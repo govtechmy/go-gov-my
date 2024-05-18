@@ -25,6 +25,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
+.env
 .env.local
 .env.development.local
 .env.test.local
@@ -55,3 +56,18 @@ localazy.keys.json
 cypress/videos
 cypress/screenshots
 cypress/downloads
+
+
+# packages customs
+packages/*/node_modules
+packages/*/dist
+packages/*/build
+packages/tinybird/.venv
+packages/tinybird/.tinyb
+
+
+# Apps
+apps/*/node_modules
+apps/*/dist
+apps/*/build
+apps/.env

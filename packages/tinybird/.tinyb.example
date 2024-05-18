@@ -1,0 +1,11 @@
+{
+  "host": "xxx",
+  "id": "xxx",
+  "name": "xxx",
+  "scope": "admin",
+  "token": "xxx",
+  "tokens": {
+    "xxx": "xxx"
+  },
+  "version": "3.11.0"
+}
