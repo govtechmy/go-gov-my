@@ -65,9 +65,10 @@ packages/*/build
 packages/tinybird/.venv
 packages/tinybird/.tinyb
 
-
 # Apps
 apps/*/node_modules
 apps/*/dist
 apps/*/build
 apps/.env
+apps/web/.next
+apps/.vercel
