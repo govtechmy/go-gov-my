@@ -389,9 +389,6 @@ importers:
 
   packages/ui:
     dependencies:
-      '@dub/ui':
-        specifier: workspace:^
-        version: 'link:'
       '@radix-ui/react-accordion':
         specifier: ^1.0.1
         version: 1.0.1(react-dom@18.2.0)(react@18.2.0)
@@ -501,9 +498,6 @@ importers:
 
   packages/utils:
     dependencies:
-      '@dub/utils':
-        specifier: workspace:^
-        version: 'link:'
       '@sindresorhus/slugify':
         specifier: ^2.2.1
         version: 2.2.1
