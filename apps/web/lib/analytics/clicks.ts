@@ -1,8 +1,8 @@
-import { conn } from "@/lib/planetscale";
 import { tb } from "@/lib/tinybird";
 import z from "@/lib/zod";
 import { getDaysDifference } from "@dub/utils";
 import { headers } from "next/headers";
+import { prisma } from "../prisma";
 import {
   clickAnalyticsQuerySchema,
   getClickAnalytics,
@@ -31,21 +31,31 @@ export const getClicks = async (
     headers()?.get("Request-Source") === "app.dub.co"
   ) {
     console.log("getting all time clicks count");
-    let response = await conn.execute(
-      "SELECT clicks FROM Link WHERE `id` = ?",
-      [linkId],
-    );
 
-    if (response.rows.length === 0) {
-      response = await conn.execute(
-        "SELECT clicks FROM Domain WHERE `id` = ?",
-        [linkId],
-      );
-      if (response.rows.length === 0) {
+    let response = await prisma.link.findUnique({
+      where: {
+        id: linkId,
+      },
+      select: {
+        clicks: true,
+      },
+    });
+
+    if (!response) {
+      response = await prisma.domain.findUnique({
+        where: {
+          id: linkId,
+        },
+        select: {
+          clicks: true,
+        },
+      });
+
+      if (!response) {
         return 0;
       }
     }
-    return response.rows[0]["clicks"];
+    return response[0]["clicks"];
   }
 
   const pipe = tb.buildPipe({

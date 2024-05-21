@@ -1,4 +1,4 @@
-import { getDomainOrLink } from "@/lib/planetscale";
+import { getDomainOrLink } from "@/lib/userinfos";
 import Analytics from "@/ui/analytics";
 import { constructMetadata } from "@dub/utils";
 import { notFound } from "next/navigation";
@@ -37,7 +37,9 @@ export default async function StatsPage({
 
   return (
     <Suspense fallback={<div className="h-screen w-full bg-gray-50" />}>
-      <Analytics staticDomain={params.domain} staticUrl={data.url} />
+      {data && data.url && (
+        <Analytics staticDomain={params.domain} staticUrl={data.url} />
+      )}
     </Suspense>
   );
 }

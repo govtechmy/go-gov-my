@@ -41,11 +41,11 @@ export const DELETE = withAdmin(async ({ params }) => {
         projectId: LEGAL_WORKSPACE_ID,
       },
     }),
-    domain &&
-      updateConfig({
-        key: "domains",
-        value: domain,
-      }),
+    domain, &&
+    updateConfig({
+      key: "domains",
+      value: domain,
+    }),
   ]);
 
   return NextResponse.json(response);

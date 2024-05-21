@@ -1,6 +1,6 @@
 import { DubApiError, handleAndReturnErrorResponse } from "@/lib/api/errors";
-import { getRandomKey } from "@/lib/planetscale";
 import { ratelimit } from "@/lib/upstash";
+import { getRandomKey } from "@/lib/userinfos";
 import { domainKeySchema } from "@/lib/zod/schemas/links";
 import { getSearchParams } from "@dub/utils";
 import { ipAddress } from "@vercel/edge";

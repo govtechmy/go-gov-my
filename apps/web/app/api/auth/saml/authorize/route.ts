@@ -5,6 +5,8 @@ import { NextResponse } from "next/server";
 const handler = async (req: Request) => {
   const { oauthController } = await jackson();
 
+  console.log("test");
+
   const requestParams =
     req.method === "GET" ? getSearchParams(req.url) : await req.json();
 

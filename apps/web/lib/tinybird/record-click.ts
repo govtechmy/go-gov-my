@@ -9,7 +9,7 @@ import { ipAddress } from "@vercel/edge";
 import { nanoid } from "ai";
 import { NextRequest, userAgent } from "next/server";
 import { detectBot, detectQr, getIdentityHash } from "../middleware/utils";
-import { conn } from "../planetscale";
+import { prisma } from "../prisma";
 import { ratelimit } from "../upstash";
 
 /**
@@ -97,29 +97,55 @@ export async function recordClick({
 
     // increment the click count for the link or domain (based on their ID)
     // also increment the usage count for the workspace
-    // and then we have a cron that will reset it at the start of new billing cycle
     root
       ? [
-          conn.execute(
-            "UPDATE Domain SET clicks = clicks + 1, lastClicked = NOW() WHERE id = ?",
-            [id],
-          ),
-          // only increment workspace clicks if there is a destination URL configured (not placeholder landing page)
+          prisma.domain.update({
+            where: { id: id },
+            data: {
+              clicks: {
+                increment: 1,
+              },
+              lastClicked: new Date(),
+            },
+          }),
           url &&
-            conn.execute(
-              "UPDATE Project p JOIN Domain d ON p.id = d.projectId SET p.usage = p.usage + 1 WHERE d.id = ?",
-              [id],
-            ),
+            prisma.project.update({
+              where: { id: id },
+              data: {
+                usage: {
+                  increment: 1,
+                },
+              },
+              include: {
+                domains: {
+                  where: { id: id },
+                },
+              },
+            }),
         ]
       : [
-          conn.execute(
-            "UPDATE Link SET clicks = clicks + 1, lastClicked = NOW() WHERE id = ?",
-            [id],
-          ),
-          conn.execute(
-            "UPDATE Project p JOIN Link l ON p.id = l.projectId SET p.usage = p.usage + 1 WHERE l.id = ?",
-            [id],
-          ),
+          prisma.link.update({
+            where: { id: id },
+            data: {
+              clicks: {
+                increment: 1,
+              },
+              lastClicked: new Date(),
+            },
+          }),
+          prisma.project.update({
+            where: { id: id },
+            data: {
+              usage: {
+                increment: 1,
+              },
+            },
+            include: {
+              links: {
+                where: { id: id },
+              },
+            },
+          }),
         ],
   ]);
 }

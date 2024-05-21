@@ -5,8 +5,8 @@ import {
   exceededLimitError,
   handleAndReturnErrorResponse,
 } from "@/lib/api/errors";
-import { getDomainOrLink, getWorkspaceViaEdge } from "@/lib/planetscale";
 import { ratelimit } from "@/lib/upstash";
+import { getDomainOrLink, getWorkspaceViaEdge } from "@/lib/userinfos";
 import {
   analyticsEndpointSchema,
   clickAnalyticsQuerySchema,

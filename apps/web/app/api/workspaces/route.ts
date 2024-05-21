@@ -5,8 +5,8 @@ import {
 } from "@/lib/api/domains";
 import { DubApiError } from "@/lib/api/errors";
 import { withSession } from "@/lib/auth";
-import { checkIfUserExists } from "@/lib/planetscale";
 import { prisma } from "@/lib/prisma";
+import { checkIfUserExists } from "@/lib/userinfos";
 import {
   WorkspaceSchema,
   createWorkspaceSchema,
@@ -50,6 +50,8 @@ export const GET = withSession(async ({ session }) => {
 });
 
 export const POST = withSession(async ({ req, session }) => {
+  console.log(req.json());
+
   const { name, slug, domain } = await createWorkspaceSchema.parseAsync(
     await req.json(),
   );

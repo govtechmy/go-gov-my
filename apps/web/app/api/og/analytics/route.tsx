@@ -1,5 +1,5 @@
 import { getClicks } from "@/lib/analytics/clicks";
-import { getDomainOrLink } from "@/lib/planetscale";
+import { getDomainOrLink } from "@/lib/userinfos";
 import {
   GOOGLE_FAVICON_URL,
   getApexDomain,
