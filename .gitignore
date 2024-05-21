@@ -72,3 +72,6 @@ apps/*/build
 apps/.env
 apps/web/.next
 apps/.vercel
+
+# Turbo
+.turbo
