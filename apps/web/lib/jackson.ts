@@ -19,8 +19,8 @@ const opts: JacksonOption = {
       : "/api/auth/saml/callback",
   samlAudience,
   db: {
-    engine: "planetscale",
-    type: "mysql",
+    engine: "redis",
+    type: "postgres",
     url: process.env.DATABASE_URL as string,
     ssl: {
       rejectUnauthorized: false,

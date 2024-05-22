@@ -1,21 +1,16 @@
 # This is meant for local development only. Do not use this in production.
 version: "3.8"
 services:
-  ps-mysql:
-    image: mysql:8.0
+  ps-postgres:
+    image: postgres:13
     restart: always
     environment:
-      MYSQL_DATABASE: gogov-local
-      MYSQL_ROOT_HOST: "%"
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-    command:
-      [
-        "--max_connections=1000",
-        "--default-authentication-plugin=mysql_native_password",
-      ]
+      POSTGRES_DB: gogov-local
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
-      - 3306:3306
+      - 5432:5432
     volumes:
-      - ps-mysql:/var/lib/mysql
+      - ps-postgres:/var/lib/postgresql/data
 volumes:
-  ps-mysql:
+  ps-postgres:
