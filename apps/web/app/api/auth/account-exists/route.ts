@@ -1,5 +1,5 @@
 import { isWhitelistedEmail } from "@/lib/edge-config";
-import { DATABASE_URL, conn } from "@/lib/planetscale";
+import { prisma } from "@/lib/prisma";
 import { ratelimit } from "@/lib/upstash";
 import { ipAddress } from "@vercel/edge";
 import { NextRequest, NextResponse } from "next/server";
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
 
   const { email } = (await req.json()) as { email: string };
 
-  if (!DATABASE_URL) {
+  if (!prisma) {
     return new Response("Database connection not established", {
       status: 500,
     });
@@ -25,9 +25,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ exists: true });
   }
 
-  const user = await conn
-    .execute("SELECT email FROM User WHERE email = ?", [email])
-    .then((res) => res.rows[0]);
+  const user = await prisma.user.findUnique({
+    where: {
+      email: email,
+    },
+  });
 
   if (user) {
     return NextResponse.json({ exists: true });

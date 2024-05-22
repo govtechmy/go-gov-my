@@ -5,8 +5,8 @@ import {
 } from "@/lib/api/domains";
 import { DubApiError } from "@/lib/api/errors";
 import { withSession } from "@/lib/auth";
-import { checkIfUserExists } from "@/lib/planetscale";
 import { prisma } from "@/lib/prisma";
+import { checkIfUserExists } from "@/lib/userinfos";
 import {
   WorkspaceSchema,
   createWorkspaceSchema,

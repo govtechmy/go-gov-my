@@ -1,7 +1,7 @@
 import { getClicks } from "@/lib/analytics/clicks";
 import { validDateRangeForPlan } from "@/lib/analytics/utils";
 import { withWorkspace } from "@/lib/auth";
-import { getDomainViaEdge } from "@/lib/planetscale";
+import { getDomainViaEdge } from "@/lib/userinfos";
 import {
   analyticsEndpointSchema,
   clickAnalyticsQuerySchema,

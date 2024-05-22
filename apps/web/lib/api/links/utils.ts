@@ -3,8 +3,8 @@ import {
   isReservedKey,
   isReservedUsername,
 } from "@/lib/edge-config";
-import { checkIfKeyExists } from "@/lib/planetscale";
 import { WorkspaceProps } from "@/lib/types";
+import { checkIfKeyExists } from "@/lib/userinfos";
 import {
   DEFAULT_REDIRECTS,
   SHORT_DOMAIN,

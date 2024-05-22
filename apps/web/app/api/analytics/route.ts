@@ -1,6 +1,6 @@
 import { withWorkspace } from "@/lib/auth";
-import { getDomainOrLink } from "@/lib/planetscale";
 import { prisma } from "@/lib/prisma";
+import { getDomainOrLink } from "@/lib/userinfos";
 import z from "@/lib/zod";
 import { domainKeySchema } from "@/lib/zod/schemas/links";
 import { NextResponse } from "next/server";

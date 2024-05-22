@@ -1,8 +1,8 @@
 import { isBlacklistedDomain, updateConfig } from "@/lib/edge-config";
 import { getPangeaDomainIntel } from "@/lib/pangea";
-import { checkIfUserExists, getRandomKey } from "@/lib/planetscale";
 import { prisma } from "@/lib/prisma";
 import { NewLinkProps, ProcessedLinkProps, WorkspaceProps } from "@/lib/types";
+import { checkIfUserExists, getRandomKey } from "@/lib/userinfos";
 import {
   DUB_DOMAINS,
   SHORT_DOMAIN,

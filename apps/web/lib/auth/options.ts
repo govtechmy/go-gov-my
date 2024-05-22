@@ -1,7 +1,7 @@
 import { isBlacklistedEmail } from "@/lib/edge-config";
 import jackson from "@/lib/jackson";
-import { prisma } from "@/lib/prisma";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { PrismaClient } from "@prisma/client";
 import { sendEmail } from "emails";
 import LoginLink from "emails/login-link";
 import WelcomeEmail from "emails/welcome-email";
@@ -14,6 +14,8 @@ import { subscribe } from "../flodesk";
 import { isStored, storage } from "../storage";
 
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
+
+const prisma = new PrismaClient();
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -183,6 +185,7 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     signIn: async ({ user, account, profile }) => {
+      console.log("IM HERE");
       console.log({ user, account, profile });
       if (!user.email || (await isBlacklistedEmail(user.email))) {
         return false;
@@ -354,3 +357,9 @@ export const authOptions: NextAuthOptions = {
     },
   },
 };
+
+// function PrismaAdapter(
+//   prisma: PrismaClient<{ adapter: PrismaPlanetScale }, never, DefaultArgs>,
+// ): import("next-auth/adapters").Adapter | undefined {
+//   throw new Error("Function not implemented.");
+// }
