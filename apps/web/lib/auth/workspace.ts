@@ -315,7 +315,11 @@ export const withWorkspace = (
             code: "not_found",
             message: "Workspace not found.",
           });
-        } else if (pendingInvites.expires < new Date()) {
+        } else if (
+          pendingInvites &&
+          pendingInvites.expires &&
+          pendingInvites.expires < new Date()
+        ) {
           throw new DubApiError({
             code: "invite_expired",
             message: "Workspace invite expired.",
