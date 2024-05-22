@@ -34,7 +34,7 @@ export const POST = withSession(async ({ session, params }) => {
     return new Response("Invalid invite", { status: 404 });
   }
 
-  if (invite.expires < new Date()) {
+  if (invite && invite.expires && invite.expires < new Date()) {
     return new Response("Invite expired", { status: 410 });
   }
 

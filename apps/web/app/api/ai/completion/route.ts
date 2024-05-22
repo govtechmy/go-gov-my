@@ -1,7 +1,7 @@
 import { anthropic } from "@/lib/anthropic";
 import { DubApiError, handleAndReturnErrorResponse } from "@/lib/api/errors";
 import { withWorkspaceEdge } from "@/lib/auth/workspace-edge";
-import { prismaEdge } from "@/lib/prisma/edge";
+import { prisma } from "@/lib/prisma";
 import z from "@/lib/zod";
 import { waitUntil } from "@vercel/functions";
 import { AnthropicStream, StreamingTextResponse } from "ai";
@@ -51,7 +51,7 @@ export const POST = withWorkspaceEdge(
       // only count usage for the sonnet model
       if (model === "claude-3-sonnet-20240229") {
         waitUntil(
-          prismaEdge.project.update({
+          prisma.project.update({
             where: { id: workspace.id.replace("ws_", "") },
             data: {
               aiUsage: {

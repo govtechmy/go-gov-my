@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
 export const GET = withWorkspace(async ({ workspace }) => {
   const defaultDomains = await prisma.defaultDomains.findUnique({
     where: {
-      projectId: workspace.id,
+      id: workspace.id,
     },
     select: {
       dubsh: true,
@@ -45,7 +45,7 @@ export const PUT = withWorkspace(async ({ req, workspace }) => {
 
   const response = await prisma.defaultDomains.update({
     where: {
-      projectId: workspace.id,
+      id: workspace.id,
     },
     data: {
       dubsh: defaultDomains.includes("dub.sh"),
