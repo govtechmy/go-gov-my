@@ -6,6 +6,8 @@ export async function POST(req: Request) {
 
   const formData = await req.formData();
 
+  console.log("SAML Callback:", formData);
+
   const RelayState = formData.get("RelayState");
   const SAMLResponse = formData.get("SAMLResponse");
 
@@ -19,6 +21,8 @@ export async function POST(req: Request) {
       status: 400,
     });
   }
+
+  console.log("Redirecting to:", redirect_url);
 
   return NextResponse.redirect(redirect_url, {
     status: 302,

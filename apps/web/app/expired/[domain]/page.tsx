@@ -1,4 +1,4 @@
-import { getDomainViaEdge } from "@/lib/planetscale";
+import { getDomainViaEdge } from "@/lib/userinfos";
 import { Background, Footer, Nav } from "@dub/ui";
 import { constructMetadata } from "@dub/utils";
 import { TimerOff } from "lucide-react";

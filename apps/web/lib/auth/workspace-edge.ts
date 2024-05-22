@@ -11,7 +11,7 @@ import { StreamingTextResponse } from "ai";
 import { getToken } from "next-auth/jwt";
 import { NextRequest } from "next/server";
 import { isBetaTester } from "../edge-config";
-import { prismaEdge } from "../prisma/edge";
+import { prisma } from "../prisma";
 import { hashToken } from "./hash-token";
 import type { Session } from "./utils";
 
@@ -119,7 +119,7 @@ export const withWorkspaceEdge = (
       if (apiKey) {
         const hashedKey = await hashToken(apiKey);
 
-        const token = await prismaEdge.token.findUnique({
+        const token = await prisma.token.findUnique({
           where: {
             hashedKey,
           },
@@ -158,7 +158,7 @@ export const withWorkspaceEdge = (
           });
         }
         waitUntil(
-          prismaEdge.token.update({
+          prisma.token.update({
             where: {
               hashedKey,
             },
@@ -188,7 +188,7 @@ export const withWorkspaceEdge = (
         }
       }
 
-      const workspace = (await prismaEdge.project.findUnique({
+      const workspace = (await prisma.project.findUnique({
         where: {
           id: workspaceId || undefined,
           slug: workspaceSlug || undefined,
@@ -232,7 +232,7 @@ export const withWorkspaceEdge = (
 
       // workspace exists but user is not part of it
       if (workspace.users.length === 0) {
-        const pendingInvites = await prismaEdge.projectInvite.findUnique({
+        const pendingInvites = await prisma.projectInvite.findUnique({
           where: {
             email_projectId: {
               email: session.user.email,

@@ -1,4 +1,4 @@
-import { getLinkViaEdge } from "@/lib/planetscale";
+import { getLinkViaEdge } from "@/lib/userinfos";
 import { BlurImage } from "@dub/ui";
 import {
   GOOGLE_FAVICON_URL,
@@ -60,7 +60,7 @@ export default async function ProxyPage({
     <main className="flex h-screen w-screen items-center justify-center">
       <div className="mx-5 w-full max-w-lg overflow-hidden rounded-lg border border-gray-200 sm:mx-0">
         <img
-          src={data.image}
+          src={data.image || ""}
           alt={unescape(data.title || "")}
           className="w-full object-cover"
         />
