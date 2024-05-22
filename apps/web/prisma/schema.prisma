@@ -2,20 +2,21 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider     = "mysql"
+  provider     = "postgresql"
   url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  directUrl    = env("DIRECT_URL")
+  extensions = [pgcrypto(map: "pgcrypto", schema: "public")]
 }
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch", "fullTextIndex", "driverAdapters"]
+  provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name          String?
-  email         String?   @unique
+  email         String   @unique
   emailVerified DateTime?
   image         String?
 
@@ -24,7 +25,7 @@ model User {
   projects   ProjectUsers[]
   links      Link[]
   tokens     Token[]
-  createdAt  DateTime       @default(now())
+  createdAt  DateTime       @default(now()) @db.Timestamptz
   subscribed Boolean        @default(true)
   source     String?
 
@@ -32,8 +33,8 @@ model User {
 }
 
 model Account {
-  id                       String  @id @default(cuid())
-  userId                   String
+  id                       String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                   String  @db.Uuid
   type                     String
   provider                 String
   providerAccountId        String
@@ -54,9 +55,9 @@ model Account {
 
 model Session {
   id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
+  sessionToken String   @map("session_token") @db.Text
+  userId       String   @db.Uuid
+  expires      DateTime @default(now()) @db.Timestamptz
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
@@ -71,22 +72,22 @@ model VerificationToken {
 }
 
 model Token {
-  id         String    @id @default(cuid())
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name       String
   hashedKey  String    @unique
   partialKey String
   expires    DateTime?
   lastUsed   DateTime?
-  createdAt  DateTime  @default(now())
+  createdAt  DateTime  @default(now()) @db.Timestamptz
   updatedAt  DateTime  @updatedAt
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     String
+  userId     String    @db.Uuid
 
   @@index([userId])
 }
 
 model Project {
-  id   String  @id @default(cuid())
+  id   String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name String
   slug String  @unique
   logo String?
@@ -111,7 +112,7 @@ model Project {
   domains    Domain[]
   tags       Tag[]
 
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @db.Timestamptz
   updatedAt DateTime @updatedAt
 
   inviteCode     String?          @unique
@@ -120,24 +121,24 @@ model Project {
 
 model ProjectInvite {
   email     String
-  expires   DateTime
+  expires   DateTime? 
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId String
-  createdAt DateTime @default(now())
+  projectId String @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamptz
 
   @@unique([email, projectId])
   @@index([projectId])
 }
 
 model DefaultDomains {
-  id          String  @id @default(cuid())
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   dubsh       Boolean @default(true)
   chatgpt     Boolean @default(true)
   sptifi      Boolean @default(true)
   gitnew      Boolean @default(true)
   amznid      Boolean @default(true)
   loooooooong Boolean @default(false)
-  projectId   String  @unique
+  projectId   String  @db.Uuid
   project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 }
 
@@ -147,42 +148,42 @@ enum Role {
 }
 
 model ProjectUsers {
-  id        String   @id @default(cuid())
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   role      Role     @default(member)
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @db.Timestamptz
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
+  userId    String   @db.Uuid
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId String
+  projectId String   @db.Uuid
 
   @@unique([userId, projectId])
   @@index([projectId])
 }
 
 model SentEmail {
-  id        String   @id @default(cuid())
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   type      String
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @db.Timestamptz
   project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId String?
+  projectId String? @db.Uuid
 
   @@index([projectId])
 }
 
 model Domain {
-  id          String   @id @default(cuid())
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   slug        String   @unique
   verified    Boolean  @default(false)
   placeholder String   @default("https://dub.co/help/article/what-is-dub")
   description String?
   primary     Boolean  @default(false)
   archived    Boolean  @default(false)
-  expiredUrl  String?  @db.LongText // URL to redirect to for expired links
-  lastChecked DateTime @default(now())
+  expiredUrl  String?  // URL to redirect to for expired links
+  lastChecked DateTime @default(now()) @db.Timestamptz
   links       Link[]
   project     Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId   String?
+  projectId   String? @db.Uuid
 
   // TODO: migrate these attributes to Link model
   target      String?
@@ -192,7 +193,7 @@ model Domain {
   publicStats Boolean   @default(false)
 
   // these attributes will exist on both Link and Domain models
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @db.Timestamptz
   updatedAt DateTime @updatedAt
 
   @@index(projectId)
@@ -202,13 +203,13 @@ model Domain {
 }
 
 model Link {
-  id         String    @id @default(cuid())
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   domain     String // domain of the link (e.g. dub.sh) – also stored on Redis
   key        String // key of the link (e.g. /github) – also stored on Redis
-  url        String    @db.LongText // target url (e.g. https://github.com/dubinc/dub) – also stored on Redis
+  url        String    // @db.LongText // target url (e.g. https://github.com/dubinc/dub) – also stored on Redis
   archived   Boolean   @default(false) // whether the link is archived or not
   expiresAt  DateTime? // when the link expires – stored on Redis via ttl
-  expiredUrl String?   @db.LongText // URL to redirect the user to when the link is expired
+  expiredUrl String?   // @db.LongText // URL to redirect the user to when the link is expired
   password   String? // password to access the link
   externalId String?
 
@@ -217,7 +218,7 @@ model Link {
   proxy       Boolean @default(false) // Proxy to use custom OG tags (stored on redis) – if false, will use OG tags from target url
   title       String? // OG title for the link (e.g. Dub.co - Open-Source Link Management Infrastructure)
   description String? @db.VarChar(280) // OG description for the link (e.g. An open-source link management tool for modern marketing teams to create, share, and track short links.)
-  image       String? @db.LongText // OG image for the link (e.g. https://d.to/og)
+  image       String? // @db.LongText // OG image for the link (e.g. https://d.to/og)
 
   // UTM parameters
   utm_source   String? // UTM source for the link (e.g. youtube.com)
@@ -230,31 +231,31 @@ model Link {
   rewrite Boolean @default(false) // whether to rewrite the link or not
 
   // Custom device targeting
-  ios     String? @db.LongText // custom link for iOS devices
-  android String? @db.LongText // custom link for Android devices
+  ios     String? // @db.LongText // custom link for iOS devices
+  android String? // @db.LongText // custom link for Android devices
   geo     Json?   @db.Json // custom link for specific countries
 
   // User who created the link
   user   User?   @relation(fields: [userId], references: [id])
-  userId String?
+  userId String? @db.Uuid
 
   // Project that the link belongs to
   project       Project? @relation(fields: [projectId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  projectId     String?
+  projectId     String? @db.Uuid
   // Relational reference to the project domain
   projectDomain Domain?  @relation(fields: [domain], references: [slug], onUpdate: Cascade, onDelete: Cascade)
 
   publicStats Boolean   @default(false) // whether to show public stats or not
   clicks      Int       @default(0) // number of clicks
   lastClicked DateTime? // when the link was last clicked
-  createdAt   DateTime  @default(now())
+  createdAt   DateTime  @default(now()) @db.Timestamptz
   updatedAt   DateTime  @updatedAt
 
   // Link tags
   tags LinkTag[]
 
   // Comments on the particular shortlink
-  comments String? @db.LongText
+  comments String? //@db.LongText
 
   // TODO: might wanna add indices for utm_source, utm_medium, utm_campaign
 
@@ -269,17 +270,17 @@ model Link {
   @@index(clicks(sort: Desc))
   @@index(lastClicked)
   @@index(userId)
-  @@fulltext([key, url])
+  // @@fulltext([key, url])
 }
 
 model Tag {
-  id        String    @id @default(cuid())
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name      String
   color     String    @default("blue")
-  createdAt DateTime  @default(now())
+  createdAt DateTime  @default(now()) @db.Timestamptz
   updatedAt DateTime  @updatedAt
   project   Project   @relation(fields: [projectId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  projectId String
+  projectId String    @db.Uuid
   links     LinkTag[]
 
   @@unique([name, projectId])
@@ -287,13 +288,13 @@ model Tag {
 }
 
 model LinkTag {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  createdAt DateTime @default(now()) @db.Timestamptz
   updatedAt DateTime @updatedAt
   link      Link     @relation(fields: [linkId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  linkId    String
+  linkId    String   @db.Uuid
   tag       Tag      @relation(fields: [tagId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  tagId     String
+  tagId     String   @db.Uuid
 
   @@unique([linkId, tagId])
   @@index(linkId)
@@ -315,7 +316,7 @@ model jackson_store {
   iv         String?   @db.VarChar(64)
   tag        String?   @db.VarChar(64)
   namespace  String?   @db.VarChar(64)
-  createdAt  DateTime  @default(now()) @db.Timestamp(0)
+  createdAt  DateTime  @default(now()) @db.Timestamptz
   modifiedAt DateTime? @db.Timestamp(0)
 
   @@index([namespace], map: "_jackson_store_namespace")

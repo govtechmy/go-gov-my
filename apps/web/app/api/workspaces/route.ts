@@ -50,8 +50,6 @@ export const GET = withSession(async ({ session }) => {
 });
 
 export const POST = withSession(async ({ req, session }) => {
-  console.log(req.json());
-
   const { name, slug, domain } = await createWorkspaceSchema.parseAsync(
     await req.json(),
   );
