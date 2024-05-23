@@ -9,7 +9,7 @@
 
 // // if (process.env.NODE_ENV === "development") global.prisma = prisma;
 
-import { PrismaClient } from "@prisma/client/edge";
+import { PrismaClient } from "@prisma/client";
 
 export const prisma = new PrismaClient();
 
