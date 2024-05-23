@@ -1,6 +1,5 @@
 import z from "@/lib/zod";
 import { metaTagsSchema } from "@/lib/zod/schemas/metatags";
-import { DirectorySyncProviders } from "@boxyhq/saml-jackson";
 import { Link } from "@prisma/client";
 import { createLinkBodySchema } from "./zod/schemas/links";
 
@@ -150,18 +149,6 @@ export interface ImportedDomainCountProps {
   id: number;
   domain: string;
   links: number;
-}
-
-export interface SAMLProviderProps {
-  name: string;
-  logo: string;
-  saml: "okta" | "azure" | "google";
-  samlModalCopy: string;
-  scim: keyof typeof DirectorySyncProviders;
-  scimModalCopy: {
-    url: string;
-    token: string;
-  };
 }
 
 export type NewLinkProps = z.infer<typeof createLinkBodySchema>;
