@@ -7,7 +7,6 @@ export * from "./localhost";
 export * from "./middleware";
 export * from "./misc";
 export * from "./pricing";
-export * from "./saml";
 
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "Dub.co";
 

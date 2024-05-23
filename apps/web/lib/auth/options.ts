@@ -1,12 +1,10 @@
 import { isBlacklistedEmail } from "@/lib/edge-config";
-import jackson from "@/lib/jackson";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import { sendEmail } from "emails";
 import LoginLink from "emails/login-link";
 import WelcomeEmail from "emails/welcome-email";
 import { type NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
 import EmailProvider from "next-auth/providers/email";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
@@ -42,125 +40,6 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GITHUB_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
       allowDangerousEmailAccountLinking: true,
-    }),
-    {
-      id: "saml",
-      name: "BoxyHQ",
-      type: "oauth",
-      version: "2.0",
-      checks: ["pkce", "state"],
-      authorization: {
-        url: `${process.env.NEXTAUTH_URL}/api/auth/saml/authorize`,
-        params: {
-          scope: "",
-          response_type: "code",
-          provider: "saml",
-        },
-      },
-      token: {
-        url: `${process.env.NEXTAUTH_URL}/api/auth/saml/token`,
-        params: { grant_type: "authorization_code" },
-      },
-      userinfo: `${process.env.NEXTAUTH_URL}/api/auth/saml/userinfo`,
-      profile: async (profile) => {
-        let existingUser = await prisma.user.findUnique({
-          where: { email: profile.email },
-        });
-
-        // user is authorized but doesn't have a Dub account, create one for them
-        if (!existingUser) {
-          existingUser = await prisma.user.create({
-            data: {
-              email: profile.email,
-              name: `${profile.firstName || ""} ${
-                profile.lastName || ""
-              }`.trim(),
-            },
-          });
-        }
-
-        const { id, name, email, image } = existingUser;
-
-        return {
-          id,
-          name,
-          email,
-          image,
-        };
-      },
-      options: {
-        clientId: "dummy",
-        clientSecret: process.env.NEXTAUTH_SECRET as string,
-      },
-      allowDangerousEmailAccountLinking: true,
-    },
-    CredentialsProvider({
-      id: "saml-idp",
-      name: "IdP Login",
-      credentials: {
-        code: {},
-      },
-      async authorize(credentials) {
-        if (!credentials) {
-          return null;
-        }
-
-        const { code } = credentials;
-
-        if (!code) {
-          return null;
-        }
-
-        const { oauthController } = await jackson();
-
-        // Fetch access token
-        const { access_token } = await oauthController.token({
-          code,
-          grant_type: "authorization_code",
-          redirect_uri: process.env.NEXTAUTH_URL as string,
-          client_id: "dummy",
-          client_secret: process.env.NEXTAUTH_SECRET as string,
-        });
-
-        if (!access_token) {
-          return null;
-        }
-
-        // Fetch user info
-        const userInfo = await oauthController.userInfo(access_token);
-
-        if (!userInfo) {
-          return null;
-        }
-
-        let existingUser = await prisma.user.findUnique({
-          where: { email: userInfo.email },
-        });
-
-        // user is authorized but doesn't have a Dub account, create one for them
-        if (!existingUser) {
-          existingUser = await prisma.user.create({
-            data: {
-              email: userInfo.email,
-              name: `${userInfo.firstName || ""} ${
-                userInfo.lastName || ""
-              }`.trim(),
-            },
-          });
-        }
-
-        const { id, name, email, image } = existingUser;
-
-        return {
-          id,
-          email,
-          name,
-          email_verified: true,
-          image,
-          // adding profile here so we can access it in signIn callback
-          profile: userInfo,
-        };
-      },
     }),
   ],
   adapter: PrismaAdapter(prisma),
@@ -223,57 +102,6 @@ export const authOptions: NextAuthOptions = {
               ...(newAvatar && { image: newAvatar }),
             },
           });
-        }
-      } else if (
-        account?.provider === "saml" ||
-        account?.provider === "saml-idp"
-      ) {
-        let samlProfile;
-
-        if (account?.provider === "saml-idp") {
-          // @ts-ignore
-          samlProfile = user.profile;
-          if (!samlProfile) {
-            return true;
-          }
-        } else {
-          samlProfile = profile;
-        }
-
-        if (!samlProfile?.requested?.tenant) {
-          return false;
-        }
-        const workspace = await prisma.project.findUnique({
-          where: {
-            id: samlProfile.requested.tenant,
-          },
-        });
-        if (workspace) {
-          await Promise.allSettled([
-            // add user to workspace
-            prisma.projectUsers.upsert({
-              where: {
-                userId_projectId: {
-                  projectId: workspace.id,
-                  userId: user.id,
-                },
-              },
-              update: {},
-              create: {
-                projectId: workspace.id,
-                userId: user.id,
-              },
-            }),
-            // delete any pending invites for this user
-            prisma.projectInvite.delete({
-              where: {
-                email_projectId: {
-                  email: user.email,
-                  projectId: workspace.id,
-                },
-              },
-            }),
-          ]);
         }
       }
       return true;
