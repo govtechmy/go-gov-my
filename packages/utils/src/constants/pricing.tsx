@@ -298,7 +298,6 @@ export const PLANS = [
     features: [
       { text: "Custom usage limits" },
       { text: "Volume discounts" },
-      { text: "SSO/SAML" },
       { text: "Role-based access controls" },
       { text: "Custom contract & SLA" },
       { text: "Whiteglove onboarding" },
