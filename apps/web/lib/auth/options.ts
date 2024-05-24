@@ -64,7 +64,6 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     signIn: async ({ user, account, profile }) => {
-      console.log("IM HERE");
       console.log({ user, account, profile });
       if (!user.email || (await isBlacklistedEmail(user.email))) {
         return false;
