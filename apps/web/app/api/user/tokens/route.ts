@@ -33,6 +33,7 @@ export const GET = withSession(async ({ session }) => {
 export const POST = withSession(async ({ req, session }) => {
   const { name } = await req.json();
   const token = nanoid(24);
+  console.log("token", token);
   const hashedKey = await hashToken(token);
   // take first 3 and last 4 characters of the key
   const partialKey = `${token.slice(0, 3)}...${token.slice(-4)}`;

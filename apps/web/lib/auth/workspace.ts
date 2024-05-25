@@ -88,7 +88,8 @@ export const withWorkspace = (
               "Misconfigured authorization header. Did you forget to add 'Bearer '? Learn more: https://d.to/auth",
           });
         }
-        apiKey = authorizationHeader.replace("Bearer ", "");
+        console.log(req.headers.get("x-api-key"));
+        apiKey = req.headers.get("x-api-key") || "";
       }
 
       const domain = params?.domain || searchParams.domain;
