@@ -37,7 +37,7 @@ export const withApiAuth = (handler: withApiAuthHandler, {}: {} = {}) => {
               "Misconfigured authorization header. Did you forget to add 'Bearer '? Learn more: https://d.to/auth",
           });
         }
-        const apiKey = authorizationHeader.replace("Bearer ", "");
+        const apiKey = req.headers.get("x-api-key") || "";
 
         const hashedKey = await hashToken(apiKey);
 
