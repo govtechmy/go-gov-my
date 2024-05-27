@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { RedisLinkProps } from "@/lib/types";
-import { redis } from "@/lib/upstash";
+import { upstashRedis } from "@/lib/upstash";
 import { chunk } from "@dub/utils";
 import "dotenv-flow/config";
 
@@ -27,11 +27,11 @@ async function main() {
   const chunks = chunk(allExpiredLinks, 100);
 
   for (const chunk of chunks) {
-    const redisLinks = await redis.mget<RedisLinkProps[]>(
+    const redisLinks = await upstashRedis.mget<RedisLinkProps[]>(
       chunk.map((link) => `${link.domain}:${link.key}`),
     );
 
-    const pipeline = redis.pipeline();
+    const pipeline = upstashRedis.pipeline();
     redisLinks.forEach((link, idx) => {
       const { domain, key, expiresAt } = chunk[idx];
       // @ts-ignore (old version)
