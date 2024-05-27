@@ -1,4 +1,4 @@
-import { redis } from "@/lib/upstash";
+import { redis } from "@/lib/redis";
 import { isIframeable } from "@dub/utils";
 import { recordLink } from "../../tinybird";
 

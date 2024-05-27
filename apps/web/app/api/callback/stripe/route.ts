@@ -1,7 +1,7 @@
 import { limiter } from "@/lib/cron";
 import { prisma } from "@/lib/prisma";
+import { redis } from "@/lib/redis";
 import { stripe } from "@/lib/stripe";
-import { redis } from "@/lib/upstash";
 import { FREE_PLAN, getPlanFromPriceId, log } from "@dub/utils";
 import { sendEmail } from "emails";
 import UpgradeEmail from "emails/upgrade-email";

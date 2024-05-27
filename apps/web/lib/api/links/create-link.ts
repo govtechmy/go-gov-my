@@ -1,9 +1,10 @@
 import { qstash } from "@/lib/cron";
 import { prisma } from "@/lib/prisma";
+import { redis } from "@/lib/redis";
 import { isStored, storage } from "@/lib/storage";
 import { recordLink } from "@/lib/tinybird";
 import { ProcessedLinkProps } from "@/lib/types";
-import { formatRedisLink, redis } from "@/lib/upstash";
+import { formatRedisLink } from "@/lib/upstash";
 import { APP_DOMAIN_WITH_NGROK, getParamsFromURL, truncate } from "@dub/utils";
 import { Prisma } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
