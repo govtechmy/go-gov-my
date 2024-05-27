@@ -89,10 +89,12 @@ export const POST = withWorkspace(
     waitUntil(
       Promise.all([
         redis.hset(link.domain.toLowerCase(), {
-          [link.key.toLowerCase()]: await formatRedisLink({
-            ...link,
-            projectId: newWorkspaceId,
-          }),
+          [link.key.toLowerCase()]: JSON.stringify(
+            await formatRedisLink({
+              ...link,
+              projectId: newWorkspaceId,
+            }),
+          ),
         }),
         recordLink({
           link_id: link.id,

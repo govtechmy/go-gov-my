@@ -220,10 +220,10 @@ export const POST = async (req: Request) => {
         // remove root domain redirect for all domains
         workspace.domains.forEach((domain) => {
           pipeline.hset(domain.slug.toLowerCase(), {
-            _root: {
+            _root: JSON.stringify({
               id: domain.id,
               projectId: workspace.id,
-            },
+            }),
           });
         });
 

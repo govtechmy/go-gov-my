@@ -31,7 +31,7 @@ export const updateLinksInRedis = async ({
     const { key, ...rest } = formatedLink;
 
     pipeline.hset(domain.toLowerCase(), {
-      [formatedLink.key]: rest,
+      [formatedLink.key]: JSON.stringify(rest),
     });
   });
 

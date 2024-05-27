@@ -37,10 +37,10 @@ export const DELETE = withAdmin(async ({ params }) => {
       },
     }),
     redis.hset(link.domain.toLowerCase(), {
-      [link.key.toLowerCase()]: {
+      [link.key.toLowerCase()]: JSON.stringify({
         ...(await formatRedisLink(link)),
         projectId: LEGAL_WORKSPACE_ID,
-      },
+      }),
     }),
     domain &&
       updateConfig({

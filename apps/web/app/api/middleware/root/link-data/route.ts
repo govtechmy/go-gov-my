@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
 
       waitUntil(
         redis.hset(domain, {
-          _root: link,
+          _root: JSON.stringify(link),
         }),
       );
     }

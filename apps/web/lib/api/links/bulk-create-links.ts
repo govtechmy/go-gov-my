@@ -107,7 +107,7 @@ export async function propagateBulkLinkChanges(
   );
 
   Object.entries(linksByDomain).forEach(([domain, links]) => {
-    pipeline.hset(domain.toLowerCase(), links);
+    pipeline.hset(domain.toLowerCase(), JSON.stringify(links));
   });
 
   await Promise.all([

@@ -84,7 +84,9 @@ export async function createLink(link: ProcessedLinkProps) {
     Promise.all([
       // record link in Redis
       redis.hset(link.domain.toLowerCase(), {
-        [link.key.toLowerCase()]: await formatRedisLink(response),
+        [link.key.toLowerCase()]: JSON.stringify(
+          await formatRedisLink(response),
+        ),
       }),
       // record link in Tinybird
       recordLink({
