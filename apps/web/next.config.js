@@ -16,6 +16,7 @@ module.exports = {
       "@react-email/render",
       "@react-email/tailwind",
     ],
+    instrumentationHook: true,
   },
   webpack: (config, { webpack, isServer }) => {
     if (isServer) {
