@@ -6,7 +6,9 @@ import { workspaceIdSchema } from "@/lib/zod/schemas/workspaces";
 import { getSearchParams } from "@dub/utils";
 import { NextRequest, NextResponse } from "next/server";
 
-export const runtime = "edge";
+// Issue #22 "[Fix APIs Not Working] Links API" (https://github.com/govtechmy/go-gov-my/issues/22)
+// - Disable edge runtime since we are self hosting our database
+// export const runtime = "edge";
 
 // GET /api/links/verify – run keyChecks on the key
 export const GET = async (req: NextRequest) => {
