@@ -1,6 +1,7 @@
 import { detectBot, getFinalUrl, parse } from "@/lib/middleware/utils";
 import { recordClick } from "@/lib/tinybird";
 import {
+  API_DOMAIN,
   DUB_DEMO_LINKS,
   DUB_HEADERS,
   LEGAL_WORKSPACE_ID,
@@ -56,7 +57,7 @@ export default async function LinkMiddleware(
     domain: string,
     key: string,
   ): Promise<LinkMiddlewareLinkDataResponse> {
-    const url = new URL("/api/middleware/link/link-data", req.url);
+    const url = new URL("/api/middleware/link/link-data", API_DOMAIN);
     url.searchParams.set("domain", domain);
     url.searchParams.set("key", key);
     const response = await fetch(url);

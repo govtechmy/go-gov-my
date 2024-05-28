@@ -1,5 +1,5 @@
 import { recordClick } from "@/lib/tinybird";
-import { DUB_HEADERS } from "@dub/utils";
+import { API_DOMAIN, DUB_HEADERS } from "@dub/utils";
 import type { RootMiddlewareLinkDataResponse } from "app/api/middleware/root/link-data/route";
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 import { parse } from "./utils";
@@ -19,7 +19,7 @@ export default async function RootMiddleware(
   async function fetchLinkData(
     domain: string,
   ): Promise<RootMiddlewareLinkDataResponse> {
-    const url = new URL("/api/middleware/root/link-data", req.url);
+    const url = new URL("/api/middleware/root/link-data", API_DOMAIN);
     url.searchParams.set("domain", domain);
     const response = await fetch(url);
     return response.json();
