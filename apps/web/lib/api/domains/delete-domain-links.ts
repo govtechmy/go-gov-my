@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { redis } from "@/lib/upstash";
+import { redis } from "@/lib/redis";
 import { waitUntil } from "@vercel/functions";
 import { storage } from "../../storage";
 import { recordLink } from "../../tinybird";

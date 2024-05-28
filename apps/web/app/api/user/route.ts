@@ -1,8 +1,8 @@
 import { withSession } from "@/lib/auth";
 import { unsubscribe } from "@/lib/flodesk";
 import { prisma } from "@/lib/prisma";
+import { redis } from "@/lib/redis";
 import { storage } from "@/lib/storage";
-import { redis } from "@/lib/upstash";
 import { trim } from "@dub/utils";
 import { NextResponse } from "next/server";
 import { z } from "zod";

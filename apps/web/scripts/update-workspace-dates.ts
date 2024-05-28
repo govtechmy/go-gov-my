@@ -1,10 +1,10 @@
 import { prisma } from "@/lib/prisma";
-import { redis } from "@/lib/upstash";
+import { upstashRedis } from "@/lib/upstash";
 import "dotenv-flow/config";
 
 async function main() {
   // original hash was migrated_links_users, we archived it to migrated_links_users_archived
-  const migratedWorkspaces = await redis.hgetall<Record<string, string>>(
+  const migratedWorkspaces = await upstashRedis.hgetall<Record<string, string>>(
     "migrated_links_users", // migrated_links_users_archived
   );
 

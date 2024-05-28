@@ -1,5 +1,6 @@
 import { deleteDomainAndLinks } from "@/lib/api/domains";
 import { prisma } from "@/lib/prisma";
+import { redis } from "@/lib/redis";
 import { storage } from "@/lib/storage";
 import { cancelSubscription } from "@/lib/stripe";
 import {
@@ -10,7 +11,6 @@ import {
 import { waitUntil } from "@vercel/functions";
 import { recordLink } from "../tinybird";
 import { WorkspaceProps } from "../types";
-import { redis } from "../upstash";
 
 export async function deleteWorkspace(
   workspace: Pick<WorkspaceProps, "id" | "slug" | "stripeId" | "logo">,

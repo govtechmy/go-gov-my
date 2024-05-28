@@ -1,4 +1,4 @@
-import { redis } from "@/lib/upstash";
+import { upstashRedis } from "@/lib/upstash";
 import "dotenv-flow/config";
 
 async function main() {
@@ -18,7 +18,11 @@ end
 
 return output`;
 
-  const response = await redis.eval(script, ["metatags, metatags-set"], []);
+  const response = await upstashRedis.eval(
+    script,
+    ["metatags, metatags-set"],
+    [],
+  );
 
   console.log(response);
 }
