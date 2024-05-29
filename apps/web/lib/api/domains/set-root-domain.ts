@@ -1,4 +1,4 @@
-import { redis } from "@/lib/upstash";
+import { redis } from "@/lib/redis";
 import { isIframeable } from "@dub/utils";
 import { recordLink } from "../../tinybird";
 
@@ -24,7 +24,7 @@ export async function setRootDomain({
   }
   return await Promise.allSettled([
     redis.hset(newDomain ? newDomain.toLowerCase() : domain.toLowerCase(), {
-      _root: {
+      _root: JSON.stringify({
         id,
         ...(url && {
           url,
@@ -40,7 +40,7 @@ export async function setRootDomain({
             }),
           }),
         projectId,
-      },
+      }),
     }),
     recordLink({
       link_id: id,

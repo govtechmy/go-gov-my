@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import { formatRedisLink, redis } from "@/lib/upstash";
+import { redis } from "@/lib/redis";
+import { formatRedisLink } from "@/lib/upstash";
 import { Link } from "@prisma/client";
 import { sendEmail } from "emails";
 import DomainTransferred from "emails/domain-transferred";
@@ -30,7 +31,7 @@ export const updateLinksInRedis = async ({
     const { key, ...rest } = formatedLink;
 
     pipeline.hset(domain.toLowerCase(), {
-      [formatedLink.key]: rest,
+      [formatedLink.key]: JSON.stringify(rest),
     });
   });
 

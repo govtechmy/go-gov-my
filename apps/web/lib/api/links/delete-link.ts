@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
+import { redis } from "@/lib/redis";
 import { storage } from "@/lib/storage";
 import { recordLink } from "@/lib/tinybird";
-import { redis } from "@/lib/upstash";
 import { waitUntil } from "@vercel/functions";
 
 export async function deleteLink(linkId: string) {

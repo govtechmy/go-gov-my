@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma";
+import { redis } from "@/lib/redis";
 import { recordLink } from "@/lib/tinybird";
 import { LinkProps, ProcessedLinkProps, RedisLinkProps } from "@/lib/types";
-import { formatRedisLink, redis } from "@/lib/upstash";
+import { formatRedisLink } from "@/lib/upstash";
 import { getParamsFromURL, truncate } from "@dub/utils";
 import { combineTagIds, transformLink } from "./utils";
 
@@ -106,7 +107,7 @@ export async function propagateBulkLinkChanges(
   );
 
   Object.entries(linksByDomain).forEach(([domain, links]) => {
-    pipeline.hset(domain.toLowerCase(), links);
+    pipeline.hset(domain.toLowerCase(), JSON.stringify(links));
   });
 
   await Promise.all([

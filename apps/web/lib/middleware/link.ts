@@ -1,13 +1,14 @@
 import { detectBot, getFinalUrl, parse } from "@/lib/middleware/utils";
 import { recordClick } from "@/lib/tinybird";
-import { formatRedisLink, redis } from "@/lib/upstash";
 import {
+  API_DOMAIN,
   DUB_DEMO_LINKS,
   DUB_HEADERS,
   LEGAL_WORKSPACE_ID,
   LOCALHOST_GEO_DATA,
   punyEncode,
 } from "@dub/utils";
+import type { LinkMiddlewareLinkDataResponse } from "app/api/middleware/link/link-data/route";
 import {
   NextFetchEvent,
   NextRequest,
@@ -15,7 +16,6 @@ import {
   userAgent,
 } from "next/server";
 import { isBlacklistedReferrer } from "../edge-config";
-import { RedisLinkProps } from "../types";
 import { getLinkViaEdge } from "../userinfos";
 
 export default async function LinkMiddleware(
@@ -51,28 +51,27 @@ export default async function LinkMiddleware(
     key = key.slice(0, -1);
   }
 
-  let link = await redis.hget<RedisLinkProps>(domain, key);
+  // Issue #8: self-host redis (https://github.com/govtechmy/go-gov-my/issues/8)
+  // need to make a HTTP request since middlewares use the edge runtime which cannot connect to redis servers
+  async function fetchLinkData(
+    domain: string,
+    key: string,
+  ): Promise<LinkMiddlewareLinkDataResponse> {
+    const url = new URL("/api/middleware/link/link-data", API_DOMAIN);
+    url.searchParams.set("domain", domain);
+    url.searchParams.set("key", key);
+    const response = await fetch(url);
+    return response.json();
+  }
 
-  if (!link) {
-    const linkData = await getLinkViaEdge(domain, key);
-
-    if (!linkData) {
-      // short link not found, redirect to root
-      // TODO: log 404s (https://github.com/dubinc/dub/issues/559)
-      return NextResponse.redirect(new URL("/", req.url), {
-        ...DUB_HEADERS,
-        status: 302,
-      });
-    }
-
-    // format link to fit the RedisLinkProps interface
-    link = await formatRedisLink(linkData as any);
-
-    ev.waitUntil(
-      redis.hset(domain, {
-        [key]: link,
-      }),
-    );
+  const linkData = await fetchLinkData(domain, key);
+  if (!linkData) {
+    // short link not found, redirect to root
+    // TODO: log 404s (https://github.com/dubinc/dub/issues/559)
+    return NextResponse.redirect(new URL("/", req.url), {
+      ...DUB_HEADERS,
+      status: 302,
+    });
   }
 
   const {
@@ -87,7 +86,7 @@ export default async function LinkMiddleware(
     android,
     geo,
     expiredUrl,
-  } = link;
+  } = linkData;
 
   // only show inspect modal if the link is not password protected
   if (inspectMode && !password) {
@@ -117,7 +116,7 @@ export default async function LinkMiddleware(
   }
 
   // if the link is banned
-  if (link.projectId === LEGAL_WORKSPACE_ID) {
+  if (linkData.projectId === LEGAL_WORKSPACE_ID) {
     return NextResponse.rewrite(new URL("/banned", req.url), DUB_HEADERS);
   }
 

@@ -1,7 +1,7 @@
 import { limiter } from "@/lib/cron";
 import { prisma } from "@/lib/prisma";
+import { redis } from "@/lib/redis";
 import { stripe } from "@/lib/stripe";
-import { redis } from "@/lib/upstash";
 import { FREE_PLAN, getPlanFromPriceId, log } from "@dub/utils";
 import { sendEmail } from "emails";
 import UpgradeEmail from "emails/upgrade-email";
@@ -220,10 +220,10 @@ export const POST = async (req: Request) => {
         // remove root domain redirect for all domains
         workspace.domains.forEach((domain) => {
           pipeline.hset(domain.slug.toLowerCase(), {
-            _root: {
+            _root: JSON.stringify({
               id: domain.id,
               projectId: workspace.id,
-            },
+            }),
           });
         });
 

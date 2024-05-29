@@ -1,13 +1,13 @@
 import { bulkCreateLinks } from "@/lib/api/links";
 import { prisma } from "@/lib/prisma";
 import { ProcessedLinkProps } from "@/lib/types";
-import { redis } from "@/lib/upstash";
+import { upstashRedis } from "@/lib/upstash";
 import "dotenv-flow/config";
 
 const domain = "xxx";
 
 async function main() {
-  const restoredData = await redis.lrange<ProcessedLinkProps>(
+  const restoredData = await upstashRedis.lrange<ProcessedLinkProps>(
     "restoredData",
     0,
     -1,
@@ -19,12 +19,12 @@ async function main() {
         domain,
       },
     });
-    await redis.lpush("restoredData", links);
+    await upstashRedis.lpush("restoredData", links);
   } else {
     const response = await bulkCreateLinks({ links: restoredData });
     console.log(response);
-    // delete restoredData from redis
-    await redis.del("restoredData");
+    // delete restoredData from upstashRedis
+    await upstashRedis.del("restoredData");
   }
 }
 

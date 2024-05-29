@@ -24,6 +24,7 @@ export class IntegrationHarness {
     this.http = new HttpClient({
       baseUrl: `${this.baseUrl}/api`,
       headers: {
+        "x-api-key": this.env.E2E_TOKEN,
         Authorization: `Bearer ${this.env.E2E_TOKEN}`,
       },
     });

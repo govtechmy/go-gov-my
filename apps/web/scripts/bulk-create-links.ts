@@ -1,5 +1,5 @@
 import { qstash } from "@/lib/cron";
-import { redis } from "@/lib/upstash";
+import { upstashRedis } from "@/lib/upstash";
 import "dotenv-flow/config";
 import * as fs from "fs";
 import * as Papa from "papaparse";
@@ -20,7 +20,7 @@ async function main() {
       });
     },
     complete: async () => {
-      await redis.lpush(`import:csv:${projectId}`, ...links);
+      await upstashRedis.lpush(`import:csv:${projectId}`, ...links);
 
       await qstash.publishJSON({
         url: `https://app.dub.co/api/cron/import/csv`,

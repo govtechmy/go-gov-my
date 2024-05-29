@@ -1,9 +1,7 @@
 import { recordClick } from "@/lib/tinybird";
-import { formatRedisDomain, redis } from "@/lib/upstash";
-import { DUB_HEADERS } from "@dub/utils";
+import { API_DOMAIN, DUB_HEADERS } from "@dub/utils";
+import type { RootMiddlewareLinkDataResponse } from "app/api/middleware/root/link-data/route";
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
-import { RedisDomainProps } from "../types";
-import { getDomainViaEdge } from "../userinfos";
 import { parse } from "./utils";
 
 export default async function RootMiddleware(
@@ -16,27 +14,24 @@ export default async function RootMiddleware(
     return NextResponse.next();
   }
 
-  let link = await redis.hget<RedisDomainProps>(domain, "_root");
-
-  if (!link) {
-    const linkData = await getDomainViaEdge(domain);
-
-    if (!linkData) {
-      // rewrite to placeholder page if domain doesn't exist
-      return NextResponse.rewrite(new URL(`/${domain}`, req.url), DUB_HEADERS);
-    }
-
-    // format link to fit the RedisLinkProps interface
-    link = await formatRedisDomain(linkData as any);
-
-    ev.waitUntil(
-      redis.hset(domain, {
-        _root: link,
-      }),
-    );
+  // Issue #8: self-host redis (https://github.com/govtechmy/go-gov-my/issues/8)
+  // need to make a HTTP request since middlewares use the edge runtime which cannot connect to redis servers
+  async function fetchLinkData(
+    domain: string,
+  ): Promise<RootMiddlewareLinkDataResponse> {
+    const url = new URL("/api/middleware/root/link-data", API_DOMAIN);
+    url.searchParams.set("domain", domain);
+    const response = await fetch(url);
+    return response.json();
   }
 
-  const { id, url, rewrite, iframeable } = link;
+  const linkData = await fetchLinkData(domain);
+  if (!linkData) {
+    // rewrite to placeholder page if domain doesn't exist
+    return NextResponse.rewrite(new URL(`/${domain}`, req.url), DUB_HEADERS);
+  }
+
+  const { id, url, rewrite, iframeable } = linkData;
 
   // record clicks on root page
   ev.waitUntil(recordClick({ req, id, ...(url && { url }), root: true }));
