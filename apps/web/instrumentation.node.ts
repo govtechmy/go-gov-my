@@ -1,9 +1,3 @@
-/**
- *  
- * 
- * 
- */
-
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { ConsoleSpanExporter } from '@opentelemetry/sdk-trace-node';
 import { Resource } from '@opentelemetry/resources';
@@ -19,19 +13,3 @@ const sdk = new NodeSDK({
 });
 
 sdk.start();
-
-// implement tracing
-// const { trace } = require('@opentelemetry/api');
-// const {
-//   SEMATTRS_CODE_FUNCTION,
-//   SEMATTRS_CODE_FILEPATH,
-// } = require('@opentelemetry/semantic-conventions');
-
-// return tracer.startActiveSpan(`rollOnce:`, (span) => {
-//   span.setAttribute(SEMATTRS_CODE_FUNCTION, 'function name');
-//   span.setAttribute(SEMATTRS_CODE_FILEPATH, __filename);
-//   span.addEvent(<event name>);
-//    result = 1+1;
-//   span.end();
-//   return result;
-// });
