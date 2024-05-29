@@ -77,7 +77,7 @@ export default function WorkspaceBillingClient() {
           });
       }, 1000);
     }
-  }, [searchParams, plan]);
+  }, [searchParams, plan, id]);
 
   return (
     <>

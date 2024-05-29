@@ -10,12 +10,13 @@ import { ReactNode } from "react";
 
 export default function AnalyticsClient({ children }: { children: ReactNode }) {
   const { exceededClicks, loading } = useWorkspace();
-  if (exceededClicks) {
-    return <WorkspaceExceededClicks />;
-  }
   const { allDomains, loading: loadingDomains } = useDomains();
   const searchParams = useSearchParams();
   const domain = searchParams?.get("domain");
+
+  if (exceededClicks) {
+    return <WorkspaceExceededClicks />;
+  }
 
   if (loading || loadingDomains) {
     return <LayoutLoader />;

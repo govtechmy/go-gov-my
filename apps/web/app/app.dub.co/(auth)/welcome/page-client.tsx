@@ -37,7 +37,7 @@ export default function WelcomePageClient() {
     } else {
       setShowUpgradePlanModal(false);
     }
-  }, [searchParams]);
+  }, [searchParams, setShowAddWorkspaceModal, setShowUpgradePlanModal]);
 
   return (
     <div className="flex h-screen flex-col items-center">

@@ -25,7 +25,7 @@ export default function PasswordForm() {
     if (state.redirect) {
       router.push(state.redirect);
     }
-  }, [state]);
+  }, [state, router]);
 
   const { isMobile } = useMediaQuery();
 

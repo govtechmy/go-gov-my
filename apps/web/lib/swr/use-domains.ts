@@ -10,14 +10,11 @@ import useDefaultDomains from "./use-default-domains";
 import useWorkspace from "./use-workspace";
 
 export default function useDomains({
-  id: workspaceId,
+  id,
   domain,
 }: { id?: string; domain?: string } = {}) {
-  let id: string | undefined = undefined;
-  if (workspaceId) {
-    id = workspaceId;
-  } else {
-    const { id: paramsId } = useWorkspace();
+  const { id: paramsId } = useWorkspace();
+  if (!id) {
     id = paramsId;
   }
 
