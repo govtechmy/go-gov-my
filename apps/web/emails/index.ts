@@ -1,10 +1,32 @@
 import { render } from "@react-email/render";
-import { Client } from "postmark";
+import nodemailer, { SendMailOptions } from "nodemailer";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 import { JSXElementConstructor, ReactElement } from "react";
 
-export const client = process.env.POSTMARK_API_KEY
-  ? new Client(process.env.POSTMARK_API_KEY)
-  : null;
+const hasEnvVars =
+  !!process.env.SMTP_HOST &&
+  !!process.env.SMTP_PORT &&
+  !!process.env.SMTP_USER &&
+  !!process.env.SMTP_PASSWORD;
+
+const smtpOptions: SMTPTransport.Options = {
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT),
+  secure: process.env.NODE_ENV === "production",
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASSWORD,
+  },
+};
+
+const client = hasEnvVars ? nodemailer.createTransport(smtpOptions) : null;
+
+if (process.env.NODE_ENV === "production" && !client) {
+  // Fail fast if it's a production environment
+  throw Error(
+    "Email is not configured. You may be missing some environment variables",
+  );
+}
 
 export const sendEmail = async ({
   email,
@@ -20,38 +42,38 @@ export const sendEmail = async ({
   text?: string;
   react?: ReactElement<any, string | JSXElementConstructor<any>>;
   marketing?: boolean;
-}) => {
-  if (process.env.NODE_ENV === "development" && !client) {
-    // Set up a fake email client for development
-    console.info(
-      `Email to ${email} with subject ${subject} sent from ${
-        from || process.env.NEXT_PUBLIC_APP_NAME
-      }`,
-    );
-    return Promise.resolve();
-  } else if (!client) {
+}): Promise<void> => {
+  if (!client) {
     console.error(
-      "Postmark is not configured. You need to add a POSTMARK_API_KEY in your .env file for emails to work.",
+      "Email is not configured. You may be missing some environment variables",
     );
     return Promise.resolve();
   }
 
-  return client.sendEmail({
-    From:
-      from || marketing
+  const sendOptions: SendMailOptions = {
+    from:
+      from ||
+      (marketing
         ? "steven@ship.dub.co"
         : process.env.NEXT_PUBLIC_IS_DUB
           ? "system@dub.co"
-          : `${process.env.NEXT_PUBLIC_APP_NAME} <system@${process.env.NEXT_PUBLIC_APP_DOMAIN}>`,
-    To: email,
-    ReplyTo: process.env.NEXT_PUBLIC_IS_DUB
+          : `${process.env.NEXT_PUBLIC_APP_NAME} <system@${process.env.NEXT_PUBLIC_APP_DOMAIN}>`),
+    to: email,
+    replyTo: process.env.NEXT_PUBLIC_IS_DUB
       ? "support@dub.co"
       : `support@${process.env.NEXT_PUBLIC_APP_DOMAIN}`,
-    Subject: subject,
-    ...(text && { TextBody: text }),
-    ...(react && { HtmlBody: render(react) }),
-    ...(marketing && {
-      MessageStream: "broadcast",
-    }),
-  });
+    subject: subject,
+    text,
+    ...(react && { html: render(react) }),
+  };
+
+  const response = await client.sendMail(sendOptions);
+
+  if (process.env.NODE_ENV === "development") {
+    const { to, subject, from } = sendOptions;
+    const previewUrl = nodemailer.getTestMessageUrl(response);
+    console.info(
+      `Email to ${to} with subject ${subject} sent from ${from}\nPreview email: ${previewUrl}`,
+    );
+  }
 };
