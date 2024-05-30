@@ -54,14 +54,10 @@ export const sendEmail = async ({
     from:
       from ||
       (marketing
-        ? "steven@ship.dub.co"
-        : process.env.NEXT_PUBLIC_IS_DUB
-          ? "system@dub.co"
-          : `${process.env.NEXT_PUBLIC_APP_NAME} <system@${process.env.NEXT_PUBLIC_APP_DOMAIN}>`),
+        ? `system@marketing.${process.env.NEXT_PUBLIC_APP_DOMAIN}`
+        : `${process.env.NEXT_PUBLIC_APP_NAME} <system@${process.env.NEXT_PUBLIC_APP_DOMAIN}>`),
     to: email,
-    replyTo: process.env.NEXT_PUBLIC_IS_DUB
-      ? "support@dub.co"
-      : `support@${process.env.NEXT_PUBLIC_APP_DOMAIN}`,
+    replyTo: `support@${process.env.NEXT_PUBLIC_APP_DOMAIN}`,
     subject: subject,
     text,
     ...(react && { html: render(react) }),
