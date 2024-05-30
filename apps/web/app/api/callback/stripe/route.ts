@@ -2,7 +2,7 @@ import { limiter } from "@/lib/cron";
 import { prisma } from "@/lib/prisma";
 import { redis } from "@/lib/redis";
 import { stripe } from "@/lib/stripe";
-import { FREE_PLAN, getPlanFromPriceId, log } from "@dub/utils";
+import { APP_NAME, FREE_PLAN, getPlanFromPriceId, log } from "@dub/utils";
 import { sendEmail } from "emails";
 import UpgradeEmail from "emails/upgrade-email";
 import { NextResponse } from "next/server";
@@ -105,7 +105,7 @@ export const POST = async (req: Request) => {
             limiter.schedule(() =>
               sendEmail({
                 email: user.email as string,
-                subject: `Thank you for upgrading to Dub.co ${plan.name}!`,
+                subject: `Thank you for upgrading to ${APP_NAME} ${plan.name}!`,
                 react: UpgradeEmail({
                   name: user.name,
                   email: user.email as string,
@@ -254,9 +254,8 @@ export const POST = async (req: Request) => {
           workspaceUsers.map((email) =>
             sendEmail({
               email,
-              from: "steven@dub.co",
-              subject: "Feedback on your Dub.co experience?",
-              text: "Hey!\n\nI noticed you recently cancelled your Dub.co subscription – we're sorry to see you go!\n\nI'd love to hear your feedback on your experience with Dub – what could we have done better?\n\nThanks!\n\nSteven Tey\nFounder, Dub.co",
+              subject: `Feedback on your ${APP_NAME} experience?`,
+              text: `Hey!\n\nWe noticed you recently cancelled your ${APP_NAME} subscription – we're sorry to see you go!\n\nWe'd love to hear your feedback on your experience with ${process.env.NEXT_PUBLIC_APP_NAME} – what could we have done better?\n\nThanks!`,
             }),
           ),
         ]);
