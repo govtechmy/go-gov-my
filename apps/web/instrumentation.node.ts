@@ -14,4 +14,6 @@ const sdk = new NodeSDK({
   traceExporter: new ConsoleSpanExporter(),
 });
 
-sdk.start();
+if (process.env.ENVIRONMENT !== "local") {
+  sdk.start();
+}
