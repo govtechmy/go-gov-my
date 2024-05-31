@@ -1,8 +1,7 @@
 "use client";
 
-import { Button, Github, Google, useMediaQuery } from "@dub/ui";
+import { Button, useMediaQuery } from "@dub/ui";
 import { signIn } from "next-auth/react";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -25,6 +24,13 @@ export default function LoginForm() {
 
   const { isMobile } = useMediaQuery();
 
+  const isLocal = process.env.ENVIRONMENT === "local";
+
+  const validateEmailDomain = (email: string) => {
+    if (!isLocal) return true;
+    return email.endsWith("gov.my");
+  };
+
   useEffect(() => {
     // when leave page, reset state
     return () => {
@@ -37,35 +43,13 @@ export default function LoginForm() {
 
   return (
     <>
-      <div className="flex space-x-2">
-        <Button
-          variant="secondary"
-          onClick={() => {
-            setClickedGoogle(true);
-            signIn("google", {
-              ...(next && next.length > 0 ? { callbackUrl: next } : {}),
-            });
-          }}
-          loading={clickedGoogle}
-          disabled={clickedEmail || clickedSSO}
-          icon={<Google className="h-5 w-5" />}
-        />
-        <Button
-          variant="secondary"
-          onClick={() => {
-            setClickedGithub(true);
-            signIn("github", {
-              ...(next && next.length > 0 ? { callbackUrl: next } : {}),
-            });
-          }}
-          loading={clickedGithub}
-          disabled={clickedEmail || clickedSSO}
-          icon={<Github className="h-5 w-5 text-black" />}
-        />
-      </div>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
+          if (!validateEmailDomain(email)) {
+            toast.error("You must use a government email address.");
+            return;
+          }
           setClickedEmail(true);
           fetch("/api/auth/account-exists", {
             method: "POST",
@@ -109,7 +93,7 @@ export default function LoginForm() {
               name="email"
               autoFocus={!isMobile}
               type="email"
-              placeholder="panic@thedis.co"
+              placeholder="officer@mod.gov.my"
               autoComplete="email"
               required
               value={email}
@@ -135,25 +119,6 @@ export default function LoginForm() {
           disabled={clickedGoogle || clickedSSO}
         />
       </form>
-      {noSuchAccount ? (
-        <p className="text-center text-sm text-red-500">
-          No such account.{" "}
-          <Link href="/register" className="font-semibold text-red-600">
-            Sign up
-          </Link>{" "}
-          instead?
-        </p>
-      ) : (
-        <p className="text-center text-sm text-gray-500">
-          Don&apos;t have an account?{" "}
-          <Link
-            href="/register"
-            className="font-semibold text-gray-500 transition-colors hover:text-black"
-          >
-            Sign up
-          </Link>
-        </p>
-      )}
     </>
   );
 }

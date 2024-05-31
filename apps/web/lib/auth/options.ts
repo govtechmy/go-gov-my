@@ -21,6 +21,11 @@ export const authOptions: NextAuthOptions = {
       sendVerificationRequest({ identifier, url }) {
         if (process.env.NODE_ENV === "development") {
           console.log(`Login link: ${url}`);
+          sendEmail({
+            email: identifier,
+            subject: `Your ${process.env.NEXT_PUBLIC_APP_NAME} Login Link`,
+            react: LoginLink({ url, email: identifier }),
+          });
           return;
         } else {
           sendEmail({

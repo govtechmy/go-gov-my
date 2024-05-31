@@ -53,6 +53,7 @@
     "@visx/text": "^3.3.0",
     "@visx/tooltip": "^2.16.0",
     "ai": "^3.0.22",
+    "aws-sdk": "^2.1631.0",
     "aws4fetch": "^1.0.18",
     "bottleneck": "^2.19.5",
     "cmdk": "^0.2.0",
