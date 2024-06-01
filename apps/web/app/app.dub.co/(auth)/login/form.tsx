@@ -1,10 +1,13 @@
 "use client";
 
-import { Button, useMediaQuery } from "@dub/ui";
+import { Button, Google, useMediaQuery } from "@dub/ui";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { allowedDomain } from "./allowedDomain";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
@@ -43,11 +46,28 @@ export default function LoginForm() {
 
   return (
     <>
+      <div className="flex space-x-2">
+        <Button
+          variant="secondary"
+          onClick={() => {
+            setClickedGoogle(true);
+            signIn("google", {
+              ...(next && next.length > 0 ? { callbackUrl: next } : {}),
+            });
+          }}
+          loading={clickedGoogle}
+          disabled={clickedEmail || clickedSSO}
+          icon={<Google className="h-5 w-5" />}
+          text="Continue with Google"
+        />
+      </div>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          if (!validateEmailDomain(email)) {
-            toast.error("You must use a government email address.");
+          if (!allowedDomain(email, isLocal)) {
+            toast.error(
+              "Email must be a government email ending with an allowed domain.",
+            );
             return;
           }
           setClickedEmail(true);
@@ -93,7 +113,7 @@ export default function LoginForm() {
               name="email"
               autoFocus={!isMobile}
               type="email"
-              placeholder="officer@mod.gov.my"
+              placeholder="e.g. officer@gov.my"
               autoComplete="email"
               required
               value={email}
@@ -106,6 +126,7 @@ export default function LoginForm() {
           </div>
         )}
         <Button
+          icon={<FontAwesomeIcon icon={faEnvelope} className="h-5 w-5" />}
           text="Continue with Email"
           variant="secondary"
           {...(!showEmailOption && {
