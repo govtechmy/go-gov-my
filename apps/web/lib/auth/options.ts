@@ -16,14 +16,14 @@ const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
 const prisma = new PrismaClient();
 
-const isLocal = process.env.ENVIRONMENT === "local";
+const isLocal = process.env.NODE_ENV === "development";
 
 export const authOptions: NextAuthOptions = {
   providers: [
     EmailProvider({
       sendVerificationRequest({ identifier, url }) {
+        // For now the dev and prod should be the same unless we want to handle them email differently later.
         if (process.env.NODE_ENV === "development") {
-          console.log(`Login link: ${url}`);
           sendEmail({
             email: identifier,
             subject: `Your ${process.env.NEXT_PUBLIC_APP_NAME} Login Link`,
@@ -36,6 +36,7 @@ export const authOptions: NextAuthOptions = {
             subject: `Your ${process.env.NEXT_PUBLIC_APP_NAME} Login Link`,
             react: LoginLink({ url, email: identifier }),
           });
+          return;
         }
       },
     }),
@@ -73,6 +74,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     signIn: async ({ user, account, profile }) => {
       console.log({ user, account, profile });
+
       if (!user.email || (await isBlacklistedEmail(user.email))) {
         return false;
       }

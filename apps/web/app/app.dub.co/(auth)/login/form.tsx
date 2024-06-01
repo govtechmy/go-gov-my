@@ -7,7 +7,6 @@ import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { allowedDomain } from "./allowedDomain";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
@@ -26,8 +25,6 @@ export default function LoginForm() {
   }, [searchParams]);
 
   const { isMobile } = useMediaQuery();
-
-  const isLocal = process.env.ENVIRONMENT === "local";
 
   useEffect(() => {
     // when leave page, reset state
@@ -59,12 +56,6 @@ export default function LoginForm() {
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          if (!allowedDomain(email, isLocal)) {
-            toast.error(
-              "Email must be a Government email ending with an allowed domain.",
-            );
-            return;
-          }
           setClickedEmail(true);
           fetch("/api/auth/account-exists", {
             method: "POST",

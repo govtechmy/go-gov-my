@@ -5,8 +5,8 @@ import { JSXElementConstructor, ReactElement } from "react";
 // import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 AWS.config.update({
-  accessKeyId: process.env.AWS_SMTP_USER,
-  secretAccessKey: process.env.AWS_SMTP_PASSWORD,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION || "us-east-1", // Set your preferred region
 });
 
@@ -15,6 +15,8 @@ AWS.config.getCredentials(function (error) {
     console.log(error.stack);
   }
 });
+
+console.log("AWS.config", AWS.config);
 
 const ses = new AWS.SES({ apiVersion: "2010-12-01" });
 
