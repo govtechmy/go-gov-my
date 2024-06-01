@@ -1,6 +1,7 @@
 import { isBlacklistedEmail } from "@/lib/edge-config";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
+import { allowedDomain } from "app/app.dub.co/(auth)/login/allowedDomain";
 import { sendEmail } from "emails";
 import LoginLink from "emails/login-link";
 import WelcomeEmail from "emails/welcome-email";
@@ -14,6 +15,8 @@ import { isStored, storage } from "../storage";
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
 
 const prisma = new PrismaClient();
+
+const isLocal = process.env.ENVIRONMENT === "local";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -73,6 +76,11 @@ export const authOptions: NextAuthOptions = {
       if (!user.email || (await isBlacklistedEmail(user.email))) {
         return false;
       }
+
+      if (!allowedDomain(user.email, isLocal)) {
+        return false;
+      }
+
       if (account?.provider === "google" || account?.provider === "github") {
         const userExists = await prisma.user.findUnique({
           where: { email: user.email },

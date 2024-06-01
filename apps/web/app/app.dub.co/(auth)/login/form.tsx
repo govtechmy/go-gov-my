@@ -29,11 +29,6 @@ export default function LoginForm() {
 
   const isLocal = process.env.ENVIRONMENT === "local";
 
-  const validateEmailDomain = (email: string) => {
-    if (!isLocal) return true;
-    return email.endsWith("gov.my");
-  };
-
   useEffect(() => {
     // when leave page, reset state
     return () => {
@@ -66,7 +61,7 @@ export default function LoginForm() {
           e.preventDefault();
           if (!allowedDomain(email, isLocal)) {
             toast.error(
-              "Email must be a government email ending with an allowed domain.",
+              "Email must be a Government email ending with an allowed domain.",
             );
             return;
           }
