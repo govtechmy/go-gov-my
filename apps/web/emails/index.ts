@@ -16,8 +16,6 @@ AWS.config.getCredentials(function (error) {
   }
 });
 
-console.log("AWS.config", AWS.config);
-
 const ses = new AWS.SES({ apiVersion: "2010-12-01" });
 
 export const sendEmail = async ({
