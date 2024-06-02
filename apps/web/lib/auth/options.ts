@@ -21,23 +21,21 @@ const isLocal = process.env.NODE_ENV === "development";
 export const authOptions: NextAuthOptions = {
   providers: [
     EmailProvider({
-      sendVerificationRequest({ identifier, url }) {
+      async sendVerificationRequest({ identifier, url }) {
         // For now the dev and prod should be the same unless we want to handle them email differently later.
         if (process.env.NODE_ENV === "development") {
-          sendEmail({
-            email: identifier,
-            subject: `Your ${process.env.NEXT_PUBLIC_APP_NAME} Login Link`,
-            react: LoginLink({ url, email: identifier }),
-          });
-          return;
-        } else {
-          sendEmail({
+          await sendEmail({
             email: identifier,
             subject: `Your ${process.env.NEXT_PUBLIC_APP_NAME} Login Link`,
             react: LoginLink({ url, email: identifier }),
           });
           return;
         }
+        await sendEmail({
+          email: identifier,
+          subject: `Your ${process.env.NEXT_PUBLIC_APP_NAME} Login Link`,
+          react: LoginLink({ url, email: identifier }),
+        });
       },
     }),
     GoogleProvider({
