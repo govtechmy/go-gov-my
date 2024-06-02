@@ -1,32 +1,22 @@
 import { render } from "@react-email/render";
-import nodemailer, { SendMailOptions } from "nodemailer";
-import SMTPTransport from "nodemailer/lib/smtp-transport";
+import AWS from "aws-sdk";
+import nodemailer from "nodemailer";
 import { JSXElementConstructor, ReactElement } from "react";
+// import SMTPTransport from "nodemailer/lib/smtp-transport";
 
-const hasEnvVars =
-  !!process.env.SMTP_HOST &&
-  !!process.env.SMTP_PORT &&
-  !!process.env.SMTP_USER &&
-  !!process.env.SMTP_PASSWORD;
+AWS.config.update({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION || "us-east-1", // Set your preferred region
+});
 
-const smtpOptions: SMTPTransport.Options = {
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT),
-  secure: process.env.NODE_ENV === "production",
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASSWORD,
-  },
-};
+AWS.config.getCredentials(function (error) {
+  if (error) {
+    console.log(error.stack);
+  }
+});
 
-const client = hasEnvVars ? nodemailer.createTransport(smtpOptions) : null;
-
-if (process.env.NODE_ENV === "production" && !client) {
-  // Fail fast if it's a production environment
-  throw Error(
-    "Email is not configured. You may be missing some environment variables",
-  );
-}
+const ses = new AWS.SES({ apiVersion: "2010-12-01" });
 
 export const sendEmail = async ({
   email,
@@ -43,33 +33,26 @@ export const sendEmail = async ({
   react?: ReactElement<any, string | JSXElementConstructor<any>>;
   marketing?: boolean;
 }): Promise<void> => {
-  if (!client) {
-    console.error(
-      "Email is not configured. You may be missing some environment variables",
-    );
-    return Promise.resolve();
+  const sourceEmail = process.env.SES_EMAIL_SOURCE;
+  const transporter = nodemailer.createTransport({
+    SES: ses,
+  });
+
+  if (!sourceEmail) {
+    throw new Error("SES_EMAIL_SOURCE is not defined");
   }
 
-  const sendOptions: SendMailOptions = {
-    from:
-      from ||
-      (marketing
-        ? `system@marketing.${process.env.NEXT_PUBLIC_APP_DOMAIN}`
-        : `${process.env.NEXT_PUBLIC_APP_NAME} <system@${process.env.NEXT_PUBLIC_APP_DOMAIN}>`),
+  const params = {
+    from: sourceEmail,
     to: email,
-    replyTo: `support@${process.env.NEXT_PUBLIC_APP_DOMAIN}`,
     subject: subject,
-    text,
-    ...(react && { html: render(react) }),
+    html: react ? render(react) : "",
+    data: text || "",
   };
 
-  const response = await client.sendMail(sendOptions);
+  const response = await transporter.sendMail(params);
 
   if (process.env.NODE_ENV === "development") {
-    const { to, subject, from } = sendOptions;
-    const previewUrl = nodemailer.getTestMessageUrl(response);
-    console.info(
-      `Email to ${to} with subject ${subject} sent from ${from}\nPreview email: ${previewUrl}`,
-    );
+    console.info(`Email sent to ${email} with subject ${subject}`);
   }
 };

@@ -1,8 +1,9 @@
 "use client";
 
-import { Button, Github, Google, useMediaQuery } from "@dub/ui";
+import { Button, Google, useMediaQuery } from "@dub/ui";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signIn } from "next-auth/react";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -49,18 +50,7 @@ export default function LoginForm() {
           loading={clickedGoogle}
           disabled={clickedEmail || clickedSSO}
           icon={<Google className="h-5 w-5" />}
-        />
-        <Button
-          variant="secondary"
-          onClick={() => {
-            setClickedGithub(true);
-            signIn("github", {
-              ...(next && next.length > 0 ? { callbackUrl: next } : {}),
-            });
-          }}
-          loading={clickedGithub}
-          disabled={clickedEmail || clickedSSO}
-          icon={<Github className="h-5 w-5 text-black" />}
+          text="Continue with Google"
         />
       </div>
       <form
@@ -109,7 +99,7 @@ export default function LoginForm() {
               name="email"
               autoFocus={!isMobile}
               type="email"
-              placeholder="panic@thedis.co"
+              placeholder="e.g. officer@gov.my"
               autoComplete="email"
               required
               value={email}
@@ -122,6 +112,7 @@ export default function LoginForm() {
           </div>
         )}
         <Button
+          icon={<FontAwesomeIcon icon={faEnvelope} className="h-5 w-5" />}
           text="Continue with Email"
           variant="secondary"
           {...(!showEmailOption && {
@@ -135,25 +126,6 @@ export default function LoginForm() {
           disabled={clickedGoogle || clickedSSO}
         />
       </form>
-      {noSuchAccount ? (
-        <p className="text-center text-sm text-red-500">
-          No such account.{" "}
-          <Link href="/register" className="font-semibold text-red-600">
-            Sign up
-          </Link>{" "}
-          instead?
-        </p>
-      ) : (
-        <p className="text-center text-sm text-gray-500">
-          Don&apos;t have an account?{" "}
-          <Link
-            href="/register"
-            className="font-semibold text-gray-500 transition-colors hover:text-black"
-          >
-            Sign up
-          </Link>
-        </p>
-      )}
     </>
   );
 }

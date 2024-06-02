@@ -50,6 +50,7 @@ export default function LoginLink({
               <Link
                 className="rounded-full bg-black px-6 py-3 text-center text-[12px] font-semibold text-white no-underline"
                 href={url}
+                target="_blank"
               >
                 Sign in
               </Link>
@@ -58,7 +59,8 @@ export default function LoginLink({
               or copy and paste this URL into your browser:
             </Text>
             <Text className="max-w-sm flex-wrap break-words font-medium text-purple-600 no-underline">
-              {url.replace(/^https?:\/\//, "")}
+              {/* {url.replace(/^https?:\/\//, "")} */}
+              {url}
             </Text>
             <Footer email={email} />
           </Container>
