@@ -15,7 +15,6 @@ export default function LoginForm() {
   const [noSuchAccount, setNoSuchAccount] = useState(false);
   const [email, setEmail] = useState("");
   const [clickedGoogle, setClickedGoogle] = useState(false);
-  const [clickedGithub, setClickedGithub] = useState(false);
   const [clickedEmail, setClickedEmail] = useState(false);
   const [clickedSSO, setClickedSSO] = useState(false);
 
@@ -30,7 +29,6 @@ export default function LoginForm() {
     // when leave page, reset state
     return () => {
       setClickedGoogle(false);
-      setClickedGithub(false);
       setClickedEmail(false);
       setClickedSSO(false);
     };
@@ -126,6 +124,9 @@ export default function LoginForm() {
           disabled={clickedGoogle || clickedSSO}
         />
       </form>
+      {noSuchAccount && (
+        <p className="text-center text-sm text-red-500">No such account. </p>
+      )}
     </>
   );
 }

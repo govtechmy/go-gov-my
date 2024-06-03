@@ -7,7 +7,6 @@ import LoginLink from "emails/login-link";
 import WelcomeEmail from "emails/welcome-email";
 import { type NextAuthOptions } from "next-auth";
 import EmailProvider from "next-auth/providers/email";
-import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import { subscribe } from "../flodesk";
 import { isStored, storage } from "../storage";
@@ -43,11 +42,6 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       allowDangerousEmailAccountLinking: true,
     }),
-    GithubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID as string,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-      allowDangerousEmailAccountLinking: true,
-    }),
   ],
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
@@ -81,7 +75,7 @@ export const authOptions: NextAuthOptions = {
         return false;
       }
 
-      if (account?.provider === "google" || account?.provider === "github") {
+      if (account?.provider === "google") {
         const userExists = await prisma.user.findUnique({
           where: { email: user.email },
           select: { id: true, name: true, image: true },
