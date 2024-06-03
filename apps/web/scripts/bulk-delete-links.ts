@@ -1,10 +1,13 @@
 import { prisma } from "@/lib/prisma";
-import { recordLink } from "@/lib/tinybird";
+import { trace } from "@opentelemetry/api";
 import "dotenv-flow/config";
 
 const domain = "song.fyi";
 
 async function main() {
+  const tracer = trace.getTracer("default");
+  const span = tracer.startSpan("recordLinks");
+
   const links = await prisma.link.findMany({
     where: {
       domain,
@@ -20,33 +23,38 @@ async function main() {
     },
     // take: 10000,
   });
-  const response = await Promise.allSettled([
-    prisma.link.deleteMany({
-      where: {
-        domain,
-        id: {
-          in: links.map((link) => link.id),
+
+  try {
+    const response = await Promise.allSettled([
+      prisma.link.deleteMany({
+        where: {
+          domain,
+          id: {
+            in: links.map((link) => link.id),
+          },
         },
-      },
-    }),
-    // redis.del(domain),
-    recordLink(
-      links.map((link) => ({
+      }),
+    ]);
+
+    // Log results to OpenTelemetry
+    links.forEach((link) => {
+      span.addEvent("recordLinks", {
         link_id: link.id,
         domain: link.domain,
         key: link.key,
         url: link.url,
         tag_ids: link.tags.map((tag) => tag.tagId),
-        workspace_id: link.projectId,
-        created_at: link.createdAt,
+        workspace_id: link.projectId?.toString(),
+        created_at: link.createdAt.toISOString(),
         deleted: true,
-      })),
-    ),
-  ]);
-
-  console.log(links.length);
-  console.table(links.slice(-10), ["domain", "key"]);
-  console.log(response);
+        logtime: new Date().toISOString(),
+      });
+    });
+  } catch (error) {
+    span.recordException(error);
+  } finally {
+    span.end();
+  }
 }
 
 main();

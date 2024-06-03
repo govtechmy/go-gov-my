@@ -1,14 +1,7 @@
-import { tb } from "@/lib/tinybird";
 import z from "@/lib/zod";
-import { getDaysDifference } from "@dub/utils";
 import { headers } from "next/headers";
 import { prisma } from "../prisma";
-import {
-  clickAnalyticsQuerySchema,
-  getClickAnalytics,
-  getClickAnalyticsResponse,
-} from "../zod/schemas/analytics";
-import { INTERVAL_DATA } from "./constants";
+import { clickAnalyticsQuerySchema } from "../zod/schemas/analytics";
 import { AnalyticsEndpoints } from "./types";
 
 export const getClicks = async (
@@ -30,8 +23,6 @@ export const getClicks = async (
     interval === "all" &&
     headers()?.get("Request-Source") === "app.dub.co"
   ) {
-    console.log("getting all time clicks count");
-
     let response = await prisma.link.findUnique({
       where: {
         id: linkId,
@@ -58,42 +49,51 @@ export const getClicks = async (
     return response[0]["clicks"];
   }
 
-  const pipe = tb.buildPipe({
-    pipe: `clicks_${endpoint || "count"}`,
-    parameters: getClickAnalytics,
-    data: getClickAnalyticsResponse[endpoint || "count"],
-  });
+  // ## Issue 6: Since we are not using Tinybird anymore, we need to migrate this pipe logic to ClickHouse
+  // const pipe = tb.buildPipe({
+  //   pipe: `clicks_${endpoint || "count"}`,
+  //   parameters: getClickAnalytics,
+  //   data: getClickAnalyticsResponse[endpoint || "count"],
+  // });
 
-  let granularity: "minute" | "hour" | "day" | "month" = "day";
+  // let granularity: "minute" | "hour" | "day" | "month" = "day";
 
-  if (interval) {
-    start = INTERVAL_DATA[interval].startDate;
-    end = new Date(Date.now());
-    granularity = INTERVAL_DATA[interval].granularity;
-  } else {
-    start = new Date(start!);
-    end = end ? new Date(end) : new Date(Date.now());
-    if (getDaysDifference(start, end) > 180) {
-      granularity = "month";
-    }
+  // if (interval) {
+  //   start = INTERVAL_DATA[interval].startDate;
+  //   end = new Date(Date.now());
+  //   granularity = INTERVAL_DATA[interval].granularity;
+  // } else {
+  //   start = new Date(start!);
+  //   end = end ? new Date(end) : new Date(Date.now());
+  //   if (getDaysDifference(start, end) > 180) {
+  //     granularity = "month";
+  //   }
 
-    // swap start and end if start is greater than end
-    if (start > end) {
-      [start, end] = [end, start];
-    }
-  }
+  //   // swap start and end if start is greater than end
+  //   if (start > end) {
+  //     [start, end] = [end, start];
+  //   }
+  // }
 
-  const res = await pipe(
-    getClickAnalytics.parse({
-      ...props,
-      workspaceId,
-      start: start.toISOString().replace("T", " ").replace("Z", ""),
-      end: end.toISOString().replace("T", " ").replace("Z", ""),
-      granularity,
-    }),
-  );
+  // const res = await pipe(
+  //   getClickAnalytics.parse({
+  //     ...props,
+  //     workspaceId,
+  //     start: start.toISOString().replace("T", " ").replace("Z", ""),
+  //     end: end.toISOString().replace("T", " ").replace("Z", ""),
+  //     granularity,
+  //   }),
+  // );
 
   // for total clicks, we return just the value;
   // everything else we return an array of values
-  return endpoint === "count" ? res.data[0].clicks : res.data;
+
+  let dummyResponse = [
+    { clicks: 10 },
+    { clicks: 15 },
+    { clicks: 8 },
+    { clicks: 20 },
+  ];
+
+  return endpoint === "count" ? dummyResponse[0].clicks : dummyResponse;
 };

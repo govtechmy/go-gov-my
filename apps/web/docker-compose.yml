@@ -16,5 +16,17 @@ services:
     image: redis:7.2
     ports:
       - 6379:6379
+  clickhouse-server:
+    image: clickhouse/clickhouse-server:latest
+    container_name: clickhouse-server
+    ports:
+      - "8123:8123" # HTTP interface
+      - "9000:9000" # Native client port
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    restart: unless-stopped
 volumes:
   ps-postgres:
+  clickhouse_data:
