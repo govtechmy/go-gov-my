@@ -124,11 +124,9 @@ export default function LoginForm() {
           disabled={clickedGoogle || clickedSSO}
         />
       </form>
-      {noSuchAccount && 
-        <p className="text-center text-sm text-red-500">
-          No such account.{" "}
-        </p>
-      }
+      {noSuchAccount && (
+        <p className="text-center text-sm text-red-500">No such account. </p>
+      )}
     </>
   );
 }
