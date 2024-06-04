@@ -41,35 +41,6 @@ export default function SettingsPageClient() {
           })
         }
       />
-      <Form
-        title="Your Email"
-        description={`This will be the email you use to log in to ${APP_NAME} and receive notifications.`}
-        inputAttrs={{
-          name: "email",
-          type: "email",
-          defaultValue: session?.user?.email || undefined,
-          placeholder: "panic@thedis.co",
-        }}
-        helpText="Must be a valid email address."
-        // helpText={<UpdateSubscription />} TODO: enable this once we can subscribe folks programmatically
-        handleSubmit={(data) =>
-          fetch("/api/user", {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          }).then(async (res) => {
-            if (res.status === 200) {
-              update();
-              toast.success("Successfully updated your email!");
-            } else {
-              const { error } = await res.json();
-              toast.error(error.message);
-            }
-          })
-        }
-      />
       <UploadAvatar />
       <DeleteAccountSection />
     </>

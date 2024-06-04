@@ -53,7 +53,6 @@ export const PUT = withSession(async ({ req, session }) => {
       },
       data: {
         ...(name && { name }),
-        ...(email && { email }),
         ...(image && { image }),
         ...(source && { source }),
       },
@@ -61,7 +60,6 @@ export const PUT = withSession(async ({ req, session }) => {
     return NextResponse.json(response);
   } catch (error) {
     if (error.code === "P2002") {
-      // return res.status(422).end("Email is already in use.");
       return NextResponse.json(
         {
           error: {
