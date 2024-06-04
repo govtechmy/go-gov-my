@@ -2,7 +2,7 @@ import { limiter } from "@/lib/cron";
 import { prisma } from "@/lib/prisma";
 import { redis } from "@/lib/redis";
 import { stripe } from "@/lib/stripe";
-import { APP_NAME, FREE_PLAN, getPlanFromPriceId, log } from "@dub/utils";
+import { APP_NAME, BUSINESS_PLAN, getPlanFromPriceId, log } from "@dub/utils";
 import { sendEmail } from "emails";
 import UpgradeEmail from "emails/upgrade-email";
 import { NextResponse } from "next/server";
@@ -234,12 +234,12 @@ export const POST = async (req: Request) => {
             },
             data: {
               plan: "free",
-              usageLimit: FREE_PLAN.limits.clicks!,
-              linksLimit: FREE_PLAN.limits.links!,
-              domainsLimit: FREE_PLAN.limits.domains!,
-              aiLimit: FREE_PLAN.limits.ai!,
-              tagsLimit: FREE_PLAN.limits.tags!,
-              usersLimit: FREE_PLAN.limits.users!,
+              usageLimit: BUSINESS_PLAN.limits.clicks!,
+              linksLimit: BUSINESS_PLAN.limits.links!,
+              domainsLimit: BUSINESS_PLAN.limits.domains!,
+              aiLimit: BUSINESS_PLAN.limits.ai!,
+              tagsLimit: BUSINESS_PLAN.limits.tags!,
+              usersLimit: BUSINESS_PLAN.limits.users!,
             },
           }),
           pipeline.exec(),
