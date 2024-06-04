@@ -45,11 +45,3 @@ export const DomainSchema = z.object({
     .openapi({ enum: ["redirect", "rewrite"] }),
   clicks: z.number().describe("The number of clicks on the domain.").default(0),
 });
-
-export const transferDomainBodySchema = z.object({
-  newWorkspaceId: z
-    .string({ required_error: "New workspace ID is required." })
-    .min(1, "New workspace ID cannot be empty.")
-    .transform((v) => v.replace("ws_", ""))
-    .describe("The ID of the new workspace to transfer the domain to."),
-});
