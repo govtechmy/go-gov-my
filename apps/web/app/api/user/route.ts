@@ -39,7 +39,7 @@ const updateUserSchema = z.object({
 
 // PUT /api/user – edit a specific user
 export const PUT = withSession(async ({ req, session }) => {
-  let { name, email, image, source } = await updateUserSchema.parseAsync(
+  let { name, image, source } = await updateUserSchema.parseAsync(
     await req.json(),
   );
   try {
