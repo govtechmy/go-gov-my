@@ -20,7 +20,6 @@ export default function NavTabs() {
   const tabs = [
     { name: "Links", href: `/${slug}` },
     { name: "Analytics", href: `/${slug}/analytics` },
-    { name: "Domains", href: `/${slug}/domains` },
     { name: "Settings", href: `/${slug}/settings` },
   ];
 

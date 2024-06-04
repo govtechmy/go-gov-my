@@ -4,7 +4,6 @@ import { Lock } from "@/ui/shared/icons";
 import {
   BlurImage,
   Button,
-  ButtonProps,
   InfoTooltip,
   Logo,
   Modal,
@@ -13,7 +12,7 @@ import {
   TooltipContent,
   useRouterStuff,
 } from "@dub/ui";
-import { FADE_IN_ANIMATION_SETTINGS, capitalize } from "@dub/utils";
+import { FADE_IN_ANIMATION_SETTINGS } from "@dub/utils";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
@@ -368,48 +367,7 @@ function AddEditDomainModal({
   );
 }
 
-function AddDomainButton({
-  setShowAddEditDomainModal,
-  buttonProps,
-}: {
-  setShowAddEditDomainModal: Dispatch<SetStateAction<boolean>>;
-  buttonProps?: Partial<ButtonProps>;
-}) {
-  const { plan, nextPlan, domainsLimit, exceededDomains } = useWorkspace();
-  const { queryParams } = useRouterStuff();
-
-  return (
-    <div>
-      <Button
-        text="Add Domain"
-        disabledTooltip={
-          exceededDomains ? (
-            <TooltipContent
-              title={`You can only add up to ${domainsLimit} domain${
-                domainsLimit === 1 ? "" : "s"
-              } on the ${capitalize(plan)} plan. Upgrade to add more domains`}
-              cta="Upgrade"
-              onClick={() => {
-                queryParams({
-                  set: {
-                    upgrade: nextPlan.name.toLowerCase(),
-                  },
-                });
-              }}
-            />
-          ) : undefined
-        }
-        onClick={() => setShowAddEditDomainModal(true)}
-        {...buttonProps}
-      />
-    </div>
-  );
-}
-
-export function useAddEditDomainModal({
-  props,
-  buttonProps,
-}: { props?: DomainProps; buttonProps?: Partial<ButtonProps> } = {}) {
+export function useAddEditDomainModal({ props }: { props?: DomainProps } = {}) {
   const [showAddEditDomainModal, setShowAddEditDomainModal] = useState(false);
 
   const AddEditDomainModalCallback = useCallback(() => {
@@ -420,27 +378,13 @@ export function useAddEditDomainModal({
         props={props}
       />
     );
-  }, [showAddEditDomainModal, setShowAddEditDomainModal]);
-
-  const AddDomainButtonCallback = useCallback(() => {
-    return (
-      <AddDomainButton
-        setShowAddEditDomainModal={setShowAddEditDomainModal}
-        buttonProps={buttonProps}
-      />
-    );
-  }, [setShowAddEditDomainModal, buttonProps]);
+  }, [showAddEditDomainModal, setShowAddEditDomainModal, props]);
 
   return useMemo(
     () => ({
       setShowAddEditDomainModal,
       AddEditDomainModal: AddEditDomainModalCallback,
-      AddDomainButton: AddDomainButtonCallback,
     }),
-    [
-      setShowAddEditDomainModal,
-      AddEditDomainModalCallback,
-      AddDomainButtonCallback,
-    ],
+    [setShowAddEditDomainModal, AddEditDomainModalCallback],
   );
 }
