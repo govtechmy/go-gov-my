@@ -233,7 +233,7 @@ export const POST = async (req: Request) => {
               stripeId,
             },
             data: {
-              plan: "free",
+              plan: "business",
               usageLimit: BUSINESS_PLAN.limits.clicks!,
               linksLimit: BUSINESS_PLAN.limits.links!,
               domainsLimit: BUSINESS_PLAN.limits.domains!,
