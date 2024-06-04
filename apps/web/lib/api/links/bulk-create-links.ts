@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { redis } from "@/lib/redis";
-import { recordLink } from "@/lib/tinybird";
 import { LinkProps, ProcessedLinkProps, RedisLinkProps } from "@/lib/types";
 import { formatRedisLink } from "@/lib/upstash";
 import { getParamsFromURL, truncate } from "@dub/utils";
+import { trace } from "@opentelemetry/api";
 import { combineTagIds, transformLink } from "./utils";
 
 export async function bulkCreateLinks({
@@ -89,6 +89,8 @@ export async function propagateBulkLinkChanges(
   links: (LinkProps & { tags: { tagId: string }[] })[],
 ) {
   const pipeline = redis.pipeline();
+  const tracer = trace.getTracer("default");
+  const span = tracer.startSpan("recordLinks");
 
   // split links into domains for better write effeciency in Redis
   const linksByDomain: Record<string, Record<string, RedisLinkProps>> = {};
@@ -110,31 +112,38 @@ export async function propagateBulkLinkChanges(
     pipeline.hset(domain.toLowerCase(), JSON.stringify(links));
   });
 
-  await Promise.all([
-    // update Redis
-    pipeline.exec(),
-    // update Tinybird
-    recordLink(
-      links.map((link) => ({
+  try {
+    await Promise.all([
+      // update Redis
+      pipeline.exec(),
+      // update links usage for workspace
+      prisma.project.update({
+        where: {
+          id: links[0].projectId!, // this will always be present
+        },
+        data: {
+          linksUsage: {
+            increment: links.length,
+          },
+        },
+      }),
+    ]);
+    // Log results to OpenTelemetry
+    links.forEach((link) => {
+      span.addEvent("recordLinks", {
         link_id: link.id,
         domain: link.domain,
         key: link.key,
         url: link.url,
         tag_ids: link.tags.map((tag) => tag.tagId),
-        workspace_id: link.projectId,
-        created_at: link.createdAt,
-      })),
-    ),
-    // update links usage for workspace
-    prisma.project.update({
-      where: {
-        id: links[0].projectId!, // this will always be present
-      },
-      data: {
-        linksUsage: {
-          increment: links.length,
-        },
-      },
-    }),
-  ]);
+        workspace_id: link.projectId?.toString(),
+        created_at: link.createdAt.toISOString(),
+        logtime: new Date().toISOString(),
+      });
+    });
+  } catch (error) {
+    span.recordException(error);
+  } finally {
+    span.end();
+  }
 }

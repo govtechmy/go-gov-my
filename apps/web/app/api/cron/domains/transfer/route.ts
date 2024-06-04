@@ -1,8 +1,8 @@
 import { qstash, receiver } from "@/lib/cron";
 import { prisma } from "@/lib/prisma";
-import { recordLink } from "@/lib/tinybird";
 import z from "@/lib/zod";
 import { APP_DOMAIN_WITH_NGROK, log } from "@dub/utils";
+import { trace } from "@opentelemetry/api";
 import { NextResponse } from "next/server";
 import { domainTransferredEmail, updateLinksInRedis } from "./utils";
 
@@ -15,6 +15,8 @@ const schema = z.object({
 
 export async function POST(req: Request) {
   const body = await req.json();
+  const tracer = trace.getTracer("default");
+  const span = tracer.startSpan("recordLinks");
 
   if (process.env.VERCEL === "1") {
     const isValid = await receiver.verify({
@@ -62,18 +64,20 @@ export async function POST(req: Request) {
         where: { linkId: { in: linkIds } },
       }),
       updateLinksInRedis({ links, newWorkspaceId, domain }),
-      recordLink(
-        links.map((link) => ({
-          link_id: link.id,
-          domain: link.domain,
-          key: link.key,
-          url: link.url,
-          tag_ids: [],
-          workspace_id: newWorkspaceId,
-          created_at: link.createdAt,
-        })),
-      ),
     ]);
+
+    // Log results to OpenTelemetry
+    links.forEach((link) => {
+      span.addEvent("recordLinks", {
+        link_id: link.id,
+        domain: link.domain,
+        key: link.key,
+        url: link.url,
+        workspace_id: newWorkspaceId,
+        created_at: link.createdAt.toISOString(),
+        logtime: new Date().toISOString(),
+      });
+    });
 
     // wait 500 ms before making another request
     await new Promise((resolve) => setTimeout(resolve, 500));
@@ -107,11 +111,14 @@ export async function POST(req: Request) {
       response: "success",
     });
   } catch (error) {
+    span.recordException(error);
     await log({
       message: `Domain transfer cron for the workspace ${newWorkspaceId} failed. Error: ${error.message}`,
       type: "errors",
     });
 
     return NextResponse.json({ error: error.message });
+  } finally {
+    span.end();
   }
 }
