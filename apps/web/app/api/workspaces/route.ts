@@ -11,7 +11,7 @@ import {
   WorkspaceSchema,
   createWorkspaceSchema,
 } from "@/lib/zod/schemas/workspaces";
-import { FREE_WORKSPACES_LIMIT, nanoid } from "@dub/utils";
+import { nanoid } from "@dub/utils";
 import { waitUntil } from "@vercel/functions";
 import { NextResponse } from "next/server";
 
@@ -65,7 +65,8 @@ export const POST = withSession(async ({ req, session }) => {
 
   const freeWorkspaces = await prisma.project.count({
     where: {
-      plan: "free",
+      //// Remove filter for free workspaces
+      // plan: "free",
       users: {
         some: {
           userId: session.user.id,
@@ -75,12 +76,13 @@ export const POST = withSession(async ({ req, session }) => {
     },
   });
 
-  if (freeWorkspaces >= FREE_WORKSPACES_LIMIT) {
-    throw new DubApiError({
-      code: "exceeded_limit",
-      message: `You can only create up to ${FREE_WORKSPACES_LIMIT} free workspaces. Additional workspaces require a paid plan.`,
-    });
-  }
+  //// Remove filter for free workspaces
+  // if (freeWorkspaces >= FREE_WORKSPACES_LIMIT) {
+  //   throw new DubApiError({
+  //     code: "exceeded_limit",
+  //     message: `You can only create up to ${FREE_WORKSPACES_LIMIT} free workspaces. Additional workspaces require a paid plan.`,
+  //   });
+  // }
 
   const [slugExist, domainExist] = await Promise.all([
     prisma.project.findUnique({
@@ -112,6 +114,7 @@ export const POST = withSession(async ({ req, session }) => {
     data: {
       name,
       slug,
+      plan: "business",
       users: {
         create: {
           userId: session.user.id,
