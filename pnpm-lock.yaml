@@ -58,6 +58,9 @@ importers:
       '@next-auth/prisma-adapter':
         specifier: ^1.0.5
         version: 1.0.5(@prisma/client@5.14.0)(next-auth@4.24.4)
+      '@opentelemetry/api':
+        specifier: ^1.8.0
+        version: 1.8.0
       '@opentelemetry/resources':
         specifier: ^1.24.1
         version: 1.24.1(@opentelemetry/api@1.8.0)

@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
-import { PRO_PLAN } from "@dub/utils";
+import { BUSINESS_PLAN } from "@dub/utils";
 
 const WORKSPACE_ID = "ws_abcdefg";
-const PLAN = PRO_PLAN;
+const PLAN = BUSINESS_PLAN;
 
 async function main() {
   await prisma.project.update({

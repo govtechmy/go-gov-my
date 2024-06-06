@@ -13,9 +13,9 @@ export default function useWorkspaces() {
 
   const freeWorkspaces = workspaces?.filter(
     (workspace) =>
-      workspace.plan === "free" &&
-      workspace?.users &&
-      workspace.users[0].role === "owner",
+      //// Remove filter workspace free plan
+      // workspace.plan === "free" &&
+      workspace?.users && workspace.users[0].role === "owner",
   );
 
   return {

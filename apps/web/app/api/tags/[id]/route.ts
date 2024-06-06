@@ -1,8 +1,8 @@
 import { DubApiError } from "@/lib/api/errors";
 import { withWorkspace } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { recordLink } from "@/lib/tinybird";
 import { updateTagBodySchema } from "@/lib/zod/schemas/tags";
+import { trace } from "@opentelemetry/api";
 import { NextResponse } from "next/server";
 
 // PATCH /api/workspaces/[idOrSlug]/tags/[id] – update a tag for a workspace
@@ -52,6 +52,9 @@ export const PUT = PATCH;
 // DELETE /api/workspaces/[idOrSlug]/tags/[id] – delete a tag for a workspace
 export const DELETE = withWorkspace(async ({ params, workspace }) => {
   const { id } = params;
+  const tracer = trace.getTracer("default");
+  const span = tracer.startSpan("recordLinks");
+
   try {
     const response = await prisma.tag.delete({
       where: {
@@ -82,28 +85,30 @@ export const DELETE = withWorkspace(async ({ params, workspace }) => {
       });
     }
 
-    // update links metadata in tinybird after deleting a tag
-    await recordLink(
-      response.links.map(({ link }) => ({
-        link_id: link.id,
-        domain: link.domain,
-        key: link.key,
-        url: link.url,
-        tag_ids: [],
+    // Log results to OpenTelemetry
+    response.links.forEach((link) => {
+      span.addEvent("recordLinks", {
+        link_id: link.link.id,
+        domain: link.link.domain,
+        key: link.link.key,
+        url: link.link.url,
         workspace_id: workspace.id,
-        created_at: link.createdAt,
-      })),
-    );
+        created_at: link.link.createdAt.toISOString(),
+        logtime: new Date().toISOString(),
+      });
+    });
 
     return NextResponse.json(response);
   } catch (error) {
+    span.recordException(error);
     if (error.code === "P2025") {
       throw new DubApiError({
         code: "not_found",
         message: "Tag not found.",
       });
     }
-
-    throw error;
+    return NextResponse.json({ error: error.message });
+  } finally {
+    span.end();
   }
 });

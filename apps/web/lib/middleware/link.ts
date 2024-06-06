@@ -1,5 +1,4 @@
 import { detectBot, getFinalUrl, parse } from "@/lib/middleware/utils";
-import { recordClick } from "@/lib/tinybird";
 import {
   API_DOMAIN,
   DUB_DEMO_LINKS,
@@ -8,6 +7,7 @@ import {
   LOCALHOST_GEO_DATA,
   punyEncode,
 } from "@dub/utils";
+import { trace } from "@opentelemetry/api";
 import type { LinkMiddlewareLinkDataResponse } from "app/api/middleware/link/link-data/route";
 import {
   NextFetchEvent,
@@ -133,6 +133,8 @@ export default async function LinkMiddleware(
   }
 
   const searchParams = req.nextUrl.searchParams;
+  const tracer = trace.getTracer("default");
+  const span = tracer.startSpan("recordClick");
   // only track the click when there is no `dub-no-track` header or query param
   if (
     !(
@@ -140,7 +142,19 @@ export default async function LinkMiddleware(
       searchParams.get("dub-no-track") === "1"
     )
   ) {
-    ev.waitUntil(recordClick({ req, id, url: getFinalUrl(url, { req }) }));
+    try {
+      // Log results to OpenTelemetry
+      span.addEvent("recordClick", {
+        id,
+        url,
+        workspace_id: linkData.projectId?.toString(),
+        logtime: new Date().toISOString(),
+      });
+    } catch (error) {
+      span.recordException(error);
+    } finally {
+      span.end();
+    }
   }
 
   const isBot = detectBot(req);

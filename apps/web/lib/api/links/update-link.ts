@@ -1,10 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { redis } from "@/lib/redis";
 import { isStored, storage } from "@/lib/storage";
-import { recordLink } from "@/lib/tinybird";
 import { LinkProps, ProcessedLinkProps } from "@/lib/types";
 import { formatRedisLink } from "@/lib/upstash";
 import { SHORT_DOMAIN, getParamsFromURL, truncate } from "@dub/utils";
+import { trace } from "@opentelemetry/api";
 import { Prisma } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
 import { combineTagIds, transformLink } from "./utils";
@@ -33,6 +33,8 @@ export async function updateLink({
   } = updatedLink;
   const changedKey = key.toLowerCase() !== oldKey.toLowerCase();
   const changedDomain = domain !== oldDomain;
+  const tracer = trace.getTracer("default");
+  const span = tracer.startSpan("recordLinks");
 
   const { utm_source, utm_medium, utm_campaign, utm_term, utm_content } =
     getParamsFromURL(url);
@@ -115,37 +117,46 @@ export async function updateLink({
     },
   });
 
-  waitUntil(
-    Promise.all([
-      // record link in Redis
-      redis.hset(updatedLink.domain.toLowerCase(), {
-        [updatedLink.key.toLowerCase()]: JSON.stringify(
-          await formatRedisLink(response),
-        ),
-      }),
-      // record link in Tinybird
-      recordLink({
-        link_id: response.id,
-        domain: response.domain,
-        key: response.key,
-        url: response.url,
-        tag_ids: response.tags.map(({ tag }) => tag.id),
-        workspace_id: response.projectId,
-        created_at: response.createdAt,
-      }),
-      // if key is changed: delete the old key in Redis
-      (changedDomain || changedKey) &&
-        redis.hdel(oldDomain.toLowerCase(), oldKey.toLowerCase()),
-      // if proxy is true and image is not stored in R2, upload image to R2
-      proxy &&
-        image &&
-        !isStored(image) &&
-        storage.upload(`images/${id}`, image, {
-          width: 1200,
-          height: 630,
+  try {
+    waitUntil(
+      Promise.all([
+        // record link in Redis
+        redis.hset(updatedLink.domain.toLowerCase(), {
+          [updatedLink.key.toLowerCase()]: JSON.stringify(
+            await formatRedisLink(response),
+          ),
         }),
-    ]),
-  );
+        // if key is changed: delete the old key in Redis
+        (changedDomain || changedKey) &&
+          redis.hdel(oldDomain.toLowerCase(), oldKey.toLowerCase()),
+        // if proxy is true and image is not stored in R2, upload image to R2
+        proxy &&
+          image &&
+          !isStored(image) &&
+          storage.upload(`images/${id}`, image, {
+            width: 1200,
+            height: 630,
+          }),
+      ]),
+    );
 
-  return transformLink(response);
+    // Log results to OpenTelemetry
+    span.addEvent("recordLinks", {
+      link_id: response.id,
+      domain: response.domain,
+      key: response.key,
+      url: response.url,
+      tag_ids: response.tags.map(({ tag }) => tag.id),
+      workspace_id: response.projectId?.toString(),
+      created_at: response.createdAt.toISOString(),
+      updated_at: response.updatedAt.toISOString(),
+    });
+
+    return transformLink(response);
+  } catch (error) {
+    span.recordException(error);
+    throw error;
+  } finally {
+    span.end();
+  }
 }
