@@ -226,19 +226,17 @@ export async function processLink<T extends Record<string, any>>({
           code: "unprocessable_entity",
         };
       }
-    } catch (e){
+    } catch (e) {
       if (e?.code === "P2023") {
         return {
           link: payload,
-          error:
-            "Invalid tagIds detected: invalid",
+          error: "Invalid tagIds detected: invalid",
           code: "unprocessable_entity",
         };
       }
       return {
         link: payload,
-        error:
-          e?.meta?.message,
+        error: e?.meta?.message,
         code: e.code,
       };
     }
