@@ -36,7 +36,7 @@ export const POST = withSession(async ({ req, session }) => {
   console.log("token", token);
   const hashedKey = await hashToken(token);
   // take first 3 and last 4 characters of the key
-  const partialKey = `${token.slice(0, 3)}...${token.slice(-4)}`;
+  const partialKey = token; //`${token.slice(0, 3)}...${token.slice(-4)}`;
   await Promise.all([
     prisma.token.create({
       data: {
