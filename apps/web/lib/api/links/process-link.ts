@@ -230,7 +230,7 @@ export async function processLink<T extends Record<string, any>>({
       return {
         link: payload,
         error:
-          "Invalid tagIds detected: ",
+          "Invalid tagIds detected: invalid",
         code: "unprocessable_entity",
       };
     }
