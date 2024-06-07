@@ -139,12 +139,6 @@ export interface RedisDomainProps {
   projectId: string;
 }
 
-export interface BitlyGroupProps {
-  guid: string;
-  bsds: string[]; // custom domains
-  tags: string[];
-}
-
 export interface ImportedDomainCountProps {
   id: number;
   domain: string;
