@@ -12,10 +12,6 @@ export default function WorkspaceSettingsLayout({
       segment: null,
     },
     {
-      name: "Billing",
-      segment: "billing",
-    },
-    {
       name: "People",
       segment: "people",
     },
