@@ -157,7 +157,7 @@ export function LineItem({
       isVisible &&
       (admin
         ? `/api/admin/links/${title}`
-        : `/api/links/${title}?workspaceId=${id}&checkDomain=true`),
+        : `/api/links/${title}?workspaceId=${id}`),
     fetcher,
     {
       dedupingInterval: 60000,

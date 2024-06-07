@@ -7,7 +7,6 @@ import { AnalyticsEndpoints } from "@/lib/analytics/types";
 import { DubApiError } from "@/lib/api/errors";
 import { withWorkspace } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { getDomainViaEdge } from "@/lib/userinfos";
 import { clickAnalyticsQuerySchema } from "@/lib/zod/schemas/analytics";
 import { linkConstructor } from "@dub/utils";
 import { json2csv } from "json-2-csv";
@@ -42,11 +41,7 @@ export const GET = withWorkspace(
       });
     }
 
-    const linkId = link
-      ? link.id
-      : domain && key === "_root"
-        ? await getDomainViaEdge(domain).then((d) => d?.id)
-        : null;
+    const linkId = link ? link.id : null;
 
     const zip = new JSZip();
 
@@ -63,7 +58,7 @@ export const GET = withWorkspace(
             ...parsedParams,
           });
 
-          const [links, domains] = await Promise.all([
+          const [links] = await Promise.all([
             prisma.link.findMany({
               where: {
                 projectId: workspace.id,
@@ -78,19 +73,6 @@ export const GET = withWorkspace(
                 url: true,
               },
             }),
-            prisma.domain.findMany({
-              where: {
-                projectId: workspace.id,
-                id: {
-                  in: data.map(({ link }) => link),
-                },
-              },
-              select: {
-                id: true,
-                slug: true,
-                target: true,
-              },
-            }),
           ]);
 
           const allLinks = [
@@ -102,14 +84,6 @@ export const GET = withWorkspace(
                 pretty: true,
               }),
               url: link.url,
-            })),
-            ...domains.map((domain) => ({
-              linkId: domain.id,
-              shortLink: linkConstructor({
-                domain: domain.slug,
-                pretty: true,
-              }),
-              url: domain.target || "",
             })),
           ];
 

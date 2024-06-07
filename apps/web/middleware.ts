@@ -1,9 +1,4 @@
-import {
-  ApiMiddleware,
-  AppMiddleware,
-  LinkMiddleware,
-  RootMiddleware,
-} from "@/lib/middleware";
+import { ApiMiddleware, AppMiddleware, LinkMiddleware } from "@/lib/middleware";
 import { parse } from "@/lib/middleware/utils";
 import {
   ADMIN_HOSTNAMES,
@@ -57,9 +52,9 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
     return AdminMiddleware(req);
   }
 
-  // for root pages (e.g. dub.sh, chatg.pt, etc.)
+  // key must be defined for link redirects
   if (key.length === 0) {
-    return RootMiddleware(req, ev);
+    throw Error("Failed to redirect, missing link key");
   }
 
   return LinkMiddleware(req, ev);

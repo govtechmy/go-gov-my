@@ -1,6 +1,6 @@
 import { withWorkspace } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { getDomainOrLink } from "@/lib/userinfos";
+import { getLink } from "@/lib/userinfos";
 import z from "@/lib/zod";
 import { domainKeySchema } from "@/lib/zod/schemas/links";
 import { NextResponse } from "next/server";
@@ -12,7 +12,7 @@ const updatePublicStatsSchema = z.object({
 // GET /api/analytics – get the publicStats setting for a link
 export const GET = withWorkspace(async ({ searchParams }) => {
   const { domain, key } = domainKeySchema.parse(searchParams);
-  const response = await getDomainOrLink({ domain, key });
+  const response = await getLink({ domain, key });
   return NextResponse.json(response);
 });
 
@@ -20,15 +20,9 @@ export const GET = withWorkspace(async ({ searchParams }) => {
 export const PUT = withWorkspace(async ({ req, searchParams }) => {
   const { domain, key } = domainKeySchema.parse(searchParams);
   const { publicStats } = updatePublicStatsSchema.parse(await req.json());
-  const response =
-    key === "_root"
-      ? await prisma.domain.update({
-          where: { slug: domain },
-          data: { publicStats },
-        })
-      : await prisma.link.update({
-          where: { domain_key: { domain, key } },
-          data: { publicStats },
-        });
+  const response = await prisma.link.update({
+    where: { domain_key: { domain, key } },
+    data: { publicStats },
+  });
   return NextResponse.json(response);
 });

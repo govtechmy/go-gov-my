@@ -111,28 +111,18 @@ export async function deleteWorkspace(
 export async function deleteWorkspaceAdmin(
   workspace: Pick<WorkspaceProps, "id" | "slug" | "stripeId" | "logo">,
 ) {
-  const [customDomains, _] = await Promise.all([
-    prisma.domain.findMany({
-      where: {
-        projectId: workspace.id,
+  await prisma.link.updateMany({
+    where: {
+      projectId: workspace.id,
+      domain: {
+        in: DUB_DOMAINS_ARRAY,
       },
-      select: {
-        slug: true,
-      },
-    }),
-    prisma.link.updateMany({
-      where: {
-        projectId: workspace.id,
-        domain: {
-          in: DUB_DOMAINS_ARRAY,
-        },
-      },
-      data: {
-        userId: LEGAL_USER_ID,
-        projectId: LEGAL_WORKSPACE_ID,
-      },
-    }),
-  ]);
+    },
+    data: {
+      userId: LEGAL_USER_ID,
+      projectId: LEGAL_WORKSPACE_ID,
+    },
+  });
 
   const deleteWorkspaceResponse = await Promise.all([
     // delete workspace logo if it's a custom logo stored in R2

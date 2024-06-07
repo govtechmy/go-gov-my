@@ -1,7 +1,6 @@
 import { getClicks } from "@/lib/analytics/clicks";
 import { validDateRangeForPlan } from "@/lib/analytics/utils";
 import { withWorkspace } from "@/lib/auth";
-import { getDomainViaEdge } from "@/lib/userinfos";
 import {
   analyticsEndpointSchema,
   clickAnalyticsQuerySchema,
@@ -24,11 +23,7 @@ export const GET = withWorkspace(
       throwError: true,
     });
 
-    const linkId = link
-      ? link.id
-      : domain && key === "_root"
-        ? await getDomainViaEdge(domain).then((d) => d?.id)
-        : null;
+    const linkId = link ? link.id : null;
 
     const response = await getClicks({
       ...parsedParams,
