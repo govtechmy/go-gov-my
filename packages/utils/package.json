@@ -1,7 +1,7 @@
 {
-  "name": "@dub/utils",
-  "description": "Utility functions and constants for Dub.co",
-  "version": "0.0.54",
+  "name": "@gogovmy/utils",
+  "description": "Utility functions and constants for GoGovMy",
+  "version": "0.0.2",
   "sideEffects": false,
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
@@ -39,21 +39,20 @@
     "punycode": "^2.3.0",
     "tailwind-merge": "^2.2.1"
   },
-  "author": "Steven Tey <stevensteel97@gmail.com>",
-  "homepage": "https://dub.co",
+  "author": "Moshpit94 <farhan.gunz@gmail.com>",
+  "homepage": "https://go.gov.my",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/steven-tey/dub.git"
+    "url": "git+https://github.com/govtechmy/go-gov-my.git"
   },
   "bugs": {
-    "url": "https://github.com/steven-tey/dub/issues"
+    "url": "https://github.com/govtechmy/go-gov-my/issues"
   },
   "keywords": [
-    "dub",
-    "dub.co",
-    "utils",
-    "utility",
-    "functions"
+    "gogovmy",
+    "go.gov.my",
+    "tailwind",
+    "tailwindcss"
   ],
   "publishConfig": {
     "access": "public"
