@@ -205,24 +205,39 @@ export async function processLink<T extends Record<string, any>>({
     // - not bulk creation (we do that check separately in the route itself)
     // - tagIds are present
   } else if (tagIds && tagIds.length > 0) {
-    const tags = await prisma.tag.findMany({
-      select: {
-        id: true,
-      },
-      where: { projectId: workspace?.id, id: { in: tagIds } },
-    });
+    try {
+      const tags = await prisma.tag.findMany({
+        select: {
+          id: true,
+        },
+        where: { projectId: workspace?.id, id: { in: tagIds } },
+      });
 
-    if (tags.length !== tagIds.length) {
+      if (tags.length !== tagIds.length) {
+        return {
+          link: payload,
+          error:
+            "Invalid tagIds detected: " +
+            tagIds
+              .filter(
+                (tagId) => tags.find(({ id }) => tagId === id) === undefined,
+              )
+              .join(", "),
+          code: "unprocessable_entity",
+        };
+      }
+    } catch (e) {
+      if (e?.code === "P2023") {
+        return {
+          link: payload,
+          error: "Invalid tagIds detected: invalid",
+          code: "unprocessable_entity",
+        };
+      }
       return {
         link: payload,
-        error:
-          "Invalid tagIds detected: " +
-          tagIds
-            .filter(
-              (tagId) => tags.find(({ id }) => tagId === id) === undefined,
-            )
-            .join(", "),
-        code: "unprocessable_entity",
+        error: e?.meta?.message,
+        code: e.code,
       };
     }
   } else if (tagNames && tagNames.length > 0) {
