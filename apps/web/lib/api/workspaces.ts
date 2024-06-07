@@ -1,4 +1,3 @@
-import { deleteDomainAndLinks } from "@/lib/api/domains";
 import { prisma } from "@/lib/prisma";
 import { redis } from "@/lib/redis";
 import { storage } from "@/lib/storage";
@@ -15,15 +14,7 @@ import { WorkspaceProps } from "../types";
 export async function deleteWorkspace(
   workspace: Pick<WorkspaceProps, "id" | "slug" | "stripeId" | "logo">,
 ) {
-  const [customDomains, defaultDomainLinks] = await Promise.all([
-    prisma.domain.findMany({
-      where: {
-        projectId: workspace.id,
-      },
-      select: {
-        slug: true,
-      },
-    }),
+  const [defaultDomainLinks] = await Promise.all([
     prisma.link.findMany({
       where: {
         projectId: workspace.id,
@@ -75,7 +66,6 @@ export async function deleteWorkspace(
 
       // delete all domains, links, and uploaded images associated with the workspace
       await Promise.allSettled([
-        ...customDomains.map(({ slug }) => deleteDomainAndLinks(slug)),
         // delete all default domain links from redis
         pipeline.exec(),
         // record deletes in Tinybird for default domain links
@@ -144,11 +134,6 @@ export async function deleteWorkspaceAdmin(
     }),
   ]);
 
-  // delete all domains, links, and uploaded images associated with the workspace
-  const deleteDomainsLinksResponse = await Promise.allSettled([
-    ...customDomains.map(({ slug }) => deleteDomainAndLinks(slug)),
-  ]);
-
   const deleteWorkspaceResponse = await Promise.all([
     // delete workspace logo if it's a custom logo stored in R2
     workspace.logo?.startsWith(process.env.STORAGE_BASE_URL as string) &&
@@ -164,7 +149,6 @@ export async function deleteWorkspaceAdmin(
   ]);
 
   return {
-    deleteDomainsLinksResponse,
     deleteWorkspaceResponse,
   };
 }

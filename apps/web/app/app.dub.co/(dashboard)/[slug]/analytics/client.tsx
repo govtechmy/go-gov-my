@@ -22,7 +22,7 @@ export default function AnalyticsClient({ children }: { children: ReactNode }) {
   }
 
   //  GoGovMy does not support custom domains, the 'domain' searchParam must always be equal to SHORT_DOMAIN
-  if (domain !== SHORT_DOMAIN) {
+  if (domain && domain !== SHORT_DOMAIN) {
     return <LinkNotFound />;
   }
 
