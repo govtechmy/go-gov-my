@@ -1,6 +1,5 @@
 "use client";
 
-import useDomains from "@/lib/swr/use-domains";
 import useLinksCount from "@/lib/swr/use-links-count";
 import useUsers from "@/lib/swr/use-users";
 import useWorkspace from "@/lib/swr/use-workspace";
@@ -23,7 +22,6 @@ export default function NavTabs() {
     { name: "Settings", href: `/${slug}/settings` },
   ];
 
-  const { loading: loadingDomains } = useDomains();
   const { data: linksCount } = useLinksCount();
 
   if (!slug || error) return null;
@@ -49,29 +47,24 @@ export default function NavTabs() {
           )}
         </Link>
       ))}
-      {slug &&
-        !loading &&
-        !error &&
-        !loadingDomains &&
-        !domain &&
-        linksCount === 0 && <OnboardingChecklist />}
+      {slug && !loading && !error && !domain && linksCount === 0 && (
+        <OnboardingChecklist />
+      )}
     </div>
   );
 }
 const OnboardingChecklist = () => {
   const { setShowCompleteSetupModal } = useContext(ModalContext);
-  const { verified } = useDomains();
   const { data: links } = useLinksCount();
   const { users } = useUsers();
   const { users: invites } = useUsers({ invites: true });
 
   const remainder = useMemo(() => {
     return (
-      (verified ? 0 : 1) +
       (links > 0 ? 0 : 1) +
       ((users && users.length > 1) || (invites && invites.length > 0) ? 0 : 1)
     );
-  }, [links, invites, users, verified]);
+  }, [links, invites, users]);
 
   return (
     <button

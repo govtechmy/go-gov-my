@@ -113,12 +113,6 @@ export const createLinkBodySchema = z.object({
     .openapi({
       example: "https://google/com",
     }),
-  domain: z
-    .string()
-    .optional()
-    .describe(
-      "The domain of the short link. If not provided, the primary domain for the workspace will be used (or `dub.sh` if the workspace has no domains).",
-    ),
   key: z
     .string()
     .optional()

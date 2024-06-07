@@ -33,19 +33,16 @@ export const POST = withWorkspace(
       });
     }
 
-    // check if any of the links have a defined key and the domain + key combination is the same
+    // check if any of the links have a key that are the same
     const duplicates = links.filter(
       (link, index, self) =>
-        link.key &&
-        self
-          .slice(index + 1)
-          .some((l) => l.domain === link.domain && l.key === link.key),
+        link.key && self.slice(index + 1).some((l) => l.key === link.key),
     );
     if (duplicates.length > 0) {
       throw new DubApiError({
         code: "bad_request",
         message: `Duplicate links found: ${duplicates
-          .map((link) => `${link.domain}/${link.key}`)
+          .map((link) => `/${link.key}`)
           .join(", ")}`,
       });
     }

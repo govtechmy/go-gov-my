@@ -1,8 +1,3 @@
-import {
-  addDomainToVercel,
-  domainExists,
-  setRootDomain,
-} from "@/lib/api/domains";
 import { DubApiError } from "@/lib/api/errors";
 import { withSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -12,7 +7,6 @@ import {
   createWorkspaceSchema,
 } from "@/lib/zod/schemas/workspaces";
 import { nanoid } from "@dub/utils";
-import { waitUntil } from "@vercel/functions";
 import { NextResponse } from "next/server";
 
 // GET /api/workspaces - get all projects for the current user
@@ -50,7 +44,7 @@ export const GET = withSession(async ({ session }) => {
 });
 
 export const POST = withSession(async ({ req, session }) => {
-  const { name, slug, domain } = await createWorkspaceSchema.parseAsync(
+  const { name, slug } = await createWorkspaceSchema.parseAsync(
     await req.json(),
   );
 
@@ -84,29 +78,19 @@ export const POST = withSession(async ({ req, session }) => {
   //   });
   // }
 
-  const [slugExist, domainExist] = await Promise.all([
-    prisma.project.findUnique({
-      where: {
-        slug,
-      },
-      select: {
-        slug: true,
-      },
-    }),
-    domain ? domainExists(domain) : false,
-  ]);
+  const slugExist = await prisma.project.findUnique({
+    where: {
+      slug,
+    },
+    select: {
+      slug: true,
+    },
+  });
 
   if (slugExist) {
     throw new DubApiError({
       code: "conflict",
       message: "Slug is already in use.",
-    });
-  }
-
-  if (domainExist) {
-    throw new DubApiError({
-      code: "conflict",
-      message: "Domain is already in use.",
     });
   }
 
@@ -121,14 +105,6 @@ export const POST = withSession(async ({ req, session }) => {
           role: "owner",
         },
       },
-      ...(domain && {
-        domains: {
-          create: {
-            slug: domain,
-            primary: true,
-          },
-        },
-      }),
       billingCycleStart: new Date().getDate(),
       inviteCode: nanoid(24),
       defaultDomains: {
@@ -151,29 +127,6 @@ export const POST = withSession(async ({ req, session }) => {
       },
     },
   });
-
-  if (domain) {
-    waitUntil(
-      (async () => {
-        const domainRepsonse = await addDomainToVercel(domain);
-        if (domainRepsonse.error) {
-          await prisma.domain.delete({
-            where: {
-              slug: domain,
-              projectId: projectResponse.id,
-            },
-          });
-        } else {
-          await setRootDomain({
-            id: projectResponse.domains[0].id,
-            domain,
-            domainCreatedAt: projectResponse.domains[0].createdAt,
-            projectId: projectResponse.id,
-          });
-        }
-      })(),
-    );
-  }
 
   const response = {
     ...projectResponse,

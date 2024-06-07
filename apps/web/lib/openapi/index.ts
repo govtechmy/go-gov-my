@@ -6,7 +6,6 @@ import { WorkspaceSchema } from "@/lib/zod/schemas/workspaces";
 import { API_DOMAIN } from "@dub/utils";
 import { createDocument } from "zod-openapi";
 import { clickAnalyticsPaths } from "./analytics/clicks";
-import { domainsPaths } from "./domains";
 import { linksPaths } from "./links";
 import { metatagsPath } from "./metatags";
 import { qrCodePaths } from "./qr";
@@ -42,7 +41,6 @@ export const document = createDocument({
     ...clickAnalyticsPaths,
     ...workspacesPaths,
     ...tagsPaths,
-    ...domainsPaths,
     ...metatagsPath,
   },
   components: {

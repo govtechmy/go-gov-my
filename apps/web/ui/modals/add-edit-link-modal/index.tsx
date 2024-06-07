@@ -1,6 +1,5 @@
 "use client";
 
-import useDomains from "@/lib/swr/use-domains";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { LinkWithTagsProps } from "@/lib/types";
 import LinkLogo from "@/ui/links/link-logo";
@@ -21,6 +20,7 @@ import {
 } from "@dub/ui";
 import {
   DEFAULT_LINK_PROPS,
+  SHORT_DOMAIN,
   cn,
   deepEqual,
   getApexDomain,
@@ -94,25 +94,19 @@ function AddEditLinkModal({
   const [generatingRandomKey, setGeneratingRandomKey] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const {
-    allActiveDomains: domains,
-    primaryDomain,
-    activeDefaultDomains,
-  } = useDomains();
-
   const [data, setData] = useState<LinkWithTagsProps>(
     props || duplicateProps || DEFAULT_LINK_PROPS,
   );
 
   useEffect(() => {
-    // for a new link (no props or duplicateProps), set the domain to the primary domain
-    if (primaryDomain && !props && !duplicateProps) {
+    // for a new link (no props or duplicateProps), set the domain to SHORT_DOMAIN
+    if (!props && !duplicateProps) {
       setData((prev) => ({
         ...prev,
-        domain: primaryDomain,
+        domain: SHORT_DOMAIN,
       }));
     }
-  }, [primaryDomain, props, duplicateProps]);
+  }, [props, duplicateProps]);
 
   const { domain, key, url, password, proxy } = data;
 
@@ -489,11 +483,7 @@ function AddEditLinkModal({
                     name="url"
                     id={`url-${randomIdx}`}
                     required
-                    placeholder={
-                      domains?.find(({ slug }) => slug === domain)
-                        ?.placeholder ||
-                      "https://dub.co/help/article/what-is-dub"
-                    }
+                    placeholder="https://dub.co/help/article/what-is-dub"
                     value={url}
                     autoFocus={!key && !isMobile}
                     autoComplete="off"
@@ -573,24 +563,6 @@ function AddEditLinkModal({
                   )}
                 </div>
                 <div className="relative mt-1 flex rounded-md shadow-sm">
-                  <select
-                    disabled={props && lockKey}
-                    value={domain}
-                    onChange={(e) => {
-                      setKeyError(null);
-                      setData({ ...data, domain: e.target.value });
-                    }}
-                    className={cn(
-                      "max-w-[16rem] rounded-l-md border border-r-0 border-gray-300 bg-gray-50 pl-4 pr-8 text-sm text-gray-500 focus:border-gray-300 focus:outline-none focus:ring-0",
-                      props && lockKey && "cursor-not-allowed",
-                    )}
-                  >
-                    {domains?.map(({ slug }) => (
-                      <option key={slug} value={slug}>
-                        {punycode(slug)}
-                      </option>
-                    ))}
-                  </select>
                   <input
                     ref={keyRef}
                     type="text"

@@ -3,7 +3,6 @@
 import useWorkspace from "@/lib/swr/use-workspace";
 import { SimpleLinkProps } from "@/lib/types";
 import { useAcceptInviteModal } from "@/ui/modals/accept-invite-modal";
-import { useAddEditDomainModal } from "@/ui/modals/add-edit-domain-modal";
 import { useAddEditLinkModal } from "@/ui/modals/add-edit-link-modal";
 import { useAddWorkspaceModal } from "@/ui/modals/add-workspace-modal";
 import { useCompleteSetupModal } from "@/ui/modals/complete-setup-modal";
@@ -27,7 +26,6 @@ import { useImportRebrandlyModal } from "./import-rebrandly-modal";
 export const ModalContext = createContext<{
   setShowAddWorkspaceModal: Dispatch<SetStateAction<boolean>>;
   setShowCompleteSetupModal: Dispatch<SetStateAction<boolean>>;
-  setShowAddEditDomainModal: Dispatch<SetStateAction<boolean>>;
   setShowAddEditLinkModal: Dispatch<SetStateAction<boolean>>;
   setShowAddEditTagModal: Dispatch<SetStateAction<boolean>>;
   setShowUpgradePlanModal: Dispatch<SetStateAction<boolean>>;
@@ -37,7 +35,6 @@ export const ModalContext = createContext<{
 }>({
   setShowAddWorkspaceModal: () => {},
   setShowCompleteSetupModal: () => {},
-  setShowAddEditDomainModal: () => {},
   setShowAddEditLinkModal: () => {},
   setShowAddEditTagModal: () => {},
   setShowUpgradePlanModal: () => {},
@@ -53,8 +50,6 @@ export default function ModalProvider({ children }: { children: ReactNode }) {
     useCompleteSetupModal();
   const { AcceptInviteModal, setShowAcceptInviteModal } =
     useAcceptInviteModal();
-  const { setShowAddEditDomainModal, AddEditDomainModal } =
-    useAddEditDomainModal();
   const { setShowAddEditLinkModal, AddEditLinkModal } = useAddEditLinkModal();
   const { setShowAddEditTagModal, AddEditTagModal } = useAddEditTagModal();
   const { setShowUpgradePlanModal, UpgradePlanModal } = useUpgradePlanModal();
@@ -121,7 +116,6 @@ export default function ModalProvider({ children }: { children: ReactNode }) {
       value={{
         setShowAddWorkspaceModal,
         setShowCompleteSetupModal,
-        setShowAddEditDomainModal,
         setShowAddEditLinkModal,
         setShowAddEditTagModal,
         setShowUpgradePlanModal,
@@ -133,7 +127,6 @@ export default function ModalProvider({ children }: { children: ReactNode }) {
       <AddWorkspaceModal />
       <AcceptInviteModal />
       <CompleteSetupModal />
-      <AddEditDomainModal />
       <AddEditLinkModal />
       <AddEditTagModal />
       <UpgradePlanModal />

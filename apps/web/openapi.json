@@ -92,10 +92,6 @@
                     "description": "The destination URL of the short link.",
                     "example": "https://google/com"
                   },
-                  "domain": {
-                    "type": "string",
-                    "description": "The domain of the short link. If not provided, the primary domain for the workspace will be used (or `dub.sh` if the workspace has no domains)."
-                  },
                   "key": {
                     "type": "string",
                     "description": "The short link slug. If not provided, a random 7-character slug will be generated."
@@ -836,10 +832,6 @@
                     "description": "The destination URL of the short link.",
                     "example": "https://google/com"
                   },
-                  "domain": {
-                    "type": "string",
-                    "description": "The domain of the short link. If not provided, the primary domain for the workspace will be used (or `dub.sh` if the workspace has no domains)."
-                  },
                   "key": {
                     "type": "string",
                     "description": "The short link slug. If not provided, a random 7-character slug will be generated."
@@ -1156,10 +1148,6 @@
                       "description": "The destination URL of the short link.",
                       "example": "https://google/com"
                     },
-                    "domain": {
-                      "type": "string",
-                      "description": "The domain of the short link. If not provided, the primary domain for the workspace will be used (or `dub.sh` if the workspace has no domains)."
-                    },
                     "key": {
                       "type": "string",
                       "description": "The short link slug. If not provided, a random 7-character slug will be generated."
@@ -1382,10 +1370,6 @@
                     "type": "string",
                     "description": "The destination URL of the short link.",
                     "example": "https://google/com"
-                  },
-                  "domain": {
-                    "type": "string",
-                    "description": "The domain of the short link. If not provided, the primary domain for the workspace will be used (or `dub.sh` if the workspace has no domains)."
                   },
                   "key": {
                     "type": "string",
@@ -6861,9 +6845,6 @@
                     "type": "string",
                     "minLength": 3,
                     "maxLength": 48
-                  },
-                  "domain": {
-                    "type": "string"
                   }
                 },
                 "required": [
@@ -7137,177 +7118,6 @@
                   "items": {
                     "$ref": "#/components/schemas/TagSchema"
                   }
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/400"
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          },
-          "403": {
-            "$ref": "#/components/responses/403"
-          },
-          "404": {
-            "$ref": "#/components/responses/404"
-          },
-          "409": {
-            "$ref": "#/components/responses/409"
-          },
-          "410": {
-            "$ref": "#/components/responses/410"
-          },
-          "422": {
-            "$ref": "#/components/responses/422"
-          },
-          "429": {
-            "$ref": "#/components/responses/429"
-          },
-          "500": {
-            "$ref": "#/components/responses/500"
-          }
-        }
-      }
-    },
-    "/domains": {
-      "get": {
-        "operationId": "listDomains",
-        "x-speakeasy-name-override": "list",
-        "summary": "Retrieve a list of domains",
-        "description": "Retrieve a list of domains associated with the authenticated workspace.",
-        "tags": [
-          "Domains"
-        ],
-        "security": [
-          {
-            "token": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "workspaceId",
-            "description": "The ID of the workspace.",
-            "schema": {
-              "type": "string",
-              "description": "The ID of the workspace.",
-              "example": "ws_cluuwcv0r..."
-            },
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "projectSlug",
-            "description": "The slug of the project. This field is deprecated – use `workspaceId` instead.",
-            "schema": {
-              "type": "string",
-              "description": "The slug of the project. This field is deprecated – use `workspaceId` instead.",
-              "deprecated": true
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The domains were retrieved.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/DomainSchema"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/400"
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          },
-          "403": {
-            "$ref": "#/components/responses/403"
-          },
-          "404": {
-            "$ref": "#/components/responses/404"
-          },
-          "409": {
-            "$ref": "#/components/responses/409"
-          },
-          "410": {
-            "$ref": "#/components/responses/410"
-          },
-          "422": {
-            "$ref": "#/components/responses/422"
-          },
-          "429": {
-            "$ref": "#/components/responses/429"
-          },
-          "500": {
-            "$ref": "#/components/responses/500"
-          }
-        }
-      }
-    },
-    "/domains/{slug}/primary": {
-      "post": {
-        "operationId": "setPrimaryDomain",
-        "x-speakeasy-name-override": "setPrimary",
-        "x-speakeasy-max-method-params": 1,
-        "summary": "Set a domain as primary",
-        "description": "Set a domain as primary for the authenticated workspace.",
-        "tags": [
-          "Domains"
-        ],
-        "security": [
-          {
-            "token": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "slug",
-            "description": "The domain name.",
-            "schema": {
-              "type": "string",
-              "description": "The domain name.",
-              "example": "acme.com"
-            },
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "workspaceId",
-            "description": "The ID of the workspace.",
-            "schema": {
-              "type": "string",
-              "description": "The ID of the workspace.",
-              "example": "ws_cluuwcv0r..."
-            },
-            "required": true
-          },
-          {
-            "in": "query",
-            "name": "projectSlug",
-            "description": "The slug of the project. This field is deprecated – use `workspaceId` instead.",
-            "schema": {
-              "type": "string",
-              "description": "The slug of the project. This field is deprecated – use `workspaceId` instead.",
-              "deprecated": true
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The domain was set as primary",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DomainSchema"
                 }
               }
             }

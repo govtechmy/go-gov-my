@@ -7,23 +7,6 @@ const { domain, url } = link;
 
 const cases = [
   {
-    name: "create link with domain not belonging to workspace",
-    body: {
-      domain: "google.com",
-      url,
-    },
-    expected: {
-      status: 403,
-      data: {
-        error: {
-          code: "forbidden",
-          message: "Domain does not belong to workspace.",
-          doc_url: "https://dub.co/docs/api-reference/errors#forbidden",
-        },
-      },
-    },
-  },
-  {
     name: "create link with invalid destination url",
     body: {
       domain,
