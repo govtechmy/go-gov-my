@@ -31,12 +31,7 @@ test("DELETE /links/{linkId}", async (ctx) => {
 
   // Re-fetch the link
   const { status: status2 } = await http.get({
-    path: "/links",
-    query: {
-      workspaceId,
-      domain,
-      key: link.key,
-    },
+    path: `/links/${link.id}`,
   });
 
   expect(status2).toBe(404);

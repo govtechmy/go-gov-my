@@ -22,7 +22,7 @@ export const AnalyticsContext = createContext<{
   basePath: string;
   baseApiPath: string;
   domain?: string;
-  key?: string;
+  key: string;
   url?: string;
   queryString: string;
   interval: string;
@@ -33,6 +33,7 @@ export const AnalyticsContext = createContext<{
   basePath: "",
   baseApiPath: "",
   domain: "",
+  key: "",
   queryString: "",
   interval: "",
   admin: false,
@@ -54,9 +55,13 @@ export default function Analytics({
   let { key } = useParams() as {
     key?: string;
   };
-  const domainSlug = searchParams?.get("domain");
   // key can be a path param (public stats pages) or a query param (stats pages in app)
   key = searchParams?.get("key") || key;
+  if (!key) {
+    throw Error("Failed to load Analytics context provider 'key' is undefined");
+  }
+
+  const domainSlug = searchParams?.get("domain");
   const interval = searchParams?.get("interval") || "24h";
 
   const tagId = searchParams?.get("tagId") ?? undefined;
@@ -119,7 +124,7 @@ export default function Analytics({
         baseApiPath, // baseApiPath for the API (e.g. /api/analytics)
         queryString,
         domain: domain || undefined, // domain for the link (e.g. dub.sh, stey.me, etc.)
-        key: key ? decodeURIComponent(key) : undefined, // link key (e.g. github, weathergpt, etc.)
+        key: decodeURIComponent(key), // link key (e.g. github, weathergpt, etc.)
         url: staticUrl, // url for the link (only for public stats pages)
         interval, // time interval (e.g. 24h, 7d, 30d, etc.)
         tagId, // id of a single tag

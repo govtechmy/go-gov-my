@@ -1,6 +1,5 @@
 import { limiter } from "@/lib/cron";
 import { prisma } from "@/lib/prisma";
-import { redis } from "@/lib/redis";
 import { stripe } from "@/lib/stripe";
 import { APP_NAME, BUSINESS_PLAN, getPlanFromPriceId, log } from "@dub/utils";
 import { sendEmail } from "emails";
@@ -216,17 +215,6 @@ export const POST = async (req: Request) => {
           ({ user }) => user.email as string,
         );
 
-        const pipeline = redis.pipeline();
-        // remove root domain redirect for all domains
-        workspace.domains.forEach((domain) => {
-          pipeline.hset(domain.slug.toLowerCase(), {
-            _root: JSON.stringify({
-              id: domain.id,
-              projectId: workspace.id,
-            }),
-          });
-        });
-
         await Promise.allSettled([
           prisma.project.update({
             where: {
@@ -242,7 +230,6 @@ export const POST = async (req: Request) => {
               usersLimit: BUSINESS_PLAN.limits.users!,
             },
           }),
-          pipeline.exec(),
           log({
             message:
               ":cry: Workspace *`" +

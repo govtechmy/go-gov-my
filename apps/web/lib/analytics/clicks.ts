@@ -33,19 +33,9 @@ export const getClicks = async (
     });
 
     if (!response) {
-      response = await prisma.domain.findUnique({
-        where: {
-          id: linkId,
-        },
-        select: {
-          clicks: true,
-        },
-      });
-
-      if (!response) {
-        return 0;
-      }
+      return 0;
     }
+
     return response[0]["clicks"];
   }
 

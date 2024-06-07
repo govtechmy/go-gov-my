@@ -19,12 +19,10 @@ export async function recordClick({
   req,
   id,
   url,
-  root,
 }: {
   req: NextRequest;
   id: string;
   url?: string;
-  root?: boolean;
 }) {
   const isBot = detectBot(req);
   if (isBot) {
@@ -95,57 +93,31 @@ export async function recordClick({
       },
     ).then((res) => res.json()),
 
-    // increment the click count for the link or domain (based on their ID)
+    // increment the click count for the link (based on their ID)
     // also increment the usage count for the workspace
-    root
-      ? [
-          prisma.domain.update({
+    [
+      prisma.link.update({
+        where: { id: id },
+        data: {
+          clicks: {
+            increment: 1,
+          },
+          lastClicked: new Date(),
+        },
+      }),
+      prisma.project.update({
+        where: { id: id },
+        data: {
+          usage: {
+            increment: 1,
+          },
+        },
+        include: {
+          links: {
             where: { id: id },
-            data: {
-              clicks: {
-                increment: 1,
-              },
-              lastClicked: new Date(),
-            },
-          }),
-          url &&
-            prisma.project.update({
-              where: { id: id },
-              data: {
-                usage: {
-                  increment: 1,
-                },
-              },
-              include: {
-                domains: {
-                  where: { id: id },
-                },
-              },
-            }),
-        ]
-      : [
-          prisma.link.update({
-            where: { id: id },
-            data: {
-              clicks: {
-                increment: 1,
-              },
-              lastClicked: new Date(),
-            },
-          }),
-          prisma.project.update({
-            where: { id: id },
-            data: {
-              usage: {
-                increment: 1,
-              },
-            },
-            include: {
-              links: {
-                where: { id: id },
-              },
-            },
-          }),
-        ],
+          },
+        },
+      }),
+    ],
   ]);
 }

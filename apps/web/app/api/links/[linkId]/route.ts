@@ -135,6 +135,7 @@ export const PUT = PATCH;
 
 // DELETE /api/links/[linkId] – delete a link
 export const DELETE = withWorkspace(async ({ headers, link }) => {
+  console.log({ link });
   await deleteLink(link!.id);
 
   return NextResponse.json(

@@ -17,7 +17,7 @@ export interface SimpleLinkProps {
 
 export interface QRLinkProps {
   domain: string;
-  key?: string;
+  key: string;
   url?: string;
 }
 
