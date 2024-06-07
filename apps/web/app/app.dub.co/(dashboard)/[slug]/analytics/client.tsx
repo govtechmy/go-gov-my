@@ -1,16 +1,15 @@
 "use client";
 
-import useDomains from "@/lib/swr/use-domains";
 import useWorkspace from "@/lib/swr/use-workspace";
 import LayoutLoader from "@/ui/layout/layout-loader";
 import LinkNotFound from "@/ui/links/link-not-found";
 import WorkspaceExceededClicks from "@/ui/workspaces/workspace-exceeded-clicks";
+import { SHORT_DOMAIN } from "@dub/utils";
 import { useSearchParams } from "next/navigation";
 import { ReactNode } from "react";
 
 export default function AnalyticsClient({ children }: { children: ReactNode }) {
   const { exceededClicks, loading } = useWorkspace();
-  const { allDomains, loading: loadingDomains } = useDomains();
   const searchParams = useSearchParams();
   const domain = searchParams?.get("domain");
 
@@ -18,13 +17,12 @@ export default function AnalyticsClient({ children }: { children: ReactNode }) {
     return <WorkspaceExceededClicks />;
   }
 
-  if (loading || loadingDomains) {
+  if (loading) {
     return <LayoutLoader />;
   }
-  if (
-    allDomains?.length === 0 ||
-    (domain && !allDomains?.find((d) => d.slug === domain))
-  ) {
+
+  //  GoGovMy does not support custom domains, the 'domain' searchParam must always be equal to SHORT_DOMAIN
+  if (domain !== SHORT_DOMAIN) {
     return <LinkNotFound />;
   }
 

@@ -1,4 +1,3 @@
-import useDomains from "@/lib/swr/use-domains";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { LinkWithTagsProps, TagProps, UserProps } from "@/lib/types";
 import TagBadge from "@/ui/links/tag-badge";
@@ -17,7 +16,6 @@ import {
   Popover,
   SimpleTooltipContent,
   Tooltip,
-  TooltipContent,
   useIntersectionObserver,
   useRouterStuff,
 } from "@dub/ui";
@@ -108,7 +106,6 @@ export default function LinkCard({
   const { slug } = params;
 
   const { id: workspaceId, exceededClicks } = useWorkspace();
-  const { verified, loading } = useDomains({ domain });
 
   const linkRef = useRef<any>();
   const entry = useIntersectionObserver(linkRef, {});
@@ -308,25 +305,7 @@ export default function LinkCard({
           */}
           <div className="ml-2 sm:ml-4">
             <div className="flex max-w-fit flex-wrap items-center gap-x-2">
-              {!verified && !loading ? (
-                <Tooltip
-                  content={
-                    <TooltipContent
-                      title="Your branded links won't work until you verify your domain."
-                      cta="Verify your domain"
-                      href={`/${slug}/domains`}
-                    />
-                  }
-                >
-                  <div className="max-w-[140px] -translate-x-2 cursor-not-allowed truncate text-sm font-semibold text-gray-400 line-through sm:max-w-[300px] sm:text-base md:max-w-[360px] xl:max-w-[500px]">
-                    {linkConstructor({
-                      domain,
-                      key,
-                      pretty: true,
-                    })}
-                  </div>
-                </Tooltip>
-              ) : (
+              {
                 <a
                   className={cn(
                     "max-w-[140px] truncate text-sm font-semibold text-blue-800 sm:max-w-[300px] sm:text-base md:max-w-[360px] xl:max-w-[500px]",
@@ -347,7 +326,7 @@ export default function LinkCard({
                     pretty: true,
                   })}
                 </a>
-              )}
+              }
               <CopyButton
                 value={linkConstructor({
                   domain,

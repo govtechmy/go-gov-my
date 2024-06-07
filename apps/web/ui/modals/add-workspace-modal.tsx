@@ -4,14 +4,12 @@ import {
   InfoTooltip,
   Logo,
   Modal,
-  Switch,
   useMediaQuery,
   useRouterStuff,
 } from "@dub/ui";
-import { FADE_IN_ANIMATION_SETTINGS, generateDomainFromName } from "@dub/utils";
+import { generateDomainFromName } from "@dub/utils";
 import slugify from "@sindresorhus/slugify";
 import va from "@vercel/analytics";
-import { motion } from "framer-motion";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Dispatch,
@@ -25,7 +23,6 @@ import {
 import { toast } from "sonner";
 import { mutate } from "swr";
 import { useDebounce } from "use-debounce";
-import DomainInput from "./add-edit-domain-modal/domain-input";
 
 function AddWorkspaceModalHelper({
   showAddWorkspaceModal,
@@ -40,13 +37,11 @@ function AddWorkspaceModalHelper({
   const [data, setData] = useState<{
     name: string;
     slug: string;
-    domain: string;
   }>({
     name: "",
     slug: "",
-    domain: "",
   });
-  const { name, slug, domain } = data;
+  const { name, slug } = data;
 
   const [slugError, setSlugError] = useState<string | null>(null);
   const [domainError, setDomainError] = useState<string | null>(null);
@@ -78,14 +73,7 @@ function AddWorkspaceModalHelper({
 
   const searchParams = useSearchParams();
   const { queryParams } = useRouterStuff();
-  const [useDefaultDomain, setUseDefaultDomain] = useState<boolean>(false);
-  useEffect(() => {
-    if (searchParams.has("useDefaultDomain")) {
-      setUseDefaultDomain(true);
-    } else {
-      setUseDefaultDomain(false);
-    }
-  }, [searchParams]);
+  const [useDefaultDomain] = useState<boolean>(true);
 
   const { isMobile } = useMediaQuery();
 
@@ -125,10 +113,7 @@ function AddWorkspaceModalHelper({
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-              ...data,
-              domain: useDefaultDomain ? undefined : domain,
-            }),
+            body: JSON.stringify(data),
           }).then(async (res) => {
             if (res.status === 200) {
               // track workspace creation event
@@ -236,49 +221,6 @@ function AddWorkspaceModalHelper({
             <p className="mt-2 text-sm text-red-600" id="slug-error">
               {slugError}
             </p>
-          )}
-        </div>
-
-        <div>
-          <div className="flex items-center justify-between">
-            <label htmlFor="domain" className="flex items-center space-x-2">
-              <p className="block text-sm font-medium text-gray-700">
-                Custom Domain
-              </p>
-              <InfoTooltip content="This is the domain that your short links will be hosted on. E.g. yourbrand.com/link" />
-            </label>
-            <Switch
-              fn={() => {
-                if (welcomeFlow) {
-                  if (useDefaultDomain) {
-                    queryParams({
-                      del: ["useDefaultDomain"],
-                      replace: true,
-                    });
-                  } else {
-                    queryParams({
-                      set: {
-                        useDefaultDomain: "true",
-                      },
-                      replace: true,
-                    });
-                  }
-                } else {
-                  setUseDefaultDomain(!useDefaultDomain);
-                }
-              }}
-              checked={!useDefaultDomain}
-            />
-          </div>
-          {!useDefaultDomain && (
-            <motion.div {...FADE_IN_ANIMATION_SETTINGS}>
-              <DomainInput
-                data={data}
-                setData={setData}
-                domainError={domainError}
-                setDomainError={setDomainError}
-              />
-            </motion.div>
           )}
         </div>
 

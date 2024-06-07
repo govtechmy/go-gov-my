@@ -1,4 +1,3 @@
-import useDomains from "@/lib/swr/use-domains";
 import useLinksCount from "@/lib/swr/use-links-count";
 import useUsers from "@/lib/swr/use-users";
 import { ModalContext } from "@/ui/modals/provider";
@@ -24,7 +23,6 @@ function CompleteSetupModal({
 }) {
   const { slug } = useParams() as { slug: string };
 
-  const { verified } = useDomains();
   const { data: count } = useLinksCount();
   const { users } = useUsers();
   const { users: invites } = useUsers({ invites: true });
@@ -32,11 +30,6 @@ function CompleteSetupModal({
 
   const tasks = useMemo(() => {
     return [
-      {
-        display: "Configure your custom domain",
-        cta: `/${slug}/domains`,
-        checked: verified,
-      },
       {
         display: "Create or import your links",
         cta: `/${slug}`,
@@ -48,7 +41,7 @@ function CompleteSetupModal({
         checked: (users && users.length > 1) || (invites && invites.length > 0),
       },
     ];
-  }, [slug, verified, count]);
+  }, [slug, count]);
 
   return (
     <Modal
@@ -57,7 +50,7 @@ function CompleteSetupModal({
     >
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <Logo />
-        <h3 className="text-lg font-medium">You're almost there!</h3>
+        <h3 className="text-lg font-medium">You&apos;re almost there!</h3>
         <p className="text-center text-sm text-gray-500">
           Complete the following steps and start sharing your branded short
           links.
