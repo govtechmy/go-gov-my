@@ -17,13 +17,6 @@ RUN pnpm install
 COPY . .
 
 # Set working directory to apps/web and install dependencies
-WORKDIR /usr/src/app/apps/web
-RUN pnpm install
-
-# Return to the root working directory
-WORKDIR /usr/src/app
-
-# Set working directory to apps/web and install dependencies
 WORKDIR /usr/src/app/packages/tailwind-config
 RUN pnpm install
 
@@ -45,16 +38,16 @@ RUN pnpm install
 WORKDIR /usr/src/app
 
 # Build the custom packages
-RUN pnpm --filter @gogovmy/tailwind-config run build
-RUN pnpm --filter @gogovmy/utils run build
-RUN pnpm --filter @gogovmy/ui run build
+RUN pnpm --filter @dub/tailwind-config run build
+RUN pnpm --filter @dub/utils run build
+RUN pnpm --filter @dub/ui run build
 
-# Build the main application
-ENV NODE_OPTIONS="--max-old-space-size=4096"
+# Build the custom packages
 RUN pnpm build
 
-# Expose the port the app runs on
-EXPOSE 3000
+EXPOSE 8888 3334
 
-# Command to run the application
-CMD ["pnpm", "dev"]
+COPY wait-for-it.sh /usr/src/app/wait-for-it.sh
+RUN chmod +x /usr/src/app/wait-for-it.sh
+
+CMD ["./wait-for-it.sh", "ps-postgres:5432", "--", "./wait-for-it.sh", "redis:6379", "--", "pnpm", "dev"]

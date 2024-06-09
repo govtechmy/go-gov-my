@@ -1,0 +1,19 @@
+# Use the base image from the root Dockerfile
+FROM node:20.11.1
+
+# Set the working directory
+WORKDIR /usr/src/app
+
+# Copy specific sub-application files
+COPY apps/docs/package.json apps/docs/pnpm-lock.yaml ./
+COPY apps/docs ./
+
+# Install dependencies and build the docs application
+RUN pnpm install
+RUN pnpm run build
+
+# Expose the port for the docs application
+EXPOSE 3334
+
+# Command to run the docs application
+CMD ["pnpm", "start"]

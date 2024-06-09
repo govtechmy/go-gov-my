@@ -1,10 +1,12 @@
 version: "3.8"
 
 services:
-  app:
-    build: .
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - 8888:3000
     environment:
       - NODE_ENV=development
     env_file:
@@ -15,6 +17,20 @@ services:
     depends_on:
       - ps-postgres
       - redis
+
+  docs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3334:3334
+    environment:
+      - NODE_ENV=development
+    env_file:
+      - .env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
 
   ps-postgres:
     image: postgres:13

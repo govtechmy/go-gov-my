@@ -1,7 +1,7 @@
 {
-  "name": "@gogovmy/tailwind-config",
-  "description": "Tailwindcss config for GoGovMy",
-  "version": "0.0.3",
+  "name": "@dub/tailwind-config",
+  "description": "Tailwindcss config for Dub.co",
+  "version": "0.0.4",
   "main": "index.ts",
   "types": "index.ts",
   "devDependencies": {
@@ -13,18 +13,18 @@
     "tailwind-scrollbar-hide": "^1.1.7",
     "tailwindcss-radix": "^2.8.0"
   },
-  "author": "Moshpit94 <farhan.gunz@gmail.com>",
-  "homepage": "https://go.gov.my",
+  "author": "Steven Tey <stevensteel97@gmail.com>",
+  "homepage": "https://dub.co",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/govtechmy/go-gov-my.git"
+    "url": "git+https://github.com/steven-tey/dub.git"
   },
   "bugs": {
-    "url": "https://github.com/govtechmy/go-gov-my/issues"
+    "url": "https://github.com/steven-tey/dub/issues"
   },
   "keywords": [
-    "gogovmy",
-    "go.gov.my",
+    "dub",
+    "dub.co",
     "tailwind",
     "tailwindcss"
   ],
