@@ -1,6 +1,6 @@
 import { DubApiError, handleAndReturnErrorResponse } from "@/lib/api/errors";
 import { prisma } from "@/lib/prisma";
-import { ratelimit } from "@/lib/upstash";
+import { ratelimit } from "@/lib/redis/ratelimit";
 import { getSearchParams } from "@dub/utils";
 import { waitUntil } from "@vercel/functions";
 import { hashToken } from "./hash-token";
@@ -65,9 +65,10 @@ export const withSession =
         }
 
         const { success, limit, reset, remaining } = await ratelimit(
+          apiKey,
           600,
           "1 m",
-        ).limit(apiKey);
+        );
 
         headers = {
           "Retry-After": reset.toString(),

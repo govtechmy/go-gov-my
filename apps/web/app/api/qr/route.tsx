@@ -1,14 +1,12 @@
 import { DubApiError, handleAndReturnErrorResponse } from "@/lib/api/errors";
 import { QRCodeSVG } from "@/lib/qr/utils";
-import { ratelimit } from "@/lib/upstash";
+import { ratelimit } from "@/lib/redis/ratelimit";
 import { getQRCodeQuerySchema } from "@/lib/zod/schemas/qr";
 import { getSearchParams } from "@dub/utils";
 import { ipAddress } from "@vercel/edge";
 import { getToken } from "next-auth/jwt";
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
-
-export const runtime = "edge";
 
 export async function GET(req: NextRequest) {
   try {
@@ -19,7 +17,7 @@ export async function GET(req: NextRequest) {
     });
     if (!session?.email) {
       const ip = ipAddress(req);
-      const { success } = await ratelimit().limit(`qr:${ip}`);
+      const { success } = await ratelimit(`qr:${ip}`);
       if (!success) {
         throw new DubApiError({
           code: "rate_limit_exceeded",

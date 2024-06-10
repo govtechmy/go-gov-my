@@ -4,8 +4,8 @@ import {
   handleAndReturnErrorResponse,
 } from "@/lib/api/errors";
 import { prisma } from "@/lib/prisma";
+import { ratelimit } from "@/lib/redis/ratelimit";
 import { PlanProps, WorkspaceProps } from "@/lib/types";
-import { ratelimit } from "@/lib/upstash";
 import {
   API_DOMAIN,
   DUB_WORKSPACE_ID,
@@ -54,7 +54,6 @@ export const withWorkspace = (
     requiredRole = ["owner", "member"],
     needNotExceededClicks, // if the action needs the user to not have exceeded their clicks usage
     needNotExceededLinks, // if the action needs the user to not have exceeded their links usage
-    allowAnonymous, // special case for /api/links (POST /api/links) – allow no session
     allowSelf, // special case for removing yourself from a workspace
     skipLinkChecks, // special case for /api/links/exists – skip link checks
     domainChecks,
@@ -63,7 +62,6 @@ export const withWorkspace = (
     requiredRole?: Array<"owner" | "member">;
     needNotExceededClicks?: boolean;
     needNotExceededLinks?: boolean;
-    allowAnonymous?: boolean;
     allowSelf?: boolean;
     skipLinkChecks?: boolean;
     domainChecks?: boolean;
@@ -112,22 +110,11 @@ export const withWorkspace = (
 
       // if there's no workspace ID or slug
       if (!idOrSlug) {
-        // for /api/links (POST /api/links) – allow no session (but warn if user provides apiKey)
-        if (allowAnonymous && !apiKey) {
-          // @ts-expect-error
-          return await handler({
-            req,
-            params,
-            searchParams,
-            headers,
-          });
-        } else {
-          throw new DubApiError({
-            code: "not_found",
-            message:
-              "Workspace id not found. Did you forget to include a `workspaceId` query parameter? Learn more: https://d.to/id",
-          });
-        }
+        throw new DubApiError({
+          code: "not_found",
+          message:
+            "Workspace id not found. Did you forget to include a `workspaceId` query parameter? Learn more: https://d.to/id",
+        });
       }
 
       if (idOrSlug.startsWith("ws_")) {
@@ -161,9 +148,10 @@ export const withWorkspace = (
         }
 
         const { success, limit, reset, remaining } = await ratelimit(
+          apiKey,
           600,
           "1 m",
-        ).limit(apiKey);
+        );
         headers = {
           "Retry-After": reset.toString(),
           "X-RateLimit-Limit": limit.toString(),

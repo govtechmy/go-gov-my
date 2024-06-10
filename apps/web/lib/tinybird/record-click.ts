@@ -1,3 +1,4 @@
+import { ratelimit } from "@/lib/redis/ratelimit";
 import {
   EU_COUNTRY_CODES,
   LOCALHOST_GEO_DATA,
@@ -10,7 +11,6 @@ import { nanoid } from "ai";
 import { NextRequest, userAgent } from "next/server";
 import { detectBot, detectQr, getIdentityHash } from "../middleware/utils";
 import { prisma } from "../prisma";
-import { ratelimit } from "../upstash";
 
 /**
  * Recording clicks with geo, ua, referer and timestamp data
@@ -38,9 +38,7 @@ export async function recordClick({
   const identity_hash = await getIdentityHash(req);
   // if in production / preview env, deduplicate clicks from the same IP address + link ID – only record 1 click per hour
   if (process.env.VERCEL === "1") {
-    const { success } = await ratelimit(2, "1 h").limit(
-      `recordClick:${ip}:${id}`,
-    );
+    const { success } = await ratelimit(`recordClick:${ip}:${id}`, 2, "1 h");
     if (!success) {
       return null;
     }

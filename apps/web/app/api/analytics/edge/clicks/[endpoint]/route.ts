@@ -5,7 +5,7 @@ import {
   exceededLimitError,
   handleAndReturnErrorResponse,
 } from "@/lib/api/errors";
-import { ratelimit } from "@/lib/upstash";
+import { ratelimit } from "@/lib/redis/ratelimit";
 import { getDomainOrLink, getWorkspaceViaEdge } from "@/lib/userinfos";
 import {
   analyticsEndpointSchema,
@@ -14,8 +14,6 @@ import {
 import { DUB_DEMO_LINKS, DUB_WORKSPACE_ID, getSearchParams } from "@dub/utils";
 import { ipAddress } from "@vercel/edge";
 import { NextResponse, type NextRequest } from "next/server";
-
-export const runtime = "edge";
 
 export const GET = async (
   req: NextRequest,
@@ -48,9 +46,10 @@ export const GET = async (
       if (process.env.NODE_ENV !== "development") {
         const ip = ipAddress(req);
         const { success } = await ratelimit(
+          `demo-analytics:${demoLink.id}:${ip}:${endpoint || "clicks"}`,
           15,
           endpoint ? "1 m" : "10 s",
-        ).limit(`demo-analytics:${demoLink.id}:${ip}:${endpoint || "clicks"}`);
+        );
 
         if (!success) {
           throw new DubApiError({

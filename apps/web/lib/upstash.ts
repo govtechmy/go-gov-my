@@ -1,5 +1,4 @@
-import { getDomainWithoutWWW, isIframeable } from "@dub/utils";
-import { Ratelimit } from "@upstash/ratelimit";
+import { isIframeable } from "@dub/utils";
 import { Redis } from "@upstash/redis";
 import {
   DomainProps,
@@ -13,53 +12,6 @@ export const upstashRedis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL || "",
   token: process.env.UPSTASH_REDIS_REST_TOKEN || "",
 });
-
-export const ratelimitRedis = new Redis({
-  url:
-    process.env.RATELIMIT_UPSTASH_REDIS_REST_URL ||
-    process.env.UPSTASH_REDIS_REST_URL ||
-    "",
-  token:
-    process.env.RATELIMIT_UPSTASH_REDIS_REST_TOKEN ||
-    process.env.UPSTASH_REDIS_REST_TOKEN ||
-    "",
-});
-
-// Create a new ratelimiter, that allows 10 requests per 10 seconds by default
-export const ratelimit = (
-  requests: number = 10,
-  seconds:
-    | `${number} ms`
-    | `${number} s`
-    | `${number} m`
-    | `${number} h`
-    | `${number} d` = "10 s",
-) => {
-  return new Ratelimit({
-    redis: ratelimitRedis,
-    limiter: Ratelimit.slidingWindow(requests, seconds),
-    analytics: true,
-    prefix: "dub",
-  });
-};
-
-/**
- * Recording metatags that were generated via `/api/metatags`
- * If there's an error, it will be logged to a separate redis list for debugging
- **/
-export async function recordMetatags(url: string, error: boolean) {
-  if (url === "https://github.com/dubinc/dub") {
-    // don't log metatag generation for default URL
-    return null;
-  }
-
-  if (error) {
-    return await ratelimitRedis.zincrby("metatags-error-zset", 1, url);
-  }
-
-  const domain = getDomainWithoutWWW(url);
-  return await ratelimitRedis.zincrby("metatags-zset", 1, domain);
-}
 
 export async function formatRedisLink(
   link: LinkProps,

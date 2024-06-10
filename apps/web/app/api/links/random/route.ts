@@ -1,5 +1,5 @@
 import { DubApiError, handleAndReturnErrorResponse } from "@/lib/api/errors";
-import { ratelimit } from "@/lib/upstash";
+import { ratelimit } from "@/lib/redis/ratelimit";
 import { getRandomKey } from "@/lib/userinfos";
 import { domainKeySchema } from "@/lib/zod/schemas/links";
 import { getSearchParams } from "@dub/utils";
@@ -26,7 +26,7 @@ export const GET = async (req: NextRequest) => {
     });
     if (!session?.email) {
       const ip = ipAddress(req);
-      const { success } = await ratelimit().limit(`links-random:${ip}`);
+      const { success } = await ratelimit(`links-random:${ip}`);
       if (!success) {
         throw new DubApiError({
           code: "rate_limit_exceeded",

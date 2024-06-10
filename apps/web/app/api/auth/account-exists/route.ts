@@ -1,14 +1,12 @@
 import { isWhitelistedEmail } from "@/lib/edge-config";
 import { prisma } from "@/lib/prisma";
-import { ratelimit } from "@/lib/upstash";
+import { ratelimit } from "@/lib/redis/ratelimit";
 import { ipAddress } from "@vercel/edge";
 import { NextRequest, NextResponse } from "next/server";
 
-export const runtime = "edge";
-
 export async function POST(req: NextRequest) {
   const ip = ipAddress(req);
-  const { success } = await ratelimit(5, "1 m").limit(`account-exists:${ip}`);
+  const { success } = await ratelimit(`account-exists:${ip}`, 5, "1 m");
   if (!success) {
     return new Response("Don't DDoS me pls 🥺", { status: 429 });
   }

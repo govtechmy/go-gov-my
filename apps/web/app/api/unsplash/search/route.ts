@@ -1,9 +1,7 @@
-import { ratelimit } from "@/lib/upstash";
+import { ratelimit } from "@/lib/redis/ratelimit";
 import { ipAddress } from "@vercel/edge";
 import { NextResponse } from "next/server";
 import { unsplash } from "../utils";
-
-export const runtime = "edge";
 
 export async function GET(req: Request) {
   const searchParams = new URL(req.url).searchParams;
@@ -18,7 +16,7 @@ export async function GET(req: Request) {
   }
 
   const ip = ipAddress(req);
-  const { success } = await ratelimit(10, "10 s").limit(`unsplash:${ip}`);
+  const { success } = await ratelimit(`unsplash:${ip}`, 10, "10 s");
   if (!success) {
     return new Response("Don't DDoS me pls 🥺", { status: 429 });
   }
