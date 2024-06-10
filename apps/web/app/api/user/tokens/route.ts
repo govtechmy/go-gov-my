@@ -1,7 +1,8 @@
 import { hashToken, withSession } from "@/lib/auth";
-import { qstash } from "@/lib/cron";
 import { prisma } from "@/lib/prisma";
-import { APP_DOMAIN_WITH_NGROK, nanoid } from "@dub/utils";
+import { nanoid } from "@dub/utils";
+import { sendEmail } from "emails";
+import APIKeyCreated from "emails/api-key-created";
 import { NextResponse } from "next/server";
 
 // GET /api/user/tokens – get all tokens for a specific user
@@ -46,15 +47,13 @@ export const POST = withSession(async ({ req, session }) => {
         userId: session.user.id,
       },
     }),
-    qstash.publishJSON({
-      url: `${APP_DOMAIN_WITH_NGROK}/api/cron/notify`,
-      body: {
-        type: "API_KEY_CREATED",
-        props: {
-          email: session.user.email,
-          apiKeyName: name,
-        },
-      },
+    await sendEmail({
+      email: session.user.email,
+      subject: "New API Key Created",
+      react: APIKeyCreated({
+        email: session.user.email,
+        apiKeyName: name,
+      }),
     }),
   ]);
   return NextResponse.json({ token });
