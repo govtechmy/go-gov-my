@@ -6,8 +6,6 @@ import { useAcceptInviteModal } from "@/ui/modals/accept-invite-modal";
 import { useAddEditLinkModal } from "@/ui/modals/add-edit-link-modal";
 import { useAddWorkspaceModal } from "@/ui/modals/add-workspace-modal";
 import { useCompleteSetupModal } from "@/ui/modals/complete-setup-modal";
-import { useImportBitlyModal } from "@/ui/modals/import-bitly-modal";
-import { useImportShortModal } from "@/ui/modals/import-short-modal";
 import { useUpgradePlanModal } from "@/ui/modals/upgrade-plan-modal";
 import { useCookies } from "@dub/ui";
 import { useSearchParams } from "next/navigation";
@@ -21,7 +19,6 @@ import {
 import { toast } from "sonner";
 import { mutate } from "swr";
 import { useAddEditTagModal } from "./add-edit-tag-modal";
-import { useImportRebrandlyModal } from "./import-rebrandly-modal";
 
 export const ModalContext = createContext<{
   setShowAddWorkspaceModal: Dispatch<SetStateAction<boolean>>;
@@ -29,18 +26,12 @@ export const ModalContext = createContext<{
   setShowAddEditLinkModal: Dispatch<SetStateAction<boolean>>;
   setShowAddEditTagModal: Dispatch<SetStateAction<boolean>>;
   setShowUpgradePlanModal: Dispatch<SetStateAction<boolean>>;
-  setShowImportBitlyModal: Dispatch<SetStateAction<boolean>>;
-  setShowImportShortModal: Dispatch<SetStateAction<boolean>>;
-  setShowImportRebrandlyModal: Dispatch<SetStateAction<boolean>>;
 }>({
   setShowAddWorkspaceModal: () => {},
   setShowCompleteSetupModal: () => {},
   setShowAddEditLinkModal: () => {},
   setShowAddEditTagModal: () => {},
   setShowUpgradePlanModal: () => {},
-  setShowImportBitlyModal: () => {},
-  setShowImportShortModal: () => {},
-  setShowImportRebrandlyModal: () => {},
 });
 
 export default function ModalProvider({ children }: { children: ReactNode }) {
@@ -53,10 +44,6 @@ export default function ModalProvider({ children }: { children: ReactNode }) {
   const { setShowAddEditLinkModal, AddEditLinkModal } = useAddEditLinkModal();
   const { setShowAddEditTagModal, AddEditTagModal } = useAddEditTagModal();
   const { setShowUpgradePlanModal, UpgradePlanModal } = useUpgradePlanModal();
-  const { setShowImportBitlyModal, ImportBitlyModal } = useImportBitlyModal();
-  const { setShowImportShortModal, ImportShortModal } = useImportShortModal();
-  const { setShowImportRebrandlyModal, ImportRebrandlyModal } =
-    useImportRebrandlyModal();
 
   const [hashes, setHashes] = useCookies<SimpleLinkProps[]>("hashes__dub", [], {
     domain: !!process.env.NEXT_PUBLIC_VERCEL_URL ? ".dub.co" : undefined,
@@ -119,9 +106,6 @@ export default function ModalProvider({ children }: { children: ReactNode }) {
         setShowAddEditLinkModal,
         setShowAddEditTagModal,
         setShowUpgradePlanModal,
-        setShowImportBitlyModal,
-        setShowImportShortModal,
-        setShowImportRebrandlyModal,
       }}
     >
       <AddWorkspaceModal />
@@ -130,9 +114,6 @@ export default function ModalProvider({ children }: { children: ReactNode }) {
       <AddEditLinkModal />
       <AddEditTagModal />
       <UpgradePlanModal />
-      <ImportBitlyModal />
-      <ImportShortModal />
-      <ImportRebrandlyModal />
       {children}
     </ModalContext.Provider>
   );

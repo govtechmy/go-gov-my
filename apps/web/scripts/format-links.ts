@@ -23,28 +23,10 @@ async function main() {
     ),
   ).then((results) => results.flat());
 
-  const domains = await prisma.domain
-    .findMany({
-      select: {
-        id: true,
-        slug: true,
-        target: true,
-        projectId: true,
-      },
-    })
-    .then((domains) =>
-      domains.map((domain) => ({
-        ...domain,
-        domain: domain.slug,
-        key: "_root",
-        url: domain.target,
-      })),
-    );
-
   const file = fs.createWriteStream(`links-metadata.ndjson`);
 
   // Iterate over the array and write each object as a string
-  [...links, ...domains].forEach((obj) => {
+  [...links].forEach((obj) => {
     file.write(
       JSON.stringify({
         ...obj,

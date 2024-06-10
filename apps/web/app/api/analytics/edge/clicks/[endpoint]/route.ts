@@ -6,7 +6,7 @@ import {
   handleAndReturnErrorResponse,
 } from "@/lib/api/errors";
 import { ratelimit } from "@/lib/redis/ratelimit";
-import { getDomainOrLink, getWorkspaceViaEdge } from "@/lib/userinfos";
+import { getLink, getWorkspaceViaEdge } from "@/lib/userinfos";
 import {
   analyticsEndpointSchema,
   clickAnalyticsQuerySchema,
@@ -63,7 +63,7 @@ export const GET = async (
         projectId: DUB_WORKSPACE_ID,
       };
     } else if (domain) {
-      link = await getDomainOrLink({ domain, key });
+      link = await getLink({ domain, key });
       // if the link is explicitly private (publicStats === false)
       if (!link?.publicStats) {
         throw new DubApiError({

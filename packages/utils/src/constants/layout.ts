@@ -17,8 +17,4 @@ export const ALL_TOOLS = [
   { name: "UTM Builder", slug: "utm-builder" },
 ];
 
-export const COMPARE_PAGES = [
-  { name: "Bitly", slug: "bitly" },
-  { name: "Rebrandly", slug: "rebrandly" },
-  { name: "Short.io", slug: "short" },
-];
+export const COMPARE_PAGES = [{ name: "xxx", slug: "xxx" }];

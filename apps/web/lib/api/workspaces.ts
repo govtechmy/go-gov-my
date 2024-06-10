@@ -8,7 +8,6 @@ import {
   LEGAL_WORKSPACE_ID,
 } from "@dub/utils";
 import { waitUntil } from "@vercel/functions";
-import { recordLink } from "../tinybird";
 import { WorkspaceProps } from "../types";
 
 export async function deleteWorkspace(
@@ -68,19 +67,6 @@ export async function deleteWorkspace(
       await Promise.allSettled([
         // delete all default domain links from redis
         pipeline.exec(),
-        // record deletes in Tinybird for default domain links
-        recordLink(
-          defaultDomainLinks.map((link) => ({
-            link_id: link.id,
-            domain: link.domain,
-            key: link.key,
-            url: link.url,
-            tag_ids: link.tags.map((tag) => tag.tagId),
-            workspace_id: link.projectId,
-            created_at: link.createdAt,
-            deleted: true,
-          })),
-        ),
         // remove all images from R2
         ...defaultDomainLinks.map(({ id, proxy, image }) =>
           proxy && image?.startsWith(process.env.STORAGE_BASE_URL as string)
@@ -111,28 +97,18 @@ export async function deleteWorkspace(
 export async function deleteWorkspaceAdmin(
   workspace: Pick<WorkspaceProps, "id" | "slug" | "stripeId" | "logo">,
 ) {
-  const [customDomains, _] = await Promise.all([
-    prisma.domain.findMany({
-      where: {
-        projectId: workspace.id,
+  await prisma.link.updateMany({
+    where: {
+      projectId: workspace.id,
+      domain: {
+        in: DUB_DOMAINS_ARRAY,
       },
-      select: {
-        slug: true,
-      },
-    }),
-    prisma.link.updateMany({
-      where: {
-        projectId: workspace.id,
-        domain: {
-          in: DUB_DOMAINS_ARRAY,
-        },
-      },
-      data: {
-        userId: LEGAL_USER_ID,
-        projectId: LEGAL_WORKSPACE_ID,
-      },
-    }),
-  ]);
+    },
+    data: {
+      userId: LEGAL_USER_ID,
+      projectId: LEGAL_WORKSPACE_ID,
+    },
+  });
 
   const deleteWorkspaceResponse = await Promise.all([
     // delete workspace logo if it's a custom logo stored in R2

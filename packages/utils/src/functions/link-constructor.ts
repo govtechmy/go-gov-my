@@ -7,7 +7,7 @@ export function linkConstructor({
   searchParams,
 }: {
   domain?: string;
-  key?: string;
+  key: string;
   pretty?: boolean;
   searchParams?: Record<string, string>;
 }) {
@@ -15,7 +15,7 @@ export function linkConstructor({
     return "";
   }
 
-  let url = `https://${punycode(domain)}${key && key !== "_root" ? `/${punycode(key)}` : ""}`;
+  let url = `https://${punycode(domain)}/${punycode(key)}`;
 
   if (searchParams) {
     const search = new URLSearchParams();

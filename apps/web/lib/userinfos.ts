@@ -1,6 +1,6 @@
 import { nanoid, punyEncode } from "@dub/utils";
 import { prisma } from "lib/prisma";
-import { DomainProps, WorkspaceProps } from "./types";
+import { WorkspaceProps } from "./types";
 
 export const getWorkspaceViaEdge = async (workspaceId: string) => {
   const workspace = await prisma.project.findUnique({
@@ -12,14 +12,6 @@ export const getWorkspaceViaEdge = async (workspaceId: string) => {
   });
 
   return (workspace as WorkspaceProps) || null;
-};
-
-export const getDomainViaEdge = async (domain: string) => {
-  const domainRecord = await prisma.domain.findUnique({
-    where: { slug: domain },
-  });
-
-  return (domainRecord as DomainProps) || null;
 };
 
 export const checkIfKeyExists = async (domain: string, key: string) => {
@@ -52,35 +44,21 @@ export const getLinkViaEdge = async (domain: string, key: string) => {
   return link || null;
 };
 
-export const getDomainOrLink = async ({
+export const getLink = async ({
   domain,
   key,
 }: {
   domain: string;
-  key?: string;
+  key: string;
 }) => {
-  if (!key || key === "_root") {
-    const data = await prisma.domain.findUnique({
-      where: { slug: domain },
-    });
+  const link = await prisma.link.findFirst({
+    where: {
+      domain: domain,
+      key: punyEncode(decodeURIComponent(key)),
+    },
+  });
 
-    if (!data) return null;
-
-    return {
-      ...data,
-      key: "_root",
-      url: data?.target,
-    };
-  } else {
-    const link = await prisma.link.findFirst({
-      where: {
-        domain: domain,
-        key: punyEncode(decodeURIComponent(key)),
-      },
-    });
-
-    return link || null;
-  }
+  return link || null;
 };
 
 export async function getRandomKey({

@@ -17,7 +17,7 @@ export interface SimpleLinkProps {
 
 export interface QRLinkProps {
   domain: string;
-  key?: string;
+  key: string;
   url?: string;
 }
 
@@ -137,12 +137,6 @@ export interface RedisDomainProps {
   rewrite?: boolean;
   iframeable?: boolean;
   projectId: string;
-}
-
-export interface BitlyGroupProps {
-  guid: string;
-  bsds: string[]; // custom domains
-  tags: string[];
 }
 
 export interface ImportedDomainCountProps {
