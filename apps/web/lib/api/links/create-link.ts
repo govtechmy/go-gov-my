@@ -1,10 +1,9 @@
-import { qstash } from "@/lib/cron";
 import { prisma } from "@/lib/prisma";
 import { redis } from "@/lib/redis";
 import { isStored, storage } from "@/lib/storage";
 import { ProcessedLinkProps } from "@/lib/types";
 import { formatRedisLink } from "@/lib/upstash";
-import { APP_DOMAIN_WITH_NGROK, getParamsFromURL, truncate } from "@dub/utils";
+import { getParamsFromURL, truncate } from "@dub/utils";
 import { trace } from "@opentelemetry/api";
 import { Prisma } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
@@ -110,16 +109,6 @@ export async function createLink(link: ProcessedLinkProps) {
               }),
             ]
           : []),
-        // delete public links after 30 mins
-        !response.userId &&
-          qstash.publishJSON({
-            url: `${APP_DOMAIN_WITH_NGROK}/api/cron/links/delete`,
-            // delete after 30 mins
-            delay: 30 * 60,
-            body: {
-              linkId: response.id,
-            },
-          }),
         // update links usage for workspace
         link.projectId &&
           prisma.project.update({
