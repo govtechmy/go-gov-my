@@ -2,12 +2,11 @@ import { DubApiError, ErrorCodes } from "@/lib/api/errors";
 import { createLink, getLinksForWorkspace, processLink } from "@/lib/api/links";
 import { parseRequestBody } from "@/lib/api/utils";
 import { withWorkspace } from "@/lib/auth";
-import { ratelimit } from "@/lib/upstash";
 import {
   createLinkBodySchema,
   getLinksQuerySchemaExtended,
 } from "@/lib/zod/schemas/links";
-import { LOCALHOST_IP, getSearchParamsWithArray } from "@dub/utils";
+import { getSearchParamsWithArray } from "@dub/utils";
 import { NextResponse } from "next/server";
 
 // GET /api/links – get all links for a workspace
@@ -52,19 +51,6 @@ export const POST = withWorkspace(
     const bodyRaw = await parseRequestBody(req);
     const body = createLinkBodySchema.parse(bodyRaw);
 
-    if (!session) {
-      const ip = req.headers.get("x-forwarded-for") || LOCALHOST_IP;
-      const { success } = await ratelimit(10, "1 d").limit(ip);
-
-      if (!success) {
-        throw new DubApiError({
-          code: "rate_limit_exceeded",
-          message:
-            "Rate limited – you can only create up to 10 links per day without an account.",
-        });
-      }
-    }
-
     const { link, error, code } = await processLink({
       payload: body,
       workspace,
@@ -97,6 +83,5 @@ export const POST = withWorkspace(
   },
   {
     needNotExceededLinks: true,
-    allowAnonymous: true,
   },
 );

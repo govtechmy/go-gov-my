@@ -1,5 +1,5 @@
-import { recordMetatags } from "@/lib/upstash";
-import { fetchWithTimeout, isValidUrl } from "@dub/utils";
+import { redis } from "@/lib/redis";
+import { fetchWithTimeout, getDomainWithoutWWW, isValidUrl } from "@dub/utils";
 import { waitUntil } from "@vercel/functions";
 import he from "he";
 import { parse } from "node-html-parser";
@@ -98,3 +98,27 @@ export const getMetaTags = async (url: string) => {
     image: getRelativeUrl(url, image),
   };
 };
+
+/**
+ * Recording metatags that were generated via `/api/metatags`
+ * If there's an error, it will be logged to a separate redis list for debugging
+ **/
+async function recordMetatags(url: string, error: boolean) {
+  if (url === "https://github.com/dubinc/dub") {
+    // don't log metatag generation for default URL
+    return null;
+  }
+
+  if (error) {
+    return await redis.zincrby("metatags-error-zset", 1, url);
+  }
+
+  const domain = getDomainWithoutWWW(url);
+  if (!domain) {
+    throw Error(
+      `failed to record metatags, url "${url}" does not contain a domain`,
+    );
+  }
+
+  await redis.zincrby("metatags-zset", 1, domain);
+}

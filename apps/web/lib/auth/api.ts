@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
+import { ratelimit } from "@/lib/redis/ratelimit";
 import { getSearchParams } from "@dub/utils";
 import { DubApiError, handleAndReturnErrorResponse } from "../api/errors";
-import { ratelimit } from "../upstash";
 import { hashToken } from "./hash-token";
 
 interface withApiAuthHandler {
@@ -54,9 +54,10 @@ export const withApiAuth = (handler: withApiAuthHandler, {}: {} = {}) => {
         }
 
         const { success, limit, reset, remaining } = await ratelimit(
+          apiKey,
           600,
           "1 m",
-        ).limit(apiKey);
+        );
 
         headers = {
           "Retry-After": reset.toString(),

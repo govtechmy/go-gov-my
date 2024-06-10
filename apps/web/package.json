@@ -81,6 +81,7 @@
     "openapi-types": "^12.1.3",
     "openapi3-ts": "^4.2.1",
     "prisma": "^5.13.0",
+    "rate-limiter-flexible": "^5.0.3",
     "react": "^18.2.0",
     "react-colorful": "^5.6.1",
     "react-dom": "^18.2.0",

@@ -3,8 +3,8 @@ import {
   exceededLimitError,
   handleAndReturnErrorResponse,
 } from "@/lib/api/errors";
+import { ratelimit } from "@/lib/redis/ratelimit";
 import { PlanProps, WorkspaceProps } from "@/lib/types";
-import { ratelimit } from "@/lib/upstash";
 import { API_DOMAIN, getSearchParams } from "@dub/utils";
 import { waitUntil } from "@vercel/functions";
 import { StreamingTextResponse } from "ai";
@@ -33,6 +33,9 @@ interface WithWorkspaceEdgeHandler {
   }): Promise<Response | StreamingTextResponse>;
 }
 
+/**
+ * @deprecated GoGovMy uses self-hosted DB and redis which does not run in edge environments.
+ */
 export const withWorkspaceEdge = (
   handler: WithWorkspaceEdgeHandler,
   {
@@ -141,9 +144,10 @@ export const withWorkspaceEdge = (
         }
 
         const { success, limit, reset, remaining } = await ratelimit(
+          apiKey,
           600,
           "1 m",
-        ).limit(apiKey);
+        );
         headers = {
           "Retry-After": reset.toString(),
           "X-RateLimit-Limit": limit.toString(),
