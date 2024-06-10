@@ -37,17 +37,25 @@ RUN pnpm install
 # Return to the root working directory
 WORKDIR /usr/src/app
 
+# Generate Database schema
+# WORKDIR /usr/src/app/apps/web
+# RUN pnpm i
+# RUN npx prisma generate
+# RUN npx prisma db push
+WORKDIR /usr/src/app
+
 # Build the custom packages
 RUN pnpm --filter @dub/tailwind-config run build
 RUN pnpm --filter @dub/utils run build
 RUN pnpm --filter @dub/ui run build
 
-# Build the custom packages
-RUN pnpm build
-
 EXPOSE 8888 3334
 
 COPY wait-for-it.sh /usr/src/app/wait-for-it.sh
+
 RUN chmod +x /usr/src/app/wait-for-it.sh
+
+# Build the custom packages
+RUN pnpm build
 
 CMD ["./wait-for-it.sh", "ps-postgres:5432", "--", "./wait-for-it.sh", "redis:6379", "--", "pnpm", "dev"]

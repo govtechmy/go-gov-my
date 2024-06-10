@@ -10,6 +10,7 @@ import { NextRequest, NextResponse } from "next/server";
 // Issue #22 "[Fix APIs Not Working] Links API" (https://github.com/govtechmy/go-gov-my/issues/22)
 // - Disable edge runtime since we are self hosting our database
 // export const runtime = "edge";
+export const dynamic = "force-dynamic";
 
 // GET /api/links/random – get a random available link key for a given domain
 export const GET = async (req: NextRequest) => {

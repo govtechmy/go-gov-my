@@ -8,6 +8,8 @@ import { getToken } from "next-auth/jwt";
 import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest) {
   try {
     // Rate limit if user is not logged in

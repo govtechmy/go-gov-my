@@ -1,22 +1,15 @@
+import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import { render } from "@react-email/render";
-import AWS from "aws-sdk";
 import nodemailer from "nodemailer";
 import { JSXElementConstructor, ReactElement } from "react";
-// import SMTPTransport from "nodemailer/lib/smtp-transport";
 
-AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION || "us-east-1", // Set your preferred region
+const sesClient = new SESClient({
+  region: process.env.AWS_REGION || "us-east-1",
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
+  },
 });
-
-AWS.config.getCredentials(function (error) {
-  if (error) {
-    console.log(error.stack);
-  }
-});
-
-const ses = new AWS.SES({ apiVersion: "2010-12-01" });
 
 export const sendEmail = async ({
   email,
@@ -34,20 +27,20 @@ export const sendEmail = async ({
   marketing?: boolean;
 }): Promise<void> => {
   const sourceEmail = process.env.SES_EMAIL_SOURCE;
-  const transporter = nodemailer.createTransport({
-    SES: ses,
-  });
-
   if (!sourceEmail) {
     throw new Error("SES_EMAIL_SOURCE is not defined");
   }
+
+  const transporter = nodemailer.createTransport({
+    SES: { ses: sesClient, aws: { SendEmailCommand } },
+  });
 
   const params = {
     from: sourceEmail,
     to: email,
     subject: subject,
     html: react ? render(react) : "",
-    data: text || "",
+    text: text || "", // Use the text field instead of data
   };
 
   const response = await transporter.sendMail(params);

@@ -3,6 +3,8 @@ import { plain, upsertPlainCustomer } from "@/lib/plain";
 import { AttachmentType } from "@team-plain/typescript-sdk";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 // POST /api/support/upload – get a signed URL to upload an attachment
 export const GET = withSession(async ({ searchParams, session }) => {
   let plainCustomerId: string | null = null;

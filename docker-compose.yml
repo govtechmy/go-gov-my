@@ -1,36 +1,40 @@
 version: "3.8"
 
 services:
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - 8888:3000
-    environment:
-      - NODE_ENV=development
-    env_file:
-      - .env
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    depends_on:
-      - ps-postgres
-      - redis
+  # web:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 8888:3000
+  #   environment:
+  #     - NODE_ENV=development
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - .:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   depends_on:
+  #     - ps-postgres
+  #     - redis
+  #   networks:
+  #     - my-network
 
-  docs:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - 3334:3334
-    environment:
-      - NODE_ENV=development
-    env_file:
-      - .env
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+  # docs:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 3334:3334
+  #   environment:
+  #     - NODE_ENV=development
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - .:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   networks:
+  #     - my-network
 
   ps-postgres:
     image: postgres:13
@@ -43,11 +47,18 @@ services:
       - 5432:5432
     volumes:
       - ps-postgres:/var/lib/postgresql/data
+    networks:
+      - my-network
 
   redis:
     image: redis:7.2
     ports:
       - 6379:6379
+    networks:
+      - my-network
+
+networks:
+  my-network:
 
 volumes:
   ps-postgres:

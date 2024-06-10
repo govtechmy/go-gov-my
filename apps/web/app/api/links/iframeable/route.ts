@@ -9,6 +9,8 @@ import { ipAddress } from "@vercel/edge";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(req: NextRequest) {
   try {
     const { url, domain } = getUrlQuerySchema.and(getDomainQuerySchema).parse({
