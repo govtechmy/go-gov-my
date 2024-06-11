@@ -1,5 +1,10 @@
 import { redis } from "@/lib/redis";
-import { fetchWithTimeout, getDomainWithoutWWW, isValidUrl } from "@dub/utils";
+import {
+  APP_NAME,
+  fetchWithTimeout,
+  getDomainWithoutWWW,
+  isValidUrl,
+} from "@dub/utils";
 import { waitUntil } from "@vercel/functions";
 import he from "he";
 import { parse } from "node-html-parser";
@@ -7,7 +12,7 @@ import { parse } from "node-html-parser";
 export const getHtml = async (url: string) => {
   return await fetchWithTimeout(url, {
     headers: {
-      "User-Agent": "Dub.co Bot",
+      "User-Agent": `${APP_NAME} Bot`,
     },
   })
     .then((r) => r.text())

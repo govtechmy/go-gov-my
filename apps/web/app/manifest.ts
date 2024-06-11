@@ -1,10 +1,11 @@
+import { APP_NAME } from "@dub/utils";
 import { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Dub.co App",
-    short_name: "Dub.co",
-    description: "Dub.co – the open-source link management infrastructure.",
+    name: APP_NAME,
+    short_name: APP_NAME,
+    description: `${APP_NAME} – Malaysia's open-source link management infrastructure.`,
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",

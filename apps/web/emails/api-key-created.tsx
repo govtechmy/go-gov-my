@@ -1,4 +1,4 @@
-import { DUB_LOGO, formatDate } from "@dub/utils";
+import { APP_NAME, DUB_LOGO, formatDate } from "@dub/utils";
 import {
   Body,
   Container,
@@ -33,7 +33,7 @@ export default function APIKeyCreated({
                 src={DUB_LOGO}
                 width="40"
                 height="40"
-                alt="Dub.co"
+                alt={APP_NAME}
                 className="mx-auto my-0"
               />
             </Section>
@@ -41,8 +41,8 @@ export default function APIKeyCreated({
               New API Key Created
             </Heading>
             <Text className="text-sm leading-6 text-black">
-              You created a new API key for your Dub.co account with the name{" "}
-              <strong>"{apiKeyName}"</strong> on{" "}
+              You created a new API key for your {APP_NAME} account with the
+              name <strong>"{apiKeyName}"</strong> on{" "}
               {formatDate(new Date().toString())}.
             </Text>
             <Section className="my-8 text-center">

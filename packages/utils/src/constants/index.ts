@@ -8,10 +8,10 @@ export * from "./middleware";
 export * from "./misc";
 export * from "./pricing";
 
-export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "Dub.co";
+export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "GoGovMy";
 
 export const SHORT_DOMAIN =
-  process.env.NEXT_PUBLIC_APP_SHORT_DOMAIN || "dub.sh";
+  process.env.NEXT_PUBLIC_APP_SHORT_DOMAIN || "go.gov.my";
 
 export const HOME_DOMAIN = `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}`;
 
@@ -55,7 +55,7 @@ export const ADMIN_HOSTNAMES = new Set([
   "admin.localhost:8888",
 ]);
 
-export const DUB_LOGO = "https://assets.dub.co/logo.png";
+export const DUB_LOGO = `${APP_DOMAIN}/_static/logo.png`;
 export const DUB_THUMBNAIL = "https://assets.dub.co/thumbnail.jpg";
 
 export const DUB_WORKSPACE_ID = "cl7pj5kq4006835rbjlt2ofka";
@@ -163,7 +163,7 @@ export const DUB_DOMAINS_ARRAY = DUB_DOMAINS.map((domain) => domain.slug);
 export const DUB_DEMO_LINKS = [
   {
     id: "clqo10sum0006js08vutzfxt3",
-    domain: "dub.sh",
+    domain: SHORT_DOMAIN,
     key: "try",
   },
   {

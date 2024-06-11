@@ -1,4 +1,10 @@
-import { DUB_LOGO, capitalize, getNextPlan, nFormatter } from "@dub/utils";
+import {
+  APP_NAME,
+  DUB_LOGO,
+  capitalize,
+  getNextPlan,
+  nFormatter,
+} from "@dub/utils";
 import {
   Body,
   Container,
@@ -59,10 +65,10 @@ export default function LinksLimitAlert({
               />
             </Section>
             <Heading className="mx-0 my-7 p-0 text-center text-xl font-semibold text-black">
-              Dub.co Links Limit Alert
+              {APP_NAME} Links Limit Alert
             </Heading>
             <Text className="text-sm leading-6 text-black">
-              Your Dub.co workspace,{" "}
+              Your {APP_NAME} workspace,{" "}
               <Link
                 href={`https://app.dub.co/${slug}`}
                 className="text-black underline"

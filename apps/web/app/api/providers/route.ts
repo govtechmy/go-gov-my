@@ -1,7 +1,7 @@
 import { handleAndReturnErrorResponse } from "@/lib/api/errors";
 import { ratelimit } from "@/lib/redis/ratelimit";
 import { getUrlQuerySchema } from "@/lib/zod/schemas/links";
-import { fetchWithTimeout } from "@dub/utils";
+import { APP_NAME, fetchWithTimeout } from "@dub/utils";
 import { ipAddress } from "@vercel/edge";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
@@ -74,7 +74,7 @@ export async function GET(req: NextRequest) {
           provider: "short",
         });
       }
-      if (headers.poweredBy?.includes("Dub.co")) {
+      if (headers.poweredBy?.includes(APP_NAME)) {
         return NextResponse.json({
           provider: "dub",
         });

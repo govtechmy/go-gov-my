@@ -1,5 +1,7 @@
+import { SHORT_DOMAIN } from "@dub/utils";
+
 export const filter = {
-  domain: "dub.sh",
+  domain: SHORT_DOMAIN,
   key: "checkly-check",
   interval: "30d",
 };

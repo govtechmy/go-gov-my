@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Background, BlurImage, Logo } from "@dub/ui";
-import { constructMetadata, isDubDomain } from "@dub/utils";
+import { APP_NAME, constructMetadata, isDubDomain } from "@dub/utils";
 import { notFound, redirect } from "next/navigation";
 import PasswordForm from "./form";
 
@@ -41,7 +41,7 @@ export async function generateMetadata({
   return constructMetadata({
     title:
       isDubDomain(domain) || link.project?.plan === "free"
-        ? `${title} - Dub.co`
+        ? `${title} - ${APP_NAME}`
         : title,
     description,
     image,
