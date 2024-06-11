@@ -17,6 +17,7 @@ import {
   useRouterStuff,
 } from "@dub/ui";
 import {
+  APP_DOMAIN,
   APP_HOSTNAMES,
   FADE_IN_ANIMATION_SETTINGS,
   getApexDomain,
@@ -91,7 +92,7 @@ export function QRCodePicker({
       ...(showLogo && {
         imageSettings: {
           src:
-            logo && plan !== "free" ? logo : "https://dub.co/_static/logo.svg",
+            logo && plan !== "free" ? logo : `${APP_DOMAIN}/_static/logo.svg`,
           height: 256,
           width: 256,
           excavate: true,
@@ -237,7 +238,7 @@ export function QRCodePicker({
                           src:
                             logo && plan !== "free"
                               ? logo
-                              : "https://dub.co/_static/logo.svg",
+                              : `${APP_DOMAIN}/_static/logo.svg`,
                         },
                       }),
                     }),
