@@ -28,6 +28,7 @@ services:
     build:
       context: .
       dockerfile: ./apps/web/Dockerfile
+      network: host
     working_dir: /app
     volumes:
       - ./:/app
