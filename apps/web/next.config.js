@@ -10,6 +10,7 @@ const REDIRECT_SEGMENTS = [
 /** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: false,
+  output: "standalone",
   experimental: {
     serverComponentsExternalPackages: [
       "@react-email/components",
