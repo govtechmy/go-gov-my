@@ -1,4 +1,4 @@
-import { DUB_LOGO } from "@dub/utils";
+import { APP_NAME, DUB_LOGO } from "@dub/utils";
 import {
   Body,
   Container,
@@ -46,7 +46,7 @@ export default function InvalidDomain({
             </Heading>
             <Text className="text-sm leading-6 text-black">
               Your domain <code className="text-purple-600">{domain}</code> for
-              your Dub.co workspace{" "}
+              your {APP_NAME} workspace{" "}
               <Link
                 href={`https://app.dub.co/${workspaceSlug}`}
                 className="font-medium text-blue-600 no-underline"
@@ -57,8 +57,8 @@ export default function InvalidDomain({
             </Text>
             <Text className="text-sm leading-6 text-black">
               If your domain remains unconfigured for 30 days, it will be
-              automatically deleted from Dub.co. Please click the link below to
-              configure your domain.
+              automatically deleted from {APP_NAME}. Please click the link below
+              to configure your domain.
             </Text>
             <Section className="my-8 text-center">
               <Link
@@ -69,7 +69,7 @@ export default function InvalidDomain({
               </Link>
             </Section>
             <Text className="text-sm leading-6 text-black">
-              If you do not want to keep this domain on Dub.co, you can{" "}
+              If you do not want to keep this domain on {APP_NAME}, you can{" "}
               <Link
                 href={`https://app.dub.co/${workspaceSlug}/domains`}
                 className="font-medium text-blue-600 no-underline"

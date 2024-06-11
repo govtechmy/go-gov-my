@@ -1,5 +1,6 @@
 import { BlurImage, ExpandingArrow, useScroll } from "@dub/ui";
 import {
+  APP_NAME,
   DUB_LOGO,
   GOOGLE_FAVICON_URL,
   cn,
@@ -53,7 +54,7 @@ export default function Toggle() {
               rel="noreferrer"
             >
               <BlurImage
-                alt={url || "Dub.co"}
+                alt={url || APP_NAME}
                 src={
                   url ? `${GOOGLE_FAVICON_URL}${getApexDomain(url)}` : DUB_LOGO
                 }

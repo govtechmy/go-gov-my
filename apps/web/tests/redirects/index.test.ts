@@ -1,8 +1,9 @@
+import { DUB_HEADERS } from "@dub/utils";
 import { describe, expect, test } from "vitest";
 import { env } from "../utils/env";
 import { IntegrationHarness } from "../utils/integration";
 
-const poweredBy = "Dub.co - Link management for modern marketing teams";
+const poweredBy = DUB_HEADERS["headers"]["x-powered-by"];
 const fetchOptions: RequestInit = {
   cache: "no-store",
   redirect: "manual",

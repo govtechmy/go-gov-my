@@ -1,3 +1,4 @@
+import { APP_NAME } from "@dub/utils";
 import Stripe from "stripe";
 
 export const stripe = new Stripe(
@@ -5,7 +6,7 @@ export const stripe = new Stripe(
   {
     apiVersion: "2022-11-15",
     appInfo: {
-      name: "Dub.co",
+      name: APP_NAME,
       version: "0.1.0",
     },
   },
