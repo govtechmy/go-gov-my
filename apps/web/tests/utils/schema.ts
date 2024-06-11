@@ -1,10 +1,11 @@
+import { SHORT_DOMAIN } from "@dub/utils";
 import { Link, Project, Tag } from "@prisma/client";
 import { expect } from "vitest";
 
 export const expectedLink: Partial<Link> & { tagId: string | null } = {
   id: expect.any(String),
   key: expect.any(String),
-  domain: "dub.sh",
+  domain: SHORT_DOMAIN,
   trackConversion: false,
   archived: false,
   expiresAt: null,

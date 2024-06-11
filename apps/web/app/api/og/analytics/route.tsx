@@ -2,6 +2,7 @@ import { getClicks } from "@/lib/analytics/clicks";
 import { getLink } from "@/lib/userinfos";
 import {
   GOOGLE_FAVICON_URL,
+  SHORT_DOMAIN,
   getApexDomain,
   linkConstructor,
   nFormatter,
@@ -16,7 +17,7 @@ export async function GET(req: NextRequest) {
     new URL("@/styles/Inter-Medium.ttf", import.meta.url),
   ).then((res) => res.arrayBuffer());
 
-  const domain = req.nextUrl.searchParams.get("domain") || "dub.sh";
+  const domain = req.nextUrl.searchParams.get("domain") || SHORT_DOMAIN;
   const key = req.nextUrl.searchParams.get("key") || "github";
 
   const link = await getLink({ domain, key });

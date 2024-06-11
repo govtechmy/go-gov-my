@@ -1,5 +1,5 @@
 import { Logo } from "@dub/ui";
-import { STAGGER_CHILD_VARIANTS } from "@dub/utils";
+import { SHORT_DOMAIN, STAGGER_CHILD_VARIANTS } from "@dub/utils";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
@@ -43,9 +43,9 @@ export default function Interim() {
           className="text-gray-500 underline transition-colors hover:text-gray-700"
           target="_blank"
           rel="noreferrer"
-          href="https://dub.sh"
+          href={`https://${SHORT_DOMAIN}`}
         >
-          dub.sh
+          {SHORT_DOMAIN}
         </a>{" "}
         domain to create short links.
       </motion.p>

@@ -3,7 +3,13 @@
 import useUser from "@/lib/swr/use-user";
 import { WorkspaceProps } from "@/lib/types";
 import { BlurImage, InlineSnippet, NumberTooltip } from "@dub/ui";
-import { DICEBEAR_AVATAR_URL, cn, fetcher, nFormatter } from "@dub/utils";
+import {
+  DICEBEAR_AVATAR_URL,
+  SHORT_DOMAIN,
+  cn,
+  fetcher,
+  nFormatter,
+} from "@dub/utils";
 import { BarChart2, Link2 } from "lucide-react";
 import Link from "next/link";
 import useSWR from "swr";
@@ -35,7 +41,7 @@ export default function WorkspaceCard({
           <WorkspaceArrow className="absolute -bottom-20 right-56 z-10 text-violet-600 lg:right-0" />
           <div className="absolute -bottom-28 right-0 z-10 w-full max-w-[16rem] rounded-lg border border-gray-200 bg-white p-3 text-center text-sm shadow lg:-right-56">
             <p>
-              Your <InlineSnippet>dub.sh</InlineSnippet> links have been
+              Your <InlineSnippet>{SHORT_DOMAIN}</InlineSnippet> links have been
               migrated to a custom workspace.
             </p>
             <a
