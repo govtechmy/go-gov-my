@@ -29,7 +29,6 @@ export const POST = withAdmin(async ({ req }) => {
               id: true,
               slug: true,
               logo: true,
-              stripeId: true,
             },
           },
         },
@@ -47,7 +46,6 @@ export const POST = withAdmin(async ({ req }) => {
         deleteWorkspaceAdmin({
           id: project.id,
           slug: project.slug,
-          stripeId: project.stripeId || null,
           logo: project.logo || null,
         }),
       ),

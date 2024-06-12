@@ -30,7 +30,6 @@ export const WorkspaceSchema = z
     tagsLimit: z.number().describe("The tags limit of the workspace."),
     usersLimit: z.number().describe("The users limit of the workspace."),
     plan: planSchema,
-    stripeId: z.string().nullable().describe("The Stripe ID of the workspace."),
     billingCycleStart: z
       .number()
       .describe(
