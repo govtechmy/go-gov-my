@@ -14,7 +14,6 @@ import {
   useRouterStuff,
 } from "@dub/ui";
 import { capitalize, cn } from "@dub/utils";
-import va from "@vercel/analytics";
 import {
   Dispatch,
   FormEvent,
@@ -116,7 +115,6 @@ function AddEditTagModal({
             }),
           }).then(async (res) => {
             if (res.status === 200 || res.status === 201) {
-              va.track(props ? "Edited Tag" : "Created Tag");
               await Promise.all([
                 mutate(`/api/tags?workspaceId=${workspaceId}`),
                 props

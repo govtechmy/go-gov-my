@@ -1,7 +1,6 @@
 "use client";
 
 import { APP_NAME, cn, fetcher } from "@dub/utils";
-import va from "@vercel/analytics";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -33,18 +32,7 @@ export function Footer() {
       <MaxWidthWrapper className="relative z-10 overflow-hidden border border-b-0 border-gray-200 bg-white/50 px-8 py-16 backdrop-blur-lg md:rounded-t-2xl">
         <div className="xl:flex xl:justify-between">
           <div className="space-y-6">
-            <Link
-              href={createHref("/")}
-              {...(domain !== "dub.co" && {
-                onClick: () => {
-                  va.track("Referred from custom domain", {
-                    domain,
-                    medium: "footer item (logo)",
-                  });
-                },
-              })}
-              className="block max-w-fit"
-            >
+            <Link href={createHref("/")} className="block max-w-fit">
               <span className="sr-only">
                 {process.env.NEXT_PUBLIC_APP_NAME} Logo
               </span>
@@ -73,14 +61,6 @@ export function Footer() {
                   <li key={item.name}>
                     <Link
                       href={createHref(item.href)}
-                      {...(domain !== "dub.co" && {
-                        onClick: () => {
-                          va.track("Referred from custom domain", {
-                            domain,
-                            medium: `footer item (${item.name})`,
-                          });
-                        },
-                      })}
                       className="text-sm text-gray-500 hover:text-gray-800"
                     >
                       {item.name}
@@ -96,14 +76,6 @@ export function Footer() {
                   <li key={item.name}>
                     <Link
                       href={createHref(item.href)}
-                      {...(domain !== "dub.co" && {
-                        onClick: () => {
-                          va.track("Referred from custom domain", {
-                            domain,
-                            medium: `footer item (${item.name})`,
-                          });
-                        },
-                      })}
                       className="text-sm text-gray-500 hover:text-gray-800"
                     >
                       {item.name}

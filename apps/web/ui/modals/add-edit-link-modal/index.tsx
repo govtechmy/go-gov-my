@@ -31,7 +31,6 @@ import {
   punycode,
   truncate,
 } from "@dub/utils";
-import va from "@vercel/analytics";
 import { useCompletion } from "ai/react";
 import { TriangleAlert } from "lucide-react";
 import {
@@ -170,9 +169,6 @@ function AddEditLinkModal({
       setGeneratedKeys((prev) => [...prev, completion]);
       mutateWorkspace();
       runKeyChecks(completion);
-      va.track("Generated AI key", {
-        metadata: `Key: ${completion} | URL: ${data.url}`,
-      });
     },
   });
 

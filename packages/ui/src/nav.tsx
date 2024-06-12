@@ -2,7 +2,6 @@
 
 import { APP_DOMAIN, HIDE_BACKGROUND_SEGMENTS, cn, fetcher } from "@dub/utils";
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
-import va from "@vercel/analytics";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { useParams, useSelectedLayoutSegment } from "next/navigation";
@@ -80,17 +79,7 @@ export function Nav({ theme = "light" }: { theme?: NavTheme }) {
         <MaxWidthWrapper className="relative">
           <div className="flex h-14 items-center justify-between">
             <div className="flex items-center space-x-12">
-              <Link
-                href={createHref("/")}
-                {...(domain !== "dub.co" && {
-                  onClick: () => {
-                    va.track("Referred from custom domain", {
-                      domain,
-                      medium: "logo",
-                    });
-                  },
-                })}
-              >
+              <Link href={createHref("/")}>
                 <NavLogo />
               </Link>
               <NavigationMenuPrimitive.Root
@@ -121,14 +110,6 @@ export function Nav({ theme = "light" }: { theme?: NavTheme }) {
                             <Link
                               key={slug}
                               href={createHref(`/${slug}`)}
-                              {...(domain !== "dub.co" && {
-                                onClick: () => {
-                                  va.track("Referred from custom domain", {
-                                    domain,
-                                    medium: `navbar item (/${slug})`,
-                                  });
-                                },
-                              })}
                               className="rounded-lg p-3 transition-colors hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-white/[0.15] dark:active:bg-white/20"
                             >
                               <div className="flex items-center space-x-2">
@@ -153,14 +134,6 @@ export function Nav({ theme = "light" }: { theme?: NavTheme }) {
                         id={`nav-${slug}`}
                         key={slug}
                         href={createHref(`/${slug}`)}
-                        {...(domain !== "dub.co" && {
-                          onClick: () => {
-                            va.track("Referred from custom domain", {
-                              domain,
-                              medium: `navbar item (${slug})`,
-                            });
-                          },
-                        })}
                         className={cn(
                           "rounded-md px-3 py-2 text-sm font-medium text-gray-500 transition-colors ease-out hover:text-black dark:text-white/70 dark:hover:text-white",
                           {
@@ -191,28 +164,12 @@ export function Nav({ theme = "light" }: { theme?: NavTheme }) {
                 <>
                   <Link
                     href={`${APP_DOMAIN}/login`}
-                    {...(domain !== "dub.co" && {
-                      onClick: () => {
-                        va.track("Referred from custom domain", {
-                          domain,
-                          medium: `navbar item (login)`,
-                        });
-                      },
-                    })}
                     className="animate-fade-in rounded-full px-4 py-1.5 text-sm font-medium text-gray-500 transition-colors ease-out hover:text-black dark:text-white dark:hover:text-white/70"
                   >
                     Log in
                   </Link>
                   <Link
                     href={`${APP_DOMAIN}/register`}
-                    {...(domain !== "dub.co" && {
-                      onClick: () => {
-                        va.track("Referred from custom domain", {
-                          domain,
-                          medium: `navbar item (signup)`,
-                        });
-                      },
-                    })}
                     className="animate-fade-in rounded-full border border-black bg-black px-4 py-1.5 text-sm text-white transition-all hover:bg-gray-800 hover:ring-4 hover:ring-gray-200 dark:border-white dark:bg-white dark:text-gray-600 dark:hover:bg-white dark:hover:text-gray-800 dark:hover:hover:shadow-[0_0_25px_5px_rgba(256,256,256,0.2)] dark:hover:ring-0"
                   >
                     Sign Up

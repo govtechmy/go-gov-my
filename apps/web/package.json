@@ -37,7 +37,6 @@
     "@splinetool/runtime": "^1.2.8",
     "@stripe/stripe-js": "^1.44.1",
     "@team-plain/typescript-sdk": "^3.9.0",
-    "@vercel/analytics": "^1.0.0",
     "@vercel/edge": "^0.3.1",
     "@vercel/edge-config": "^0.4.1",
     "@vercel/functions": "^1.0.1",

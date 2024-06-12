@@ -1,6 +1,5 @@
 import useWorkspace from "@/lib/swr/use-workspace";
 import { LoadingDots, Logo, Modal } from "@dub/ui";
-import va from "@vercel/analytics";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import {
@@ -51,11 +50,6 @@ function AcceptInviteModal({
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                 }).then(async () => {
-                  if (slug) {
-                    va.track("User accepted workspace invite", {
-                      workspace: slug,
-                    });
-                  }
                   await Promise.all([
                     mutate("/api/workspaces"),
                     mutate(`/api/workspaces/${slug}`),
