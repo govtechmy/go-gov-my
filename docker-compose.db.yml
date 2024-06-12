@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  ps-postgres:
+    image: postgres:13
+    restart: always
+    environment:
+      - POSTGRES_DB=${POSTGRESDB}
+      - POSTGRES_USER=${POSTGRESUSER}
+      - POSTGRES_PASSWORD=${POSTGRESPASSWORD}
+    ports:
+      - 5432:5432
+    volumes:
+      - ps-postgres:/var/lib/postgresql/data
+    networks:
+      - my-network
+
+  redis:
+    image: redis:7.2
+    ports:
+      - 6379:6379
+    networks:
+      - my-network
+
+networks:
+  my-network:
+
+volumes:
+  ps-postgres:
