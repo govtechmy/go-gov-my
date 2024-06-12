@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import { redis } from "@/lib/redis";
+import { formatRedisLink, redis } from "@/lib/redis";
 import { LinkProps, ProcessedLinkProps, RedisLinkProps } from "@/lib/types";
-import { formatRedisLink } from "@/lib/upstash";
 import { getParamsFromURL, truncate } from "@dub/utils";
 import { trace } from "@opentelemetry/api";
 import { combineTagIds, transformLink } from "./utils";

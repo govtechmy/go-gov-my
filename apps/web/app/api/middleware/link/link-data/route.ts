@@ -1,6 +1,5 @@
-import { redis } from "@/lib/redis";
+import { formatRedisLink, redis } from "@/lib/redis";
 import { RedisLinkProps } from "@/lib/types";
-import { formatRedisLink } from "@/lib/upstash";
 import { getLinkViaEdge } from "@/lib/userinfos";
 import { waitUntil } from "@vercel/functions";
 import { NextRequest } from "next/server";
