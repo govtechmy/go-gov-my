@@ -101,7 +101,6 @@ export interface UserProps {
   email: string;
   image?: string;
   createdAt: Date;
-  source: string | null;
   migratedWorkspace: string | null;
 }
 

@@ -34,14 +34,11 @@ const updateUserSchema = z.object({
   name: z.preprocess(trim, z.string().min(1).max(64)).optional(),
   email: z.preprocess(trim, z.string().email()).optional(),
   image: z.string().url().optional(),
-  source: z.preprocess(trim, z.string().min(1).max(32)).optional(),
 });
 
 // PUT /api/user – edit a specific user
 export const PUT = withSession(async ({ req, session }) => {
-  let { name, image, source } = await updateUserSchema.parseAsync(
-    await req.json(),
-  );
+  let { name, image } = await updateUserSchema.parseAsync(await req.json());
   try {
     if (image) {
       const { url } = await storage.upload(`avatars/${session.user.id}`, image);
@@ -54,7 +51,6 @@ export const PUT = withSession(async ({ req, session }) => {
       data: {
         ...(name && { name }),
         ...(image && { image }),
-        ...(source && { source }),
       },
     });
     return NextResponse.json(response);

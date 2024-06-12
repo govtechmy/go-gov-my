@@ -13,7 +13,6 @@ CREATE TABLE "User" (
     "image" TEXT,
     "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "subscribed" BOOLEAN NOT NULL DEFAULT true,
-    "source" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
