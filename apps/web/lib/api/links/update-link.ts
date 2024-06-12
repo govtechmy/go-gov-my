@@ -1,8 +1,7 @@
 import { prisma } from "@/lib/prisma";
-import { redis } from "@/lib/redis";
+import { formatRedisLink, redis } from "@/lib/redis";
 import { isStored, storage } from "@/lib/storage";
 import { LinkProps, ProcessedLinkProps } from "@/lib/types";
-import { formatRedisLink } from "@/lib/upstash";
 import { SHORT_DOMAIN, getParamsFromURL, truncate } from "@dub/utils";
 import { trace } from "@opentelemetry/api";
 import { Prisma } from "@prisma/client";
