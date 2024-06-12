@@ -38,9 +38,7 @@ const updateUserSchema = z.object({
 
 // PUT /api/user – edit a specific user
 export const PUT = withSession(async ({ req, session }) => {
-  let { name, image } = await updateUserSchema.parseAsync(
-    await req.json(),
-  );
+  let { name, image } = await updateUserSchema.parseAsync(await req.json());
   try {
     if (image) {
       const { url } = await storage.upload(`avatars/${session.user.id}`, image);
