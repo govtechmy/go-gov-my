@@ -1,7 +1,6 @@
 "use client";
 
 import { useAddWorkspaceModal } from "@/ui/modals/add-workspace-modal";
-import { useUpgradePlanModal } from "@/ui/modals/upgrade-plan-modal";
 import Interim from "@/ui/welcome/interim";
 import Intro from "@/ui/welcome/intro";
 import { AnimatePresence } from "framer-motion";
@@ -12,7 +11,6 @@ import { useEffect } from "react";
 export default function WelcomePageClient() {
   const { setShowAddWorkspaceModal, AddWorkspaceModal } =
     useAddWorkspaceModal();
-  const { setShowUpgradePlanModal, UpgradePlanModal } = useUpgradePlanModal();
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -25,19 +23,11 @@ export default function WelcomePageClient() {
     } else {
       setShowAddWorkspaceModal(false);
     }
-    if (searchParams?.get("type") === "upgrade") {
-      setTimeout(() => {
-        setShowUpgradePlanModal(true);
-      }, 200);
-    } else {
-      setShowUpgradePlanModal(false);
-    }
-  }, [searchParams, setShowAddWorkspaceModal, setShowUpgradePlanModal]);
+  }, [searchParams, setShowAddWorkspaceModal]);
 
   return (
     <div className="flex h-screen flex-col items-center">
       <AddWorkspaceModal />
-      <UpgradePlanModal />
       <AnimatePresence mode="wait">
         {!searchParams?.get("type") && <Intro key="intro" />}
         {searchParams?.get("type") === "interim" && (

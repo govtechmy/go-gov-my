@@ -75,7 +75,6 @@ CREATE TABLE "Project" (
     "slug" TEXT NOT NULL,
     "logo" TEXT,
     "plan" TEXT NOT NULL DEFAULT 'free',
-    "stripeId" TEXT,
     "billingCycleStart" INTEGER NOT NULL,
     "usage" INTEGER NOT NULL DEFAULT 0,
     "usageLimit" INTEGER NOT NULL DEFAULT 1000,
@@ -279,9 +278,6 @@ CREATE INDEX "Token_userId_idx" ON "Token"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Project_slug_key" ON "Project"("slug");
-
--- CreateIndex
-CREATE UNIQUE INDEX "Project_stripeId_key" ON "Project"("stripeId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Project_inviteCode_key" ON "Project"("inviteCode");

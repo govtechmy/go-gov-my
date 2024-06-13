@@ -1,6 +1,5 @@
 import HelpPortal from "@/ui/layout/help";
 import NavTabs from "@/ui/layout/nav-tabs";
-import UpgradeBanner from "@/ui/layout/upgrade-banner";
 import UserDropdown from "@/ui/layout/user-dropdown";
 import WorkspaceSwitcher from "@/ui/layout/workspace-switcher";
 import { Divider } from "@/ui/shared/icons";
@@ -26,7 +25,6 @@ export default function Layout({ children }: { children: ReactNode }) {
                 </Link>
                 <Divider className="hidden h-8 w-8 text-gray-200 sm:ml-3 sm:block" />
                 <WorkspaceSwitcher />
-                <UpgradeBanner />
               </div>
               <div className="flex items-center space-x-6">
                 <a

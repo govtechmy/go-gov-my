@@ -6,7 +6,6 @@ import { useAcceptInviteModal } from "@/ui/modals/accept-invite-modal";
 import { useAddEditLinkModal } from "@/ui/modals/add-edit-link-modal";
 import { useAddWorkspaceModal } from "@/ui/modals/add-workspace-modal";
 import { useCompleteSetupModal } from "@/ui/modals/complete-setup-modal";
-import { useUpgradePlanModal } from "@/ui/modals/upgrade-plan-modal";
 import { useCookies } from "@dub/ui";
 import { useSearchParams } from "next/navigation";
 import {
@@ -25,13 +24,11 @@ export const ModalContext = createContext<{
   setShowCompleteSetupModal: Dispatch<SetStateAction<boolean>>;
   setShowAddEditLinkModal: Dispatch<SetStateAction<boolean>>;
   setShowAddEditTagModal: Dispatch<SetStateAction<boolean>>;
-  setShowUpgradePlanModal: Dispatch<SetStateAction<boolean>>;
 }>({
   setShowAddWorkspaceModal: () => {},
   setShowCompleteSetupModal: () => {},
   setShowAddEditLinkModal: () => {},
   setShowAddEditTagModal: () => {},
-  setShowUpgradePlanModal: () => {},
 });
 
 export default function ModalProvider({ children }: { children: ReactNode }) {
@@ -43,7 +40,6 @@ export default function ModalProvider({ children }: { children: ReactNode }) {
     useAcceptInviteModal();
   const { setShowAddEditLinkModal, AddEditLinkModal } = useAddEditLinkModal();
   const { setShowAddEditTagModal, AddEditTagModal } = useAddEditTagModal();
-  const { setShowUpgradePlanModal, UpgradePlanModal } = useUpgradePlanModal();
 
   const [hashes, setHashes] = useCookies<SimpleLinkProps[]>("hashes__dub", [], {
     domain: !!process.env.NEXT_PUBLIC_VERCEL_URL ? ".dub.co" : undefined,
@@ -105,7 +101,6 @@ export default function ModalProvider({ children }: { children: ReactNode }) {
         setShowCompleteSetupModal,
         setShowAddEditLinkModal,
         setShowAddEditTagModal,
-        setShowUpgradePlanModal,
       }}
     >
       <AddWorkspaceModal />
@@ -113,7 +108,6 @@ export default function ModalProvider({ children }: { children: ReactNode }) {
       <CompleteSetupModal />
       <AddEditLinkModal />
       <AddEditTagModal />
-      <UpgradePlanModal />
       {children}
     </ModalContext.Provider>
   );

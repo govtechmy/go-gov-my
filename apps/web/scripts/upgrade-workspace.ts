@@ -10,7 +10,6 @@ async function main() {
       id: WORKSPACE_ID.replace("ws_", ""),
     },
     data: {
-      stripeId: null,
       billingCycleStart: new Date().getDate(),
       plan: PLAN.name.toLowerCase(),
       usageLimit: PLAN.limits.clicks!,

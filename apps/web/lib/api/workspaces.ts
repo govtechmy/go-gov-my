@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { redis } from "@/lib/redis";
 import { storage } from "@/lib/storage";
-import { cancelSubscription } from "@/lib/stripe";
 import {
   DUB_DOMAINS_ARRAY,
   LEGAL_USER_ID,
@@ -11,7 +10,7 @@ import { waitUntil } from "@vercel/functions";
 import { WorkspaceProps } from "../types";
 
 export async function deleteWorkspace(
-  workspace: Pick<WorkspaceProps, "id" | "slug" | "stripeId" | "logo">,
+  workspace: Pick<WorkspaceProps, "id" | "slug" | "logo">,
 ) {
   const [defaultDomainLinks] = await Promise.all([
     prisma.link.findMany({
@@ -79,8 +78,6 @@ export async function deleteWorkspace(
         // delete workspace logo if it's a custom logo stored in R2
         workspace.logo?.startsWith(process.env.STORAGE_BASE_URL as string) &&
           storage.delete(`logos/${workspace.id}`),
-        // if they have a Stripe subscription, cancel it
-        workspace.stripeId && cancelSubscription(workspace.stripeId),
         // delete the workspace
         prisma.project.delete({
           where: {
@@ -95,7 +92,7 @@ export async function deleteWorkspace(
 }
 
 export async function deleteWorkspaceAdmin(
-  workspace: Pick<WorkspaceProps, "id" | "slug" | "stripeId" | "logo">,
+  workspace: Pick<WorkspaceProps, "id" | "slug" | "logo">,
 ) {
   await prisma.link.updateMany({
     where: {
@@ -114,8 +111,6 @@ export async function deleteWorkspaceAdmin(
     // delete workspace logo if it's a custom logo stored in R2
     workspace.logo?.startsWith(process.env.STORAGE_BASE_URL as string) &&
       storage.delete(`logos/${workspace.id}`),
-    // if they have a Stripe subscription, cancel it
-    workspace.stripeId && cancelSubscription(workspace.stripeId),
     // delete the workspace
     prisma.project.delete({
       where: {
