@@ -7233,7 +7233,7 @@
           },
           "domain": {
             "type": "string",
-            "description": "The domain of the short link. If not provided, the primary domain for the workspace will be used (or `dub.sh` if the workspace has no domains)."
+            "description": "The domain of the short link. If not provided, the primary domain for the workspace will be used (or `go.gov.my` if the workspace has no domains)."
           },
           "key": {
             "type": "string",
@@ -8345,12 +8345,12 @@
           "shortLink": {
             "type": "string",
             "format": "uri",
-            "description": "The full URL of the short link, including the https protocol (e.g. `https://dub.sh/try`)."
+            "description": "The full URL of the short link, including the https protocol (e.g. `https://go.gov.my/try`)."
           },
           "qrCode": {
             "type": "string",
             "format": "uri",
-            "description": "The full URL of the QR code for the short link (e.g. `https://api.dub.co/qr?url=https://dub.sh/try`)."
+            "description": "The full URL of the QR code for the short link (e.g. `https://api.dub.co/qr?url=https://go.gov.my/try`)."
           },
           "utm_source": {
             "type": "string",
@@ -8511,11 +8511,6 @@
             ],
             "description": "The plan of the workspace."
           },
-          "stripeId": {
-            "type": "string",
-            "nullable": true,
-            "description": "The Stripe ID of the workspace."
-          },
           "billingCycleStart": {
             "type": "number",
             "description": "The date and time when the billing cycle starts for the workspace."
@@ -8586,7 +8581,6 @@
           "tagsLimit",
           "usersLimit",
           "plan",
-          "stripeId",
           "billingCycleStart",
           "createdAt",
           "users",

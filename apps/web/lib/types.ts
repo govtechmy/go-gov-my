@@ -79,7 +79,6 @@ export interface WorkspaceProps {
   tagsLimit: number;
   usersLimit: number;
   plan: PlanProps;
-  stripeId: string | null;
   billingCycleStart: number;
   createdAt: Date;
   domains: {
