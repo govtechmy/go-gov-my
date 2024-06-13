@@ -12,8 +12,7 @@ import {
   Switch,
   Unsplash,
 } from "@dub/ui";
-import { FADE_IN_ANIMATION_SETTINGS, resizeImage, truncate } from "@dub/utils";
-import va from "@vercel/analytics";
+import { FADE_IN_ANIMATION_SETTINGS, resizeImage } from "@dub/utils";
 import { useCompletion } from "ai/react";
 import { motion } from "framer-motion";
 import { Link2 } from "lucide-react";
@@ -72,9 +71,6 @@ export default function OGSection({
     },
     onFinish: (_, completion) => {
       mutate();
-      va.track("Generated AI Meta Title", {
-        metadata: `Title: ${truncate(completion, 255 - (18 + data.url.length))} | URL: ${data.url}`,
-      });
     },
   });
 
@@ -118,9 +114,6 @@ export default function OGSection({
     },
     onFinish: (_, completion) => {
       mutate();
-      va.track("Generated AI Meta Description", {
-        metadata: `Description: ${truncate(completion, 255 - (25 + data.url.length))} | URL: ${data.url}`,
-      });
     },
   });
 

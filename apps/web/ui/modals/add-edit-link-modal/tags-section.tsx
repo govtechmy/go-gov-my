@@ -9,7 +9,6 @@ import {
   SimpleTooltipContent,
   Tooltip,
 } from "@dub/ui";
-import va from "@vercel/analytics";
 import { useCompletion } from "ai/react";
 import { Command, useCommandState } from "cmdk";
 import { Check, ChevronDown, Tag, X } from "lucide-react";
@@ -300,9 +299,6 @@ export default function TagsSection({
                   setSuggestedTags((tags) =>
                     tags.filter(({ id }) => id !== tag.id),
                   );
-                  va.track("Selected AI-suggested tag", {
-                    metadata: `Tag: ${tag.name} | URL: ${url}`,
-                  });
                 }}
                 className="group flex items-center transition-all active:scale-95"
               >

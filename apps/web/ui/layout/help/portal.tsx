@@ -2,7 +2,6 @@
 
 import { Popover, useResizeObserver } from "@dub/ui";
 import { fetcher } from "@dub/utils";
-import va from "@vercel/analytics";
 import { AnimatePresence, motion } from "framer-motion";
 import { XIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -45,9 +44,6 @@ export function HelpButton({
         <button
           type="button"
           onClick={() => {
-            if (!isOpen) {
-              va.track("Open help portal");
-            }
             setIsOpen((o) => !o);
           }}
           className="font-lg relative h-12 w-12 overflow-hidden rounded-full border border-gray-200 bg-white shadow-md active:bg-gray-50"

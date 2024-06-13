@@ -9,7 +9,6 @@ import {
 } from "@dub/ui";
 import { generateDomainFromName } from "@dub/utils";
 import slugify from "@sindresorhus/slugify";
-import va from "@vercel/analytics";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Dispatch,
@@ -117,7 +116,6 @@ function AddWorkspaceModalHelper({
           }).then(async (res) => {
             if (res.status === 200) {
               // track workspace creation event
-              va.track("Created Workspace");
               await mutate("/api/workspaces");
               if (welcomeFlow) {
                 router.push(`/welcome?type=upgrade&slug=${slug}`);
