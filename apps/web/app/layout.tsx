@@ -12,12 +12,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={cn(satoshi.variable, inter.variable)}>
+    <html lang={"en"} className={cn(satoshi.variable, inter.variable)}>
       <body>
+        
         <TooltipProvider>
           <Toaster closeButton className="pointer-events-auto" />
           {children}
         </TooltipProvider>
+
       </body>
     </html>
   );

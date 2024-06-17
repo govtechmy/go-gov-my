@@ -4,7 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { UserProps } from "../types";
 
 export default async function AppMiddleware(req: NextRequest) {
-  const { path, fullPath } = parse(req);
+  const { path, fullPath, locale, pathWithoutLocale, fullPathWithoutLocale } = parse(req);
+
   const session = (await getToken({
     req,
     secret: process.env.NEXTAUTH_SECRET,
@@ -12,14 +13,19 @@ export default async function AppMiddleware(req: NextRequest) {
     email?: string;
     user?: UserProps;
   };
+
+
   // if there's no session and the path isn't /login or /register, redirect to /login
-  if (!session?.email && path !== "/login" && path !== "/register") {
-    return NextResponse.redirect(
+  if (!session?.email && pathWithoutLocale !== "/login" && pathWithoutLocale !== "/register") {
+    const response = NextResponse.redirect(
       new URL(
-        `/login${path === "/" ? "" : `?next=${encodeURIComponent(fullPath)}`}`,
+        `/${locale}/login${pathWithoutLocale === "/" ? "" : `?next=${encodeURIComponent(fullPathWithoutLocale)}`}`,
         req.url,
       ),
-    );
+    )
+    response.headers.set('NEXT_LOCALE', locale);
+    return response
+
 
     // if there's a session
   } else if (session?.email) {
@@ -29,18 +35,25 @@ export default async function AppMiddleware(req: NextRequest) {
       session?.user?.createdAt &&
       new Date(session?.user?.createdAt).getTime() > Date.now() - 10000 &&
       // here we include the root page + /new (since they're going through welcome flow already)
-      (path === "/" || path === "/new")
+      (pathWithoutLocale === "/" || pathWithoutLocale === "/new")
     ) {
-      return NextResponse.redirect(new URL("/welcome", req.url));
+      const response = NextResponse.redirect(new URL(`/${locale}/welcome`, req.url))
+      response.headers.set('NEXT_LOCALE', locale);
+      return response
 
       // if the path is /login or /register, redirect to "/"
-    } else if (path === "/login" || path === "/register") {
-      return NextResponse.redirect(new URL("/", req.url));
+    } else if (pathWithoutLocale === "/login" || pathWithoutLocale === "/register") {
+      const response = NextResponse.redirect(new URL(`/${locale}`, req.url))
+      response.headers.set('NEXT_LOCALE', locale);
+      return response
     }
   }
-
+  
   // otherwise, rewrite the path to /app
-  return NextResponse.rewrite(
-    new URL(`/app.dub.co${fullPath === "/" ? "" : fullPath}`, req.url),
+  const headers = new Headers(req.headers)
+  headers.set('NEXT_LOCALE', locale)
+  return  NextResponse.rewrite(
+    new URL(`/${locale}/app.dub.co${fullPathWithoutLocale === "/" ? "" : fullPathWithoutLocale}`, req.url),
+    { request: { headers: headers } }
   );
 }

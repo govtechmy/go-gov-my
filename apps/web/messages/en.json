@@ -1,0 +1,20 @@
+{
+    "Login": {
+        "login_msg_1": "Sign in to",
+        "login_msg_2": "Start creating short links with superpowers"
+    }, 
+    "Dashboard": {
+        "workspace_title": "My Workspace",
+        "create_workspace": "Create Workspace",
+        "business": "business",
+        "link": "link",
+        "click": "click"
+    },
+    "Layout": {
+        "changelog": "Changelog",
+        "help": "Help",
+        "help_centre": "Help Centre",
+        "logout": "Log out",
+        "settings": "Settings"
+    }
+}

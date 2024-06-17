@@ -1,0 +1,20 @@
+{
+    "Login": {
+        "login_msg_1": "Log masuk ke",
+        "login_msg_2": "Mula membina link pendek dengan kuasa mutlak"
+    },
+    "Dashboard": {
+        "workspace_title": "Ruang Kerja Saya",
+        "create_workspace": "Membina Ruang Baru",
+        "business": "business",
+        "link": "penghubung",
+        "click": "tekanan"
+    },
+    "Layout": {
+        "changelog": "Log Tukar",
+        "help": "Tolong",
+        "help_centre": "Pusat Tolong",
+        "logout": "Log Keluar",
+        "settings": "Tetapan"
+    }
+}

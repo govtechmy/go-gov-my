@@ -6,15 +6,17 @@ import { Button } from "@dub/ui";
 import { TooltipContent } from "@dub/ui/src/tooltip";
 import { FREE_WORKSPACES_LIMIT } from "@dub/utils";
 import { useContext } from "react";
+import { MessagesContext } from "@/ui/workspaces/provider";
 
 export default function CreateWorkspaceButton() {
   const { setShowAddWorkspaceModal } = useContext(ModalContext);
+  const messages = useContext(MessagesContext);
   const { freeWorkspaces, exceedingFreeWorkspaces } = useWorkspaces();
 
   return (
     <div>
       <Button
-        text="Create workspace"
+        text={messages?.Dashboard?.create_workspace}
         disabledTooltip={
           exceedingFreeWorkspaces ? (
             <TooltipContent

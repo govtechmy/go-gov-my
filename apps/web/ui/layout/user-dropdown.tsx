@@ -5,11 +5,13 @@ import Cookies from "js-cookie";
 import { Edit3, HelpCircle, LogOut, Settings } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { MessagesContext } from "@/ui/workspaces/provider";
 
 export default function UserDropdown() {
   const { data: session } = useSession();
   const [openPopover, setOpenPopover] = useState(false);
+  const messages = useContext(MessagesContext);
 
   const [unreadChangelogs, setUnreadChangelogs] = useState(0);
   useEffect(() => {
@@ -45,7 +47,7 @@ export default function UserDropdown() {
               className="w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
             >
               <IconMenu
-                text="Help Center"
+                text={messages?.Layout?.help_centre}
                 icon={<HelpCircle className="h-4 w-4" />}
               />
             </Link>
@@ -55,7 +57,7 @@ export default function UserDropdown() {
               className="block w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
             >
               <IconMenu
-                text="Settings"
+                text={messages?.Layout?.settings}
                 icon={<Settings className="h-4 w-4" />}
               />
             </Link>
@@ -69,7 +71,7 @@ export default function UserDropdown() {
               }}
               className="flex w-full justify-between rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
             >
-              <IconMenu text="Changelog" icon={<Edit3 className="h-4 w-4" />} />
+              <IconMenu text={messages?.Layout?.changelog} icon={<Edit3 className="h-4 w-4" />} />
               {unreadChangelogs > 0 && (
                 <Badge variant="blue">{unreadChangelogs}</Badge>
               )}
@@ -82,7 +84,7 @@ export default function UserDropdown() {
                 });
               }}
             >
-              <IconMenu text="Logout" icon={<LogOut className="h-4 w-4" />} />
+              <IconMenu text={messages?.Layout?.logout} icon={<LogOut className="h-4 w-4" />} />
             </button>
           </div>
         }
