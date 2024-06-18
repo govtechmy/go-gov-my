@@ -10,7 +10,7 @@ import { ReactNode, Suspense } from "react";
 import Providers from "./providers";
 import { useIntlHook } from "@/lib/middleware/utils/useI18n";
 import { MessagesProvider } from "@/ui/workspaces/provider";
-import LangSwitcher from '@/ui/switcher/switcher';
+import LocaleSwitcher from '@/ui/switcher/switcher';
 
 export const dynamic = "force-static";
 export const metadata = constructMetadata();
@@ -34,8 +34,8 @@ export default function Layout({ children, params: { locale } }:
                   <Divider className="hidden h-8 w-8 text-gray-200 sm:ml-3 sm:block" />
                   <WorkspaceSwitcher />
                 </div>
-                <LangSwitcher/>
                 <div className="flex items-center space-x-6">
+                  <LocaleSwitcher/>
                   <a
                     href="https://dub.co/changelog"
                     className="hidden text-sm text-gray-500 transition-colors hover:text-gray-700 sm:block"
