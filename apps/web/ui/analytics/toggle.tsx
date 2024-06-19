@@ -46,7 +46,7 @@ export default function Toggle() {
             },
           )}
         >
-          {isPublicStatsPage ? (
+          {isPublicStatsPage && key ? (
             <a
               className="group flex items-center text-lg font-semibold text-gray-800"
               href={linkConstructor({ domain, key })}
