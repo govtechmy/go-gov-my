@@ -17,6 +17,6 @@ export const DEFAULT_REDIRECTS = {
 
 export const DUB_HEADERS = {
   headers: {
-    "x-powered-by": `${APP_NAME} – Malaysia's open-source link management infrastructure`,
+    "x-powered-by": `${APP_NAME} - Malaysia's open-source link management infrastructure`,
   },
 };
