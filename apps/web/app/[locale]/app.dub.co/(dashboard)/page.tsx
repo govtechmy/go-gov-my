@@ -2,7 +2,7 @@ import CreateWorkspaceButton from "@/ui/workspaces/create-workspace-button";
 import WorkspaceList from "@/ui/workspaces/workspace-list";
 import { MaxWidthWrapper } from "@dub/ui";
 import { useIntlHook } from "@/lib/middleware/utils/useI18n";
-import { MessagesProvider } from "@/ui/workspaces/provider";
+import { MessagesProvider } from "@/ui/switcher/provider";
 
 export default function App({ params: { locale } }) {
   const messages = useIntlHook(locale)

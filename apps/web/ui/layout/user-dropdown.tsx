@@ -6,7 +6,7 @@ import { Edit3, HelpCircle, LogOut, Settings } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState, useContext } from "react";
-import { MessagesContext } from "@/ui/workspaces/provider";
+import { MessagesContext } from "@/ui/switcher/provider";
 
 export default function UserDropdown() {
   const { data: session } = useSession();

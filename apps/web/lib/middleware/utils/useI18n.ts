@@ -12,6 +12,7 @@ export function useIntlHook(locale?: string) {
 
     const headersList = headers()
     const locale_header = headersList.get('NEXT_LOCALE')
+    console.log("useIntlHook", locale_header)
 
     if (locale_header) return dictionaries[locale_header]
 

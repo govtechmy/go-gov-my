@@ -5,10 +5,7 @@
     },
     "Dashboard": {
         "workspace_title": "Ruang Kerja Saya",
-        "create_workspace": "Membina Ruang Baru",
-        "business": "business",
-        "link": "penghubung",
-        "click": "tekanan"
+        "create_workspace": "Membina Ruang Baru"
     },
     "Layout": {
         "changelog": "Log Tukar",
@@ -16,5 +13,20 @@
         "help_centre": "Pusat Tolong",
         "logout": "Log Keluar",
         "settings": "Tetapan"
+    },
+    "Workspace": {
+        "create_title": "Membina ruang kerja baru",
+        "question": "Apa benda tu ruang kerja?",
+        "name": "Nama Ruang Bina",
+        "slug": "ID Ruang Bina",
+        "create_workspace": "Membina",
+        "tooltip": "Ini adalah ID anda yang unik dari ",
+        "in_use": "ID is adalah terguna.",
+        "business": "bisnes",
+        "link": "penghubung",
+        "click": "tekanan",
+        "your": "",
+        "migrate": "Anda telah hijrah ke ruang khas.",
+        "read": "Membaca log tukar."
     }
 }

@@ -5,10 +5,7 @@
     }, 
     "Dashboard": {
         "workspace_title": "My Workspace",
-        "create_workspace": "Create Workspace",
-        "business": "business",
-        "link": "link",
-        "click": "click"
+        "create_workspace": "Create Workspace"
     },
     "Layout": {
         "changelog": "Changelog",
@@ -16,5 +13,20 @@
         "help_centre": "Help Centre",
         "logout": "Log out",
         "settings": "Settings"
+    },
+    "Workspace": {
+        "create_title": "Create a new workspace",
+        "question": "What is a workspace?",
+        "name": "Workspace Name",
+        "slug": "Workspace Slug",
+        "create_workspace": "Create Workspace",
+        "tooltip": "This is your workspace's unique slug on ",
+        "in_use": "Slug is already in use.",
+        "business": "business",
+        "link": "link",
+        "click": "click",
+        "your": "Your",
+        "migrate": "links have been migrated to a custom workspace.",
+        "read": "Read the changelog."
     }
 }

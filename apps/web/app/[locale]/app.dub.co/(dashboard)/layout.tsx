@@ -9,7 +9,7 @@ import Link from "next/link";
 import { ReactNode, Suspense } from "react";
 import Providers from "./providers";
 import { useIntlHook } from "@/lib/middleware/utils/useI18n";
-import { MessagesProvider } from "@/ui/workspaces/provider";
+import { MessagesProvider } from "@/ui/switcher/provider";
 import LocaleSwitcher from '@/ui/switcher/switcher';
 
 export const dynamic = "force-static";

@@ -22,6 +22,7 @@ import {
 import { toast } from "sonner";
 import { mutate } from "swr";
 import { useDebounce } from "use-debounce";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function AddWorkspaceModalHelper({
   showAddWorkspaceModal,
@@ -32,6 +33,7 @@ function AddWorkspaceModalHelper({
 }) {
   const router = useRouter();
   const pathname = usePathname();
+  const { messages } = useIntlClientHook();
 
   const [data, setData] = useState<{
     name: string;
@@ -52,7 +54,7 @@ function AddWorkspaceModalHelper({
       fetch(`/api/workspaces/${slug}/exists`).then(async (res) => {
         if (res.status === 200) {
           const exists = await res.json();
-          setSlugError(exists === 1 ? "Slug is already in use." : null);
+          setSlugError(exists === 1 ? messages?.Workspace?.in_use : null);
         }
       });
     }
@@ -73,7 +75,6 @@ function AddWorkspaceModalHelper({
   const searchParams = useSearchParams();
   const { queryParams } = useRouterStuff();
   const [useDefaultDomain] = useState<boolean>(true);
-
   const { isMobile } = useMediaQuery();
 
   return (
@@ -93,13 +94,13 @@ function AddWorkspaceModalHelper({
     >
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <Logo />
-        <h3 className="text-lg font-medium">Create a new workspace</h3>
+        <h3 className="text-lg font-medium">{messages?.Workspace?.create_title}</h3>
         <a
           href="https://dub.co/help/article/what-is-a-workspace"
           target="_blank"
           className="-translate-y-2 text-center text-xs text-gray-500 underline underline-offset-4 hover:text-gray-800"
         >
-          What is a workspace?
+          {messages?.Workspace?.question}
         </a>
       </div>
 
@@ -146,7 +147,7 @@ function AddWorkspaceModalHelper({
         <div>
           <label htmlFor="name" className="flex items-center space-x-2">
             <p className="block text-sm font-medium text-gray-700">
-              Workspace Name
+              {messages?.Workspace?.name}
             </p>
             <InfoTooltip
               content={`This is the name of your workspace on ${process.env.NEXT_PUBLIC_APP_NAME}.`}
@@ -174,10 +175,10 @@ function AddWorkspaceModalHelper({
         <div>
           <label htmlFor="slug" className="flex items-center space-x-2">
             <p className="block text-sm font-medium text-gray-700">
-              Workspace Slug
+              {messages?.Workspace?.slug}
             </p>
             <InfoTooltip
-              content={`This is your workspace's unique slug on ${process.env.NEXT_PUBLIC_APP_NAME}.`}
+              content={`${messages?.Workspace?.tooltip}${process.env.NEXT_PUBLIC_APP_NAME}.`}
             />
           </label>
           <div className="relative mt-2 flex rounded-md shadow-sm">
@@ -225,7 +226,7 @@ function AddWorkspaceModalHelper({
         <Button
           disabled={slugError || domainError ? true : false}
           loading={saving}
-          text="Create workspace"
+          text={messages?.Workspace?.create_workspace}
         />
       </form>
     </Modal>
