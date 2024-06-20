@@ -1,5 +1,5 @@
 import { headers } from 'next/headers'
-import { DEFAULT_LOCALE } from "@dub/utils"
+import { DEFAULT_LOCALE, LOCALES } from "@dub/utils"
 import en from "../../../messages/en.json"
 import bm from "../../../messages/bm.json"
 
@@ -8,13 +8,14 @@ export function useIntlHook(locale?: string) {
         "en": en,
         "bm": bm
     }
-    if (locale) return dictionaries[locale] 
+    if (locale && LOCALES.includes(locale)) return { messages: dictionaries[locale], locale }
 
     const headersList = headers()
     const locale_header = headersList.get('NEXT_LOCALE')
-    console.log("useIntlHook", locale_header)
-
-    if (locale_header) return dictionaries[locale_header]
-
-    return dictionaries[DEFAULT_LOCALE];
+    if (locale_header && LOCALES.includes(locale_header)) {
+        return { messages: dictionaries[locale_header], locale: locale_header }
+    }
+    
+    // IF ALL FAILS, USE DEFAULT LOCALE
+    return { messages: dictionaries[DEFAULT_LOCALE], locale: DEFAULT_LOCALE };
 }

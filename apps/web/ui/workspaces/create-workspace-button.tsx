@@ -16,7 +16,7 @@ export default function CreateWorkspaceButton() {
   return (
     <div>
       <Button
-        text={messages?.Dashboard?.create_workspace}
+        text={messages?.dashboard?.create_workspace}
         disabledTooltip={
           exceedingFreeWorkspaces ? (
             <TooltipContent

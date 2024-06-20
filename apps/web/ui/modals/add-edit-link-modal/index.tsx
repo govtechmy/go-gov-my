@@ -63,6 +63,7 @@ import PasswordSection from "./password-section";
 import Preview from "./preview";
 import TagsSection from "./tags-section";
 import UTMSection from "./utm-section";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function AddEditLinkModal({
   showAddEditLinkModal,
@@ -87,6 +88,8 @@ function AddEditLinkModal({
     aiLimit,
     mutate: mutateWorkspace,
   } = useWorkspace();
+  const { messages } = useIntlClientHook();
+  const message = messages?.link
 
   const [keyError, setKeyError] = useState<string | null>(null);
   const [urlError, setUrlError] = useState<string | null>(null);
@@ -376,7 +379,7 @@ function AddEditLinkModal({
           <div className="sticky top-0 z-20 flex h-14 items-center justify-center gap-4 space-y-3 border-b border-gray-200 bg-white px-4 transition-all sm:h-24 md:px-16">
             <LinkLogo apexDomain={getApexDomain(url)} />
             <h3 className="!mt-0 max-w-sm truncate text-lg font-medium">
-              {props ? `Edit ${shortLink}` : "Create a new link"}
+              {props ? `Edit ${shortLink}` : message?.create_new_link}
             </h3>
           </div>
 
@@ -462,15 +465,16 @@ function AddEditLinkModal({
                     htmlFor={`url-${randomIdx}`}
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Destination URL
+                    {message?.destination}
                   </label>
                   {urlError ? (
                     <p className="text-sm text-red-600" id="key-error">
-                      Invalid URL
+                      {message?.invalid_url}
                     </p>
                   ) : url ? (
                     <div className="animate-text-appear text-xs font-normal text-gray-500">
-                      press <strong>Enter</strong> ↵ to submit
+                      {/* press <strong>Enter</strong> ↵ to submit */}
+                      {`${message?.press_enter}`}
                     </div>
                   ) : null}
                 </div>
@@ -510,7 +514,7 @@ function AddEditLinkModal({
                     htmlFor={`key-${randomIdx}`}
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Short Link
+                    {message?.short_link}
                   </label>
                   {props && lockKey ? (
                     <button
@@ -608,8 +612,7 @@ function AddEditLinkModal({
                             <TriangleAlert className="mt-0.5 h-4 w-4 flex-none text-amber-500" />
                             <div>
                               <p className="text-sm text-gray-700">
-                                Short links longer than 25 characters will show
-                                up differently on some platforms.
+                                {message?.too_long}
                               </p>
                               <div className="mt-2 flex items-center space-x-2">
                                 <LinkedIn className="h-4 w-4" />
@@ -677,7 +680,7 @@ function AddEditLinkModal({
               </div>
               <div className="relative flex justify-center">
                 <span className="-translate-y-1 bg-gray-50 px-2 text-sm text-gray-500">
-                  Optional
+                  {message?.optional}
                 </span>
               </div>
             </div>
@@ -712,7 +715,7 @@ function AddEditLinkModal({
                 <Button
                   disabled={saveDisabled}
                   loading={saving}
-                  text={props ? "Save changes" : "Create link"}
+                  text={props ? message?.save_changes : message?.create_link}
                 />
               )}
             </div>
@@ -737,6 +740,8 @@ function AddEditLinkButton({
 }) {
   const { nextPlan, exceededLinks } = useWorkspace();
   const { queryParams } = useRouterStuff();
+  const { messages } = useIntlClientHook();
+  const message = messages?.link
 
   const onKeyDown = useCallback((e: KeyboardEvent) => {
     const target = e.target as HTMLElement;
@@ -795,7 +800,7 @@ function AddEditLinkButton({
 
   return (
     <Button
-      text="Create link"
+      text={message?.create_link}
       shortcut="C"
       disabledTooltip={
         exceededLinks ? (

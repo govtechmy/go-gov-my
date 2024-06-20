@@ -9,17 +9,20 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useContext, useMemo } from "react";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function NavTabs() {
   const pathname = usePathname();
   const { slug } = useParams() as { slug?: string };
   const domain = useSearchParams()?.get("domain");
   const { loading, error } = useWorkspace();
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.dashboard
 
   const tabs = [
-    { name: "Links", href: `/${slug}` },
-    { name: "Analytics", href: `/${slug}/analytics` },
-    { name: "Settings", href: `/${slug}/settings` },
+    { name: message?.links, href: `/${slug}` },
+    { name: message?.analytics, href: `/${slug}/analytics` },
+    { name: message?.settings, href: `/${slug}/settings` },
   ];
 
   const { data: linksCount } = useLinksCount();

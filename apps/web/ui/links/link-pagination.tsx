@@ -3,11 +3,13 @@ import { NumberTooltip, useRouterStuff } from "@dub/ui";
 import { PAGINATION_LIMIT, nFormatter } from "@dub/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function LinkPagination() {
   const searchParams = useSearchParams();
   const currentPage = parseInt(searchParams?.get("page") || "1");
   const { queryParams } = useRouterStuff();
+  const { messages, locale } = useIntlClientHook();
 
   const { data: count } = useLinksCount();
 
@@ -80,12 +82,12 @@ export default function LinkPagination() {
         )}
       </div>
       <p className="text-sm text-gray-500">
-        Showing {(currentPage - 1) * PAGINATION_LIMIT + 1} -{" "}
-        {Math.min(currentPage * PAGINATION_LIMIT, count)} of{" "}
+        {messages?.dashboard?.showing} {(currentPage - 1) * PAGINATION_LIMIT + 1} -{" "}
+        {Math.min(currentPage * PAGINATION_LIMIT, count)} {messages?.dashboard?.of}{" "}
         <NumberTooltip value={count} unit="links">
           <span>{nFormatter(count)}</span>
         </NumberTooltip>{" "}
-        links
+        {messages?.dashboard?.links}
       </p>
     </div>
   );

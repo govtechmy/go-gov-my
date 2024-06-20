@@ -1,20 +1,37 @@
 {
-    "Login": {
+    "login": {
         "login_msg_1": "Sign in to",
         "login_msg_2": "Start creating short links with superpowers"
     }, 
-    "Dashboard": {
+    "dashboard": {
         "workspace_title": "My Workspace",
-        "create_workspace": "Create Workspace"
+        "create_workspace": "Create Workspace",
+        "links": "Links",
+        "sort_by": "Sort By",
+        "date_added": "Date Added",
+        "number_clicks": "Number of Clicks",
+        "last_clicked": "Last Clicked",
+        "analytics": "Analytics",
+        "settings": "Settings",
+        "filter_links": "Filter Links",
+        "filter_tags": "Filter Tags",
+        "add": "Add",
+        "search": "Search",
+        "show_my_links_only": "Show my links only",
+        "include_archive_links": "Include Archive Links",
+        "no_tags_yet": "No Tags Yet",
+        "no_tags_match_search": "No tags match your search.",
+        "showing": "Showing",
+        "of": "of"
     },
-    "Layout": {
+    "layout": {
         "changelog": "Changelog",
         "help": "Help",
         "help_centre": "Help Centre",
         "logout": "Log out",
         "settings": "Settings"
     },
-    "Workspace": {
+    "workspace": {
         "create_title": "Create a new workspace",
         "question": "What is a workspace?",
         "name": "Workspace Name",
@@ -28,5 +45,19 @@
         "your": "Your",
         "migrate": "links have been migrated to a custom workspace.",
         "read": "Read the changelog."
+    },
+    "link": {
+        "create_link": "Create Link",
+        "save_changes": "Save Changes",
+        "create_new_link": "Create a new link",
+        "social_preview": "Social Previews",
+        "enter_link": "Enter a link to generate a preview.",
+        "short_link": "Short Link",
+        "optional": "Optional",
+        "select_tags": "Select Tags",
+        "destination": "Destination URL",
+        "invalid_url": "Invalid URL",
+        "press_enter": "press <strong>Enter</strong> ↵ to submit",
+        "too_long": "Short links longer than 25 characters will show up differently on some platforms."
     }
 }

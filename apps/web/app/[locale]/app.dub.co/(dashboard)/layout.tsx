@@ -19,7 +19,7 @@ export default function Layout({ children, params: { locale } }:
   { children: ReactNode,
     params: {locale: string}; 
   }) {
-    const messages = useIntlHook(locale)
+    const {messages} = useIntlHook(locale)
     return (
       <Providers>
         <MessagesProvider messages={messages}>
@@ -41,14 +41,14 @@ export default function Layout({ children, params: { locale } }:
                     className="hidden text-sm text-gray-500 transition-colors hover:text-gray-700 sm:block"
                     target="_blank"
                   >
-                    {messages?.Layout?.changelog}
+                    {messages?.layout?.changelog}
                   </a>
                   <a
                     href="https://dub.co/help"
                     className="hidden text-sm text-gray-500 transition-colors hover:text-gray-700 sm:block"
                     target="_blank"
                   >
-                    {messages?.Layout?.help}
+                    {messages?.layout?.help}
                   </a>
                   <UserDropdown />
                 </div>

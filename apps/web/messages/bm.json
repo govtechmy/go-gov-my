@@ -1,20 +1,38 @@
 {
-    "Login": {
+    "login": {
         "login_msg_1": "Log masuk ke",
         "login_msg_2": "Mula membina link pendek dengan kuasa mutlak"
     },
-    "Dashboard": {
+    "dashboard": {
         "workspace_title": "Ruang Kerja Saya",
-        "create_workspace": "Membina Ruang Baru"
+        "create_workspace": "Membina Ruang Baru",
+        "links": "penghubung",
+        "Links": "Penghubung",
+        "sort_by": "Disusun Mengikuti",
+        "date_added": "Tarikh Ditambah",
+        "number_clicks": "Bilangan Tekanan",
+        "last_clicked": "Ditekan Terakhir",
+        "analytics": "Analisis",
+        "settings": "Tetapan",
+        "filter_links": "Penapis Penghubung",
+        "filter_tags": "Penapis Tags",
+        "add": "Tambah",
+        "search": "Cari",
+        "show_my_links_only": "Tunjukkan penghubung saya sahaja",
+        "include_archive_links": "Termasuk penhubung arkib",
+        "no_tags_yet": "Belum ada tags",
+        "no_tags_match_search": "Tiada tags yang dijumpa.",
+        "showing": "Menunjuk",
+        "of": "dari"
     },
-    "Layout": {
+    "layout": {
         "changelog": "Log Tukar",
         "help": "Tolong",
         "help_centre": "Pusat Tolong",
         "logout": "Log Keluar",
         "settings": "Tetapan"
     },
-    "Workspace": {
+    "workspace": {
         "create_title": "Membina ruang kerja baru",
         "question": "Apa benda tu ruang kerja?",
         "name": "Nama Ruang Bina",
@@ -28,5 +46,20 @@
         "your": "",
         "migrate": "Anda telah hijrah ke ruang khas.",
         "read": "Membaca log tukar."
+    },
+    "link": {
+        "create_link": "Membina Penghubung",
+        "save_changes": "Simpan Perubahan",
+        "create_new_link": "Membina penghubung baru",
+        "social_preview": "Kejangkaan",
+        "enter_link": "Input penghubung untuk meninjau kejangkaan.",
+        "short_link": "Penhubung pendek",
+        "optional": "Tidak Wajib",
+        "select_tags": "Pilihkan Tags",
+        "destination": "Destinasi URL",
+        "invalid_url": "URL tidak sah",
+        "press_enter": "tekan <strong>Enter</strong> ↵ untuk menyerahkan",
+        "too_long": "Penhubung yang melebihi 25 perkataan mungkin akan dipaparkan berbeza mengikut platform."
+
     }
 }

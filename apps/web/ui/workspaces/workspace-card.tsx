@@ -32,7 +32,7 @@ export default function WorkspaceCard({
 
   const { user } = useUser();
   const { messages, locale } = useIntlClientHook();
-  const workspace_msg = messages?.Workspace
+  const workspace_msg = messages?.workspace
 
   const isMigratedWorkspace = user?.migratedWorkspace === id;
 

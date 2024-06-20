@@ -3,27 +3,31 @@ import { IconMenu, Popover, Tick, useRouterStuff } from "@dub/ui";
 import { ChevronDown, SortDesc } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
-
-const sortOptions = [
-  {
-    display: "Date Added",
-    slug: "createdAt",
-  },
-  {
-    display: "Number of Clicks",
-    slug: "clicks",
-  },
-  {
-    display: "Last Clicked",
-    slug: "lastClicked",
-  },
-];
+import { useContext } from "react";
+import { MessagesContext } from "@/ui/switcher/provider";
 
 export default function LinkSort() {
   const [openPopover, setOpenPopover] = useState(false);
   const searchParams = useSearchParams();
   const sort = searchParams?.get("sort");
   const { queryParams } = useRouterStuff();
+  const messages = useContext(MessagesContext);
+
+  const sortOptions = [
+    {
+      display: messages?.dashboard?.date_added,
+      slug: "createdAt",
+    },
+    {
+      display: messages?.dashboard?.number_clicks,
+      slug: "clicks",
+    },
+    {
+      display: messages?.dashboard?.last_clicked,
+      slug: "lastClicked",
+    },
+  ];
+  
 
   const selectedSort = useMemo(() => {
     return sortOptions.find((s) => s.slug === sort) || sortOptions[0];
@@ -65,7 +69,7 @@ export default function LinkSort() {
         className="flex w-48 items-center justify-between space-x-2 rounded-md bg-white px-3 py-2.5 shadow transition-all duration-75 hover:shadow-md"
       >
         <IconMenu
-          text={sort ? selectedSort.display : "Sort by"}
+          text={sort ? selectedSort.display : messages?.dashboard?.sort_by}
           icon={
             sort ? (
               <SortDesc className="h-4 w-4" />

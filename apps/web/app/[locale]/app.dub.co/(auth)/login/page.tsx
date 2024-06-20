@@ -17,10 +17,10 @@ export default function LoginPage() {
           <Logo className="h-10 w-10" />
         </a>
         <h3 className="text-xl font-semibold">
-          {messages?.Login?.login_msg_1} {process.env.NEXT_PUBLIC_APP_NAME}
+          {messages?.login?.login_msg_1} {process.env.NEXT_PUBLIC_APP_NAME}
         </h3>
         <p className="text-sm text-gray-500">
-          {messages?.Login?.login_msg_2}
+          {messages?.login?.login_msg_2}
         </p>
       </div>
       <div className="flex flex-col space-y-3 bg-gray-50 px-4 py-8 sm:px-16">
