@@ -50,7 +50,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: ./apps/web/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - 8888:8888
     environment:
@@ -62,6 +62,25 @@ services:
       - /usr/src/app/node_modules
     networks:
       - my-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+    networks:
+      - my-network
+
+  redirect-server:
+    build:
+      context: ./redirect-server
+    ports:
+      - 8889:8889
+    networks:
+      - my-network
+    depends_on:
+      - elasticsearch
 
 networks:
   my-network:

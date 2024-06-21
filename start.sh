@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 
 # Start the database and Redis services
 docker-compose -f docker-compose.db.yml up -d
