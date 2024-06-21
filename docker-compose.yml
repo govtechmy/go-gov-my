@@ -35,7 +35,15 @@ services:
     image: docker.elastic.co/logstash/logstash:7.13.2
     volumes:
       - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-      - /path/to/postgresql-42.2.5.jar:/usr/share/logstash/logstash-core/lib/jars/postgresql-42.2.5.jar
+      - ./postgresql-42.2.5.jar:/usr/share/logstash/logstash-core/lib/jars/postgresql-42.2.5.jar
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - ELASTICSEARCH_HOST=${ELASTICSEARCH_HOST}
+      - LOGSTASH_STATEMENT=${LOGSTASH_STATEMENT}
     networks:
       - my-network
     depends_on:
@@ -51,18 +59,6 @@ services:
       - my-network
     depends_on:
       - elasticsearch
-
-  redirect-service:
-    build:
-      context: ./apps/redirect-server
-    ports:
-      - 8080:8080
-    networks:
-      - my-network
-    depends_on:
-      - elasticsearch
-      - ps-postgres
-      - filebeat
 
 networks:
   my-network:

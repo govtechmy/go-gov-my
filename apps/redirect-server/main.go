@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"html/template"
@@ -9,29 +10,27 @@ import (
 	"os"
 	"time"
 
-	"github.com/olivere/elastic/v7"
+	"github.com/elastic/go-elasticsearch/v7"
 )
 
 var (
-    esClient   *elastic.Client
+    esClient   *elasticsearch.Client
     indexName  = "links"
-    baseDomainUrl = "http://your-domain.com"
+    baseDomainUrl = "https://go.gov.my/"
 )
 
 func main() {
     var err error
 
-    esClient, err = elastic.NewClient(elastic.SetURL("http://elasticsearch:9200"))
-
+    // Initialize the Elasticsearch client
+    esClient, err = elasticsearch.NewDefaultClient()
     if err != nil {
         log.Fatalf("Error creating the Elasticsearch client: %s", err)
     }
 
     http.HandleFunc("/t/", redirectHandler)
-
     log.Println("Starting server on :8080")
-
-    log.Fatal(http.ListenAndServe(":8080", nil))
+    log.Fatal(http.ListenAndServeTLS(":8080", "cert.pem", "key.pem", nil))
 }
 
 func redirectHandler(w http.ResponseWriter, r *http.Request) {
@@ -41,8 +40,14 @@ func redirectHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
+    // Only for test... 
+    if (key == "test") {
+        logRedirect(key, r.RemoteAddr)
+        renderWaitPage(w, key, "https://www.google.com/")
+        return
+    }
+    
     exists, expired, originalURL := checkLinkInElasticsearch(key)
-
     if !exists {
         http.Error(w, "Link not found", http.StatusNotFound)
         return
@@ -58,32 +63,69 @@ func redirectHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func checkLinkInElasticsearch(key string) (exists, expired bool, originalURL string) {
+    query := map[string]interface{}{
+        "query": map[string]interface{}{
+            "term": map[string]interface{}{
+                "key": key,
+            },
+        },
+    }
+    var buf bytes.Buffer
+    if err := json.NewEncoder(&buf).Encode(query); err != nil {
+        log.Printf("Error encoding query: %s", err)
+        return false, false, ""
+    }
 
-    query := elastic.NewTermQuery("key", key)
-    
-    searchResult, err := esClient.Search().
-        Index(indexName).
-        Query(query).
-        Do(context.Background())
-
+    res, err := esClient.Search(
+        esClient.Search.WithContext(context.Background()),
+        esClient.Search.WithIndex(indexName),
+        esClient.Search.WithBody(&buf),
+        esClient.Search.WithTrackTotalHits(true),
+    )
     if err != nil {
         log.Printf("Error querying Elasticsearch: %s", err)
         return false, false, ""
     }
+    defer res.Body.Close()
 
-    if searchResult.TotalHits() == 0 {
+    if res.IsError() {
+        var e map[string]interface{}
+        if err := json.NewDecoder(res.Body).Decode(&e); err != nil {
+            log.Printf("Error parsing the response body: %s", err)
+        } else {
+            log.Printf("[%s] %s: %s",
+                res.Status(),
+                e["error"].(map[string]interface{})["type"],
+                e["error"].(map[string]interface{})["reason"],
+            )
+        }
         return false, false, ""
     }
 
-    for _, hit := range searchResult.Hits.Hits {
+    var r map[string]interface{}
+    if err := json.NewDecoder(res.Body).Decode(&r); err != nil {
+        log.Printf("Error parsing the response body: %s", err)
+        return false, false, ""
+    }
+
+    if r["hits"].(map[string]interface{})["total"].(map[string]interface{})["value"].(float64) == 0 {
+        return false, false, ""
+    }
+
+    for _, hit := range r["hits"].(map[string]interface{})["hits"].([]interface{}) {
         var link struct {
             Key         string `json:"key"`
             Expired     bool   `json:"expired"`
             OriginalURL string `json:"original_url"`
         }
-        err := json.Unmarshal(hit.Source, &link)
+        source := hit.(map[string]interface{})["_source"]
+        linkJSON, err := json.Marshal(source)
         if err != nil {
-            log.Printf("Error unmarshalling Elasticsearch hit: %s", err)
+            log.Printf("Error marshalling hit source: %s", err)
+            continue
+        }
+        if err := json.Unmarshal(linkJSON, &link); err != nil {
+            log.Printf("Error unmarshalling hit source: %s", err)
             continue
         }
         return true, link.Expired, link.OriginalURL
@@ -135,7 +177,7 @@ func renderWaitPage(w http.ResponseWriter, key, originalURL string) {
 <body>
     <div class="container">
         <h1>Check your address bar</h1>
-        <p>Beware of phishing, make sure it starts with {{.BaseDomain}}.</p>
+        <p>Beware of phishing, make sure it starts with <b style="color:red">{{.BaseDomain}}</b></p>
         <div class="spinner"></div>
         <p>You'll be redirected in 10 seconds...</p>
     </div>
