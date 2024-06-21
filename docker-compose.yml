@@ -31,6 +31,39 @@ services:
     networks:
       - my-network
 
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.13.2
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - /path/to/postgresql-42.2.5.jar:/usr/share/logstash/logstash-core/lib/jars/postgresql-42.2.5.jar
+    networks:
+      - my-network
+    depends_on:
+      - elasticsearch
+      - ps-postgres
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.13.2
+    volumes:
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ./logs:/usr/share/filebeat/logs
+    networks:
+      - my-network
+    depends_on:
+      - elasticsearch
+
+  redirect-service:
+    build:
+      context: ./apps/redirect-server
+    ports:
+      - 8080:8080
+    networks:
+      - my-network
+    depends_on:
+      - elasticsearch
+      - ps-postgres
+      - filebeat
+
 networks:
   my-network:
 
