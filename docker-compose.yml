@@ -22,6 +22,15 @@ services:
     networks:
       - my-network
 
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+    networks:
+      - my-network
+
 networks:
   my-network:
 
