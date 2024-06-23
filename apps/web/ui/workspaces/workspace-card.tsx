@@ -90,7 +90,7 @@ export default function WorkspaceCard({
             {count || count === 0 ? (
               <NumberTooltip value={count} unit="links">
                 <h2 className="whitespace-nowrap text-sm">
-                  {nFormatter(count)} {workspace_msg?.link}{count != 1 && "s"}
+                  {nFormatter(count)} {count != 1 ? workspace_msg?.links : workspace_msg?.link}
                 </h2>
               </NumberTooltip>
             ) : (
@@ -101,7 +101,7 @@ export default function WorkspaceCard({
             <BarChart2 className="h-4 w-4" />
             <NumberTooltip value={usage}>
               <h2 className="whitespace-nowrap text-sm">
-                {nFormatter(usage)} {workspace_msg?.click}{usage != 1 && "s"}
+                {nFormatter(usage)} {usage != 1 ? workspace_msg?.clicks : workspace_msg?.click}
               </h2>
             </NumberTooltip>
           </div>
