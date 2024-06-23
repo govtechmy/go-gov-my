@@ -9,6 +9,7 @@ import { useSearchParams } from "next/navigation";
 import { useContext } from "react";
 import { AnalyticsContext } from ".";
 import ClicksChart from "./clicks-chart";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function Clicks() {
   const { totalClicks } = useContext(AnalyticsContext);
@@ -16,6 +17,8 @@ export default function Clicks() {
   const domain = searchParams.get("domain");
   const key = searchParams.get("key");
   const { queryParams } = useRouterStuff();
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.analytics
 
   // Tag related
   const tagId = searchParams.get("tagId");
@@ -44,7 +47,7 @@ export default function Clicks() {
             <Chart className="mb-1 h-6 w-6 text-gray-600" />
           </div>
           <p className="text-sm font-medium uppercase text-gray-600">
-            Total Clicks
+            {message?.total_clicks}
           </p>
         </div>
         <div className="flex flex-wrap items-center justify-end gap-2">
@@ -59,7 +62,7 @@ export default function Clicks() {
                 }
                 className="flex items-center space-x-1 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1 text-sm text-gray-500 transition-all hover:bg-gray-100"
               >
-                <p>Link</p>
+                <p>{message?.link}</p>
                 <strong className="text-gray-800">
                   {truncate(linkConstructor({ domain, key, pretty: true }), 24)}
                 </strong>
@@ -75,7 +78,7 @@ export default function Clicks() {
                 }
                 className="flex items-center space-x-1 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1 text-sm text-gray-500 transition-all hover:bg-gray-100"
               >
-                <p>Domain</p>
+                <p>{message?.domain}</p>
                 <strong className="text-gray-800">{domain}</strong>
                 <X className="h-4 w-4" />
               </Link>
@@ -110,7 +113,7 @@ export default function Clicks() {
               <strong className="text-gray-800">
                 {root === "true" ? "Domains" : "Links"}
               </strong>
-              <p>Only</p>
+              <p>{message?.only}</p>
               <X className="h-4 w-4" />
             </Link>
           )}

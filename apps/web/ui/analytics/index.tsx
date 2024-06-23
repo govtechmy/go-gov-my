@@ -57,9 +57,9 @@ export default function Analytics({
   };
   // key can be a path param (public stats pages) or a query param (stats pages in app)
   key = searchParams?.get("key") || key;
-  if (!key) {
-    throw Error("Failed to load Analytics context provider 'key' is undefined");
-  }
+  // if (!key) {
+  //   throw Error("Failed to load Analytics context provider 'key' is undefined");
+  // }
 
   const domainSlug = searchParams?.get("domain");
   const interval = searchParams?.get("interval") || "24h";

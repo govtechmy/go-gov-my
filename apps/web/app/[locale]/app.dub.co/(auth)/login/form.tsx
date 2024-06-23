@@ -7,6 +7,7 @@ import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
@@ -17,6 +18,8 @@ export default function LoginForm() {
   const [clickedGoogle, setClickedGoogle] = useState(false);
   const [clickedEmail, setClickedEmail] = useState(false);
   const [clickedSSO, setClickedSSO] = useState(false);
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.login
 
   useEffect(() => {
     const error = searchParams?.get("error");
@@ -48,7 +51,7 @@ export default function LoginForm() {
           loading={clickedGoogle}
           disabled={clickedEmail || clickedSSO}
           icon={<Google className="h-5 w-5" />}
-          text="Continue with Google"
+          text={message?.cont_google}
         />
       </div>
       <form
@@ -71,20 +74,20 @@ export default function LoginForm() {
                   setClickedEmail(false);
                   if (res?.ok && !res?.error) {
                     setEmail("");
-                    toast.success("Email sent - check your inbox!");
+                    toast.success(message?.email_sent);
                   } else {
-                    toast.error("Error sending email - try again?");
+                    toast.error(message?.email_sent_error);
                   }
                 });
               } else {
-                toast.error("No account found with that email address.");
+                toast.error(message?.no_account);
                 setNoSuchAccount(true);
                 setClickedEmail(false);
               }
             })
             .catch(() => {
               setClickedEmail(false);
-              toast.error("Error sending email - try again?");
+              toast.error(message?.email_sent_error);
             });
         }}
         className="flex flex-col space-y-3"
@@ -125,7 +128,7 @@ export default function LoginForm() {
         />
       </form>
       {noSuchAccount && (
-        <p className="text-center text-sm text-red-500">No such account. </p>
+        <p className="text-center text-sm text-red-500">{message?.no_account_v2}</p>
       )}
     </>
   );

@@ -25,6 +25,7 @@ import {
 import { toast } from "sonner";
 import { mutate } from "swr";
 import { COLORS_LIST, randomBadgeColor } from "../links/tag-badge";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function AddEditTagModal({
   showAddEditTagModal,
@@ -37,6 +38,8 @@ function AddEditTagModal({
 }) {
   const { id: workspaceId } = useWorkspace();
   const { isMobile } = useMediaQuery();
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal;
 
   const [saving, setSaving] = useState(false);
 
@@ -65,12 +68,12 @@ function AddEditTagModal({
         ? {
             method: "PATCH",
             url: `/api/tags/${id}?workspaceId=${workspaceId}`,
-            successMessage: "Successfully updated tag!",
+            successMessage: message?.success_update_tag,
           }
         : {
             method: "POST",
             url: `/api/tags?workspaceId=${workspaceId}`,
-            successMessage: "Successfully added tag!",
+            successMessage: message?.success_add_tag,
           },
     [id],
   );
@@ -85,14 +88,14 @@ function AddEditTagModal({
         <div className="flex flex-col space-y-1 text-center">
           <h3 className="text-lg font-medium">{props ? "Edit" : "Add"} tag</h3>
           <p className="text-sm text-gray-500">
-            Use tags to organize your links.{" "}
+            {message?.use_tag}{" "}
             <a
               href="https://dub.co/help/article/how-to-use-tags#what-is-a-tag"
               target="_blank"
               rel="noopener noreferrer"
               className="underline underline-offset-4 hover:text-gray-800"
             >
-              Learn more
+              {message?.learn_more}
             </a>
           </p>
         </div>
@@ -139,7 +142,7 @@ function AddEditTagModal({
       >
         <div>
           <label htmlFor="name" className="flex items-center space-x-2">
-            <p className="block text-sm font-medium text-gray-700">Tag Name</p>
+            <p className="block text-sm font-medium text-gray-700">{message?.tag_name}</p>
           </label>
           <div className="mt-2 flex rounded-md shadow-sm">
             <input
@@ -161,7 +164,7 @@ function AddEditTagModal({
 
         <div>
           <label htmlFor="name" className="flex items-center space-x-2">
-            <p className="block text-sm font-medium text-gray-700">Tag Color</p>
+            <p className="block text-sm font-medium text-gray-700">{message?.tag_colour}</p>
             <InfoTooltip content={`A color to make your tag stand out.`} />
           </label>
           <RadioGroup

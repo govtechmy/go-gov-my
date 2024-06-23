@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { Dispatch, SetStateAction, useContext, useMemo, useRef } from "react";
 import Highlighter from "react-highlight-words";
 import { HelpContext } from "./portal";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export function HelpArticles({
   setScreen,
@@ -14,13 +15,15 @@ export function HelpArticles({
 }) {
   const { data: session } = useSession();
   const commandListRef = useRef<HTMLDivElement>(null);
+  const { messages } = useIntlClientHook();
+  const message = messages?.help
 
   return (
     <div>
       <div className="p-2 sm:p-4">
         <div className="p-2">
           <h3 className="text-lg font-semibold text-gray-700">
-            👋 How can we help?
+            👋 {message?.how}
           </h3>
         </div>
         <Command label="help-portal" loop shouldFilter={false}>
@@ -46,11 +49,10 @@ export function HelpArticles({
               <MessageSquareText className="h-4 w-4 text-gray-400" />
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium text-purple-600">
-                  Can't find what you're looking for?
+                  {message?.cant_find}
                 </p>
                 <p className="text-xs text-gray-400">
-                  Send us a message and we'll get back to you as soon as
-                  possible.
+                  {message?.send_message}
                 </p>
               </div>
             </Command.Empty>
@@ -65,7 +67,7 @@ export function HelpArticles({
             className="flex items-center space-x-2 hover:underline"
           >
             <MessageSquareText className="h-4 w-4" />
-            <p className="text-sm">Contact us</p>
+            <p className="text-sm">{message?.contact_us}</p>
           </button>
         ) : (
           <div />
@@ -75,7 +77,7 @@ export function HelpArticles({
           target="_blank"
           className="flex items-center space-x-2 hover:underline"
         >
-          <p className="text-sm">Help center</p>
+          <p className="text-sm">{message?.help_center}</p>
           <ExternalLink className="h-4 w-4" />
         </a>
       </div>

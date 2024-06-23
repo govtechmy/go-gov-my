@@ -8,6 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function GoogleOauthModal({
   showGoogleOauthModal,
@@ -17,6 +18,8 @@ function GoogleOauthModal({
   setShowGoogleOauthModal: Dispatch<SetStateAction<boolean>>;
 }) {
   const [clickedGoogle, setClickedGoogle] = useState(false);
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal;
 
   return (
     <Modal
@@ -25,23 +28,23 @@ function GoogleOauthModal({
     >
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <Logo />
-        <h3 className="text-lg font-medium">Connect your Google Account</h3>
+        <h3 className="text-lg font-medium">{message?.google}</h3>
         <p className="text-center text-sm text-gray-500">
-          This allows you to sign in to your {process.env.NEXT_PUBLIC_APP_NAME}{" "}
-          account with Google.{" "}
+          {message?.google_desc_1} {process.env.NEXT_PUBLIC_APP_NAME}{" "}
+          {message?.google_desc_2}{" "}
           <a
             className="underline underline-offset-4 transition-colors hover:text-black"
             href="https://dub.co/changelog/sign-in-with-google"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Read the announcement.
+            {message?.read_announcement}
           </a>
         </p>
       </div>
       <div className="flex flex-col space-y-3 bg-gray-50 px-4 py-8 text-left sm:px-16">
         <Button
-          text="Connect Google Account"
+          text={message?.connect_google}
           onClick={() => {
             setClickedGoogle(true);
             signIn("google", {
@@ -58,7 +61,7 @@ function GoogleOauthModal({
           }}
           className="text-sm text-gray-400 underline underline-offset-4 transition-colors hover:text-gray-800 active:text-gray-400"
         >
-          Don't show this again
+          {message?.dont_show}
         </button>
       </div>
     </Modal>

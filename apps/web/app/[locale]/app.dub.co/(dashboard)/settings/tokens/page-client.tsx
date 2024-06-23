@@ -9,6 +9,7 @@ import { FolderOpen, MoreVertical, Trash } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import useSWR from "swr";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function TokensPageClient() {
   const {
@@ -16,6 +17,8 @@ export default function TokensPageClient() {
     mutate,
     isLoading,
   } = useSWR<Token[]>("/api/user/tokens", fetcher);
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.tokens;
 
   const [createdToken, setCreatedToken] = useState<string | null>(null);
   const { TokenCreatedModal, setShowTokenCreatedModal } = useTokenCreatedModal({
@@ -25,15 +28,15 @@ export default function TokensPageClient() {
     <>
       <TokenCreatedModal />
       <Form
-        title="Create New API Key"
-        description="Enter a unique name for your API key to differentiate it from other keys."
+        title={message?.create_api_key}
+        description={message?.enter_key}
         inputAttrs={{
           name: "name",
           defaultValue: "",
           placeholder: "Jetpack API Key",
           maxLength: 140,
         }}
-        helpText="<a href='https://d.to/api' target='_blank'>Learn more about Dub's API.</a>"
+        helpText={`<a href='https://d.to/api' target='_blank'>${message?.learn_more}</a>`}
         buttonText="Submit"
         handleSubmit={(data) =>
           fetch("/api/user/tokens", {
@@ -48,34 +51,32 @@ export default function TokensPageClient() {
               setCreatedToken(token);
               setShowTokenCreatedModal(true);
               mutate();
-              toast.success("Successfully created a new token!");
+              toast.success(message?.success);
             } else {
               const errorMessage = await res.text();
-              toast.error(errorMessage || "Something went wrong");
+              toast.error(errorMessage || message?.error);
             }
           })
         }
       />
       <div className="rounded-lg border border-gray-200 bg-white">
         <div className="flex flex-col space-y-3 p-5 sm:p-10">
-          <h2 className="text-xl font-medium">Your API Keys</h2>
+          <h2 className="text-xl font-medium">{message?.your_api_keys}</h2>
           <p className="text-sm text-gray-500">
-            These API keys allow other apps to access your account. Use it with
-            caution – do not share your API key with others, or expose it in the
-            browser or other client-side code
+            {message?.description}
           </p>
         </div>
         {isLoading || !tokens ? (
           <div className="flex flex-col items-center justify-center space-y-4 pb-20 pt-10">
             <LoadingSpinner className="h-6 w-6 text-gray-500" />
-            <p className="text-sm text-gray-500">Fetching API keys...</p>
+            <p className="text-sm text-gray-500">{message?.fetch_api}</p>
           </div>
         ) : tokens.length > 0 ? (
           <div>
             <div className="grid grid-cols-5 border-b border-gray-200 px-5 py-2 text-sm font-medium text-gray-500 sm:px-10">
-              <div className="col-span-3">Name</div>
-              <div>Key</div>
-              <div className="text-center">Last used</div>
+              <div className="col-span-3">{message?.name}</div>
+              <div>{message?.key}</div>
+              <div className="text-center">{message?.last_used}</div>
             </div>
             <div className="divide-y divide-gray-200">
               {tokens.map((token) => (
@@ -87,7 +88,7 @@ export default function TokensPageClient() {
           <div className="flex flex-col items-center justify-center space-y-4 pb-20 pt-10">
             <FolderOpen className="h-6 w-6 text-gray-500" />
             <p className="text-sm text-gray-500">
-              No API keys found. Create one above.
+              {message?.no_api_key}
             </p>
           </div>
         )}
@@ -101,6 +102,8 @@ const TokenRow = (token: Token) => {
   const { DeleteTokenModal, setShowDeleteTokenModal } = useDeleteTokenModal({
     token,
   });
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.token;
   return (
     <>
       <DeleteTokenModal />
@@ -110,7 +113,7 @@ const TokenRow = (token: Token) => {
           <div className="flex flex-col space-y-px">
             <p className="font-semibold text-gray-700">{token.name}</p>
             <p className="text-sm text-gray-500" suppressHydrationWarning>
-              Created {timeAgo(token.createdAt, { withAgo: true })}
+              {message?.created} {timeAgo(token.createdAt, { withAgo: true })}
             </p>
           </div>
         </div>
@@ -132,7 +135,7 @@ const TokenRow = (token: Token) => {
                 className="rounded-md p-2 text-left text-sm font-medium text-red-600 transition-all duration-75 hover:bg-red-600 hover:text-white"
               >
                 <IconMenu
-                  text="Delete API Key"
+                  text={message?.delete_api_key}
                   icon={<Trash className="h-4 w-4" />}
                 />
               </button>

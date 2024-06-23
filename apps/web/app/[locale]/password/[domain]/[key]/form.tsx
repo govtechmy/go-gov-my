@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { verifyPassword } from "./action";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 const initialState = {
   redirect: null,
@@ -13,6 +14,8 @@ const initialState = {
 };
 
 export default function PasswordForm() {
+  const { messages } = useIntlClientHook();
+  const message = messages?.password
   const { domain, key } = useParams() as {
     domain: string;
     key: string;
@@ -37,7 +40,7 @@ export default function PasswordForm() {
     >
       <div>
         <label htmlFor="password" className="block text-xs text-gray-600">
-          PASSWORD
+          {message?.password}
         </label>
         <div className="relative mt-1 rounded-md shadow-sm">
           <input type="hidden" name="domain" value={domain} />
@@ -65,7 +68,7 @@ export default function PasswordForm() {
         </div>
         {state.error && (
           <p className="mt-2 text-sm text-red-600" id="slug-error">
-            Incorrect password
+            {message?.incorrect}
           </p>
         )}
       </div>

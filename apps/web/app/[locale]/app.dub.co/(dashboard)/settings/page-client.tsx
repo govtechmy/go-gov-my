@@ -6,15 +6,18 @@ import { Form } from "@dub/ui";
 import { APP_NAME } from "@dub/utils";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function SettingsPageClient() {
   const { data: session, update, status } = useSession();
+  const { messages } = useIntlClientHook();
+  const message = messages?.tokens
 
   return (
     <>
       <Form
-        title="Your Name"
-        description={`This will be your display name on ${APP_NAME}.`}
+        title={message?.your_name}
+        description={`${message?.display_name} ${APP_NAME}.`}
         inputAttrs={{
           name: "name",
           defaultValue:
@@ -22,7 +25,7 @@ export default function SettingsPageClient() {
           placeholder: "Steve Jobs",
           maxLength: 32,
         }}
-        helpText="Max 32 characters."
+        helpText={message?.max_char}
         handleSubmit={(data) =>
           fetch("/api/user", {
             method: "PUT",
@@ -33,7 +36,7 @@ export default function SettingsPageClient() {
           }).then(async (res) => {
             if (res.status === 200) {
               update();
-              toast.success("Successfully updated your name!");
+              toast.success(message?.success_update);
             } else {
               const { error } = await res.json();
               toast.error(error.message);

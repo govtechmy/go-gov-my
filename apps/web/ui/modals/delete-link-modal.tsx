@@ -12,6 +12,7 @@ import {
 import { toast } from "sonner";
 import { mutate } from "swr";
 import LinkLogo from "../links/link-logo";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function DeleteLinkModal({
   showDeleteLinkModal,
@@ -25,6 +26,8 @@ function DeleteLinkModal({
   const { id } = useWorkspace();
   const [deleting, setDeleting] = useState(false);
   const apexDomain = getApexDomain(props.url);
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal
 
   const { key, domain } = props;
 
@@ -45,10 +48,9 @@ function DeleteLinkModal({
     >
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 text-center sm:px-16">
         <LinkLogo apexDomain={apexDomain} />
-        <h3 className="text-lg font-medium">Delete {shortlink}</h3>
+        <h3 className="text-lg font-medium">{message?.delete} {shortlink}</h3>
         <p className="text-sm text-gray-500">
-          Warning: Deleting this link will remove all of its analytics. This
-          action cannot be undone – proceed with caution.
+          {message?.delete}
         </p>
       </div>
 
@@ -70,7 +72,7 @@ function DeleteLinkModal({
                 { revalidate: true },
               );
               setShowDeleteLinkModal(false);
-              toast.success("Successfully deleted shortlink!");
+              toast.success(message?.delete_link_success);
             } else {
               const { error } = await res.json();
               toast.error(error.message);
@@ -82,8 +84,8 @@ function DeleteLinkModal({
       >
         <div>
           <label htmlFor="verification" className="block text-sm text-gray-700">
-            To verify, type <span className="font-semibold">{shortlink}</span>{" "}
-            below
+            {message?.to_verify} <span className="font-semibold">{shortlink}</span>{" "}
+            {message?.below}
           </label>
           <div className="relative mt-1 rounded-md shadow-sm">
             <input
@@ -99,7 +101,7 @@ function DeleteLinkModal({
           </div>
         </div>
 
-        <Button variant="danger" text="Confirm delete" loading={deleting} />
+        <Button variant="danger" text={message?.confirm_delete} loading={deleting} />
       </form>
     </Modal>
   );

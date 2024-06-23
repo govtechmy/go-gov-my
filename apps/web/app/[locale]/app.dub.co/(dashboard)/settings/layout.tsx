@@ -1,18 +1,20 @@
 import SettingsLayout from "@/ui/layout/settings-layout";
 import { ReactNode } from "react";
+import { useIntlHook } from "@/lib/middleware/utils/useI18n";
 
 export default function PersonalSettingsLayout({
   children,
 }: {
   children: ReactNode;
 }) {
+  const { messages } = useIntlHook();
   const tabs = [
     {
-      name: "General",
+      name: messages?.tokens?.general,
       segment: null,
     },
     {
-      name: "API Keys",
+      name: messages?.tokens?.api_key,
       segment: "tokens",
     },
   ];

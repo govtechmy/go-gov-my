@@ -38,6 +38,7 @@ import { HexColorInput, HexColorPicker } from "react-colorful";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 import LinkLogo from "../links/link-logo";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function LinkQRModalHelper({
   showLinkQRModal,
@@ -65,6 +66,8 @@ export function QRCodePicker({
   const anchorRef = useRef<HTMLAnchorElement>(null);
   const { logo, plan } = useWorkspace();
   const apexDomain = props.url ? getApexDomain(props.url) : null;
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal;
 
   function download(url: string, extension: string) {
     if (!anchorRef.current) return;
@@ -123,7 +126,7 @@ export function QRCodePicker({
     <>
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <LinkLogo apexDomain={apexDomain} />
-        <h3 className="text-lg font-medium">Download QR Code</h3>
+        <h3 className="text-lg font-medium">{message?.download_qr}</h3>
       </div>
 
       <div className="flex flex-col space-y-6 bg-gray-50 py-6 text-left">
@@ -155,6 +158,7 @@ export function QRCodePicker({
           showLogo={showLogo}
           setShowLogo={setShowLogo}
           setShowLinkQRModal={setShowLinkQRModal}
+          message={message}
         />
 
         <div className="grid grid-cols-2 gap-2 px-4 sm:px-16">
@@ -162,7 +166,7 @@ export function QRCodePicker({
             button={
               <>
                 <Clipboard />
-                <p>Copy</p>
+                <p>{message?.copy}</p>
               </>
             }
           >
@@ -170,15 +174,15 @@ export function QRCodePicker({
               <button
                 onClick={async () => {
                   toast.promise(copyToClipboard, {
-                    loading: "Copying QR code to clipboard...",
-                    success: "Copied QR code to clipboard!",
-                    error: "Failed to copy",
+                    loading: message?.copying,
+                    success: message?.copy_success,
+                    error: message?.copy_error,
                   });
                 }}
                 className="w-full rounded-md p-2 text-left text-sm font-medium text-gray-500 transition-all duration-75 hover:bg-gray-100"
               >
                 <IconMenu
-                  text="Image"
+                  text={message?.image}
                   icon={
                     copiedImage ? (
                       <Check className="h-4 w-4" />
@@ -199,7 +203,7 @@ export function QRCodePicker({
                       },
                     })}`,
                   );
-                  toast.success("Copied QR code URL to clipboard!");
+                  toast.success(message?.copied);
                   setCopiedURL(true);
                   setTimeout(() => setCopiedURL(false), 2000);
                 }}
@@ -222,7 +226,7 @@ export function QRCodePicker({
             button={
               <>
                 <Download />
-                <p>Export</p>
+                <p>{message?.export}</p>
               </>
             }
           >
@@ -292,6 +296,7 @@ function AdvancedSettings({
   showLogo,
   setShowLogo,
   setShowLinkQRModal,
+  message
 }) {
   const { slug } = useParams() as { slug?: string };
   const { plan, logo } = useWorkspace();
@@ -316,7 +321,7 @@ function AdvancedSettings({
               expanded ? "rotate-90" : ""
             } transition-all`}
           />
-          <p className="text-sm text-gray-600">Advanced options</p>
+          <p className="text-sm text-gray-600">{message?.advanced_options}</p>
         </button>
       </div>
       {expanded && (
@@ -330,13 +335,13 @@ function AdvancedSettings({
               htmlFor="logo-toggle"
               className="flex items-center space-x-1"
             >
-              <p className="text-sm font-medium text-gray-700">Logo</p>
+              <p className="text-sm font-medium text-gray-700">{message?.logo}</p>
               {plan !== "free" && (
                 <InfoTooltip
                   content={
                     <SimpleTooltipContent
                       title=""
-                      cta="How to update my QR Code logo?"
+                      cta={message?.update_qr}
                       href="https://dub.co/help/article/custom-qr-codes"
                     />
                   }
@@ -353,8 +358,8 @@ function AdvancedSettings({
                   thumbTranslate="translate-x-6"
                 />
                 <p className="text-sm text-gray-600">
-                  Show {!slug || (!logo && process.env.NEXT_PUBLIC_APP_NAME)}{" "}
-                  Logo
+                  {message?.show} {!slug || (!logo && process.env.NEXT_PUBLIC_APP_NAME)}{" "}
+                  {message?.logo}
                 </p>
               </div>
             ) : (
@@ -388,7 +393,7 @@ function AdvancedSettings({
                     disabled={true}
                   />
                   <p className="text-sm text-gray-600">
-                    Show {process.env.NEXT_PUBLIC_APP_NAME} Logo
+                    {message?.show} {process.env.NEXT_PUBLIC_APP_NAME} {message?.logo}
                   </p>
                 </div>
               </Tooltip>
@@ -399,7 +404,7 @@ function AdvancedSettings({
               htmlFor="color"
               className="block text-sm font-medium text-gray-700"
             >
-              Foreground Color
+              {message?.foreground_color}
             </label>
             <div className="relative mt-1 flex h-9 w-48 rounded-md shadow-sm">
               <Tooltip

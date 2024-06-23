@@ -12,6 +12,7 @@ import {
 } from "react";
 import { toast } from "sonner";
 import { mutate } from "swr";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function RemoveTeammateModal({
   showRemoveTeammateModal,
@@ -30,6 +31,8 @@ function RemoveTeammateModal({
   const { data: session } = useSession();
   const { id, name, email } = user;
   const { isMobile } = useMediaQuery();
+  const { messages } = useIntlClientHook();
+  const message = messages?.modal;
 
   return (
     <Modal
@@ -50,26 +53,26 @@ function RemoveTeammateModal({
         )}
         <h3 className="text-lg font-medium">
           {invite
-            ? "Revoke Invitation"
+            ? message?.revoke_invitation
             : session?.user?.email === email
-              ? "Leave Workspace"
-              : "Remove Teammate"}
+              ? message?.leave_workspace
+              : message?.remove_teammate}
         </h3>
         <p className="text-center text-sm text-gray-500">
           {invite
-            ? "This will revoke "
+            ? message?.will_revoke
             : session?.user?.email === email
-              ? "You're about to leave "
-              : "This will remove "}
+              ? message?.about_to_leave
+              : message?.will_remove}
           <span className="font-semibold text-black">
             {session?.user?.email === email ? workspaceName : name || email}
           </span>
           {invite
-            ? "'s invitation to join your workspace. "
+            ? message?.invitation_workspace
             : session?.user?.email === email
-              ? ". You will lose all access to this workspace. "
-              : " from your workspace. "}
-          Are you sure you want to continue?
+              ? message?.lose_access
+              : message?.from_your_workspace}
+          {message?.are_you_sure}
         </p>
       </div>
 
@@ -82,7 +85,7 @@ function RemoveTeammateModal({
           </div>
         </div>
         <Button
-          text="Confirm"
+          text={message?.confirm}
           variant="danger"
           autoFocus={!isMobile}
           loading={removing}
@@ -111,10 +114,10 @@ function RemoveTeammateModal({
                 }
                 toast.success(
                   session?.user?.email === email
-                    ? "You have left the workspace!"
+                    ? message?.left_workspace
                     : invite
-                      ? "Successfully revoked invitation!"
-                      : "Successfully removed teammate!",
+                      ? message?.revoke_success
+                      : message?.removed_teammate,
                 );
               } else {
                 const { error } = await res.json();

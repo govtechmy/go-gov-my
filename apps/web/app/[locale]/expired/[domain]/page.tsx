@@ -1,6 +1,7 @@
 import { Background, Footer, Nav } from "@dub/ui";
 import { APP_NAME, constructMetadata } from "@dub/utils";
 import { TimerOff } from "lucide-react";
+import { useIntlHook } from "@/lib/middleware/utils/useI18n";
 
 export const runtime = "edge";
 
@@ -16,6 +17,8 @@ export default async function ExpiredPage({
 }: {
   params: { domain: string };
 }) {
+  const { messages } = useIntlHook();
+  const message = messages?.expired
   return (
     <main className="flex min-h-screen flex-col justify-between">
       <Nav />
@@ -23,16 +26,15 @@ export default async function ExpiredPage({
         <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-gray-300 bg-white/30">
           <TimerOff className="h-6 w-6 text-gray-400" />
         </div>
-        <h1 className="font-display text-5xl font-bold">Expired Link</h1>
+        <h1 className="font-display text-5xl font-bold">{message?.expired_link}</h1>
         <p className="text-lg text-gray-600">
-          This link has expired. Please contact the owner of this link to get a
-          new one.
+          {message?.expired_desc}
         </p>
         <a
           href="https://dub.co"
           className="rounded-full bg-gray-800 px-10 py-2 font-medium text-white transition-colors hover:bg-black"
         >
-          Create Your Free Branded Link
+          {message?.create}
         </a>
       </div>
       <Footer />

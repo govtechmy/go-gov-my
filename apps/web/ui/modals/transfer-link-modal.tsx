@@ -19,6 +19,7 @@ import {
 import { toast } from "sonner";
 import { mutate } from "swr";
 import LinkLogo from "../links/link-logo";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function TransferLinkModal({
   showTransferLinkModal,
@@ -29,6 +30,8 @@ function TransferLinkModal({
   setShowTransferLinkModal: Dispatch<SetStateAction<boolean>>;
   props: LinkProps;
 }) {
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal;
   const { id } = useWorkspace();
   const { workspaces } = useWorkspaces();
   const [transferring, setTransferring] = useState(false);
@@ -81,19 +84,18 @@ function TransferLinkModal({
           if (selectedWorkspace) {
             setTransferring(true);
             toast.promise(transferLink(props.id, selectedWorkspace.id), {
-              loading: "Transferring link...",
-              success: "Successfully transferred link.",
-              error: "Failed to transfer link.",
+              loading: message?.transfer_link_loading,
+              success: message?.transfer_link_successful,
+              error: message?.transfer_link_failed,
             });
           }
         }}
       >
         <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 text-center sm:px-16">
           <LinkLogo apexDomain={apexDomain} />
-          <h3 className="text-lg font-medium">Transfer {shortlink}</h3>
+          <h3 className="text-lg font-medium">{message?.transfer} {shortlink}</h3>
           <p className="text-sm text-gray-500">
-            Transfer this link and its analytics to another {APP_NAME}{" "}
-            workspace. Link tags will not be transferred.
+            {message?.transfer_desc_1} {APP_NAME}{" "} {message?.transfer_desc_2}
           </p>
         </div>
 
@@ -111,7 +113,7 @@ function TransferLinkModal({
                       workspace.id.replace("ws_", "") === props.projectId,
                     label:
                       workspace.id.replace("ws_", "") === props.projectId
-                        ? "Current"
+                        ? message?.current
                         : "",
                   }))
                 : []
@@ -125,7 +127,7 @@ function TransferLinkModal({
           <Button
             disabled={!selectedWorkspace || !isDubDomain(domain)}
             loading={transferring}
-            text="Confirm transfer"
+            text={message?.confirm_transfer}
           />
         </div>
       </form>

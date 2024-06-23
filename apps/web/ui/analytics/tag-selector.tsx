@@ -4,6 +4,7 @@ import { Tag } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useContext } from "react";
 import { ModalContext } from "../modals/provider";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function TagSelector() {
   const { queryParams } = useRouterStuff();
@@ -12,6 +13,8 @@ export default function TagSelector() {
   const searchParams = useSearchParams();
   const selectedTagId = searchParams?.get("tagId");
   const { setShowAddEditTagModal } = useContext(ModalContext);
+  const { messages } = useIntlClientHook();
+  const message = messages?.analytics
 
   return (
     <InputSelect
@@ -46,14 +49,14 @@ export default function TagSelector() {
       noItemsElement={
         <div>
           <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">
-            No tags found in this workspace
+            {message?.no_tag}
           </h4>
           <button
             type="button"
             className="w-full rounded-md border border-black bg-black px-3 py-1.5 text-center text-sm text-white transition-all hover:bg-white hover:text-black"
             onClick={() => setShowAddEditTagModal(true)}
           >
-            Add a tag
+            {message?.add_tag}
           </button>
         </div>
       }

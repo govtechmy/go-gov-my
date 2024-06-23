@@ -9,6 +9,7 @@ import {
   truncate,
 } from "@dub/utils";
 import { Archive, EyeOff, Globe } from "lucide-react";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function LinkPreviewTooltip({
   data,
@@ -17,6 +18,8 @@ export default function LinkPreviewTooltip({
 }) {
   const { url, rewrite, createdAt, archived, user } = data;
   const apexDomain = getApexDomain(url);
+  const { messages } = useIntlClientHook();
+  const message = messages?.analytics
 
   return (
     <div className="relative flex w-[28rem] items-center justify-between px-4 py-2">
@@ -102,7 +105,7 @@ export default function LinkPreviewTooltip({
               </a>
             ) : (
               <p className="xs:block hidden max-w-[240px] truncate text-sm font-medium text-gray-700 underline-offset-2 hover:underline">
-                No redirect configured
+                {message?.no_redirect}
               </p>
             )}
           </div>

@@ -3,10 +3,12 @@
 import useWorkspace from "@/lib/swr/use-workspace";
 import { MaxWidthWrapper, useRouterStuff } from "@dub/ui";
 import { Lock } from "lucide-react";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function WorkspaceExceededClicks() {
   const { nextPlan } = useWorkspace();
   const { queryParams } = useRouterStuff();
+  const { messages, locale } = useIntlClientHook();
 
   return (
     <MaxWidthWrapper>

@@ -50,6 +50,7 @@ import { toast } from "sonner";
 import useSWR, { mutate } from "swr";
 import { useTransferLinkModal } from "../modals/transfer-link-modal";
 import LinkLogo from "./link-logo";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function LinkCard({
   props,
@@ -75,6 +76,8 @@ export default function LinkCard({
   } = props;
 
   const searchParams = useSearchParams();
+
+  const { messages, locale } = useIntlClientHook();
 
   const [primaryTags, additionalTags] = useMemo(() => {
     const primaryTagsCount = 1;
@@ -386,7 +389,7 @@ export default function LinkCard({
                         )}
                     </div>
                     <p className="mt-1 text-xs text-gray-500">
-                      Created{" "}
+                      {messages?.misc?.created} {" "}
                       {new Date(createdAt).toLocaleDateString("en-us", {
                         month: "short",
                         day: "numeric",

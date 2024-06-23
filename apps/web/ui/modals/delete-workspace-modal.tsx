@@ -11,6 +11,7 @@ import {
 } from "react";
 import { toast } from "sonner";
 import { mutate } from "swr";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function DeleteWorkspaceModal({
   showDeleteWorkspaceModal,
@@ -22,6 +23,8 @@ function DeleteWorkspaceModal({
   const router = useRouter();
   const { slug } = useParams() as { slug: string };
   const { id, isOwner } = useWorkspace();
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal;
 
   const [deleting, setDeleting] = useState(false);
 
@@ -56,10 +59,9 @@ function DeleteWorkspaceModal({
     >
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <Logo />
-        <h3 className="text-lg font-medium">Delete Workspace</h3>
+        <h3 className="text-lg font-medium">{message?.delete_workspace}</h3>
         <p className="text-center text-sm text-gray-500">
-          Warning: This will permanently delete your workspace, custom domain,
-          and all associated links and their respective stats.
+          {message?.delete_workspace_desc}
         </p>
       </div>
 
@@ -67,8 +69,8 @@ function DeleteWorkspaceModal({
         onSubmit={async (e) => {
           e.preventDefault();
           toast.promise(deleteWorkspace(), {
-            loading: "Deleting workspace...",
-            success: "Workspace deleted successfully!",
+            loading: message?.deleting_workspace,
+            success: message?.delete_workspace_success,
             error: (err) => err,
           });
         }}
@@ -79,9 +81,8 @@ function DeleteWorkspaceModal({
             htmlFor="workspace-slug"
             className="block text-sm font-medium text-gray-700"
           >
-            Enter the workspace slug{" "}
-            <span className="font-semibold text-black">{slug}</span> to
-            continue:
+            {message?.enter_workspace_slug}{" "}
+            <span className="font-semibold text-black">{slug}</span> {message?.to_continue}
           </label>
           <div className="relative mt-1 rounded-md shadow-sm">
             <input
@@ -104,18 +105,18 @@ function DeleteWorkspaceModal({
 
         <div>
           <label htmlFor="verification" className="block text-sm text-gray-700">
-            To verify, type{" "}
+            {message?.to_verify}{" "}
             <span className="font-semibold text-black">
-              confirm delete workspace
+              {message?.confirm_delete_workspace}
             </span>{" "}
-            below
+            {message?.below}
           </label>
           <div className="relative mt-1 rounded-md shadow-sm">
             <input
               type="text"
               name="verification"
               id="verification"
-              pattern="confirm delete workspace"
+              pattern={message?.confirm_delete_workspace}
               required
               autoComplete="off"
               disabled={!isOwner}
@@ -130,11 +131,11 @@ function DeleteWorkspaceModal({
         </div>
 
         <Button
-          text="Confirm delete workspace"
+          text={message?.confirm_delete_workspace}
           variant="danger"
           loading={deleting}
           {...(!isOwner && {
-            disabledTooltip: "Only workspace owners can delete a workspace.",
+            disabledTooltip: messages?.workspace?.only_owner,
           })}
         />
       </form>
