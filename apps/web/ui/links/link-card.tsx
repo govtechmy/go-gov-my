@@ -123,7 +123,7 @@ export default function LinkCard({
     (url) =>
       fetcher(url, {
         headers: {
-          "Request-Source": "app.dub.co",
+          "Request-Source": process.env.NEXT_PUBLIC_APP_DOMAIN!,
         },
       }),
     {

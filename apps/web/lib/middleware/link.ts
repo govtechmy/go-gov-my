@@ -1,6 +1,6 @@
 import { detectBot, getFinalUrl, parse } from "@/lib/middleware/utils";
 import {
-  API_DOMAIN,
+  APP_DOMAIN,
   DUB_DEMO_LINKS,
   DUB_HEADERS,
   LEGAL_WORKSPACE_ID,
@@ -57,7 +57,7 @@ export default async function LinkMiddleware(
     domain: string,
     key: string,
   ): Promise<LinkMiddlewareLinkDataResponse> {
-    const url = new URL("/api/middleware/link/link-data", API_DOMAIN);
+    const url = new URL("/api/middleware/link/link-data", APP_DOMAIN);
     url.searchParams.set("domain", domain);
     url.searchParams.set("key", key);
     const response = await fetch(url);
@@ -68,7 +68,7 @@ export default async function LinkMiddleware(
   if (!linkData) {
     // short link not found, redirect to root
     // TODO: log 404s (https://github.com/dubinc/dub/issues/559)
-    return NextResponse.redirect(new URL("/", req.url), {
+    return NextResponse.redirect(new URL("/", APP_DOMAIN), {
       ...DUB_HEADERS,
       status: 302,
     });
