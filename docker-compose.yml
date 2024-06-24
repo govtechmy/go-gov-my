@@ -1,0 +1,67 @@
+version: "3.8"
+
+services:
+  ps-postgres:
+    image: postgres:13
+    restart: always
+    environment:
+      - POSTGRES_DB=${POSTGRESDB}
+      - POSTGRES_USER=${POSTGRESUSER}
+      - POSTGRES_PASSWORD=${POSTGRESPASSWORD}
+    ports:
+      - 5432:5432
+    volumes:
+      - ps-postgres:/var/lib/postgresql/data
+    networks:
+      - my-network
+
+  redis:
+    image: redis:7.2
+    ports:
+      - 6379:6379
+    networks:
+      - my-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+    networks:
+      - my-network
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.13.2
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./postgresql-42.2.5.jar:/usr/share/logstash/logstash-core/lib/jars/postgresql-42.2.5.jar
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - ELASTICSEARCH_HOST=${ELASTICSEARCH_HOST}
+      - LOGSTASH_STATEMENT=${LOGSTASH_STATEMENT}
+    networks:
+      - my-network
+    depends_on:
+      - elasticsearch
+      - ps-postgres
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.13.2
+    volumes:
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
+      - ./logs:/usr/share/filebeat/logs
+    networks:
+      - my-network
+    depends_on:
+      - elasticsearch
+
+networks:
+  my-network:
+
+volumes:
+  ps-postgres:
