@@ -4,10 +4,13 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function Intro() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.welcome;
   const onLoad = () => {
     setLoading(false);
   };
@@ -50,21 +53,20 @@ export default function Intro() {
             className="font-display text-4xl font-bold text-gray-800 transition-colors sm:text-5xl"
             variants={STAGGER_CHILD_VARIANTS}
           >
-            Welcome to {process.env.NEXT_PUBLIC_APP_NAME}
+            {message?.selcome_to} {process.env.NEXT_PUBLIC_APP_NAME}
           </motion.h1>
           <motion.p
             className="max-w-md text-gray-600 transition-colors sm:text-lg"
             variants={STAGGER_CHILD_VARIANTS}
           >
-            {process.env.NEXT_PUBLIC_APP_NAME} gives you marketing superpowers
-            with short links that stand out.
+            {process.env.NEXT_PUBLIC_APP_NAME} {message?.welcome_desc}
           </motion.p>
           <motion.button
             variants={STAGGER_CHILD_VARIANTS}
             className="rounded-full bg-gray-800 px-10 py-2 font-medium text-white transition-colors hover:bg-black"
-            onClick={() => router.push("/welcome?type=interim")}
+            onClick={() => router.push(`/${locale}/welcome?type=interim`)}
           >
-            Get Started
+            {message?.get_started}
           </motion.button>
         </motion.div>
       )}

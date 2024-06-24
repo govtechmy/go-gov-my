@@ -35,7 +35,7 @@ export function HelpArticles({
                 commandListRef.current?.scrollTo(0, 0);
               }, 0);
             }}
-            placeholder="Search articles, guides, and more..."
+            placeholder={message?.help_placeholder}
             className="w-full border-none p-2 text-sm placeholder-gray-400 focus:outline-none focus:ring-0"
           />
           <Command.List

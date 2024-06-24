@@ -6,9 +6,12 @@ import { useState } from "react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 import UserInfo, { UserInfoProps } from "./user-info";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function ImpersonateUser() {
   const [data, setData] = useState<UserInfoProps | null>(null);
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.admin;
 
   return (
     <div className="flex flex-col space-y-5">
@@ -36,7 +39,7 @@ export default function ImpersonateUser() {
           action={async (formData) => {
             if (
               !confirm(
-                `This will ban the user ${data.email} and delete all their workspaces and links. Are you sure?`,
+                `${message?.ban_confirm_1} ${data.email} ${message?.ban_confirm_2}`,
               )
             ) {
               return;
@@ -48,7 +51,7 @@ export default function ImpersonateUser() {
               }),
             }).then(async (res) => {
               if (res.ok) {
-                toast.success("User has been banned");
+                toast.success(message?.banned);
               } else {
                 const error = await res.text();
                 toast.error(error);
@@ -93,6 +96,7 @@ const Form = () => {
 };
 
 const BanButton = () => {
+  const { messages } = useIntlClientHook();
   const { pending } = useFormStatus();
-  return <Button text="Confirm Ban" loading={pending} variant="danger" />;
+  return <Button text={messages?.admin?.confirm_ban} loading={pending} variant="danger" />;
 };

@@ -591,7 +591,7 @@ function AddEditLinkModal({
                           props && lockKey,
                       },
                     )}
-                    placeholder="(optional)"
+                    placeholder={message?.optional}
                     value={punycode(key)}
                     onChange={(e) => {
                       setKeyError(null);

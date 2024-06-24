@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import useSWR from "swr";
 import { Basic } from "unsplash-js/dist/methods/photos/types";
 import { useDebounce } from "use-debounce";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function UnsplashSearch({
   onImageSelected,
@@ -13,6 +14,8 @@ export default function UnsplashSearch({
   onImageSelected: (image: string) => void;
   setOpenPopover: Dispatch<SetStateAction<boolean>>;
 }) {
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal;
   const [search, setSearch] = useState("");
   const [debouncedQuery] = useDebounce(search, 500);
   const { data } = useSWR<Basic[]>(
@@ -39,7 +42,7 @@ export default function UnsplashSearch({
           type="text"
           name="search"
           id="search"
-          placeholder="Search for an image..."
+          placeholder={message?.search_image}
           autoFocus={!isMobile}
           autoComplete="off"
           value={search}

@@ -1,4 +1,5 @@
 {
+    "language": "bm",
     "login": {
         "login_msg_1": "Log masuk ke",
         "login_msg_2": "Mula membina link pendek dengan kuasa mutlak",
@@ -55,14 +56,14 @@
         "migrate": "Anda telah hijrah ke ruang khas.",
         "read": "Membaca log tukar.",
         "not_found_title": "Ruang Bina tidak dijumpai",
-        "not_found_desc": "RUang Bina yang anda mencari tidak wujud. Anda sama ada \n tersalah taip nama atau tidak mempunyai akses ke ruang bina tersebut.",
+        "not_found_desc": "RUang Bina yang anda mencari tidak wujud. Anda sama ada  tersalah taip nama atau tidak mempunyai akses ke ruang bina tersebut.",
         "back": "Balik ke ruang bina saya",
         "workspace_id": "ID Ruang Bina",
         "learn_more": "Membaca lebih banyak tentang id ruang bina.",
         "dont_have": "Anda tiada ruang bina lagi!",
         "create": "Sedia ruang bina",
         "delete": "Padam ruang bina",
-        "delete_desc": "Padamkan ruang bina, domain, penghubung, staistik dan semua yang berkaitan selama-lamanya. Tindakan ini \\n tidak boleh diterbalikan. Sila pertimbangkan akibat sebelum meneruskan.",
+        "delete_desc": "Padamkan ruang bina, domain, penghubung, staistik dan semua yang berkaitan selama-lamanya. Tindakan ini tidak boleh diterbalikan. Sila pertimbangkan akibat sebelum meneruskan.",
         "only_owner": "Hanya pemilik boleh memadamkan ruang bina.",
         "add_new": "Tambah ruang bina baru"
     },
@@ -80,7 +81,7 @@
         "press_enter": "tekan <strong>Enter</strong> ↵ untuk menyerahkan",
         "too_long": "Penhubung yang melebihi 25 perkataan mungkin akan dipaparkan berbeza mengikut platform.",
         "not_found": "Penghubung tidak dijumpai",
-        "bummer": "Penghubung yang anda merncari tidak wujud, Anda mungkin memasuki URL yang salah \n atau tidak ada akses yang betul.",
+        "bummer": "Penghubung yang anda merncari tidak wujud, Anda mungkin memasuki URL yang salah  atau tidak ada akses yang betul.",
         "back": "Balik ke penghubung saya",
         "no_link": "Tiada penghubung ditemui.",
         "edit": "atau ubah penapis"
@@ -88,14 +89,14 @@
     "account": {
         "delete_account": "Padam Akaun",
         "delete_desc_p1": "Padamkan akaun",
-        "delete_desc_p2": "anda, \\n ruang kerja, penghubung dan statistik selama-lamanya. Tindakan ini \\n tidak boleh diterbalikan. Sila pertimbangkan akibat sebelum meneruskan."
+        "delete_desc_p2": "anda, ruang kerja, penghubung dan statistik selama-lamanya. Tindakan ini tidak boleh diterbalikan. Sila pertimbangkan akibat sebelum meneruskan."
     },
     "settings": {
         "success_updated_picture": "Berjaya muat naik gambar profil terkini!",
         "error": "Kesilapan menjalankan aksi.",
         "your_avatar": "Avatar Anda",
         "this_avatar": "Ini adalah Avatar anda pada",
-        "size_notice": "Gambar segi empat dinasihati. Jenis fail diterima: .png, .jpg. \n saiz terbesar: 2MB.",
+        "size_notice": "Gambar segi empat dinasihati. Jenis fail diterima: .png, .jpg.  saiz terbesar: 2MB.",
         "success_updated_logo": "Berjaya muat naik logo ruang bina!",
         "workspace_logo": "Logo Ruang Bina",
         "this_logo": "Ini adalah logo ruang bina anda dari",
@@ -111,7 +112,7 @@
         "success": "Berjaya membina token baru!",
         "error": "Kesilapan telah berlaku.",
         "your_api_keys": "Kunci API Anda",
-        "description": "Kunci API anda membenarkan aplikasi lain untuk akses akaun anda. Gunakan dengan hati-hati. \n Jangan dedahkan atau kongsi dengan orang lain. ",
+        "description": "Kunci API anda membenarkan aplikasi lain untuk akses akaun anda. Gunakan dengan hati-hati.  Jangan dedahkan atau kongsi dengan orang lain. ",
         "fetch_api": "Sedang mendapati kunci API...",
         "name": "Nama",
         "key": "Kunci",
@@ -133,7 +134,7 @@
     },
     "expired": {
         "expired_link": "Penghubung tamah tempoh",
-        "expired_desc": "Tempoh penghubung ini sudah tamat. Sila menghubungi pemilik untuk mendapatkan \n yang baru.",
+        "expired_desc": "Tempoh penghubung ini sudah tamat. Sila menghubungi pemilik untuk mendapatkan  yang baru.",
         "create": "Membina Penghubung anda percuma"
     },
     "password": {
@@ -147,7 +148,7 @@
         "link": "Penghubung",
         "only": "Sahaja ",
         "total_clicks": "Jumlah Tekanan",
-        "devices": "peranti ",
+        "devices": "Peranti ",
         "no_data": "Tiada Data tersedia",
         "view_all": "Lihat semua",
         "no_data_download": "Tiada data yang disediakan untuk muat turun. Sila cuba tukar penapis anda atau tarikh.",
@@ -164,7 +165,7 @@
         "share_stat": "Kongsi statistik untuk ",
         "public_stat": "Muka surat statistik umum",
         "share_link": "Kongsi Penghubung",
-        "stat_desc": "Mengumumkan statistik akan membenarkan semua yang mempunyai penghubung \n memperolehi staistik penghubung.",
+        "stat_desc": "Mengumumkan statistik akan membenarkan semua yang mempunyai penghubung  memperolehi staistik penghubung.",
         "no_tag": "Tiada tag yang dijumpai dalan ruang bina ini",
         "add_tag": "Tambah Tag"
     },
@@ -176,9 +177,10 @@
         "issue": "Tajuk Isu",
         "how": "Bagaimana kami boleh tolong?",
         "cant_find": "Tidak mendapat apa yang anda mencari?",
-        "send_message": "Hantari mesej dan kita akan memaklum balas secepta \n semungkin.",
+        "send_message": "Hantari mesej dan kita akan memaklum balas secepta  semungkin.",
         "contact_us": "Hubungi kami",
-        "help_center": "pusat pengurusan"
+        "help_center": "pusat pengurusan",
+        "help_placeholder": "Search articles, guides, and more..."
     },
     "modal": {
         "invitation": "Jemputan uang Bina",
@@ -203,17 +205,17 @@
         "archive": "Arkib",
         "confirm": "Pasti",
         "delete": "Padam",
-        "delete_desc": "Amaran: Memadamkan penghubung ini akan menghilangkan semua analisis tersebut. \n Operasi ini tidak boleh dikembalikan.",
+        "delete_desc": "Amaran: Memadamkan penghubung ini akan menghilangkan semua analisis tersebut.  Operasi ini tidak boleh dikembalikan.",
         "delete_link_success": "Berjaya memadamkan penghubung pendek",
         "to_verify": "Untuk menentukan, taip ",
         "below": "di bawah ",
         "confirm_delete": "Pasti Padam",
         "delete_api_key": "Padam Kunci API",
-        "delete_api_desc": "Ini akan memadakan kunci API anda selama-lamanya dan membatalkan semua akses anda ke \n akaun anda. Adakah anda pasti untuk teruskan?",
+        "delete_api_desc": "Ini akan memadakan kunci API anda selama-lamanya dan membatalkan semua akses anda ke  akaun anda. Adakah anda pasti untuk teruskan?",
         "last_used": "Terakhir Diguna",
         "success_delete_api": "Berjaya memadamkan kunci API",
         "delete_workspace": "Padam Ruang Bina",
-        "delete_workspace_desc": "Amaran: Aksi ini akan memadamkan semua ruang bina anda. Semua Domain, \n statistik anda yang berkaitan dengan ruang bina akan hilang.",
+        "delete_workspace_desc": "Amaran: Aksi ini akan memadamkan semua ruang bina anda. Semua Domain,  statistik anda yang berkaitan dengan ruang bina akan hilang.",
         "enter_workspace_slug": "Masukan slug ruang bina",
         "to_continue": "Bersambung:",
         "confirm_delete_workspace": "Pasti memadamkan ruang bina",
@@ -221,9 +223,9 @@
         "delete_workspace_success": "Workspace deleted successfully!",
         "change_teammate_role": "Tukar peranan rakan",
         "change_role_desc_1": "Ini akan menukarkan",
-        "change_role_desc_2": " \n peranan dari ",
-        "change_role_desc_3": "ke \n",
-        "change_role_desc_4": "Adakan anda pasti anda hendak \n teruskan? ",
+        "change_role_desc_2": "  peranan dari ",
+        "change_role_desc_3": "ke ",
+        "change_role_desc_4": "Adakan anda pasti anda hendak  teruskan? ",
         "success_toast_1": "Berjaya tukar ",
         "success_toast_2": " peranan ke ",
         "google": "Sambung ke akaun Google",
@@ -259,7 +261,7 @@
         "revoke_success": "Berjaya membatalkan jemputan!",
         "removed_teammate": "Berjaya memadamkan rakan!",
         "api_key_created": "Kunci API dibina",
-        "api_key_created_desc": "Kunci hanya akan dipapar sekali. Sila membuat \n salinan dan simpan di tempate selamat.",
+        "api_key_created_desc": "Kunci hanya akan dipapar sekali. Sila membuat  salinan dan simpan di tempate selamat.",
         "done": "Selesai",
         "transfer": "Pindah",
         "transfer_desc_1": "Memindahkan penghubung ini dana analisisnya ke  ",
@@ -268,7 +270,35 @@
         "current": "Terbaru",
         "transfer_link_loading": "memindahi penghubung...",
         "transfer_link_successful": "Berjaya memindahkan penghubung.",
-        "transfer_link_failed": "Gagal memindahkan penghubung."
-
+        "transfer_link_failed": "Gagal memindahkan penghubung.",
+        "new_tag": "Tag Baru",
+        "add_comment": "Tambah Komen",
+        "expiration_example": "E.g. 'tomorrow at 5pm' or 'in 2 hours'",
+        "set_expiration": "Tetapkan tarikh lupuh untuk peghubung - Selepas itu penghubung tidak akan boleh diakses.",
+        "optional": "(tidak wajib)",
+        "enter_password": "Masuk password",
+        "select_tags": "Pilih tags...",
+        "search_image": "Mencari sesuatu imeg..."
+    },
+    "admin": {
+        "impersonate_user": "Menyamar Pengguna",
+        "get_login_user": "Dapatkan link log masuk untuk pengguna.",
+        "impersonate_workspace": "Menyamar ruang bina",
+        "get_login_workspace": "Dapatkan link log masuk untuk pemilik ruang bina.",
+        "refresh_domain": "Membaharui Domain",
+        "vercel": "Remove and re-add domain from Vercel",
+        "plan": "Pelan",
+        "domains": "Domains",
+        "links": "Penghubung",
+        "clicks": "Tekanan",
+        "ban_confirm_1": "Ini akan melarangkan pengguna.",
+        "ban_confirm_2": "dan memadamkan semua penghubung dan ruang bina. Adakah anda pasti?",
+        "banned": "Pengguna telah dilarangkan",
+        "confirm_ban": "Sahkan Larangan"
+    },
+    "welcome": {
+        "welcome_to": "Selamat Datang ke ",
+        "welcome_desc": "memberi anda kusa besar pemasaran dengan penghubung pendek yang istimewa.",
+        "get_started": "Bermula di sini"
     }
 }

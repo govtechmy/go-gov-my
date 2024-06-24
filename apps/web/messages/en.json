@@ -1,4 +1,5 @@
 {
+    "language": "en",
     "login": {
         "login_msg_1": "Sign in to",
         "login_msg_2": "Start creating short links with superpowers",
@@ -55,14 +56,14 @@
         "migrate": "links have been migrated to a custom workspace.",
         "read": "Read the changelog.",
         "not_found_title": "Workspace Not Found",
-        "not_found_desc": "Bummer! The workspace you are looking for does not exist. You either \n typed in the wrong URL or don't have access to this workspace.",
+        "not_found_desc": "Bummer! The workspace you are looking for does not exist. You either  typed in the wrong URL or don't have access to this workspace.",
         "back": "Back to my workspaces",
         "workspace_id": "Workspace ID",
         "learn_more": "Learn more about Workspace ID.",
         "dont_have": "You don't have any workspaces yet!",
         "create": "Create a workspace",
         "delete": "Delete Workspace",
-        "delete_desc": "Permanently delete your workspace, custom domain, and all associated \n links + their stats. This action cannot be undone - please proceed \n with caution.",
+        "delete_desc": "Permanently delete your workspace, custom domain, and all associated  links + their stats. This action cannot be undone - please proceed  with caution.",
         "only_owner": "Only workspace owners can delete a workspace.",
         "add_new": "Add a new workspace"
     },
@@ -80,7 +81,7 @@
         "press_enter": "press <strong>Enter</strong> ↵ to submit",
         "too_long": "Short links longer than 25 characters will show up differently on some platforms.",
         "not_found": "Link Not Found",
-        "bummer": "Bummer! The link you are looking for does not exist. You either typed \n in the wrong URL or don't have access to this link.",
+        "bummer": "Bummer! The link you are looking for does not exist. You either typed  in the wrong URL or don't have access to this link.",
         "back": "Back to my links",
         "no_link": "No links found.",
         "edit": "or edit your search filters"
@@ -88,7 +89,7 @@
     "account": {
         "delete_account": "Delete Account",
         "delete_desc_p1": "Permanently delete your",
-        "delete_desc_p2": "account, \n all of your workspaces, links and their respective stats. This action \n cannot be undone - please proceed with caution."
+        "delete_desc_p2": "account,  all of your workspaces, links and their respective stats. This action  cannot be undone - please proceed with caution."
     },
     "settings": {
         "success_updated_picture": "Successfully updated your profile picture!",
@@ -111,7 +112,7 @@
         "success": "Successfully created a new token!",
         "error": "Something went wrong.",
         "your_api_keys": "Your API Keys",
-        "description": "These API keys allow other apps to access your account. Use it with \n caution – do not share your API key with others, or expose it in the \n browser or other client-side code",
+        "description": "These API keys allow other apps to access your account. Use it with  caution – do not share your API key with others, or expose it in the  browser or other client-side code",
         "fetch_api": "Fetching API keys...",
         "name": "Name",
         "key": "Key",
@@ -133,7 +134,7 @@
     },
     "expired": {
         "expired_link": "Expired Link",
-        "expired_desc": "This link has expired. Please contact the owner of this link to get a \n new one.",
+        "expired_desc": "This link has expired. Please contact the owner of this link to get a  new one.",
         "create": "Create Your Free Branded Link"
     },
     "password": {
@@ -164,7 +165,7 @@
         "share_stat": "Share stats for",
         "public_stat": "Public Stats Page",
         "share_link": "Share Link",
-        "stat_desc": "Making stats public will allow anyone with the link to see the \n stats for this short link.",
+        "stat_desc": "Making stats public will allow anyone with the link to see the  stats for this short link.",
         "no_tag": "No tags found in this workspace",
         "add_tag": "Add a tag"
     },
@@ -176,9 +177,10 @@
         "issue": "Issue title",
         "how": "How can we help?",
         "cant_find": "Can't find what you're looking for?",
-        "send_message": "Send us a message and we'll get back to you as soon as \n possible.",
+        "send_message": "Send us a message and we'll get back to you as soon as  possible.",
         "contact_us": "Contact us",
-        "help_center": "Help center"
+        "help_center": "Help center",
+        "help_placeholder": "Search articles, guides, and more..."
     },
     "modal": {
         "invitation": "Workspace Invitation",
@@ -203,17 +205,17 @@
         "archive": "Archive",
         "confirm": "Confirm",
         "delete": "Delete",
-        "delete_desc": "Warning: Deleting this link will remove all of its analytics. This \n action cannot be undone – proceed with caution.",
+        "delete_desc": "Warning: Deleting this link will remove all of its analytics. This  action cannot be undone – proceed with caution.",
         "delete_link_success": "Successfully deleted shortlink!",
         "to_verify": "To verify, type",
         "below": "below",
         "confirm_delete": "Confirm delete",
         "delete_api_key": "Delete API Key",
-        "delete_api_desc": "This will permanently delete the API key for and revoke all access to \n your account. Are you sure you want to continue?",
+        "delete_api_desc": "This will permanently delete the API key for and revoke all access to  your account. Are you sure you want to continue?",
         "last_used": "Last Used",
         "success_delete_api": "Successfully deleted API key",
         "delete_workspace": "Delete Workspace",
-        "delete_workspace_desc": "Warning: This will permanently delete your workspace, custom domain, \n and all associated links and their respective stats",
+        "delete_workspace_desc": "Warning: This will permanently delete your workspace, custom domain,  and all associated links and their respective stats",
         "enter_workspace_slug": "Enter the workspace slug",
         "to_continue": "to continue:",
         "confirm_delete_workspace": "Confirm delete workspace",
@@ -221,9 +223,9 @@
         "delete_workspace_success": "Workspace deleted successfully!",
         "change_teammate_role": "Change Teammate Role",
         "change_role_desc_1": "This will change",
-        "change_role_desc_2": "'s \n role in ",
-        "change_role_desc_3": "to \n",
-        "change_role_desc_4": "Are you sure you want to \n continue? ",
+        "change_role_desc_2": "'s  role in ",
+        "change_role_desc_3": "to ",
+        "change_role_desc_4": "Are you sure you want to  continue? ",
         "success_toast_1": "Successfully changed ",
         "success_toast_2": "'s role to ",
         "google": "Connect your Google Account",
@@ -259,7 +261,7 @@
         "revoke_success": "Successfully revoked invitation!",
         "removed_teammate": "Successfully removed teammate!",
         "api_key_created": "API Key Created",
-        "api_key_created_desc": "For security reasons, we will only show you the key once. Please copy \n and store it somewhere safe.",
+        "api_key_created_desc": "For security reasons, we will only show you the key once. Please copy  and store it somewhere safe.",
         "done": "Done",
         "transfer": "Transfer",
         "transfer_desc_1": "Transfer this link and its analytics to another ",
@@ -268,7 +270,35 @@
         "current": "Current",
         "transfer_link_loading": "Transferring link...",
         "transfer_link_successful": "Successfully transferred link.",
-        "transfer_link_failed": "Failed to transfer link."
-
+        "transfer_link_failed": "Failed to transfer link.",
+        "new_tag": "New Tag",
+        "add_comment": "Add Comment",
+        "expiration_example": "E.g. 'tomorrow at 5pm' or 'in 2 hours'",
+        "set_expiration": "Set an expiration date for your links – after which it won't be accessible.",
+        "optional": "(optional)",
+        "enter_password": "Enter password",
+        "select_tags": "Select tags...",
+        "search_image": "Search for an image..."
+    },
+    "admin": {
+        "impersonate_user": "Impersonate User",
+        "get_login_user": "Get a login link for a user.",
+        "impersonate_workspace": "Impersonate Workspace",
+        "get_login_workspace": "Get a login link for the owner of a workspace.",
+        "refresh_domain": "Refresh Domain",
+        "vercel": "Remove and re-add domain from Vercel",
+        "plan": "Plan",
+        "domains": "Domains",
+        "links": "Links",
+        "clicks": "Clicks",
+        "ban_confirm_1": "This will ban the user",
+        "ban_confirm_2": "and delete all their workspaces and links. Are you sure?",
+        "banned": "User has been banned",
+        "confirm_ban": "Confirm Ban"
+    },
+    "welcome": {
+        "welcome_to": "Welcome to ",
+        "welcome_desc": "gives you marketing superpowers  with short links that stand out.",
+        "get_started": "Get Started"
     }
 }
