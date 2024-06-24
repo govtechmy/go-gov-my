@@ -1,0 +1,6 @@
+{
+    "name": "redirect-server",
+    "scripts": {
+        "dev": "air"
+    }
+}
