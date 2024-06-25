@@ -21,6 +21,7 @@ const (
 
 var (
 	env           string
+	logPath       string
 	esClient      *elasticsearch.Client
 	indexName     = "links"
 	baseDomainUrl = "https://go.gov.my/"
@@ -31,9 +32,11 @@ func main() {
 	var err error
 
 	envFlag := flag.String("env", ENV_DEVELOPMENT, "App environment ('development' or 'production')")
+	logPathFlag := flag.String("logPath", "logs/redirects.log", "Path to file to store short link redirect logs")
 	flag.Parse()
 
 	env = *envFlag
+	logPath = *logPathFlag
 
 	// Initialize the Elasticsearch client
 	esClient, err = elasticsearch.NewDefaultClient()
@@ -159,7 +162,7 @@ func logRedirect(key, remoteAddr string) {
 		"timestamp":  time.Now().Unix(),
 	}
 
-	file, err := os.OpenFile("logs/redirects.json", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	file, err := os.OpenFile(logPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Printf("Failed to open log file: %s", err)
 		return

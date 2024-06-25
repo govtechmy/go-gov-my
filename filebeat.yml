@@ -2,7 +2,7 @@ filebeat.inputs:
   - type: log
     enabled: true
     paths:
-      - /usr/share/filebeat/logs/*.json
+      - /usr/share/filebeat/logs/*.log
 
 output.elasticsearch:
   hosts: ["http://elasticsearch:9200"]
