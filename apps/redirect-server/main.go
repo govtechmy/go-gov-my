@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"flag"
 	"html/template"
 	"log"
 	"net/http"
@@ -13,7 +14,13 @@ import (
 	"github.com/elastic/go-elasticsearch/v7"
 )
 
+const (
+	ENV_DEVELOPMENT = "development"
+	ENV_PRODUCTION  = "production"
+)
+
 var (
+	env           string
 	esClient      *elasticsearch.Client
 	indexName     = "links"
 	baseDomainUrl = "https://go.gov.my/"
@@ -22,6 +29,11 @@ var (
 
 func main() {
 	var err error
+
+	envFlag := flag.String("env", ENV_DEVELOPMENT, "App environment ('development' or 'production')")
+	flag.Parse()
+
+	env = *envFlag
 
 	// Initialize the Elasticsearch client
 	esClient, err = elasticsearch.NewDefaultClient()
@@ -35,7 +47,8 @@ func main() {
 	}
 
 	http.HandleFunc("/t/", redirectHandler)
-	log.Println("Starting server on :8080")
+
+	log.Printf("Starting server on :8080 in %s mode\n", env)
 	log.Fatal(http.ListenAndServeTLS(":8080", "cert.pem", "key.pem", nil))
 }
 
@@ -47,7 +60,7 @@ func redirectHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Only for test...
-	if key == "test" {
+	if env == ENV_DEVELOPMENT && key == "test" {
 		logRedirect(key, r.RemoteAddr)
 		renderWaitPage(w, "https://www.google.com/")
 		return
