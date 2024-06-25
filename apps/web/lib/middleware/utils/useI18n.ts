@@ -8,10 +8,12 @@ export function useIntlHook(locale?: string) {
         "en": en,
         "ms": ms
     }
+
     if (locale && LOCALES.includes(locale)) return { messages: dictionaries[locale], locale }
 
     const headersList = headers()
     const locale_header = headersList.get('NEXT_LOCALE')
+
     if (locale_header && LOCALES.includes(locale_header)) {
         return { messages: dictionaries[locale_header], locale: locale_header }
     }

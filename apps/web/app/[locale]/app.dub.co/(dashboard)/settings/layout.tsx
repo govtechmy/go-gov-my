@@ -3,11 +3,12 @@ import { ReactNode } from "react";
 import { useIntlHook } from "@/lib/middleware/utils/useI18n";
 
 export default function PersonalSettingsLayout({
-  children,
+  children, params: { locale }
 }: {
   children: ReactNode;
+  params: {locale: string}; 
 }) {
-  const { messages } = useIntlHook();
+  const { messages } = useIntlHook(locale);
   const tabs = [
     {
       name: messages?.tokens?.general,
@@ -19,5 +20,5 @@ export default function PersonalSettingsLayout({
     },
   ];
 
-  return <SettingsLayout tabs={tabs}>{children}</SettingsLayout>;
+  return <SettingsLayout tabs={tabs} locale={locale}>{children}</SettingsLayout>;
 }

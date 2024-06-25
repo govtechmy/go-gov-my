@@ -29,7 +29,19 @@
         "no_tags_yet": "No Tags Yet",
         "no_tags_match_search": "No tags match your search.",
         "showing": "Showing",
-        "of": "of"
+        "of": "of",
+        "workspace_name": "Workspace Name",
+        "workspace_desc": "This is the name of your workspace on ",
+        "my_workspace": "My Workspace",
+        "max_characters": "Max 32 characters.",
+        "only_owners": "Only workspace owners can change the workspace name.",
+        "success_update": "Successfully updated workspace name!",
+        "workspace_slug": "Workspace Slug",
+        "slug_desc": "This is your workspace's unique slug on ",
+        "help_text": "Only lowercase letters, numbers, and dashes. Max 48 characters.",
+        "only_owners_slug": "Only workspace owners can change the workspace slug.",
+        "success_update_slug": "Successfully updated workspace slug!"
+
     },
     "layout": {
         "changelog": "Changelog",
@@ -184,6 +196,8 @@
         "help_placeholder": "Search articles, guides, and more..."
     },
     "modal": {
+        "create_tag": "Create Tag",
+        "save_changes": "Save Changes",
         "invitation": "Workspace Invitation",
         "invited": "You've been invited to join and collaborate on the",
         "workspace_on": "workspace on",
@@ -301,5 +315,15 @@
         "welcome_to": "Welcome to ",
         "welcome_desc": "gives you marketing superpowers  with short links that stand out.",
         "get_started": "Get Started"
+    },
+    "INTERVAL_DISPLAYS": {
+        "Last hour": "Last hour",
+        "Last 24 hours": "Last 24 hours",
+        "Last 7 days": "Last 7 days",
+        "Last 30 days": "Last 30 days",
+        "Last 3 months": "Last 3 months",
+        "Year to Date": "Year to Date",
+        "Last 12 months": "Last 12 months",
+        "All Time": "All Time"
     }
 }

@@ -23,7 +23,7 @@ export default function DeleteAccountSection() {
       <div className="flex items-center justify-end p-3 sm:px-10">
         <div>
           <Button
-            text="Delete Account"
+            text={message?.delete_account}
             variant="danger"
             onClick={() => setShowDeleteAccountModal(true)}
           />

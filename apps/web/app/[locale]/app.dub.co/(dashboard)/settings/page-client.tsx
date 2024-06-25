@@ -25,6 +25,7 @@ export default function SettingsPageClient() {
           placeholder: "Steve Jobs",
           maxLength: 32,
         }}
+        buttonText={messages?.link?.save_changes}
         helpText={message?.max_char}
         handleSubmit={(data) =>
           fetch("/api/user", {

@@ -73,7 +73,7 @@ export default function UploadAvatar() {
         </p>
         <div className="shrink-0">
           <Button
-            text="Save changes"
+            text={messages?.link?.save_changes}
             loading={uploading}
             disabled={!image || session?.user?.image === image}
           />

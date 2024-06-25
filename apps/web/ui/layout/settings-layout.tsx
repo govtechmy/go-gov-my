@@ -6,14 +6,16 @@ import { useIntlHook } from "@/lib/middleware/utils/useI18n";
 export default function SettingsLayout({
   tabs,
   children,
+  locale
 }: {
   tabs: {
     name: string;
     segment: string | null;
   }[];
   children: ReactNode;
+  locale: string
 }) {
-  const { messages, locale } = useIntlHook();;
+  const { messages } = useIntlHook(locale);
   const message = messages?.layout
   
   return (

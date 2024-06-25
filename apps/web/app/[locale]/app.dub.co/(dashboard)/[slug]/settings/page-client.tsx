@@ -8,26 +8,29 @@ import { Form } from "@dub/ui";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { mutate } from "swr";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function WorkspaceSettingsClient() {
   const router = useRouter();
   const { id, name, slug, isOwner } = useWorkspace();
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.dashboard;
 
   return (
     <>
       <Form
-        title="Workspace Name"
-        description={`This is the name of your workspace on ${process.env.NEXT_PUBLIC_APP_NAME}.`}
+        title={message?.workspace_name}
+        description={`${message?.workspace_desc} ${process.env.NEXT_PUBLIC_APP_NAME}.`}
         inputAttrs={{
           name: "name",
           defaultValue: name,
-          placeholder: "My Workspace",
+          placeholder: message?.my_workspace,
           maxLength: 32,
         }}
-        helpText="Max 32 characters."
+        helpText={message?.max_characters}
         {...(!isOwner && {
           disabledTooltip:
-            "Only workspace owners can change the workspace name.",
+            message?.only_owners,
         })}
         handleSubmit={(updateData) =>
           fetch(`/api/workspaces/${id}`, {
@@ -42,7 +45,7 @@ export default function WorkspaceSettingsClient() {
                 mutate("/api/workspaces"),
                 mutate(`/api/workspaces/${id}`),
               ]);
-              toast.success("Successfully updated workspace name!");
+              toast.success(message?.success_update);
             } else {
               const { error } = await res.json();
               toast.error(error.message);
@@ -51,8 +54,8 @@ export default function WorkspaceSettingsClient() {
         }
       />
       <Form
-        title="Workspace Slug"
-        description={`This is your workspace's unique slug on ${process.env.NEXT_PUBLIC_APP_NAME}.`}
+        title={message?.workspace_slug}
+        description={`${message?.slug_desc} ${process.env.NEXT_PUBLIC_APP_NAME}.`}
         inputAttrs={{
           name: "slug",
           defaultValue: slug,
@@ -60,10 +63,10 @@ export default function WorkspaceSettingsClient() {
           pattern: "^[a-z0-9-]+$",
           maxLength: 48,
         }}
-        helpText="Only lowercase letters, numbers, and dashes. Max 48 characters."
+        helpText={message?.help_text}
         {...(!isOwner && {
           disabledTooltip:
-            "Only workspace owners can change the workspace slug.",
+            message?.only_owners_slug,
         })}
         handleSubmit={(data) =>
           fetch(`/api/workspaces/${id}`, {
@@ -77,7 +80,7 @@ export default function WorkspaceSettingsClient() {
               const { slug: newSlug } = await res.json();
               await mutate("/api/workspaces");
               router.push(`/${newSlug}/settings`);
-              toast.success("Successfully updated workspace slug!");
+              toast.success(message?.success_update_slug);
             } else {
               const { error } = await res.json();
               toast.error(error.message);

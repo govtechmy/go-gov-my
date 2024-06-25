@@ -14,9 +14,12 @@ import { Calendar, ChevronDown, Lock } from "lucide-react";
 import Link from "next/link";
 import { useContext, useMemo, useState } from "react";
 import { AnalyticsContext } from ".";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function DateRangePicker() {
   const { queryParams } = useRouterStuff();
+  const { messages, locale } = useIntlClientHook();
+  const wrapper = messages?.INTERVAL_DISPLAYS;
 
   const { basePath, interval, admin } = useContext(AnalyticsContext);
 
@@ -84,7 +87,7 @@ export default function DateRangePicker() {
                 }
                 className="flex w-full items-center justify-between space-x-2 rounded-md p-2 hover:bg-gray-100 active:bg-gray-200"
               >
-                <p className="text-sm">{display}</p>
+                <p className="text-sm">{wrapper[display]}</p>
                 {selectedInterval.value === value && (
                   <Tick className="h-4 w-4" aria-hidden="true" />
                 )}
@@ -106,7 +109,7 @@ export default function DateRangePicker() {
         )}
       >
         <IconMenu
-          text={selectedInterval.display}
+          text={wrapper[selectedInterval.display]}
           icon={<Calendar className="h-4 w-4 flex-shrink-0" />}
         />
         <ChevronDown

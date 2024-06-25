@@ -199,7 +199,7 @@ function AddEditTagModal({
         <Button
           disabled={saveDisabled}
           loading={saving}
-          text={props ? "Save changes" : "Create tag"}
+          text={props ? message?.save_changes : message?.create_tag}
         />
       </form>
     </Modal>

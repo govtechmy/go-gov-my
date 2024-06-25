@@ -11,7 +11,6 @@ export default function DeviceIcon({
   tab: DeviceTabs;
   className: string;
 }) {
-  console.log("tabxx", tab, display)
   if (tab === "devices") {
     return (
       <BlurImage

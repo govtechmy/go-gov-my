@@ -709,7 +709,7 @@ function AddEditLinkModal({
               {homepageDemo ? (
                 <Button
                   disabledTooltip="This is a demo link. You can't edit it."
-                  text="Save changes"
+                  text={message?.save_changes}
                 />
               ) : (
                 <Button
