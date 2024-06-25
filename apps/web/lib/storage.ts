@@ -15,7 +15,7 @@ class StorageClient {
       accessKeyId: process.env.STORAGE_ACCESS_KEY_ID || "",
       secretAccessKey: process.env.STORAGE_SECRET_ACCESS_KEY || "",
       service: "s3",
-      region: "auto",
+      region: process.env.AWS_REGION,
     });
   }
 
@@ -39,11 +39,18 @@ class StorageClient {
     if (opts?.contentType) headers["Content-Type"] = opts.contentType;
 
     try {
-      await this.client.fetch(`${process.env.STORAGE_ENDPOINT}/${key}`, {
-        method: "PUT",
-        headers,
-        body: uploadBody,
-      });
+      const res = await this.client.fetch(
+        `${process.env.STORAGE_ENDPOINT}/${key}`,
+        {
+          method: "PUT",
+          headers,
+          body: uploadBody,
+        },
+      );
+
+      if (!res.ok) {
+        throw new Error(`Request failed, response status code: ${res.status}`);
+      }
 
       return {
         url: `${process.env.STORAGE_BASE_URL}/${key}`,
@@ -54,11 +61,14 @@ class StorageClient {
   }
 
   async delete(key: string) {
-    await this.client.fetch(`${process.env.STORAGE_ENDPOINT}/${key}`, {
-      method: "DELETE",
-    });
+    const res = await this.client.fetch(
+      `${process.env.STORAGE_ENDPOINT}/${key}`,
+      {
+        method: "DELETE",
+      },
+    );
 
-    return { success: true };
+    return { success: res.ok };
   }
 
   private base64ToArrayBuffer(base64: string, opts?: imageOptions) {
