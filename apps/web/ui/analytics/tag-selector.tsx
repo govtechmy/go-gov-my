@@ -43,7 +43,7 @@ export default function TagSelector() {
         }
       }}
       inputAttrs={{
-        placeholder: "Filter tags",
+        placeholder: message?.filter_tags,
       }}
       className="lg:w-48"
       noItemsElement={

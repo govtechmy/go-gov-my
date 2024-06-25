@@ -1,13 +1,13 @@
 import { DEFAULT_LOCALE, LOCALES } from "@dub/utils"
 import en from "../../../messages/en.json"
-import bm from "../../../messages/bm.json"
+import ms from "../../../messages/ms.json"
 import { useParams } from "next/navigation"
 
 export function useIntlClientHook(locale?: string) {
     const params = useParams()
     const dictionaries = {
         "en": en,
-        "bm": bm
+        "ms": ms
     }
     if (locale && LOCALES.includes(locale)) return { messages: dictionaries[locale], locale }
     

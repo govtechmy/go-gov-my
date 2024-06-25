@@ -1,5 +1,5 @@
 {
-    "language": "bm",
+    "language": "ms",
     "login": {
         "login_msg_1": "Log masuk ke",
         "login_msg_2": "Mula membina link pendek dengan kuasa mutlak",
@@ -167,7 +167,8 @@
         "share_link": "Kongsi Penghubung",
         "stat_desc": "Mengumumkan statistik akan membenarkan semua yang mempunyai penghubung  memperolehi staistik penghubung.",
         "no_tag": "Tiada tag yang dijumpai dalan ruang bina ini",
-        "add_tag": "Tambah Tag"
+        "add_tag": "Tambah Tag",
+        "filter_tags": "Penapis tags"
     },
     "help": {
         "contact_support": "Menghubungi pusat pengurusan",
