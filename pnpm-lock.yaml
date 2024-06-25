@@ -32,6 +32,8 @@ importers:
 
   apps/docs: {}
 
+  apps/redirect-server: {}
+
   apps/web:
     dependencies:
       '@anthropic-ai/sdk':
