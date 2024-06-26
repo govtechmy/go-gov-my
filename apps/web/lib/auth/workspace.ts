@@ -201,6 +201,7 @@ export const withWorkspace = (
           where: {
             id: workspaceId || undefined,
             slug: workspaceSlug || undefined,
+            agencyCode: session.user.agencyCode,
           },
           include: {
             users: {
