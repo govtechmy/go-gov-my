@@ -76,6 +76,7 @@ export default function Devices() {
           <h1 className="text-lg font-semibold">{message?.devices}</h1>
           <TabSelect
             options={["devices", "browsers", "os"]}
+            translation={message}
             selected={tab}
             // @ts-ignore
             selectAction={setTab}

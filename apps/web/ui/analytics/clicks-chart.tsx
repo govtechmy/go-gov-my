@@ -7,6 +7,7 @@ import Areas from "../charts/areas";
 import TimeSeriesChart from "../charts/time-series-chart";
 import XAxis from "../charts/x-axis";
 import YAxis from "../charts/y-axis";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function ClicksChart() {
   const { baseApiPath, queryString, interval } = useContext(AnalyticsContext);
@@ -15,6 +16,8 @@ export default function ClicksChart() {
     `${baseApiPath}/timeseries?${queryString}`,
     fetcher,
   );
+
+  const { messages } = useIntlClientHook();
 
   const chartData = useMemo(
     () =>
@@ -65,7 +68,7 @@ export default function ClicksChart() {
                 <strong className="text-gray-800">
                   {nFormatter(d.values.clicks, { full: true })}
                 </strong>{" "}
-                clicks
+                {messages?.workspace.click}
               </p>
               <p className="text-sm text-gray-500">{formatDate(d.date)}</p>
             </>

@@ -179,7 +179,14 @@
         "stat_desc": "Mengumumkan statistik akan membenarkan semua yang mempunyai penghubung  memperolehi staistik penghubung.",
         "no_tag": "Tiada tag yang dijumpai dalan ruang kerja ini",
         "add_tag": "Tambah Tag",
-        "filter_tags": "Penapis tags"
+        "filter_tags": "Penapis tags",
+        "cities": "Bandar",
+        "countries": "Negara",
+        "Links": "Penghubung",
+        "Domains": "Domains",
+        "Type": "Jenis",
+        "browsers": "Browsers",
+        "OS": "OS"
     },
     "help": {
         "contact_support": "Menghubungi pusat pengurusan",

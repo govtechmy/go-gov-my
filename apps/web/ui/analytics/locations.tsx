@@ -74,10 +74,11 @@ export default function Locations() {
         <div className="mb-3 flex justify-between">
           <h1 className="text-lg font-semibold">{message?.locations}</h1>
           <TabSelect
-            options={["countries", "cities"]}
+            options={["countries", "cities", ]}
             selected={tab}
             // @ts-ignore
             selectAction={setTab}
+            translation={message}
           />
         </div>
         {data ? (

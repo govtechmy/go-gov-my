@@ -5,10 +5,12 @@ export function TabSelect({
   options,
   selected,
   selectAction,
+  translation
 }: {
   options: string[];
   selected: string | null;
   selectAction: (option: string) => void;
+  translation: any
 }) {
   return (
     <div className="relative inline-flex items-center space-x-1">
@@ -24,7 +26,10 @@ export function TabSelect({
           onClick={() => selectAction(option)}
         >
           <p>
-            {option === "devices" ? "Type" : option === "os" ? "OS" : option}
+            {
+              translation ? translation[option === "devices" ? "Type" : option === "os" ? "OS" : option]
+              : option === "devices" ? "Type" : option === "os" ? "OS" : option
+            }
           </p>
           {option === selected && (
             <motion.div

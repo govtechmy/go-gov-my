@@ -454,7 +454,7 @@ export default function LinkCard({
         <div className="flex items-center space-x-2">
           <NumberTooltip value={clicks} lastClicked={lastClicked}>
             <Link
-              href={`/${slug}/analytics?domain=${domain}&key=${key}`}
+              href={`/${locale}/${slug}/analytics?domain=${domain}&key=${key}`}
               className="flex items-center space-x-1 rounded-md bg-gray-100 px-2 py-0.5 transition-all duration-75 hover:scale-105 active:scale-100"
             >
               <Chart className="h-4 w-4" />

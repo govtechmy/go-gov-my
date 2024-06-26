@@ -129,7 +129,7 @@ function WorkspaceList({
     (slug: string) => {
       if (domain || key || selected.slug === "/") {
         // if we're on a link page, navigate back to the workspace root
-        return `/${slug}`;
+        return `/${locale}/${slug}`;
       } else {
         // else, we keep the path but remove all query params
         return pathname?.replace(selected.slug, slug).split("?")[0] || "/";

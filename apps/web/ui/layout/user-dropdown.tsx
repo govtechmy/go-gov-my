@@ -12,7 +12,8 @@ export default function UserDropdown() {
   const { data: session } = useSession();
   const [openPopover, setOpenPopover] = useState(false);
   const messages = useContext(MessagesContext);
-  const message = messages.layout;
+  const message = messages?.layout;
+  const locale = messages?.language
 
   const [unreadChangelogs, setUnreadChangelogs] = useState(0);
   useEffect(() => {
@@ -28,7 +29,7 @@ export default function UserDropdown() {
         content={
           <div className="flex w-full flex-col space-y-px rounded-md bg-white p-3 sm:w-56">
             <Link
-              href={`/${messages?.language}`}
+              href={`/${locale}/${messages?.language}`}
               className="p-2"
               onClick={() => setOpenPopover(false)}
             >
@@ -53,7 +54,7 @@ export default function UserDropdown() {
               />
             </Link>
             <Link
-              href={`/${messages?.language}/settings`}
+              href={`/${locale}/${messages?.language}/settings`}
               onClick={() => setOpenPopover(false)}
               className="block w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
             >

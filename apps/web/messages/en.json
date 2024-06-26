@@ -179,7 +179,14 @@
         "stat_desc": "Making stats public will allow anyone with the link to see the  stats for this short link.",
         "no_tag": "No tags found in this workspace",
         "add_tag": "Add a tag",
-        "filter_tags": "Filter tags"
+        "filter_tags": "Filter tags",
+        "cities": "Cities",
+        "countries": "Countries",
+        "Links": "Links",
+        "Domains": "Domains",
+        "Type": "Type",
+        "browsers": "Browsers",
+        "OS": "OS"
     },
     "help": {
         "contact_support": "Contact support",

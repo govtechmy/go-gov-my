@@ -115,6 +115,7 @@ export default function TopLinks() {
                   replace: true,
                 })
               }
+              translation={message}
             />
           )}
         </div>
