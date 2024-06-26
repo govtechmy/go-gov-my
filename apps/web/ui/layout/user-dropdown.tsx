@@ -37,7 +37,12 @@ export default function UserDropdown() {
               <p className="truncate text-sm text-gray-500">
                 {session?.user?.email}
               </p>
-              {session && <RoleBadge role={session.user.role} />}
+              {session && (
+                <div className="mt-1 flex gap-1">
+                  <AgencyBadge agencyCode={session.user.agencyCode} />
+                  <RoleBadge role={session.user.role} />
+                </div>
+              )}
             </Link>
             <Link
               href="https://dub.co/help"
@@ -124,4 +129,8 @@ function RoleBadge({ role }: { role: "staff" | "super_admin" }) {
   } as const;
 
   return <Badge variant={variant[role]}>{label[role]}</Badge>;
+}
+
+function AgencyBadge({ agencyCode }: { agencyCode: string }) {
+  return <Badge variant="black">{agencyCode}</Badge>;
 }

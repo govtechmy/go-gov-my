@@ -133,6 +133,7 @@ export const withWorkspaceEdge = (
                 name: true,
                 email: true,
                 role: true,
+                agencyCode: true,
               },
             },
           },
@@ -178,6 +179,7 @@ export const withWorkspaceEdge = (
             name: token.user.name || "",
             email: token.user.email,
             role: token.user.role,
+            agencyCode: token.user.agencyCode,
           },
         };
       } else {

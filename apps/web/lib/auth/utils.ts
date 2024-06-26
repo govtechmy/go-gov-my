@@ -9,6 +9,7 @@ export interface Session {
     name: string;
     image?: string;
     role: UserRole;
+    agencyCode: string;
   };
 }
 
@@ -27,6 +28,7 @@ declare module "next-auth" {
       name: string;
       image?: string;
       role: UserRole;
+      agencyCode: string;
     };
   }
 }

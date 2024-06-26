@@ -59,6 +59,7 @@ export const withWorkspace = (
     domainChecks,
   }: {
     requiredPlan?: Array<PlanProps>;
+    /** The workspace roles that are required for the user. Does not apply to super admins. */
     requiredRole?: Array<"owner" | "member">;
     needNotExceededClicks?: boolean;
     needNotExceededLinks?: boolean;
@@ -139,6 +140,7 @@ export const withWorkspace = (
             name: true,
             email: true,
             role: true,
+            agencyCode: true,
           },
         });
         if (!user) {
@@ -182,6 +184,7 @@ export const withWorkspace = (
             name: user.name || "",
             email: user.email,
             role: user.role,
+            agencyCode: user.agencyCode,
           },
         };
       } else {
@@ -242,7 +245,7 @@ export const withWorkspace = (
             }),
       ])) as [WorkspaceProps, LinkProps | undefined];
 
-      if (!workspace || !workspace.users) {
+      if (!workspace) {
         // workspace doesn't exist
         throw new DubApiError({
           code: "not_found",
@@ -282,62 +285,65 @@ export const withWorkspace = (
         }
       }
 
-      // workspace exists but user is not part of it
-      if (workspace.users.length === 0) {
-        const pendingInvites = await prisma.projectInvite.findUnique({
-          where: {
-            email_projectId: {
-              email: session.user.email,
-              projectId: workspace.id,
+      // These checks are for staff, super admin roles should bypass this
+      if (session.user.role === "staff") {
+        // workspace exists but user is not part of it
+        if (workspace.users.length === 0) {
+          const pendingInvites = await prisma.projectInvite.findUnique({
+            where: {
+              email_projectId: {
+                email: session.user.email,
+                projectId: workspace.id,
+              },
             },
-          },
-          select: {
-            expires: true,
-          },
-        });
-        if (!pendingInvites) {
-          throw new DubApiError({
-            code: "not_found",
-            message: "Workspace not found.",
+            select: {
+              expires: true,
+            },
           });
-        } else if (
-          pendingInvites &&
-          pendingInvites.expires &&
-          pendingInvites.expires < new Date()
+          if (!pendingInvites) {
+            throw new DubApiError({
+              code: "not_found",
+              message: "Workspace not found.",
+            });
+          } else if (
+            pendingInvites &&
+            pendingInvites.expires &&
+            pendingInvites.expires < new Date()
+          ) {
+            throw new DubApiError({
+              code: "invite_expired",
+              message: "Workspace invite expired.",
+            });
+          } else {
+            throw new DubApiError({
+              code: "invite_pending",
+              message: "Workspace invite pending.",
+            });
+          }
+        }
+
+        // workspace role checks
+        if (
+          !requiredRole.includes(workspace.users[0].role) &&
+          !(allowSelf && searchParams.userId === session.user.id)
         ) {
           throw new DubApiError({
-            code: "invite_expired",
-            message: "Workspace invite expired.",
-          });
-        } else {
-          throw new DubApiError({
-            code: "invite_pending",
-            message: "Workspace invite pending.",
+            code: "forbidden",
+            message: "Unauthorized: Insufficient permissions.",
           });
         }
-      }
 
-      // workspace role checks
-      if (
-        !requiredRole.includes(workspace.users[0].role) &&
-        !(allowSelf && searchParams.userId === session.user.id)
-      ) {
-        throw new DubApiError({
-          code: "forbidden",
-          message: "Unauthorized: Insufficient permissions.",
-        });
-      }
-
-      // clicks usage overage checks
-      if (needNotExceededClicks && workspace.usage > workspace.usageLimit) {
-        throw new DubApiError({
-          code: "forbidden",
-          message: exceededLimitError({
-            plan: workspace.plan,
-            limit: workspace.usageLimit,
-            type: "clicks",
-          }),
-        });
+        // clicks usage overage checks
+        if (needNotExceededClicks && workspace.usage > workspace.usageLimit) {
+          throw new DubApiError({
+            code: "forbidden",
+            message: exceededLimitError({
+              plan: workspace.plan,
+              limit: workspace.usageLimit,
+              type: "clicks",
+            }),
+          });
+        }
       }
 
       // links usage overage checks
