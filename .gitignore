@@ -75,3 +75,9 @@ apps/.vercel
 
 # Turbo
 .turbo
+
+# go live reload temp folder
+apps/redirect-server/tmp
+
+# redirect-server logs
+redirects.log
