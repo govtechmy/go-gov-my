@@ -81,7 +81,7 @@ export default function WorkspaceSettingsClient() {
             if (res.status === 200) {
               const { slug: newSlug } = await res.json();
               await mutate("/api/workspaces");
-              router.push(`/${newSlug}/settings`);
+              router.push(`/${locale}/${newSlug}/settings`);
               toast.success(message?.success_update_slug);
             } else {
               const { error } = await res.json();

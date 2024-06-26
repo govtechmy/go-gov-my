@@ -13,6 +13,8 @@ import {
   useMemo,
   useState,
 } from "react";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
+
 
 function CompleteSetupModal({
   showCompleteSetupModal,
@@ -22,6 +24,8 @@ function CompleteSetupModal({
   setShowCompleteSetupModal: Dispatch<SetStateAction<boolean>>;
 }) {
   const { slug } = useParams() as { slug: string };
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal;
 
   const { data: count } = useLinksCount();
   const { users } = useUsers();
@@ -31,13 +35,13 @@ function CompleteSetupModal({
   const tasks = useMemo(() => {
     return [
       {
-        display: "Create or import your links",
-        cta: `/${slug}`,
+        display: message?.create_or_import,
+        cta: `/${locale}/${slug}`,
         checked: count > 0,
       },
       {
-        display: "Invite your teammates",
-        cta: `/${slug}/settings/people`,
+        display: message?.invite_your_team,
+        cta: `/${locale}/${slug}/settings/people`,
         checked: (users && users.length > 1) || (invites && invites.length > 0),
       },
     ];
@@ -50,10 +54,9 @@ function CompleteSetupModal({
     >
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <Logo />
-        <h3 className="text-lg font-medium">You&apos;re almost there!</h3>
+        <h3 className="text-lg font-medium">{message?.almost_there}</h3>
         <p className="text-center text-sm text-gray-500">
-          Complete the following steps and start sharing your branded short
-          links.
+          {message?.complete}
         </p>
       </div>
       <div className="flex flex-col space-y-6 bg-gray-50 px-4 py-8 text-left sm:px-12">

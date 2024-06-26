@@ -1,18 +1,21 @@
 import SettingsLayout from "@/ui/layout/settings-layout";
 import { ReactNode } from "react";
+import { useIntlHook } from "@/lib/middleware/utils/useI18n";
 
 export default function WorkspaceSettingsLayout({
-  children,
+  children, params: { locale }
 }: {
   children: ReactNode;
+  params: {locale: string};
 }) {
+  const { messages } = useIntlHook(locale);
   const tabs = [
     {
-      name: "General",
+      name: messages?.tokens?.general,
       segment: null,
     },
     {
-      name: "People",
+      name: messages?.people?.people,
       segment: "people",
     },
   ];

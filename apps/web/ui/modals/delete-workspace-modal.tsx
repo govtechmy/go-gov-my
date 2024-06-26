@@ -39,7 +39,7 @@ function DeleteWorkspaceModal({
       }).then(async (res) => {
         if (res.ok) {
           await mutate("/api/workspaces");
-          router.push("/");
+          router.push(`/${locale}`);
           resolve(null);
         } else {
           setDeleting(false);

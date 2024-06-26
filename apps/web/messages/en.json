@@ -301,7 +301,11 @@
         "select_tags": "Select tags...",
         "search_image": "Search for an image...",
         "add":"Add",
-        "edit": "Edit"
+        "edit": "Edit",
+        "create_or_import": "Create or import your links",
+        "invite_your_team": "Invite your teammates",
+        "almost_there": "You're almost there!",
+        "complete": "Complete the following steps and start sharing your branded short links."
     },
     "admin": {
         "impersonate_user": "Impersonate User",
@@ -345,5 +349,25 @@
         "unarchive": "Unarchive",
         "ban": "Ban",
         "more_options": "More Options"
+    },
+    "people": {
+        "people": "People",
+        "teammates": "Teammates that have access to this workspace.",
+        "no_invitations": "No invitations sent",
+        "expired": "Expired",
+        "owner": "Owner",
+        "member": "Member",
+        "Members": "Members",
+        "Invitations": "Invitations",
+        "invite": "Invite",
+        "invited": "Invited",
+        "edit": "Edit",
+        "invite_team": "Invite Teammate",
+        "invite_team_desc": "Invite a teammate to join your workspace. Invitations will be valid for 14 days.",
+        "invite_sent": "Invitation sent!",
+        "send_invite": "Send Invite",
+        "invite_link": "Invite Link",
+        "invite_link_desc": "Allow other people to join your workspace through the link below.",
+        "reset": "Reset invite link"
     }
 }

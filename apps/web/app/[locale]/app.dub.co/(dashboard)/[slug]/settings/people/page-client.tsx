@@ -13,12 +13,16 @@ import { cn, timeAgo } from "@dub/utils";
 import { UserMinus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
+
 
 const tabs: Array<"Members" | "Invitations"> = ["Members", "Invitations"];
 
 export default function WorkspacePeopleClient() {
   const { setShowInviteTeammateModal, InviteTeammateModal } =
     useInviteTeammateModal();
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.people;
 
   const { setShowInviteCodeModal, InviteCodeModal } = useInviteCodeModal();
 
@@ -35,14 +39,14 @@ export default function WorkspacePeopleClient() {
       <div className="rounded-lg border border-gray-200 bg-white">
         <div className="flex flex-col items-center justify-between space-y-3 p-5 sm:flex-row sm:space-y-0 sm:p-10">
           <div className="flex flex-col space-y-3">
-            <h2 className="text-xl font-medium">People</h2>
+            <h2 className="text-xl font-medium">{message?.people}</h2>
             <p className="text-sm text-gray-500">
-              Teammates that have access to this workspace.
+              {message?.teammates}
             </p>
           </div>
           <div className="flex space-x-2">
             <Button
-              text="Invite"
+              text={message?.invite}
               onClick={() => setShowInviteTeammateModal(true)}
               className="h-9"
             />
@@ -66,7 +70,7 @@ export default function WorkspacePeopleClient() {
                 onClick={() => setCurrentTab(tab)}
                 className="rounded-md px-3 py-1.5 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
               >
-                {tab}
+                {message? message[tab]: tab}
               </button>
             </div>
           ))}
@@ -90,7 +94,7 @@ export default function WorkspacePeopleClient() {
                   height={300}
                   className="pointer-events-none -my-8"
                 />
-                <p className="text-sm text-gray-500">No invitations sent</p>
+                <p className="text-sm text-gray-500">{message?.no_invitations}</p>
               </div>
             )
           ) : (
@@ -110,6 +114,9 @@ const UserCard = ({
   currentTab: "Members" | "Invitations";
 }) => {
   const [openPopover, setOpenPopover] = useState(false);
+
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.people;
 
   const { plan, isOwner } = useWorkspace();
 
@@ -150,7 +157,7 @@ const UserCard = ({
             </div>
           </div>
 
-          {expiredInvite && <Badge variant="gray">Expired</Badge>}
+          {expiredInvite && <Badge variant="gray">{message?.expired}</Badge>}
         </div>
         <div className="flex items-center space-x-3">
           {currentTab === "Members" ? (
@@ -172,13 +179,13 @@ const UserCard = ({
                   setShowEditRoleModal(true);
                 }}
               >
-                <option value="owner">Owner</option>
-                <option value="member">Member</option>
+                <option value="owner">{message?.owner}</option>
+                <option value="member">{message?.member}</option>
               </select>
             )
           ) : (
             <p className="text-xs text-gray-500" suppressHydrationWarning>
-              Invited {timeAgo(createdAt)}
+              {message?.invited} {timeAgo(createdAt)}
             </p>
           )}
 
@@ -195,10 +202,10 @@ const UserCard = ({
                   <IconMenu
                     text={
                       session?.user?.email === email
-                        ? "Leave workspace"
+                        ? messages?.modal?.leave_workspace
                         : currentTab === "Members"
-                          ? "Remove teammate"
-                          : "Revoke invite"
+                          ? messages?.modal?.remove_teammate
+                          : messages?.modal?.revoke_invitation
                     }
                     icon={<UserMinus className="h-4 w-4" />}
                   />
@@ -217,7 +224,7 @@ const UserCard = ({
               }}
               className="rounded-md px-1 py-2 transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
             >
-              <span className="sr-only">Edit</span>
+              <span className="sr-only">{message?.edit}</span>
               <ThreeDots className="h-5 w-5 text-gray-500" />
             </button>
           </Popover>

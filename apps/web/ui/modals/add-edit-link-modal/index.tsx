@@ -88,7 +88,7 @@ function AddEditLinkModal({
     aiLimit,
     mutate: mutateWorkspace,
   } = useWorkspace();
-  const { messages } = useIntlClientHook();
+  const { messages, locale } = useIntlClientHook();
   const message = messages?.link
 
   const [keyError, setKeyError] = useState<string | null>(null);
@@ -411,7 +411,7 @@ function AddEditLinkModal({
                   );
                   // for welcome page, redirect to links page after adding a link
                   if (pathname === "/welcome") {
-                    router.push("/links");
+                    router.push(`/${locale}/links`);
                     setShowAddEditLinkModal(false);
                   }
                   const data = await res.json();

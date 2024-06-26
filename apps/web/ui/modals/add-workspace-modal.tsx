@@ -33,7 +33,7 @@ function AddWorkspaceModalHelper({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { messages } = useIntlClientHook();
+  const { messages, locale } = useIntlClientHook();
 
   const [data, setData] = useState<{
     name: string;
@@ -119,10 +119,10 @@ function AddWorkspaceModalHelper({
               // track workspace creation event
               await mutate("/api/workspaces");
               if (welcomeFlow) {
-                router.push(`/welcome?type=upgrade&slug=${slug}`);
+                router.push(`/${locale}/welcome?type=upgrade&slug=${slug}`);
               } else {
-                router.push(`/${slug}`);
-                toast.success("Successfully created workspace!");
+                router.push(`/${locale}/${slug}`);
+                toast.success(messages?.tokens?.success);
                 setShowAddWorkspaceModal(false);
               }
             } else {

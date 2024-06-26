@@ -112,7 +112,7 @@ export default async function PasswordProtectedLinkPage({
   if (!link.password) {
     redirect(link.url);
   }
-  const { messages } = useContext(MessagesContext);
+  const messages = useContext(MessagesContext);
   const message = messages?.password
   return (
     <main className="flex h-screen w-screen items-center justify-center">

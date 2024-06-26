@@ -238,10 +238,10 @@
         "delete_workspace": "Padam Ruang Kerja",
         "delete_workspace_desc": "Amaran: Aksi ini akan memadamkan semua ruang kerja anda. Semua Domain,  statistik anda yang berkaitan dengan ruang kerja akan hilang.",
         "enter_workspace_slug": "Masukan slug ruang kerja",
-        "to_continue": "Bersambung:",
+        "to_continue": "sambung:",
         "confirm_delete_workspace": "Pasti memadamkan ruang kerja",
         "deleting_workspace": "Tengah memadamkan ruang kerja...",
-        "delete_workspace_success": "Workspace deleted successfully!",
+        "delete_workspace_success": "Ruang kerja berjaya dipadamkan!",
         "change_teammate_role": "Tukar peranan rakan",
         "change_role_desc_1": "Ini akan menukarkan",
         "change_role_desc_2": "  peranan dari ",
@@ -301,7 +301,11 @@
         "select_tags": "Pilih tags...",
         "search_image": "Mencari sesuatu imeg...",
         "add":"Tambah",
-        "edit": "Ubah"
+        "edit": "Ubah",
+        "create_or_import": "Bina atau import penghubung",
+        "invite_your_team": "Jemput rakan anda",
+        "almost_there": "Anda hampir habis!",
+        "complete": "Habiskan langkah berikut dan mula kongsi penghubung pendek anda."
     },
     "admin": {
         "impersonate_user": "Menyamar Pengguna",
@@ -345,5 +349,25 @@
         "unarchive": "Nyaharkib",
         "ban": "Gantung",
         "more_options": "Pilihan Lain"
+    },
+    "people": {
+        "people": "Rakan",
+        "teammates": "Rakan yang ada akses ke ruang ini.",
+        "no_invitations": "Tiada jemputan dihantar",
+        "expired": "Tamat tempoh",
+        "owner": "Pemilik",
+        "member": "Ahli",
+        "Members": "Ahli",
+        "Invitations": "Jemputan",
+        "invite": "Menyembut",
+        "invited": "Dijemput",
+        "edit": "Ubah",
+        "invite_team": "Jemput Rakan",
+        "invite_team_desc": "Jemputlah rakan-rakan untuk menyertai ruang kerja anda. Jemputan akan sah dalam 14 hari sahaja",
+        "invite_sent": "Jemputan dihantar!",
+        "send_invite": "Hantar jemputan",
+        "invite_link": "Alamat Jemputan",
+        "invite_link_desc": "Membenarkan orang lain menyertai ruang kerja anda melalui penghubung di bawah.",
+        "reset": "Tetapan semula alamat jemputan"
     }
 }

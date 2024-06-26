@@ -31,7 +31,7 @@ function RemoveTeammateModal({
   const { data: session } = useSession();
   const { id, name, email } = user;
   const { isMobile } = useMediaQuery();
-  const { messages } = useIntlClientHook();
+  const { messages, locale } = useIntlClientHook();
   const message = messages?.modal;
 
   return (
@@ -108,7 +108,7 @@ function RemoveTeammateModal({
                 );
                 if (session?.user?.email === email) {
                   await mutate("/api/workspaces");
-                  router.push("/");
+                  router.push(`/${locale}`);
                 } else {
                   setShowRemoveTeammateModal(false);
                 }
