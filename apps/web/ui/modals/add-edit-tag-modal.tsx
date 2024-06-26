@@ -86,7 +86,7 @@ function AddEditTagModal({
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <Logo />
         <div className="flex flex-col space-y-1 text-center">
-          <h3 className="text-lg font-medium">{props ? "Edit" : "Add"} tag</h3>
+          <h3 className="text-lg font-medium">{props ? message?.edit : message?.add} tag</h3>
           <p className="text-sm text-gray-500">
             {message?.use_tag}{" "}
             <a
@@ -215,12 +215,14 @@ function AddTagButton({
   const { tags } = useTags();
   const { queryParams } = useRouterStuff();
   const exceededTags = tags && tagsLimit && tags.length >= tagsLimit;
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal;
 
   return (
     <div>
       <Button
         variant="secondary"
-        text="Add"
+        text={message?.add}
         className="h-7 px-2"
         disabledTooltip={
           exceededTags ? (

@@ -78,6 +78,7 @@ export default function LinkCard({
   const searchParams = useSearchParams();
 
   const { messages, locale } = useIntlClientHook();
+  const message = messages?.menu
 
   const [primaryTags, additionalTags] = useMemo(() => {
     const primaryTagsCount = 1;
@@ -459,7 +460,7 @@ export default function LinkCard({
               <Chart className="h-4 w-4" />
               <p className="whitespace-nowrap text-sm text-gray-500">
                 {nFormatter(clicks)}
-                <span className="ml-1 hidden sm:inline-block">clicks</span>
+                <span className="ml-1 hidden sm:inline-block">{messages?.workspace?.clicks}</span>
               </p>
             </Link>
           </NumberTooltip>
@@ -467,7 +468,7 @@ export default function LinkCard({
             content={
               <div className="grid w-full gap-px p-2 sm:w-48">
                 <Button
-                  text="Edit"
+                  text={message?.edit}
                   variant="outline"
                   onClick={() => {
                     setOpenPopover(false);
@@ -478,7 +479,7 @@ export default function LinkCard({
                   className="h-9 px-2 font-medium"
                 />
                 <Button
-                  text="Duplicate"
+                  text={message?.duplicate}
                   variant="outline"
                   onClick={() => {
                     setOpenPopover(false);
@@ -489,7 +490,7 @@ export default function LinkCard({
                   className="h-9 px-2 font-medium"
                 />
                 <Button
-                  text="QR Code"
+                  text={message?.qr}
                   variant="outline"
                   onClick={() => {
                     setOpenPopover(false);
@@ -500,7 +501,7 @@ export default function LinkCard({
                   className="h-9 px-2 font-medium"
                 />
                 <Button
-                  text={archived ? "Unarchive" : "Archive"}
+                  text={archived ? message?.unarchive : message?.archive}
                   variant="outline"
                   onClick={() => {
                     setOpenPopover(false);
@@ -511,7 +512,7 @@ export default function LinkCard({
                   className="h-9 px-2 font-medium"
                 />
                 <Button
-                  text="Transfer"
+                  text={message?.transfer}
                   variant="outline"
                   onClick={() => {
                     setOpenPopover(false);
@@ -531,7 +532,7 @@ export default function LinkCard({
                   })}
                 />
                 <Button
-                  text="Copy Link ID"
+                  text={message?.copy_link_id}
                   variant="outline"
                   onClick={() => copyLinkId()}
                   icon={
@@ -545,7 +546,7 @@ export default function LinkCard({
                   className="h-9 px-2 font-medium"
                 />
                 <Button
-                  text="Delete"
+                  text={message?.delete}
                   variant="danger-outline"
                   onClick={() => {
                     setOpenPopover(false);
@@ -584,7 +585,7 @@ export default function LinkCard({
                     className="group flex w-full items-center justify-between rounded-md p-2 text-left text-sm font-medium text-red-600 transition-all duration-75 hover:bg-red-600 hover:text-white"
                   >
                     <IconMenu
-                      text="Ban"
+                      text={message?.ban}
                       icon={<Delete className="h-4 w-4" />}
                     />
                     <kbd className="hidden rounded bg-red-100 px-2 py-0.5 text-xs font-light text-red-600 transition-all duration-75 group-hover:bg-red-500 group-hover:text-white sm:inline-block">
@@ -605,7 +606,7 @@ export default function LinkCard({
               }}
               className="rounded-md px-1 py-2 transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
             >
-              <span className="sr-only">More options</span>
+              <span className="sr-only">{message?.more_options}</span>
               <ThreeDots className="h-5 w-5 text-gray-500" />
             </button>
           </Popover>

@@ -41,7 +41,6 @@
         "help_text": "Only lowercase letters, numbers, and dashes. Max 48 characters.",
         "only_owners_slug": "Only workspace owners can change the workspace slug.",
         "success_update_slug": "Successfully updated workspace slug!"
-
     },
     "layout": {
         "changelog": "Changelog",
@@ -293,7 +292,9 @@
         "optional": "(optional)",
         "enter_password": "Enter password",
         "select_tags": "Select tags...",
-        "search_image": "Search for an image..."
+        "search_image": "Search for an image...",
+        "add":"Add",
+        "edit": "Edit"
     },
     "admin": {
         "impersonate_user": "Impersonate User",
@@ -325,5 +326,17 @@
         "Year to Date": "Year to Date",
         "Last 12 months": "Last 12 months",
         "All Time": "All Time"
+    },
+    "menu": {
+        "edit": "Edit",
+        "duplicate": "Duplicate",
+        "qr": "QR Code",
+        "archive": "Archive",
+        "transfer": "Transfer",
+        "copy_link_id": "Copy Link ID",
+        "delete": "Delete",
+        "unarchive": "Unarchive",
+        "ban": "Ban",
+        "more_options": "More Options"
     }
 }

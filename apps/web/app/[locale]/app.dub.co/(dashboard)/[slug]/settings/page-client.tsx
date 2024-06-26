@@ -28,6 +28,7 @@ export default function WorkspaceSettingsClient() {
           maxLength: 32,
         }}
         helpText={message?.max_characters}
+        buttonText={messages?.link?.save_changes}
         {...(!isOwner && {
           disabledTooltip:
             message?.only_owners,
@@ -64,6 +65,7 @@ export default function WorkspaceSettingsClient() {
           maxLength: 48,
         }}
         helpText={message?.help_text}
+        buttonText={messages?.link?.save_changes}
         {...(!isOwner && {
           disabledTooltip:
             message?.only_owners_slug,
