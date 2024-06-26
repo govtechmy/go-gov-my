@@ -36,6 +36,7 @@ interface WithWorkspaceHandler {
     workspace: WorkspaceProps;
     domain: string;
     link?: LinkProps;
+    userWorkspaceRole: "owner" | "member";
   }): Promise<Response>;
 }
 
@@ -54,7 +55,6 @@ export const withWorkspace = (
     requiredRole = ["owner", "member"],
     needNotExceededClicks, // if the action needs the user to not have exceeded their clicks usage
     needNotExceededLinks, // if the action needs the user to not have exceeded their links usage
-    allowSelf, // special case for removing yourself from a workspace
     skipLinkChecks, // special case for /api/links/exists – skip link checks
     domainChecks,
   }: {
@@ -63,7 +63,6 @@ export const withWorkspace = (
     requiredRole?: Array<"owner" | "member">;
     needNotExceededClicks?: boolean;
     needNotExceededLinks?: boolean;
-    allowSelf?: boolean;
     skipLinkChecks?: boolean;
     domainChecks?: boolean;
   } = {},
@@ -285,65 +284,67 @@ export const withWorkspace = (
         }
       }
 
-      // These checks are for staff, super admin roles should bypass this
-      if (session.user.role === "staff") {
-        // workspace exists but user is not part of it
-        if (workspace.users.length === 0) {
-          const pendingInvites = await prisma.projectInvite.findUnique({
-            where: {
-              email_projectId: {
-                email: session.user.email,
-                projectId: workspace.id,
-              },
-            },
-            select: {
-              expires: true,
-            },
-          });
-          if (!pendingInvites) {
-            throw new DubApiError({
-              code: "not_found",
-              message: "Workspace not found.",
-            });
-          } else if (
-            pendingInvites &&
-            pendingInvites.expires &&
-            pendingInvites.expires < new Date()
-          ) {
-            throw new DubApiError({
-              code: "invite_expired",
-              message: "Workspace invite expired.",
-            });
-          } else {
-            throw new DubApiError({
-              code: "invite_pending",
-              message: "Workspace invite pending.",
-            });
-          }
-        }
+      // null if user is not part of the workspace
+      let userWorkspaceRole = workspace.users.at(0)?.role || null;
 
-        // workspace role checks
-        if (
-          !requiredRole.includes(workspace.users[0].role) &&
-          !(allowSelf && searchParams.userId === session.user.id)
+      // super admins have the same priveleges as workspace owners
+      if (session.user.role === "super_admin") {
+        userWorkspaceRole = "owner";
+      }
+
+      // User is not part of the workspace, check if they have pending invitations
+      if (!userWorkspaceRole) {
+        const pendingInvites = await prisma.projectInvite.findUnique({
+          where: {
+            email_projectId: {
+              email: session.user.email,
+              projectId: workspace.id,
+            },
+          },
+          select: {
+            expires: true,
+          },
+        });
+        if (!pendingInvites) {
+          throw new DubApiError({
+            code: "not_found",
+            message: "Workspace not found.",
+          });
+        } else if (
+          pendingInvites &&
+          pendingInvites.expires &&
+          pendingInvites.expires < new Date()
         ) {
           throw new DubApiError({
-            code: "forbidden",
-            message: "Unauthorized: Insufficient permissions.",
+            code: "invite_expired",
+            message: "Workspace invite expired.",
           });
-        }
-
-        // clicks usage overage checks
-        if (needNotExceededClicks && workspace.usage > workspace.usageLimit) {
+        } else {
           throw new DubApiError({
-            code: "forbidden",
-            message: exceededLimitError({
-              plan: workspace.plan,
-              limit: workspace.usageLimit,
-              type: "clicks",
-            }),
+            code: "invite_pending",
+            message: "Workspace invite pending.",
           });
         }
+      }
+
+      // workspace role checks
+      if (!requiredRole.includes(userWorkspaceRole)) {
+        throw new DubApiError({
+          code: "forbidden",
+          message: "Unauthorized: Insufficient permissions.",
+        });
+      }
+
+      // clicks usage overage checks
+      if (needNotExceededClicks && workspace.usage > workspace.usageLimit) {
+        throw new DubApiError({
+          code: "forbidden",
+          message: exceededLimitError({
+            plan: workspace.plan,
+            limit: workspace.usageLimit,
+            type: "clicks",
+          }),
+        });
       }
 
       // links usage overage checks
@@ -403,6 +404,7 @@ export const withWorkspace = (
         workspace,
         domain,
         link,
+        userWorkspaceRole,
       });
     } catch (error) {
       return handleAndReturnErrorResponse(error, headers);
