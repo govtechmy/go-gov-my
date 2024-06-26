@@ -51,8 +51,8 @@ func main() {
 
 	http.HandleFunc("/t/", redirectHandler)
 
-	log.Printf("Starting server on :8080 in %s mode\n", env)
-	log.Fatal(http.ListenAndServeTLS(":8080", "cert.pem", "key.pem", nil))
+	log.Printf("Starting server on :3000 in %s mode\n", env)
+	log.Fatal(http.ListenAndServeTLS(":3000", "cert.pem", "key.pem", nil))
 }
 
 func redirectHandler(w http.ResponseWriter, r *http.Request) {

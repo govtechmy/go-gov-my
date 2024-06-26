@@ -14,44 +14,49 @@ services:
       - ps-postgres:/var/lib/postgresql/data
     networks:
       - my-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   redis:
     image: redis:7.2
+    restart: always
     ports:
       - 6379:6379
     networks:
       - my-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
+    restart: always
     environment:
       - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
     ports:
       - 9200:9200
     networks:
       - my-network
-
-  logstash:
-    image: docker.elastic.co/logstash/logstash:7.13.2
-    volumes:
-      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-      - ./postgresql-42.2.5.jar:/usr/share/logstash/logstash-core/lib/jars/postgresql-42.2.5.jar
-    environment:
-      - POSTGRES_HOST=${POSTGRES_HOST}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_PORT=${POSTGRES_PORT}
-      - ELASTICSEARCH_HOST=${ELASTICSEARCH_HOST}
-      - LOGSTASH_STATEMENT=${LOGSTASH_STATEMENT}
-    networks:
-      - my-network
-    depends_on:
-      - elasticsearch
-      - ps-postgres
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 1g
 
   filebeat:
     image: docker.elastic.co/beats/filebeat:7.13.2
+    restart: always
     volumes:
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
       - ./logs:/usr/share/filebeat/logs
@@ -59,6 +64,105 @@ services:
       - my-network
     depends_on:
       - elasticsearch
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    restart: always
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 2181:2181
+    networks:
+      - my-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    restart: always
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_JMX_PORT: 9991
+    ports:
+      - 9092:9092
+    depends_on:
+      - zookeeper
+    networks:
+      - my-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    mem_limit: 1g
+
+  debezium:
+    image: debezium/connect-jdbc-es:0.9
+    ports:
+      - 8083:8083
+    links:
+      - kafka
+      - ps-postgres
+    environment:
+      - BOOTSTRAP_SERVERS=kafka:9092
+      - GROUP_ID=1
+      - CONFIG_STORAGE_TOPIC=my_connect_configs
+      - OFFSET_STORAGE_TOPIC=my_connect_offsets
+      - STATUS_STORAGE_TOPIC=my_connect_statuses
+      - KEY_CONVERTER=io.confluent.connect.avro.AvroConverter
+      - VALUE_CONVERTER=io.confluent.connect.avro.AvroConverter
+      - INTERNAL_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+      - INTERNAL_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+      - CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL=http://schema-registry:8081
+      - CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL=http://schema-registry:8081
+    networks:
+      - my-network
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:5.5.3
+    restart: always
+    environment:
+      - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:2181
+      - SCHEMA_REGISTRY_HOST_NAME=schema-registry
+      - SCHEMA_REGISTRY_LISTENERS=http://schema-registry:8081,http://localhost:8081
+    ports:
+      - 8081:8081
+    depends_on:
+      - zookeeper
+      - kafka
+    networks:
+      - my-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  kafka-manager:
+    image: hlebalbau/kafka-manager:stable
+    restart: always
+    environment:
+      ZK_HOSTS: zookeeper:2181
+      APPLICATION_SECRET: "randomsecret"
+    ports:
+      - 9000:9000
+    depends_on:
+      - zookeeper
+      - kafka
+    networks:
+      - my-network
 
 networks:
   my-network:
