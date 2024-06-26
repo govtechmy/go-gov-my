@@ -37,6 +37,7 @@ export default function UserDropdown() {
               <p className="truncate text-sm text-gray-500">
                 {session?.user?.email}
               </p>
+              {session && <RoleBadge role={session.user.role} />}
             </Link>
             <Link
               href="https://dub.co/help"
@@ -109,4 +110,18 @@ export default function UserDropdown() {
       </Popover>
     </div>
   );
+}
+
+function RoleBadge({ role }: { role: "staff" | "super_admin" }) {
+  const label = {
+    staff: "Staff",
+    super_admin: "Super Admin",
+  } as const;
+
+  const variant = {
+    staff: "default",
+    super_admin: "violet",
+  } as const;
+
+  return <Badge variant={variant[role]}>{label[role]}</Badge>;
 }

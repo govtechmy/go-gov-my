@@ -138,6 +138,7 @@ export const withWorkspace = (
             id: true,
             name: true,
             email: true,
+            role: true,
           },
         });
         if (!user) {
@@ -179,7 +180,8 @@ export const withWorkspace = (
           user: {
             id: user.id,
             name: user.name || "",
-            email: user.email || "",
+            email: user.email,
+            role: user.role,
           },
         };
       } else {

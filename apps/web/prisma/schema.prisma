@@ -20,6 +20,7 @@ model User {
   email         String   @unique
   emailVerified DateTime?
   image         String?
+  role          UserRole  @default(staff)
 
   accounts   Account[]
   sessions   Session[]
@@ -28,6 +29,11 @@ model User {
   tokens     Token[]
   createdAt  DateTime       @default(now()) @db.Timestamptz
   subscribed Boolean        @default(true)
+}
+
+enum UserRole {
+  staff
+  super_admin
 }
 
 model Account {

@@ -435,6 +435,10 @@ const MyLinksFilter = () => {
   const userId = searchParams?.get("userId");
   const { data: session } = useSession();
 
+  if (!session) {
+    return null;
+  }
+
   return (
     <div className="flex items-center justify-between py-6">
       <label className="text-sm font-medium text-gray-600">
@@ -447,8 +451,7 @@ const MyLinksFilter = () => {
               ? { del: "userId" }
               : {
                   set: {
-                    // @ts-ignore
-                    userId: session?.user?.id,
+                    userId: session?.user.id,
                   },
                 },
           )

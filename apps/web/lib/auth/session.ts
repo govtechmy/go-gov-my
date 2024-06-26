@@ -55,6 +55,7 @@ export const withSession =
             id: true,
             name: true,
             email: true,
+            role: true,
           },
         });
         if (!user) {
@@ -97,7 +98,8 @@ export const withSession =
           user: {
             id: user.id,
             name: user.name || "",
-            email: user.email || "",
+            email: user.email,
+            role: user.role,
           },
         };
       } else {
