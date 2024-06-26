@@ -1,8 +1,8 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { CopyButton } from "@dub/ui";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function WorkspaceId() {
   const { id } = useWorkspace();
@@ -13,7 +13,9 @@ export default function WorkspaceId() {
       <div className="rounded-lg border border-gray-200 bg-white">
         <div className="relative flex flex-col space-y-6 p-5 sm:p-10">
           <div className="flex flex-col space-y-3">
-            <h2 className="text-xl font-medium">{messages?.workspace?.workspace_id}</h2>
+            <h2 className="text-xl font-medium">
+              {messages?.workspace?.workspace_id}
+            </h2>
             <p className="text-sm text-gray-500">
               {`You'll need this ID to interact with the ${process.env.NEXT_PUBLIC_APP_NAME} API.`}
             </p>

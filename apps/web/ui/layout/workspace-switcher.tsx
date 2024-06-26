@@ -1,5 +1,6 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspaces from "@/lib/swr/use-workspaces";
 import { PlanProps, WorkspaceProps } from "@/lib/types";
 import { ModalContext } from "@/ui/modals/provider";
@@ -11,7 +12,6 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { useCallback, useContext, useMemo, useState } from "react";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function WorkspaceSwitcher() {
   const { workspaces } = useWorkspaces();
@@ -140,7 +140,9 @@ function WorkspaceList({
 
   return (
     <div className="relative mt-1 max-h-72 w-full space-y-0.5 overflow-auto rounded-md bg-white p-2 text-base sm:w-60 sm:text-sm sm:shadow-lg">
-      <div className="p-2 text-xs text-gray-500">{messages?.dashboard?.workspace_title}</div>
+      <div className="p-2 text-xs text-gray-500">
+        {messages?.dashboard?.workspace_title}
+      </div>
       {workspaces.map(({ id, name, slug, logo }) => {
         return (
           <Link

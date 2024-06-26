@@ -1,16 +1,16 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { useDeleteWorkspaceModal } from "@/ui/modals/delete-workspace-modal";
 import { Button } from "@dub/ui";
 import { cn } from "@dub/utils";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function DeleteWorkspace() {
   const { setShowDeleteWorkspaceModal, DeleteWorkspaceModal } =
     useDeleteWorkspaceModal();
-    const { messages, locale } = useIntlClientHook();
-    const message = messages?.workspace
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.workspace;
 
   const { isOwner } = useWorkspace();
   return (
@@ -22,9 +22,7 @@ export default function DeleteWorkspace() {
       <DeleteWorkspaceModal />
       <div className="flex flex-col space-y-3 p-5 sm:p-10">
         <h2 className="text-xl font-medium">{message?.delete}</h2>
-        <p className="text-sm text-gray-500">
-          {message?.delete_desc}
-        </p>
+        <p className="text-sm text-gray-500">{message?.delete_desc}</p>
       </div>
       <div
         className={cn("border-b border-red-600", {

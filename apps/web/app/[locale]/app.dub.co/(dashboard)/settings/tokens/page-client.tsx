@@ -1,5 +1,6 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { useDeleteTokenModal } from "@/ui/modals/delete-token-modal";
 import { useTokenCreatedModal } from "@/ui/modals/token-created-modal";
 import { Form, IconMenu, LoadingSpinner, Popover, TokenAvatar } from "@dub/ui";
@@ -9,7 +10,6 @@ import { FolderOpen, MoreVertical, Trash } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import useSWR from "swr";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function TokensPageClient() {
   const {
@@ -62,9 +62,7 @@ export default function TokensPageClient() {
       <div className="rounded-lg border border-gray-200 bg-white">
         <div className="flex flex-col space-y-3 p-5 sm:p-10">
           <h2 className="text-xl font-medium">{message?.your_api_keys}</h2>
-          <p className="text-sm text-gray-500">
-            {message?.description}
-          </p>
+          <p className="text-sm text-gray-500">{message?.description}</p>
         </div>
         {isLoading || !tokens ? (
           <div className="flex flex-col items-center justify-center space-y-4 pb-20 pt-10">
@@ -87,9 +85,7 @@ export default function TokensPageClient() {
         ) : (
           <div className="flex flex-col items-center justify-center space-y-4 pb-20 pt-10">
             <FolderOpen className="h-6 w-6 text-gray-500" />
-            <p className="text-sm text-gray-500">
-              {message?.no_api_key}
-            </p>
+            <p className="text-sm text-gray-500">{message?.no_api_key}</p>
           </div>
         )}
       </div>

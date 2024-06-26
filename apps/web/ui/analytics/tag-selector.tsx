@@ -1,10 +1,10 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useTags from "@/lib/swr/use-tags";
 import { InputSelect, useRouterStuff } from "@dub/ui";
 import { Tag } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useContext } from "react";
 import { ModalContext } from "../modals/provider";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function TagSelector() {
   const { queryParams } = useRouterStuff();
@@ -14,7 +14,7 @@ export default function TagSelector() {
   const selectedTagId = searchParams?.get("tagId");
   const { setShowAddEditTagModal } = useContext(ModalContext);
   const { messages } = useIntlClientHook();
-  const message = messages?.analytics
+  const message = messages?.analytics;
 
   return (
     <InputSelect

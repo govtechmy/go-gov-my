@@ -2,11 +2,11 @@
 
 import useWorkspaces from "@/lib/swr/use-workspaces";
 import { ModalContext } from "@/ui/modals/provider";
+import { MessagesContext } from "@/ui/switcher/provider";
 import { Button } from "@dub/ui";
 import { TooltipContent } from "@dub/ui/src/tooltip";
 import { FREE_WORKSPACES_LIMIT } from "@dub/utils";
 import { useContext } from "react";
-import { MessagesContext } from "@/ui/switcher/provider";
 
 export default function CreateWorkspaceButton() {
   const { setShowAddWorkspaceModal } = useContext(ModalContext);

@@ -1,5 +1,6 @@
 import { LocationTabs } from "@/lib/analytics/types";
 import { formatAnalyticsEndpoint } from "@/lib/analytics/utils";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LoadingSpinner, Modal, TabSelect, useRouterStuff } from "@dub/ui";
 import { COUNTRIES, fetcher } from "@dub/utils";
 import { Maximize } from "lucide-react";
@@ -7,7 +8,6 @@ import { useContext, useMemo, useState } from "react";
 import useSWR from "swr";
 import { AnalyticsContext } from ".";
 import BarList from "./bar-list";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function Locations() {
   const [tab, setTab] = useState<LocationTabs>("countries");
@@ -17,7 +17,7 @@ export default function Locations() {
   );
 
   const { messages } = useIntlClientHook();
-  const message = messages?.analytics
+  const message = messages?.analytics;
 
   const { baseApiPath, queryString } = useContext(AnalyticsContext);
 
@@ -74,7 +74,7 @@ export default function Locations() {
         <div className="mb-3 flex justify-between">
           <h1 className="text-lg font-semibold">{message?.locations}</h1>
           <TabSelect
-            options={["countries", "cities", ]}
+            options={["countries", "cities"]}
             selected={tab}
             // @ts-ignore
             selectAction={setTab}
@@ -100,7 +100,9 @@ export default function Locations() {
             className="absolute inset-x-0 bottom-4 z-10 mx-auto flex w-full items-center justify-center space-x-2 rounded-md bg-gradient-to-b from-transparent to-white py-2 text-gray-500 transition-all hover:text-gray-800 active:scale-95"
           >
             <Maximize className="h-4 w-4" />
-            <p className="text-xs font-semibold uppercase">{message?.view_all}</p>
+            <p className="text-xs font-semibold uppercase">
+              {message?.view_all}
+            </p>
           </button>
         )}
       </div>

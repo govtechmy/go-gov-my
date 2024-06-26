@@ -1,10 +1,10 @@
 import { prisma } from "@/lib/prisma";
+import { MessagesContext } from "@/ui/switcher/provider";
 import { Background, BlurImage, Logo } from "@dub/ui";
 import { APP_NAME, constructMetadata, isDubDomain } from "@dub/utils";
 import { notFound, redirect } from "next/navigation";
-import PasswordForm from "./form";
 import { useContext } from "react";
-import { MessagesContext } from "@/ui/switcher/provider";
+import PasswordForm from "./form";
 
 const title = "Password Required";
 const description =
@@ -113,7 +113,7 @@ export default async function PasswordProtectedLinkPage({
     redirect(link.url);
   }
   const messages = useContext(MessagesContext);
-  const message = messages?.password
+  const message = messages?.password;
   return (
     <main className="flex h-screen w-screen items-center justify-center">
       <Background />
@@ -134,7 +134,9 @@ export default async function PasswordProtectedLinkPage({
               <Logo />
             </a>
           )}
-          <h3 className="text-xl font-semibold">{message?.password_required}</h3>
+          <h3 className="text-xl font-semibold">
+            {message?.password_required}
+          </h3>
           <p className="text-sm text-gray-500">{message?.description}</p>
         </div>
         <PasswordForm />

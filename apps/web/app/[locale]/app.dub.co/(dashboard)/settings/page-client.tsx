@@ -1,17 +1,17 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import DeleteAccountSection from "@/ui/account/delete-account";
 import UploadAvatar from "@/ui/account/upload-avatar";
 import { Form } from "@dub/ui";
 import { APP_NAME } from "@dub/utils";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function SettingsPageClient() {
   const { data: session, update, status } = useSession();
   const { messages } = useIntlClientHook();
-  const message = messages?.tokens
+  const message = messages?.tokens;
 
   return (
     <>

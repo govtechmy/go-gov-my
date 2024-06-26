@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { LinkWithTagsProps, TagProps, UserProps } from "@/lib/types";
 import TagBadge from "@/ui/links/tag-badge";
@@ -50,7 +51,6 @@ import { toast } from "sonner";
 import useSWR, { mutate } from "swr";
 import { useTransferLinkModal } from "../modals/transfer-link-modal";
 import LinkLogo from "./link-logo";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function LinkCard({
   props,
@@ -78,7 +78,7 @@ export default function LinkCard({
   const searchParams = useSearchParams();
 
   const { messages, locale } = useIntlClientHook();
-  const message = messages?.menu
+  const message = messages?.menu;
 
   const [primaryTags, additionalTags] = useMemo(() => {
     const primaryTagsCount = 1;
@@ -390,7 +390,7 @@ export default function LinkCard({
                         )}
                     </div>
                     <p className="mt-1 text-xs text-gray-500">
-                      {messages?.misc?.created} {" "}
+                      {messages?.misc?.created}{" "}
                       {new Date(createdAt).toLocaleDateString("en-us", {
                         month: "short",
                         day: "numeric",
@@ -460,7 +460,9 @@ export default function LinkCard({
               <Chart className="h-4 w-4" />
               <p className="whitespace-nowrap text-sm text-gray-500">
                 {nFormatter(clicks)}
-                <span className="ml-1 hidden sm:inline-block">{messages?.workspace?.clicks}</span>
+                <span className="ml-1 hidden sm:inline-block">
+                  {messages?.workspace?.clicks}
+                </span>
               </p>
             </Link>
           </NumberTooltip>

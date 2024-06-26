@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { Button, CopyButton, Logo, Modal } from "@dub/ui";
 import { APP_DOMAIN } from "@dub/utils";
@@ -8,8 +9,6 @@ import {
   useMemo,
   useState,
 } from "react";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-
 
 function InviteCodeModal({
   showInviteCodeModal,

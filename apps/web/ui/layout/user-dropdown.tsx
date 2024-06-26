@@ -1,19 +1,19 @@
 "use client";
 
+import { MessagesContext } from "@/ui/switcher/provider";
 import { Avatar, Badge, IconMenu, Popover } from "@dub/ui";
 import Cookies from "js-cookie";
 import { Edit3, HelpCircle, LogOut, Settings } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useEffect, useState, useContext } from "react";
-import { MessagesContext } from "@/ui/switcher/provider";
+import { useContext, useEffect, useState } from "react";
 
 export default function UserDropdown() {
   const { data: session } = useSession();
   const [openPopover, setOpenPopover] = useState(false);
   const messages = useContext(MessagesContext);
   const message = messages?.layout;
-  const locale = messages?.language
+  const locale = messages?.language;
 
   const [unreadChangelogs, setUnreadChangelogs] = useState(0);
   useEffect(() => {
@@ -73,7 +73,10 @@ export default function UserDropdown() {
               }}
               className="flex w-full justify-between rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
             >
-              <IconMenu text={message?.changelog} icon={<Edit3 className="h-4 w-4" />} />
+              <IconMenu
+                text={message?.changelog}
+                icon={<Edit3 className="h-4 w-4" />}
+              />
               {unreadChangelogs > 0 && (
                 <Badge variant="blue">{unreadChangelogs}</Badge>
               )}
@@ -86,7 +89,10 @@ export default function UserDropdown() {
                 });
               }}
             >
-              <IconMenu text={message?.logout} icon={<LogOut className="h-4 w-4" />} />
+              <IconMenu
+                text={message?.logout}
+                icon={<LogOut className="h-4 w-4" />}
+              />
             </button>
           </div>
         }

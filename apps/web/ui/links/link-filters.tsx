@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useLinks from "@/lib/swr/use-links";
 import useLinksCount from "@/lib/swr/use-links-count";
 import useTags from "@/lib/swr/use-tags";
@@ -30,12 +31,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { mutate } from "swr";
 import { useDebouncedCallback } from "use-debounce";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function LinkFilters() {
   const { data: domains } = useLinksCount({ groupBy: "domain" });
   const { messages, locale } = useIntlClientHook();
-  const message = messages?.dashboard
+  const message = messages?.dashboard;
 
   const { tags } = useTags();
   const { data: tagsCount } = useLinksCount({ groupBy: "tagId" });
@@ -113,7 +113,7 @@ const ClearButton = ({ searchInputRef }) => {
 
 export const SearchBox = ({ searchInputRef }) => {
   const { messages, locale } = useIntlClientHook();
-  const message = messages?.dashboard
+  const message = messages?.dashboard;
   const searchParams = useSearchParams();
   const { queryParams } = useRouterStuff();
   const debounced = useDebouncedCallback((value) => {
@@ -193,7 +193,7 @@ const TagsFilter = ({
   const [search, setSearch] = useState("");
   const [showMore, setShowMore] = useState(false);
   const { messages } = useIntlClientHook();
-  const message = messages?.dashboard
+  const message = messages?.dashboard;
 
   const { AddEditTagModal, AddTagButton } = useAddEditTagModal();
 
@@ -258,7 +258,9 @@ const TagsFilter = ({
             {...SWIPE_REVEAL_ANIMATION_SETTINGS}
           >
             {tags?.length === 0 ? ( // if the workspace has no tags
-              <p className="text-center text-sm text-gray-500">{message?.no_tags_yet}</p>
+              <p className="text-center text-sm text-gray-500">
+                {message?.no_tags_yet}
+              </p>
             ) : (
               <>
                 <div className="relative mb-1">
@@ -442,7 +444,7 @@ const MyLinksFilter = () => {
   const userId = searchParams?.get("userId");
   const { data: session } = useSession();
   const { messages } = useIntlClientHook();
-  const message = messages?.dashboard
+  const message = messages?.dashboard;
 
   return (
     <div className="flex items-center justify-between py-6">
@@ -473,7 +475,7 @@ const ArchiveFilter = () => {
   const { queryParams } = useRouterStuff();
   const showArchived = searchParams?.get("showArchived");
   const { messages } = useIntlClientHook();
-  const message = messages?.dashboard
+  const message = messages?.dashboard;
   return (
     <div className="flex items-center justify-between py-6">
       <label className="text-sm font-medium text-gray-600">

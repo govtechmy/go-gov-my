@@ -1,10 +1,10 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { STAGGER_CHILD_VARIANTS } from "@dub/utils";
 import Spline from "@splinetool/react-spline";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function Intro() {
   const router = useRouter();

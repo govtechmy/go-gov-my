@@ -1,5 +1,6 @@
 import { INTERVAL_DISPLAYS } from "@/lib/analytics/constants";
 import { validDateRangeForPlan } from "@/lib/analytics/utils";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import {
   IconMenu,
@@ -14,7 +15,6 @@ import { Calendar, ChevronDown, Lock } from "lucide-react";
 import Link from "next/link";
 import { useContext, useMemo, useState } from "react";
 import { AnalyticsContext } from ".";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function DateRangePicker() {
   const { queryParams } = useRouterStuff();

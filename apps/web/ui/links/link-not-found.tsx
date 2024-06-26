@@ -1,7 +1,7 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { MaxWidthWrapper } from "@dub/ui";
 import { FileX2 } from "lucide-react";
 import Link from "next/link";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function LinkNotFound() {
   const { messages, locale } = useIntlClientHook();

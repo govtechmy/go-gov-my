@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { LinkProps } from "@/lib/types";
 import { Button, Modal, useToastWithUndo } from "@dub/ui";
@@ -13,7 +14,6 @@ import {
 import { toast } from "sonner";
 import { mutate } from "swr";
 import LinkLogo from "../links/link-logo";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 const sendArchiveRequest = ({
   linkId,
@@ -124,9 +124,7 @@ function ArchiveLinkModal({
           {props.archived ? message?.unarchive : message?.archive} {shortlink}
         </h3>
         <p className="text-sm text-gray-500">
-          {props.archived
-            ? message?.unarchive_desc
-            : message?.archive_desc}
+          {props.archived ? message?.unarchive_desc : message?.archive_desc}
         </p>
       </div>
 

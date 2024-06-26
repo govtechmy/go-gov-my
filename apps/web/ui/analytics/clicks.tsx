@@ -1,4 +1,5 @@
 import { VALID_ANALYTICS_FILTERS } from "@/lib/analytics/constants";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useTags from "@/lib/swr/use-tags";
 import { Chart } from "@/ui/shared/icons";
 import { CountingNumbers, NumberTooltip, useRouterStuff } from "@dub/ui";
@@ -9,7 +10,6 @@ import { useSearchParams } from "next/navigation";
 import { useContext } from "react";
 import { AnalyticsContext } from ".";
 import ClicksChart from "./clicks-chart";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function Clicks() {
   const { totalClicks } = useContext(AnalyticsContext);
@@ -18,7 +18,7 @@ export default function Clicks() {
   const key = searchParams.get("key");
   const { queryParams } = useRouterStuff();
   const { messages, locale } = useIntlClientHook();
-  const message = messages?.analytics
+  const message = messages?.analytics;
 
   // Tag related
   const tagId = searchParams.get("tagId");

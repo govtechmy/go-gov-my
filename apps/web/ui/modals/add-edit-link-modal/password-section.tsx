@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LinkProps } from "@/lib/types";
 import { Eye, EyeOff } from "@/ui/shared/icons";
 import { ProBadgeTooltip } from "@/ui/shared/pro-badge-tooltip";
@@ -5,7 +6,6 @@ import { SimpleTooltipContent, Switch } from "@dub/ui";
 import { FADE_IN_ANIMATION_SETTINGS } from "@dub/utils";
 import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function PasswordSection({
   props,

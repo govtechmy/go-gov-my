@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LinkProps } from "@/lib/types";
 import {
   Facebook,
@@ -29,7 +30,6 @@ import { toast } from "sonner";
 import { useDebounce } from "use-debounce";
 import { usePromptModal } from "../prompt-modal";
 import UnsplashSearch from "./unsplash-search";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function Preview({
   data,
@@ -47,7 +47,7 @@ export default function Preview({
     return getDomainWithoutWWW(debouncedUrl);
   }, [password, debouncedUrl]);
   const { messages } = useIntlClientHook();
-  const message = messages?.link
+  const message = messages?.link;
 
   const onImageChange = (image: string) =>
     setData((prev) => ({ ...prev, image, proxy: true }));
@@ -199,7 +199,7 @@ const ImagePreview = ({
   const inputFileRef = useRef<HTMLInputElement>(null);
 
   const { messages } = useIntlClientHook();
-  const message = messages?.link
+  const message = messages?.link;
 
   const [openPopover, setOpenPopover] = useState(false);
   const [resizing, setResizing] = useState(false);
@@ -270,9 +270,7 @@ const ImagePreview = ({
       return (
         <div className="flex h-[250px] w-full flex-col items-center justify-center space-y-4 bg-gray-100">
           <Photo className="h-8 w-8 text-gray-400" />
-          <p className="text-sm text-gray-400">
-            {message?.enter_link}
-          </p>
+          <p className="text-sm text-gray-400">{message?.enter_link}</p>
         </div>
       );
     }

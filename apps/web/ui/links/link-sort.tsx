@@ -1,10 +1,9 @@
 import { Sort } from "@/ui/shared/icons";
+import { MessagesContext } from "@/ui/switcher/provider";
 import { IconMenu, Popover, Tick, useRouterStuff } from "@dub/ui";
 import { ChevronDown, SortDesc } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
-import { useContext } from "react";
-import { MessagesContext } from "@/ui/switcher/provider";
+import { useContext, useMemo, useState } from "react";
 
 export default function LinkSort() {
   const [openPopover, setOpenPopover] = useState(false);
@@ -27,7 +26,6 @@ export default function LinkSort() {
       slug: "lastClicked",
     },
   ];
-  
 
   const selectedSort = useMemo(() => {
     return sortOptions.find((s) => s.slug === sort) || sortOptions[0];

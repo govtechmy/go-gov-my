@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import useWorkspaces from "@/lib/swr/use-workspaces";
 import { LinkProps } from "@/lib/types";
@@ -19,7 +20,6 @@ import {
 import { toast } from "sonner";
 import { mutate } from "swr";
 import LinkLogo from "../links/link-logo";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function TransferLinkModal({
   showTransferLinkModal,
@@ -93,9 +93,11 @@ function TransferLinkModal({
       >
         <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 text-center sm:px-16">
           <LinkLogo apexDomain={apexDomain} />
-          <h3 className="text-lg font-medium">{message?.transfer} {shortlink}</h3>
+          <h3 className="text-lg font-medium">
+            {message?.transfer} {shortlink}
+          </h3>
           <p className="text-sm text-gray-500">
-            {message?.transfer_desc_1} {APP_NAME}{" "} {message?.transfer_desc_2}
+            {message?.transfer_desc_1} {APP_NAME} {message?.transfer_desc_2}
           </p>
         </div>
 

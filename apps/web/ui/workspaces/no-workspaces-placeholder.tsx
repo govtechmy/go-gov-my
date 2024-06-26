@@ -1,8 +1,8 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { ModalContext } from "@/ui/modals/provider";
 import { useContext } from "react";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function NoWorkspacesPlaceholder() {
   const { setShowAddWorkspaceModal } = useContext(ModalContext);

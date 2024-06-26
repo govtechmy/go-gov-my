@@ -1,16 +1,16 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LoadingSpinner, Tooltip, TooltipContent } from "@dub/ui";
 import { Download } from "lucide-react";
 import { useContext, useState } from "react";
 import { toast } from "sonner";
 import { AnalyticsContext } from ".";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function ExportButton() {
   const [loading, setLoading] = useState(false);
   const { totalClicks } = useContext(AnalyticsContext);
   const { queryString } = useContext(AnalyticsContext);
   const { messages, locale } = useIntlClientHook();
-  const message = messages?.analytics
+  const message = messages?.analytics;
 
   async function exportData() {
     setLoading(true);

@@ -1,5 +1,6 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useUser from "@/lib/swr/use-user";
 import { WorkspaceProps } from "@/lib/types";
 import { BlurImage, InlineSnippet, NumberTooltip } from "@dub/ui";
@@ -15,7 +16,6 @@ import Link from "next/link";
 import useSWR from "swr";
 import PlanBadge from "./plan-badge";
 import WorkspaceArrow from "./workspace-arrow";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function WorkspaceCard({
   id,
@@ -32,7 +32,7 @@ export default function WorkspaceCard({
 
   const { user } = useUser();
   const { messages, locale } = useIntlClientHook();
-  const workspace_msg = messages?.workspace
+  const workspace_msg = messages?.workspace;
 
   const isMigratedWorkspace = user?.migratedWorkspace === id;
 
@@ -44,7 +44,8 @@ export default function WorkspaceCard({
           <WorkspaceArrow className="absolute -bottom-20 right-56 z-10 text-violet-600 lg:right-0" />
           <div className="absolute -bottom-28 right-0 z-10 w-full max-w-[16rem] rounded-lg border border-gray-200 bg-white p-3 text-center text-sm shadow lg:-right-56">
             <p>
-              {workspace_msg?.your} <InlineSnippet>{SHORT_DOMAIN}</InlineSnippet>
+              {workspace_msg?.your}{" "}
+              <InlineSnippet>{SHORT_DOMAIN}</InlineSnippet>
               {workspace_msg?.migrate}
             </p>
             <a
@@ -90,7 +91,8 @@ export default function WorkspaceCard({
             {count || count === 0 ? (
               <NumberTooltip value={count} unit="links">
                 <h2 className="whitespace-nowrap text-sm">
-                  {nFormatter(count)} {count != 1 ? workspace_msg?.links : workspace_msg?.link}
+                  {nFormatter(count)}{" "}
+                  {count != 1 ? workspace_msg?.links : workspace_msg?.link}
                 </h2>
               </NumberTooltip>
             ) : (
@@ -101,7 +103,8 @@ export default function WorkspaceCard({
             <BarChart2 className="h-4 w-4" />
             <NumberTooltip value={usage}>
               <h2 className="whitespace-nowrap text-sm">
-                {nFormatter(usage)} {usage != 1 ? workspace_msg?.clicks : workspace_msg?.click}
+                {nFormatter(usage)}{" "}
+                {usage != 1 ? workspace_msg?.clicks : workspace_msg?.click}
               </h2>
             </NumberTooltip>
           </div>

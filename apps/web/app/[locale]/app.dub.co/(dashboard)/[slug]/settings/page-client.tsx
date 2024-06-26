@@ -1,5 +1,6 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import DeleteWorkspace from "@/ui/workspaces/delete-workspace";
 import UploadLogo from "@/ui/workspaces/upload-logo";
@@ -8,7 +9,6 @@ import { Form } from "@dub/ui";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { mutate } from "swr";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function WorkspaceSettingsClient() {
   const router = useRouter();
@@ -30,8 +30,7 @@ export default function WorkspaceSettingsClient() {
         helpText={message?.max_characters}
         buttonText={messages?.link?.save_changes}
         {...(!isOwner && {
-          disabledTooltip:
-            message?.only_owners,
+          disabledTooltip: message?.only_owners,
         })}
         handleSubmit={(updateData) =>
           fetch(`/api/workspaces/${id}`, {
@@ -67,8 +66,7 @@ export default function WorkspaceSettingsClient() {
         helpText={message?.help_text}
         buttonText={messages?.link?.save_changes}
         {...(!isOwner && {
-          disabledTooltip:
-            message?.only_owners_slug,
+          disabledTooltip: message?.only_owners_slug,
         })}
         handleSubmit={(data) =>
           fetch(`/api/workspaces/${id}`, {

@@ -1,5 +1,5 @@
 const language = {
-    "avtar": ()=> {}
-}
+  avtar: () => {},
+};
 
-export default language
+export default language;

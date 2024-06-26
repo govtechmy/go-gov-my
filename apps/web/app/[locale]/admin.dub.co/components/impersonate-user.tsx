@@ -1,12 +1,12 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { Button, LoadingSpinner } from "@dub/ui";
 import { cn } from "@dub/utils";
 import { useState } from "react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 import UserInfo, { UserInfoProps } from "./user-info";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function ImpersonateUser() {
   const [data, setData] = useState<UserInfoProps | null>(null);
@@ -98,5 +98,11 @@ const Form = () => {
 const BanButton = () => {
   const { messages } = useIntlClientHook();
   const { pending } = useFormStatus();
-  return <Button text={messages?.admin?.confirm_ban} loading={pending} variant="danger" />;
+  return (
+    <Button
+      text={messages?.admin?.confirm_ban}
+      loading={pending}
+      variant="danger"
+    />
+  );
 };

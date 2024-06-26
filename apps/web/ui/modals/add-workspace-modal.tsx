@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { AlertCircleFill } from "@/ui/shared/icons";
 import {
   Button,
@@ -22,7 +23,6 @@ import {
 import { toast } from "sonner";
 import { mutate } from "swr";
 import { useDebounce } from "use-debounce";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function AddWorkspaceModalHelper({
   showAddWorkspaceModal,
@@ -94,7 +94,9 @@ function AddWorkspaceModalHelper({
     >
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <Logo />
-        <h3 className="text-lg font-medium">{messages?.workspace?.create_title}</h3>
+        <h3 className="text-lg font-medium">
+          {messages?.workspace?.create_title}
+        </h3>
         <a
           href="https://dub.co/help/article/what-is-a-workspace"
           target="_blank"

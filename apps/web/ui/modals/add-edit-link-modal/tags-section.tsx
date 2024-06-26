@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useTags from "@/lib/swr/use-tags";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { LinkWithTagsProps, TagProps } from "@/lib/types";
@@ -15,7 +16,6 @@ import { Check, ChevronDown, Tag, X } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { mutate } from "swr";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function TagsSection({
   data,

@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LoadingSpinner, useMediaQuery } from "@dub/ui";
 import { fetcher } from "@dub/utils";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -5,7 +6,6 @@ import { toast } from "sonner";
 import useSWR from "swr";
 import { Basic } from "unsplash-js/dist/methods/photos/types";
 import { useDebounce } from "use-debounce";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function UnsplashSearch({
   onImageSelected,

@@ -1,5 +1,6 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { QRCodeSVG, getQRAsCanvas, getQRAsSVGDataUri } from "@/lib/qr";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { QRLinkProps } from "@/lib/types";
@@ -38,7 +39,6 @@ import { HexColorInput, HexColorPicker } from "react-colorful";
 import { toast } from "sonner";
 import { useDebouncedCallback } from "use-debounce";
 import LinkLogo from "../links/link-logo";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function LinkQRModalHelper({
   showLinkQRModal,
@@ -296,7 +296,7 @@ function AdvancedSettings({
   showLogo,
   setShowLogo,
   setShowLinkQRModal,
-  message
+  message,
 }) {
   const { slug } = useParams() as { slug?: string };
   const { plan, logo } = useWorkspace();
@@ -335,7 +335,9 @@ function AdvancedSettings({
               htmlFor="logo-toggle"
               className="flex items-center space-x-1"
             >
-              <p className="text-sm font-medium text-gray-700">{message?.logo}</p>
+              <p className="text-sm font-medium text-gray-700">
+                {message?.logo}
+              </p>
               {plan !== "free" && (
                 <InfoTooltip
                   content={
@@ -358,7 +360,8 @@ function AdvancedSettings({
                   thumbTranslate="translate-x-6"
                 />
                 <p className="text-sm text-gray-600">
-                  {message?.show} {!slug || (!logo && process.env.NEXT_PUBLIC_APP_NAME)}{" "}
+                  {message?.show}{" "}
+                  {!slug || (!logo && process.env.NEXT_PUBLIC_APP_NAME)}{" "}
                   {message?.logo}
                 </p>
               </div>
@@ -393,7 +396,8 @@ function AdvancedSettings({
                     disabled={true}
                   />
                   <p className="text-sm text-gray-600">
-                    {message?.show} {process.env.NEXT_PUBLIC_APP_NAME} {message?.logo}
+                    {message?.show} {process.env.NEXT_PUBLIC_APP_NAME}{" "}
+                    {message?.logo}
                   </p>
                 </div>
               </Tooltip>

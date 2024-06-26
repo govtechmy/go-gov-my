@@ -1,10 +1,10 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LinkProps } from "@/lib/types";
 import { InfoTooltip, SimpleTooltipContent, Switch } from "@dub/ui";
 import { FADE_IN_ANIMATION_SETTINGS } from "@dub/utils";
 import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function CommentsSection({
   props,

@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { Button, CopyButton, Logo, Modal } from "@dub/ui";
 import {
   Dispatch,
@@ -6,7 +7,6 @@ import {
   useMemo,
   useState,
 } from "react";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function TokenCreatedModal({
   showTokenCreatedModal,

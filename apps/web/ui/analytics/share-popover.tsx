@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import {
   Copy,
   IconMenu,
@@ -11,12 +12,11 @@ import { Share2 } from "lucide-react";
 import { useContext, useState } from "react";
 import { toast } from "sonner";
 import { AnalyticsContext } from ".";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function SharePopover() {
   const [openSharePopover, setopenSharePopoverPopover] = useState(false);
   const { messages } = useIntlClientHook();
-  const message = messages?.analytics
+  const message = messages?.analytics;
 
   const { baseApiPath, queryString, domain, key } = useContext(
     AnalyticsContext,
@@ -73,7 +73,9 @@ export default function SharePopover() {
           </div>
           <div className="p-4">
             <div className="mb-2 flex items-center justify-between">
-              <p className="font-semibold text-gray-800">{message?.public_stat}</p>
+              <p className="font-semibold text-gray-800">
+                {message?.public_stat}
+              </p>
               <Switch
                 checked={data?.publicStats}
                 loading={isLoading}
@@ -82,9 +84,7 @@ export default function SharePopover() {
                 }}
               />
             </div>
-            <p className="text-gray-500">
-              {message?.stat_desc}
-            </p>
+            <p className="text-gray-500">{message?.stat_desc}</p>
           </div>
           <div className="p-4">
             <p className="font-semibold text-gray-800">{message?.share_link}</p>

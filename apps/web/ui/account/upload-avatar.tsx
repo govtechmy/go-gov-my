@@ -1,10 +1,10 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { Button, FileUpload } from "@dub/ui";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function UploadAvatar() {
   const { data: session, update } = useSession();
@@ -48,7 +48,9 @@ export default function UploadAvatar() {
       className="rounded-lg border border-gray-200 bg-white"
     >
       <div className="flex flex-col space-y-3 p-5 sm:p-10">
-        <h2 className="text-xl font-medium">{messages?.settings?.your_avatar}</h2>
+        <h2 className="text-xl font-medium">
+          {messages?.settings?.your_avatar}
+        </h2>
         <p className="text-sm text-gray-500">
           {messages?.settings?.this_avatar} {process.env.NEXT_PUBLIC_APP_NAME}.
         </p>

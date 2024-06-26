@@ -1,11 +1,11 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { Button, FileUpload } from "@dub/ui";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { mutate } from "swr";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function UploadLogo() {
   const { id, logo, isOwner } = useWorkspace();
@@ -68,16 +68,14 @@ export default function UploadLogo() {
       </div>
 
       <div className="flex items-center justify-between space-x-4 rounded-b-lg border-t border-gray-200 bg-gray-50 p-3 sm:px-10">
-        <p className="text-sm text-gray-500">
-          {message?.size_notice}
-        </p>
+        <p className="text-sm text-gray-500">{message?.size_notice}</p>
         <div className="shrink-0">
           <Button
             text={messages?.link?.save_changes}
             loading={uploading}
             disabled={!isOwner || !image || logo === image}
             {...(!isOwner && {
-              disabledTooltip: message?.is_owner
+              disabledTooltip: message?.is_owner,
             })}
           />
         </div>

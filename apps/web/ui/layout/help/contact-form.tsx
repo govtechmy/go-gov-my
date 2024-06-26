@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { CheckCircleFill } from "@/ui/shared/icons";
 import { Button, FileUpload, LoadingSpinner, useEnterSubmit } from "@dub/ui";
 import { useCompletion } from "ai/react";
@@ -6,7 +7,6 @@ import { ChevronLeft, Paperclip, Trash2 } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
 import { toast } from "sonner";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export function ContactForm({
   setScreen,
@@ -23,7 +23,7 @@ export function ContactForm({
     attachmentIds: [],
   });
   const { messages, locale } = useIntlClientHook();
-  const message = messages?.help
+  const message = messages?.help;
 
   const [uploads, setUploads] = useState<
     {
@@ -104,7 +104,9 @@ export function ContactForm({
         onClick={() => setScreen("main")}
       >
         <ChevronLeft className="h-5 w-5" />
-        <h3 className="text-lg font-semibold text-gray-700">{message?.contact_support}</h3>
+        <h3 className="text-lg font-semibold text-gray-700">
+          {message?.contact_support}
+        </h3>
       </button>
 
       <AnimatePresence>
@@ -116,7 +118,7 @@ export function ContactForm({
           >
             <CheckCircleFill className="h-8 w-8 text-green-500" />
             <p className="text-gray-500">
-            {message?.thanks} <br /> {message?.get_back}
+              {message?.thanks} <br /> {message?.get_back}
             </p>
           </motion.div>
         ) : (

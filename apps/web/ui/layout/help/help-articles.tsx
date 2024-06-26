@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { ExpandingArrow } from "@dub/ui";
 import { Command, useCommandState } from "cmdk";
 import Fuse from "fuse.js";
@@ -6,7 +7,6 @@ import { useSession } from "next-auth/react";
 import { Dispatch, SetStateAction, useContext, useMemo, useRef } from "react";
 import Highlighter from "react-highlight-words";
 import { HelpContext } from "./portal";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export function HelpArticles({
   setScreen,
@@ -16,7 +16,7 @@ export function HelpArticles({
   const { data: session } = useSession();
   const commandListRef = useRef<HTMLDivElement>(null);
   const { messages } = useIntlClientHook();
-  const message = messages?.help
+  const message = messages?.help;
 
   return (
     <div>
@@ -51,9 +51,7 @@ export function HelpArticles({
                 <p className="text-sm font-medium text-purple-600">
                   {message?.cant_find}
                 </p>
-                <p className="text-xs text-gray-400">
-                  {message?.send_message}
-                </p>
+                <p className="text-xs text-gray-400">{message?.send_message}</p>
               </div>
             </Command.Empty>
             <CommandResults />

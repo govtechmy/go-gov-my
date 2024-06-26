@@ -1,5 +1,6 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useUsers from "@/lib/swr/use-users";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { WorkspaceUserProps } from "@/lib/types";
@@ -13,8 +14,6 @@ import { cn, timeAgo } from "@dub/utils";
 import { UserMinus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-
 
 const tabs: Array<"Members" | "Invitations"> = ["Members", "Invitations"];
 
@@ -40,9 +39,7 @@ export default function WorkspacePeopleClient() {
         <div className="flex flex-col items-center justify-between space-y-3 p-5 sm:flex-row sm:space-y-0 sm:p-10">
           <div className="flex flex-col space-y-3">
             <h2 className="text-xl font-medium">{message?.people}</h2>
-            <p className="text-sm text-gray-500">
-              {message?.teammates}
-            </p>
+            <p className="text-sm text-gray-500">{message?.teammates}</p>
           </div>
           <div className="flex space-x-2">
             <Button
@@ -70,7 +67,7 @@ export default function WorkspacePeopleClient() {
                 onClick={() => setCurrentTab(tab)}
                 className="rounded-md px-3 py-1.5 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
               >
-                {message? message[tab]: tab}
+                {message ? message[tab] : tab}
               </button>
             </div>
           ))}
@@ -94,7 +91,9 @@ export default function WorkspacePeopleClient() {
                   height={300}
                   className="pointer-events-none -my-8"
                 />
-                <p className="text-sm text-gray-500">{message?.no_invitations}</p>
+                <p className="text-sm text-gray-500">
+                  {message?.no_invitations}
+                </p>
               </div>
             )
           ) : (

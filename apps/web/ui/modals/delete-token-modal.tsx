@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import {
   Badge,
   Button,
@@ -17,7 +18,6 @@ import {
 } from "react";
 import { toast } from "sonner";
 import { mutate } from "swr";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function DeleteTokenModal({
   showDeleteTokenModal,
@@ -58,7 +58,8 @@ function DeleteTokenModal({
               {token.name}
             </h3>
             <p className="text-xs text-gray-500" suppressHydrationWarning>
-              {message?.delete_api_desc} {timeAgo(token.lastUsed, { withAgo: true })}
+              {message?.delete_api_desc}{" "}
+              {timeAgo(token.lastUsed, { withAgo: true })}
             </p>
           </div>
         </div>

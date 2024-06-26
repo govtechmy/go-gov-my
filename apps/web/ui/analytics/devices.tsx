@@ -1,5 +1,6 @@
 import { DeviceTabs } from "@/lib/analytics/types";
 import { formatAnalyticsEndpoint } from "@/lib/analytics/utils";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LoadingSpinner, Modal, TabSelect, useRouterStuff } from "@dub/ui";
 import { fetcher } from "@dub/utils";
 import { Maximize } from "lucide-react";
@@ -8,7 +9,6 @@ import useSWR from "swr";
 import { AnalyticsContext } from ".";
 import BarList from "./bar-list";
 import DeviceIcon from "./device-icon";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function Devices() {
   const [tab, setTab] = useState<DeviceTabs>("devices");
@@ -17,7 +17,7 @@ export default function Devices() {
     [tab],
   );
   const { messages, locale } = useIntlClientHook();
-  const message = messages?.analytics
+  const message = messages?.analytics;
 
   const { baseApiPath, queryString } = useContext(AnalyticsContext);
 
@@ -101,7 +101,9 @@ export default function Devices() {
             className="absolute inset-x-0 bottom-4 z-10 mx-auto flex w-full items-center justify-center space-x-2 rounded-md bg-gradient-to-b from-transparent to-white py-2 text-gray-500 transition-all hover:text-gray-800 active:scale-95"
           >
             <Maximize className="h-4 w-4" />
-            <p className="text-xs font-semibold uppercase">{message?.view_all}</p>
+            <p className="text-xs font-semibold uppercase">
+              {message?.view_all}
+            </p>
           </button>
         )}
       </div>

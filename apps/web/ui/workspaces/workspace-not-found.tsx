@@ -1,11 +1,11 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { MaxWidthWrapper } from "@dub/ui";
 import { FileX2 } from "lucide-react";
 import Link from "next/link";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function WorkspaceNotFound() {
   const { messages, locale } = useIntlClientHook();
-  const message = messages?.workspace
+  const message = messages?.workspace;
   return (
     <MaxWidthWrapper>
       <div className="my-10 flex flex-col items-center justify-center rounded-md border border-gray-200 bg-white py-12">

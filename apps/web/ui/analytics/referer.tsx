@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { BlurImage, LoadingSpinner, Modal, useRouterStuff } from "@dub/ui";
 import { GOOGLE_FAVICON_URL, fetcher } from "@dub/utils";
 import { Link2, Maximize } from "lucide-react";
@@ -5,7 +6,6 @@ import { useContext, useState } from "react";
 import useSWR from "swr";
 import { AnalyticsContext } from ".";
 import BarList from "./bar-list";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function Referer() {
   const { baseApiPath, queryString } = useContext(AnalyticsContext);
@@ -16,7 +16,7 @@ export default function Referer() {
   );
 
   const { messages } = useIntlClientHook();
-  const message = messages?.analytics
+  const message = messages?.analytics;
 
   const { queryParams } = useRouterStuff();
   const [showModal, setShowModal] = useState(false);
@@ -90,7 +90,9 @@ export default function Referer() {
             className="absolute inset-x-0 bottom-4 z-10 mx-auto flex w-full items-center justify-center space-x-2 rounded-md bg-gradient-to-b from-transparent to-white py-2 text-gray-500 transition-all hover:text-gray-800 active:scale-95"
           >
             <Maximize className="h-4 w-4" />
-            <p className="text-xs font-semibold uppercase">{message?.view_all}</p>
+            <p className="text-xs font-semibold uppercase">
+              {message?.view_all}
+            </p>
           </button>
         )}
       </div>

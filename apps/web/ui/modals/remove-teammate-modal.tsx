@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { UserProps } from "@/lib/types";
 import { Avatar, BlurImage, Button, Logo, Modal, useMediaQuery } from "@dub/ui";
@@ -12,7 +13,6 @@ import {
 } from "react";
 import { toast } from "sonner";
 import { mutate } from "swr";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function RemoveTeammateModal({
   showRemoveTeammateModal,

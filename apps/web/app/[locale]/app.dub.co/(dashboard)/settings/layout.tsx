@@ -1,12 +1,13 @@
+import { useIntlHook } from "@/lib/middleware/utils/useI18n";
 import SettingsLayout from "@/ui/layout/settings-layout";
 import { ReactNode } from "react";
-import { useIntlHook } from "@/lib/middleware/utils/useI18n";
 
 export default function PersonalSettingsLayout({
-  children, params: { locale }
+  children,
+  params: { locale },
 }: {
   children: ReactNode;
-  params: {locale: string}; 
+  params: { locale: string };
 }) {
   const { messages } = useIntlHook(locale);
   const tabs = [
@@ -20,5 +21,9 @@ export default function PersonalSettingsLayout({
     },
   ];
 
-  return <SettingsLayout tabs={tabs} locale={locale}>{children}</SettingsLayout>;
+  return (
+    <SettingsLayout tabs={tabs} locale={locale}>
+      {children}
+    </SettingsLayout>
+  );
 }

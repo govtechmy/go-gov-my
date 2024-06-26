@@ -1,11 +1,11 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { Badge, Copy, Tick } from "@dub/ui";
 import { capitalize, nFormatter } from "@dub/utils";
 import { Globe } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export interface UserInfoProps {
   email: string;
@@ -86,17 +86,23 @@ export default function UserInfo({ data }: { data: UserInfoProps }) {
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="font-medium text-gray-700">{message?.domains}</span>
+              <span className="font-medium text-gray-700">
+                {message?.domains}
+              </span>
               <span className="text-gray-500">{workspace.domains}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="font-medium text-gray-700">{message?.links}</span>
+              <span className="font-medium text-gray-700">
+                {message?.links}
+              </span>
               <span className="text-gray-500">
                 {nFormatter(workspace.links, { full: true })}
               </span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="font-medium text-gray-700">{message?.clicks}</span>
+              <span className="font-medium text-gray-700">
+                {message?.clicks}
+              </span>
               <span className="text-gray-500">
                 {nFormatter(workspace.clicks, { full: true })}
               </span>

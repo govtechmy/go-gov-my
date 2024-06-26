@@ -1,5 +1,6 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useLinksCount from "@/lib/swr/use-links-count";
 import useUsers from "@/lib/swr/use-users";
 import useWorkspace from "@/lib/swr/use-workspace";
@@ -9,7 +10,6 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useContext, useMemo } from "react";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function NavTabs() {
   const pathname = usePathname();
@@ -17,7 +17,7 @@ export default function NavTabs() {
   const domain = useSearchParams()?.get("domain");
   const { loading, error } = useWorkspace();
   const { messages, locale } = useIntlClientHook();
-  const message = messages?.dashboard
+  const message = messages?.dashboard;
 
   const tabs = [
     { name: message?.Links, href: `/${locale}/${slug}` },
@@ -69,7 +69,7 @@ const OnboardingChecklist = () => {
     );
   }, [links, invites, users]);
   const { messages } = useIntlClientHook();
-  const message = messages?.layout
+  const message = messages?.layout;
 
   return (
     <button

@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { BlurImage, Button, Logo, Modal, useMediaQuery } from "@dub/ui";
 import {
@@ -9,8 +10,6 @@ import {
 } from "react";
 import { toast } from "sonner";
 import { mutate } from "swr";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-
 
 function InviteTeammateModal({
   showInviteTeammateModal,

@@ -1,12 +1,12 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { AlertCircleFill } from "@/ui/shared/icons";
 import { Button, useMediaQuery } from "@dub/ui";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { verifyPassword } from "./action";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 const initialState = {
   redirect: null,
@@ -15,7 +15,7 @@ const initialState = {
 
 export default function PasswordForm() {
   const { messages } = useIntlClientHook();
-  const message = messages?.password
+  const message = messages?.password;
   const { domain, key } = useParams() as {
     domain: string;
     key: string;

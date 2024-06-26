@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LinkProps, UserProps } from "@/lib/types";
 import { Avatar, BlurImage, CopyButton } from "@dub/ui";
 import {
@@ -9,7 +10,6 @@ import {
   truncate,
 } from "@dub/utils";
 import { Archive, EyeOff, Globe } from "lucide-react";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function LinkPreviewTooltip({
   data,
@@ -19,7 +19,7 @@ export default function LinkPreviewTooltip({
   const { url, rewrite, createdAt, archived, user } = data;
   const apexDomain = getApexDomain(url);
   const { messages } = useIntlClientHook();
-  const message = messages?.analytics
+  const message = messages?.analytics;
 
   return (
     <div className="relative flex w-[28rem] items-center justify-between px-4 py-2">

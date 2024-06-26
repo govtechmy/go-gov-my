@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { Button, Logo, Modal, useMediaQuery } from "@dub/ui";
 import { cn } from "@dub/utils";
@@ -11,7 +12,6 @@ import {
 } from "react";
 import { toast } from "sonner";
 import { mutate } from "swr";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function DeleteWorkspaceModal({
   showDeleteWorkspaceModal,
@@ -82,7 +82,8 @@ function DeleteWorkspaceModal({
             className="block text-sm font-medium text-gray-700"
           >
             {message?.enter_workspace_slug}{" "}
-            <span className="font-semibold text-black">{slug}</span> {message?.to_continue}
+            <span className="font-semibold text-black">{slug}</span>{" "}
+            {message?.to_continue}
           </label>
           <div className="relative mt-1 rounded-md shadow-sm">
             <input

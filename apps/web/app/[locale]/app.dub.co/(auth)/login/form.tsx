@@ -1,5 +1,6 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { Button, Google, useMediaQuery } from "@dub/ui";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,7 +8,6 @@ import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
@@ -19,7 +19,7 @@ export default function LoginForm() {
   const [clickedEmail, setClickedEmail] = useState(false);
   const [clickedSSO, setClickedSSO] = useState(false);
   const { messages, locale } = useIntlClientHook();
-  const message = messages?.login
+  const message = messages?.login;
 
   useEffect(() => {
     const error = searchParams?.get("error");
@@ -128,7 +128,9 @@ export default function LoginForm() {
         />
       </form>
       {noSuchAccount && (
-        <p className="text-center text-sm text-red-500">{message?.no_account_v2}</p>
+        <p className="text-center text-sm text-red-500">
+          {message?.no_account_v2}
+        </p>
       )}
     </>
   );

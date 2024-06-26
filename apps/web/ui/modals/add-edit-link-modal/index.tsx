@@ -1,5 +1,6 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { LinkWithTagsProps } from "@/lib/types";
 import LinkLogo from "@/ui/links/link-logo";
@@ -63,7 +64,6 @@ import PasswordSection from "./password-section";
 import Preview from "./preview";
 import TagsSection from "./tags-section";
 import UTMSection from "./utm-section";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function AddEditLinkModal({
   showAddEditLinkModal,
@@ -89,7 +89,7 @@ function AddEditLinkModal({
     mutate: mutateWorkspace,
   } = useWorkspace();
   const { messages, locale } = useIntlClientHook();
-  const message = messages?.link
+  const message = messages?.link;
 
   const [keyError, setKeyError] = useState<string | null>(null);
   const [urlError, setUrlError] = useState<string | null>(null);
@@ -741,7 +741,7 @@ function AddEditLinkButton({
   const { nextPlan, exceededLinks } = useWorkspace();
   const { queryParams } = useRouterStuff();
   const { messages } = useIntlClientHook();
-  const message = messages?.link
+  const message = messages?.link;
 
   const onKeyDown = useCallback((e: KeyboardEvent) => {
     const target = e.target as HTMLElement;

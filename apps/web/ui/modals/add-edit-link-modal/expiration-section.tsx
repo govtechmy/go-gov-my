@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LinkProps } from "@/lib/types";
 import { ProBadgeTooltip } from "@/ui/shared/pro-badge-tooltip";
 import {
@@ -14,7 +15,6 @@ import {
 } from "@dub/utils";
 import { motion } from "framer-motion";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function ExpirationSection({
   props,

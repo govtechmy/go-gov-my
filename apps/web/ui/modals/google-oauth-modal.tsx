@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { Button, Google, Logo, Modal } from "@dub/ui";
 import Cookies from "js-cookie";
 import { signIn } from "next-auth/react";
@@ -8,7 +9,6 @@ import {
   useMemo,
   useState,
 } from "react";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function GoogleOauthModal({
   showGoogleOauthModal,

@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LoadingSpinner } from "@dub/ui";
 import { fetcher, nFormatter } from "@dub/utils";
 import { useCallback, useContext, useMemo } from "react";
@@ -7,7 +8,6 @@ import Areas from "../charts/areas";
 import TimeSeriesChart from "../charts/time-series-chart";
 import XAxis from "../charts/x-axis";
 import YAxis from "../charts/y-axis";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function ClicksChart() {
   const { baseApiPath, queryString, interval } = useContext(AnalyticsContext);

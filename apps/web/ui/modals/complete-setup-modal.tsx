@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useLinksCount from "@/lib/swr/use-links-count";
 import useUsers from "@/lib/swr/use-users";
 import { ModalContext } from "@/ui/modals/provider";
@@ -13,8 +14,6 @@ import {
   useMemo,
   useState,
 } from "react";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-
 
 function CompleteSetupModal({
   showCompleteSetupModal,
@@ -55,9 +54,7 @@ function CompleteSetupModal({
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <Logo />
         <h3 className="text-lg font-medium">{message?.almost_there}</h3>
-        <p className="text-center text-sm text-gray-500">
-          {message?.complete}
-        </p>
+        <p className="text-center text-sm text-gray-500">{message?.complete}</p>
       </div>
       <div className="flex flex-col space-y-6 bg-gray-50 px-4 py-8 text-left sm:px-12">
         <div className="grid divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white">

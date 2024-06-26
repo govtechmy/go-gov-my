@@ -1,10 +1,10 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { cn } from "@dub/utils";
 import Link from "next/link";
 import { useParams, useSelectedLayoutSegment } from "next/navigation";
 import { ReactNode } from "react";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 export default function NavLink({
   segment,

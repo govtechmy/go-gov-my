@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { LoadingDots, Logo, Modal } from "@dub/ui";
 import Link from "next/link";
@@ -11,7 +12,6 @@ import {
 } from "react";
 import { toast } from "sonner";
 import { mutate } from "swr";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 
 function AcceptInviteModal({
   showAcceptInviteModal,
