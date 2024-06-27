@@ -142,6 +142,7 @@ export async function updateLink({
           }),
         addToHistory({
           ...response,
+          type: "update",
           linkId: response.id,
           comittedByUserId: sessionUserId,
           timestamp: response.updatedAt,

@@ -22,6 +22,7 @@ type LinkHistory = Pick<
   | "trackConversion"
   | "url"
 > & {
+  type: "create" | "update";
   /** The id of the user who created/updated the link */
   comittedByUserId: string;
   /** The id of the link that was created/updated */
@@ -32,6 +33,7 @@ type LinkHistory = Pick<
 export async function addToHistory(entry: LinkHistory): Promise<void> {
   await prisma.linkHistory.create({
     data: {
+      type: entry.type,
       archived: entry.archived,
       domain: entry.domain,
       key: entry.key,

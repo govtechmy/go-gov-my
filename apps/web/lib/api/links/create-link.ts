@@ -117,6 +117,7 @@ export async function createLink(
               }),
               addToHistory({
                 ...response,
+                type: "create",
                 image: uploadedImageUrl,
                 linkId: response.id,
                 comittedByUserId: sessionUserId,
@@ -126,6 +127,7 @@ export async function createLink(
           : [
               addToHistory({
                 ...response,
+                type: "create",
                 linkId: response.id,
                 comittedByUserId: sessionUserId,
                 timestamp: response.createdAt,

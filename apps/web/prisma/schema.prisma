@@ -290,6 +290,7 @@ model Link {
 
 model LinkHistory {
   id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  type              LinkHistoryType
   committedByUserId String?   @db.Uuid // The user who created/updated the link
   linkId            String    @db.Uuid
   link              Link      @relation(fields: [linkId], references: [id], onDelete: Cascade)
@@ -318,6 +319,11 @@ model LinkHistory {
   ios     String?
   android String?
   geo     Json?   @db.Json
+}
+
+enum LinkHistoryType {
+  create
+  update
 }
 
 model Tag {
