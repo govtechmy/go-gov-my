@@ -185,7 +185,7 @@ function WorkspaceList({
         className="flex w-full cursor-pointer items-center space-x-2 rounded-md p-2 transition-all duration-75 hover:bg-gray-100"
       >
         <PlusCircle className="h-6 w-6 text-gray-500" />
-        <span className="block truncate">{messages?.dashboard?.add_new}</span>
+        <span className="block truncate">{messages.workspace.add_new}</span>
       </button>
     </div>
   );

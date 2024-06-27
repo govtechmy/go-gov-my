@@ -99,7 +99,7 @@ const TokenRow = (token: Token) => {
     token,
   });
   const { messages, locale } = useIntlClientHook();
-  const message = messages?.token;
+  const message = messages?.tokens;
   return (
     <>
       <DeleteTokenModal />

@@ -29,7 +29,7 @@ export default function UserDropdown() {
         content={
           <div className="flex w-full flex-col space-y-px rounded-md bg-white p-3 sm:w-56">
             <Link
-              href={`/${locale}/${messages?.language}`}
+              href={`/${locale}`}
               className="p-2"
               onClick={() => setOpenPopover(false)}
             >
@@ -60,7 +60,7 @@ export default function UserDropdown() {
               />
             </Link>
             <Link
-              href={`/${locale}/${messages?.language}/settings`}
+              href={`/${locale}/settings`}
               onClick={() => setOpenPopover(false)}
               className="block w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
             >
