@@ -70,8 +70,17 @@ export const PUT = withWorkspace(
 // DELETE /api/workspaces/[idOrSlug]/users – remove a user from a workspace
 
 export const DELETE = withWorkspace(
-  async ({ searchParams, workspace, session }) => {
+  async ({ searchParams, workspace, session, userWorkspaceRole }) => {
     const { userId } = removeUserSchema.parse(searchParams);
+
+    // Regular workspace members can only remove themselves from the workspace
+    if (userWorkspaceRole === "member" && userId !== session.user.id) {
+      throw new DubApiError({
+        code: "unauthorized",
+        message: "Unauthorized: Login required.",
+      });
+    }
+
     const [projectUser, totalOwners] = await Promise.all([
       prisma.projectUsers.findUnique({
         where: {
@@ -120,7 +129,6 @@ export const DELETE = withWorkspace(
     return NextResponse.json(response);
   },
   {
-    requiredRole: ["owner"],
-    allowSelf: true,
+    requiredRole: ["owner", "member"],
   },
 );

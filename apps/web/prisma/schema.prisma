@@ -14,12 +14,19 @@ generator client {
   previewFeatures = ["postgresqlExtensions"]
 }
 
+model Agency {
+  code          String    @id
+  name          String
+}
+
 model User {
   id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name          String?
   email         String   @unique
   emailVerified DateTime?
   image         String?
+  agencyCode    String    @default("dev")
+  role          UserRole  @default(staff)
 
   accounts   Account[]
   sessions   Session[]
@@ -28,6 +35,11 @@ model User {
   tokens     Token[]
   createdAt  DateTime       @default(now()) @db.Timestamptz
   subscribed Boolean        @default(true)
+}
+
+enum UserRole {
+  staff
+  super_admin
 }
 
 model Account {
@@ -85,10 +97,11 @@ model Token {
 }
 
 model Project {
-  id   String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name String
-  slug String  @unique
-  logo String?
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  slug        String    @unique
+  logo        String?
+  agencyCode  String    @default("dev")
 
   plan              String  @default("business")
   billingCycleStart Int // day of the month when the billing cycle starts
@@ -137,6 +150,8 @@ model DefaultDomains {
   loooooooong Boolean @default(false)
   projectId   String  @db.Uuid
   project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
 }
 
 enum Role {
