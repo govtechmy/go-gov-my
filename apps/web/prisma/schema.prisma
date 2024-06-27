@@ -266,6 +266,9 @@ model Link {
   // Link tags
   tags LinkTag[]
 
+  // Link history
+  history LinkHistory[]
+
   // Comments on the particular shortlink
   comments String? //@db.LongText
 
@@ -283,6 +286,38 @@ model Link {
   @@index(lastClicked)
   @@index(userId)
   // @@fulltext([key, url])
+}
+
+model LinkHistory {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  committedByUserId String?   @db.Uuid // The user who created/updated the link
+  linkId            String    @db.Uuid
+  link              Link      @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  timestamp         DateTime  @db.Timestamptz
+
+  @@index([linkId])
+
+  // Everything below are the columns we want to track from Link model
+  domain     String
+  key        String
+  url        String
+  archived   Boolean
+  expiresAt  DateTime?
+  expiredUrl String?
+  password   String?
+  externalId String?
+
+  trackConversion Boolean
+  publicStats     Boolean
+
+  proxy       Boolean
+  title       String?
+  description String? @db.VarChar(280)
+  image       String?
+
+  ios     String?
+  android String?
+  geo     Json?   @db.Json
 }
 
 model Tag {

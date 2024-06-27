@@ -49,7 +49,7 @@ export const GET = withWorkspace(async ({ headers, link }) => {
 
 // PATCH /api/links/[linkId] – update a link
 export const PATCH = withWorkspace(
-  async ({ req, headers, workspace, link }) => {
+  async ({ req, headers, workspace, link, session }) => {
     if (!link) {
       throw new DubApiError({
         code: "not_found",
@@ -109,6 +109,7 @@ export const PATCH = withWorkspace(
         oldDomain: link.domain,
         oldKey: link.key,
         updatedLink: processedLink,
+        sessionUserId: session.user.id,
       });
 
       return NextResponse.json(response, {

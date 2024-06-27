@@ -6,17 +6,21 @@ import { SHORT_DOMAIN, getParamsFromURL, truncate } from "@dub/utils";
 import { trace } from "@opentelemetry/api";
 import { Prisma } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
+import { addToHistory } from "./add-to-history";
 import { combineTagIds, transformLink } from "./utils";
 
 export async function updateLink({
   oldDomain = SHORT_DOMAIN,
   oldKey,
   updatedLink,
+  sessionUserId,
 }: {
   oldDomain?: string;
   oldKey: string;
   updatedLink: ProcessedLinkProps &
     Pick<LinkProps, "id" | "clicks" | "lastClicked" | "updatedAt">;
+  /** To store user id who created/update the link in history */
+  sessionUserId: string;
 }) {
   let {
     id,
@@ -136,6 +140,12 @@ export async function updateLink({
             width: 1200,
             height: 630,
           }),
+        addToHistory({
+          ...response,
+          linkId: response.id,
+          comittedByUserId: sessionUserId,
+          timestamp: response.updatedAt,
+        }),
       ]),
     );
 

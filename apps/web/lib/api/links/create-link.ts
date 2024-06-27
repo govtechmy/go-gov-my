@@ -6,9 +6,18 @@ import { getParamsFromURL, truncate } from "@dub/utils";
 import { trace } from "@opentelemetry/api";
 import { Prisma } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
+import { addToHistory } from "./add-to-history";
 import { combineTagIds, transformLink } from "./utils";
 
-export async function createLink(link: ProcessedLinkProps) {
+export async function createLink(
+  link: ProcessedLinkProps,
+  {
+    sessionUserId,
+  }: {
+    /** To store user id who created/update the link in history */
+    sessionUserId: string;
+  },
+) {
   let { key, url, expiresAt, title, description, image, proxy, geo } = link;
   const tracer = trace.getTracer("default");
   const span = tracer.startSpan("recordLinks");
@@ -106,8 +115,22 @@ export async function createLink(link: ProcessedLinkProps) {
                   image: uploadedImageUrl,
                 },
               }),
+              addToHistory({
+                ...response,
+                image: uploadedImageUrl,
+                linkId: response.id,
+                comittedByUserId: sessionUserId,
+                timestamp: response.createdAt,
+              }),
             ]
-          : []),
+          : [
+              addToHistory({
+                ...response,
+                linkId: response.id,
+                comittedByUserId: sessionUserId,
+                timestamp: response.createdAt,
+              }),
+            ]),
         // update links usage for workspace
         link.projectId &&
           prisma.project.update({
