@@ -21,5 +21,9 @@ export default function WorkspaceSettingsLayout({
     },
   ];
 
-  return <SettingsLayout tabs={tabs} locale={locale}>{children}</SettingsLayout>;
+  return (
+    <SettingsLayout tabs={tabs} locale={locale}>
+      {children}
+    </SettingsLayout>
+  );
 }
