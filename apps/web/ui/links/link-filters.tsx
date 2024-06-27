@@ -446,6 +446,10 @@ const MyLinksFilter = () => {
   const { messages } = useIntlClientHook();
   const message = messages?.dashboard;
 
+  if (!session) {
+    return null;
+  }
+
   return (
     <div className="flex items-center justify-between py-6">
       <label className="text-sm font-medium text-gray-600">
@@ -458,8 +462,7 @@ const MyLinksFilter = () => {
               ? { del: "userId" }
               : {
                   set: {
-                    // @ts-ignore
-                    userId: session?.user?.id,
+                    userId: session?.user.id,
                   },
                 },
           )

@@ -36,6 +36,7 @@ interface WithWorkspaceHandler {
     workspace: WorkspaceProps;
     domain: string;
     link?: LinkProps;
+    userWorkspaceRole: "owner" | "member";
   }): Promise<Response>;
 }
 
@@ -54,15 +55,14 @@ export const withWorkspace = (
     requiredRole = ["owner", "member"],
     needNotExceededClicks, // if the action needs the user to not have exceeded their clicks usage
     needNotExceededLinks, // if the action needs the user to not have exceeded their links usage
-    allowSelf, // special case for removing yourself from a workspace
     skipLinkChecks, // special case for /api/links/exists – skip link checks
     domainChecks,
   }: {
     requiredPlan?: Array<PlanProps>;
+    /** The workspace roles that are required for the user. Does not apply to super admins. */
     requiredRole?: Array<"owner" | "member">;
     needNotExceededClicks?: boolean;
     needNotExceededLinks?: boolean;
-    allowSelf?: boolean;
     skipLinkChecks?: boolean;
     domainChecks?: boolean;
   } = {},
@@ -138,6 +138,8 @@ export const withWorkspace = (
             id: true,
             name: true,
             email: true,
+            role: true,
+            agencyCode: true,
           },
         });
         if (!user) {
@@ -179,7 +181,9 @@ export const withWorkspace = (
           user: {
             id: user.id,
             name: user.name || "",
-            email: user.email || "",
+            email: user.email,
+            role: user.role,
+            agencyCode: user.agencyCode,
           },
         };
       } else {
@@ -197,6 +201,7 @@ export const withWorkspace = (
           where: {
             id: workspaceId || undefined,
             slug: workspaceSlug || undefined,
+            agencyCode: session.user.agencyCode,
           },
           include: {
             users: {
@@ -240,7 +245,7 @@ export const withWorkspace = (
             }),
       ])) as [WorkspaceProps, LinkProps | undefined];
 
-      if (!workspace || !workspace.users) {
+      if (!workspace) {
         // workspace doesn't exist
         throw new DubApiError({
           code: "not_found",
@@ -280,8 +285,16 @@ export const withWorkspace = (
         }
       }
 
-      // workspace exists but user is not part of it
-      if (workspace.users.length === 0) {
+      // null if user is not part of the workspace
+      let userWorkspaceRole = workspace.users.at(0)?.role || null;
+
+      // super admins have the same priveleges as workspace owners
+      if (session.user.role === "super_admin") {
+        userWorkspaceRole = "owner";
+      }
+
+      // User is not part of the workspace, check if they have pending invitations
+      if (!userWorkspaceRole) {
         const pendingInvites = await prisma.projectInvite.findUnique({
           where: {
             email_projectId: {
@@ -316,10 +329,7 @@ export const withWorkspace = (
       }
 
       // workspace role checks
-      if (
-        !requiredRole.includes(workspace.users[0].role) &&
-        !(allowSelf && searchParams.userId === session.user.id)
-      ) {
+      if (!requiredRole.includes(userWorkspaceRole)) {
         throw new DubApiError({
           code: "forbidden",
           message: "Unauthorized: Insufficient permissions.",
@@ -395,6 +405,7 @@ export const withWorkspace = (
         workspace,
         domain,
         link,
+        userWorkspaceRole,
       });
     } catch (error) {
       return handleAndReturnErrorResponse(error, headers);

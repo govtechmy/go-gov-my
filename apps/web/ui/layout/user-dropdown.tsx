@@ -41,6 +41,12 @@ export default function UserDropdown() {
               <p className="truncate text-sm text-gray-500">
                 {session?.user?.email}
               </p>
+              {session && (
+                <div className="mt-1 flex gap-1">
+                  <AgencyBadge agencyCode={session.user.agencyCode} />
+                  <RoleBadge role={session.user.role} />
+                </div>
+              )}
             </Link>
             <Link
               href="https://dub.co/help"
@@ -119,4 +125,22 @@ export default function UserDropdown() {
       </Popover>
     </div>
   );
+}
+
+function RoleBadge({ role }: { role: "staff" | "super_admin" }) {
+  const label = {
+    staff: "Staff",
+    super_admin: "Super Admin",
+  } as const;
+
+  const variant = {
+    staff: "default",
+    super_admin: "violet",
+  } as const;
+
+  return <Badge variant={variant[role]}>{label[role]}</Badge>;
+}
+
+function AgencyBadge({ agencyCode }: { agencyCode: string }) {
+  return <Badge variant="black">{agencyCode}</Badge>;
 }

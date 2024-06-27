@@ -7,18 +7,34 @@ import {
   createWorkspaceSchema,
 } from "@/lib/zod/schemas/workspaces";
 import { nanoid } from "@dub/utils";
+import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 // GET /api/workspaces - get all projects for the current user
 export const GET = withSession(async ({ session }) => {
-  const projects = await prisma.project.findMany({
-    where: {
-      users: {
-        some: {
-          userId: session.user.id,
+  let whereQuery: Prisma.ProjectWhereInput = {};
+
+  switch (session.user.role) {
+    // Staff can only get workspaces where they are a member
+    case "staff":
+      whereQuery = {
+        users: {
+          some: { userId: session.user.id },
         },
-      },
-    },
+      };
+      break;
+    // Super admins can get all workspaces from their agency
+    case "super_admin":
+      whereQuery = {
+        agencyCode: session.user.agencyCode,
+      };
+      break;
+    default:
+      throw Error(`Unknown user role '${session.user.role}'`);
+  }
+
+  const projects = await prisma.project.findMany({
+    where: whereQuery,
     include: {
       users: {
         where: {
@@ -36,6 +52,7 @@ export const GET = withSession(async ({ session }) => {
       },
     },
   });
+
   return NextResponse.json(
     projects.map((project) =>
       WorkspaceSchema.parse({ ...project, id: `ws_${project.id}` }),
