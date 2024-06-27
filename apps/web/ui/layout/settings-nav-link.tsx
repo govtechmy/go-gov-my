@@ -1,5 +1,6 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { cn } from "@dub/utils";
 import Link from "next/link";
 import { useParams, useSelectedLayoutSegment } from "next/navigation";
@@ -16,8 +17,9 @@ export default function NavLink({
   const { slug } = useParams() as {
     slug?: string;
   };
+  const { locale } = useIntlClientHook();
 
-  const href = `${slug ? `/${slug}` : ""}/settings${
+  const href = `${slug ? `/${locale}/${slug}` : `/${locale}`}/settings${
     segment ? `/${segment}` : ""
   }`;
 

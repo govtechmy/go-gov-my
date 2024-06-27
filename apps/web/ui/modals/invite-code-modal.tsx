@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { Button, CopyButton, Logo, Modal } from "@dub/ui";
 import { APP_DOMAIN } from "@dub/utils";
@@ -18,8 +19,11 @@ function InviteCodeModal({
 }) {
   const { id, inviteCode, mutate } = useWorkspace();
 
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.people;
+
   const inviteLink = useMemo(() => {
-    return `${APP_DOMAIN}/invites/${inviteCode}`;
+    return `${APP_DOMAIN}/${locale}/invites/${inviteCode}`;
   }, [inviteCode]);
 
   const [resetting, setResetting] = useState(false);
@@ -31,9 +35,9 @@ function InviteCodeModal({
     >
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <Logo />
-        <h3 className="text-lg font-medium">Invite Link</h3>
+        <h3 className="text-lg font-medium">{message?.invite_link}</h3>
         <p className="text-center text-sm text-gray-500">
-          Allow other people to join your workspace through the link below.
+          {message?.invite_link_desc}
         </p>
       </div>
 
@@ -45,7 +49,7 @@ function InviteCodeModal({
           <CopyButton value={inviteLink} className="rounded-md" />
         </div>
         <Button
-          text="Reset invite link"
+          text={message?.reset}
           variant="secondary"
           loading={resetting}
           onClick={() => {

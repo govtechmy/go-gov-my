@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { CheckCircleFill } from "@/ui/shared/icons";
 import { Button, FileUpload, LoadingSpinner, useEnterSubmit } from "@dub/ui";
 import { useCompletion } from "ai/react";
@@ -21,6 +22,8 @@ export function ContactForm({
     message: "",
     attachmentIds: [],
   });
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.help;
 
   const [uploads, setUploads] = useState<
     {
@@ -101,7 +104,9 @@ export function ContactForm({
         onClick={() => setScreen("main")}
       >
         <ChevronLeft className="h-5 w-5" />
-        <h3 className="text-lg font-semibold text-gray-700">Contact support</h3>
+        <h3 className="text-lg font-semibold text-gray-700">
+          {message?.contact_support}
+        </h3>
       </button>
 
       <AnimatePresence>
@@ -113,8 +118,7 @@ export function ContactForm({
           >
             <CheckCircleFill className="h-8 w-8 text-green-500" />
             <p className="text-gray-500">
-              Thanks for reaching out! <br /> We'll get back to you as soon as
-              possible.
+              {message?.thanks} <br /> {message?.get_back}
             </p>
           </motion.div>
         ) : (
@@ -142,7 +146,7 @@ export function ContactForm({
             {typeof data.title === "string" && (
               <label>
                 <span className="text-sm font-medium text-gray-700">
-                  Issue title
+                  {message?.issue}
                 </span>
                 <input
                   name="title"
@@ -160,7 +164,7 @@ export function ContactForm({
 
             <label>
               <span className="text-sm font-medium text-gray-700">
-                Describe the issue
+                {message?.describe}
               </span>
               <TextareaAutosize
                 name="message"

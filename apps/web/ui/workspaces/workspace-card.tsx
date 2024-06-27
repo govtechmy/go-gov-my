@@ -1,5 +1,6 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useUser from "@/lib/swr/use-user";
 import { WorkspaceProps } from "@/lib/types";
 import { BlurImage, InlineSnippet, NumberTooltip } from "@dub/ui";
@@ -30,6 +31,8 @@ export default function WorkspaceCard({
   );
 
   const { user } = useUser();
+  const { messages, locale } = useIntlClientHook();
+  const workspace_msg = messages?.workspace;
 
   const isMigratedWorkspace = user?.migratedWorkspace === id;
 
@@ -41,22 +44,23 @@ export default function WorkspaceCard({
           <WorkspaceArrow className="absolute -bottom-20 right-56 z-10 text-violet-600 lg:right-0" />
           <div className="absolute -bottom-28 right-0 z-10 w-full max-w-[16rem] rounded-lg border border-gray-200 bg-white p-3 text-center text-sm shadow lg:-right-56">
             <p>
-              Your <InlineSnippet>{SHORT_DOMAIN}</InlineSnippet> links have been
-              migrated to a custom workspace.
+              {workspace_msg?.your}{" "}
+              <InlineSnippet>{SHORT_DOMAIN}</InlineSnippet>
+              {workspace_msg?.migrate}
             </p>
             <a
               href="https://dub.co/changelog/dub-links-updates"
               target="_blank"
               className="mt-1 block text-gray-500 underline underline-offset-4 hover:text-gray-800"
             >
-              Read the changelog.
+              {workspace_msg?.read}
             </a>
           </div>
         </>
       )}
       <Link
         key={slug}
-        href={`/${slug}`}
+        href={`/${locale}/${slug}`}
         className={cn(
           "relative flex flex-col justify-between space-y-10 rounded-lg border border-gray-100 bg-white p-6 shadow transition-all hover:shadow-lg",
           {
@@ -87,7 +91,8 @@ export default function WorkspaceCard({
             {count || count === 0 ? (
               <NumberTooltip value={count} unit="links">
                 <h2 className="whitespace-nowrap text-sm">
-                  {nFormatter(count)} link{count != 1 && "s"}
+                  {nFormatter(count)}{" "}
+                  {count != 1 ? workspace_msg?.links : workspace_msg?.link}
                 </h2>
               </NumberTooltip>
             ) : (
@@ -98,7 +103,8 @@ export default function WorkspaceCard({
             <BarChart2 className="h-4 w-4" />
             <NumberTooltip value={usage}>
               <h2 className="whitespace-nowrap text-sm">
-                {nFormatter(usage)} click{usage != 1 && "s"}
+                {nFormatter(usage)}{" "}
+                {usage != 1 ? workspace_msg?.clicks : workspace_msg?.click}
               </h2>
             </NumberTooltip>
           </div>

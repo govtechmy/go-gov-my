@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { BlurImage, LoadingSpinner, Modal, useRouterStuff } from "@dub/ui";
 import { GOOGLE_FAVICON_URL, fetcher } from "@dub/utils";
 import { Link2, Maximize } from "lucide-react";
@@ -13,6 +14,9 @@ export default function Referer() {
     `${baseApiPath}/referers?${queryString}`,
     fetcher,
   );
+
+  const { messages } = useIntlClientHook();
+  const message = messages?.analytics;
 
   const { queryParams } = useRouterStuff();
   const [showModal, setShowModal] = useState(false);
@@ -59,20 +63,20 @@ export default function Referer() {
         className="max-w-lg"
       >
         <div className="border-b border-gray-200 px-6 py-4">
-          <h1 className="text-lg font-semibold">Referers</h1>
+          <h1 className="text-lg font-semibold">{message?.referers}</h1>
         </div>
         {barList()}
       </Modal>
       <div className="scrollbar-hide relative z-0 h-[400px] border border-gray-200 bg-white px-7 py-5 sm:rounded-lg sm:border-gray-100 sm:shadow-lg">
         <div className="mb-3 flex justify-between">
-          <h1 className="text-lg font-semibold">Referers</h1>
+          <h1 className="text-lg font-semibold">{message?.referers}</h1>
         </div>
         {data ? (
           data.length > 0 ? (
             barList(9)
           ) : (
             <div className="flex h-[300px] items-center justify-center">
-              <p className="text-sm text-gray-600">No data available</p>
+              <p className="text-sm text-gray-600">{message?.no_data}</p>
             </div>
           )
         ) : (
@@ -86,7 +90,9 @@ export default function Referer() {
             className="absolute inset-x-0 bottom-4 z-10 mx-auto flex w-full items-center justify-center space-x-2 rounded-md bg-gradient-to-b from-transparent to-white py-2 text-gray-500 transition-all hover:text-gray-800 active:scale-95"
           >
             <Maximize className="h-4 w-4" />
-            <p className="text-xs font-semibold uppercase">View all</p>
+            <p className="text-xs font-semibold uppercase">
+              {message?.view_all}
+            </p>
           </button>
         )}
       </div>

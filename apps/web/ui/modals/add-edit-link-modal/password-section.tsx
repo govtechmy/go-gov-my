@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LinkProps } from "@/lib/types";
 import { Eye, EyeOff } from "@/ui/shared/icons";
 import { ProBadgeTooltip } from "@/ui/shared/pro-badge-tooltip";
@@ -15,6 +16,8 @@ export default function PasswordSection({
   data: LinkProps;
   setData: Dispatch<SetStateAction<LinkProps>>;
 }) {
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal;
   const { password } = data;
   const [enabled, setEnabled] = useState(!!password);
   useEffect(() => {
@@ -62,7 +65,7 @@ export default function PasswordSection({
             type={showPassword ? "text" : "password"}
             className="block w-full rounded-md border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm"
             value={password || ""}
-            placeholder="Enter password"
+            placeholder={message?.enter_password}
             onChange={(e) => {
               setData({ ...data, password: e.target.value });
             }}

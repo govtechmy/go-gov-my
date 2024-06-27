@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { BlurImage, Button, Logo, Modal, useMediaQuery } from "@dub/ui";
 import {
@@ -21,6 +22,8 @@ function InviteTeammateModal({
   const [email, setEmail] = useState("");
   const { id, slug, logo } = useWorkspace();
   const { isMobile } = useMediaQuery();
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.people;
 
   return (
     <Modal
@@ -39,10 +42,9 @@ function InviteTeammateModal({
         ) : (
           <Logo />
         )}
-        <h3 className="text-lg font-medium">Invite Teammate</h3>
+        <h3 className="text-lg font-medium">{message?.invite_team}</h3>
         <p className="text-center text-sm text-gray-500">
-          Invite a teammate to join your workspace. Invitations will be valid
-          for 14 days.
+          {message?.invite_team_desc}
         </p>
       </div>
       <form
@@ -56,7 +58,7 @@ function InviteTeammateModal({
           }).then(async (res) => {
             if (res.status === 200) {
               await mutate(`/api/workspaces/${id}/invites`);
-              toast.success("Invitation sent!");
+              toast.success(message?.invite_sent);
               setShowInviteTeammateModal(false);
             } else {
               const { error } = await res.json();
@@ -86,7 +88,7 @@ function InviteTeammateModal({
             />
           </div>
         </div>
-        <Button loading={inviting} text="Send invite" />
+        <Button loading={inviting} text={message?.send_invite} />
       </form>
     </Modal>
   );

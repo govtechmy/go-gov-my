@@ -1,7 +1,7 @@
 import { isBlacklistedEmail } from "@/lib/edge-config";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
-import { allowedDomain } from "app/app.dub.co/(auth)/login/allowedDomain";
+import { allowedDomain } from "app/[locale]/app.dub.co/(auth)/login/allowedDomain";
 import { sendEmail } from "emails";
 import LoginLink from "emails/login-link";
 import WelcomeEmail from "emails/welcome-email";

@@ -1,15 +1,19 @@
 "use client";
 
+import { MessagesContext } from "@/ui/switcher/provider";
 import { Avatar, Badge, IconMenu, Popover } from "@dub/ui";
 import Cookies from "js-cookie";
 import { Edit3, HelpCircle, LogOut, Settings } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function UserDropdown() {
   const { data: session } = useSession();
   const [openPopover, setOpenPopover] = useState(false);
+  const messages = useContext(MessagesContext);
+  const message = messages?.layout;
+  const locale = messages?.language;
 
   const [unreadChangelogs, setUnreadChangelogs] = useState(0);
   useEffect(() => {
@@ -25,7 +29,7 @@ export default function UserDropdown() {
         content={
           <div className="flex w-full flex-col space-y-px rounded-md bg-white p-3 sm:w-56">
             <Link
-              href="/"
+              href={`/${locale}`}
               className="p-2"
               onClick={() => setOpenPopover(false)}
             >
@@ -51,17 +55,17 @@ export default function UserDropdown() {
               className="w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
             >
               <IconMenu
-                text="Help Center"
+                text={message?.help_centre}
                 icon={<HelpCircle className="h-4 w-4" />}
               />
             </Link>
             <Link
-              href="/settings"
+              href={`/${locale}/settings`}
               onClick={() => setOpenPopover(false)}
               className="block w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
             >
               <IconMenu
-                text="Settings"
+                text={message?.settings}
                 icon={<Settings className="h-4 w-4" />}
               />
             </Link>
@@ -75,7 +79,10 @@ export default function UserDropdown() {
               }}
               className="flex w-full justify-between rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
             >
-              <IconMenu text="Changelog" icon={<Edit3 className="h-4 w-4" />} />
+              <IconMenu
+                text={message?.changelog}
+                icon={<Edit3 className="h-4 w-4" />}
+              />
               {unreadChangelogs > 0 && (
                 <Badge variant="blue">{unreadChangelogs}</Badge>
               )}
@@ -88,7 +95,10 @@ export default function UserDropdown() {
                 });
               }}
             >
-              <IconMenu text="Logout" icon={<LogOut className="h-4 w-4" />} />
+              <IconMenu
+                text={message?.logout}
+                icon={<LogOut className="h-4 w-4" />}
+              />
             </button>
           </div>
         }

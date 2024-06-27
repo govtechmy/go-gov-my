@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { UserProps } from "@/lib/types";
 import { Avatar, BlurImage, Button, Logo, Modal } from "@dub/ui";
@@ -25,6 +26,8 @@ function EditRoleModal({
   const [editing, setEditing] = useState(false);
   const { id, name: workspaceName, logo } = useWorkspace();
   const { id: userId, name, email } = user;
+  const { messages } = useIntlClientHook();
+  const message = messages?.modal;
 
   return (
     <Modal showModal={showEditRoleModal} setShowModal={setShowEditRoleModal}>
@@ -40,12 +43,14 @@ function EditRoleModal({
         ) : (
           <Logo />
         )}
-        <h3 className="text-lg font-medium">Change Teammate Role</h3>
+        <h3 className="text-lg font-medium">{message?.change_teammate_role}</h3>
         <p className="text-center text-sm text-gray-500">
-          This will change <b className="text-gray-800">{name || email}</b>'s
-          role in <b className="text-gray-800">{workspaceName}</b> to{" "}
-          <b className="text-gray-800">{role}</b>. Are you sure you want to
-          continue?
+          {message?.change_role_desc_1}{" "}
+          <b className="text-gray-800">{name || email}</b>
+          {message?.change_role_desc_2}{" "}
+          <b className="text-gray-800">{workspaceName}</b>
+          {message?.change_role_desc_3} <b className="text-gray-800">{role}</b>.{" "}
+          {message?.change_role_desc_4}
         </p>
       </div>
 
@@ -74,7 +79,7 @@ function EditRoleModal({
                 await mutate(`/api/workspaces/${id}/users`);
                 setShowEditRoleModal(false);
                 toast.success(
-                  `Successfully changed ${name || email}'s role to ${role}.`,
+                  `${message?.success_toast_1} ${name || email}${message?.success_toast_2} ${role}.`,
                 );
               } else {
                 const { error } = await res.json();

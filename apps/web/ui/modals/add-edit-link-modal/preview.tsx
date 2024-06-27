@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LinkProps } from "@/lib/types";
 import {
   Facebook,
@@ -45,6 +46,8 @@ export default function Preview({
     if (password) return "dub.co";
     return getDomainWithoutWWW(debouncedUrl);
   }, [password, debouncedUrl]);
+  const { messages } = useIntlClientHook();
+  const message = messages?.link;
 
   const onImageChange = (image: string) =>
     setData((prev) => ({ ...prev, image, proxy: true }));
@@ -52,7 +55,7 @@ export default function Preview({
   return (
     <div>
       <div className="sticky top-0 z-10 flex h-14 items-center justify-center border-b border-gray-200 bg-white px-5 sm:h-24">
-        <h2 className="text-lg font-medium">Social Previews</h2>
+        <h2 className="text-lg font-medium">{message?.social_preview}</h2>
       </div>
       <div className="grid gap-5 p-5">
         {/* Twitter */}
@@ -195,6 +198,9 @@ const ImagePreview = ({
 }) => {
   const inputFileRef = useRef<HTMLInputElement>(null);
 
+  const { messages } = useIntlClientHook();
+  const message = messages?.link;
+
   const [openPopover, setOpenPopover] = useState(false);
   const [resizing, setResizing] = useState(false);
 
@@ -264,9 +270,7 @@ const ImagePreview = ({
       return (
         <div className="flex h-[250px] w-full flex-col items-center justify-center space-y-4 bg-gray-100">
           <Photo className="h-8 w-8 text-gray-400" />
-          <p className="text-sm text-gray-400">
-            Enter a link to generate a preview.
-          </p>
+          <p className="text-sm text-gray-400">{message?.enter_link}</p>
         </div>
       );
     }

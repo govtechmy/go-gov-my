@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useTags from "@/lib/swr/use-tags";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { LinkWithTagsProps, TagProps } from "@/lib/types";
@@ -33,6 +34,9 @@ export default function TagsSection({
     exceededAI,
     mutate: mutateWorkspace,
   } = useWorkspace();
+
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal;
 
   const [suggestedTags, setSuggestedTags] = useState<TagProps[]>([]);
   const tagMatch = availableTags
@@ -131,7 +135,7 @@ export default function TagsSection({
     const isEmpty = useCommandState((state) => state.filtered.count === 0);
     return (
       <Command.Input
-        placeholder="Select tags..."
+        placeholder={message?.select_tags}
         // hack to focus on the input when the dropdown opens
         autoFocus={openCommandList}
         // when focus on the input. only show the dropdown if there are tags and the tagValue is not empty

@@ -1,5 +1,6 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useLinksCount from "@/lib/swr/use-links-count";
 import useUsers from "@/lib/swr/use-users";
 import useWorkspace from "@/lib/swr/use-workspace";
@@ -15,11 +16,13 @@ export default function NavTabs() {
   const { slug } = useParams() as { slug?: string };
   const domain = useSearchParams()?.get("domain");
   const { loading, error } = useWorkspace();
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.dashboard;
 
   const tabs = [
-    { name: "Links", href: `/${slug}` },
-    { name: "Analytics", href: `/${slug}/analytics` },
-    { name: "Settings", href: `/${slug}/settings` },
+    { name: message?.Links, href: `/${locale}/${slug}` },
+    { name: message?.analytics, href: `/${locale}/${slug}/analytics` },
+    { name: message?.settings, href: `/${locale}/${slug}/settings` },
   ];
 
   const { data: linksCount } = useLinksCount();
@@ -65,6 +68,8 @@ const OnboardingChecklist = () => {
       ((users && users.length > 1) || (invites && invites.length > 0) ? 0 : 1)
     );
   }, [links, invites, users]);
+  const { messages } = useIntlClientHook();
+  const message = messages?.layout;
 
   return (
     <button
@@ -72,7 +77,7 @@ const OnboardingChecklist = () => {
       className="flex items-center space-x-2 rounded-md border-b-2 border-transparent p-1 px-3 py-2 transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
     >
       <p className="whitespace-nowrap text-sm text-gray-600">
-        Onboarding Checklist
+        {message?.onboarding}
       </p>
       <Badge variant="blue">{remainder.toString()}</Badge>
     </button>

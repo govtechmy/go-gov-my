@@ -3,6 +3,7 @@ export * from "./countries";
 export * from "./domains";
 export * from "./framer-motion";
 export * from "./layout";
+export * from "./locale";
 export * from "./localhost";
 export * from "./middleware";
 export * from "./misc";

@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LinkProps } from "@/lib/types";
 import { InfoTooltip, SimpleTooltipContent, Switch } from "@dub/ui";
 import { FADE_IN_ANIMATION_SETTINGS } from "@dub/utils";
@@ -14,6 +15,8 @@ export default function CommentsSection({
   data: LinkProps;
   setData: Dispatch<SetStateAction<LinkProps>>;
 }) {
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal;
   const { comments } = data;
   const [enabled, setEnabled] = useState(!!comments);
   useEffect(() => {
@@ -52,7 +55,7 @@ export default function CommentsSection({
             name="comments"
             minRows={3}
             className="block w-full rounded-md border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm"
-            placeholder="Add comments"
+            placeholder={message?.add_comment}
             value={comments || ""}
             onChange={(e) => {
               setData({ ...data, comments: e.target.value });

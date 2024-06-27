@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useTags from "@/lib/swr/use-tags";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { TagColorProps, TagProps } from "@/lib/types";
@@ -37,6 +38,8 @@ function AddEditTagModal({
 }) {
   const { id: workspaceId } = useWorkspace();
   const { isMobile } = useMediaQuery();
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal;
 
   const [saving, setSaving] = useState(false);
 
@@ -65,12 +68,12 @@ function AddEditTagModal({
         ? {
             method: "PATCH",
             url: `/api/tags/${id}?workspaceId=${workspaceId}`,
-            successMessage: "Successfully updated tag!",
+            successMessage: message?.success_update_tag,
           }
         : {
             method: "POST",
             url: `/api/tags?workspaceId=${workspaceId}`,
-            successMessage: "Successfully added tag!",
+            successMessage: message?.success_add_tag,
           },
     [id],
   );
@@ -83,16 +86,18 @@ function AddEditTagModal({
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <Logo />
         <div className="flex flex-col space-y-1 text-center">
-          <h3 className="text-lg font-medium">{props ? "Edit" : "Add"} tag</h3>
+          <h3 className="text-lg font-medium">
+            {props ? message?.edit : message?.add} tag
+          </h3>
           <p className="text-sm text-gray-500">
-            Use tags to organize your links.{" "}
+            {message?.use_tag}{" "}
             <a
               href="https://dub.co/help/article/how-to-use-tags#what-is-a-tag"
               target="_blank"
               rel="noopener noreferrer"
               className="underline underline-offset-4 hover:text-gray-800"
             >
-              Learn more
+              {message?.learn_more}
             </a>
           </p>
         </div>
@@ -139,7 +144,9 @@ function AddEditTagModal({
       >
         <div>
           <label htmlFor="name" className="flex items-center space-x-2">
-            <p className="block text-sm font-medium text-gray-700">Tag Name</p>
+            <p className="block text-sm font-medium text-gray-700">
+              {message?.tag_name}
+            </p>
           </label>
           <div className="mt-2 flex rounded-md shadow-sm">
             <input
@@ -150,7 +157,7 @@ function AddEditTagModal({
               autoFocus={!isMobile}
               autoComplete="off"
               className="block w-full rounded-md border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm"
-              placeholder="New Tag"
+              placeholder={message?.new_tag}
               value={name}
               onChange={(e) => {
                 setData({ ...data, name: e.target.value });
@@ -161,7 +168,9 @@ function AddEditTagModal({
 
         <div>
           <label htmlFor="name" className="flex items-center space-x-2">
-            <p className="block text-sm font-medium text-gray-700">Tag Color</p>
+            <p className="block text-sm font-medium text-gray-700">
+              {message?.tag_colour}
+            </p>
             <InfoTooltip content={`A color to make your tag stand out.`} />
           </label>
           <RadioGroup
@@ -196,7 +205,7 @@ function AddEditTagModal({
         <Button
           disabled={saveDisabled}
           loading={saving}
-          text={props ? "Save changes" : "Create tag"}
+          text={props ? message?.save_changes : message?.create_tag}
         />
       </form>
     </Modal>
@@ -212,12 +221,14 @@ function AddTagButton({
   const { tags } = useTags();
   const { queryParams } = useRouterStuff();
   const exceededTags = tags && tagsLimit && tags.length >= tagsLimit;
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal;
 
   return (
     <div>
       <Button
         variant="secondary"
-        text="Add"
+        text={message?.add}
         className="h-7 px-2"
         disabledTooltip={
           exceededTags ? (

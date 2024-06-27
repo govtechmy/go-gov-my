@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { Button, CopyButton, Logo, Modal } from "@dub/ui";
 import {
   Dispatch,
@@ -16,6 +17,8 @@ function TokenCreatedModal({
   setShowTokenCreatedModal: Dispatch<SetStateAction<boolean>>;
   token: string;
 }) {
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal;
   return (
     <Modal
       showModal={showTokenCreatedModal}
@@ -23,10 +26,9 @@ function TokenCreatedModal({
     >
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <Logo />
-        <h3 className="text-lg font-medium">API Key Created</h3>
+        <h3 className="text-lg font-medium">{message?.api_key_created}</h3>
         <p className="text-center text-sm text-gray-500">
-          For security reasons, we will only show you the key once. Please copy
-          and store it somewhere safe.
+          {message?.api_key_created_desc}
         </p>
       </div>
 
@@ -36,7 +38,7 @@ function TokenCreatedModal({
           <CopyButton value={token} className="rounded-md" />
         </div>
         <Button
-          text="Done"
+          text={message?.done}
           variant="secondary"
           onClick={() => setShowTokenCreatedModal(false)}
         />

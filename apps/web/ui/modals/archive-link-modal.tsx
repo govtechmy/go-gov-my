@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { LinkProps } from "@/lib/types";
 import { Button, Modal, useToastWithUndo } from "@dub/ui";
@@ -50,6 +51,8 @@ function ArchiveLinkModal({
   props: LinkProps;
 }) {
   const toastWithUndo = useToastWithUndo();
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal;
 
   const { id: workspaceId } = useWorkspace();
   const [archiving, setArchiving] = useState(false);
@@ -100,11 +103,11 @@ function ArchiveLinkModal({
         workspaceId,
       }),
       {
-        loading: "Undo in progress...",
-        error: "Failed to roll back changes. An error occurred.",
+        loading: message?.undo_in_progress,
+        error: message?.fail_to_rollback,
         success: () => {
           revalidateLinks();
-          return "Undo successful! Changes reverted.";
+          return message?.undo_successful;
         },
       },
     );
@@ -118,12 +121,10 @@ function ArchiveLinkModal({
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 text-center sm:px-16">
         <LinkLogo apexDomain={apexDomain} />
         <h3 className="text-lg font-medium">
-          {props.archived ? "Unarchive" : "Archive"} {shortlink}
+          {props.archived ? message?.unarchive : message?.archive} {shortlink}
         </h3>
         <p className="text-sm text-gray-500">
-          {props.archived
-            ? "By unarchiving this link, it will show up on your main dashboard again."
-            : "Archived links will still work - they just won't show up on your main dashboard."}
+          {props.archived ? message?.unarchive_desc : message?.archive_desc}
         </p>
       </div>
 
@@ -132,7 +133,7 @@ function ArchiveLinkModal({
           onClick={handleArchiveRequest}
           autoFocus
           loading={archiving}
-          text={`Confirm ${props.archived ? "unarchive" : "archive"}`}
+          text={`${message?.confirm} ${props.archived ? message?.unarchive : message?.archive}`}
         />
       </div>
     </Modal>

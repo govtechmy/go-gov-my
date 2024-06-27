@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import {
   Badge,
   Button,
@@ -28,6 +29,8 @@ function DeleteTokenModal({
   token: Token;
 }) {
   const [removing, setRemoving] = useState(false);
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal;
 
   const { isMobile } = useMediaQuery();
 
@@ -38,10 +41,9 @@ function DeleteTokenModal({
     >
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <Logo />
-        <h3 className="text-lg font-medium">Delete API Key</h3>
+        <h3 className="text-lg font-medium">{message?.delete_api_key}</h3>
         <p className="text-center text-sm text-gray-500">
-          This will permanently delete the API key for and revoke all access to
-          your account. Are you sure you want to continue?
+          {message?.delete_api_desc}
         </p>
       </div>
 
@@ -56,12 +58,13 @@ function DeleteTokenModal({
               {token.name}
             </h3>
             <p className="text-xs text-gray-500" suppressHydrationWarning>
-              Last used {timeAgo(token.lastUsed, { withAgo: true })}
+              {message?.delete_api_desc}{" "}
+              {timeAgo(token.lastUsed, { withAgo: true })}
             </p>
           </div>
         </div>
         <Button
-          text="Confirm"
+          text={message?.confirm}
           variant="danger"
           autoFocus={!isMobile}
           loading={removing}
@@ -73,7 +76,7 @@ function DeleteTokenModal({
             }).then(async (res) => {
               setRemoving(false);
               if (res.status === 200) {
-                toast.success(`Successfully deleted API key`);
+                toast.success(message?.success_delete_api);
                 mutate("/api/user/tokens");
                 setShowDeleteTokenModal(false);
               } else {

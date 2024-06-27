@@ -1,5 +1,6 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { Button, FileUpload } from "@dub/ui";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
@@ -7,6 +8,7 @@ import { toast } from "sonner";
 
 export default function UploadAvatar() {
   const { data: session, update } = useSession();
+  const { messages } = useIntlClientHook();
 
   const [image, setImage] = useState<string | null>();
 
@@ -36,19 +38,21 @@ export default function UploadAvatar() {
           setUploading(false);
           if (res.status === 200) {
             await update();
-            toast.success("Successfully updated your profile picture!");
+            toast.success(messages?.settings?.success_updated_picture);
           } else {
             const errorMessage = await res.text();
-            toast.error(errorMessage || "Something went wrong");
+            toast.error(errorMessage || messages?.settings?.error);
           }
         });
       }}
       className="rounded-lg border border-gray-200 bg-white"
     >
       <div className="flex flex-col space-y-3 p-5 sm:p-10">
-        <h2 className="text-xl font-medium">Your Avatar</h2>
+        <h2 className="text-xl font-medium">
+          {messages?.settings?.your_avatar}
+        </h2>
         <p className="text-sm text-gray-500">
-          This is your avatar image on {process.env.NEXT_PUBLIC_APP_NAME}.
+          {messages?.settings?.this_avatar} {process.env.NEXT_PUBLIC_APP_NAME}.
         </p>
         <div className="mt-1">
           <FileUpload
@@ -67,12 +71,11 @@ export default function UploadAvatar() {
 
       <div className="flex items-center justify-between space-x-4 rounded-b-lg border-t border-gray-200 bg-gray-50 p-3 sm:px-10">
         <p className="text-sm text-gray-500">
-          Square image recommended. Accepted file types: .png, .jpg. Max file
-          size: 2MB.
+          {messages?.settings?.size_notice}
         </p>
         <div className="shrink-0">
           <Button
-            text="Save changes"
+            text={messages?.link?.save_changes}
             loading={uploading}
             disabled={!image || session?.user?.image === image}
           />
