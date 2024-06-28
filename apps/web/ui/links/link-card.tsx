@@ -40,6 +40,7 @@ import {
   Edit3,
   EyeOff,
   FolderInput,
+  History,
   Lock,
   Mail,
   MessageCircle,
@@ -117,6 +118,7 @@ export default function LinkCard({
   const entry = useIntersectionObserver(linkRef, {});
   const isVisible = !!entry?.isIntersecting;
 
+  // TODO: Fix analytics API
   // const { data: clicks } = useSWR<number>(
   //   // only fetch clicks if the link is visible and there's a slug and the usage is not exceeded
   //   isVisible &&
@@ -144,13 +146,14 @@ export default function LinkCard({
   });
   const [showHistory, setShowHistory] = useState(false);
 
-  const { data: history } = useSWR<LinkHistory[]>(
-    showHistory && `/api/links/${id}/history?workspaceId=${workspaceId}`,
+  const { data: history, isLoading: isLoadingHistory } = useSWR<LinkHistory[]>(
+    isVisible && `/api/links/${id}/history?workspaceId=${workspaceId}`,
     async (input: RequestInfo, init?: RequestInit) => {
       const history = await fetcher<LinkHistory[]>(input, init);
       history.forEach((h) => {
-        // Convert the string timestamp to Date instance
+        // Convert the string timestamps to Date instance
         h.timestamp = new Date(h.timestamp);
+        if (h.expiresAt) h.expiresAt = new Date(h.expiresAt);
       });
       return history;
     },
@@ -242,7 +245,7 @@ export default function LinkCard({
     // - there is no existing modal backdrop
     if (
       (selected || openPopover) &&
-      ["e", "d", "q", "a", "t", "i", "x"].includes(key)
+      ["e", "d", "q", "a", "t", "i", "x", "h"].includes(key)
     ) {
       setSelected(false);
       e.preventDefault();
@@ -270,7 +273,11 @@ export default function LinkCard({
         case "x":
           setShowDeleteLinkModal(true);
           break;
+        case "h":
+          setShowHistory(true);
+          break;
       }
+      setOpenPopover(false);
     }
   };
 
@@ -296,6 +303,13 @@ export default function LinkCard({
           <ArchiveLinkModal />
           <TransferLinkModal />
           <DeleteLinkModal />
+          <LinkHistoryModal
+            isLoading={isLoadingHistory}
+            history={history || []}
+            show={showHistory}
+            setShow={setShowHistory}
+            link={`${domain}/${key}`}
+          />
         </>
       )}
       <div className="relative flex items-center justify-between">
@@ -467,15 +481,6 @@ export default function LinkCard({
           </div>
         </div>
 
-        <div>
-          <LinkHistoryModal
-            history={history || []}
-            show={showHistory}
-            setShow={setShowHistory}
-          />
-          <button onClick={() => setShowHistory(true)}>View history</button>
-        </div>
-
         <div className="flex items-center space-x-2">
           <NumberTooltip value={clicks} lastClicked={lastClicked}>
             <Link
@@ -571,6 +576,17 @@ export default function LinkCard({
                   }
                   shortcut="I"
                   className="h-9 px-2 font-medium"
+                />
+                <Button
+                  text={messages.link.history.view_history}
+                  variant="outline"
+                  onClick={() => {
+                    setOpenPopover(false);
+                    setShowHistory(true);
+                  }}
+                  icon={<History className="h-4 w-4" />}
+                  shortcut="H"
+                  className="h-9 px-2 font-medium capitalize"
                 />
                 <Button
                   text={message?.delete}

@@ -1,21 +1,28 @@
 import type { LinkHistory } from "@/lib/api/links/add-to-history";
-import { Modal } from "@dub/ui";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
+import { LoadingSpinner, Modal } from "@dub/ui";
 import { X } from "lucide-react";
 
 export default function LinkHistoryModal({
   history,
   show = false,
   setShow,
+  isLoading,
+  link,
 }: {
   history: LinkHistory[];
   show: boolean;
   setShow: (value: boolean) => void;
+  isLoading?: boolean;
+  link: string;
 }) {
+  const messages = useIntlClientHook();
+
   return (
     <Modal showModal={show} setShowModal={setShow} className="max-w-screen-md">
       <div className="scrollbar-hide  max-h-[95vh] overflow-auto">
         <h2 className="border-gray sticky top-0 z-20 mb-2 h-14 border-b bg-white p-5 text-lg font-medium">
-          Link History
+          {messages.messages.link.history.history_for} {link}
         </h2>
         <button
           onClick={() => {
@@ -26,7 +33,9 @@ export default function LinkHistoryModal({
           <X className="h-5 w-5" />
         </button>
         <div className="px-5 pb-5">
-          {history.length > 0 ? (
+          {isLoading ? (
+            <LoadingSpinner className="mx-auto my-10" />
+          ) : history.length > 0 ? (
             <LinkHistoryTimeline history={history} />
           ) : (
             <p>No history found</p>
@@ -38,6 +47,8 @@ export default function LinkHistoryModal({
 }
 
 function LinkHistoryTimeline({ history }: { history: LinkHistory[] }) {
+  const { messages } = useIntlClientHook();
+
   return (
     <div>
       {history.map((h, i, arr) => {
@@ -52,11 +63,13 @@ function LinkHistoryTimeline({ history }: { history: LinkHistory[] }) {
               )}
               <div className="my-2 flex-1 rounded-lg border p-4">
                 <h3 className="mb-4">
-                  Created on {h.timestamp.toLocaleDateString()},{" "}
-                  {h.timestamp.toLocaleTimeString()}
+                  {messages.link.history.created_on} {formatDate(h.timestamp)}
                 </h3>
                 <ul className="ml-4 list-disc">
-                  <li>{`https://${h.domain}/${h.key} was created`}</li>
+                  <li>
+                    {`https://${h.domain}/${h.key}`}{" "}
+                    {messages.link.history.was_created}
+                  </li>
                 </ul>
               </div>
             </div>
@@ -74,8 +87,7 @@ function LinkHistoryTimeline({ history }: { history: LinkHistory[] }) {
             <VerticalTimeline isFirst={i === 0} isLast={i === arr.length - 1} />
             <div className="my-2 flex-1 rounded-lg border p-4">
               <h3 className="mb-4">
-                Changes on {h.timestamp.toLocaleDateString()},{" "}
-                {h.timestamp.toLocaleTimeString()}
+                {messages.link.history.changes_on} {formatDate(h.timestamp)}
               </h3>
               <ul className="ml-4 list-disc">
                 <UpdateMessages prev={prevHistory} curr={h} />
@@ -105,7 +117,7 @@ function VerticalTimeline({
       )}
       <div
         aria-hidden
-        className="bg-grey-400 absolute bottom-[50%] left-0 right-0 mx-auto h-3 w-3 rounded-full bg-gray-200"
+        className="bg-grey-400 absolute bottom-[50%] left-0 right-0 mx-auto h-3 w-3 rounded-full bg-gray-300"
       ></div>
       {!isLast && (
         <div
@@ -124,7 +136,8 @@ function UpdateMessages({
   prev: LinkHistory;
   curr: LinkHistory;
 }) {
-  const messages: React.ReactNode[] = [];
+  const { messages } = useIntlClientHook();
+  const changes: React.ReactNode[] = [];
 
   const keysToInclude: (keyof LinkHistory)[] = [
     "android",
@@ -146,38 +159,57 @@ function UpdateMessages({
     "url",
   ];
 
+  function formatKey(key: keyof LinkHistory): string {
+    if (messages.link.history[key]) {
+      return messages.link.history[key];
+    }
+    return key.charAt(0).toUpperCase() + key.slice(1);
+  }
+
   for (const k of Object.keys(prev)) {
     const key = k as keyof LinkHistory;
-    const prevVal = prev[key];
-    const currVal = curr[key];
+    let prevVal = prev[key];
+    let currVal = curr[key];
 
     if (!keysToInclude.includes(key) || prevVal === currVal) {
       continue;
     }
 
+    if (currVal instanceof Date) currVal = formatDate(currVal);
+    if (prevVal instanceof Date) prevVal = formatDate(prevVal);
+
     if (key === "archived") {
-      messages.push(
+      changes.push(
         <li>
-          Link was <strong>{currVal ? "archived" : "unarchived"}</strong>
+          Link was{" "}
+          <strong>
+            {currVal
+              ? messages.link.history.archived
+              : messages.link.history.unarchived}
+          </strong>
         </li>,
       );
       continue;
     }
 
     if (typeof prevVal === "boolean" && typeof currVal === "boolean") {
-      messages.push(
+      changes.push(
         <li>
-          <strong>{formatKey(key)}</strong> was{" "}
-          <strong>{currVal ? "enabled" : "disabled"}</strong>
+          <strong>{formatKey(key)}</strong> {messages.link.history.was}{" "}
+          <strong>
+            {currVal
+              ? messages.link.history.enabled
+              : messages.link.history.disabled}
+          </strong>
         </li>,
       );
       continue;
     }
 
     if (!prevVal && currVal) {
-      messages.push(
+      changes.push(
         <li>
-          <strong>{formatKey(key)}</strong> was set to{" "}
+          <strong>{formatKey(key)}</strong> {messages.link.history.was_set_to}{" "}
           <strong>{currVal.toString()}</strong>
         </li>,
       );
@@ -185,47 +217,37 @@ function UpdateMessages({
     }
 
     if (prevVal && !currVal) {
-      messages.push(
+      changes.push(
         <li>
-          <strong>{formatKey(key)}</strong> was <strong>removed</strong>
+          <strong>{formatKey(key)}</strong> {messages.link.history.was}{" "}
+          <strong>removed</strong>
         </li>,
       );
       continue;
     }
 
     if (typeof prevVal === typeof currVal) {
-      messages.push(
+      changes.push(
         <li>
-          <strong>{formatKey(key)}</strong> was changed from{" "}
-          <strong>{prevVal?.toString()}</strong> to{" "}
+          <strong>{formatKey(key)}</strong>{" "}
+          {messages.link.history.was_changed_from}{" "}
+          <strong>{prevVal?.toString()}</strong> {messages.link.history.to}{" "}
           <strong>{currVal?.toString()}</strong>
         </li>,
       );
       continue;
     }
 
-    messages.push(<li>{key} was changed</li>);
+    changes.push(
+      <li>
+        {key} {messages.link.history.was_changed}
+      </li>,
+    );
   }
 
-  return messages;
+  return changes;
 }
 
-function formatKey(key: keyof LinkHistory): string {
-  switch (key) {
-    case "trackConversion":
-      return "Conversion tracking";
-    case "ios":
-      return "URL for iOS devices";
-    case "android":
-      return "URL for Android devices";
-    case "expiredUrl":
-      return "Expired URL";
-    case "expiresAt":
-      return "Expiry date";
-    case "publicStats":
-      return "Public statistics";
-    case "proxy":
-      return "Social media cards";
-  }
-  return key.charAt(0).toUpperCase() + key.slice(1);
+function formatDate(date: Date) {
+  return `${date.toLocaleDateString()}, ${date.toLocaleTimeString()}`;
 }
