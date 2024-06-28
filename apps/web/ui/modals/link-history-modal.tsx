@@ -12,7 +12,7 @@ export default function LinkHistoryModal({
   setShow: (value: boolean) => void;
 }) {
   return (
-    <Modal showModal={show} setShowModal={setShow} className="max-w-screen-lg">
+    <Modal showModal={show} setShowModal={setShow} className="max-w-screen-md">
       <div className="scrollbar-hide  max-h-[95vh] overflow-auto">
         <h2 className="border-gray sticky top-0 z-20 mb-2 h-14 border-b bg-white p-5 text-lg font-medium">
           Link History
@@ -40,43 +40,45 @@ export default function LinkHistoryModal({
 function LinkHistoryTimeline({ history }: { history: LinkHistory[] }) {
   return (
     <div>
-      {history.map((snapshot, i, arr) => {
-        if (snapshot.type === "create") {
+      {history.map((h, i, arr) => {
+        if (h.type === "create") {
           return (
-            <div className="flex" key={i}>
-              <VerticalTimeline
-                isFirst={i === 0}
-                isLast={i === arr.length - 1}
-              />
-              <div className="mb-2 flex-1 rounded-md border p-4">
+            <div className="flex gap-4 " key={i}>
+              {arr.length > 1 && (
+                <VerticalTimeline
+                  isFirst={i === 0}
+                  isLast={i === arr.length - 1}
+                />
+              )}
+              <div className="my-2 flex-1 rounded-lg border p-4">
                 <h3 className="mb-4">
-                  Created on {snapshot.timestamp.toLocaleDateString()},{" "}
-                  {snapshot.timestamp.toLocaleTimeString()}
+                  Created on {h.timestamp.toLocaleDateString()},{" "}
+                  {h.timestamp.toLocaleTimeString()}
                 </h3>
-                <ul className="list-inside list-disc">
-                  <li>{`https://${snapshot.domain}/${snapshot.key} was created`}</li>
+                <ul className="ml-4 list-disc">
+                  <li>{`https://${h.domain}/${h.key} was created`}</li>
                 </ul>
               </div>
             </div>
           );
         }
 
-        const prevSnapshot = arr.at(i + 1);
+        const prevHistory = arr.at(i + 1);
         // no previous history to compare with
-        if (!prevSnapshot) {
+        if (!prevHistory) {
           return null;
         }
 
         return (
-          <div className="flex" key={i}>
+          <div className="flex gap-4" key={i}>
             <VerticalTimeline isFirst={i === 0} isLast={i === arr.length - 1} />
-            <div className="my-2 flex-1 rounded-md border p-4">
+            <div className="my-2 flex-1 rounded-lg border p-4">
               <h3 className="mb-4">
-                Changes on {snapshot.timestamp.toLocaleDateString()},{" "}
-                {snapshot.timestamp.toLocaleTimeString()}
+                Changes on {h.timestamp.toLocaleDateString()},{" "}
+                {h.timestamp.toLocaleTimeString()}
               </h3>
-              <ul className="list-inside list-disc">
-                <UpdateMessages prev={prevSnapshot} curr={snapshot} />
+              <ul className="ml-4 list-disc">
+                <UpdateMessages prev={prevHistory} curr={h} />
               </ul>
             </div>
           </div>
@@ -98,19 +100,17 @@ function VerticalTimeline({
       {!isFirst && (
         <div
           aria-hidden
-          className="absolute inset-0 bottom-[50%] mx-auto w-0 border"
+          className="absolute inset-0 bottom-[50%] mx-auto w-0 border-l"
         ></div>
       )}
-      {!(isFirst && isLast) && (
-        <div
-          aria-hidden
-          className="bg-grey-400 absolute bottom-[50%] left-0 right-0 mx-auto h-4 w-4 rounded-full bg-gray-300"
-        ></div>
-      )}
+      <div
+        aria-hidden
+        className="bg-grey-400 absolute bottom-[50%] left-0 right-0 mx-auto h-3 w-3 rounded-full bg-gray-200"
+      ></div>
       {!isLast && (
         <div
           aria-hidden
-          className="absolute inset-0 top-[50%] mx-auto w-0 border"
+          className="absolute inset-0 top-[50%] mx-auto w-0 border-l"
         ></div>
       )}
     </div>
@@ -126,12 +126,24 @@ function UpdateMessages({
 }) {
   const messages: React.ReactNode[] = [];
 
-  // These are keys for internal use
-  const keysToExclude: (keyof LinkHistory)[] = [
-    "linkId",
-    "timestamp",
-    "type",
+  const keysToInclude: (keyof LinkHistory)[] = [
+    "android",
+    "archived",
+    "description",
+    "domain",
+    "expiredUrl",
+    "expiresAt",
+    "externalId",
+    "geo",
+    "image",
+    "ios",
+    "key",
+    "password",
     "proxy",
+    "publicStats",
+    "title",
+    "trackConversion",
+    "url",
   ];
 
   for (const k of Object.keys(prev)) {
@@ -139,7 +151,7 @@ function UpdateMessages({
     const prevVal = prev[key];
     const currVal = curr[key];
 
-    if (keysToExclude.includes(key) || prevVal === currVal) {
+    if (!keysToInclude.includes(key) || prevVal === currVal) {
       continue;
     }
 
@@ -212,6 +224,8 @@ function formatKey(key: keyof LinkHistory): string {
       return "Expiry date";
     case "publicStats":
       return "Public statistics";
+    case "proxy":
+      return "Social media cards";
   }
   return key.charAt(0).toUpperCase() + key.slice(1);
 }

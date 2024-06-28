@@ -1,3 +1,4 @@
+import { LinkHistory } from "@/lib/api/links/add-to-history";
 import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { LinkWithTagsProps, TagProps, UserProps } from "@/lib/types";
@@ -116,23 +117,24 @@ export default function LinkCard({
   const entry = useIntersectionObserver(linkRef, {});
   const isVisible = !!entry?.isIntersecting;
 
-  const { data: clicks } = useSWR<number>(
-    // only fetch clicks if the link is visible and there's a slug and the usage is not exceeded
-    isVisible &&
-      workspaceId &&
-      !exceededClicks &&
-      `/api/analytics/clicks?workspaceId=${workspaceId}&linkId=${id}&interval=all&`,
-    (url) =>
-      fetcher(url, {
-        headers: {
-          "Request-Source": process.env.NEXT_PUBLIC_APP_DOMAIN!,
-        },
-      }),
-    {
-      fallbackData: props.clicks,
-      dedupingInterval: 60000,
-    },
-  );
+  // const { data: clicks } = useSWR<number>(
+  //   // only fetch clicks if the link is visible and there's a slug and the usage is not exceeded
+  //   isVisible &&
+  //     workspaceId &&
+  //     !exceededClicks &&
+  //     `/api/analytics/clicks?workspaceId=${workspaceId}&linkId=${id}&interval=all&`,
+  //   (url) =>
+  //     fetcher(url, {
+  //       headers: {
+  //         "Request-Source": process.env.NEXT_PUBLIC_APP_DOMAIN!,
+  //       },
+  //     }),
+  //   {
+  //     fallbackData: props.clicks,
+  //     dedupingInterval: 60000,
+  //   },
+  // );
+  const clicks = 0;
 
   const { setShowLinkQRModal, LinkQRModal } = useLinkQRModal({
     props,
@@ -141,6 +143,18 @@ export default function LinkCard({
     props,
   });
   const [showHistory, setShowHistory] = useState(false);
+
+  const { data: history } = useSWR<LinkHistory[]>(
+    showHistory && `/api/links/${id}/history?workspaceId=${workspaceId}`,
+    async (input: RequestInfo, init?: RequestInit) => {
+      const history = await fetcher<LinkHistory[]>(input, init);
+      history.forEach((h) => {
+        // Convert the string timestamp to Date instance
+        h.timestamp = new Date(h.timestamp);
+      });
+      return history;
+    },
+  );
 
   // Duplicate link Modal
   const {
@@ -455,7 +469,7 @@ export default function LinkCard({
 
         <div>
           <LinkHistoryModal
-            history={[]}
+            history={history || []}
             show={showHistory}
             setShow={setShowHistory}
           />
