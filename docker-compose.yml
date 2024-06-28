@@ -54,113 +54,171 @@ services:
         hard: -1
     mem_limit: 1g
 
-  filebeat:
-    image: docker.elastic.co/beats/filebeat:7.13.2
-    restart: always
-    volumes:
-      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
-      - ./logs:/usr/share/filebeat/logs
-    networks:
-      - my-network
-    depends_on:
-      - elasticsearch
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+  # filebeat:
+  #   image: docker.elastic.co/beats/filebeat:7.13.2
+  #   restart: always
+  #   volumes:
+  #     - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
+  #     - ./logs:/usr/share/filebeat/logs
+  #   networks:
+  #     - my-network
+  #   depends_on:
+  #     - elasticsearch
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
 
+  # zookeeper:
+  #   image: confluentinc/cp-zookeeper:latest
+  #   restart: always
+  #   environment:
+  #     ZOOKEEPER_CLIENT_PORT: 2181
+  #     ZOOKEEPER_TICK_TIME: 2000
+  #   ports:
+  #     - 2181:2181
+  #   networks:
+  #     - my-network
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    restart: always
+    image: confluentinc/cp-zookeeper:5.5.3
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
     ports:
       - 2181:2181
     networks:
       - my-network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
 
+  # kafka:
+  #   image: confluentinc/cp-kafka:latest
+  #   restart: always
+  #   environment:
+  #     KAFKA_BROKER_ID: 1
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  #     KAFKA_JMX_PORT: 9991
+  #   ports:
+  #     - 9092:9092
+  #   depends_on:
+  #     - zookeeper
+  #   networks:
+  #     - my-network
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
+  #   mem_limit: 1g
   kafka:
-    image: confluentinc/cp-kafka:latest
-    restart: always
+    image: confluentinc/cp-enterprise-kafka:5.5.3
+    depends_on: [zookeeper]
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_BROKER_ID: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_JMX_PORT: 9991
     ports:
       - 9092:9092
-    depends_on:
-      - zookeeper
     networks:
       - my-network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
-    mem_limit: 1g
 
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    restart: always
+    ports:
+      - 9000:9000
+    environment:
+      KAFKA_BROKER_CONNECT: "kafka:9092"
+    depends_on:
+      - kafka
+    networks:
+      - my-network
+
+  # debezium:
+  #   image: debezium/connect-jdbc-es:0.9
+  #   ports:
+  #     - 8083:8083
+  #   links:
+  #     - kafka
+  #     - ps-postgres
+  #   environment:
+  #     - BOOTSTRAP_SERVERS=kafka:9092
+  #     - GROUP_ID=1
+  #     - CONFIG_STORAGE_TOPIC=my_connect_configs
+  #     - OFFSET_STORAGE_TOPIC=my_connect_offsets
+  #     - STATUS_STORAGE_TOPIC=my_connect_statuses
+  #     - KEY_CONVERTER=io.confluent.connect.avro.AvroConverter
+  #     - VALUE_CONVERTER=io.confluent.connect.avro.AvroConverter
+  #     - INTERNAL_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+  #     - INTERNAL_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
+  #     - CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL=http://schema-registry:8081
+  #     - CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL=http://schema-registry:8081
+  #   networks:
+  #     - my-network
   debezium:
-    image: debezium/connect-jdbc-es:0.9
+    image: debezium/connect:1.4
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: 1
+      CONFIG_STORAGE_TOPIC: connect_configs
+      OFFSET_STORAGE_TOPIC: connect_offsets
+      KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
+      VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
+    depends_on: [kafka]
     ports:
       - 8083:8083
-    links:
-      - kafka
-      - ps-postgres
-    environment:
-      - BOOTSTRAP_SERVERS=kafka:9092
-      - GROUP_ID=1
-      - CONFIG_STORAGE_TOPIC=my_connect_configs
-      - OFFSET_STORAGE_TOPIC=my_connect_offsets
-      - STATUS_STORAGE_TOPIC=my_connect_statuses
-      - KEY_CONVERTER=io.confluent.connect.avro.AvroConverter
-      - VALUE_CONVERTER=io.confluent.connect.avro.AvroConverter
-      - INTERNAL_KEY_CONVERTER=org.apache.kafka.connect.json.JsonConverter
-      - INTERNAL_VALUE_CONVERTER=org.apache.kafka.connect.json.JsonConverter
-      - CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL=http://schema-registry:8081
-      - CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL=http://schema-registry:8081
     networks:
       - my-network
 
+  # schema-registry:
+  #   image: confluentinc/cp-schema-registry:5.5.3
+  #   restart: always
+  #   environment:
+  #     - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:2181
+  #     - SCHEMA_REGISTRY_HOST_NAME=schema-registry
+  #     - SCHEMA_REGISTRY_LISTENERS=http://schema-registry:8081,http://localhost:8081
+  #   ports:
+  #     - 8081:8081
+  #   depends_on:
+  #     - zookeeper
+  #     - kafka
+  #   networks:
+  #     - my-network
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
   schema-registry:
     image: confluentinc/cp-schema-registry:5.5.3
-    restart: always
     environment:
       - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:2181
       - SCHEMA_REGISTRY_HOST_NAME=schema-registry
       - SCHEMA_REGISTRY_LISTENERS=http://schema-registry:8081,http://localhost:8081
     ports:
       - 8081:8081
-    depends_on:
-      - zookeeper
-      - kafka
+    depends_on: [zookeeper, kafka]
     networks:
       - my-network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
 
-  kafka-manager:
-    image: hlebalbau/kafka-manager:stable
+  debezium-ui:
+    image: quay.io/debezium/debezium-ui:latest
     restart: always
-    environment:
-      ZK_HOSTS: zookeeper:2181
-      APPLICATION_SECRET: "randomsecret"
     ports:
-      - 9000:9000
+      - "8080:8080" # Mapping container port 8080 to host port 8084
+    environment:
+      - KAFKA_CONNECT_URIS=http://debezium:8083
     depends_on:
-      - zookeeper
-      - kafka
+      - debezium
     networks:
       - my-network
 
