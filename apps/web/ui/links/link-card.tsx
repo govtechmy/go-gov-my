@@ -5,6 +5,7 @@ import TagBadge from "@/ui/links/tag-badge";
 import { useAddEditLinkModal } from "@/ui/modals/add-edit-link-modal";
 import { useArchiveLinkModal } from "@/ui/modals/archive-link-modal";
 import { useDeleteLinkModal } from "@/ui/modals/delete-link-modal";
+import LinkHistoryModal from "@/ui/modals/link-history-modal";
 import { useLinkQRModal } from "@/ui/modals/link-qr-modal";
 import { Chart, CheckCircleFill, Delete, ThreeDots } from "@/ui/shared/icons";
 import {
@@ -139,6 +140,7 @@ export default function LinkCard({
   const { setShowAddEditLinkModal, AddEditLinkModal } = useAddEditLinkModal({
     props,
   });
+  const [showHistory, setShowHistory] = useState(false);
 
   // Duplicate link Modal
   const {
@@ -449,6 +451,15 @@ export default function LinkCard({
               </a>
             </div>
           </div>
+        </div>
+
+        <div>
+          <LinkHistoryModal
+            history={[]}
+            show={showHistory}
+            setShow={setShowHistory}
+          />
+          <button onClick={() => setShowHistory(true)}>View history</button>
         </div>
 
         <div className="flex items-center space-x-2">

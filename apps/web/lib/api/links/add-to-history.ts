@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { LinkProps } from "@/lib/types";
 
-type LinkHistory = Pick<
+export type LinkHistory = Pick<
   LinkProps,
   // Only pick these fields to store as history
   | "android"
