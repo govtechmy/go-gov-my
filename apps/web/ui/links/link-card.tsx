@@ -1,3 +1,4 @@
+import { LinkHistory } from "@/lib/api/links/add-to-history";
 import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { LinkWithTagsProps, TagProps, UserProps } from "@/lib/types";
@@ -5,6 +6,7 @@ import TagBadge from "@/ui/links/tag-badge";
 import { useAddEditLinkModal } from "@/ui/modals/add-edit-link-modal";
 import { useArchiveLinkModal } from "@/ui/modals/archive-link-modal";
 import { useDeleteLinkModal } from "@/ui/modals/delete-link-modal";
+import LinkHistoryModal from "@/ui/modals/link-history-modal";
 import { useLinkQRModal } from "@/ui/modals/link-qr-modal";
 import { Chart, CheckCircleFill, Delete, ThreeDots } from "@/ui/shared/icons";
 import {
@@ -38,6 +40,7 @@ import {
   Edit3,
   EyeOff,
   FolderInput,
+  History,
   Lock,
   Mail,
   MessageCircle,
@@ -115,23 +118,25 @@ export default function LinkCard({
   const entry = useIntersectionObserver(linkRef, {});
   const isVisible = !!entry?.isIntersecting;
 
-  const { data: clicks } = useSWR<number>(
-    // only fetch clicks if the link is visible and there's a slug and the usage is not exceeded
-    isVisible &&
-      workspaceId &&
-      !exceededClicks &&
-      `/api/analytics/clicks?workspaceId=${workspaceId}&linkId=${id}&interval=all&`,
-    (url) =>
-      fetcher(url, {
-        headers: {
-          "Request-Source": process.env.NEXT_PUBLIC_APP_DOMAIN!,
-        },
-      }),
-    {
-      fallbackData: props.clicks,
-      dedupingInterval: 60000,
-    },
-  );
+  // TODO: Fix analytics API
+  // const { data: clicks } = useSWR<number>(
+  //   // only fetch clicks if the link is visible and there's a slug and the usage is not exceeded
+  //   isVisible &&
+  //     workspaceId &&
+  //     !exceededClicks &&
+  //     `/api/analytics/clicks?workspaceId=${workspaceId}&linkId=${id}&interval=all&`,
+  //   (url) =>
+  //     fetcher(url, {
+  //       headers: {
+  //         "Request-Source": process.env.NEXT_PUBLIC_APP_DOMAIN!,
+  //       },
+  //     }),
+  //   {
+  //     fallbackData: props.clicks,
+  //     dedupingInterval: 60000,
+  //   },
+  // );
+  const clicks = 0;
 
   const { setShowLinkQRModal, LinkQRModal } = useLinkQRModal({
     props,
@@ -139,6 +144,20 @@ export default function LinkCard({
   const { setShowAddEditLinkModal, AddEditLinkModal } = useAddEditLinkModal({
     props,
   });
+  const [showHistory, setShowHistory] = useState(false);
+
+  const { data: history, isLoading: isLoadingHistory } = useSWR<LinkHistory[]>(
+    isVisible && `/api/links/${id}/history?workspaceId=${workspaceId}`,
+    async (input: RequestInfo, init?: RequestInit) => {
+      const history = await fetcher<LinkHistory[]>(input, init);
+      history.forEach((h) => {
+        // Convert the string timestamps to Date instance
+        h.timestamp = new Date(h.timestamp);
+        if (h.expiresAt) h.expiresAt = new Date(h.expiresAt);
+      });
+      return history;
+    },
+  );
 
   // Duplicate link Modal
   const {
@@ -226,7 +245,7 @@ export default function LinkCard({
     // - there is no existing modal backdrop
     if (
       (selected || openPopover) &&
-      ["e", "d", "q", "a", "t", "i", "x"].includes(key)
+      ["e", "d", "q", "a", "t", "i", "x", "h"].includes(key)
     ) {
       setSelected(false);
       e.preventDefault();
@@ -254,7 +273,11 @@ export default function LinkCard({
         case "x":
           setShowDeleteLinkModal(true);
           break;
+        case "h":
+          setShowHistory(true);
+          break;
       }
+      setOpenPopover(false);
     }
   };
 
@@ -280,6 +303,13 @@ export default function LinkCard({
           <ArchiveLinkModal />
           <TransferLinkModal />
           <DeleteLinkModal />
+          <LinkHistoryModal
+            isLoading={isLoadingHistory}
+            history={history || []}
+            show={showHistory}
+            setShow={setShowHistory}
+            link={`${domain}/${key}`}
+          />
         </>
       )}
       <div className="relative flex items-center justify-between">
@@ -546,6 +576,17 @@ export default function LinkCard({
                   }
                   shortcut="I"
                   className="h-9 px-2 font-medium"
+                />
+                <Button
+                  text={messages.link.history.view_history}
+                  variant="outline"
+                  onClick={() => {
+                    setOpenPopover(false);
+                    setShowHistory(true);
+                  }}
+                  icon={<History className="h-4 w-4" />}
+                  shortcut="H"
+                  className="h-9 px-2 font-medium capitalize"
                 />
                 <Button
                   text={message?.delete}
