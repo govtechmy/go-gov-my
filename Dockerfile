@@ -20,17 +20,3 @@ RUN docker-maven-download debezium mongodb "$DEBEZIUM_VERSION" "$MONGODB_MD5" &&
     docker-maven-download debezium sqlserver "$DEBEZIUM_VERSION" "$SQLSERVER_MD5" && \
     docker-maven-download debezium oracle "$DEBEZIUM_VERSION" "$ORACLE_MD5" && \
     tar -xzf confluentinc-kafka-connect-elasticsearch-5.2.1.tar.gz -C "$MAVEN_DEP_DESTINATION"
-
-
-FROM postgres:13
-
-RUN apt-get update && \
-    apt-get install -y git build-essential postgresql-server-dev-13 && \
-    git clone https://github.com/debezium/postgres-decoderbufs.git && \
-    cd postgres-decoderbufs && \
-    make && \
-    make install && \
-    echo "shared_preload_libraries = 'decoderbufs'" >> /usr/share/postgresql/postgresql.conf.sample
-    
-EXPOSE 5432
-    
