@@ -74,19 +74,8 @@ export default async function LinkMiddleware(
     });
   }
 
-  const {
-    id,
-    url,
-    password,
-    proxy,
-    rewrite,
-    iframeable,
-    expiresAt,
-    ios,
-    android,
-    geo,
-    expiredUrl,
-  } = linkData;
+  const { id, url, password, proxy, expiresAt, ios, android, geo, expiredUrl } =
+    linkData;
 
   // only show inspect modal if the link is not password protected
   if (inspectMode && !password) {
@@ -175,18 +164,6 @@ export default async function LinkMiddleware(
       new URL(`/mailto/${encodeURIComponent(url)}`, req.url),
       DUB_HEADERS,
     );
-
-    // rewrite to target URL if link cloaking is enabled
-  } else if (rewrite) {
-    if (iframeable) {
-      return NextResponse.rewrite(
-        new URL(`/cloaked/${encodeURIComponent(url)}`, req.url),
-        DUB_HEADERS,
-      );
-    } else {
-      // if link is not iframeable, use Next.js rewrite instead
-      return NextResponse.rewrite(url, DUB_HEADERS);
-    }
 
     // redirect to iOS link if it is specified and the user is on an iOS device
   } else if (ios && userAgent(req).os?.name === "iOS") {
