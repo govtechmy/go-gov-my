@@ -275,6 +275,7 @@ model WebhookOutbox {
   host       String
   payload    Json
   sentAt     DateTime  @default(now()) @db.Timestamptz
+  action     String
 }
 
 model Tag {

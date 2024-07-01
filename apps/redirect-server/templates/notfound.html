@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirecting...</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 20px;
+      }
+      .container {
+        max-width: 600px;
+        margin: auto;
+      }
+      .spinner {
+        margin: 20px auto;
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #3498db;
+        border-radius: 50%;
+        animation: spin 2s linear infinite;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+    <script>
+      setTimeout(function () {
+        window.location.href = "{{.URL}}";
+      }, 10000);
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Check your address bar</h1>
+      <p>
+        Beware of phishing, make sure it starts with
+        <b style="color: red">{{.BaseDomain}}</b>
+      </p>
+      <div class="spinner"></div>
+      <p>You'll be redirected in 10 seconds...</p>
+    </div>
+  </body>
+</html>
