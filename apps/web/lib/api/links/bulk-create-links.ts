@@ -101,7 +101,6 @@ export async function propagateBulkLinkChanges(
       if (!linksByDomain[domain]) {
         linksByDomain[domain] = {};
       }
-      // this technically will be a synchronous function since isIframeable won't be run for bulk link creation
       const formattedLink = await formatRedisLink(link);
       linksByDomain[domain][key.toLowerCase()] = formattedLink;
     }),

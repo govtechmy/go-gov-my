@@ -203,11 +203,6 @@ export const createLinkBodySchema = z.object({
     .describe(
       "The image of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true.",
     ),
-  rewrite: z
-    .boolean()
-    .optional()
-    .default(false)
-    .describe("Whether the short link uses link cloaking."),
   ios: parseUrlSchema
     .nullish()
     .describe(
@@ -303,10 +298,6 @@ export const LinkSchema = z
       .describe(
         "The image of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true.",
       ),
-    rewrite: z
-      .boolean()
-      .default(false)
-      .describe("Whether the short link uses link cloaking."),
     ios: z
       .string()
       .nullable()

@@ -9,7 +9,6 @@ export * from "./fetch-with-timeout";
 export * from "./fetcher";
 export * from "./hash";
 export * from "./images";
-export * from "./is-iframeable";
 export * from "./link-constructor";
 export * from "./log";
 export * from "./nanoid";

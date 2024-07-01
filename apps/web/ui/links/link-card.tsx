@@ -38,7 +38,6 @@ import {
   Copy,
   CopyPlus,
   Edit3,
-  EyeOff,
   FolderInput,
   History,
   Lock,
@@ -67,7 +66,6 @@ export default function LinkCard({
     key,
     domain,
     url,
-    rewrite,
     password,
     expiresAt,
     createdAt,
@@ -443,19 +441,6 @@ export default function LinkCard({
                 {timeAgo(createdAt)}
               </p>
               <p className="xs:block hidden">•</p>
-              {rewrite && (
-                <Tooltip
-                  content={
-                    <SimpleTooltipContent
-                      title="This link is cloaked. Your users will only see the short link in the browser address bar."
-                      cta="Learn more."
-                      href="https://dub.co/help/article/link-cloaking"
-                    />
-                  }
-                >
-                  <EyeOff className="xs:block hidden h-4 w-4 text-gray-500" />
-                </Tooltip>
-              )}
               {password && (
                 <Tooltip
                   content={

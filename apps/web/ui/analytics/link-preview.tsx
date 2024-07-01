@@ -9,14 +9,14 @@ import {
   timeAgo,
   truncate,
 } from "@dub/utils";
-import { Archive, EyeOff, Globe } from "lucide-react";
+import { Archive, Globe } from "lucide-react";
 
 export default function LinkPreviewTooltip({
   data,
 }: {
   data: LinkProps & { user?: UserProps };
 }) {
-  const { url, rewrite, createdAt, archived, user } = data;
+  const { url, createdAt, archived, user } = data;
   const apexDomain = getApexDomain(url);
   const { messages } = useIntlClientHook();
   const message = messages?.analytics;
@@ -89,9 +89,6 @@ export default function LinkPreviewTooltip({
                 </p>
                 <p>•</p>
               </>
-            )}
-            {rewrite && (
-              <EyeOff className="xs:block hidden h-4 w-4 text-gray-500" />
             )}
             {url ? (
               <a

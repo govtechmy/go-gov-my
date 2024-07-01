@@ -54,7 +54,6 @@ import { toast } from "sonner";
 import { mutate } from "swr";
 import { useDebounce, useDebouncedCallback } from "use-debounce";
 import AndroidSection from "./android-section";
-import CloakingSection from "./cloaking-section";
 import CommentsSection from "./comments-section";
 import ExpirationSection from "./expiration-section";
 import GeoSection from "./geo-section";
@@ -693,7 +692,6 @@ function AddEditLinkModal({
                 {...{ props, data, setData }}
                 generatingMetatags={generatingMetatags}
               />
-              <CloakingSection {...{ data, setData }} />
               <PasswordSection {...{ props, data, setData }} />
               <ExpirationSection {...{ props, data, setData }} />
               <IOSSection {...{ props, data, setData }} />
