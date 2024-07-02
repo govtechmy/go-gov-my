@@ -43,7 +43,7 @@ func consumeKafka(ctx context.Context) {
 		CommitInterval: time.Second, // Commit offsets every second
 	})
 	defer r.Close()
-
+	
 	indexName := "links" // Example index name, adjust as needed
 
 	for {
