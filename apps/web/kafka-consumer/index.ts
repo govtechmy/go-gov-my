@@ -24,41 +24,54 @@ async function main() {
   await consumer.run({
     autoCommitInterval: 1000, // 1 second
     eachMessage: async ({ message }) => {
-      if (!message.value) {
-        return;
-      }
-
-      // expect a debezium event payload
-      const { payload: debeziumPayload } = JSON.parse(
-        message.value.toString("utf8"),
-      );
-
-      if (debeziumPayload.op === "c") {
-        // debeziumPayload.after is the newly inserted row in WebhookOutbox table
-        const { payload, action } = debeziumPayload.after;
-
-        switch (action) {
-          case "create":
-            await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
-              method: "POST",
-              body: payload,
-            });
-            break;
-          case "update":
-            await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
-              method: "POST",
-              body: payload,
-            });
-            break;
-          case "delete":
-            const { id: linkId } = JSON.parse(payload);
-            await fetch(`${REDIRECT_SERVER_BASE_URL}/links/${linkId}`, {
-              method: "DELETE",
-            });
-            break;
+      try {
+        if (!message.value) {
+          return;
         }
 
-        // TODO: Delete the row from WebhookOutbox table
+        // expect a debezium event payload
+        const { payload: debeziumPayload } = JSON.parse(
+          message.value.toString("utf8"),
+        );
+
+        if (debeziumPayload.op === "c") {
+          // debeziumPayload.after is the newly inserted row in WebhookOutbox table
+          const { payload, action } = debeziumPayload.after;
+
+          switch (action) {
+            case "create":
+              console.log(
+                "Sending a request to the redirect server: POST /links",
+              );
+              await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
+                method: "POST",
+                body: payload,
+              });
+              break;
+            case "update":
+              console.log(
+                "Sending a request to the redirect server: PUT /links",
+              );
+              await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
+                method: "PUT",
+                body: payload,
+              });
+              break;
+            case "delete":
+              const { id: linkId } = JSON.parse(payload);
+              console.log(
+                `Sending a request to the redirect server: DELETE /links/${linkId}`,
+              );
+              await fetch(`${REDIRECT_SERVER_BASE_URL}/links/${linkId}`, {
+                method: "DELETE",
+              });
+              break;
+          }
+
+          // TODO: Delete the row from WebhookOutbox table
+        }
+      } catch (err) {
+        console.error(err);
       }
     },
   });
