@@ -34,6 +34,8 @@ func main() {
     InitTemplates()
 
     http.HandleFunc("/t/", redirectHandler)
+    http.HandleFunc("/links", indexLinkHandler)
+    http.HandleFunc("/links/", deleteLinkHandler)
 
     go startKafkaConsumer()
 

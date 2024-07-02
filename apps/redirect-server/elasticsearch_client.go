@@ -71,11 +71,7 @@ func checkLinkInElasticsearch(key string) (exists, expired bool, originalURL str
     }
 
     for _, hit := range r["hits"].(map[string]interface{})["hits"].([]interface{}) {
-        var link struct {
-            Key         string `json:"key"`
-            Expired     bool   `json:"expired"`
-            OriginalURL string `json:"original_url"`
-        }
+        var link Link
         source := hit.(map[string]interface{})["_source"]
         linkJSON, err := json.Marshal(source)
         if err != nil {
@@ -86,7 +82,7 @@ func checkLinkInElasticsearch(key string) (exists, expired bool, originalURL str
             log.Printf("Error unmarshalling hit source: %s", err)
             continue
         }
-        return true, link.Expired, link.OriginalURL
+        return true, link.Expired, link.URL
     }
 
     return false, false, ""
