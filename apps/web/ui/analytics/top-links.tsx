@@ -1,4 +1,5 @@
 import { TopLinksTabs } from "@/lib/analytics/types";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LoadingSpinner, Modal, TabSelect, useRouterStuff } from "@dub/ui";
 import { fetcher, linkConstructor, truncate } from "@dub/utils";
 import { Maximize, X } from "lucide-react";
@@ -11,6 +12,8 @@ import BarList from "./bar-list";
 
 export default function TopLinks() {
   const [tab, setTab] = useState<TopLinksTabs>("link");
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.analytics;
 
   const { basePath, baseApiPath, queryString, domain, key } =
     useContext(AnalyticsContext);
@@ -112,6 +115,7 @@ export default function TopLinks() {
                   replace: true,
                 })
               }
+              translation={message}
             />
           )}
         </div>
@@ -120,7 +124,7 @@ export default function TopLinks() {
             barList(9)
           ) : (
             <div className="flex h-[300px] items-center justify-center">
-              <p className="text-sm text-gray-600">No data available</p>
+              <p className="text-sm text-gray-600">{message?.no_data}</p>
             </div>
           )
         ) : (
@@ -135,7 +139,9 @@ export default function TopLinks() {
           >
             <div className="flex items-center space-x-1 bg-white px-4 py-2">
               <Maximize className="h-4 w-4" />
-              <p className="text-xs font-semibold uppercase">View all</p>
+              <p className="text-xs font-semibold uppercase">
+                {message?.view_all}
+              </p>
             </div>
           </button>
         )}

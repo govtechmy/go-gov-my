@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LinkProps } from "@/lib/types";
 import { ProBadgeTooltip } from "@/ui/shared/pro-badge-tooltip";
 import {
@@ -24,6 +25,8 @@ export default function ExpirationSection({
   data: LinkProps;
   setData: Dispatch<SetStateAction<LinkProps>>;
 }) {
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal;
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { expiresAt, expiredUrl } = data;
@@ -50,8 +53,8 @@ export default function ExpirationSection({
           <ProBadgeTooltip
             content={
               <SimpleTooltipContent
-                title="Set an expiration date for your links – after which it won't be accessible."
-                cta="Learn more."
+                title={message?.set_expiration}
+                cta={message?.learn_more}
                 href="https://dub.co/help/article/link-expiration"
               />
             }
@@ -65,7 +68,7 @@ export default function ExpirationSection({
             <input
               ref={inputRef}
               type="text"
-              placeholder='E.g. "tomorrow at 5pm" or "in 2 hours"'
+              placeholder={message?.expiration_example}
               defaultValue={expiresAt ? formatDateTime(expiresAt) : ""}
               onBlur={(e) => {
                 if (e.target.value.length > 0) {

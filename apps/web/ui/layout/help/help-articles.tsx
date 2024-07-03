@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { ExpandingArrow } from "@dub/ui";
 import { Command, useCommandState } from "cmdk";
 import Fuse from "fuse.js";
@@ -14,13 +15,15 @@ export function HelpArticles({
 }) {
   const { data: session } = useSession();
   const commandListRef = useRef<HTMLDivElement>(null);
+  const { messages } = useIntlClientHook();
+  const message = messages?.help;
 
   return (
     <div>
       <div className="p-2 sm:p-4">
         <div className="p-2">
           <h3 className="text-lg font-semibold text-gray-700">
-            👋 How can we help?
+            👋 {message?.how}
           </h3>
         </div>
         <Command label="help-portal" loop shouldFilter={false}>
@@ -32,7 +35,7 @@ export function HelpArticles({
                 commandListRef.current?.scrollTo(0, 0);
               }, 0);
             }}
-            placeholder="Search articles, guides, and more..."
+            placeholder={message?.help_placeholder}
             className="w-full border-none p-2 text-sm placeholder-gray-400 focus:outline-none focus:ring-0"
           />
           <Command.List
@@ -46,12 +49,9 @@ export function HelpArticles({
               <MessageSquareText className="h-4 w-4 text-gray-400" />
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium text-purple-600">
-                  Can't find what you're looking for?
+                  {message?.cant_find}
                 </p>
-                <p className="text-xs text-gray-400">
-                  Send us a message and we'll get back to you as soon as
-                  possible.
-                </p>
+                <p className="text-xs text-gray-400">{message?.send_message}</p>
               </div>
             </Command.Empty>
             <CommandResults />
@@ -65,7 +65,7 @@ export function HelpArticles({
             className="flex items-center space-x-2 hover:underline"
           >
             <MessageSquareText className="h-4 w-4" />
-            <p className="text-sm">Contact us</p>
+            <p className="text-sm">{message?.contact_us}</p>
           </button>
         ) : (
           <div />
@@ -75,7 +75,7 @@ export function HelpArticles({
           target="_blank"
           className="flex items-center space-x-2 hover:underline"
         >
-          <p className="text-sm">Help center</p>
+          <p className="text-sm">{message?.help_center}</p>
           <ExternalLink className="h-4 w-4" />
         </a>
       </div>

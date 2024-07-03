@@ -1,3 +1,4 @@
+import { useIntlHook } from "@/lib/middleware/utils/useI18n";
 import NavLink from "@/ui/layout/settings-nav-link";
 import { MaxWidthWrapper } from "@dub/ui";
 import { ReactNode } from "react";
@@ -5,19 +6,24 @@ import { ReactNode } from "react";
 export default function SettingsLayout({
   tabs,
   children,
+  locale,
 }: {
   tabs: {
     name: string;
     segment: string | null;
   }[];
   children: ReactNode;
+  locale: string;
 }) {
+  const { messages } = useIntlHook(locale);
+  const message = messages?.layout;
+
   return (
     <div className="min-h-[calc(100vh-16px)] bg-white">
       <div className="flex h-36 items-center border-b border-gray-200">
         <MaxWidthWrapper>
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl text-gray-600">Settings</h1>
+            <h1 className="text-2xl text-gray-600">{message?.settings}</h1>
           </div>
         </MaxWidthWrapper>
       </div>

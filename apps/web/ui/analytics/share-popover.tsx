@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import {
   Copy,
   IconMenu,
@@ -14,6 +15,8 @@ import { AnalyticsContext } from ".";
 
 export default function SharePopover() {
   const [openSharePopover, setopenSharePopoverPopover] = useState(false);
+  const { messages } = useIntlClientHook();
+  const message = messages?.analytics;
 
   const { baseApiPath, queryString, domain, key } = useContext(
     AnalyticsContext,
@@ -27,9 +30,9 @@ export default function SharePopover() {
   const { data, isLoading, update } = useOptimisticUpdate<{
     publicStats: boolean;
   }>(`/api/analytics?${queryString}`, {
-    loading: "Updating...",
-    success: "Successfully updated stats page visibility!",
-    error: "Something went wrong",
+    loading: message?.updating,
+    success: message?.success,
+    error: message?.error,
   });
 
   const handleUpdate = async (checked: boolean) => {
@@ -43,7 +46,7 @@ export default function SharePopover() {
       }),
     });
     if (!res.ok) {
-      throw new Error("Failed to update email preferences");
+      throw new Error(message?.fail_to_update);
     }
     if (res.status === 200) {
       checked &&
@@ -63,14 +66,16 @@ export default function SharePopover() {
       content={
         <div className="w-full divide-y divide-gray-200 text-sm md:w-60">
           <div className="p-4">
-            <p className="text-gray-500">Share stats for</p>
+            <p className="text-gray-500">{message?.share_stat}</p>
             <p className="truncate font-semibold text-gray-800">
               {linkConstructor({ key, domain, pretty: true })}
             </p>
           </div>
           <div className="p-4">
             <div className="mb-2 flex items-center justify-between">
-              <p className="font-semibold text-gray-800">Public Stats Page</p>
+              <p className="font-semibold text-gray-800">
+                {message?.public_stat}
+              </p>
               <Switch
                 checked={data?.publicStats}
                 loading={isLoading}
@@ -79,13 +84,10 @@ export default function SharePopover() {
                 }}
               />
             </div>
-            <p className="text-gray-500">
-              Making stats public will allow anyone with the link to see the
-              stats for this short link.
-            </p>
+            <p className="text-gray-500">{message?.stat_desc}</p>
           </div>
           <div className="p-4">
-            <p className="font-semibold text-gray-800">Share Link</p>
+            <p className="font-semibold text-gray-800">{message?.share_link}</p>
             <div className="divide-x-200 mt-2 flex items-center justify-between divide-x overflow-hidden rounded-md border border-gray-200 bg-gray-100">
               <div className="scrollbar-hide overflow-scroll pl-2">
                 <p className="whitespace-nowrap text-gray-600">

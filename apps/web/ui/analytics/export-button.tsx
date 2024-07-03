@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LoadingSpinner, Tooltip, TooltipContent } from "@dub/ui";
 import { Download } from "lucide-react";
 import { useContext, useState } from "react";
@@ -8,6 +9,8 @@ export default function ExportButton() {
   const [loading, setLoading] = useState(false);
   const { totalClicks } = useContext(AnalyticsContext);
   const { queryString } = useContext(AnalyticsContext);
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.analytics;
 
   async function exportData() {
     setLoading(true);
@@ -41,8 +44,8 @@ export default function ExportButton() {
     <Tooltip
       content={
         <TooltipContent
-          title="There's no data available for download. Try adjusting your filter or date range settings."
-          cta="Learn more"
+          title={message?.no_data_download}
+          cta={message?.learn_more}
           href="https://dub.co/help/article/how-to-export-analytics"
         />
       }
@@ -60,8 +63,8 @@ export default function ExportButton() {
       className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md border border-gray-200 bg-white transition-all focus:border-gray-500 focus:ring-4 focus:ring-gray-200 disabled:cursor-progress disabled:text-gray-400 disabled:hover:bg-white disabled:active:bg-white"
       onClick={() => {
         toast.promise(exportData(), {
-          loading: "Exporting files...",
-          success: "Exported successfully",
+          loading: message?.export_loading,
+          success: message?.export_successfully,
           error: (error) => error,
         });
       }}

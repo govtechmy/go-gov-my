@@ -14,12 +14,19 @@ generator client {
   previewFeatures = ["postgresqlExtensions"]
 }
 
+model Agency {
+  code          String    @id
+  name          String
+}
+
 model User {
   id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name          String?
   email         String   @unique
   emailVerified DateTime?
   image         String?
+  agencyCode    String    @default("dev")
+  role          UserRole  @default(staff)
 
   accounts   Account[]
   sessions   Session[]
@@ -28,6 +35,11 @@ model User {
   tokens     Token[]
   createdAt  DateTime       @default(now()) @db.Timestamptz
   subscribed Boolean        @default(true)
+}
+
+enum UserRole {
+  staff
+  super_admin
 }
 
 model Account {
@@ -85,10 +97,11 @@ model Token {
 }
 
 model Project {
-  id   String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name String
-  slug String  @unique
-  logo String?
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String
+  slug        String    @unique
+  logo        String?
+  agencyCode  String    @default("dev")
 
   plan              String  @default("business")
   billingCycleStart Int // day of the month when the billing cycle starts
@@ -137,6 +150,8 @@ model DefaultDomains {
   loooooooong Boolean @default(false)
   projectId   String  @db.Uuid
   project     Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
 }
 
 enum Role {
@@ -224,9 +239,6 @@ model Link {
   utm_term     String? // UTM term for the link (e.g. dub)
   utm_content  String? // UTM content for the link (e.g. description)
 
-  // Link cloaking/masking via rewrite
-  rewrite Boolean @default(false) // whether to rewrite the link or not
-
   // Custom device targeting
   ios     String? // @db.LongText // custom link for iOS devices
   android String? // @db.LongText // custom link for Android devices
@@ -251,6 +263,9 @@ model Link {
   // Link tags
   tags LinkTag[]
 
+  // Link history
+  history LinkHistory[]
+
   // Comments on the particular shortlink
   comments String? //@db.LongText
 
@@ -269,13 +284,50 @@ model Link {
   @@index(userId)
   // @@fulltext([key, url])
 }
-
 model WebhookOutbox {
   id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   host       String
   payload    Json
   sentAt     DateTime  @default(now()) @db.Timestamptz
   action     String
+}
+
+model LinkHistory {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  type              LinkHistoryType
+  committedByUserId String?   @db.Uuid // The user who created/updated the link
+  linkId            String    @db.Uuid
+  link              Link      @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  timestamp         DateTime  @db.Timestamptz
+
+  @@index([linkId])
+
+  // Everything below are the columns we want to track from Link model
+  domain     String
+  key        String
+  url        String
+  archived   Boolean
+  expiresAt  DateTime?
+  expiredUrl String?
+  password   String?
+  externalId String?
+
+  trackConversion Boolean
+  publicStats     Boolean
+
+  proxy       Boolean
+  title       String?
+  description String? @db.VarChar(280)
+  image       String?
+
+  ios     String?
+  android String?
+  geo     Json?   @db.Json
+}
+
+enum LinkHistoryType {
+  create
+  update
 }
 
 model Tag {

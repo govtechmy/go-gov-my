@@ -11,17 +11,8 @@ export default function useWorkspaces() {
     },
   );
 
-  const freeWorkspaces = workspaces?.filter(
-    (workspace) =>
-      //// Remove filter workspace free plan
-      // workspace.plan === "free" &&
-      workspace?.users && workspace.users[0].role === "owner",
-  );
-
   return {
     workspaces,
-    freeWorkspaces,
-    exceedingFreeWorkspaces: freeWorkspaces && freeWorkspaces.length >= 2,
     error,
     loading: !workspaces && !error,
   };

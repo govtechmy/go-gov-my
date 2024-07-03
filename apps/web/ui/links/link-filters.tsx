@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useLinks from "@/lib/swr/use-links";
 import useLinksCount from "@/lib/swr/use-links-count";
 import useTags from "@/lib/swr/use-tags";
@@ -33,6 +34,8 @@ import { useDebouncedCallback } from "use-debounce";
 
 export default function LinkFilters() {
   const { data: domains } = useLinksCount({ groupBy: "domain" });
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.dashboard;
 
   const { tags } = useTags();
   const { data: tagsCount } = useLinksCount({ groupBy: "tagId" });
@@ -67,7 +70,7 @@ export default function LinkFilters() {
     <div className="grid w-full rounded-md bg-white px-5 lg:divide-y lg:divide-gray-300">
       <div className="grid gap-3 py-6">
         <div className="flex items-center justify-between">
-          <h3 className="ml-1 mt-2 font-semibold">Filter Links</h3>
+          <h3 className="ml-1 mt-2 font-semibold">{message?.filter_links}</h3>
           {showClearButton && <ClearButton searchInputRef={searchInputRef} />}
         </div>
         <div className="hidden lg:block">
@@ -109,6 +112,8 @@ const ClearButton = ({ searchInputRef }) => {
 };
 
 export const SearchBox = ({ searchInputRef }) => {
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.dashboard;
   const searchParams = useSearchParams();
   const { queryParams } = useRouterStuff();
   const debounced = useDebouncedCallback((value) => {
@@ -154,7 +159,7 @@ export const SearchBox = ({ searchInputRef }) => {
         ref={searchInputRef}
         type="text"
         className="peer w-full rounded-md border border-gray-300 px-10 text-black placeholder:text-gray-400 focus:border-black focus:ring-0 sm:text-sm"
-        placeholder="Search..."
+        placeholder={message?.search}
         defaultValue={searchParams?.get("search") || ""}
         onChange={(e) => {
           debounced(e.target.value);
@@ -187,6 +192,8 @@ const TagsFilter = ({
   const [collapsed, setCollapsed] = useState(tags.length === 0 ? true : false);
   const [search, setSearch] = useState("");
   const [showMore, setShowMore] = useState(false);
+  const { messages } = useIntlClientHook();
+  const message = messages?.dashboard;
 
   const { AddEditTagModal, AddTagButton } = useAddEditTagModal();
 
@@ -251,7 +258,9 @@ const TagsFilter = ({
             {...SWIPE_REVEAL_ANIMATION_SETTINGS}
           >
             {tags?.length === 0 ? ( // if the workspace has no tags
-              <p className="text-center text-sm text-gray-500">No tags yet.</p>
+              <p className="text-center text-sm text-gray-500">
+                {message?.no_tags_yet}
+              </p>
             ) : (
               <>
                 <div className="relative mb-1">
@@ -261,14 +270,14 @@ const TagsFilter = ({
                   <input
                     type="text"
                     className="peer w-full rounded-md border border-gray-300 py-1.5 pl-10 text-sm text-black placeholder:text-gray-400 focus:border-black focus:ring-0"
-                    placeholder="Filter tags"
+                    placeholder={message?.filter_tags}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                   />
                 </div>
                 {options.length === 0 && (
                   <p className="mt-1 text-center text-sm text-gray-500">
-                    No tags match your search.
+                    {message?.no_tags_match_search}
                   </p>
                 )}
               </>
@@ -434,11 +443,17 @@ const MyLinksFilter = () => {
   const { queryParams } = useRouterStuff();
   const userId = searchParams?.get("userId");
   const { data: session } = useSession();
+  const { messages } = useIntlClientHook();
+  const message = messages?.dashboard;
+
+  if (!session) {
+    return null;
+  }
 
   return (
     <div className="flex items-center justify-between py-6">
       <label className="text-sm font-medium text-gray-600">
-        Show my links only
+        {message?.show_my_links_only}
       </label>
       <Switch
         fn={() =>
@@ -447,8 +462,7 @@ const MyLinksFilter = () => {
               ? { del: "userId" }
               : {
                   set: {
-                    // @ts-ignore
-                    userId: session?.user?.id,
+                    userId: session?.user.id,
                   },
                 },
           )
@@ -463,10 +477,12 @@ const ArchiveFilter = () => {
   const searchParams = useSearchParams();
   const { queryParams } = useRouterStuff();
   const showArchived = searchParams?.get("showArchived");
+  const { messages } = useIntlClientHook();
+  const message = messages?.dashboard;
   return (
     <div className="flex items-center justify-between py-6">
       <label className="text-sm font-medium text-gray-600">
-        Include archived links
+        {message?.show_my_links_only}
       </label>
       <Switch
         fn={() =>

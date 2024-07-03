@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LinkProps, UserProps } from "@/lib/types";
 import { Avatar, BlurImage, CopyButton } from "@dub/ui";
 import {
@@ -8,15 +9,17 @@ import {
   timeAgo,
   truncate,
 } from "@dub/utils";
-import { Archive, EyeOff, Globe } from "lucide-react";
+import { Archive, Globe } from "lucide-react";
 
 export default function LinkPreviewTooltip({
   data,
 }: {
   data: LinkProps & { user?: UserProps };
 }) {
-  const { url, rewrite, createdAt, archived, user } = data;
+  const { url, createdAt, archived, user } = data;
   const apexDomain = getApexDomain(url);
+  const { messages } = useIntlClientHook();
+  const message = messages?.analytics;
 
   return (
     <div className="relative flex w-[28rem] items-center justify-between px-4 py-2">
@@ -87,9 +90,6 @@ export default function LinkPreviewTooltip({
                 <p>•</p>
               </>
             )}
-            {rewrite && (
-              <EyeOff className="xs:block hidden h-4 w-4 text-gray-500" />
-            )}
             {url ? (
               <a
                 href={url}
@@ -102,7 +102,7 @@ export default function LinkPreviewTooltip({
               </a>
             ) : (
               <p className="xs:block hidden max-w-[240px] truncate text-sm font-medium text-gray-700 underline-offset-2 hover:underline">
-                No redirect configured
+                {message?.no_redirect}
               </p>
             )}
           </div>

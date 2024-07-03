@@ -1,3 +1,4 @@
+import type { UserRole } from "@prisma/client";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./options";
 
@@ -7,7 +8,29 @@ export interface Session {
     id: string;
     name: string;
     image?: string;
+    role: UserRole;
+    agencyCode: string;
   };
+}
+
+/**
+ * Extend next-auth's session type to match our Session type
+ * Docs: https://next-auth.js.org/getting-started/typescript#module-augmentation
+ */
+declare module "next-auth" {
+  /**
+   * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+   */
+  interface Session {
+    user: {
+      email: string;
+      id: string;
+      name: string;
+      image?: string;
+      role: UserRole;
+      agencyCode: string;
+    };
+  }
 }
 
 export const getSession = async () => {

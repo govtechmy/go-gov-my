@@ -19,7 +19,6 @@ export const expectedLink: Partial<Link> & { tagId: string | null } = {
   utm_campaign: null,
   utm_term: null,
   utm_content: null,
-  rewrite: false,
   ios: null,
   android: null,
   geo: null,

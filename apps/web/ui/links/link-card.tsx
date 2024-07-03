@@ -1,9 +1,12 @@
+import { LinkHistory } from "@/lib/api/links/add-to-history";
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { LinkWithTagsProps, TagProps, UserProps } from "@/lib/types";
 import TagBadge from "@/ui/links/tag-badge";
 import { useAddEditLinkModal } from "@/ui/modals/add-edit-link-modal";
 import { useArchiveLinkModal } from "@/ui/modals/archive-link-modal";
 import { useDeleteLinkModal } from "@/ui/modals/delete-link-modal";
+import LinkHistoryModal from "@/ui/modals/link-history-modal";
 import { useLinkQRModal } from "@/ui/modals/link-qr-modal";
 import { Chart, CheckCircleFill, Delete, ThreeDots } from "@/ui/shared/icons";
 import {
@@ -35,8 +38,8 @@ import {
   Copy,
   CopyPlus,
   Edit3,
-  EyeOff,
   FolderInput,
+  History,
   Lock,
   Mail,
   MessageCircle,
@@ -63,7 +66,6 @@ export default function LinkCard({
     key,
     domain,
     url,
-    rewrite,
     password,
     expiresAt,
     createdAt,
@@ -75,6 +77,9 @@ export default function LinkCard({
   } = props;
 
   const searchParams = useSearchParams();
+
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.menu;
 
   const [primaryTags, additionalTags] = useMemo(() => {
     const primaryTagsCount = 1;
@@ -111,23 +116,25 @@ export default function LinkCard({
   const entry = useIntersectionObserver(linkRef, {});
   const isVisible = !!entry?.isIntersecting;
 
-  const { data: clicks } = useSWR<number>(
-    // only fetch clicks if the link is visible and there's a slug and the usage is not exceeded
-    isVisible &&
-      workspaceId &&
-      !exceededClicks &&
-      `/api/analytics/clicks?workspaceId=${workspaceId}&linkId=${id}&interval=all&`,
-    (url) =>
-      fetcher(url, {
-        headers: {
-          "Request-Source": process.env.NEXT_PUBLIC_APP_DOMAIN!,
-        },
-      }),
-    {
-      fallbackData: props.clicks,
-      dedupingInterval: 60000,
-    },
-  );
+  // TODO: Fix analytics API
+  // const { data: clicks } = useSWR<number>(
+  //   // only fetch clicks if the link is visible and there's a slug and the usage is not exceeded
+  //   isVisible &&
+  //     workspaceId &&
+  //     !exceededClicks &&
+  //     `/api/analytics/clicks?workspaceId=${workspaceId}&linkId=${id}&interval=all&`,
+  //   (url) =>
+  //     fetcher(url, {
+  //       headers: {
+  //         "Request-Source": process.env.NEXT_PUBLIC_APP_DOMAIN!,
+  //       },
+  //     }),
+  //   {
+  //     fallbackData: props.clicks,
+  //     dedupingInterval: 60000,
+  //   },
+  // );
+  const clicks = 0;
 
   const { setShowLinkQRModal, LinkQRModal } = useLinkQRModal({
     props,
@@ -135,6 +142,20 @@ export default function LinkCard({
   const { setShowAddEditLinkModal, AddEditLinkModal } = useAddEditLinkModal({
     props,
   });
+  const [showHistory, setShowHistory] = useState(false);
+
+  const { data: history, isLoading: isLoadingHistory } = useSWR<LinkHistory[]>(
+    isVisible && `/api/links/${id}/history?workspaceId=${workspaceId}`,
+    async (input: RequestInfo, init?: RequestInit) => {
+      const history = await fetcher<LinkHistory[]>(input, init);
+      history.forEach((h) => {
+        // Convert the string timestamps to Date instance
+        h.timestamp = new Date(h.timestamp);
+        if (h.expiresAt) h.expiresAt = new Date(h.expiresAt);
+      });
+      return history;
+    },
+  );
 
   // Duplicate link Modal
   const {
@@ -222,7 +243,7 @@ export default function LinkCard({
     // - there is no existing modal backdrop
     if (
       (selected || openPopover) &&
-      ["e", "d", "q", "a", "t", "i", "x"].includes(key)
+      ["e", "d", "q", "a", "t", "i", "x", "h"].includes(key)
     ) {
       setSelected(false);
       e.preventDefault();
@@ -250,7 +271,11 @@ export default function LinkCard({
         case "x":
           setShowDeleteLinkModal(true);
           break;
+        case "h":
+          setShowHistory(true);
+          break;
       }
+      setOpenPopover(false);
     }
   };
 
@@ -276,6 +301,13 @@ export default function LinkCard({
           <ArchiveLinkModal />
           <TransferLinkModal />
           <DeleteLinkModal />
+          <LinkHistoryModal
+            isLoading={isLoadingHistory}
+            history={history || []}
+            show={showHistory}
+            setShow={setShowHistory}
+            link={`${domain}/${key}`}
+          />
         </>
       )}
       <div className="relative flex items-center justify-between">
@@ -386,7 +418,7 @@ export default function LinkCard({
                         )}
                     </div>
                     <p className="mt-1 text-xs text-gray-500">
-                      Created{" "}
+                      {messages?.misc?.created}{" "}
                       {new Date(createdAt).toLocaleDateString("en-us", {
                         month: "short",
                         day: "numeric",
@@ -409,19 +441,6 @@ export default function LinkCard({
                 {timeAgo(createdAt)}
               </p>
               <p className="xs:block hidden">•</p>
-              {rewrite && (
-                <Tooltip
-                  content={
-                    <SimpleTooltipContent
-                      title="This link is cloaked. Your users will only see the short link in the browser address bar."
-                      cta="Learn more."
-                      href="https://dub.co/help/article/link-cloaking"
-                    />
-                  }
-                >
-                  <EyeOff className="xs:block hidden h-4 w-4 text-gray-500" />
-                </Tooltip>
-              )}
               {password && (
                 <Tooltip
                   content={
@@ -450,13 +469,15 @@ export default function LinkCard({
         <div className="flex items-center space-x-2">
           <NumberTooltip value={clicks} lastClicked={lastClicked}>
             <Link
-              href={`/${slug}/analytics?domain=${domain}&key=${key}`}
+              href={`/${locale}/${slug}/analytics?domain=${domain}&key=${key}`}
               className="flex items-center space-x-1 rounded-md bg-gray-100 px-2 py-0.5 transition-all duration-75 hover:scale-105 active:scale-100"
             >
               <Chart className="h-4 w-4" />
               <p className="whitespace-nowrap text-sm text-gray-500">
                 {nFormatter(clicks)}
-                <span className="ml-1 hidden sm:inline-block">clicks</span>
+                <span className="ml-1 hidden sm:inline-block">
+                  {messages?.workspace?.clicks}
+                </span>
               </p>
             </Link>
           </NumberTooltip>
@@ -464,7 +485,7 @@ export default function LinkCard({
             content={
               <div className="grid w-full gap-px p-2 sm:w-48">
                 <Button
-                  text="Edit"
+                  text={message?.edit}
                   variant="outline"
                   onClick={() => {
                     setOpenPopover(false);
@@ -475,7 +496,7 @@ export default function LinkCard({
                   className="h-9 px-2 font-medium"
                 />
                 <Button
-                  text="Duplicate"
+                  text={message?.duplicate}
                   variant="outline"
                   onClick={() => {
                     setOpenPopover(false);
@@ -486,7 +507,7 @@ export default function LinkCard({
                   className="h-9 px-2 font-medium"
                 />
                 <Button
-                  text="QR Code"
+                  text={message?.qr}
                   variant="outline"
                   onClick={() => {
                     setOpenPopover(false);
@@ -497,7 +518,7 @@ export default function LinkCard({
                   className="h-9 px-2 font-medium"
                 />
                 <Button
-                  text={archived ? "Unarchive" : "Archive"}
+                  text={archived ? message?.unarchive : message?.archive}
                   variant="outline"
                   onClick={() => {
                     setOpenPopover(false);
@@ -508,7 +529,7 @@ export default function LinkCard({
                   className="h-9 px-2 font-medium"
                 />
                 <Button
-                  text="Transfer"
+                  text={message?.transfer}
                   variant="outline"
                   onClick={() => {
                     setOpenPopover(false);
@@ -528,7 +549,7 @@ export default function LinkCard({
                   })}
                 />
                 <Button
-                  text="Copy Link ID"
+                  text={message?.copy_link_id}
                   variant="outline"
                   onClick={() => copyLinkId()}
                   icon={
@@ -542,7 +563,18 @@ export default function LinkCard({
                   className="h-9 px-2 font-medium"
                 />
                 <Button
-                  text="Delete"
+                  text={messages.link.history.view_history}
+                  variant="outline"
+                  onClick={() => {
+                    setOpenPopover(false);
+                    setShowHistory(true);
+                  }}
+                  icon={<History className="h-4 w-4" />}
+                  shortcut="H"
+                  className="h-9 px-2 font-medium capitalize"
+                />
+                <Button
+                  text={message?.delete}
                   variant="danger-outline"
                   onClick={() => {
                     setOpenPopover(false);
@@ -581,7 +613,7 @@ export default function LinkCard({
                     className="group flex w-full items-center justify-between rounded-md p-2 text-left text-sm font-medium text-red-600 transition-all duration-75 hover:bg-red-600 hover:text-white"
                   >
                     <IconMenu
-                      text="Ban"
+                      text={message?.ban}
                       icon={<Delete className="h-4 w-4" />}
                     />
                     <kbd className="hidden rounded bg-red-100 px-2 py-0.5 text-xs font-light text-red-600 transition-all duration-75 group-hover:bg-red-500 group-hover:text-white sm:inline-block">
@@ -602,7 +634,7 @@ export default function LinkCard({
               }}
               className="rounded-md px-1 py-2 transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
             >
-              <span className="sr-only">More options</span>
+              <span className="sr-only">{message?.more_options}</span>
               <ThreeDots className="h-5 w-5 text-gray-500" />
             </button>
           </Popover>

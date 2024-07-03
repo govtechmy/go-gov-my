@@ -37,7 +37,6 @@ describe.sequential("POST /links", async () => {
       externalId,
       publicStats: true,
       comments: "This is a test",
-      rewrite: true,
       userId: user.id,
       projectId,
       workspaceId,

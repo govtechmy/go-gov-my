@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LoadingSpinner } from "@dub/ui";
 import { fetcher, nFormatter } from "@dub/utils";
 import { useCallback, useContext, useMemo } from "react";
@@ -15,6 +16,8 @@ export default function ClicksChart() {
     `${baseApiPath}/timeseries?${queryString}`,
     fetcher,
   );
+
+  const { messages } = useIntlClientHook();
 
   const chartData = useMemo(
     () =>
@@ -65,7 +68,7 @@ export default function ClicksChart() {
                 <strong className="text-gray-800">
                   {nFormatter(d.values.clicks, { full: true })}
                 </strong>{" "}
-                clicks
+                {messages?.workspace.click}
               </p>
               <p className="text-sm text-gray-500">{formatDate(d.date)}</p>
             </>

@@ -1,3 +1,4 @@
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { LoadingDots, Logo, Modal } from "@dub/ui";
 import Link from "next/link";
@@ -22,6 +23,8 @@ function AcceptInviteModal({
   const { slug } = useParams() as { slug: string };
   const [accepting, setAccepting] = useState(false);
   const { error } = useWorkspace();
+  const { messages, locale } = useIntlClientHook();
+  const message = messages?.modal;
 
   return (
     <Modal
@@ -33,13 +36,13 @@ function AcceptInviteModal({
         <>
           <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
             <Logo />
-            <h3 className="text-lg font-medium">Workspace Invitation</h3>
+            <h3 className="text-lg font-medium">{message?.invitation}</h3>
             <p className="text-center text-sm text-gray-500">
-              You've been invited to join and collaborate on the{" "}
+              {message?.invited}{" "}
               <span className="font-mono text-purple-600">
                 {slug || "......"}
               </span>{" "}
-              workspace on {process.env.NEXT_PUBLIC_APP_NAME}
+              {message?.workspace_on} {process.env.NEXT_PUBLIC_APP_NAME}
             </p>
           </div>
           <div className="flex flex-col space-y-6 bg-gray-50 px-4 py-8 text-left sm:px-16">
@@ -65,7 +68,7 @@ function AcceptInviteModal({
                   : "border-black bg-black text-white hover:bg-white hover:text-black"
               } flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
             >
-              {accepting ? <LoadingDots /> : <p>Accept invite</p>}
+              {accepting ? <LoadingDots /> : <p>{message?.accept_invite}</p>}
             </button>
           </div>
         </>
@@ -74,18 +77,18 @@ function AcceptInviteModal({
           <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
             <Logo />
             <h3 className="text-lg font-medium">
-              Workspace Invitation Expired
+              {message?.workspace_expired}
             </h3>
             <p className="text-center text-sm text-gray-500">
-              This invite has expired or is no longer valid.
+              {message?.workspace_invalid}
             </p>
           </div>
           <div className="flex flex-col space-y-6 bg-gray-50 px-4 py-8 text-left sm:px-16">
             <Link
-              href="/"
+              href={`/${locale}`}
               className="flex h-10 w-full items-center justify-center rounded-md border border-black bg-black text-sm text-white transition-all hover:bg-white hover:text-black focus:outline-none"
             >
-              Back to dashboard
+              {message?.back_dashboard}
             </Link>
           </div>
         </>

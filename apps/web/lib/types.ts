@@ -26,8 +26,6 @@ export interface RedisLinkProps {
   url: string;
   password?: boolean;
   proxy?: boolean;
-  rewrite?: boolean;
-  iframeable?: boolean;
   expiresAt?: Date;
   expiredUrl?: string;
   ios?: string;
@@ -132,15 +130,7 @@ export interface DomainProps {
 export interface RedisDomainProps {
   id: string;
   url?: string;
-  rewrite?: boolean;
-  iframeable?: boolean;
   projectId: string;
-}
-
-export interface ImportedDomainCountProps {
-  id: number;
-  domain: string;
-  links: number;
 }
 
 export type NewLinkProps = z.infer<typeof createLinkBodySchema>;

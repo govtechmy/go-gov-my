@@ -1,5 +1,6 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspaces from "@/lib/swr/use-workspaces";
 import { PlanProps, WorkspaceProps } from "@/lib/types";
 import { ModalContext } from "@/ui/modals/provider";
@@ -122,12 +123,13 @@ function WorkspaceList({
   const { setShowAddWorkspaceModal } = useContext(ModalContext);
   const { domain, key } = useParams() as { domain?: string; key?: string };
   const pathname = usePathname();
+  const { messages, locale } = useIntlClientHook();
 
   const href = useCallback(
     (slug: string) => {
       if (domain || key || selected.slug === "/") {
         // if we're on a link page, navigate back to the workspace root
-        return `/${slug}`;
+        return `/${locale}/${slug}`;
       } else {
         // else, we keep the path but remove all query params
         return pathname?.replace(selected.slug, slug).split("?")[0] || "/";
@@ -138,7 +140,9 @@ function WorkspaceList({
 
   return (
     <div className="relative mt-1 max-h-72 w-full space-y-0.5 overflow-auto rounded-md bg-white p-2 text-base sm:w-60 sm:text-sm sm:shadow-lg">
-      <div className="p-2 text-xs text-gray-500">My Workspaces</div>
+      <div className="p-2 text-xs text-gray-500">
+        {messages?.dashboard?.workspace_title}
+      </div>
       {workspaces.map(({ id, name, slug, logo }) => {
         return (
           <Link
@@ -181,7 +185,7 @@ function WorkspaceList({
         className="flex w-full cursor-pointer items-center space-x-2 rounded-md p-2 transition-all duration-75 hover:bg-gray-100"
       >
         <PlusCircle className="h-6 w-6 text-gray-500" />
-        <span className="block truncate">Add a new workspace</span>
+        <span className="block truncate">{messages.workspace.add_new}</span>
       </button>
     </div>
   );
