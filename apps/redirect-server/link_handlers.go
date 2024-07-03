@@ -16,7 +16,7 @@ type Link struct {
 	Key       string `json:"key"`
 	URL       string `json:"url"`
 	Expired   bool   `json:"expired"`
-	CreatedAt string `json:"created_at"`
+	CreatedAt string `json:"createdAt"`
 }
 
 // Adds a link into Elasticsearch. If the link already exists, the whole document is replaced.
@@ -69,7 +69,7 @@ func indexLinkHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(200)
+	w.WriteHeader(http.StatusOK)
 }
 
 // Deletes a link from Elasticsearch
@@ -104,5 +104,5 @@ func deleteLinkHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(204)
+	w.WriteHeader(http.StatusNoContent)
 }
