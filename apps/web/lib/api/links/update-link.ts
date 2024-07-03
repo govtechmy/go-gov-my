@@ -141,7 +141,6 @@ export async function updateLink({
             width: 1200,
             height: 630,
           }),
-
         prisma.webhookOutbox.create({
           data: {
             action: OUTBOX_ACTIONS.UPDATE_LINK,
