@@ -1,8 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { Kafka } from "kafkajs";
 
-const OUTBOX_TOPIC = "ps-postgres.public.WebhookOutbox";
-const REDIRECT_SERVER_BASE_URL = "http://localhost:3000";
+const OUTBOX_TOPIC =
+  process.env.OUTBOX_TOPIC || "ps-postgres.public.WebhookOutbox";
+const REDIRECT_SERVER_BASE_URL =
+  process.env.REDIRECT_SERVER_URL || "http://localhost:3000";
 
 export const OUTBOX_ACTIONS = {
   CREATE_LINK: "create-link",
@@ -11,9 +13,10 @@ export const OUTBOX_ACTIONS = {
 };
 
 async function main() {
+  const kafkaBrokerUrl = process.env.KAFKA_BROKER_URL || "localhost:9092";
   const kafka = new Kafka({
-    clientId: "go.gov.my",
-    brokers: ["localhost:9092"],
+    clientId: process.env.NEXT_PUBLIC_APP_SHORT_DOMAIN || "go.gov.my",
+    brokers: [kafkaBrokerUrl],
   });
 
   const consumer = kafka.consumer({
@@ -29,6 +32,7 @@ async function main() {
   });
 
   console.log("Starting kafka consumer...");
+
   await consumer.run({
     autoCommitInterval: 1000, // 1 second
     eachMessage: async ({ message }) => {

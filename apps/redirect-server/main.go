@@ -1,14 +1,13 @@
 package main
 
 import (
-	"context"
 	"flag"
 	"log"
 	"net/http"
 	"os"
-	"os/signal"
-	"sync"
-	"syscall"
+	"path/filepath"
+
+	"github.com/joho/godotenv"
 )
 
 const (
@@ -22,6 +21,21 @@ var (
     indexName = "links"
 )
 
+func init() {
+    // Construct the path to the .env file in the root directory
+    rootDir, err := filepath.Abs(filepath.Join(".", "..", ".."))
+    if err != nil {
+        log.Fatalf("Error constructing root directory path: %s", err)
+    }
+    envPath := filepath.Join(rootDir, ".env")
+
+    // Load the .env file
+    err = godotenv.Load(envPath)
+    if err != nil {
+        log.Printf("Error loading .env file: %s", err)
+    }
+}
+
 func main() {
     envFlag := flag.String("env", ENV_DEVELOPMENT, "App environment ('development' or 'production')")
     logPathFlag := flag.String("logPath", "logs/redirects.log", "Path to file to store short link redirect logs")
@@ -33,38 +47,15 @@ func main() {
     InitElasticsearch()
     InitTemplates()
 
-    http.HandleFunc("/t/", redirectHandler)
+    http.HandleFunc("/", redirectHandler)
     http.HandleFunc("/links", indexLinkHandler)
     http.HandleFunc("/links/", deleteLinkHandler)
 
-    // Issue #119: Disable for now since we moved the kafka consumer to the NextJS app
-    // go startKafkaConsumer()
-
     log.Printf("Starting server on :3000 in %s mode\n", env)
     
-    if (env == ENV_DEVELOPMENT) {
+    if (os.Getenv("NODE_ENV") == ENV_DEVELOPMENT) {
         log.Fatal(http.ListenAndServe(":3000", nil))
     } else {
         log.Fatal(http.ListenAndServeTLS(":3000", "./certificates/cert.pem", "./certificates/key.pem", nil))
     }
-}
-
-func startKafkaConsumer() {
-    var wg sync.WaitGroup
-    ctx, cancel := context.WithCancel(context.Background())
-
-    wg.Add(1)
-    go func() {
-        defer wg.Done()
-        consumeKafka(ctx)
-    }()
-
-    sigs := make(chan os.Signal, 1)
-    signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
-    <-sigs
-    log.Println("Received shutdown signal")
-
-    cancel()
-    wg.Wait()
-    log.Println("Shutdown complete")
 }
