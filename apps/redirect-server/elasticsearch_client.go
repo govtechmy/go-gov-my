@@ -23,7 +23,7 @@ func InitElasticsearch() *elasticsearch.Client {
 func checkLinkInElasticsearch(key string) (exists, expired bool, originalURL string) {
     query := map[string]interface{}{
         "query": map[string]interface{}{
-            "term": map[string]interface{}{
+            "match": map[string]interface{}{
                 "key": key,
             },
         },

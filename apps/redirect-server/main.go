@@ -37,10 +37,16 @@ func main() {
     http.HandleFunc("/links", indexLinkHandler)
     http.HandleFunc("/links/", deleteLinkHandler)
 
-    go startKafkaConsumer()
+    // Issue #119: Disable for now since we moved the kafka consumer to the NextJS app
+    // go startKafkaConsumer()
 
     log.Printf("Starting server on :3000 in %s mode\n", env)
-    log.Fatal(http.ListenAndServeTLS(":3000", "./certificates/cert.pem", "./certificates/key.pem", nil))
+    
+    if (env == ENV_DEVELOPMENT) {
+        log.Fatal(http.ListenAndServe(":3000", nil))
+    } else {
+        log.Fatal(http.ListenAndServeTLS(":3000", "./certificates/cert.pem", "./certificates/key.pem", nil))
+    }
 }
 
 func startKafkaConsumer() {

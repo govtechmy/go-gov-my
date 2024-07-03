@@ -9,7 +9,8 @@
     "start": "next start",
     "script": "tsx ./scripts/run.ts",
     "test": "vitest -no-file-parallelism",
-    "generate-openapi": "tsx ./scripts/generate-openapi.ts"
+    "generate-openapi": "tsx ./scripts/generate-openapi.ts",
+    "start-kafka-consumer": "tsx ./kafka-consumer/index.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.20.4",
@@ -66,6 +67,7 @@
     "js-cookie": "^3.0.5",
     "json-2-csv": "^5.5.0",
     "jszip": "^3.10.1",
+    "kafkajs": "^2.2.4",
     "lucide-react": "^0.367.0",
     "nanoid": "^5.0.1",
     "next": "14.2.3",
