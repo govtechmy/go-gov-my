@@ -10,11 +10,11 @@ export * from "./checkbox";
 export * from "./file-upload";
 export * from "./form";
 export * from "./input-select";
-export * from "./select";
 export * from "./label";
 export * from "./modal";
 export * from "./popover";
 export * from "./radio-group";
+export * from "./select";
 export * from "./switch";
 export * from "./tooltip";
 
