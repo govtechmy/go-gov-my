@@ -6,6 +6,7 @@ import { getParamsFromURL, truncate } from "@dub/utils";
 import { trace } from "@opentelemetry/api";
 import { Prisma } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
+import { OUTBOX_ACTIONS } from "kafka-consumer";
 import { combineTagIds, transformLink } from "./utils";
 
 export async function createLink(link: ProcessedLinkProps) {
@@ -106,8 +107,26 @@ export async function createLink(link: ProcessedLinkProps) {
                   image: uploadedImageUrl,
                 },
               }),
+              prisma.webhookOutbox.create({
+                data: {
+                  action: OUTBOX_ACTIONS.CREATE_LINK,
+                  host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
+                  payload: {
+                    ...response,
+                    image: uploadedImageUrl,
+                  },
+                },
+              }),
             ]
-          : []),
+          : [
+              prisma.webhookOutbox.create({
+                data: {
+                  action: OUTBOX_ACTIONS.CREATE_LINK,
+                  host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
+                  payload: response,
+                },
+              }),
+            ]),
         // update links usage for workspace
         link.projectId &&
           prisma.project.update({

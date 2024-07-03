@@ -1,7 +1,14 @@
+import { prisma } from "@/lib/prisma";
 import { Kafka } from "kafkajs";
 
 const OUTBOX_TOPIC = "ps-postgres.public.WebhookOutbox";
 const REDIRECT_SERVER_BASE_URL = "http://localhost:3000";
+
+export const OUTBOX_ACTIONS = {
+  CREATE_LINK: "create-link",
+  DELETE_LINK: "delete-link",
+  UPDATE_LINK: "update-link",
+};
 
 async function main() {
   const kafka = new Kafka({
@@ -21,6 +28,7 @@ async function main() {
     fromBeginning: true,
   });
 
+  console.log("Starting kafka consumer...");
   await consumer.run({
     autoCommitInterval: 1000, // 1 second
     eachMessage: async ({ message }) => {
@@ -36,39 +44,61 @@ async function main() {
 
         if (debeziumPayload.op === "c") {
           // debeziumPayload.after is the newly inserted row in WebhookOutbox table
-          const { payload, action } = debeziumPayload.after;
+          const { id: outboxId, payload, action } = debeziumPayload.after;
+
+          console.log(debeziumPayload.after);
+
+          let response: Response;
 
           switch (action) {
-            case "create":
+            case OUTBOX_ACTIONS.CREATE_LINK:
               console.log(
                 "Sending a request to the redirect server: POST /links",
               );
-              await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
+              response = await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
                 method: "POST",
                 body: payload,
               });
               break;
-            case "update":
+            case OUTBOX_ACTIONS.UPDATE_LINK:
               console.log(
                 "Sending a request to the redirect server: PUT /links",
               );
-              await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
+              response = await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
                 method: "PUT",
                 body: payload,
               });
               break;
-            case "delete":
+            case OUTBOX_ACTIONS.DELETE_LINK:
               const { id: linkId } = JSON.parse(payload);
               console.log(
                 `Sending a request to the redirect server: DELETE /links/${linkId}`,
               );
-              await fetch(`${REDIRECT_SERVER_BASE_URL}/links/${linkId}`, {
-                method: "DELETE",
-              });
+              response = await fetch(
+                `${REDIRECT_SERVER_BASE_URL}/links/${linkId}`,
+                {
+                  method: "DELETE",
+                },
+              );
               break;
+            default:
+              console.log(
+                `Unhandled outbox action '${action}', ID = ${outboxId}`,
+              );
+              return;
           }
 
-          // TODO: Delete the row from WebhookOutbox table
+          if (response.ok) {
+            console.log("Response to redirect-server was successful");
+            await prisma.webhookOutbox.delete({
+              where: { id: outboxId },
+            });
+            console.log(`WebhookOutbox row with ID ${outboxId} was deleted`);
+          } else {
+            console.log(
+              `Response to redirect-server was unsuccessful, status: ${response.status}, outboxId: ${outboxId}`,
+            );
+          }
         }
       } catch (err) {
         console.error(err);
