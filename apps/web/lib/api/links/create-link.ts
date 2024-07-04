@@ -6,6 +6,7 @@ import { getParamsFromURL, truncate } from "@dub/utils";
 import { trace } from "@opentelemetry/api";
 import { Prisma } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
+import { OUTBOX_ACTIONS } from "kafka-consumer/actions";
 import { addToHistory } from "./add-to-history";
 import { combineTagIds, transformLink } from "./utils";
 
@@ -115,6 +116,25 @@ export async function createLink(
                   image: uploadedImageUrl,
                 },
               }),
+              prisma.webhookOutbox.create({
+                data: {
+                  action: OUTBOX_ACTIONS.CREATE_LINK,
+                  host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
+                  payload: {
+                    ...response,
+                    image: uploadedImageUrl,
+                  },
+                },
+              }),
+            ]
+          : [
+              prisma.webhookOutbox.create({
+                data: {
+                  action: OUTBOX_ACTIONS.CREATE_LINK,
+                  host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
+                  payload: response,
+                },
+              }),
               addToHistory({
                 ...response,
                 type: "create",
@@ -123,17 +143,8 @@ export async function createLink(
                 comittedByUserId: sessionUserId,
                 timestamp: response.createdAt,
               }),
-            ]
-          : [
-              addToHistory({
-                ...response,
-                type: "create",
-                linkId: response.id,
-                comittedByUserId: sessionUserId,
-                timestamp: response.createdAt,
-              }),
             ]),
-        // update links usage for workspace
+        // increment link usage count
         link.projectId &&
           prisma.project.update({
             where: {

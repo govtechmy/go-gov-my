@@ -3,6 +3,7 @@ import { redis } from "@/lib/redis";
 import { storage } from "@/lib/storage";
 import { trace } from "@opentelemetry/api";
 import { waitUntil } from "@vercel/functions";
+import { OUTBOX_ACTIONS } from "kafka-consumer/actions";
 
 export async function deleteLink(linkId: string) {
   const tracer = trace.getTracer("default");
@@ -35,6 +36,13 @@ export async function deleteLink(linkId: string) {
               },
             },
           }),
+        prisma.webhookOutbox.create({
+          data: {
+            action: OUTBOX_ACTIONS.DELETE_LINK,
+            host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
+            payload: link,
+          },
+        }),
       ]),
     );
 

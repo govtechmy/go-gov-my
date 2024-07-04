@@ -198,6 +198,9 @@ importers:
       jszip:
         specifier: ^3.10.1
         version: 3.10.1
+      kafkajs:
+        specifier: ^2.2.4
+        version: 2.2.4
       lucide-react:
         specifier: ^0.367.0
         version: 0.367.0(react@18.2.0)
@@ -9422,6 +9425,11 @@ packages:
       pako: 1.0.11
       readable-stream: 2.3.8
       setimmediate: 1.0.5
+    dev: false
+
+  /kafkajs@2.2.4:
+    resolution: {integrity: sha512-j/YeapB1vfPT2iOIUn/vxdyKEuhuY2PxMBvf5JWux6iSaukAccrMtXEY/Lb7OvavDhOWME589bpLrEdnVHjfjA==}
+    engines: {node: '>=14.0.0'}
     dev: false
 
   /keyv@4.5.4:

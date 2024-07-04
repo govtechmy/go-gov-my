@@ -6,6 +6,7 @@ import { SHORT_DOMAIN, getParamsFromURL, truncate } from "@dub/utils";
 import { trace } from "@opentelemetry/api";
 import { Prisma } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
+import { OUTBOX_ACTIONS } from "kafka-consumer/actions";
 import { addToHistory } from "./add-to-history";
 import { combineTagIds, transformLink } from "./utils";
 
@@ -140,6 +141,13 @@ export async function updateLink({
             width: 1200,
             height: 630,
           }),
+        prisma.webhookOutbox.create({
+          data: {
+            action: OUTBOX_ACTIONS.UPDATE_LINK,
+            host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
+            payload: response,
+          },
+        }),
         addToHistory({
           ...response,
           type: "update",
