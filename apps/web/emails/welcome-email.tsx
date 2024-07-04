@@ -47,9 +47,9 @@ export default function WelcomeEmail({
               Thanks for signing up{name && `, ${name}`}!
             </Text>
             <Text className="text-sm leading-6 text-black">
-              Welcome to GoGovMy - the modern link management platform for you to
-              create marketing campaigns, link sharing feature. We&apos;re excited to have you
-              on board!
+              Welcome to GoGovMy - the modern link management platform for you
+              to create marketing campaigns, link sharing feature. We&apos;re
+              excited to have you on board!
             </Text>
             <Text className="text-sm leading-6 text-black">
               Here are a few things you can do:
