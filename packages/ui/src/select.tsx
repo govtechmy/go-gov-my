@@ -69,10 +69,10 @@ export function CustomSelect({
     return () => {
       window.removeEventListener("click", handler);
     };
-  });
+  }, []);
 
   const handleInputClick = () => {
-    setShowMenu(!showMenu);
+    setShowMenu((showMenu) => !showMenu);
   };
 
   const getDisplay = () => {
