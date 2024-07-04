@@ -1,9 +1,9 @@
 import { inter, satoshi } from "@/styles/fonts";
 import "@/styles/globals.css";
+import Header from "@/ui/header/header";
 import { TooltipProvider } from "@dub/ui/src/tooltip";
 import { cn, constructMetadata } from "@dub/utils";
 import { Toaster } from "sonner";
-import Header from "@/ui/header/header";
 
 export const metadata = constructMetadata();
 

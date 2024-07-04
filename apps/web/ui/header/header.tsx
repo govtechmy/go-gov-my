@@ -1,5 +1,4 @@
-import IdentifyWebsite from './identify-website'
-import Asklogo from '@/ui/shared/icons/asklogo';
+import IdentifyWebsite from "./identify-website";
 
 const Header = () => {
   return (
