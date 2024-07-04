@@ -4,10 +4,15 @@ services:
   ps-postgres:
     image: postgres:13
     restart: always
+    env_file:
+      - .env
     environment:
       - POSTGRES_DB=${POSTGRESDB}
       - POSTGRES_USER=${POSTGRESUSER}
       - POSTGRES_PASSWORD=${POSTGRESPASSWORD}
+    command:
+      - -c
+      - wal_level=logical
     ports:
       - 5432:5432
     volumes:
@@ -132,8 +137,30 @@ services:
       CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
     depends_on: [broker, ps-postgres]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://debezium:8083/connectors"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     ports:
       - 8083:8083
+    networks:
+      - my-network
+  
+  init-debezium-connector:
+    image: curlimages/curl:8.8.0
+    depends_on:
+      debezium:
+        condition: service_healthy
+    volumes:
+      - ./init-debezium-connector.sh:/home/curl_user/init-debezium-connector.sh
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${POSTGRESDB}
+      - POSTGRES_USER=${POSTGRESUSER}
+      - POSTGRES_PASSWORD=${POSTGRESPASSWORD}
+    entrypoint: /home/curl_user/init-debezium-connector.sh
     networks:
       - my-network
 
