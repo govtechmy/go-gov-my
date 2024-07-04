@@ -3,7 +3,7 @@ import { redis } from "@/lib/redis";
 import { storage } from "@/lib/storage";
 import { trace } from "@opentelemetry/api";
 import { waitUntil } from "@vercel/functions";
-import { OUTBOX_ACTIONS } from "kafka-consumer";
+import { OUTBOX_ACTIONS } from "kafka-consumer/actions";
 
 export async function deleteLink(linkId: string) {
   const tracer = trace.getTracer("default");
