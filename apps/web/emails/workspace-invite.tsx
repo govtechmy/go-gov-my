@@ -16,7 +16,7 @@ import Footer from "./components/footer";
 
 export default function WorkspaceInvite({
   email = "panicking@thedis.co",
-  appName = "Dub.co",
+  appName = "GoGovMy",
   url = "http://localhost:8888/api/auth/callback/email?callbackUrl=http%3A%2F%2Fapp.localhost%3A3000%2Flogin&token=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&email=youremail@gmail.com",
   workspaceName = "Acme",
   workspaceUser = "Brendon Urie",

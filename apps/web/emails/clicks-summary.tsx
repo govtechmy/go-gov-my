@@ -20,7 +20,7 @@ import Footer from "./components/footer";
 
 export default function ClicksSummary({
   email = "panic@thedis.co",
-  appName = "Dub.co",
+  appName = "GoGovMy",
   appDomain = "dub.co",
   workspaceName = "Acme",
   workspaceSlug = "acme",
