@@ -6,7 +6,7 @@ import { getParamsFromURL, truncate } from "@dub/utils";
 import { trace } from "@opentelemetry/api";
 import { Prisma } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
-import { OUTBOX_ACTIONS } from "kafka-consumer";
+import { OUTBOX_ACTIONS } from "kafka-consumer/actions";
 import { addToHistory } from "./add-to-history";
 import { combineTagIds, transformLink } from "./utils";
 

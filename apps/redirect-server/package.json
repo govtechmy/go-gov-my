@@ -1,5 +1,6 @@
 {
     "name": "redirect-server",
     "scripts": {
+        "dev": "air || echo 'warning: could not start dev server, command \"air\" failed'"
     }
 }
