@@ -14,6 +14,7 @@ export * from "./label";
 export * from "./modal";
 export * from "./popover";
 export * from "./radio-group";
+export * from "./select";
 export * from "./switch";
 export * from "./tooltip";
 
