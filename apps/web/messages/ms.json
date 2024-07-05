@@ -6,7 +6,8 @@
     "masthead_official_site_desc": "Sekiranya anda melihat pautan selain .gov.my, segera tutupkan halaman itu walaupun ia menyerupai portal rasmi!",
     "masthead_ssl_title": "Portal yang selamat menggunakan HTTPS",
     "masthead_ssl_desc_1": "Periksa ikon loker (",
-    "masthead_ssl_desc_2": ") atau https:// di depan pautan. Sekiranya tiada, jangan kongsikan sebarang maklumat sensitif."
+    "masthead_ssl_or": ") atau",
+    "masthead_ssl_desc_2": "di depan pautan. Sekiranya tiada, jangan kongsikan sebarang maklumat sensitif."
   },
   "language": "ms",
   "login": {

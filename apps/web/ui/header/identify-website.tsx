@@ -1,73 +1,90 @@
 "use client";
 
 import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import Image from "next/image";
 import React, { useState } from "react";
+import Checkmark14PointStar from "../icons/checkmark";
+import ChevronDown from "../icons/chevron";
+import GovMY from "../icons/govmy";
+import Lock from "../icons/lock";
+import SolidLock from "../icons/solid-lock";
+import { cn } from "./cn";
+import Collapse from "./layout";
 
 const IdentifyWebsite: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { messages, locale } = useIntlClientHook();
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="bg-background border-b px-3 py-1">
+    <>
       <div
-        className="flex w-full cursor-pointer"
-        onClick={() => setIsOpen(!isOpen)}
+        className={
+          open
+            ? "from-washed-100 to-outline-200 bg-gradient-to-b from-[84.74%] to-100% "
+            : "bg-washed-100 "
+        }
       >
-        <div className="inline-flex">
-          <div className="flex flex-wrap items-center text-xs">
-            <Image
-              src="/jata_logo.png"
-              width={25}
-              height={25}
-              alt="Logo Jata Negara"
-            />
-            <span className="px-3">{messages?.masthead?.masthead_title}</span>
-            <span className="items-center text-blue-600 underline">
-              {messages?.masthead?.masthead_subtitle}
+        <div className="container">
+          <div className="text-brand-700 flex flex-wrap items-center gap-1.5 py-1 text-sm leading-4">
+            <Checkmark14PointStar className="size-4 text-blue-600 sm:size-5" />
+            <span className="text-black-700">
+              {messages?.masthead?.masthead_title}
             </span>
+            <button
+              className="flex items-center gap-0.5 text-blue-600"
+              onClick={() => setOpen(!open)}
+            >
+              {messages?.masthead?.masthead_subtitle}
+              <ChevronDown
+                className={cn(
+                  "size-4 text-blue-600 transition duration-200",
+                  open ? "rotate-180" : "",
+                )}
+              />
+            </button>
           </div>
-        </div>
-      </div>
-      {isOpen && (
-        <div
-          className="mt-2 w-full rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-          role="menu"
-          aria-orientation="vertical"
-          aria-labelledby="menu-button"
-          tabIndex={-1}
-        >
-          <div className="py-1" role="none">
-            <div id="official-links" className="mb-4 rounded-md p-4">
-              <div className="flex items-start">
-                <div className="mr-2 text-xl">🏛️</div>
-                <div>
-                  <h2 className="text-lg font-semibold">
-                  {messages?.masthead?.masthead_official_site_title}
-                  </h2>
-                  <p className="text-gray-700">
+          <Collapse isOpen={open}>
+            <div className="grid grid-cols-1 gap-6 pb-8 pt-6 sm:grid-cols-2">
+              <div className="flex gap-3">
+                <GovMY className="text-foreground-success shrink-0 text-green-600" />
+                <div className="space-y-1.5">
+                  <p className="font-medium">
+                    {messages?.masthead?.masthead_official_site_title}{" "}
+                    <span className="font-semibold text-green-600">
+                      {" "}
+                      .gov.my
+                    </span>
+                  </p>
+
+                  <p className="text-black-700 max-w-prose text-balance text-sm">
                     {messages?.masthead?.masthead_official_site_desc}
                   </p>
                 </div>
               </div>
-            </div>
-            <div id="secure-websites" className="rounded-md p-4">
-              <div className="flex items-start">
-                <div className="mr-2 text-xl">🔒</div>
-                <div>
-                  <h2 className="text-lg font-semibold">
-                  {messages?.masthead?.masthead_ssl_title}
-                  </h2>
-                  <p className="text-gray-700">
-                  {messages?.masthead?.masthead_ssl_desc_1} 🔒 {messages?.masthead?.masthead_ssl_desc_2}
+              <div className="flex gap-3">
+                <Lock className="text-foreground-success shrink-0 text-orange-400" />
+                <div className="space-y-1.5">
+                  <p className="font-medium">
+                    {" "}
+                    {messages?.masthead?.masthead_ssl_title}{" "}
+                    <span className="font-semibold text-green-600"> HTTPS</span>
                   </p>
+                  <div className="text-black-700 max-w-prose text-balance text-sm">
+                    {messages?.masthead?.masthead_ssl_desc_1}{" "}
+                    <SolidLock className="inline size-4 text-green-600" />{" "}
+                    {messages?.masthead?.masthead_ssl_or}{" "}
+                    <span className="font-semibold text-green-600">
+                      https://
+                    </span>{" "}
+                    {messages?.masthead?.masthead_ssl_desc_2}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </Collapse>
         </div>
-      )}
-    </div>
+      </div>
+    </>
   );
 };
 

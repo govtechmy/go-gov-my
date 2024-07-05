@@ -2,11 +2,12 @@
   "masthead": {
     "masthead_title": "Official Malaysian Government Website",
     "masthead_subtitle": "Here's how you know",
-    "masthead_official_site_title": "Official government websites end with .gov.my",
+    "masthead_official_site_title": "Official government websites end with",
     "masthead_official_site_desc": "If the link does not end with .gov.my, exit the website immediately even if it looks similar.",
-    "masthead_ssl_title": "Secure websites use HTTPS",
+    "masthead_ssl_title": "Secure websites use",
     "masthead_ssl_desc_1": "Look for a lock (",
-    "masthead_ssl_desc_2": ") or https:// as an added precaution. Share sensitive information only on official, secure websites."
+    "masthead_ssl_or": ") or",
+    "masthead_ssl_desc_2": "as an added precaution. Share sensitive information only on official, secure websites."
   },
   "language": "en",
   "login": {
