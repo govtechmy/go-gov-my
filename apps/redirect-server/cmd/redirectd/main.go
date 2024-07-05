@@ -5,9 +5,11 @@ import (
 	"flag"
 	"fmt"
 	"html/template"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	redirectserver "redirect-server"
 	"redirect-server/repository"
 	"redirect-server/repository/es"
 	"strings"
@@ -15,6 +17,8 @@ import (
 	"time"
 
 	"github.com/olivere/elastic/v7"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	"go.opentelemetry.io/otel"
 	"go.uber.org/zap"
 )
 
@@ -26,20 +30,29 @@ func main() {
 	var elasticUser string
 	var elasticPassword string
 	var httpPort int
+	var telemetryURL string
 	{
 		flag.StringVar(&elasticURL, "elastic-url", "http://localhost:9200", "Elasticsearch URL")
 		flag.StringVar(&elasticUser, "elastic-user", "elastic", "Elasticsearch username")
 		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
 		flag.IntVar(&httpPort, "http-port", 3000, "HTTP server port")
+		flag.StringVar(&telemetryURL, "telemetry-url", "localhost:4318", "OpenTelemetry HTTP endpoint URL")
 	}
 	flag.Parse()
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
 	defer stop()
 
+	traceProvider, err := redirectserver.NewTraceProvider(telemetryURL)
+	if err != nil {
+		log.Fatal(err)
+	}
+	otel.SetTracerProvider(traceProvider)
+
 	esClient, err := elastic.NewSimpleClient(
 		elastic.SetURL(elasticURL),
 		elastic.SetBasicAuth(elasticUser, elasticPassword),
+		elastic.SetHttpClient(otelhttp.DefaultClient),
 	)
 	if err != nil {
 		logger.Fatal("cannot initiate Elasticsearch client", zap.Error(err))
@@ -51,7 +64,7 @@ func main() {
 		logger.Fatal("cannot load html templates", zap.Error(err))
 	}
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		slug := strings.TrimPrefix(r.URL.Path, "/")
 
@@ -78,7 +91,7 @@ func main() {
 		}
 
 		t.ExecuteTemplate(w, "wait.html", link)
-	})
+	}), "handleLinkVisit"))
 
 	srv := &http.Server{
 		Addr:    fmt.Sprintf("0.0.0.0:%d", httpPort),
