@@ -16,7 +16,6 @@ const (
 
 var (
 	env       string
-	logPath   string
 	indexName = "links"
 )
 
@@ -37,11 +36,9 @@ func init() {
 
 func main() {
 	envFlag := flag.String("env", ENV_DEVELOPMENT, "App environment ('development' or 'production')")
-	logPathFlag := flag.String("logPath", "logs/redirects.log", "Path to file to store short link redirect logs")
 	flag.Parse()
 
 	env = *envFlag
-	logPath = *logPathFlag
 
 	InitElasticsearch()
 
