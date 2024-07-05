@@ -22,11 +22,11 @@ import { WorkspaceProps } from "../lib/types";
 import Footer from "./components/footer";
 
 export default function ClicksExceeded({
-  email = "panic@thedis.co",
+  email = "name@agency.gov.my",
   workspace = {
     id: "ckqf1q3xw0000gk5u2q1q2q1q",
-    name: "Acme",
-    slug: "acme",
+    name: process.env.NEXT_PUBLIC_APP_NAME || "GoGovMy",
+    slug: "gogov",
     usage: 2410,
     usageLimit: 1000,
     plan: "business",

@@ -46,7 +46,7 @@ export default function Feedback() {
               <input
                 name="email"
                 type="email"
-                placeholder="panic@thedis.co"
+                placeholder="name@agency.gov.my"
                 autoComplete="email"
                 className="block w-full rounded-md border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm"
               />

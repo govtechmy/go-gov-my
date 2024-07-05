@@ -15,8 +15,8 @@ import {
 import Footer from "./components/footer";
 
 export default function WelcomeEmail({
-  name = "Brendon Urie",
-  email = "panic@thedis.co",
+  name = "Abu Kassim",
+  email = "name@agency.gov.my",
 }: {
   name: string | null;
   email: string;
@@ -24,7 +24,7 @@ export default function WelcomeEmail({
   return (
     <Html>
       <Head />
-      <Preview>Welcome to Dub.co</Preview>
+      <Preview>Welcome to GoGovMy</Preview>
       <Tailwind>
         <Body className="mx-auto my-auto bg-white font-sans">
           <Container className="mx-auto my-10 max-w-[500px] rounded border border-solid border-gray-200 px-10 py-5">
@@ -38,7 +38,7 @@ export default function WelcomeEmail({
               />
             </Section>
             <Heading className="mx-0 my-7 p-0 text-center text-xl font-semibold text-black">
-              Welcome to Dub.co
+              Welcome to GoGovMy
             </Heading>
             <Section className="my-8">
               <Img src={DUB_THUMBNAIL} alt="Dub" className="max-w-[500px]" />
@@ -47,10 +47,8 @@ export default function WelcomeEmail({
               Thanks for signing up{name && `, ${name}`}!
             </Text>
             <Text className="text-sm leading-6 text-black">
-              My name is Steven, and I'm the founder of Dub.co - the modern link
-              management platform for you to create marketing campaigns, link
-              sharing features, and referral programs. We're excited to have you
-              on board!
+              Welcome to GoGovMy - the modern link management platform for the
+              government of Malaysia to create and manage a secured short link.
             </Text>
             <Text className="text-sm leading-6 text-black">
               Here are a few things you can do:

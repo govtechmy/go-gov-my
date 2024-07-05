@@ -19,11 +19,11 @@ import { Link2, MousePointerClick } from "lucide-react";
 import Footer from "./components/footer";
 
 export default function ClicksSummary({
-  email = "panic@thedis.co",
-  appName = "Dub.co",
-  appDomain = "dub.co",
-  workspaceName = "Acme",
-  workspaceSlug = "acme",
+  email = "name@agency.gov.my",
+  appName = process.env.NEXT_PUBLIC_APP_NAME || "GoGovMy",
+  appDomain = process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
+  workspaceName = process.env.NEXT_PUBLIC_APP_NAME || "GoGovMy",
+  workspaceSlug = "gogov",
   totalClicks = 63689,
   createdLinks = 25,
   topLinks = [

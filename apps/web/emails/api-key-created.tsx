@@ -15,8 +15,8 @@ import {
 import Footer from "./components/footer";
 
 export default function APIKeyCreated({
-  email = "panicking@thedis.co",
-  apiKeyName = "Acme",
+  email = "name@agency.gov.my",
+  apiKeyName = "API Key Name",
 }: {
   email: string;
   apiKeyName: string;

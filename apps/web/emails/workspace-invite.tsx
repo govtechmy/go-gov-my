@@ -15,12 +15,12 @@ import {
 import Footer from "./components/footer";
 
 export default function WorkspaceInvite({
-  email = "panicking@thedis.co",
-  appName = "Dub.co",
-  url = "http://localhost:8888/api/auth/callback/email?callbackUrl=http%3A%2F%2Fapp.localhost%3A3000%2Flogin&token=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&email=youremail@gmail.com",
-  workspaceName = "Acme",
-  workspaceUser = "Brendon Urie",
-  workspaceUserEmail = "panic@thedis.co",
+  email = "name@agency.gov.my",
+  appName = process.env.NEXT_PUBLIC_APP_NAME || "GoGovMy",
+  url = "http://localhost:8888/api/auth/callback/email?callbackUrl=http%3A%2F%2Fapp.localhost%3A3000%2Flogin&token=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&email=youremail@agency.gov.my",
+  workspaceName = "Workspace Name",
+  workspaceUser = "Abu Kassim",
+  workspaceUserEmail = "name@agency.gov.my",
 }: {
   email: string;
   appName: string;
