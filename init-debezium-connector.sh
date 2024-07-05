@@ -29,7 +29,8 @@ CONNECTOR_CONFIG='{
   "database.password": "'"$POSTGRES_PASSWORD"'",
   "database.dbname": "'"$POSTGRES_DB"'",
   "database.server.name": "ps-postgres",
-  "table.include.list": "public.WebhookOutbox"
+  "table.include.list": "public.WebhookOutbox",
+  "topic.prefix": "ps-postgres"
 }'
 
 curl "http://debezium:8083/connectors/$CONNECTOR_NAME/config" \

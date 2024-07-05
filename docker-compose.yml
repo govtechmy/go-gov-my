@@ -76,7 +76,7 @@ services:
   #       max-file: "3"
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:5.5.3
+    image: confluentinc/cp-zookeeper:7.6.1
     hostname: zookeeper
     container_name: zookeeper
     environment:
@@ -88,7 +88,7 @@ services:
       - my-network
 
   broker:
-    image: confluentinc/cp-enterprise-kafka:5.5.3
+    image: confluentinc/cp-enterprise-kafka:7.6.1
     hostname: broker
     container_name: broker
     depends_on: [zookeeper]
@@ -123,7 +123,7 @@ services:
       - my-network
 
   debezium:
-    image: debezium/connect:1.4
+    image: debezium/connect:2.6
     environment:
       BOOTSTRAP_SERVERS: broker:29092
       GROUP_ID: 1
@@ -167,7 +167,7 @@ services:
   schema-registry:
     hostname: schema-registry
     container_name: schema-registry
-    image: confluentinc/cp-schema-registry:5.5.3
+    image: confluentinc/cp-schema-registry:7.6.1
     environment:
       - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:2181
       - SCHEMA_REGISTRY_HOST_NAME=schema-registry
@@ -180,6 +180,7 @@ services:
 
   debezium-ui:
     image: quay.io/debezium/debezium-ui:latest
+    platform: linux/amd64
     restart: always
     ports:
       - "8080:8080"
