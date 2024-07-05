@@ -15,8 +15,8 @@ import {
 import Footer from "./components/footer";
 
 export default function UpgradeEmail({
-  name = "Brendon Urie",
-  email = "panic@thedis.co",
+  name = "Abu Kassim",
+  email = "name@agency.gov.my",
   plan = "Pro",
 }: {
   name: string | null;

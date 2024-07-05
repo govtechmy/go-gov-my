@@ -22,11 +22,11 @@ import { WorkspaceProps } from "../lib/types";
 import Footer from "./components/footer";
 
 export default function LinksLimitAlert({
-  email = "panic@thedis.co",
+  email = "name@agency.gov.my",
   workspace = {
     id: "ckqf1q3xw0000gk5u2q1q2q1q",
-    name: "Acme",
-    slug: "acme",
+    name: "Gogov",
+    slug: "gogov",
     linksUsage: 800,
     linksLimit: 1000,
     plan: "pro",

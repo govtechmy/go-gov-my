@@ -15,8 +15,8 @@ import {
 import Footer from "./components/footer";
 
 export default function LoginLink({
-  email = "panic@thedis.co",
-  url = "http://localhost:8888/api/auth/callback/email?callbackUrl=http%3A%2F%2Fapp.localhost%3A3000%2Flogin&token=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&email=youremail@gmail.com",
+  email = "name@agency.gov.my",
+  url = "http://localhost:8888/api/auth/callback/email?callbackUrl=http%3A%2F%2Fapp.localhost%3A3000%2Flogin&token=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&email=youremail@agency.gov.my",
 }: {
   email: string;
   url: string;

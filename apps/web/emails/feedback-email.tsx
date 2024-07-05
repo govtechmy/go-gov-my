@@ -13,8 +13,8 @@ import {
 } from "@react-email/components";
 
 export default function FeedbackEmail({
-  email = "panic@thedis.co",
-  feedback = "I love Dub!",
+  email = "name@agency.gov.my",
+  feedback = `I love ${process.env.NEXT_PUBLIC_APP_NAME || "GoGovMy"}!`,
 }: {
   email: string;
   feedback: string;

@@ -16,9 +16,12 @@ import {
 import Footer from "./components/footer";
 
 export default function DomainTransferred({
-  email = "panic@thedis.co",
-  domain = "dub.sh",
-  newWorkspace = { name: "Dub", slug: "dub" },
+  email = "name@agency.gov.my",
+  domain = process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
+  newWorkspace = {
+    name: process.env.NEXT_PUBLIC_APP_NAME || "GoGovMy",
+    slug: "gogov",
+  },
   linksCount = 50,
 }: {
   email: string;

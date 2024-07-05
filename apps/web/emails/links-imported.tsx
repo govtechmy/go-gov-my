@@ -18,7 +18,7 @@ import {
 import Footer from "./components/footer";
 
 export default function LinksImported({
-  email = "panic@thedis.co",
+  email = "name@agency.gov.my",
   provider = "Bitly",
   count = 1020,
   links = [

@@ -15,9 +15,9 @@ import {
 import Footer from "./components/footer";
 
 export default function DomainDeleted({
-  email = "panic@thedis.co",
-  domain = "dub.sh",
-  workspaceSlug = "dub",
+  email = "name@agency.gov.my",
+  domain = process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
+  workspaceSlug = "gogov",
 }: {
   email: string;
   domain: string;

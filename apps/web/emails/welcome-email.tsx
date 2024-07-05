@@ -15,8 +15,8 @@ import {
 import Footer from "./components/footer";
 
 export default function WelcomeEmail({
-  name = "Brendon Urie",
-  email = "panic@thedis.co",
+  name = "Abu Kassim",
+  email = "name@agency.gov.my",
 }: {
   name: string | null;
   email: string;
@@ -47,9 +47,8 @@ export default function WelcomeEmail({
               Thanks for signing up{name && `, ${name}`}!
             </Text>
             <Text className="text-sm leading-6 text-black">
-              Welcome to GoGovMy - the modern link management platform for you
-              to create marketing campaigns, link sharing feature. We&apos;re
-              excited to have you on board!
+              Welcome to GoGovMy - the modern link management platform for the
+              government of Malaysia to create and manage a secured short link.
             </Text>
             <Text className="text-sm leading-6 text-black">
               Here are a few things you can do:

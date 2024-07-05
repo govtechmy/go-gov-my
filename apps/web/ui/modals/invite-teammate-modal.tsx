@@ -78,7 +78,7 @@ function InviteTeammateModal({
               type="email"
               name="email"
               id="email"
-              placeholder="panic@thedis.co"
+              placeholder="name@agency.gov.my"
               autoFocus={!isMobile}
               autoComplete="off"
               required
