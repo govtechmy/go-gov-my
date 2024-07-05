@@ -1,10 +1,12 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import Image from "next/image";
 import React, { useState } from "react";
 
 const IdentifyWebsite: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { messages, locale } = useIntlClientHook();
 
   return (
     <div className="bg-background border-b px-3 py-1">
@@ -20,9 +22,9 @@ const IdentifyWebsite: React.FC = () => {
               height={25}
               alt="Logo Jata Negara"
             />
-            <span className="px-3">A Malaysian Government Agency Website</span>
+            <span className="px-3">{messages?.masthead?.masthead_title}</span>
             <span className="items-center text-blue-600 underline">
-              How to identify Malaysian Government Website?
+              {messages?.masthead?.masthead_subtitle}
             </span>
           </div>
         </div>
@@ -41,18 +43,10 @@ const IdentifyWebsite: React.FC = () => {
                 <div className="mr-2 text-xl">🏛️</div>
                 <div>
                   <h2 className="text-lg font-semibold">
-                    Official website links end with .gov.my
+                  {messages?.masthead?.masthead_official_site_title}
                   </h2>
                   <p className="text-gray-700">
-                    Government agencies communicate via .gov.my websites (e.g.
-                    go.gov.my).
-                    <a
-                      href="https://trusted-websites.gov.my"
-                      className="text-blue-600 underline"
-                    >
-                      Trusted websites
-                    </a>
-                    {/* REWRITE BACK THIS PLACEHOLDER FOR TRUSTED WEBSITES FROM GOV */}
+                    {messages?.masthead?.masthead_official_site_desc}
                   </p>
                 </div>
               </div>
@@ -62,12 +56,10 @@ const IdentifyWebsite: React.FC = () => {
                 <div className="mr-2 text-xl">🔒</div>
                 <div>
                   <h2 className="text-lg font-semibold">
-                    Secure websites use HTTPS
+                  {messages?.masthead?.masthead_ssl_title}
                   </h2>
                   <p className="text-gray-700">
-                    Look for a lock (🔒) or https:// as an added precaution.
-                    Share sensitive information only on official, secure
-                    websites.
+                  {messages?.masthead?.masthead_ssl_desc_1} 🔒 {messages?.masthead?.masthead_ssl_desc_2}
                   </p>
                 </div>
               </div>

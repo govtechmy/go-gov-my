@@ -19,8 +19,8 @@ const logoSvg = `
 <path d="M16.8763 9.93821L13.9059 12.9086C13.0764 13.7381 12.8461 14.9398 13.2149 15.976L11.5296 17.6613C11.4649 17.7259 11.3971 17.7855 11.3266 17.84C10.0363 15.7364 10.302 12.948 12.1236 11.1264L15.0941 8.15596C17.2267 6.02329 20.6845 6.02329 22.8171 8.15596C24.9498 10.2886 24.9498 13.7464 22.8171 15.879L19.8467 18.8495C18.4796 20.2166 16.568 20.7073 14.81 20.3217L21.0349 14.0968C22.1833 12.9484 22.1833 11.0866 21.0349 9.93821C19.8865 8.78985 18.0247 8.78985 16.8763 9.93821Z" fill="white"/>
 <defs>
 <radialGradient id="paint0_radial_57_14546" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(23.8333 2.91667) rotate(122.196) scale(18.6119 19.4257)">
-<stop stop-color="#53DDAB"/>
-<stop offset="1" stop-color="#2563EB"/>
+<stop stopColor="#53DDAB"/>
+<stop offset="1" stopColor="#2563EB"/>
 </radialGradient>
 </defs>
 </svg>
@@ -96,7 +96,7 @@ export function NavLogo({
             setIsPopoverOpen(false);
           }}
         >
-          <div className="grid gap-1 rounded-lg border border-gray-200 bg-white p-2 drop-shadow-sm dark:border-white/[0.15] dark:bg-black sm:min-w-[240px]">
+          <div className="grid gap-1 rounded-lg border border-gray-200 bg-white p-2 drop-shadow-sm sm:min-w-[240px] dark:border-white/[0.15] dark:bg-black">
             <ContextMenuButton
               text="Copy Logo as SVG"
               variant="outline"
