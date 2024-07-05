@@ -78,7 +78,7 @@ model VerificationToken {
   token      String   @unique
   expires    DateTime
 
-  @@unique([identifier, token])
+  @@id([identifier, token])
 }
 
 model Token {
@@ -136,7 +136,7 @@ model ProjectInvite {
   projectId String @db.Uuid
   createdAt DateTime @default(now()) @db.Timestamptz
 
-  @@unique([email, projectId])
+  @@id([email, projectId])
   @@index([projectId])
 }
 
