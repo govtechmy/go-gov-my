@@ -9,59 +9,90 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	redirectserver "redirect-server"
+	"path/filepath"
 	"redirect-server/repository"
 	"redirect-server/repository/es"
+	"strconv"
 	"strings"
 	"syscall"
 	"time"
 
+	redirectserver "redirect-server"
+
+	"github.com/joho/godotenv"
 	"github.com/olivere/elastic/v7"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.uber.org/zap"
 )
 
+const (
+	defaultElasticURL      = "http://localhost:9200"
+	defaultElasticUser     = "elastic"
+	defaultHTTPPort        = 3000
+	defaultTelemetryURL    = "localhost:4318"
+	templatePathPattern    = "../../templates/*.html"
+	notFoundTemplate       = "notfound.html"
+	serverErrorTemplate    = "server_error.html"
+	waitTemplate           = "wait.html"
+)
+
+const (
+	ENV_DEVELOPMENT = "development"
+	ENV_PRODUCTION  = "production"
+)
+
+var env string
+
+func init() {
+	// Construct the path to the .env file in the root directory
+	rootDir, err := filepath.Abs(filepath.Join(".", "..", "..", ".."))
+	if err != nil {
+		log.Fatalf("Error constructing root directory path: %s", err)
+	}
+	envPath := filepath.Join(rootDir, ".env")
+
+	// Load the .env file
+	err = godotenv.Load(envPath)
+	if err != nil {
+		log.Printf("Error loading .env file: %s", err)
+	}
+}
+
 func main() {
+	envFlag := flag.String("env", ENV_DEVELOPMENT, "App environment ('development' or 'production')")
+	flag.Parse()
+
+	env = *envFlag
+
 	logger := zap.Must(zap.NewProduction())
 	defer logger.Sync()
 
-	var elasticURL string
-	var elasticUser string
-	var elasticPassword string
-	var httpPort int
-	var telemetryURL string
-	{
-		flag.StringVar(&elasticURL, "elastic-url", "http://localhost:9200", "Elasticsearch URL")
-		flag.StringVar(&elasticUser, "elastic-user", "elastic", "Elasticsearch username")
-		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
-		flag.IntVar(&httpPort, "http-port", 3000, "HTTP server port")
-		flag.StringVar(&telemetryURL, "telemetry-url", "localhost:4318", "OpenTelemetry HTTP endpoint URL")
-	}
-	flag.Parse()
+	cfg := loadConfig()
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
 	defer stop()
 
-	traceProvider, err := redirectserver.NewTraceProvider(telemetryURL)
+	traceProvider, err := redirectserver.NewTraceProvider(cfg.TelemetryURL)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal("failed to create trace provider", zap.Error(err))
 	}
 	otel.SetTracerProvider(traceProvider)
 
 	esClient, err := elastic.NewSimpleClient(
-		elastic.SetURL(elasticURL),
-		elastic.SetBasicAuth(elasticUser, elasticPassword),
+		elastic.SetURL(cfg.ElasticURL),
+		elastic.SetBasicAuth(cfg.ElasticUser, cfg.ElasticPassword),
 		elastic.SetHttpClient(otelhttp.DefaultClient),
 	)
+
 	if err != nil {
-		logger.Fatal("cannot initiate Elasticsearch client", zap.Error(err))
+		logger.Fatal("failed to initialize Elasticsearch client", zap.Error(err))
 	}
 	linkRepo := es.NewLinkRepo(esClient)
 
-	t, err := template.ParseGlob("../../templates/*.html")
+	t, err := template.ParseGlob(templatePathPattern)
 	if err != nil {
-		logger.Fatal("cannot load html templates", zap.Error(err))
+		logger.Fatal("failed to load HTML templates", zap.Error(err))
 	}
 
 	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -75,8 +106,8 @@ func main() {
 				zap.String("ip", r.RemoteAddr),
 				zap.String("user-agent", r.UserAgent()),
 				zap.String("code", "link_not_found")) // Filebeat will run to collect link not found errors over this code
-			w.WriteHeader(404)
-			t.ExecuteTemplate(w, "notfound.html", nil)
+			w.WriteHeader(http.StatusNotFound)
+			t.ExecuteTemplate(w, notFoundTemplate, nil)
 			return
 		}
 		if err != nil {
@@ -85,33 +116,73 @@ func main() {
 				zap.String("ip", r.RemoteAddr),
 				zap.String("user-agent", r.UserAgent()),
 				zap.Error(err))
-			w.WriteHeader(500)
-			t.ExecuteTemplate(w, "server_error.html", nil)
+			w.WriteHeader(http.StatusInternalServerError)
+			t.ExecuteTemplate(w, serverErrorTemplate, nil)
 			return
 		}
 
-		t.ExecuteTemplate(w, "wait.html", link)
+		t.ExecuteTemplate(w, waitTemplate, link)
 	}), "handleLinkVisit"))
 
 	srv := &http.Server{
-		Addr:    fmt.Sprintf("0.0.0.0:%d", httpPort),
+		Addr:    fmt.Sprintf("0.0.0.0:%d", cfg.HTTPPort),
 		Handler: http.DefaultServeMux,
 	}
 
 	go func() {
 		if err := srv.ListenAndServe(); err == http.ErrServerClosed {
+			log.Println("Server closed under request")
 		} else if err != nil {
-			logger.Fatal("failed to stop http server gracefully",
-				zap.Error(err))
+			logger.Fatal("failed to stop HTTP server gracefully", zap.Error(err))
 		}
 	}()
 
 	<-ctx.Done()
 
-	shutdownCtx, stop := context.WithTimeout(context.Background(), 60*time.Second)
-	defer stop()
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer cancel()
 
 	if err := srv.Shutdown(shutdownCtx); err != nil {
-		logger.Fatal("", zap.Error(err))
+		logger.Fatal("failed to shut down server gracefully", zap.Error(err))
 	}
+}
+
+func loadConfig() struct {
+	ElasticURL      string
+	ElasticUser     string
+	ElasticPassword string
+	HTTPPort        int
+	TelemetryURL    string
+} {
+	cfg := struct {
+		ElasticURL      string
+		ElasticUser     string
+		ElasticPassword string
+		HTTPPort        int
+		TelemetryURL    string
+	}{}
+
+	// Use environment variables or defaults
+	cfg.ElasticURL = getEnv("ELASTIC_URL", defaultElasticURL)
+	cfg.ElasticUser = getEnv("ELASTIC_USER", defaultElasticUser)
+	cfg.ElasticPassword = getEnv("ELASTIC_PASSWORD", "")
+	cfg.HTTPPort = getEnvAsInt("HTTP_PORT", defaultHTTPPort)
+	cfg.TelemetryURL = getEnv("TELEMETRY_URL", defaultTelemetryURL)
+
+	return cfg
+}
+
+func getEnv(key, defaultValue string) string {
+	if value, exists := os.LookupEnv(key); exists {
+		return value
+	}
+	return defaultValue
+}
+
+func getEnvAsInt(name string, defaultVal int) int {
+	valueStr := getEnv(name, "")
+	if value, err := strconv.Atoi(valueStr); err == nil {
+		return value
+	}
+	return defaultVal
 }
