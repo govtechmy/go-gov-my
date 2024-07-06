@@ -8,11 +8,7 @@
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
     />
-    <link
-      rel="icon"
-      href="https://raw.githubusercontent.com/data-gov-my/datagovmy-front/main/apps/kkmnow/public/favicon.ico"
-      type="image/x-icon"
-    />
+    <link rel="icon" href="../public/favicon.ico" type="image/x-icon" />
 
     <style>
       .spinner {
@@ -33,13 +29,39 @@
         }
       }
     </style>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <script>
-      // setTimeout(function () {
-      //   window.location.href = "go.gov.my";
-      // }, 10000);
+      setTimeout(function () {
+        window.location.href = "https://go.gov.my/";
+      }, 10000);
     </script>
   </head>
   <body class="bg-gray-200">
+    <nav class="border-gray-500 bg-slate-100 dark:bg-gray-900 flex justify-center items-center text-center">
+      <div
+        class="mx-auto flex max-w-screen-2xl flex-wrap justify-between p-1"
+      >
+        <p
+          href="https://go.gov.my/"
+          class="flex items-center space-x-3 rtl:space-x-reverse"
+        >
+          <img
+            src="../public/jata_logo.png"
+            class="h-6"
+            alt="GOGOVMY Logo"
+          />
+          <img
+            src="../public/_static/logo.svg"
+            class="h-5"
+            alt="GOGOVMY Logo"
+          />
+          <span
+            class="self-center whitespace-nowrap text-sm font-regular dark:text-white"
+            >Official Malaysian Government Website</span
+          >
+    </p>
+      </div>
+    </nav>
     <nav class="border-gray-500 bg-white dark:bg-gray-900">
       <div
         class="mx-auto flex max-w-screen-2xl flex-wrap items-center justify-between p-4"
@@ -49,9 +71,9 @@
           class="flex items-center space-x-3 rtl:space-x-reverse"
         >
           <img
-            src="https://data.moh.gov.my/_next/image?url=%2Fstatic%2Fimages%2Flogo.png&w=48&q=75"
+            src="../public/_static/logo.svg"
             class="h-8"
-            alt="Jata Negara Logo"
+            alt="GOGOVMY Logo"
           />
           <span
             class="self-center whitespace-nowrap text-xl font-black dark:text-white"
@@ -60,33 +82,55 @@
         </a>
       </div>
     </nav>
-    <div class="flex min-h-screen items-center justify-center">
+    <div class="flex min-h-screen items-center justify-center p-4">
       <div
         class="max-w-screen rounded-lg border border-gray-200 bg-white p-6 shadow dark:border-gray-700 dark:bg-gray-800"
       >
-        <h5
-          class="mb-2 text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-white"
+        <div
+          class="mb-4 flex items-center justify-center rounded-lg border border-red-300 bg-red-50 p-4 text-sm text-red-800 dark:border-red-800 dark:bg-gray-800 dark:text-red-400"
+          role="alert"
         >
-          Opps! Link
-          <mark class="rounded bg-red-500 px-2 text-white dark:bg-red-500"
-            >not found</mark
-          >
-        </h5>
-        <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+          <span class="sr-only">Alert</span>
+          <div>
+            <span class="font-medium"> 
+            <h5
+              class="my-2 text-center text-xl font-bold tracking-tight text-gray-900 text-red-800 dark:text-white"
+            >
+              Opps! We couldn't find the link that you're looking for.
+            </h5>
+          </div>
+        </div>
+
+        <p class="mb-3 font-normal text-center text-gray-700 dark:text-gray-400">
+          We're redirecting you back to our Home Page.
+        </p>
+       
+        <p class="mb-3 font-normal text-center text-gray-700 dark:text-gray-400">
           Beware of phishing websites. Make sure your link starts with
           <span class="font-bold text-red-500">go.gov.my</span>
         </p>
-        <div class="spinner"></div>
+        <div class="flex justify-center text-center">
+          <lottie-player
+            src="https://lottie.host/66dde825-5453-4edc-b61a-07756a1dbd88/znvK3NZvSk.json"
+            background="transparent"
+            speed="1"
+            loop
+            autoplay
+            direction="1"
+            mode="normal"
+            class="h-1/2 w-1/2"
+          ></lottie-player>
+        </div>
         <p
           class="mb-3 text-center font-normal text-gray-700 dark:text-gray-400"
         >
-          You'll be redirected to our home page in 10 seconds...
+          You'll be redirected to our Home Page in 10 seconds...
         </p>
         <a
-          href="go.gov.my"
+          href="{{.URL}}"
           class="flex items-center justify-center rounded-lg bg-blue-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-          I've checked the link. Skip ahead
+          I've understood. Skip ahead
           <svg
             class="ms-2 h-3.5 w-3.5 rtl:rotate-180"
             aria-hidden="true"

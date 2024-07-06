@@ -46,7 +46,7 @@ var env string
 
 func init() {
 	// Construct the path to the .env file in the root directory
-	rootDir, err := filepath.Abs(filepath.Join(".", "..", "..", ".."))
+	rootDir, err := filepath.Abs(filepath.Join(".", "..", "..", "..", ".."))
 	if err != nil {
 		log.Fatalf("Error constructing root directory path: %s", err)
 	}

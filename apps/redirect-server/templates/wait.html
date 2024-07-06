@@ -37,6 +37,27 @@
     </script>
   </head>
   <body class="bg-gray-200">
+    <nav
+      class="flex items-center justify-center border-gray-500 bg-slate-100 text-center dark:bg-gray-900"
+    >
+      <div class="mx-auto flex max-w-screen-2xl flex-wrap justify-between p-1">
+        <p
+          href="https://go.gov.my/"
+          class="flex items-center space-x-3 rtl:space-x-reverse"
+        >
+          <img src="../public/jata_logo.png" class="h-6" alt="GOGOVMY Logo" />
+          <img
+            src="../public/_static/logo.svg"
+            class="h-5"
+            alt="GOGOVMY Logo"
+          />
+          <span
+            class="font-regular self-center whitespace-nowrap text-sm dark:text-white"
+            >Official Malaysian Government Website</span
+          >
+        </p>
+      </div>
+    </nav>
     <nav class="border-gray-500 bg-white dark:bg-gray-900">
       <div
         class="mx-auto flex max-w-screen-2xl flex-wrap items-center justify-between p-4"
@@ -57,7 +78,7 @@
         </a>
       </div>
     </nav>
-    <div class="flex min-h-screen items-center justify-center p-4">
+    <div class="flex min-h-screen items-center justify-center p-4 text-center">
       <div
         class="max-w-screen rounded-lg border border-gray-200 bg-white p-6 shadow dark:border-gray-700 dark:bg-gray-800"
       >
@@ -73,24 +94,22 @@
           Beware of phishing websites. Make sure your link starts with
           <span class="font-bold text-red-500">go.gov.my</span>
         </p>
-        <!-- Arrow Json https://lottie.host/ac4a8168-a049-48ed-9397-8cb61887d1ce/5G4y5ghomj.json -->
-        <!-- Chain Json https://lottie.host/31e2c0f6-abf1-43b2-adbe-95dcab67e63b/t2020NObGy.json-->
         <div class="flex justify-center text-center">
           <lottie-player
-            src="https://lottie.host/ac4a8168-a049-48ed-9397-8cb61887d1ce/5G4y5ghomj.json"
+            src="https://lottie.host/2ab54ef1-9f43-4cb7-9d6d-3b36a6e9b8de/1AhMw6DxnN.json"
             background="transparent"
             speed="1"
             loop
             autoplay
             direction="1"
             mode="normal"
-            class="h-1/2 w-1/2"
+            class="h-1/4 w-1/4"
           ></lottie-player>
         </div>
         <p
           class="mb-3 text-center font-normal text-gray-700 dark:text-gray-400"
         >
-          You'll be redirected to in 10 seconds...
+          You'll be redirected to the site in 10 seconds...
         </p>
         <a
           href="{{.URL}}"
