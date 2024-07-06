@@ -1,6 +1,7 @@
 "use client";
 
 import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
+import Image from "next/image";
 import React, { useState } from "react";
 import Checkmark14PointStar from "../icons/checkmark";
 import ChevronDown from "../icons/chevron";
@@ -25,13 +26,19 @@ const IdentifyWebsite: React.FC = () => {
         }
       >
         <div className="container">
-          <div className="text-brand-700 flex flex-wrap items-center gap-1.5 py-1 text-sm leading-4">
-            <Checkmark14PointStar className="size-4 text-blue-600 sm:size-5" />
+          <div className="text-brand-700 m-1 flex flex-wrap items-center justify-center py-1 text-sm leading-4">
+            <Image
+              src="/jata_logo.png"
+              width={25}
+              height={25}
+              alt="Logo Jata Negara"
+            />
+            <Checkmark14PointStar className="mx-2 size-4 text-blue-600 sm:size-5" />
             <span className="text-black-700">
               {messages?.masthead?.masthead_title}
             </span>
             <button
-              className="flex items-center gap-0.5 text-blue-600"
+              className="ml-2 flex items-center gap-0.5 text-blue-600"
               onClick={() => setOpen(!open)}
             >
               {messages?.masthead?.masthead_subtitle}
