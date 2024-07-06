@@ -1,3 +1,5 @@
+"use client";
+
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 
 type Option = {
