@@ -1,3 +1,5 @@
+"use client";
+
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 
 type Option = {
@@ -99,7 +101,7 @@ export function CustomSelect({
   };
 
   return (
-    <div className="border-1 relative w-[-moz-max-content] w-[-webkit-max-content] w-max cursor-pointer rounded text-left duration-300 ease-in-out ">
+    <div className="border-1 relative w-max cursor-pointer rounded text-left duration-300 ease-in-out ">
       <div
         ref={inputRef}
         onClick={handleInputClick}

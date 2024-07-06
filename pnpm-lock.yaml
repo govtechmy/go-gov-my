@@ -159,6 +159,9 @@ importers:
       bottleneck:
         specifier: ^2.19.5
         version: 2.19.5
+      clsx:
+        specifier: ^2.1.0
+        version: 2.1.0
       cmdk:
         specifier: ^0.2.0
         version: 0.2.0(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)
@@ -282,6 +285,9 @@ importers:
       swr:
         specifier: ^2.1.5
         version: 2.1.5(react@18.2.0)
+      tailwind-merge:
+        specifier: ^2.2.1
+        version: 2.2.1
       topojson-client:
         specifier: ^3.1.0
         version: 3.1.0

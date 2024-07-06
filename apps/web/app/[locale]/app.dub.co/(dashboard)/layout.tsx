@@ -1,4 +1,5 @@
 import { useIntlHook } from "@/lib/middleware/utils/useI18n";
+import Header from "@/ui/header/header";
 import HelpPortal from "@/ui/layout/help";
 import NavTabs from "@/ui/layout/nav-tabs";
 import UserDropdown from "@/ui/layout/user-dropdown";
@@ -27,6 +28,7 @@ export default function Layout({
     <Providers>
       <MessagesProvider messages={messages}>
         <div className="min-h-screen w-full bg-gray-50">
+          <Header />
           <div className="sticky left-0 right-0 top-0 z-20 border-b border-gray-200 bg-white">
             <MaxWidthWrapper>
               <div className="flex h-16 items-center justify-between">

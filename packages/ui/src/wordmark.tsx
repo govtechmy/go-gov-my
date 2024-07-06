@@ -37,8 +37,8 @@ export function Wordmark({ className }: { className?: string }) {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(23.3333 2.91667) rotate(122.196) scale(18.6119 19.4257)"
         >
-          <stop stop-color="#53DDAB" />
-          <stop offset="1" stop-color="#2563EB" />
+          <stop stopColor="#53DDAB" />
+          <stop offset="1" stopColor="#2563EB" />
         </radialGradient>
       </defs>
     </svg>
