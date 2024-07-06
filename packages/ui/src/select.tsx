@@ -115,7 +115,7 @@ export function CustomSelect({
 
       {showMenu && (
         <div
-          className={`z-[99] mt-1 max-h-[312px] min-h-[50px] w-max overflow-auto rounded-lg border-2 border-[#dbdbdb] bg-white`}
+          className={`z-[99] absolute mt-1 max-h-[312px] min-h-[50px] w-max overflow-auto rounded-lg border-2 border-[#dbdbdb] bg-white`}
         >
           {getOptions().map((option) => (
             <div
