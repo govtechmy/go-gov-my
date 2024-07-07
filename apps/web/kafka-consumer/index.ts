@@ -18,6 +18,9 @@ async function main() {
     groupId: "redirect-group",
     minBytes: 10e3, // 10KB
     maxBytes: 10e6, // 10MB
+    retry: {
+      retries: Number.MAX_SAFE_INTEGER,
+    },
   });
 
   await consumer.connect();
@@ -32,73 +35,104 @@ async function main() {
   await consumer.run({
     autoCommitInterval: 1000, // 1 second
     eachMessage: async ({ message }) => {
-      try {
-        if (!message.value) {
-          return;
-        }
+      if (!message.value) {
+        return;
+      }
 
-        // expect a debezium event payload
-        const { payload: debeziumPayload } = JSON.parse(
-          message.value.toString("utf8"),
-        );
+      const processMessage = async (attempt = 0) => {
+        try {
+          // expect a debezium event payload
+          const { payload: debeziumPayload } = JSON.parse(
+            message.value?.toString("utf8") || "{}",
+          );
 
-        if (debeziumPayload.op === "c") {
-          // debeziumPayload.after is the newly inserted row in WebhookOutbox table
-          const { id: outboxId, payload, action } = debeziumPayload.after;
-
-          log.info(debeziumPayload.after);
-
-          let response: Response;
-
-          switch (action) {
-            case OUTBOX_ACTIONS.CREATE_LINK:
-              log.info("Sending a request to the redirect server: POST /links");
-              response = await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
-                method: "POST",
-                body: payload,
-              });
-              break;
-            case OUTBOX_ACTIONS.UPDATE_LINK:
-              log.info("Sending a request to the redirect server: PUT /links");
-              response = await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
-                method: "PUT",
-                body: payload,
-              });
-              break;
-            case OUTBOX_ACTIONS.DELETE_LINK:
-              const { id: linkId } = JSON.parse(payload);
-              log.info(
-                `Sending a request to the redirect server: DELETE /links/${linkId}`,
-              );
-              response = await fetch(
-                `${REDIRECT_SERVER_BASE_URL}/links/${linkId}`,
-                {
-                  method: "DELETE",
-                },
-              );
-              break;
-            default:
-              log.error(
-                `Unhandled outbox action '${action}', ID = ${outboxId}`,
-              );
-              return;
+          if (
+            Object.keys(debeziumPayload).length === 0 &&
+            debeziumPayload.constructor === Object
+          ) {
+            // Skip further processing if the payload is an empty object
+            return;
           }
 
-          if (response.ok) {
-            log.info("Response to redirect-server was successful");
-            await prisma.webhookOutbox.delete({
-              where: { id: outboxId },
-            });
-            log.info(`WebhookOutbox row with ID ${outboxId} was deleted`);
+          if (debeziumPayload.op === "c") {
+            // debeziumPayload.after is the newly inserted row in WebhookOutbox table
+            const { id: outboxId, payload, action } = debeziumPayload.after;
+
+            log.info(debeziumPayload.after);
+
+            let response: Response;
+
+            switch (action) {
+              case OUTBOX_ACTIONS.CREATE_LINK:
+                log.info(
+                  "Sending a request to the redirect server: POST /links",
+                );
+                response = await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
+                  method: "POST",
+                  body: payload,
+                });
+                break;
+              case OUTBOX_ACTIONS.UPDATE_LINK:
+                log.info(
+                  "Sending a request to the redirect server: PUT /links",
+                );
+                response = await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
+                  method: "PUT",
+                  body: payload,
+                });
+                break;
+              case OUTBOX_ACTIONS.DELETE_LINK:
+                const { id: linkId } = JSON.parse(payload);
+                log.info(
+                  `Sending a request to the redirect server: DELETE /links/${linkId}`,
+                );
+                response = await fetch(
+                  `${REDIRECT_SERVER_BASE_URL}/links/${linkId}`,
+                  {
+                    method: "DELETE",
+                  },
+                );
+                break;
+              default:
+                log.error(
+                  `Unhandled outbox action '${action}', ID = ${outboxId}`,
+                );
+                return;
+            }
+
+            if (response.ok) {
+              log.info("Response to redirect-server was successful");
+              await prisma.webhookOutbox.delete({
+                where: { id: outboxId },
+              });
+              log.info(`WebhookOutbox row with ID ${outboxId} was deleted`);
+            } else {
+              log.error(
+                `Response to redirect-server was unsuccessful, status: ${response.status}, outboxId: ${outboxId}`,
+              );
+              throw new Error(
+                `Response to redirect-server was unsuccessful, status: ${response.status}`,
+              );
+            }
+          }
+        } catch (err) {
+          console.error(`Attempt ${attempt + 1} failed:`, err);
+
+          const maxAttempts = 5;
+          const delay = Math.pow(2, attempt) * 1000; // Exponential backoff
+
+          if (attempt < maxAttempts) {
+            log.info(`Retrying in ${delay / 1000} seconds...`);
+            setTimeout(() => processMessage(attempt + 1), delay);
           } else {
             log.error(
-              `Response to redirect-server was unsuccessful, status: ${response.status}, outboxId: ${outboxId}`,
+              `Max retry attempts reached for message with offset ${message.offset}`,
             );
           }
         }
-      } catch (err) {
-        console.error(err);
-      }
+      };
+
+      processMessage();
     },
   });
 }
