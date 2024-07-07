@@ -6,6 +6,7 @@ const OUTBOX_TOPIC =
   process.env.OUTBOX_TOPIC || "ps-postgres.public.WebhookOutbox";
 const REDIRECT_SERVER_BASE_URL =
   process.env.REDIRECT_SERVER_URL || "http://localhost:3000";
+const MAX_CONSECUTIVE_FAILURES = 5; // Define the threshold for circuit breaker
 
 async function main() {
   const kafkaBrokerUrl = process.env.KAFKA_BROKER_URL || "localhost:9092";
@@ -32,8 +33,10 @@ async function main() {
   const log = consumer.logger();
   log.info("Starting kafka consumer...");
 
+  let consecutiveFailures = 0;
+
   await consumer.run({
-    autoCommitInterval: 1000, // 1 second
+    autoCommit: false,
     eachMessage: async ({ message }) => {
       if (!message.value) {
         return;
@@ -106,6 +109,7 @@ async function main() {
                 where: { id: outboxId },
               });
               log.info(`WebhookOutbox row with ID ${outboxId} was deleted`);
+              consecutiveFailures = 0;
             } else {
               log.error(
                 `Response to redirect-server was unsuccessful, status: ${response.status}, outboxId: ${outboxId}`,
@@ -116,19 +120,21 @@ async function main() {
             }
           }
         } catch (err) {
+          consecutiveFailures++;
+
           console.error(`Attempt ${attempt + 1} failed:`, err);
 
-          const maxAttempts = 5;
-          const delay = Math.pow(2, attempt) * 1000; // Exponential backoff
-
-          if (attempt < maxAttempts) {
-            log.info(`Retrying in ${delay / 1000} seconds...`);
-            setTimeout(() => processMessage(attempt + 1), delay);
-          } else {
+          if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
             log.error(
-              `Max retry attempts reached for message with offset ${message.offset}`,
+              `Max retry attempts reached for message with offset ${message.offset}. Crashing the consumer...`,
             );
+            process.exit(1); // Crash the consumer
           }
+
+          // Lets do every 1 minute with a random jitter of 5 seconds
+          const delay = 60 * 1000 + Math.random() * 5000;
+          log.info(`Retrying in ${(delay / 1000).toFixed(2)} seconds...`);
+          setTimeout(() => processMessage(attempt + 1), delay);
         }
       };
 
