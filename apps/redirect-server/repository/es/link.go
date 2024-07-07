@@ -3,13 +3,18 @@ package es
 import (
 	"context"
 	"encoding/json"
+	"time"
 
 	"redirect-server/repository"
 
 	"github.com/olivere/elastic/v7"
 )
 
-const linkIndex = "links"
+// todo: handle idempotency logic
+const (
+	linkIndex          = "links"
+	idempotencyKeyIndex = "idempotency_keys"
+)
 
 type LinkRepo struct {
 	esClient *elastic.Client
@@ -55,6 +60,32 @@ func (r *LinkRepo) DeleteLink(ctx context.Context, slug string) error {
 	_, err := r.esClient.Delete().
 		Index(linkIndex).
 		Id(slug).
+		Do(ctx)
+	return err
+}
+
+
+func (r *LinkRepo) IdempotencyKeyExists(ctx context.Context, id string) (bool, error) {
+	res, err := r.esClient.Get().
+		Index(idempotencyKeyIndex).
+		Id(id).
+		Do(ctx)
+	if err != nil {
+		if elastic.IsNotFound(err) {
+			return false, nil
+		}
+		return false, err
+	}
+	return res.Found, nil
+}
+
+func (r *LinkRepo) SaveIdempotencyKey(ctx context.Context, id string) error {
+	_, err := r.esClient.Index().
+		Index(idempotencyKeyIndex).
+		Id(id).
+		BodyJson(map[string]interface{}{
+			"timestamp": time.Now(),
+		}).
 		Do(ctx)
 	return err
 }
