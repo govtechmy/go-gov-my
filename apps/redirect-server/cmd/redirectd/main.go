@@ -24,7 +24,13 @@ import (
 
 func main() {
 	logger := zap.Must(zap.NewProduction())
-	defer logger.Sync()
+
+	// golang-lint mentioned it should check for err
+	defer func() {
+		if err := logger.Sync(); err != nil {
+			fmt.Fprintf(os.Stderr, "Failed to sync logger: %v\n", err)
+		}
+	}()
 
 	var elasticURL string
 	var elasticUser string
@@ -76,7 +82,9 @@ func main() {
 				zap.String("user-agent", r.UserAgent()),
 				zap.String("code", "link_not_found")) // Filebeat will run to collect link not found errors over this code
 			w.WriteHeader(404)
-			t.ExecuteTemplate(w, "notfound.html", nil)
+			if err := t.ExecuteTemplate(w, "notfound.html", nil); err != nil {
+				logger.Error("failed to execute template", zap.Error(err))
+			}
 			return
 		}
 		if err != nil {
@@ -86,11 +94,15 @@ func main() {
 				zap.String("user-agent", r.UserAgent()),
 				zap.Error(err))
 			w.WriteHeader(500)
-			t.ExecuteTemplate(w, "server_error.html", nil)
+			if err := t.ExecuteTemplate(w, "server_error.html", nil); err != nil {
+				logger.Error("failed to execute template", zap.Error(err))
+			}
 			return
 		}
 
-		t.ExecuteTemplate(w, "wait.html", link)
+		if err := t.ExecuteTemplate(w, "wait.html", link); err != nil {
+			logger.Error("failed to execute template", zap.Error(err))
+		}
 	}), "handleLinkVisit"))
 
 	srv := &http.Server{
