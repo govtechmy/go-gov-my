@@ -39,5 +39,4 @@ jobs:
       - name: Install Go dependencies and Run Golang Lint
         run: |
           cd apps/redirect-server
-          go mod tidy
           golangci-lint run --timeout 5m
