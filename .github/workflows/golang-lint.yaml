@@ -27,5 +27,6 @@ jobs:
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.45.2
 
       - name: Run golangci-lint
-        run: cd apps/redirect-server
+        run: |
+          cd apps/redirect-server
           golangci-lint run
