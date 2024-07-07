@@ -61,6 +61,9 @@ async function main() {
             // debeziumPayload.after is the newly inserted row in WebhookOutbox table
             const { id: outboxId, payload, action } = debeziumPayload.after;
 
+            // Lets generate idepotency key like Akmal suggested
+            const idempotencyKey = generateIdempotencyKey(outboxId);
+
             log.info(debeziumPayload.after);
 
             let response: Response;
@@ -72,6 +75,10 @@ async function main() {
                 );
                 response = await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
                   method: "POST",
+                  headers: {
+                    "X-Idempotency-Key": idempotencyKey,
+                    "Content-Type": "application/json",
+                  },
                   body: payload,
                 });
                 break;
@@ -81,6 +88,10 @@ async function main() {
                 );
                 response = await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
                   method: "PUT",
+                  headers: {
+                    "X-Idempotency-Key": idempotencyKey,
+                    "Content-Type": "application/json",
+                  },
                   body: payload,
                 });
                 break;
@@ -93,6 +104,9 @@ async function main() {
                   `${REDIRECT_SERVER_BASE_URL}/links/${linkId}`,
                   {
                     method: "DELETE",
+                    headers: {
+                      "X-Idempotency-Key": idempotencyKey,
+                    },
                   },
                 );
                 break;
@@ -133,7 +147,9 @@ async function main() {
 
           // Lets do every 1 minute with a random jitter of 5 seconds
           const delay = 60 * 1000 + Math.random() * 5000;
+
           log.info(`Retrying in ${(delay / 1000).toFixed(2)} seconds...`);
+
           setTimeout(() => processMessage(attempt + 1), delay);
         }
       };
@@ -141,6 +157,15 @@ async function main() {
       processMessage();
     },
   });
+}
+
+// Function to generate Idempotent key into Base64
+function generateIdempotencyKey(outboxId: string) {
+  const key = {
+    timestamp: new Date().toISOString(),
+    id: outboxId,
+  };
+  return Buffer.from(JSON.stringify(key)).toString("base64");
 }
 
 main();
