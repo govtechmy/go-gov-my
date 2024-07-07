@@ -154,7 +154,6 @@ async function main() {
     },
   });
 }
-
 // Function to generate Idempotent key into Base64
 function generateIdempotencyKey(outboxId: string) {
   const key = {

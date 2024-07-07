@@ -24,6 +24,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      ## Issue: https://github.com/govtechmy/go-gov-my/issues/138
       - name: Check prettier format
         run: pnpm run prettier-check
 
