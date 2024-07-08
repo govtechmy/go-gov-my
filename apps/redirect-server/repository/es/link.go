@@ -70,12 +70,15 @@ func (r *LinkRepo) IdempotencyKeyExists(ctx context.Context, id string) (bool, e
 		Index(idempotencyKeyIndex).
 		Id(id).
 		Do(ctx)
+
+	if elastic.IsNotFound(err) {
+		return false, nil
+	}
+
 	if err != nil {
-		if elastic.IsNotFound(err) {
-			return false, nil
-		}
 		return false, err
 	}
+	
 	return res.Found, nil
 }
 
