@@ -34,7 +34,7 @@ async function main() {
 
   await consumer.run({
     autoCommit: false,
-    eachMessage: async ({ message }) => {
+    eachMessage: async ({ topic, partition, message }) => {
       if (!message.value) {
         return;
       }
@@ -120,6 +120,15 @@ async function main() {
                 where: { id: outboxId },
               });
               log.info(`WebhookOutbox row with ID ${outboxId} was deleted`);
+
+              // Offset commit as per https://kafka.js.org/docs/consuming#a-name-manual-commits-a-manual-committing
+              await consumer.commitOffsets([
+                {
+                  topic,
+                  partition,
+                  offset: (parseInt(message.offset, 10) + 1).toString(),
+                },
+              ]);
             } else {
               log.error(
                 `Response to redirect-server was unsuccessful, status: ${response.status}, outboxId: ${outboxId}`,
