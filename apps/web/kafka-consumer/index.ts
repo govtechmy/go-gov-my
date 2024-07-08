@@ -6,7 +6,6 @@ const OUTBOX_TOPIC =
   process.env.OUTBOX_TOPIC || "ps-postgres.public.WebhookOutbox";
 const REDIRECT_SERVER_BASE_URL =
   process.env.REDIRECT_SERVER_URL || "http://localhost:3000";
-const MAX_CONSECUTIVE_FAILURES = 5; // Define the threshold for circuit breaker
 
 async function main() {
   const kafkaBrokerUrl = process.env.KAFKA_BROKER_URL || "localhost:9092";
@@ -32,8 +31,6 @@ async function main() {
 
   const log = consumer.logger();
   log.info("Starting kafka consumer...");
-
-  let consecutiveFailures = 0;
 
   await consumer.run({
     autoCommit: false,
@@ -123,7 +120,6 @@ async function main() {
                 where: { id: outboxId },
               });
               log.info(`WebhookOutbox row with ID ${outboxId} was deleted`);
-              consecutiveFailures = 0;
             } else {
               log.error(
                 `Response to redirect-server was unsuccessful, status: ${response.status}, outboxId: ${outboxId}`,
@@ -134,16 +130,7 @@ async function main() {
             }
           }
         } catch (err) {
-          consecutiveFailures++;
-
           console.error(`Attempt ${attempt + 1} failed:`, err);
-
-          if (consecutiveFailures >= MAX_CONSECUTIVE_FAILURES) {
-            log.error(
-              `Max retry attempts reached for message with offset ${message.offset}. Crashing the consumer...`,
-            );
-            process.exit(1); // Crash the consumer
-          }
 
           // Lets do every 1 minute with a random jitter of 5 seconds
           const delay = 60 * 1000 + Math.random() * 5000;
