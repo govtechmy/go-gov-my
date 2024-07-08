@@ -114,28 +114,43 @@ async function main() {
                 return;
             }
 
-            if (response.ok) {
-              log.info("Response to redirect-server was successful");
-              await prisma.webhookOutbox.delete({
-                where: { id: outboxId },
-              });
-              log.info(`WebhookOutbox row with ID ${outboxId} was deleted`);
+            switch (response.status) {
+              case 200:
+                // 200 OK
+                log.info("Response to redirect-server was successful");
+                await prisma.webhookOutbox.delete({
+                  where: { id: outboxId },
+                });
+                log.info(`WebhookOutbox row with ID ${outboxId} was deleted`);
+                // Offset commit as per https://kafka.js.org/docs/consuming#a-name-manual-commits-a-manual-committing
+                await consumer.commitOffsets([
+                  {
+                    topic,
+                    partition,
+                    offset: (parseInt(message.offset, 10) + 1).toString(),
+                  },
+                ]);
+                break;
 
-              // Offset commit as per https://kafka.js.org/docs/consuming#a-name-manual-commits-a-manual-committing
-              await consumer.commitOffsets([
-                {
-                  topic,
-                  partition,
-                  offset: (parseInt(message.offset, 10) + 1).toString(),
-                },
-              ]);
-            } else {
-              log.error(
-                `Response to redirect-server was unsuccessful, status: ${response.status}, outboxId: ${outboxId}`,
-              );
-              throw new Error(
-                `Response to redirect-server was unsuccessful, status: ${response.status}`,
-              );
+              case 409:
+                // 409 Conflict - Duplicate request
+                // Offset commit as per https://kafka.js.org/docs/consuming#a-name-manual-commits-a-manual-committing
+                await consumer.commitOffsets([
+                  {
+                    topic,
+                    partition,
+                    offset: (parseInt(message.offset, 10) + 1).toString(),
+                  },
+                ]);
+                break;
+              default:
+                // Means other status code, throw error and repeat loop.
+                log.error(
+                  `Response to redirect-server was unsuccessful, status: ${response.status}, outboxId: ${outboxId}`,
+                );
+                throw new Error(
+                  `Response to redirect-server was unsuccessful, status: ${response.status}`,
+                );
             }
           }
         } catch (err) {
