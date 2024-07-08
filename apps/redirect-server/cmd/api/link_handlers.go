@@ -134,18 +134,18 @@ func extractAndValidateIdempotencyKey(r *http.Request) (*IdempotencyKey, error) 
 		return nil, fmt.Errorf("X-Idempotency-Key header is required")
 	}
 
-	idempotencyKeyJson, err := base64.StdEncoding.DecodeString(idempotencyKeyBase64)
+	idempotencyKeyJSON, err := base64.StdEncoding.DecodeString(idempotencyKeyBase64)
 	if err != nil {
-		return nil, fmt.Errorf("Invalid X-Idempotency-Key header")
+		return nil, fmt.Errorf("invalid X-Idempotency-Key header")
 	}
 
 	var idempotencyKey IdempotencyKey
-	if err := json.Unmarshal(idempotencyKeyJson, &idempotencyKey); err != nil {
-		return nil, fmt.Errorf("Invalid X-Idempotency-Key header")
+	if err := json.Unmarshal(idempotencyKeyJSON, &idempotencyKey); err != nil {
+		return nil, fmt.Errorf("invalid X-Idempotency-Key header")
 	}
 
 	if time.Since(idempotencyKey.Timestamp) > idempotencyTTL {
-		return nil, fmt.Errorf("Idempotency key expired")
+		return nil, fmt.Errorf("idempotency key expired")
 	}
 
 	return &idempotencyKey, nil
@@ -155,7 +155,7 @@ func saveLinkToElasticsearch(ctx context.Context, link Link) error {
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(link); err != nil {
 		log.Printf("Error encoding document: %s", err)
-		return fmt.Errorf("Server error")
+		return fmt.Errorf("server error")
 	}
 
 	indexReq := esapi.IndexRequest{
@@ -168,13 +168,13 @@ func saveLinkToElasticsearch(ctx context.Context, link Link) error {
 	res, err := indexReq.Do(ctx, esClient)
 	if err != nil {
 		log.Printf("Error indexing document in Elasticsearch: %s", err)
-		return fmt.Errorf("Server error")
+		return fmt.Errorf("server error")
 	}
 	defer res.Body.Close()
 
 	if res.IsError() {
 		log.Printf("[%s] Error indexing document ID=%s", res.Status(), link.ID)
-		return fmt.Errorf("Server error")
+		return fmt.Errorf("server error")
 	}
 
 	return nil
