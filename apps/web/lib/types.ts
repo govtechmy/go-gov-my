@@ -1,6 +1,7 @@
 import z from "@/lib/zod";
 import { metaTagsSchema } from "@/lib/zod/schemas/metatags";
 import { Link } from "@prisma/client";
+import { AgencySchema } from "./zod/schemas/agencies";
 import { createLinkBodySchema } from "./zod/schemas/links";
 
 export type LinkProps = Link;
@@ -162,3 +163,5 @@ export const tagColors = [
 ] as const;
 
 export type MetaTag = z.infer<typeof metaTagsSchema>;
+
+export type AgencyProps = z.infer<typeof AgencySchema>;

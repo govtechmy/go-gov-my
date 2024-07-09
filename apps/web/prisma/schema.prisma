@@ -15,8 +15,11 @@ generator client {
 }
 
 model Agency {
-  code          String    @id
-  name          String
+  code    String    @id
+  logo    String?
+  names   Json
+
+  members User[]
 }
 
 model User {
@@ -25,8 +28,10 @@ model User {
   email         String   @unique
   emailVerified DateTime?
   image         String?
-  agencyCode    String    @default("dev")
+  agencyCode    String
   role          UserRole  @default(staff)
+
+  agency     Agency         @relation(fields: [agencyCode], references: [code])
 
   accounts   Account[]
   sessions   Session[]
@@ -35,6 +40,8 @@ model User {
   tokens     Token[]
   createdAt  DateTime       @default(now()) @db.Timestamptz
   subscribed Boolean        @default(true)
+
+  @@index([agencyCode])
 }
 
 enum UserRole {
