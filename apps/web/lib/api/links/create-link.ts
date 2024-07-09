@@ -133,7 +133,7 @@ export async function createLink(
                   host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
                   payload: linkDTO as unknown as Prisma.InputJsonValue,
                   headers: headersJSON,
-                  // partitionId: 0, // For now lets use the default partition id 0
+                  partitionKey: linkDTO.slug,
                 },
               }),
             ]
@@ -144,7 +144,7 @@ export async function createLink(
                   host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
                   payload: linkDTO as unknown as Prisma.InputJsonValue,
                   headers: headersJSON,
-                  // partitionId: 0, // For now lets use the default partition id 0
+                  partitionKey: linkDTO.slug,
                 },
               }),
               addToHistory({
