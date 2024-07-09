@@ -20,10 +20,15 @@ const idempotencyTTL = 72 * time.Hour
 
 type Link struct {
 	ID        string `json:"id"`
-	Key       string `json:"key"`
+	Key       string `json:"slug"`
 	URL       string `json:"url"`
-	Expired   bool   `json:"expired"`
+	ExpiresAt bool   `json:"expiresAt"`
+	Ios       string `json:"ios"`
+	Android   string `json:"android"`
 	CreatedAt string `json:"createdAt"`
+	Action    string `json:"action"`
+	// OutboxID  string `json:"outboxId"`
+	UploadedImageUrl string `json:"uploadedImageUrl"`
 }
 
 type IdempotencyKey struct {
