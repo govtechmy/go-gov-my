@@ -2,31 +2,37 @@ root = "."
 testdata_dir = "testdata"
 tmp_dir = "tmp"
 
-[build]
-  args_bin = []
-  bin = "./tmp/main"
-  cmd = "go build -o ./tmp/main ."
+# Configuration for `api` main application
+[build.api]
+  bin = "./tmp/api"
+  cmd = "go build -o ./tmp/api ./cmd/api"
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]
-  exclude_file = []
-  exclude_regex = ["_test.go"]
-  exclude_unchanged = false
-  follow_symlink = false
-  full_bin = ""
-  include_dir = []
+  include_dir = ["cmd/api"]
   include_ext = ["go", "tpl", "tmpl", "html"]
-  include_file = []
-  kill_delay = "1s"
-  log = "build-errors.log"
-  poll = false
-  poll_interval = 0
-  post_cmd = []
-  pre_cmd = []
-  rerun = false
-  rerun_delay = 500
-  send_interrupt = true
-  stop_on_error = false
+  log = "build-errors-api.log"
+  post_cmd = ["chmod +x ./tmp/api"]
 
+[run.api]
+  cmd = "./tmp/api"
+  watch = ["cmd/api"]
+
+# Configuration for `redirectd` main application
+[build.redirectd]
+  bin = "./tmp/redirectd"
+  cmd = "go build -o ./tmp/redirectd ./cmd/redirect"
+  delay = 1000
+  exclude_dir = ["assets", "tmp", "vendor", "testdata"]
+  include_dir = ["cmd/redirectd"]
+  include_ext = ["go", "tpl", "tmpl", "html"]
+  log = "build-errors-redirectd.log"
+  post_cmd = ["chmod +x ./tmp/redirectd"]
+
+[run.redirectd]
+  cmd = "./tmp/redirectd"
+  watch = ["cmd/redirectd"]
+
+# Shared configurations
 [color]
   app = ""
   build = "yellow"
