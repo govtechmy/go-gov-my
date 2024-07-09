@@ -1,10 +1,10 @@
 ---
 title: "Rate limits"
-"og:title": "What are Dub.co's API rate limits?"
-description: "Learn about Dub's API rate limits."
+"og:title": "What are GoGovMy's API rate limits?"
+description: "Learn about GoGovMy's API rate limits."
 ---
 
-Dub's API rate limiting is in conformance with the [IETF standard](https://datatracker.ietf.org/doc/html/draft-ietf-httpapi-ratelimit-headers):
+GoGovMy's API rate limiting is in conformance with the [IETF standard](https://datatracker.ietf.org/doc/html/draft-ietf-httpapi-ratelimit-headers):
 
 | Header Name             | Description                                                                     |
 | ----------------------- | ------------------------------------------------------------------------------- |
@@ -13,7 +13,7 @@ Dub's API rate limiting is in conformance with the [IETF standard](https://datat
 | `X-RateLimit-Reset`     | The time at which the current rate limit window resets in UTC epoch seconds.    |
 | `Retry-After`           | The number of seconds to wait before retrying the request again.                |
 
-Dub's API is capped at **600 requests per minute** per user.
+GoGovMy's API is capped at **600 requests per minute** per user.
 
 This is implemented to ensure a fair usage policy so that excessive use by a single user does not adversely affect the performance and usage of the API by others.
 

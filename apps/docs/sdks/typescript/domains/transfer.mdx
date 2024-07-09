@@ -1,6 +1,6 @@
 ---
 title: "Transfer"
-"og:title": "dub.domains.transfer - Transfer a domain - TypeScript SDK"
+"og:title": "go.gov.my.domains.transfer - Transfer a domain - TypeScript SDK"
 description: "Transfer a domain to another workspace within the authenticated account."
 ---
 
@@ -23,7 +23,7 @@ import DomainResponse from "/snippets/domain-response.mdx";
 <RequestExample>
 
 ```ts
-await dub.domains.transfer("acme.com", {
+await GoGovMy.domains.transfer("acme.com", {
   newWorkspaceId: "ws_clv3mw4qb00008tvuw86c53db",
 });
 ```
@@ -39,7 +39,7 @@ await dub.domains.transfer("acme.com", {
   verified: false,
   primary: true,
   archived: false,
-  placeholder: "https://dub.co/help/article/what-is-dub",
+  placeholder: "https://go.gov.my/help/article/what-is-dub",
   expiredUrl: "https://acme.com/expired",
   target: "https://acme.com/home",
   type: "redirect",

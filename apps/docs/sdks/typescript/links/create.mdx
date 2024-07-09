@@ -1,6 +1,6 @@
 ---
 title: "Create"
-"og:title": "dub.links.create - Create a new link - TypeScript SDK"
+"og:title": "go.gov.my.links.create - Create a new link - TypeScript SDK"
 description: "Create a new link for the authenticated workspace."
 ---
 
@@ -22,7 +22,7 @@ import LinkResponse from "/snippets/link-response.mdx";
 <RequestExample>
 
 ```ts
-await dub.links.create({
+await go.gov.my.links.create({
   url: "https://www.google.com",
 });
 ```
@@ -34,7 +34,7 @@ await dub.links.create({
 ```ts
 {
   id: 'clv3o9p9q000au1h0mc7r6l63',
-  domain: 'dub.sh',
+  domain: 'go.gov.my',
   key: 'e7qzMuI',
   externalId: "123",
   url: 'https://www.google.com',
@@ -54,8 +54,8 @@ await dub.links.create({
   tagId: null,
   tags: [],
   comments: null,
-  shortLink: 'https://dub.sh/e7qzMuI',
-  qrCode: 'https://api.dub.co/qr?url=https://dub.sh/e7qzMuI?qr=1',
+  shortLink: 'https://go.gov.my/e7qzMuI',
+  qrCode: 'https://api.go.gov.my/qr?url=https://go.gov.my/e7qzMuI?qr=1',
   utmSource: null,
   utmMedium: null,
   utmCampaign: null,

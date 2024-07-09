@@ -30,7 +30,7 @@
     "name": "Dashboard",
     "url": "https://go.gov.my"
   },
-  "openapi": "https://api.go.gov.my",
+  "openapi": "/openapi-with-code-samples.yaml",
   "tabs": [
     {
       "name": "API Reference",

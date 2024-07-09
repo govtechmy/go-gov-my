@@ -1,6 +1,6 @@
 ---
 title: "Update"
-"og:title": "dub.domains.update - Edit a domain - TypeScript SDK"
+"og:title": "go.gov.my.domains.update - Edit a domain - TypeScript SDK"
 description: "Edit a domain for the authenticated workspace."
 ---
 
@@ -37,7 +37,7 @@ import DomainResponse from "/snippets/domain-response.mdx";
 <ParamField
   body="placeholder"
   type="string | null"
-  default="https://dub.co/help/article/what-is-dub"
+  default="https://go.gov.my/help/article/what-is-dub"
 >
   Provide context to your teammates in the link creation modal by showing them
   an example of a link to be shortened.
@@ -50,7 +50,7 @@ import DomainResponse from "/snippets/domain-response.mdx";
 <RequestExample>
 
 ```ts
-await dub.domains.update("acme.com", {
+await GoGovMy.domains.update("acme.com", {
   expiredUrl: "https://acme.com/expired",
   target: "https://acme.com/home",
 });
@@ -67,7 +67,7 @@ await dub.domains.update("acme.com", {
   verified: false,
   primary: true,
   archived: false,
-  placeholder: "https://dub.co/help/article/what-is-dub",
+  placeholder: "https://go.gov.my/help/article/what-is-dub",
   expiredUrl: "https://acme.com/expired",
   target: "https://acme.com/home",
   type: "redirect",

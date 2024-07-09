@@ -1,48 +1,48 @@
 ---
 title: "Introduction"
-"og:title": "Dub.co API Reference - Introduction"
-description: "Fundamental concepts of Dub.co's API."
+"og:title": "GoGovMy API Reference - Introduction"
+description: "Fundamental concepts of GoGovMy's API."
 ---
 
 <Info>
-  Dub.co's API is currently in beta. If you have any questions or feedback,
+  GoGovMy's API is currently in beta. If you have any questions or feedback,
   please reach out to us at
-  [support@dub.co](mailto:support@dub.co?subject=Dub.co%20API%20Feedback).
+  [support@go.gov.my](mailto:support@go.gov.my?subject=GoGovMy.co%20API%20Feedback).
 </Info>
 
 ## Base URL
 
-Dub.co's API is built on REST principles and is served over HTTPS. To ensure data privacy, unencrypted HTTP is not supported.
+GoGovMy's API is built on REST principles and is served over HTTPS. To ensure data privacy, unencrypted HTTP is not supported.
 
 The Base URL for all API endpoints is:
 
 ```bash Terminal
-https://api.dub.co
+https://api.go.gov.my
 ```
 
 ## Authentication
 
-Authentication to Dub.co's API is performed via the Authorization header with a Bearer token. To authenticate, you need to include the Authorization header with the word `Bearer` followed by your token in your API requests like so:
+Authentication to GoGovMy's API is performed via the Authorization header with a Bearer token. To authenticate, you need to include the Authorization header with the word `Bearer` followed by your token in your API requests like so:
 
 ```bash Terminal
 Authorization: Bearer <Your-Token>
 ```
 
-You can create a new token/API key under your [Dub.co Account Settings](https://app.dub.co/settings/tokens).
+You can create a new token/API key under your [GoGovMy Account Settings](https://app.go.gov.my/settings/tokens).
 
 <Frame>
-  <img src="/images/dub-api-key.png" alt="Dub API Key" />
+  <img src="/images/dub-api-key.png" alt="GoGovMy API Key" />
 </Frame>
 
 ## Workspace ID
 
-Dub.co's API is organized around workspaces. Each workspace has its own set of resources and permissions. To access a workspace's resources, you need to include the `workspaceId` query parameter in your API requests like so:
+GoGovMy's API is organized around workspaces. Each workspace has its own set of resources and permissions. To access a workspace's resources, you need to include the `workspaceId` query parameter in your API requests like so:
 
 ```bash Terminal
-https://api.dub.co/links?workspaceId=<Your-Workspace-ID>
+https://api.go.gov.my/links?workspaceId=<Your-Workspace-ID>
 ```
 
-You can get your workspace ID under your Dub.co Workspace Settings.
+You can get your workspace ID under your GoGovMy Workspace Settings.
 
 <Frame>
   <img src="/images/dub-workspace-id.png" alt="Workspace ID" />
@@ -64,4 +64,4 @@ The API returns standard HTTP response codes to indicate the success or failure 
 
 ## Caveats
 
-- Dub's API is currently in public beta and is subject to change. However, we will do our best to keep breaking changes to a minimum.
+- GoGovMy's API is currently in public beta and is subject to change. However, we will do our best to keep breaking changes to a minimum.
