@@ -1,3 +1,4 @@
+import { processDTOLink } from "@/lib/dto/link.dto";
 import { prisma } from "@/lib/prisma";
 import { formatRedisLink, redis } from "@/lib/redis";
 import { isStored, storage } from "@/lib/storage";
@@ -8,6 +9,7 @@ import { Prisma } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
 import { OUTBOX_ACTIONS } from "kafka-consumer/actions";
 import { addToHistory } from "./add-to-history";
+import generateIdempotencyKey from "./create-idempotency-key";
 import { combineTagIds, transformLink } from "./utils";
 
 export async function updateLink({
@@ -121,6 +123,20 @@ export async function updateLink({
     },
   });
 
+  // Transform into DTOs
+  const linkDTO = await processDTOLink(
+    response,
+    OUTBOX_ACTIONS.UPDATE_LINK,
+    response.id,
+    response.image,
+  );
+
+  // For simplicity and centralized, lets create the idempotency key at this level
+  const idempotencyBase64 = generateIdempotencyKey(
+    linkDTO.id,
+    linkDTO.createdAt ?? new Date(),
+  );
+
   try {
     waitUntil(
       Promise.all([
@@ -145,7 +161,9 @@ export async function updateLink({
           data: {
             action: OUTBOX_ACTIONS.UPDATE_LINK,
             host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
-            payload: response,
+            payload: JSON.stringify(linkDTO),
+            headers: idempotencyBase64,
+            // partitionId: 0, // For now lets use the default partition id 0
           },
         }),
         addToHistory({
