@@ -96,7 +96,7 @@ export async function createLink(
   const linkDTO = await processDTOLink(response);
 
   // For simplicity and centralized, lets create the idempotency key at this level
-  const idempotencyBase64 = generateIdempotencyKey(
+  const headersJSON = generateIdempotencyKey(
     linkDTO.id,
     linkDTO.createdAt ?? new Date(),
   );
@@ -132,7 +132,7 @@ export async function createLink(
                   action: OUTBOX_ACTIONS.CREATE_LINK,
                   host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
                   payload: linkDTO as unknown as Prisma.InputJsonValue,
-                  headers: idempotencyBase64,
+                  headers: headersJSON,
                   // partitionId: 0, // For now lets use the default partition id 0
                 },
               }),
@@ -143,7 +143,7 @@ export async function createLink(
                   action: OUTBOX_ACTIONS.CREATE_LINK,
                   host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
                   payload: linkDTO as unknown as Prisma.InputJsonValue,
-                  headers: idempotencyBase64,
+                  headers: headersJSON,
                   // partitionId: 0, // For now lets use the default partition id 0
                 },
               }),

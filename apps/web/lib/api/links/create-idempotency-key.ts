@@ -7,5 +7,8 @@ export default function generateIdempotencyKey(
     timestamp: createdAt.toISOString(),
     id: outboxId,
   };
-  return Buffer.from(JSON.stringify(key)).toString("base64");
+
+  const base64Key = Buffer.from(JSON.stringify(key)).toString("base64");
+
+  return { "X-Idempotency-Key": base64Key, "Content-Type": "application/json" };
 }

@@ -78,10 +78,7 @@ async function main() {
                 );
                 response = await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
                   method: "POST",
-                  headers: {
-                    "X-Idempotency-Key": headers,
-                    "Content-Type": "application/json",
-                  },
+                  headers: headers,
                   body: payload,
                 });
                 break;
@@ -91,10 +88,7 @@ async function main() {
                 );
                 response = await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
                   method: "PUT",
-                  headers: {
-                    "X-Idempotency-Key": headers,
-                    "Content-Type": "application/json",
-                  },
+                  headers: headers,
                   body: payload,
                 });
                 break;
@@ -107,9 +101,7 @@ async function main() {
                   `${REDIRECT_SERVER_BASE_URL}/links/${linkId}`,
                   {
                     method: "DELETE",
-                    headers: {
-                      "X-Idempotency-Key": headers,
-                    },
+                    headers: headers,
                   },
                 );
                 break;

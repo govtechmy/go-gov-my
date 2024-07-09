@@ -24,7 +24,7 @@ export async function deleteLink(linkId: string) {
   const linkDTO = await processDTOLink(link);
 
   // For simplicity and centralized, lets create the idempotency key at this level
-  const idempotencyBase64 = generateIdempotencyKey(
+  const headersJSON = generateIdempotencyKey(
     linkDTO.id,
     linkDTO.createdAt ?? new Date(),
   );
@@ -53,7 +53,7 @@ export async function deleteLink(linkId: string) {
             action: OUTBOX_ACTIONS.DELETE_LINK,
             host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
             payload: linkDTO as unknown as Prisma.InputJsonValue,
-            headers: idempotencyBase64,
+            headers: headersJSON,
             // partitionId: 0, // For now lets use the default partition id 0
           },
         }),

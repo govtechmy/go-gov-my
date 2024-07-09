@@ -290,8 +290,8 @@ model WebhookOutbox {
   payload       Json
   createdAt     DateTime  @default(now()) @db.Timestamptz
   action        String
-  headers       String
-  partitionId   Int       @default(0)
+  headers       Json
+  partitionKey  Int       @default(0)
 }
 
 model LinkHistory {
