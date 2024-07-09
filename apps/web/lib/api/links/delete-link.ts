@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { redis } from "@/lib/redis";
 import { storage } from "@/lib/storage";
 import { trace } from "@opentelemetry/api";
+import { Prisma } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
 import { OUTBOX_ACTIONS } from "kafka-consumer/actions";
 import generateIdempotencyKey from "./create-idempotency-key";
@@ -56,7 +57,7 @@ export async function deleteLink(linkId: string) {
           data: {
             action: OUTBOX_ACTIONS.DELETE_LINK,
             host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
-            payload: JSON.stringify(linkDTO),
+            payload: linkDTO as unknown as Prisma.InputJsonValue,
             headers: idempotencyBase64,
             // partitionId: 0, // For now lets use the default partition id 0
           },

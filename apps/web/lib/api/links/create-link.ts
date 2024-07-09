@@ -136,7 +136,7 @@ export async function createLink(
                 data: {
                   action: OUTBOX_ACTIONS.CREATE_LINK,
                   host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
-                  payload: JSON.stringify(linkDTO),
+                  payload: linkDTO as unknown as Prisma.InputJsonValue,
                   headers: idempotencyBase64,
                   // partitionId: 0, // For now lets use the default partition id 0
                 },
@@ -147,7 +147,7 @@ export async function createLink(
                 data: {
                   action: OUTBOX_ACTIONS.CREATE_LINK,
                   host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
-                  payload: JSON.stringify(linkDTO),
+                  payload: linkDTO as unknown as Prisma.InputJsonValue,
                   headers: idempotencyBase64,
                   // partitionId: 0, // For now lets use the default partition id 0
                 },
