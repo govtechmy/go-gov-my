@@ -1,24 +1,16 @@
 // This should be like the object model
 export interface LinkDTO {
-  id: string;
+  id: string; // Table.Link.Id
   slug: string; // original should be: key
-  url: string;
-  expiresAt: Date | null;
-  ios: string | null;
-  android: string | null;
+  url: string; // main original url
+  expiresAt: Date | null; // link expiry
+  ios: string | null; // for ios url redir link
+  android: string | null; // for android redir link
   createdAt: Date | null;
-  action: "create-link" | "delete-link" | "update-link";
-  outboxId: string;
-  uploadedImageUrl: string | null;
 }
 
 // This should be able to reuse anywhere.
-export async function processDTOLink(
-  response: any,
-  action: "create-link" | "delete-link" | "update-link",
-  outboxId: string,
-  uploadedImageUrl: string | null,
-): Promise<LinkDTO> {
+export async function processDTOLink(response: any): Promise<LinkDTO> {
   const linkDTO: LinkDTO = {
     id: response.id,
     slug: response.key,
@@ -27,9 +19,6 @@ export async function processDTOLink(
     ios: response.ios,
     android: response.android,
     createdAt: response.createdAt,
-    action: action,
-    outboxId: outboxId,
-    uploadedImageUrl: uploadedImageUrl,
   };
 
   return linkDTO;

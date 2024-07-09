@@ -21,12 +21,7 @@ export async function deleteLink(linkId: string) {
   });
 
   // Transform into DTOs
-  const linkDTO = await processDTOLink(
-    link,
-    OUTBOX_ACTIONS.DELETE_LINK,
-    link.id,
-    null,
-  );
+  const linkDTO = await processDTOLink(link);
 
   // For simplicity and centralized, lets create the idempotency key at this level
   const idempotencyBase64 = generateIdempotencyKey(

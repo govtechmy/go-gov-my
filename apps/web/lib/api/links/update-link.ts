@@ -124,12 +124,7 @@ export async function updateLink({
   });
 
   // Transform into DTOs
-  const linkDTO = await processDTOLink(
-    response,
-    OUTBOX_ACTIONS.UPDATE_LINK,
-    response.id,
-    response.image,
-  );
+  const linkDTO = await processDTOLink(response);
 
   // For simplicity and centralized, lets create the idempotency key at this level
   const idempotencyBase64 = generateIdempotencyKey(

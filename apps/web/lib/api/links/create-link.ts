@@ -93,12 +93,7 @@ export async function createLink(
   const uploadedImageUrl = `${process.env.STORAGE_BASE_URL}/images/${response.id}`;
 
   // Transform into DTOs
-  const linkDTO = await processDTOLink(
-    response,
-    OUTBOX_ACTIONS.CREATE_LINK,
-    response.id,
-    uploadedImageUrl,
-  );
+  const linkDTO = await processDTOLink(response);
 
   // For simplicity and centralized, lets create the idempotency key at this level
   const idempotencyBase64 = generateIdempotencyKey(
