@@ -21,7 +21,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@dub/tailwind-config": "workspace:*",
+    "@gogovmy/tailwind-config": "workspace:*",
     "@dub/utils": "workspace:*",
     "@types/js-cookie": "^3.0.6",
     "@types/react": "^18.2.47",

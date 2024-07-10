@@ -18,7 +18,7 @@
     "@aws-sdk/client-s3": "^3.592.0",
     "@aws-sdk/client-ses": "^3.592.0",
     "@chronark/zod-bird": "^0.3.9",
-    "@dub/tailwind-config": "workspace:*",
+    "@gogovmy/tailwind-config": "workspace:*",
     "@dub/ui": "workspace:*",
     "@dub/utils": "workspace:*",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",

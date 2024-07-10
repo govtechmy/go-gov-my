@@ -9,14 +9,14 @@
     "clean": "turbo clean",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prettier-check": "prettier --check \"**/*.{ts,tsx,md}\"",
-    "publish-tw": "turbo build --filter='@dub/tailwind-config' && cd packages/tailwind-config && npm publish && cd ../../",
+    "publish-tw": "turbo build --filter='@gogovmy/tailwind-config' && cd packages/tailwind-config && npm publish && cd ../../",
     "publish-ui": "turbo build --filter='@dub/ui' && cd packages/ui && npm publish && cd ../../",
     "publish-utils": "turbo build --filter='@dub/utils' && cd packages/utils && npm publish && cd ../../",
     "script": "echo 'Run this script in apps/web'",
     "test": "turbo run test"
   },
   "devDependencies": {
-    "@dub/tailwind-config": "workspace:*",
+    "@gogovmy/tailwind-config": "workspace:*",
     "eslint": "^8.48.0",
     "prettier": "^3.2.5",
     "prettier-plugin-organize-imports": "^3.2.4",
