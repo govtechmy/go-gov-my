@@ -113,8 +113,8 @@ async function main() {
             }
 
             switch (response.status) {
-              case 200:
-                // 200 OK
+              case 201:
+                // 201 - Created entry
                 log.info("Response to redirect-server was successful");
                 await prisma.webhookOutbox.delete({
                   where: { id: outboxId },
@@ -129,9 +129,24 @@ async function main() {
                   },
                 ]);
                 break;
-
+              case 204:
+                // 201 - No Content for Deleted action
+                log.info("Response to redirect-server was successful");
+                await prisma.webhookOutbox.delete({
+                  where: { id: outboxId },
+                });
+                log.info(`WebhookOutbox row with ID ${outboxId} was deleted`);
+                // Offset commit as per https://kafka.js.org/docs/consuming#a-name-manual-commits-a-manual-committing
+                await consumer.commitOffsets([
+                  {
+                    topic,
+                    partition,
+                    offset: (parseInt(message.offset, 10) + 1).toString(),
+                  },
+                ]);
+                break;
               case 409:
-                // 409 Conflict - Duplicate request
+                // 409 Conflict - Duplicate request, then skip to next message
                 // Offset commit as per https://kafka.js.org/docs/consuming#a-name-manual-commits-a-manual-committing
                 await consumer.commitOffsets([
                   {
@@ -143,6 +158,10 @@ async function main() {
                 break;
               default:
                 // Means other status code, throw error and repeat loop.
+                // 405 - Method Not Allowed
+                // 500 - Internal Server Error
+                // 400 - Bad Request
+                // 422 - Same Idempotency Key ID already exists but different payload, we shouldn't skip this
                 log.error(
                   `Response to redirect-server was unsuccessful, status: ${response.status}, outboxId: ${outboxId}`,
                 );
