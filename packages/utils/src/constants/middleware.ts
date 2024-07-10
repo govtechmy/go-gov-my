@@ -1,18 +1,16 @@
 import { APP_NAME } from ".";
 
 export const DEFAULT_REDIRECTS = {
-  home: "https://dub.co",
-  dub: "https://dub.co",
-  signin: "https://app.dub.co/login",
-  login: "https://app.dub.co/login",
-  register: "https://app.dub.co/register",
-  signup: "https://app.dub.co/register",
-  app: "https://app.dub.co",
-  dashboard: "https://app.dub.co",
-  links: "https://app.dub.co/links",
-  settings: "https://app.dub.co/settings",
-  welcome: "https://app.dub.co/welcome",
-  discord: "https://twitter.com/dubdotco", // placeholder for now
+  home: "https://go.gov.my",
+  signin: "https://go.gov.my/login",
+  login: "https://go.gov.my/login",
+  register: "https://go.gov.my/register",
+  signup: "https://go.gov.my/register",
+  app: "https://go.gov.my",
+  dashboard: "https://go.gov.my",
+  links: "https://go.go.my/links",
+  settings: "https://go.gov.my/settings",
+  welcome: "https://go.gov.my/welcome",
 };
 
 export const DUB_HEADERS = {
