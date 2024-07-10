@@ -1,6 +1,6 @@
 {
   "name": "@dub/utils",
-  "description": "Utility functions and constants for Dub.co",
+  "description": "Utility functions and constants for go.gov.my",
   "version": "0.0.54",
   "sideEffects": false,
   "main": "./dist/index.mjs",
@@ -39,18 +39,7 @@
     "punycode": "^2.3.0",
     "tailwind-merge": "^2.2.1"
   },
-  "author": "Steven Tey <stevensteel97@gmail.com>",
-  "homepage": "https://dub.co",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/steven-tey/dub.git"
-  },
-  "bugs": {
-    "url": "https://github.com/steven-tey/dub/issues"
-  },
   "keywords": [
-    "dub",
-    "dub.co",
     "utils",
     "utility",
     "functions"
