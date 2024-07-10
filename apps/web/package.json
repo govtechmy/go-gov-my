@@ -133,5 +133,8 @@
   },
   "browser": {
     "crypto": false
+  },
+  "prisma": {
+    "seed": "tsx ./prisma/seed.ts"
   }
 }
