@@ -103,7 +103,7 @@ func indexLinkHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusCreated)
 }
 
 // Deletes a link from Elasticsearch
