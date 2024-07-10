@@ -8,5 +8,3 @@ export const AgencySchema = z.object({
     ms: z.string().min(1),
   }),
 });
-
-export const createAgencySchema = AgencySchema;
