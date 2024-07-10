@@ -1,5 +1,5 @@
 ---
-title: dub.analytics.clicks.topUrls
+title: go.gov.my.analytics.clicks.topUrls
 sidebarTitle: Top URLs
 description: Retrieve the top URLs by number of clicks for a given short link.
 ---
@@ -26,9 +26,9 @@ import AnalyticsArguments from "/snippets/analytics-arguments.mdx";
 <RequestExample>
 
 ```typescript
-await dub.analytics.clicks.topUrls({
+await go.gov.my.analytics.clicks.topUrls({
   key: "dummy",
-  domain: "dub.sh",
+  domain: "go.gov.my",
   interval: "30d",
 });
 ```
@@ -39,8 +39,8 @@ await dub.analytics.clicks.topUrls({
 
 ```typescript
 [
-  { url: "https://dub.co/", clicks: 13 },
-  { url: "https://dub.co/?qr=", clicks: 4 },
+  { url: "https://go.gov.my/", clicks: 13 },
+  { url: "https://go.gov.my/?qr=", clicks: 4 },
 ];
 ```
 
