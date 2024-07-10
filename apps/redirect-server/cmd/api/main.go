@@ -5,8 +5,11 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"redirect-server/repository/es"
 
 	"github.com/joho/godotenv"
+	"github.com/olivere/elastic/v7"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
 
 const (
@@ -17,6 +20,9 @@ const (
 var (
 	env       string
 	indexName = "links"
+
+	// TODO: Avoid using global variable to store repo instance
+	idempotentResourceRepo *es.IdempotentResourceRepo
 )
 
 func init() {
@@ -40,14 +46,26 @@ func main() {
 
 	env = *envFlag
 
+	// TODO: Delete this and use LinkRepo with the simple client below
 	InitElasticsearch()
+
+	esClient, err := elastic.NewSimpleClient(
+		elastic.SetURL("http://localhost:9200"),
+		elastic.SetBasicAuth("elastic", "elastic"),
+		elastic.SetHttpClient(otelhttp.DefaultClient),
+	)
+	if err != nil {
+		log.Fatal("failed to create Elasticsearch client")
+	}
+
+	idempotentResourceRepo = es.NewIdempotentResourceRepo(esClient)
 
 	// todo: add tracing
 	// todo: split into internal and public endpoint
 	http.HandleFunc("/links", indexLinkHandler)
 	http.HandleFunc("/links/", deleteLinkHandler)
 
-	log.Printf("Starting server on :3000 in %s mode\n", env)
+	log.Printf("Starting server on :3001 in %s mode\n", env)
 
-	log.Fatal(http.ListenAndServe(":3000", nil))
+	log.Fatal(http.ListenAndServe(":3001", nil))
 }
