@@ -19,7 +19,7 @@ import (
 
 type Link struct {
 	ID        string `json:"id"`
-	Key       string `json:"slug"`
+	SLUG      string `json:"slug"`
 	URL       string `json:"url"`
 	ExpiresAt bool   `json:"expiresAt"`
 	Ios       string `json:"ios"`
@@ -57,7 +57,7 @@ func indexLinkHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "X-Idempotency-Key header is required", http.StatusBadRequest)
 		return
 	}
-
+	
 	resource, err := idempotentResourceRepo.GetIdempotentResource(ctx, idempotencyKey)
 	if err != nil {
 		log.Printf("Error getting idempotent resource: %s", err)
@@ -152,7 +152,7 @@ func saveLinkToElasticsearch(ctx context.Context, link Link) error {
 
 	indexReq := esapi.IndexRequest{
 		Index:      indexName,
-		DocumentID: link.ID,
+		DocumentID: link.SLUG,
 		Body:       &buf,
 		Refresh:    "true",
 	}

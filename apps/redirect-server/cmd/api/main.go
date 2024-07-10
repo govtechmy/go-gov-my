@@ -65,7 +65,7 @@ func main() {
 	http.HandleFunc("/links", indexLinkHandler)
 	http.HandleFunc("/links/", deleteLinkHandler)
 
-	log.Printf("Starting server on :3000 in %s mode\n", env)
+	log.Printf("Starting server on :3001 in %s mode\n", env)
 
-	log.Fatal(http.ListenAndServe(":3000", nil))
+	log.Fatal(http.ListenAndServe(":3001", nil))
 }

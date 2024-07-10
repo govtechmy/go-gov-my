@@ -27,12 +27,13 @@ func (r *IdempotentResourceRepo) GetIdempotentResource(ctx context.Context, idem
 		).
 		Size(1).
 		Do(ctx)
+
 	if err != nil {
 		return nil, err
 	}
 
 	if len(res.Hits.Hits) == 0 {
-		return nil, repository.ErrIdempotentResourceNotFound
+		return nil, nil
 	}
 
 	idempotentResource := repository.IdempotentResource{}

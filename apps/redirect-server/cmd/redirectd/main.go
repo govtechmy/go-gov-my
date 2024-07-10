@@ -57,12 +57,16 @@ func main() {
 	if err != nil {
 		logger.Fatal("cannot initiate Elasticsearch client", zap.Error(err))
 	}
+
 	linkRepo := es.NewLinkRepo(esClient)
 
-	t, err := template.ParseGlob("../../templates/*.html")
+	t, err := template.ParseGlob("templates/*.html")
 	if err != nil {
 		logger.Fatal("cannot load html templates", zap.Error(err))
 	}
+
+	fs := http.FileServer(http.Dir("public"))
+	http.Handle("/public/", http.StripPrefix("/public/", fs))
 
 	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
