@@ -7,7 +7,7 @@ description: "Delete a domain from a workspace. It cannot be undone. This will a
 ## Arguments
 
 <ParamField body="slug" type="string" required>
-  Name of the domain. Eg. `acme.com`.
+  Name of the domain. Eg. `go.gov.my`.
 </ParamField>
 
 ## Response
@@ -19,7 +19,7 @@ description: "Delete a domain from a workspace. It cannot be undone. This will a
 <RequestExample>
 
 ```ts
-await GoGovMy.domains.delete("acme.com");
+await GoGovMy.domains.delete("go.gov.my");
 ```
 
 </RequestExample>
@@ -28,7 +28,7 @@ await GoGovMy.domains.delete("acme.com");
 
 ```ts
 {
-  slug: "acme.com";
+  slug: "go.gov.my";
 }
 ```
 

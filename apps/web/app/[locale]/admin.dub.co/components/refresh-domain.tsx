@@ -52,7 +52,7 @@ const Form = () => {
           "block w-full rounded-md border-gray-300 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500",
           pending && "bg-gray-100",
         )}
-        placeholder="acme.com"
+        placeholder="go.gov.my"
         aria-invalid="true"
       />
       {pending && (

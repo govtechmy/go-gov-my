@@ -9,7 +9,7 @@ import DomainResponse from "/snippets/domain-response.mdx";
 ## Arguments
 
 <ParamField body="slug" type="string">
-  Name of the domain to transfer. Eg. `acme.com`.
+  Name of the domain to transfer. Eg. `go.gov.my`.
 </ParamField>
 
 <ParamField body="newWorkspaceId" type="string">
@@ -23,7 +23,7 @@ import DomainResponse from "/snippets/domain-response.mdx";
 <RequestExample>
 
 ```ts
-await GoGovMy.domains.transfer("acme.com", {
+await GoGovMy.domains.transfer("go.gov.my", {
   newWorkspaceId: "ws_clv3mw4qb00008tvuw86c53db",
 });
 ```
@@ -35,13 +35,13 @@ await GoGovMy.domains.transfer("acme.com", {
 ```ts
 {
   id: "clvcep2sn87jh8nf808x00005",
-  slug: "acme.com",
+  slug: "go.gov.my",
   verified: false,
   primary: true,
   archived: false,
   placeholder: "https://go.gov.my/help/article/what-is-dub",
-  expiredUrl: "https://acme.com/expired",
-  target: "https://acme.com/home",
+  expiredUrl: "https://go.gov.my/expired",
+  target: "https://go.gov.my/home",
   type: "redirect",
   clicks: 0,
 }
