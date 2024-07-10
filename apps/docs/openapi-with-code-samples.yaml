@@ -5,7 +5,7 @@ info:
     version: "0.0.1"
     contact:
         name: "GoGovMy Support"
-        email: "support@go.gov.my"
+        email: "support@tech.gov.my"
         url: "https://go.gov.my/api"
     license:
         name: "AGPL-3.0 license"
