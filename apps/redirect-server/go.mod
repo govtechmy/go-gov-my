@@ -2,7 +2,8 @@ module redirect-server
 
 go 1.21
 
-toolchain go1.22.1
+// Please enable this locally, not sure why the CI fails at here, will take a look into details later
+// toolchain go1.22.1
 
 require (
 	github.com/elastic/go-elasticsearch/v7 v7.17.10
