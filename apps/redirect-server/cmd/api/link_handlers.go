@@ -3,20 +3,19 @@ package main
 import (
 	"bytes"
 	"context"
-	"encoding/base64"
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
-	"redirect-server/repository/es"
+	"redirect-server/repository"
 	"strings"
 	"time"
 
 	"github.com/elastic/go-elasticsearch/v7/esapi"
 )
-
-const idempotencyTTL = 72 * time.Hour
 
 type Link struct {
 	ID        string `json:"id"`
@@ -36,8 +35,6 @@ type IdempotencyKey struct {
 	ID        string    `json:"id"`
 }
 
-var linkRepo *es.LinkRepo
-
 // Adds a link into Elasticsearch. If the link already exists, the whole document is replaced.
 func indexLinkHandler(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
@@ -55,21 +52,30 @@ func indexLinkHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Before we do anything, lets check for idempotency
-	idempotencyKey, err := extractAndValidateIdempotencyKey(r)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	idempotencyKey := r.Header.Get("X-Idempotency-Key")
+	if idempotencyKey == "" {
+		http.Error(w, "X-Idempotency-Key header is required", http.StatusBadRequest)
 		return
 	}
 
-	exists, err := linkRepo.IdempotencyKeyExists(ctx, idempotencyKey.ID)
+	resource, err := idempotentResourceRepo.GetIdempotentResource(ctx, idempotencyKey)
 	if err != nil {
+		log.Printf("Error getting idempotent resource: %s", err)
 		http.Error(w, "Server error", http.StatusInternalServerError)
 		return
 	}
 
-	if exists {
-		http.Error(w, "Duplicate request", http.StatusConflict)
+	resourceExists := resource != nil
+	hash := md5.Sum(body)
+	hashedReqPayload := hex.EncodeToString(hash[:])
+
+	if resourceExists {
+		if resource.HashedRequestPayload == hashedReqPayload {
+			http.Error(w, "Duplicate request", http.StatusConflict)
+			return
+		}
+		// Resource with matching idempotency key exists but request bodies don't match
+		http.Error(w, "Idempotent resource exists but request bodies don't match", http.StatusUnprocessableEntity)
 		return
 	}
 
@@ -88,7 +94,11 @@ func indexLinkHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := linkRepo.SaveIdempotencyKey(ctx, idempotencyKey.ID); err != nil {
+	idempotentResource := repository.IdempotentResource{
+		IdempotencyKey:       idempotencyKey,
+		HashedRequestPayload: hashedReqPayload,
+	}
+	if err := idempotentResourceRepo.SaveIdempotentResource(ctx, idempotentResource); err != nil {
 		http.Error(w, "Server error", http.StatusInternalServerError)
 		return
 	}
@@ -131,29 +141,6 @@ func deleteLinkHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusNoContent)
-}
-
-func extractAndValidateIdempotencyKey(r *http.Request) (*IdempotencyKey, error) {
-	idempotencyKeyBase64 := r.Header.Get("X-Idempotency-Key")
-	if idempotencyKeyBase64 == "" {
-		return nil, fmt.Errorf("X-Idempotency-Key header is required")
-	}
-
-	idempotencyKeyJSON, err := base64.StdEncoding.DecodeString(idempotencyKeyBase64)
-	if err != nil {
-		return nil, fmt.Errorf("invalid X-Idempotency-Key header")
-	}
-
-	var idempotencyKey IdempotencyKey
-	if err := json.Unmarshal(idempotencyKeyJSON, &idempotencyKey); err != nil {
-		return nil, fmt.Errorf("invalid X-Idempotency-Key header")
-	}
-
-	if time.Since(idempotencyKey.Timestamp) > idempotencyTTL {
-		return nil, fmt.Errorf("idempotency key expired")
-	}
-
-	return &idempotencyKey, nil
 }
 
 func saveLinkToElasticsearch(ctx context.Context, link Link) error {
