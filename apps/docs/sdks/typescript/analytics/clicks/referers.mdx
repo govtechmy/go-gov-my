@@ -1,5 +1,5 @@
 ---
-title: dub.analytics.clicks.referers
+title: go.gov.my.analytics.clicks.referers
 sidebarTitle: Referers
 description: Retrieve the top referers by number of clicks for a link, a domain, or the authenticated workspace.
 ---
@@ -26,9 +26,9 @@ import AnalyticsArguments from "/snippets/analytics-arguments.mdx";
 <RequestExample>
 
 ```typescript
-await dub.analytics.clicks.referers({
+await go.gov.my.analytics.clicks.referers({
   key: "dummy",
-  domain: "dub.sh",
+  domain: "go.gov.my",
   interval: "30d",
 });
 ```

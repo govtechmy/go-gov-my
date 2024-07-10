@@ -1,13 +1,13 @@
 ---
 title: "Delete"
-"og:title": "dub.domains.delete - Delete a domain - TypeScript SDK"
+"og:title": "go.gov.my.domains.delete - Delete a domain - TypeScript SDK"
 description: "Delete a domain from a workspace. It cannot be undone. This will also delete all the links associated with the domain."
 ---
 
 ## Arguments
 
 <ParamField body="slug" type="string" required>
-  Name of the domain. Eg. `acme.com`.
+  Name of the domain. Eg. `go.gov.my`.
 </ParamField>
 
 ## Response
@@ -19,7 +19,7 @@ description: "Delete a domain from a workspace. It cannot be undone. This will a
 <RequestExample>
 
 ```ts
-await dub.domains.delete("acme.com");
+await GoGovMy.domains.delete("go.gov.my");
 ```
 
 </RequestExample>
@@ -28,7 +28,7 @@ await dub.domains.delete("acme.com");
 
 ```ts
 {
-  slug: "acme.com";
+  slug: "go.gov.my";
 }
 ```
 

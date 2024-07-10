@@ -1,19 +1,19 @@
 ---
-title: "Self-hosting Dub.co"
-"og:title": "How to self-host Dub.co in 8 easy steps"
-description: "An end-to-end guide on how to self-host Dub.co – the open-source link management platform."
+title: "Self-hosting GoGovMy"
+"og:title": "How to self-host GoGovMy in 8 easy steps"
+description: "An end-to-end guide on how to self-host GoGovMy – the open-source link management platform."
 ---
 
 <Frame>
   <img
     src="/images/logo-background-gradient.png"
-    alt="Dub.co Logo on a gradient background"
+    alt="GoGovMy Logo on a gradient background"
     width="1200"
     height="630"
   />
 </Frame>
 
-You can self-host Dub.co on your own servers and cloud infrastructure for greater control over your data and design. This guide will walk you through the entire process of setting up Dub.co on your own servers.
+You can self-host GoGovMy on your own servers and cloud infrastructure for greater control over your data and design. This guide will walk you through the entire process of setting up GoGovMy on your own servers.
 
 ## Prerequisites
 
@@ -26,22 +26,22 @@ Before you begin, make sure you have the following:
 - A [Vercel](https://vercel.com/) account
 - Either a [Cloudflare](https://www.cloudflare.com/) or [AWS](https://aws.com) account
 
-You'll also need a custom domain that you will be using for your Dub.co instance, with an optional custom short domain for your links.
+You'll also need a custom domain that you will be using for your GoGovMy instance, with an optional custom short domain for your links.
 
-In this guide, we'll use `acme.com` as a placeholder for your custom domain, and `ac.me` as a placeholder for your custom short domain.
+In this guide, we'll use `go.gov.my` as a placeholder for your custom domain, and `ac.me` as a placeholder for your custom short domain.
 
 ## Step 1: Local setup
 
-First, you'll need to clone the Dub.co repo and install the dependencies.
+First, you'll need to clone the GoGovMy repo and install the dependencies.
 
 <Steps>
 
   <Step title="Clone the repo">
 
-First, clone the [Dub repo](https://d.to/github) into a public GitHub repository. If you are planning to distribute the code, make sure to keep the source code public to comply with our [AGPLv3 license](https://d.to/license).
+First, clone the [repo](https://github.com/govtechmy/go-gov-my) into a public GitHub repository. If you are planning to distribute the code, make sure to keep the source code public to comply with our [AGPLv3 license](https://d.to/license).
 
     ```bash Terminal Terminal
-    git clone https://github.com/dubinc/dub.git
+    git clone https://github.com/govtechmy/go-gov-my.git
     ```
 
   </Step>
@@ -78,7 +78,7 @@ First, clone the [Dub repo](https://d.to/github) into a public GitHub repository
 
     ```bash Terminal
     # The domain that your app will be hosted on
-    NEXT_PUBLIC_APP_DOMAIN=acme.com
+    NEXT_PUBLIC_APP_DOMAIN=go.gov.my
     # The short domain that your app will be using (could be the same as the above)
     NEXT_PUBLIC_APP_SHORT_DOMAIN=ac.me
     # The ID of the Vercel team that your app will be deployed to: https://vercel.com/docs/accounts/create-a-team#find-your-team-id
@@ -109,7 +109,7 @@ Next, you'll need to set up the [Tinybird](https://tinybird.co) Clickhouse datab
 
   <Step title="Install Tinybird CLI and authenticate">
 
-In your newly-cloned Dub.co repo, navigate to the `packages/tinybird` directory.
+In your newly-cloned GoGovMy repo, navigate to the `packages/tinybird` directory.
 
     Install the Tinybird CLI with `pip install tinybird-cli` (requires Python >= 3.8).
 
@@ -233,7 +233,7 @@ Next, you'll need to set up a [PlanetScale](https://planetscale.com/)-compatible
 
   <Step title="Generate Prisma client and create database tables">
 
-In your Dub.co codebase, navigate to `apps/web/prisma/schema.prisma` and replace all the columns in the `DefaultDomains` model to the normalized version of your custom short domain (removing the `.` character).
+In your GoGovMy codebase, navigate to `apps/web/prisma/schema.prisma` and replace all the columns in the `DefaultDomains` model to the normalized version of your custom short domain (removing the `.` character).
 
 For example, if your custom short domain is `ac.me`, your `DefaultDomains` model should look like this:
 
@@ -264,11 +264,11 @@ For example, if your custom short domain is `ac.me`, your `DefaultDomains` model
 
 ## Step 5: Set up GitHub OAuth
 
-Next, [create a new GitHub App](https://github.com/settings/applications/new). This will allow you to sign in to Dub.co with your GitHub account.
+Next, [create a new GitHub App](https://github.com/settings/applications/new). This will allow you to sign in to GoGovMy with your GitHub account.
 
 Don't forget to set the following Callback URLs:
 
-- `https://app.acme.com/api/auth/callback/github`
+- `https://app.go.gov.my/api/auth/callback/github`
 - `http://localhost:8888/api/auth/callback/github` for local development.
 
 <Info>
@@ -280,13 +280,13 @@ Once your GitHub App is created, copy the `Client ID` and `Client Secret` into y
 
 ## Step 6: Set up Cloudflare R2
 
-Dub stores user-generated assets in either S3 or S3-compatible services like [Cloudflare R2](https://cloudflare.com/r2). These include:
+GoGovMy stores user-generated assets in either S3 or S3-compatible services like [Cloudflare R2](https://cloudflare.com/r2). These include:
 
 - Project logos
 - User avatars
 - [Custom Social Media Cards](https://dub.co/help/article/custom-social-media-cards) images
 
-We recommend using [Cloudflare R2](https://cloudflare.com/r2) for self-hosting Dub.co, as it's a more cost-effective solution compared to AWS S3. Here's how you can set it up:
+We recommend using [Cloudflare R2](https://cloudflare.com/r2) for self-hosting GoGovMy, as it's a more cost-effective solution compared to AWS S3. Here's how you can set it up:
 
 <Steps>
 
@@ -372,7 +372,7 @@ Next, you'll need to set up Postmark for transactional emails (e.g. magic link e
 
 ## Step 8: Set up Unsplash (optional)
 
-Dub uses Unsplash's API for the [Custom Social Media Cards](https://dub.co/help/article/custom-social-media-cards) feature. You'll need to set up an Unsplash application to get an access key.
+GoGovMy uses Unsplash's API for the [Custom Social Media Cards](https://dub.co/help/article/custom-social-media-cards) feature. You'll need to set up an Unsplash application to get an access key.
 
 <Frame>
   ![Custom social media
@@ -409,7 +409,7 @@ Once you've set up all of the above services, you can now deploy your app to Ver
     In the **Environment Variables** section, add all of the environment variables from your `.env` file by copying all of them and pasting it into the first input field. A few notes:
 
     - Remove the `PROJECT_ID_VERCEL` environment variable for now since we will only get the project ID after deploying the project.
-    - Replace the `NEXTAUTH_URL` environment variable with the app domain that you will be using (e.g. `https://app.acme.com`).
+    - Replace the `NEXTAUTH_URL` environment variable with the app domain that you will be using (e.g. `https://app.go.gov.my`).
 
     Click on **Deploy** to deploy your project.
 
@@ -437,7 +437,7 @@ Add both the `NEXT_PUBLIC_APP_DOMAIN` and `NEXT_PUBLIC_APP_SHORT_DOMAIN` as doma
   <Step title="Redeploy your Vercel project">
   Go back to the **Deployments** page and redeploy your project. 
   
-  Once the deployment is complete, you should be able to visit your app domain (e.g. `https://app.acme.com`) and see the following login page:
+  Once the deployment is complete, you should be able to visit your app domain (e.g. `https://app.go.gov.my`) and see the following login page:
 
 <Frame>![Whitelabeled Login](/images/whitelabeled-login.png)</Frame>
 
@@ -447,13 +447,13 @@ Add both the `NEXT_PUBLIC_APP_DOMAIN` and `NEXT_PUBLIC_APP_SHORT_DOMAIN` as doma
 
 ## Caveats
 
-This guide is meant to be a starting point for self-hosting Dub.co. It currently depends on the following services to work:
+This guide is meant to be a starting point for self-hosting GoGovMy. It currently depends on the following services to work:
 
 - [Tinybird](https://www.tinybird.co/) for the analytics database
 - [Upstash](https://upstash.com/) for the Redis database
 - [PlanetScale](https://planetscale.com/) for the MySQL database
 - [Vercel](https://vercel.com/) for hosting & [Edge Middleware](https://vercel.com/docs/functions/edge-middleware)
 
-In the future, we plan to make it easier to self-host Dub.co by making these dependencies optional by swapping them out for native databases (e.g. mysql, redis, clickhouse, [GeoLite2](https://github.com/GitSquared/node-geolite2-redist) etc.)
+In the future, we plan to make it easier to self-host GoGovMy by making these dependencies optional by swapping them out for native databases (e.g. mysql, redis, clickhouse, [GeoLite2](https://github.com/GitSquared/node-geolite2-redist) etc.)
 
 Also, Docker is currently not supported, but we have a few [open](https://github.com/dubinc/dub/issues/25) [issues](https://github.com/dubinc/dub/issues/378) and [PRs](https://github.com/dubinc/dub/pull/391) for it.

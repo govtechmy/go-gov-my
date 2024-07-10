@@ -1,13 +1,13 @@
 ---
 title: "Local Development"
-"og:title": "How to setup Dub.co for Local Development (6 steps)"
-description: "A guide on how to run Dub.co's codebase locally."
+"og:title": "How to setup GoGovMyGoGovMy for Local Development (6 steps)"
+description: "A guide on how to run GoGovMy's codebase locally."
 ---
 
 <Frame>
   <img
     src="/images/logo-background-gradient.png"
-    alt="Dub.co Logo on a gradient background"
+    alt="GoGovMy Logo on a gradient background"
     width="1200"
     height="630"
   />
@@ -15,7 +15,7 @@ description: "A guide on how to run Dub.co's codebase locally."
 
 ## Introduction
 
-Dub's codebase is set up in a monorepo (via [Turborepo](https://turbo.build/repo)) and is fully [open-source on GitHub](https://github.com/dubinc/dub).
+GoGovMy's codebase is set up in a monorepo (via [Turborepo](https://turbo.build/repo)) and is fully [open-source on GitHub](https://github.com/dubinc/dub).
 
 Here's the monorepo structure:
 
@@ -33,20 +33,20 @@ packages
 
 The `apps` directory contains the code for:
 
-- `web`: The entirety of Dub's application ([app.dub.co](https://app.dub.co)) + our link redirect infrastructure.
-- `docs`: Dub's documentation site ([dub.co/docs](https://dub.co/docs)) – including this page you're on right now!
+- `web`: The entirety of GoGovMy's application ([go.gov.my](https://go.gov.my)) + our link redirect infrastructure.
+- `docs`: GoGovMy's documentation site ([go.gov.my/docs](https://go.gov.my/docs)) – including this page you're on right now!
 
 The `packages` directory contains the code for:
 
-- `tailwind-config`: The Tailwind CSS configuration for Dub's web app.
-- `tinybird`: Dub's Tinybird configuration.
-- `tsconfig`: The TypeScript configuration for Dub's web app.
-- `ui`: Dub's UI component library.
-- `utils`: A collection of utility functions and constants used across Dub's codebase.
+- `tailwind-config`: The Tailwind CSS configuration for GoGovMy's web app.
+- `tinybird`: GoGovMy's Tinybird configuration.
+- `tsconfig`: The TypeScript configuration for GoGovMy's web app.
+- `ui`: GoGovMy's UI component library.
+- `utils`: A collection of utility functions and constants used across GoGovMy's codebase.
 
-## How `app.dub.co` works
+## How `go.gov.my` works
 
-Dub's web app is built with [Next.js](https://nextjs.org) and [TailwindCSS](https://tailwindcss.com).
+GoGovMy's web app is built with [Next.js](https://nextjs.org) and [TailwindCSS](https://tailwindcss.com).
 
 It also utilizes code from the `packages` directory, specifically the `@dub/ui` and `@dub/utils` packages.
 
@@ -56,9 +56,9 @@ There's also the API server, which is located in here: [`main`/apps/web/app/api]
 
 When you run `pnpm dev` to start the development server, the app will be available at [http://localhost:8888](http://localhost:8888). The reason we use `localhost:8888` and not `app.localhost:8888` is because Google OAuth doesn't allow you to use localhost subdomains.
 
-## How link redirects work on Dub
+## How link redirects work on GoGovMy
 
-Link redirects on Dub are powered by [Next.js Middleware](https://nextjs.org/docs/app/building-your-application/routing/middleware).
+Link redirects on GoGovMy are powered by [Next.js Middleware](https://nextjs.org/docs/app/building-your-application/routing/middleware).
 
 To handle high traffic, we use Redis to cache every link's metadata when it's first created. This allows us to serve redirects without hitting our MySQL database.
 
@@ -67,9 +67,9 @@ Here's the code that powers link redirects:
 - Link redirects: [`main`/apps/web/lib/middleware/link.ts](https://github.com/dubinc/dub/blob/main/apps/web/lib/middleware/link.ts).
 - Root domain redirects: [`main`/apps/web/lib/middleware/root.ts](https://github.com/dubinc/dub/blob/main/apps/web/lib/middleware/root.ts).
 
-## Running Dub locally
+## Running GoGovMy locally
 
-To run Dub.co locally, you'll need to set up the following:
+To run GoGovMy.co locally, you'll need to set up the following:
 
 - A [Tinybird](https://www.tinybird.co/) account
 - An [Upstash](https://upstash.com/) account
@@ -77,13 +77,13 @@ To run Dub.co locally, you'll need to set up the following:
 
 ## Step 1: Local setup
 
-First, you'll need to clone the Dub.co repo and install the dependencies.
+First, you'll need to clone the GoGovMy.co repo and install the dependencies.
 
 <Steps>
 
   <Step title="Clone the repo">
 
-First, clone the [Dub.co repo](https://d.to/github) into a public GitHub repository.
+First, clone the [GoGovMy.co repo](https://d.to/github) into a public GitHub repository.
 
     ```bash Terminal
     git clone https://github.com/dubinc/dub.git
@@ -103,7 +103,7 @@ First, clone the [Dub.co repo](https://d.to/github) into a public GitHub reposit
 
   <Step title="Optional: Install Mintlify">
 
-    If you're planning to make changes to [Dub.co's Docs](/docs), you'll need to install the [Mintlify CLI](https://mintlify.com/docs/development) to build the documentation site.
+    If you're planning to make changes to [GoGovMy.co's Docs](/docs), you'll need to install the [Mintlify CLI](https://mintlify.com/docs/development) to build the documentation site.
 
     ```bash Terminal
     pnpm install -g mintlify
@@ -129,7 +129,7 @@ Next, you'll need to set up the [Tinybird](https://tinybird.co) Clickhouse datab
 
   <Step title="Install Tinybird CLI and authenticate">
 
-In your newly-cloned Dub.co repo, navigate to the `packages/tinybird` directory.
+In your newly-cloned GoGovMy.co repo, navigate to the `packages/tinybird` directory.
 
     Install the Tinybird CLI with `pip install tinybird-cli` (requires Python >= 3.8).
 
@@ -340,7 +340,7 @@ Prerequisites:
 
 ## Step 5: Set up GitHub OAuth
 
-Next, [create a new GitHub App](https://github.com/settings/applications/new). This will allow you to sign in to Dub.co with your GitHub account.
+Next, [create a new GitHub App](https://github.com/settings/applications/new). This will allow you to sign in to GoGovMy.co with your GitHub account.
 
 Don't forget to set the following Callback URL:
 

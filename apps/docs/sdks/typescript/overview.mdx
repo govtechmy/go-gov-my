@@ -1,6 +1,6 @@
 ---
 title: "Overview"
-description: "TypeScript SDK for Dub.co"
+description: "TypeScript SDK for GoGovMy"
 ---
 
 ## Install
@@ -36,13 +36,13 @@ description: "TypeScript SDK for Dub.co"
 The SDK constructor accepts an options object with the following properties:
 
 <ParamField body="token" type="string" required>
-  The API token for the Dub.co API. You can create your token from the [Dub.co
-  dashboard](https://app.dub.co/settings/tokens).
+  The API token for the GoGovMy API. You can create your token from the [GoGovMy
+  dashboard](https://go.gov.my/settings/tokens).
 </ParamField>
 
 <ParamField body="workspaceId" type="string" required>
   The id of the workspace you want to interact with. [Learn how to get your
-  Workspace ID on Dub?](https://dub.co/help/article/how-to-get-workspace-id)
+  Workspace ID on GoGovMy?](https://dub.co/help/article/how-to-get-workspace-id)
 </ParamField>
 
 <ParamField body="projectSlug" type="string">
@@ -60,7 +60,7 @@ const dub = new Dub({
   workspaceId: "ws_clugls3...",
 });
 
-await dub.links.create({
+await go.gov.my.links.create({
   url: "https://google/com",
 });
 ```
