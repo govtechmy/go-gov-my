@@ -19,10 +19,7 @@ const (
 
 var (
 	env       string
-	indexName = "links"
-
-	// TODO: Avoid using global variable to store repo instance
-	idempotentResourceRepo *es.IdempotentResourceRepo
+	indexName = "links"	
 )
 
 func init() {
@@ -41,13 +38,11 @@ func init() {
 }
 
 func main() {
+
 	envFlag := flag.String("env", ENV_DEVELOPMENT, "App environment ('development' or 'production')")
 	flag.Parse()
 
 	env = *envFlag
-
-	// TODO: Delete this and use LinkRepo with the simple client below
-	InitElasticsearch()
 
 	esClient, err := elastic.NewSimpleClient(
 		elastic.SetURL("http://localhost:9200"),
@@ -58,11 +53,15 @@ func main() {
 		log.Fatal("failed to create Elasticsearch client")
 	}
 
-	idempotentResourceRepo = es.NewIdempotentResourceRepo(esClient)
+	idempotentResourceRepo := es.NewIdempotentResourceRepo(esClient)
+    linkRepo := es.NewLinkRepo(esClient)
 
 	// todo: add tracing
 	// todo: split into internal and public endpoint
-	http.HandleFunc("/links", indexLinkHandler)
+	http.HandleFunc("/links", func(w http.ResponseWriter, r *http.Request) {
+        indexLinkHandler(w, r, linkRepo, idempotentResourceRepo)
+    })
+
 	http.HandleFunc("/links/", deleteLinkHandler)
 
 	log.Printf("Starting server on :3001 in %s mode\n", env)

@@ -3,7 +3,6 @@ package es
 import (
 	"context"
 	"encoding/json"
-	"time"
 
 	"redirect-server/repository"
 
@@ -16,11 +15,6 @@ const (
 
 type LinkRepo struct {
 	esClient *elastic.Client
-}
-
-type IdempotencyKey struct {
-	ID        string    `json:"id"`
-	Timestamp time.Time `json:"timestamp"`
 }
 
 func NewLinkRepo(esClient *elastic.Client) *LinkRepo {
