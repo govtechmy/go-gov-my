@@ -19,7 +19,7 @@ const (
 
 var (
 	env       string
-	indexName = "links"	
+	indexName = "links"
 )
 
 func init() {
@@ -54,13 +54,13 @@ func main() {
 	}
 
 	idempotentResourceRepo := es.NewIdempotentResourceRepo(esClient)
-    linkRepo := es.NewLinkRepo(esClient)
+	linkRepo := es.NewLinkRepo(esClient)
 
 	// todo: add tracing
 	// todo: split into internal and public endpoint
 	http.HandleFunc("/links", func(w http.ResponseWriter, r *http.Request) {
-        indexLinkHandler(w, r, linkRepo, idempotentResourceRepo)
-    })
+		indexLinkHandler(w, r, linkRepo, idempotentResourceRepo)
+	})
 
 	http.HandleFunc("/links/", deleteLinkHandler)
 

@@ -8,7 +8,12 @@ import (
 var ErrLinkNotFound = errors.New("link not found")
 
 type Link struct {
-	Slug      string     `json:"slug,omitempty"`
-	URL       string     `json:"url,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
+	ID               string     `json:"id"`
+	Slug             string     `json:"slug,omitempty"`
+	URL              string     `json:"url,omitempty"`
+	CreatedAt        *time.Time `json:"created_at,omitempty"`
+	ExpiresAt        *time.Time `json:"expiresAt,omitempty"`
+	Ios              string     `json:"ios,omitempty"`
+	Android          string     `json:"android,omitempty"`
+	UploadedImageUrl string     `json:"uploadedImageUrl,omitempty"`
 }

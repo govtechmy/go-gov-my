@@ -41,13 +41,14 @@ func (r *LinkRepo) GetLink(ctx context.Context, slug string) (*repository.Link, 
 	if err := json.Unmarshal(res.Hits.Hits[0].Source, &link); err != nil {
 		return nil, err
 	}
+
 	return &link, nil
 }
 
 func (r *LinkRepo) SaveLink(ctx context.Context, link *repository.Link) error {
 	_, err := r.esClient.Index(). // not thread-safe
 					Index(linkIndex).
-					Id(link.Slug).
+					Id(link.ID).
 					BodyJson(link).
 					Do(ctx)
 	return err
