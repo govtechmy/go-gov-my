@@ -191,9 +191,17 @@ services:
       - debezium
     networks:
       - my-network
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    restart: always
+    volumes:
+      - uptime-kuma:/app/data
+    ports:
+      - 3001:3001
 
 networks:
   my-network:
 
 volumes:
   ps-postgres:
+  uptime-kuma:
