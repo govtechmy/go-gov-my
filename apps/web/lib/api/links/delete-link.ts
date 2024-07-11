@@ -1,9 +1,12 @@
+import { processDTOLink } from "@/lib/dto/link.dto";
 import { prisma } from "@/lib/prisma";
 import { redis } from "@/lib/redis";
 import { storage } from "@/lib/storage";
 import { trace } from "@opentelemetry/api";
+import { Prisma } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
 import { OUTBOX_ACTIONS } from "kafka-consumer/actions";
+import generateIdempotencyKey from "./create-idempotency-key";
 
 export async function deleteLink(linkId: string) {
   const tracer = trace.getTracer("default");
@@ -16,6 +19,15 @@ export async function deleteLink(linkId: string) {
       tags: true,
     },
   });
+
+  // Transform into DTOs
+  const linkDTO = await processDTOLink(link);
+
+  // For simplicity and centralized, lets create the idempotency key at this level
+  const headersJSON = generateIdempotencyKey(
+    linkDTO.id,
+    linkDTO.createdAt ?? new Date(),
+  );
 
   try {
     waitUntil(
@@ -40,7 +52,9 @@ export async function deleteLink(linkId: string) {
           data: {
             action: OUTBOX_ACTIONS.DELETE_LINK,
             host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
-            payload: link,
+            payload: linkDTO as unknown as Prisma.InputJsonValue,
+            headers: headersJSON,
+            partitionKey: linkDTO.slug,
           },
         }),
       ]),

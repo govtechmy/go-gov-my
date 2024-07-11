@@ -1,3 +1,4 @@
+import { processDTOLink } from "@/lib/dto/link.dto";
 import { prisma } from "@/lib/prisma";
 import { formatRedisLink, redis } from "@/lib/redis";
 import { isStored, storage } from "@/lib/storage";
@@ -8,6 +9,7 @@ import { Prisma } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
 import { OUTBOX_ACTIONS } from "kafka-consumer/actions";
 import { addToHistory } from "./add-to-history";
+import generateIdempotencyKey from "./create-idempotency-key";
 import { combineTagIds, transformLink } from "./utils";
 
 export async function createLink(
@@ -90,6 +92,15 @@ export async function createLink(
 
   const uploadedImageUrl = `${process.env.STORAGE_BASE_URL}/images/${response.id}`;
 
+  // Transform into DTOs
+  const linkDTO = await processDTOLink(response);
+
+  // For simplicity and centralized, lets create the idempotency key at this level
+  const headersJSON = generateIdempotencyKey(
+    linkDTO.id,
+    linkDTO.createdAt ?? new Date(),
+  );
+
   try {
     waitUntil(
       Promise.all([
@@ -120,10 +131,9 @@ export async function createLink(
                 data: {
                   action: OUTBOX_ACTIONS.CREATE_LINK,
                   host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
-                  payload: {
-                    ...response,
-                    image: uploadedImageUrl,
-                  },
+                  payload: linkDTO as unknown as Prisma.InputJsonValue,
+                  headers: headersJSON,
+                  partitionKey: linkDTO.slug,
                 },
               }),
             ]
@@ -132,7 +142,9 @@ export async function createLink(
                 data: {
                   action: OUTBOX_ACTIONS.CREATE_LINK,
                   host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
-                  payload: response,
+                  payload: linkDTO as unknown as Prisma.InputJsonValue,
+                  headers: headersJSON,
+                  partitionKey: linkDTO.slug,
                 },
               }),
               addToHistory({
