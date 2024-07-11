@@ -1,11 +1,22 @@
 import { prisma } from "@/lib/prisma";
 import { Kafka } from "kafkajs";
+import { z } from "zod";
 import { OUTBOX_ACTIONS } from "./actions";
 
 const OUTBOX_TOPIC =
   process.env.OUTBOX_TOPIC || "ps-postgres.public.WebhookOutbox";
 const REDIRECT_SERVER_BASE_URL =
-  process.env.REDIRECT_SERVER_URL || "http://localhost:3000";
+  process.env.REDIRECT_SERVER_URL || "http://localhost:3001";
+
+const OutboxSchema = z.object({
+  id: z.string().min(1),
+  host: z.string().min(1),
+  payload: z.string().min(1),
+  createdAt: z.string().min(1),
+  action: z.string().min(1),
+  headers: z.string().min(1),
+  partitionKey: z.string().min(1),
+});
 
 async function main() {
   const kafkaBrokerUrl = process.env.KAFKA_BROKER_URL || "localhost:9092";
@@ -35,15 +46,12 @@ async function main() {
   await consumer.run({
     autoCommit: false,
     eachMessage: async ({ topic, partition, message }) => {
-      console.log(partition, message.offset, message.value?.toString("utf8"));
-
       if (!message.value) {
         return;
       }
 
       const processMessage = async (attempt = 0) => {
         try {
-          // expect a debezium event payload
           const { payload: debeziumPayload } = JSON.parse(
             message.value?.toString("utf8") || "{}",
           );
@@ -63,11 +71,9 @@ async function main() {
               payload,
               action,
               headers,
-            } = debeziumPayload.after;
+            } = await OutboxSchema.parseAsync(debeziumPayload.after);
 
             // This is where we should store the partition key id into the outbox table
-
-            log.info(debeziumPayload.after);
 
             let response: Response;
 
@@ -78,7 +84,7 @@ async function main() {
                 );
                 response = await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
                   method: "POST",
-                  headers: headers,
+                  headers: JSON.parse(headers),
                   body: payload,
                 });
                 break;
@@ -88,7 +94,7 @@ async function main() {
                 );
                 response = await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
                   method: "PUT",
-                  headers: headers,
+                  headers: JSON.parse(headers),
                   body: payload,
                 });
                 break;
@@ -101,7 +107,7 @@ async function main() {
                   `${REDIRECT_SERVER_BASE_URL}/links/${linkId}`,
                   {
                     method: "DELETE",
-                    headers: headers,
+                    headers: JSON.parse(headers),
                   },
                 );
                 break;
