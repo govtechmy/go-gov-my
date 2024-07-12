@@ -10,8 +10,6 @@ import (
 	"redirect-server/repository"
 	"redirect-server/repository/es"
 	"strings"
-
-	"github.com/elastic/go-elasticsearch/v7/esapi"
 )
 
 // Adds a link into Elasticsearch. If the link already exists, the whole document is replaced.
@@ -105,7 +103,7 @@ func indexLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkR
 }
 
 // Deletes a link from Elasticsearch
-func deleteLinkHandler(w http.ResponseWriter, r *http.Request) {
+func deleteLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkRepo) {
 	ctx := r.Context()
 
 	if r.Method != "DELETE" {
@@ -119,21 +117,9 @@ func deleteLinkHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	deleteReq := esapi.DeleteRequest{
-		Index:      indexName,
-		DocumentID: linkId,
-	}
-
-	res, err := deleteReq.Do(ctx, esClient)
+	err := linkRepo.DeleteLink(ctx, linkId)
 	if err != nil {
 		log.Printf("Error deleting document in Elasticsearch: %s", err)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		return
-	}
-	defer res.Body.Close()
-
-	if res.IsError() {
-		log.Printf("[%s] Error deleting document ID=%s", res.Status(), linkId)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}

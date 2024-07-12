@@ -54,10 +54,10 @@ func (r *LinkRepo) SaveLink(ctx context.Context, link *repository.Link) error {
 	return err
 }
 
-func (r *LinkRepo) DeleteLink(ctx context.Context, slug string) error {
+func (r *LinkRepo) DeleteLink(ctx context.Context, linkId string) error {
 	_, err := r.esClient.Delete().
 		Index(linkIndex).
-		Id(slug).
+		Id(linkId).
 		Do(ctx)
 	return err
 }
