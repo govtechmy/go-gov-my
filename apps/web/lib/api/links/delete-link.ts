@@ -24,10 +24,7 @@ export async function deleteLink(linkId: string) {
   const linkDTO = await processDTOLink(link);
 
   // For simplicity and centralized, lets create the idempotency key at this level
-  const headersJSON = generateIdempotencyKey(
-    linkDTO.id,
-    linkDTO.createdAt ?? new Date(),
-  );
+  const headersJSON = generateIdempotencyKey(linkDTO.id, new Date());
 
   try {
     waitUntil(

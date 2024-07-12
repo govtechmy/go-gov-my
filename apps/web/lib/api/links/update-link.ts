@@ -127,10 +127,7 @@ export async function updateLink({
   const linkDTO = await processDTOLink(response);
 
   // For simplicity and centralized, lets create the idempotency key at this level
-  const headersJSON = generateIdempotencyKey(
-    linkDTO.id,
-    linkDTO.createdAt ?? new Date(),
-  );
+  const headersJSON = generateIdempotencyKey(linkDTO.id, response.updatedAt);
 
   try {
     waitUntil(

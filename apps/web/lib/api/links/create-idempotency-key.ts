@@ -1,11 +1,8 @@
 // Function to generate Idempotent key into Base64
-export default function generateIdempotencyKey(
-  outboxId: string,
-  createdAt: Date,
-) {
+export default function generateIdempotencyKey(id: string, timestamp: Date) {
   const key = {
-    timestamp: createdAt.toISOString(),
-    id: outboxId,
+    timestamp: timestamp.toISOString(),
+    id: id,
   };
 
   const base64Key = Buffer.from(JSON.stringify(key)).toString("base64");
