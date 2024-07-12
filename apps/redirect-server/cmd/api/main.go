@@ -2,8 +2,10 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"redirect-server/repository/es"
 
@@ -15,11 +17,6 @@ import (
 const (
 	ENV_DEVELOPMENT = "development"
 	ENV_PRODUCTION  = "production"
-)
-
-var (
-	env       string
-	indexName = "links"
 )
 
 func init() {
@@ -39,14 +36,21 @@ func init() {
 
 func main() {
 
-	envFlag := flag.String("env", ENV_DEVELOPMENT, "App environment ('development' or 'production')")
+	var elasticURL string
+	var elasticUser string
+	var elasticPassword string
+	var httpPort int
+	{
+		flag.StringVar(&elasticURL, "elastic-url", "http://localhost:9200", "Elasticsearch URL")
+		flag.StringVar(&elasticUser, "elastic-user", "elastic", "Elasticsearch username")
+		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
+		flag.IntVar(&httpPort, "http-port", 3001, "HTTP server port")
+	}
 	flag.Parse()
 
-	env = *envFlag
-
 	esClient, err := elastic.NewSimpleClient(
-		elastic.SetURL("http://localhost:9200"),
-		elastic.SetBasicAuth("elastic", "elastic"),
+		elastic.SetURL(elasticURL),
+		elastic.SetBasicAuth(elasticUser, elasticPassword),
 		elastic.SetHttpClient(otelhttp.DefaultClient),
 	)
 	if err != nil {
@@ -62,9 +66,14 @@ func main() {
 		indexLinkHandler(w, r, linkRepo, idempotentResourceRepo)
 	})
 
-	http.HandleFunc("/links/", deleteLinkHandler)
+	http.HandleFunc("/links/", func(w http.ResponseWriter, r *http.Request) {
+		deleteLinkHandler(w, r, linkRepo)
+	})
 
-	log.Printf("Starting server on :3001 in %s mode\n", env)
+	srv := &http.Server{
+		Addr:    fmt.Sprintf("0.0.0.0:%d", httpPort),
+		Handler: http.DefaultServeMux,
+	}
 
-	log.Fatal(http.ListenAndServe(":3001", nil))
+	log.Fatal(srv.ListenAndServe())
 }

@@ -51,6 +51,8 @@ services:
       - 9200:9200
     networks:
       - my-network
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
     logging:
       driver: "json-file"
       options:
@@ -191,16 +193,20 @@ services:
       context: ./apps/redirect-server
       dockerfile: docker/Dockerfile.api
     ports:
-      - "3000:3000"
+      - "3001:3001"
+    env_file:
+      - .env
     environment:
-      - ENV=development
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    command:
+      - "/api"
+      - "--elastic-url=http://elasticsearch:9200"
     volumes:
       - .:/app
     depends_on:
       - elasticsearch
     networks:
-      - my-internal-network
+      - my-network
 
   go-redirectd:
     container_name: go-redirectd
@@ -208,10 +214,14 @@ services:
       context: ./apps/redirect-server
       dockerfile: docker/Dockerfile.redirectd
     ports:
-      - "3001:3001"
+      - "3000:3000"
+    env_file:
+      - .env
     environment:
-      - ENV=development
       - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    command:
+      - "/redirectd"
+      - "--elastic-url=http://elasticsearch:9200"
     volumes:
       - .:/app
     depends_on:
@@ -225,3 +235,4 @@ networks:
 
 volumes:
   ps-postgres:
+  esdata:
