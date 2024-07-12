@@ -13,35 +13,36 @@ import { DICEBEAR_AVATAR_URL, cn, fetcher, nFormatter } from "@dub/utils";
 import { BarChart2, Link2, Search, XCircle } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useSWR from "swr";
+import { useDebouncedCallback } from "use-debounce";
 
 export default function Page() {
   const session = useSession();
   const { messages } = useIntlClientHook();
   const [searchValue, setSearchValue] = useState("");
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
+  const [debouncedSearchValue, setDebouncedSearchValue] = useState(searchValue);
 
-  const { data: workspaces } = useSWR<
-    Omit<WorkspaceProps, "users" | "domains">[]
-  >(
+  const {
+    data: workspaces,
+    isValidating: isFetchingWorkspaces,
+    isLoading,
+  } = useSWR<Omit<WorkspaceProps, "users" | "domains">[]>(
     session.status === "authenticated" &&
-      `/api/admin/workspaces?${new URLSearchParams({ search: searchValue })}`,
+      `/api/admin/workspaces?${new URLSearchParams({ search: debouncedSearchValue })}`,
     fetcher,
   );
 
-  useEffect(() => {
-    const newSearchParams = new URLSearchParams(searchParams);
-    if (searchValue === "") {
-      newSearchParams.delete("search");
-    } else {
-      newSearchParams.set("search", searchValue);
-    }
-    router.replace(`${pathname}?${newSearchParams}`);
-  }, [searchValue, router, searchParams, pathname]);
+  const debounced = useDebouncedCallback((value: string) => {
+    setDebouncedSearchValue(value);
+  }, 500);
+
+  const handleSearch = (val: string) => {
+    setSearchValue(val);
+    debounced(val);
+  };
+
+  const handleClearSearch = () => setSearchValue("");
 
   return (
     <>
@@ -58,8 +59,9 @@ export default function Page() {
         <div className="block lg:hidden">
           <SearchInput
             value={searchValue}
-            onChange={setSearchValue}
-            onClear={() => setSearchValue("")}
+            onChange={handleSearch}
+            onClear={handleClearSearch}
+            isLoading={isFetchingWorkspaces}
           />
         </div>
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-7">
@@ -74,8 +76,9 @@ export default function Page() {
                 <div className="hidden lg:block">
                   <SearchInput
                     value={searchValue}
-                    onChange={(val) => setSearchValue(val)}
-                    onClear={() => setSearchValue("")}
+                    onChange={handleSearch}
+                    onClear={handleClearSearch}
+                    isLoading={isFetchingWorkspaces}
                   />
                 </div>
               </div>
@@ -83,7 +86,12 @@ export default function Page() {
           </div>
           <div className="col-span-1 auto-rows-min grid-cols-1 lg:col-span-5">
             <ul className="grid min-h-[66.5vh] auto-rows-min gap-3">
-              {workspaces &&
+              {isLoading &&
+                new Array(10)
+                  .fill(null)
+                  .map((_, i) => <WorkspaceCardSkeleton key={i} />)}
+              {!isLoading &&
+                workspaces &&
                 workspaces.map((workspace) => (
                   <WorkspaceCard key={workspace.id} {...workspace} />
                 ))}
@@ -204,6 +212,28 @@ function WorkspaceCard({
           </div>
         </div>
       </Link>
+    </div>
+  );
+}
+
+function WorkspaceCardSkeleton() {
+  return (
+    <div className="flex flex-col space-y-[46px] rounded-lg border border-gray-100 bg-white p-6 shadow transition-all hover:shadow-md">
+      <div className="flex items-center space-x-3">
+        <div className="h-12 w-12 animate-pulse rounded-full bg-gray-200" />
+        <div className="flex flex-col space-y-2.5">
+          <div className="h-5 w-36 animate-pulse rounded-md bg-gray-200" />
+          <div className="flex items-center space-x-2">
+            <div className="h-5 w-20 animate-pulse rounded-md bg-gray-200" />
+            <div className="h-5 w-5 animate-pulse rounded-full bg-gray-200" />
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center justify-between space-x-4">
+        <div className="h-4 w-24 animate-pulse rounded-md bg-gray-200" />
+        <div className="h-4 w-24 animate-pulse rounded-md bg-gray-200" />
+        <div className="h-4 w-24 animate-pulse rounded-md bg-gray-200" />
+      </div>
     </div>
   );
 }
