@@ -21,6 +21,8 @@
   },
   "dashboard": {
     "workspace_title": "Ruang Kerja Saya",
+    "workspaces": "Ruang Kerja",
+    "filter_workspaces": "Tapis Ruang Kerja",
     "create_workspace": "Membina Ruang Baru",
     "links": "penghubung",
     "Links": "Penghubung",
