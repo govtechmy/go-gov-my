@@ -7,7 +7,7 @@ import { z } from "zod";
 const GetWorkspacesSearchParams = z.object({
   search: z.string().optional(),
   sort: z.enum(["createdAt"]).optional().default("createdAt"),
-  page: z.number().int().default(1),
+  page: z.coerce.number().int().default(1),
 });
 
 // GET /api/admin/workspaces
