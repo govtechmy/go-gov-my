@@ -197,10 +197,10 @@ services:
     volumes:
       - uptime-kuma:/app/data
     ports:
-      - 3001:3001
+      - 3002:3001
     networks:
       - my-network
-      
+
 networks:
   my-network:
 
