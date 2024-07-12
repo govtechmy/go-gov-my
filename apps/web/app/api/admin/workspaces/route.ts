@@ -6,16 +6,11 @@ import { z } from "zod";
 
 const GetWorkspacesSearchParams = z.object({
   search: z.string().optional(),
-  sort: z.enum(["createdAt"]).optional().default("createdAt"),
-  page: z.coerce.number().int().default(1),
 });
 
 // GET /api/admin/workspaces
 export const GET = withAdmin(async ({ searchParams }) => {
-  const { search, sort, page } =
-    await GetWorkspacesSearchParams.parseAsync(searchParams);
-
-  const RESULTS_PER_PAGE = 100;
+  const { search } = await GetWorkspacesSearchParams.parseAsync(searchParams);
 
   const projects = await prisma.project.findMany({
     where: {
@@ -30,11 +25,6 @@ export const GET = withAdmin(async ({ searchParams }) => {
         ],
       }),
     },
-    orderBy: {
-      [sort]: "desc",
-    },
-    take: RESULTS_PER_PAGE,
-    skip: (page - 1) * RESULTS_PER_PAGE,
   });
 
   const workspaces = projects.map((project) =>
