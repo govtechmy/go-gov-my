@@ -22,13 +22,13 @@ func NewIdempotentResourceRepo(esClient *elastic.Client) *IdempotentResourceRepo
 	return &IdempotentResourceRepo{esClient: esClient}
 }
 
-func (r *IdempotentResourceRepo) TryValidateResources(req *http.Request, body []byte) (*repository.IdempotentResource, string, string, error) {
+func (r *IdempotentResourceRepo) TryValidateResources(req *http.Request, body []byte) (*repository.IdempotentResource, error) {
 	ctx := req.Context()
 
 	// Check if header exists
 	idempotencyKey := req.Header.Get("X-Idempotency-Key")
 	if idempotencyKey == "" {
-		return nil, "", "", repository.ErrIdempotentMissingHeaders
+		return nil, repository.ErrIdempotentMissingHeaders
 	}
 
 	// Query from ES if idempotency key exists
@@ -41,13 +41,13 @@ func (r *IdempotentResourceRepo) TryValidateResources(req *http.Request, body []
 		Do(ctx)
 
 	if err != nil {
-		return nil, "", "",repository.ErrInternalServer
+		return nil, repository.ErrInternalServer
 	}
 
 	var idempotentResource repository.IdempotentResource
 	if len(res.Hits.Hits) > 0 {
 		if err := json.Unmarshal(res.Hits.Hits[0].Source, &idempotentResource); err != nil {
-			return nil, "", "", repository.ErrInternalServer
+			return nil, repository.ErrInternalServer
 		}
 	}
 
@@ -56,13 +56,13 @@ func (r *IdempotentResourceRepo) TryValidateResources(req *http.Request, body []
 
 	if len(res.Hits.Hits) > 0 {
 		if idempotentResource.HashedRequestPayload == hashedReqPayload {
-			return &idempotentResource, "", "", repository.ErrIdempotentDuplicateRequest
+			return &idempotentResource, repository.ErrIdempotentDuplicateRequest
 		}
 		// Idempotency key exists but hashed payload doesn't match
-		return &idempotentResource, "", "", repository.ErrIdempotentBadRequest
+		return &idempotentResource, repository.ErrIdempotentBadRequest
 	}
 
-	return nil, hashedReqPayload, idempotencyKey, nil
+	return &idempotentResource, nil
 }
 
 func (r *IdempotentResourceRepo) SaveIdempotentResource(ctx context.Context, req repository.IdempotentResource) error {

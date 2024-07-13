@@ -25,7 +25,7 @@ func indexLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkR
 		return
 	}
 
-	idempotentResource, hashedReqPayload, idempotencyKey, err := idempotentResourceRepo.TryValidateResources(r, body)
+	idempotentResource, err := idempotentResourceRepo.TryValidateResources(r, body)
 
 	if err != nil {
 		logHandler(repository.ErrGeneralMessage, err)
@@ -57,10 +57,10 @@ func indexLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkR
 		return
 	}
 
-	idempotentResource = &repository.IdempotentResource{
-		IdempotencyKey:       idempotencyKey,
-		HashedRequestPayload: hashedReqPayload,
-	}
+	// idempotentResource = &repository.IdempotentResource{
+	// 	IdempotencyKey:       idempotencyKey,
+	// 	HashedRequestPayload: hashedReqPayload,
+	// }
 
 	// Only save idempotent resource if the link was saved successfully
 	if err := idempotentResourceRepo.SaveIdempotentResource(ctx, *idempotentResource); err != nil {
