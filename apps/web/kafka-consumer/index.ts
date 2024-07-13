@@ -5,8 +5,6 @@ import { OUTBOX_ACTIONS } from "./actions";
 
 const OUTBOX_TOPIC =
   process.env.OUTBOX_TOPIC || "ps-postgres.public.WebhookOutbox";
-const REDIRECT_SERVER_BASE_URL =
-  process.env.REDIRECT_SERVER_URL || "http://localhost:3001";
 
 const OutboxSchema = z.object({
   id: z.string().min(1),
@@ -68,6 +66,7 @@ async function main() {
             // debeziumPayload.after is the newly inserted row in WebhookOutbox table
             const {
               id: outboxId,
+              host,
               payload,
               action,
               headers,
@@ -80,9 +79,9 @@ async function main() {
             switch (action) {
               case OUTBOX_ACTIONS.CREATE_LINK:
                 log.info(
-                  "Sending a request to the redirect server: POST /links",
+                  `Sending a request to the redirect server: POST ${host}`,
                 );
-                response = await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
+                response = await fetch(host, {
                   method: "POST",
                   headers: JSON.parse(headers),
                   body: payload,
@@ -90,9 +89,9 @@ async function main() {
                 break;
               case OUTBOX_ACTIONS.UPDATE_LINK:
                 log.info(
-                  "Sending a request to the redirect server: PUT /links",
+                  `Sending a request to the redirect server: POST ${host}`,
                 );
-                response = await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
+                response = await fetch(host, {
                   method: "PUT",
                   headers: JSON.parse(headers),
                   body: payload,
@@ -101,15 +100,12 @@ async function main() {
               case OUTBOX_ACTIONS.DELETE_LINK:
                 const { id: linkId } = JSON.parse(payload);
                 log.info(
-                  `Sending a request to the redirect server: DELETE /links/${linkId}`,
+                  `Sending a request to the redirect server: DELETE ${host}`,
                 );
-                response = await fetch(
-                  `${REDIRECT_SERVER_BASE_URL}/links/${linkId}`,
-                  {
-                    method: "DELETE",
-                    headers: JSON.parse(headers),
-                  },
-                );
+                response = await fetch(host, {
+                  method: "DELETE",
+                  headers: JSON.parse(headers),
+                });
                 break;
               default:
                 log.error(

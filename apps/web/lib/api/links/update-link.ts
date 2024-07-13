@@ -12,6 +12,9 @@ import { addToHistory } from "./add-to-history";
 import generateIdempotencyKey from "./create-idempotency-key";
 import { combineTagIds, transformLink } from "./utils";
 
+const REDIRECT_SERVER_BASE_URL =
+  process.env.REDIRECT_SERVER_URL || "http://localhost:3001";
+
 export async function updateLink({
   oldDomain = SHORT_DOMAIN,
   oldKey,
@@ -152,7 +155,8 @@ export async function updateLink({
         prisma.webhookOutbox.create({
           data: {
             action: OUTBOX_ACTIONS.UPDATE_LINK,
-            host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
+            // host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
+            host: REDIRECT_SERVER_BASE_URL + "/links",
             payload: linkDTO as unknown as Prisma.InputJsonValue,
             headers: headersJSON,
             partitionKey: linkDTO.slug,

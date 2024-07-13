@@ -8,6 +8,9 @@ import { waitUntil } from "@vercel/functions";
 import { OUTBOX_ACTIONS } from "kafka-consumer/actions";
 import generateIdempotencyKey from "./create-idempotency-key";
 
+const REDIRECT_SERVER_BASE_URL =
+  process.env.REDIRECT_SERVER_URL || "http://localhost:3001";
+
 export async function deleteLink(linkId: string) {
   const tracer = trace.getTracer("default");
   const span = tracer.startSpan("recordLinks");
@@ -48,7 +51,7 @@ export async function deleteLink(linkId: string) {
         prisma.webhookOutbox.create({
           data: {
             action: OUTBOX_ACTIONS.DELETE_LINK,
-            host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
+            host: REDIRECT_SERVER_BASE_URL + "/links/" + link.id,
             payload: linkDTO as unknown as Prisma.InputJsonValue,
             headers: headersJSON,
             partitionKey: linkDTO.slug,

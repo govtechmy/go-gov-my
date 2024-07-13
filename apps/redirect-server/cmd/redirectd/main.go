@@ -78,14 +78,14 @@ func main() {
 		ctx := r.Context()
 		slug := strings.TrimPrefix(r.URL.Path, "/")
 
-		link, err := linkRepo.GetLink(ctx, slug)
+		link, statusCode, err := linkRepo.GetLink(ctx, slug)
 		if err == repository.ErrLinkNotFound {
 			logger.Info("link not found",
 				zap.String("slug", slug),
 				zap.String("ip", r.RemoteAddr),
 				zap.String("user-agent", r.UserAgent()),
 				zap.String("code", "link_not_found")) // Filebeat will run to collect link not found errors over this code
-			w.WriteHeader(404)
+			w.WriteHeader(statusCode)
 			if err := t.ExecuteTemplate(w, "notfound.html", nil); err != nil {
 				logger.Error("failed to execute template", zap.Error(err))
 			}
@@ -97,7 +97,7 @@ func main() {
 				zap.String("ip", r.RemoteAddr),
 				zap.String("user-agent", r.UserAgent()),
 				zap.Error(err))
-			w.WriteHeader(500)
+			w.WriteHeader(statusCode)
 			if err := t.ExecuteTemplate(w, "server_error.html", nil); err != nil {
 				logger.Error("failed to execute template", zap.Error(err))
 			}

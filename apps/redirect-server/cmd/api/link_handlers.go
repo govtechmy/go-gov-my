@@ -1,8 +1,6 @@
 package main
 
 import (
-	"crypto/md5"
-	"encoding/hex"
 	"encoding/json"
 	"io"
 	"log"
@@ -12,7 +10,6 @@ import (
 	"strings"
 )
 
-// Adds a link into Elasticsearch. If the link already exists, the whole document is replaced.
 func indexLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkRepo, idempotentResourceRepo *es.IdempotentResourceRepo) {
 	ctx := r.Context()
 
@@ -22,32 +19,20 @@ func indexLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkR
 	}
 
 	body, err := io.ReadAll(r.Body)
-
 	if err != nil {
 		log.Printf("Error reading request body: %s", err)
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		return
 	}
 
-	idempotencyKey := r.Header.Get("X-Idempotency-Key")
-	if idempotencyKey == "" {
-		http.Error(w, "X-Idempotency-Key header is required", http.StatusBadRequest)
-		return
-	}
-
-	resource, err := idempotentResourceRepo.GetIdempotentResource(ctx, idempotencyKey)
+	idempotentResource, hashedReqPayload, idempotencyKey, statusCode, err := idempotentResourceRepo.TryValidateResources(r, body)
 	if err != nil {
-		log.Printf("Error getting idempotent resource: %s", err)
-		http.Error(w, "Server error", http.StatusInternalServerError)
+		http.Error(w, err.Error(), statusCode)
 		return
 	}
 
-	resourceExists := resource != nil
-	hash := md5.Sum(body)
-	hashedReqPayload := hex.EncodeToString(hash[:])
-
-	if resourceExists {
-		if resource.HashedRequestPayload == hashedReqPayload {
+	if idempotentResource != nil {
+		if idempotentResource.HashedRequestPayload == hashedReqPayload {
 			http.Error(w, "Duplicate request", http.StatusConflict)
 			return
 		}
@@ -57,21 +42,17 @@ func indexLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkR
 	}
 
 	var link repository.Link
-
 	err = json.Unmarshal(body, &link)
-
 	if err != nil {
 		log.Printf("Error unmarshalling request body: %s", err)
 		http.Error(w, "Invalid body", http.StatusBadRequest)
 		return
 	}
 
-	// Meaning the _id is different but the slug already exists.
-	// Actually this is already being handled at NextJS but it's good to have a double check here so that we don't differnt id but same slug
-	existingLink, err := linkRepo.GetLink(ctx, link.Slug)
+	existingLink, statusCode, err := linkRepo.GetLink(ctx, link.Slug)
 	if err != nil && err != repository.ErrLinkNotFound {
 		log.Printf("Error checking existing link: %s", err)
-		http.Error(w, "Server error", http.StatusInternalServerError)
+		http.Error(w, "Server error", statusCode)
 		return
 	}
 
@@ -85,12 +66,13 @@ func indexLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkR
 		return
 	}
 
-	idempotentResource := repository.IdempotentResource{
+	idempotentResource = &repository.IdempotentResource{
 		IdempotencyKey:       idempotencyKey,
 		HashedRequestPayload: hashedReqPayload,
 	}
 
-	if err := idempotentResourceRepo.SaveIdempotentResource(ctx, idempotentResource); err != nil {
+	// Only save idempotent resource if the link was saved successfully
+	if err := idempotentResourceRepo.SaveIdempotentResource(ctx, *idempotentResource); err != nil {
 		http.Error(w, "Server error", http.StatusInternalServerError)
 		return
 	}
@@ -101,6 +83,7 @@ func indexLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkR
 		w.WriteHeader(http.StatusNoContent)
 	}
 }
+
 
 // Deletes a link from Elasticsearch
 func deleteLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkRepo) {

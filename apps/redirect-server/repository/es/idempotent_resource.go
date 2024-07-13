@@ -2,7 +2,11 @@ package es
 
 import (
 	"context"
+	"crypto/md5"
+	"encoding/hex"
 	"encoding/json"
+	"fmt"
+	"net/http"
 
 	"redirect-server/repository"
 
@@ -19,7 +23,16 @@ func NewIdempotentResourceRepo(esClient *elastic.Client) *IdempotentResourceRepo
 	return &IdempotentResourceRepo{esClient: esClient}
 }
 
-func (r *IdempotentResourceRepo) GetIdempotentResource(ctx context.Context, idempotencyKey string) (*repository.IdempotentResource, error) {
+func (r *IdempotentResourceRepo) TryValidateResources(req *http.Request, body []byte) (*repository.IdempotentResource, string, string, int, error) {
+	ctx := req.Context()
+
+	// Check if header exists
+	idempotencyKey := req.Header.Get("X-Idempotency-Key")
+	if idempotencyKey == "" {
+		return nil, "", "", http.StatusBadRequest, fmt.Errorf("X-Idempotency-Key header is required")
+	}
+
+	// Query from ES if idempotency key exists
 	res, err := r.esClient.Search().
 		Index(idempotentResourceIndex).
 		Query(
@@ -29,19 +42,30 @@ func (r *IdempotentResourceRepo) GetIdempotentResource(ctx context.Context, idem
 		Do(ctx)
 
 	if err != nil {
-		return nil, err
+		return nil, "", "", http.StatusInternalServerError, err
 	}
 
-	if len(res.Hits.Hits) == 0 {
-		return nil, nil
+	var idempotentResource repository.IdempotentResource
+	if len(res.Hits.Hits) > 0 {
+		if err := json.Unmarshal(res.Hits.Hits[0].Source, &idempotentResource); err != nil {
+			return nil, "", "", http.StatusInternalServerError, err
+		}
 	}
 
-	idempotentResource := repository.IdempotentResource{}
-	if err := json.Unmarshal(res.Hits.Hits[0].Source, &idempotentResource); err != nil {
-		return nil, err
+	hash := md5.Sum(body)
+	hashedReqPayload := hex.EncodeToString(hash[:])
+
+	if len(res.Hits.Hits) > 0 {
+		if idempotentResource.HashedRequestPayload == hashedReqPayload {
+			return &idempotentResource, hashedReqPayload, idempotencyKey, http.StatusConflict, fmt.Errorf("Duplicate request")
+		}
+		return &idempotentResource, hashedReqPayload, idempotencyKey, http.StatusUnprocessableEntity, fmt.Errorf("Idempotent resource exists but request bodies don't match")
 	}
-	return &idempotentResource, nil
+
+	return nil, hashedReqPayload, idempotencyKey, 0, nil
 }
+
+
 
 func (r *IdempotentResourceRepo) SaveIdempotentResource(ctx context.Context, req repository.IdempotentResource) error {
 	_, err := r.esClient.Index(). // not thread-safe

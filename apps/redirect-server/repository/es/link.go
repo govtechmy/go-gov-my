@@ -3,6 +3,7 @@ package es
 import (
 	"context"
 	"encoding/json"
+	"net/http"
 
 	"redirect-server/repository"
 
@@ -21,7 +22,7 @@ func NewLinkRepo(esClient *elastic.Client) *LinkRepo {
 	return &LinkRepo{esClient: esClient}
 }
 
-func (r *LinkRepo) GetLink(ctx context.Context, slug string) (*repository.Link, error) {
+func (r *LinkRepo) GetLink(ctx context.Context, slug string) (*repository.Link, int, error) {
 	res, err := r.esClient.Search().
 		Index(linkIndex).
 		Query(
@@ -30,20 +31,21 @@ func (r *LinkRepo) GetLink(ctx context.Context, slug string) (*repository.Link, 
 		Size(1).
 		Do(ctx)
 	if err != nil {
-		return nil, err
+		return nil, http.StatusInternalServerError, err
 	}
 
 	if len(res.Hits.Hits) == 0 {
-		return nil, repository.ErrLinkNotFound
+		return nil, http.StatusNotFound, repository.ErrLinkNotFound
 	}
 
 	link := repository.Link{}
 	if err := json.Unmarshal(res.Hits.Hits[0].Source, &link); err != nil {
-		return nil, err
+		return nil, http.StatusInternalServerError, err
 	}
 
-	return &link, nil
+	return &link, 0, nil
 }
+
 
 func (r *LinkRepo) SaveLink(ctx context.Context, link *repository.Link) error {
 	_, err := r.esClient.Index(). // not thread-safe
