@@ -1,12 +1,12 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Dub.co Docs",
+  "name": "GoGovMy Docs",
   "logo": {
     "dark": "/logos/wordmark-dark.svg",
     "light": "/logos/wordmark.svg",
-    "href": "https://dub.co"
+    "href": "https://go.gov.my"
   },
-  "favicon": "/logos/favicon.png",
+  "favicon": "/public/favicon-16x16.png",
   "colors": {
     "primary": "#9563FF",
     "light": "#AE87FF",
@@ -23,34 +23,30 @@
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:support@dub.co"
+      "url": "mailto:support@tech.gov.my"
     }
   ],
   "topbarCtaButton": {
     "name": "Dashboard",
-    "url": "https://app.dub.co"
+    "url": "https://go.gov.my"
   },
-  "openapi": "https://api.dub.co",
+  "openapi": "/openapi-with-code-samples.yaml",
   "tabs": [
     {
       "name": "API Reference",
       "url": "api-reference"
-    },
-    {
-      "name": "SDKs",
-      "url": "sdks"
     }
   ],
   "anchors": [
     {
       "name": "Help Center",
       "icon": "question",
-      "url": "https://dub.co/help"
+      "url": "https://go.gov.my/help"
     },
     {
       "name": "GitHub",
       "icon": "github",
-      "url": "https://github.com/dubinc/dub"
+      "url": "https://github.com/govtechmy/go-gov-my"
     }
   ],
   "navigation": [
@@ -214,10 +210,8 @@
     "thumbsRating": true
   },
   "footerSocials": {
-    "twitter": "https://twitter.com/dubdotco",
-    "github": "https://github.com/steven-tey/dub",
-    "linkedin": "https://www.linkedin.com/company/dubhq",
-    "website": "https://dub.co"
+    "website": "https://www.digital.gov.my/en-GB",
+    "github": "https://github.com/govtechmy"
   },
   "redirects": [
     {

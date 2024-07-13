@@ -1,6 +1,6 @@
 ---
 title: "Upsert"
-"og:title": "dub.links.upsert - Upsert a new link - TypeScript SDK"
+"og:title": "go.gov.my.links.upsert - Upsert a new link - TypeScript SDK"
 description: "Upsert a link for the authenticated workspace by its URL. If a link with the same URL already exists, return it (or update it if there are any changes). Otherwise, a new link will be created."
 ---
 
@@ -22,11 +22,11 @@ import LinkResponse from "/snippets/link-response.mdx";
 <RequestExample>
 
 ```ts
-const { shortLink } = await dub.links.upsert({
+const { shortLink } = await go.gov.my.links.upsert({
   url: "https://www.google.com",
 });
 
-console.log(shortLink); // will always be https://dub.sh/xnjk23d
+console.log(shortLink); // will always be https://go.gov.my/xnjk23d
 ```
 
 </RequestExample>
@@ -36,7 +36,7 @@ console.log(shortLink); // will always be https://dub.sh/xnjk23d
 ```ts
 {
   id: 'clv3o9p9q000au1h0mc7r6l63',
-  domain: 'dub.sh',
+  domain: 'go.gov.my',
   key: 'e7qzMuI',
   externalId: "123",
   url: 'https://www.google.com',
@@ -56,8 +56,8 @@ console.log(shortLink); // will always be https://dub.sh/xnjk23d
   tagId: null,
   tags: [],
   comments: null,
-  shortLink: 'https://dub.sh/e7qzMuI',
-  qrCode: 'https://api.dub.co/qr?url=https://dub.sh/e7qzMuI?qr=1',
+  shortLink: 'https://go.gov.my/e7qzMuI',
+  qrCode: 'https://api.go.gov.my/qr?url=https://go.gov.my/e7qzMuI?qr=1',
   utmSource: null,
   utmMedium: null,
   utmCampaign: null,

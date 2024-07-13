@@ -8,7 +8,7 @@ importers:
 
   .:
     devDependencies:
-      '@dub/tailwind-config':
+      '@gogovmy/tailwind-config':
         specifier: workspace:*
         version: link:packages/tailwind-config
       eslint:
@@ -51,9 +51,6 @@ importers:
       '@chronark/zod-bird':
         specifier: ^0.3.9
         version: 0.3.9
-      '@dub/tailwind-config':
-        specifier: workspace:*
-        version: link:../../packages/tailwind-config
       '@dub/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -66,6 +63,9 @@ importers:
       '@fortawesome/react-fontawesome':
         specifier: ^0.2.2
         version: 0.2.2(@fortawesome/fontawesome-svg-core@6.5.2)(react@18.2.0)
+      '@gogovmy/tailwind-config':
+        specifier: workspace:*
+        version: link:../../packages/tailwind-config
       '@next-auth/prisma-adapter':
         specifier: ^1.0.5
         version: 1.0.5(@prisma/client@5.14.0)(next-auth@4.24.4)
@@ -485,12 +485,12 @@ importers:
         specifier: ^0.9.0
         version: 0.9.0(@types/react-dom@18.2.14)(@types/react@18.2.48)(react-dom@18.2.0)(react@18.2.0)
     devDependencies:
-      '@dub/tailwind-config':
-        specifier: workspace:*
-        version: link:../tailwind-config
       '@dub/utils':
         specifier: workspace:*
         version: link:../utils
+      '@gogovmy/tailwind-config':
+        specifier: workspace:*
+        version: link:../tailwind-config
       '@types/js-cookie':
         specifier: ^3.0.6
         version: 3.0.6

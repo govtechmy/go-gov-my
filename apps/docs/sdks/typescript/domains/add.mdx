@@ -1,6 +1,6 @@
 ---
 title: "Add"
-"og:title": "dub.domains.add - Add a domain - TypeScript SDK"
+"og:title": "go.gov.my.domains.add - Add a domain - TypeScript SDK"
 description: "Add a domain to the authenticated workspace."
 ---
 
@@ -9,7 +9,7 @@ import DomainResponse from "/snippets/domain-response.mdx";
 ## Arguments
 
 <ParamField body="slug" type="string" required>
-  Name of the domain. Eg. `acme.com`.
+  Name of the domain. Eg. `go.gov.my`.
 </ParamField>
 
 <ParamField body="type" type="enum<string>" default="redirect">
@@ -49,8 +49,8 @@ import DomainResponse from "/snippets/domain-response.mdx";
 <RequestExample>
 
 ```ts
-await dub.domains.add({
-  slug: "acme.com",
+await go.gov.my.domains.add({
+  slug: "go.gov.my",
 });
 ```
 
@@ -61,11 +61,11 @@ await dub.domains.add({
 ```ts
 {
   id: "clvcep2sn87jh8nf808x00005",
-  slug: "acme.com",
+  slug: "go.gov.my",
   verified: false,
   primary: true,
   archived: false,
-  placeholder: "https://dub.co/help/article/what-is-dub",
+  placeholder: "https://go.gov.my/help/article/what-is-dub",
   expiredUrl: null,
   target: null,
   type: "redirect",

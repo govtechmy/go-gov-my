@@ -1,6 +1,6 @@
 ---
 title: "Count"
-"og:title": "dub.links.count - Retrieve the number of links - TypeScript SDK"
+"og:title": "go.gov.my.links.count - Retrieve the number of links - TypeScript SDK"
 description: "Retrieve the number of links for the authenticated workspace. The provided query parameters allow filtering the returned links."
 ---
 
@@ -50,12 +50,12 @@ The number of links matching the query.
 
 ```ts
 // Count links by domain
-await dub.links.count({
-  domain: "dub.sh",
+await go.gov.my.links.count({
+  domain: "go.gov.my.sh",
 });
 
 // Count links by tagIds
-await dub.links.count({
+await go.gov.my.links.count({
   tagIds: ["clv3mewk30001mq0rxl3j3frn"],
 });
 ```

@@ -226,6 +226,13 @@ services:
       - .:/app
     depends_on:
       - elasticsearch
+  status-page:
+    image: louislam/uptime-kuma:1
+    restart: always
+    volumes:
+      - uptime-kuma:/app/data
+    ports:
+      - 3002:3002
     networks:
       - my-network
 
@@ -236,3 +243,4 @@ networks:
 volumes:
   ps-postgres:
   esdata:
+  status-page:

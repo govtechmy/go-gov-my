@@ -1,6 +1,6 @@
 ---
 title: "List"
-"og:title": "dub.links.list - Retrieve a list of links - TypeScript SDK"
+"og:title": "go.gov.my.links.list - Retrieve a list of links - TypeScript SDK"
 description: "Retrieve a list of links for the authenticated workspace. The list will be paginated and the provided query parameters allow filtering the returned links."
 ---
 
@@ -58,12 +58,12 @@ import LinkResponse from "/snippets/link-response.mdx";
 
 ```ts
 // Find links by domain
-await dub.links.list({
-  domain: "dub.sh",
+await go.gov.my.links.list({
+  domain: "go.gov.my",
 });
 
 // Find links by tagIds
-await dub.links.list({
+await go.gov.my.links.list({
   tagIds: ["clv3mewk30001mq0rxl3j3frn"],
 });
 ```
@@ -76,7 +76,7 @@ await dub.links.list({
 [
   {
     id: "clv3o9p9q000au1h0mc7r6l63",
-    domain: "dub.sh",
+    domain: "go.gov.my",
     key: "e7qzMuI",
     externalId: "123",
     url: "https://www.google.com",
@@ -96,8 +96,8 @@ await dub.links.list({
     tagId: null,
     tags: [],
     comments: null,
-    shortLink: "https://dub.sh/e7qzMuI",
-    qrCode: "https://api.dub.co/qr?url=https://dub.sh/e7qzMuI?qr=1",
+    shortLink: "https://go.gov.my/e7qzMuI",
+    qrCode: "https://api.go.gov.my/qr?url=https://go.gov.my/e7qzMuI?qr=1",
     utmSource: null,
     utmMedium: null,
     utmCampaign: null,

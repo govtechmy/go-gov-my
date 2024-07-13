@@ -8104,7 +8104,7 @@
                 "slug": {
                   "type": "string",
                   "description": "The domain name.",
-                  "example": "acme.com"
+                  "example": "go.gov.my"
                 },
                 "primary": {
                   "type": "boolean",
@@ -8188,7 +8188,7 @@
           "slug": {
             "type": "string",
             "description": "The domain name.",
-            "example": "acme.com"
+            "example": "go.gov.my"
           },
           "verified": {
             "type": "boolean",
@@ -8215,13 +8215,13 @@
             "type": "string",
             "nullable": true,
             "description": "The URL to redirect to when a link under this domain has expired.",
-            "example": "https://acme.com/expired"
+            "example": "https://go.gov.my/expired"
           },
           "target": {
             "type": "string",
             "nullable": true,
             "description": "The page your users will get redirected to when they visit your domain.",
-            "example": "https://acme.com/landing"
+            "example": "https://go.gov.my/landing"
           },
           "type": {
             "type": "string",
