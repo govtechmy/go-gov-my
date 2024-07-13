@@ -146,7 +146,7 @@ services:
       - 8083:8083
     networks:
       - my-network
-  
+
   init-debezium-connector:
     image: curlimages/curl:8.8.0
     depends_on:
@@ -192,8 +192,19 @@ services:
     networks:
       - my-network
 
+  status-page:
+    image: louislam/uptime-kuma:1
+    restart: always
+    volumes:
+      - uptime-kuma:/app/data
+    ports:
+      - 3002:3002
+    networks:
+      - my-network
+
 networks:
   my-network:
 
 volumes:
   ps-postgres:
+  status-page:
