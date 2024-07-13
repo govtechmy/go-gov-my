@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Kafka } from "kafkajs";
 import { z } from "zod";
-import { OUTBOX_ACTIONS } from "./actions";
 
 const OUTBOX_TOPIC =
   process.env.OUTBOX_TOPIC || "ps-postgres.public.WebhookOutbox";
@@ -76,72 +75,35 @@ async function main() {
 
             let response: Response;
 
-            switch (action) {
-              case OUTBOX_ACTIONS.CREATE_LINK:
-                log.info(
-                  `Sending a request to the redirect server: POST ${host}`,
-                );
-                response = await fetch(host, {
-                  method: "POST",
-                  headers: JSON.parse(headers),
-                  body: payload,
-                });
-                break;
-              case OUTBOX_ACTIONS.UPDATE_LINK:
-                log.info(
-                  `Sending a request to the redirect server: POST ${host}`,
-                );
-                response = await fetch(host, {
-                  method: "PUT",
-                  headers: JSON.parse(headers),
-                  body: payload,
-                });
-                break;
-              case OUTBOX_ACTIONS.DELETE_LINK:
-                const { id: linkId } = JSON.parse(payload);
-                log.info(
-                  `Sending a request to the redirect server: DELETE ${host}`,
-                );
-                response = await fetch(host, {
-                  method: "DELETE",
-                  headers: JSON.parse(headers),
-                });
-                break;
-              default:
-                log.error(
-                  `Unhandled outbox action '${action}', ID = ${outboxId}`,
-                );
-                return;
-            }
+            log.info(
+              `Sending a request to the redirect server: ${action} ${host}`,
+            );
 
-            if (response.ok) {
-              log.info("Response to redirect-server was successful");
-              await prisma.webhookOutbox.delete({ where: { id: outboxId } });
-              log.info(`WebhookOutbox row with ID ${outboxId} was deleted`);
-              await consumer.commitOffsets([
-                {
-                  topic,
-                  partition,
-                  offset: (parseInt(message.offset, 10) + 1).toString(),
-                },
-              ]);
-            } else if (response.status === 409) {
-              log.info("Link already exists in ES. Skip to next message.");
-              await consumer.commitOffsets([
-                {
-                  topic,
-                  partition,
-                  offset: (parseInt(message.offset, 10) + 1).toString(),
-                },
-              ]);
-            } else {
-              log.error(
-                `Response to redirect-server was unsuccessful, status: ${response.status}, outboxId: ${outboxId}`,
-              );
-              throw new Error(
-                `Response to redirect-server was unsuccessful, status: ${response.status}`,
-              );
-            }
+            await fetch(host, {
+              method: action,
+              headers: JSON.parse(headers),
+              body: payload,
+            }).then(async (response) => {
+              if (response.ok) {
+                log.info("Response to redirect-server was successful");
+                await prisma.webhookOutbox.delete({ where: { id: outboxId } });
+                log.info(`WebhookOutbox row with ID ${outboxId} was deleted`);
+                await consumer.commitOffsets([
+                  {
+                    topic,
+                    partition,
+                    offset: (parseInt(message.offset, 10) + 1).toString(),
+                  },
+                ]);
+              } else {
+                log.error(
+                  `Response to redirect-server was unsuccessful, status: ${response.status}, outboxId: ${outboxId}`,
+                );
+                throw new Error(
+                  `Response to redirect-server was unsuccessful, status: ${response.status}`,
+                );
+              }
+            });
           }
         } catch (err) {
           console.error(`Attempt ${attempt + 1} failed:`, err);

@@ -1,12 +1,8 @@
 package repository
 
 import (
-	"errors"
 	"time"
 )
-
-var ErrLinkNotFound = errors.New("link not found")
-
 type Link struct {
 	ID               string     `json:"id"`
 	Slug             string     `json:"slug,omitempty"`

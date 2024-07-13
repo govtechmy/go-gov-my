@@ -3,66 +3,57 @@ package main
 import (
 	"encoding/json"
 	"io"
-	"log"
 	"net/http"
 	"redirect-server/repository"
 	"redirect-server/repository/es"
 	"strings"
 )
 
+// [POST, PUT] Link
 func indexLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkRepo, idempotentResourceRepo *es.IdempotentResourceRepo) {
 	ctx := r.Context()
 
 	if !(r.Method == "POST" || r.Method == "PUT") {
-		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		errLinkHandler(w, repository.ErrMethodNotAllowed)
 		return
 	}
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		log.Printf("Error reading request body: %s", err)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		logHandler(repository.ErrReadBody, err)
+		errLinkHandler(w, repository.ErrInternalServer)
 		return
 	}
 
-	idempotentResource, hashedReqPayload, idempotencyKey, statusCode, err := idempotentResourceRepo.TryValidateResources(r, body)
+	idempotentResource, hashedReqPayload, idempotencyKey, err := idempotentResourceRepo.TryValidateResources(r, body)
+
 	if err != nil {
-		http.Error(w, err.Error(), statusCode)
-		return
-	}
-
-	if idempotentResource != nil {
-		if idempotentResource.HashedRequestPayload == hashedReqPayload {
-			http.Error(w, "Duplicate request", http.StatusConflict)
-			return
-		}
-		// Resource with matching idempotency key exists but request bodies don't match
-		http.Error(w, "Idempotent resource exists but request bodies don't match", http.StatusUnprocessableEntity)
+		logHandler(repository.ErrGeneralMessage, err)
+		errLinkHandler(w, err)
 		return
 	}
 
 	var link repository.Link
 	err = json.Unmarshal(body, &link)
 	if err != nil {
-		log.Printf("Error unmarshalling request body: %s", err)
-		http.Error(w, "Invalid body", http.StatusBadRequest)
+		logHandler(repository.ErrUnmarshalling, err)
+		errLinkHandler(w, repository.ErrBadRequest)
 		return
 	}
 
-	existingLink, statusCode, err := linkRepo.GetLink(ctx, link.Slug)
+	existingLink, err := linkRepo.GetLink(ctx, link.Slug)
 	if err != nil && err != repository.ErrLinkNotFound {
-		log.Printf("Error checking existing link: %s", err)
-		http.Error(w, "Server error", statusCode)
+		errLinkHandler(w, repository.ErrCheckExistingLink)
 		return
 	}
 
 	if r.Method == "POST" && existingLink != nil {
-		http.Error(w, "Slug already exists", http.StatusConflict)
+		errLinkHandler(w, repository.ErrSlugExists)
 		return
 	}
 
 	if err := linkRepo.SaveLink(ctx, &link); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		errLinkHandler(w, repository.ErrInternalServer)
 		return
 	}
 
@@ -73,7 +64,7 @@ func indexLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkR
 
 	// Only save idempotent resource if the link was saved successfully
 	if err := idempotentResourceRepo.SaveIdempotentResource(ctx, *idempotentResource); err != nil {
-		http.Error(w, "Server error", http.StatusInternalServerError)
+		errLinkHandler(w, repository.ErrInternalServer)
 		return
 	}
 
@@ -84,26 +75,25 @@ func indexLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkR
 	}
 }
 
-
-// Deletes a link from Elasticsearch
+// [DELETE] Link
 func deleteLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkRepo) {
 	ctx := r.Context()
 
 	if r.Method != "DELETE" {
-		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		errLinkHandler(w, repository.ErrMethodNotAllowed)
 		return
 	}
 
 	linkId := strings.Split(r.URL.Path, "/")[2]
 	if linkId == "" {
-		http.Error(w, "Missing path parameter 'linkId'", http.StatusBadRequest)
+		errLinkHandler(w, repository.ErrMissingParameters)
 		return
 	}
 
 	err := linkRepo.DeleteLink(ctx, linkId)
 	if err != nil {
-		log.Printf("Error deleting document in Elasticsearch: %s", err)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		logHandler(repository.ErrDeleting, err)
+		errLinkHandler(w, repository.ErrInternalServer)
 		return
 	}
 

@@ -5,7 +5,6 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"redirect-server/repository"
@@ -23,13 +22,13 @@ func NewIdempotentResourceRepo(esClient *elastic.Client) *IdempotentResourceRepo
 	return &IdempotentResourceRepo{esClient: esClient}
 }
 
-func (r *IdempotentResourceRepo) TryValidateResources(req *http.Request, body []byte) (*repository.IdempotentResource, string, string, int, error) {
+func (r *IdempotentResourceRepo) TryValidateResources(req *http.Request, body []byte) (*repository.IdempotentResource, string, string, error) {
 	ctx := req.Context()
 
 	// Check if header exists
 	idempotencyKey := req.Header.Get("X-Idempotency-Key")
 	if idempotencyKey == "" {
-		return nil, "", "", http.StatusBadRequest, fmt.Errorf("X-Idempotency-Key header is required")
+		return nil, "", "", repository.ErrIdempotentMissingHeaders
 	}
 
 	// Query from ES if idempotency key exists
@@ -42,13 +41,13 @@ func (r *IdempotentResourceRepo) TryValidateResources(req *http.Request, body []
 		Do(ctx)
 
 	if err != nil {
-		return nil, "", "", http.StatusInternalServerError, err
+		return nil, "", "",repository.ErrInternalServer
 	}
 
 	var idempotentResource repository.IdempotentResource
 	if len(res.Hits.Hits) > 0 {
 		if err := json.Unmarshal(res.Hits.Hits[0].Source, &idempotentResource); err != nil {
-			return nil, "", "", http.StatusInternalServerError, err
+			return nil, "", "", repository.ErrInternalServer
 		}
 	}
 
@@ -57,15 +56,14 @@ func (r *IdempotentResourceRepo) TryValidateResources(req *http.Request, body []
 
 	if len(res.Hits.Hits) > 0 {
 		if idempotentResource.HashedRequestPayload == hashedReqPayload {
-			return &idempotentResource, hashedReqPayload, idempotencyKey, http.StatusConflict, fmt.Errorf("Duplicate request")
+			return &idempotentResource, "", "", repository.ErrIdempotentDuplicateRequest
 		}
-		return &idempotentResource, hashedReqPayload, idempotencyKey, http.StatusUnprocessableEntity, fmt.Errorf("Idempotent resource exists but request bodies don't match")
+		// Idempotency key exists but hashed payload doesn't match
+		return &idempotentResource, "", "", repository.ErrIdempotentBadRequest
 	}
 
-	return nil, hashedReqPayload, idempotencyKey, 0, nil
+	return nil, hashedReqPayload, idempotencyKey, nil
 }
-
-
 
 func (r *IdempotentResourceRepo) SaveIdempotentResource(ctx context.Context, req repository.IdempotentResource) error {
 	_, err := r.esClient.Index(). // not thread-safe

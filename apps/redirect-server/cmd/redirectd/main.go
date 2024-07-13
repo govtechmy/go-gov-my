@@ -74,18 +74,22 @@ func main() {
 	fs := http.FileServer(http.Dir("public"))
 	http.Handle("/public/", http.StripPrefix("/public/", fs))
 
+
+	// todo: logger handler
+	// todo: metrics handler
+	// todo: err handler
 	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		slug := strings.TrimPrefix(r.URL.Path, "/")
 
-		link, statusCode, err := linkRepo.GetLink(ctx, slug)
+		link, err := linkRepo.GetLink(ctx, slug)
 		if err == repository.ErrLinkNotFound {
 			logger.Info("link not found",
 				zap.String("slug", slug),
 				zap.String("ip", r.RemoteAddr),
 				zap.String("user-agent", r.UserAgent()),
 				zap.String("code", "link_not_found")) // Filebeat will run to collect link not found errors over this code
-			w.WriteHeader(statusCode)
+			w.WriteHeader(http.StatusNotFound)
 			if err := t.ExecuteTemplate(w, "notfound.html", nil); err != nil {
 				logger.Error("failed to execute template", zap.Error(err))
 			}
@@ -97,7 +101,7 @@ func main() {
 				zap.String("ip", r.RemoteAddr),
 				zap.String("user-agent", r.UserAgent()),
 				zap.Error(err))
-			w.WriteHeader(statusCode)
+			w.WriteHeader(http.StatusInternalServerError)
 			if err := t.ExecuteTemplate(w, "server_error.html", nil); err != nil {
 				logger.Error("failed to execute template", zap.Error(err))
 			}
