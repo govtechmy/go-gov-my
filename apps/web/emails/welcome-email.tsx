@@ -33,7 +33,7 @@ export default function WelcomeEmail({
                 src={DUB_LOGO}
                 width="40"
                 height="40"
-                alt="Dub"
+                alt="GoGovMY"
                 className="mx-auto my-0"
               />
             </Section>
@@ -41,7 +41,11 @@ export default function WelcomeEmail({
               Welcome to GoGovMy
             </Heading>
             <Section className="my-8">
-              <Img src={DUB_THUMBNAIL} alt="Dub" className="max-w-[500px]" />
+              <Img
+                src={DUB_THUMBNAIL}
+                alt="GoGovMY"
+                className="max-w-[500px]"
+              />
             </Section>
             <Text className="text-sm leading-6 text-black">
               Thanks for signing up{name && `, ${name}`}!
@@ -89,11 +93,11 @@ export default function WelcomeEmail({
               for programmatic link generation
             </Text>
             <Text className="text-sm leading-6 text-black">
-              Let me know if you have any questions or feedback. I'm always
-              happy to help!
+              Let us know if you have any questions or feedback. We&apos;re
+              always happy to help!
             </Text>
             <Text className="text-sm font-light leading-6 text-gray-400">
-              Steven from Dub
+              GovTech
             </Text>
 
             <Footer email={email} marketing />

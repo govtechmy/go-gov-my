@@ -192,13 +192,13 @@ services:
     networks:
       - my-network
 
-  status-page:
+  uptime-kuma:
     image: louislam/uptime-kuma:1
     restart: always
     volumes:
       - uptime-kuma:/app/data
     ports:
-      - 3002:3002
+      - 3001:3001
     networks:
       - my-network
 
@@ -207,4 +207,4 @@ networks:
 
 volumes:
   ps-postgres:
-  status-page:
+  uptime-kuma:

@@ -36,7 +36,7 @@ export default function UpgradeEmail({
                 src={DUB_LOGO}
                 width="40"
                 height="40"
-                alt="Dub"
+                alt="GoGovMY"
                 className="mx-auto my-0"
               />
             </Section>
@@ -54,13 +54,13 @@ export default function UpgradeEmail({
               Hey{name && ` ${name}`}!
             </Text>
             <Text className="text-sm leading-6 text-black">
-              My name is Steven, and I'm the founder of Dub. I wanted to
-              personally reach out to thank you for upgrading to{" "}
+              Hey! We're from GovTech Team. We wanted to personally reach out to
+              thank you for upgrading to{" "}
               <Link
                 href={planDetails.link}
                 className="font-medium text-blue-600 no-underline"
               >
-                Dub.co {plan}
+                GoGovMY {plan}
               </Link>
               !
             </Text>
@@ -91,11 +91,11 @@ export default function UpgradeEmail({
               </Text>
             ))}
             <Text className="text-sm leading-6 text-black">
-              Let me know if you have any questions or feedback. I'm always
+              Let us know if you have any questions or feedback. We're always
               happy to help!
             </Text>
             <Text className="text-sm font-light leading-6 text-gray-400">
-              Steven from Dub
+              GovTech Team
             </Text>
             <Footer email={email} marketing />
           </Container>
