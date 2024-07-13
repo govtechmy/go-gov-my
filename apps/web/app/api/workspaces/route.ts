@@ -9,9 +9,15 @@ import {
 import { nanoid } from "@dub/utils";
 import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { z } from "zod";
+
+const GetWorkspacesSearchParams = z.object({
+  search: z.string().optional(),
+});
 
 // GET /api/workspaces - get all projects for the current user
-export const GET = withSession(async ({ session }) => {
+export const GET = withSession(async ({ session, searchParams }) => {
+  const { search } = await GetWorkspacesSearchParams.parseAsync(searchParams);
   let whereQuery: Prisma.ProjectWhereInput = {};
 
   switch (session.user.role) {
@@ -34,7 +40,19 @@ export const GET = withSession(async ({ session }) => {
   }
 
   const projects = await prisma.project.findMany({
-    where: whereQuery,
+    where: {
+      ...whereQuery,
+      ...(search && {
+        OR: [
+          {
+            name: { contains: search },
+          },
+          {
+            slug: { contains: search },
+          },
+        ],
+      }),
+    },
     include: {
       users: {
         where: {

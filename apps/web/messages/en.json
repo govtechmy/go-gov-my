@@ -21,6 +21,8 @@
   },
   "dashboard": {
     "workspace_title": "My Workspace",
+    "workspaces": "Workspaces",
+    "filter_workspaces": "Filter Workspaces",
     "create_workspace": "Create Workspace",
     "links": "links",
     "Links": "Links",

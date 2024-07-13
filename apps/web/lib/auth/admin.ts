@@ -1,5 +1,4 @@
-import { prisma } from "@/lib/prisma";
-import { DUB_WORKSPACE_ID, getSearchParams } from "@dub/utils";
+import { getSearchParams } from "@dub/utils";
 import { getSession } from "./utils";
 
 // Internal use only (for admin portal)
@@ -26,15 +25,9 @@ export const withAdmin =
       return new Response("Unauthorized: Login required.", { status: 401 });
     }
 
-    const response = await prisma.projectUsers.findUnique({
-      where: {
-        userId_projectId: {
-          userId: session.user.id,
-          projectId: DUB_WORKSPACE_ID,
-        },
-      },
-    });
-    if (!response) {
+    // TODO: Determine if user is admin
+    let isAdmin = !!session;
+    if (!isAdmin) {
       return new Response("Unauthorized: Not an admin.", { status: 401 });
     }
 

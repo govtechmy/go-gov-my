@@ -1,43 +1,24 @@
 import { parse } from "@/lib/middleware/utils";
-import { DUB_WORKSPACE_ID } from "@dub/utils";
-import { prisma } from "lib/prisma";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
-import { UserProps } from "../types";
 
 export default async function AdminMiddleware(req: NextRequest) {
-  const { path } = parse(req);
-  let isAdmin = false;
+  const { pathWithoutLocale, locale } = parse(req);
 
-  const session = (await getToken({
-    req,
-    secret: process.env.NEXTAUTH_SECRET,
-  })) as {
-    id?: string;
-    email?: string;
-    user?: UserProps;
-  };
+  const session = await getToken({ req });
+  // TODO: Determine if user is an admin
+  let isAdmin = !!session;
 
-  const response = await prisma.projectUsers.findFirst({
-    where: {
-      userId: session?.user?.id,
-    },
-    select: {
-      projectId: true,
-    },
-  });
-
-  if (response?.projectId === DUB_WORKSPACE_ID) {
-    isAdmin = true;
-  }
-
-  if (path === "/login" && isAdmin) {
-    return NextResponse.redirect(new URL("/", req.url));
-  } else if (path !== "/login" && !isAdmin) {
-    return NextResponse.redirect(new URL(`/login`, req.url));
+  if (pathWithoutLocale === "/login" && isAdmin) {
+    return NextResponse.redirect(new URL(`/${locale}`, req.url));
+  } else if (pathWithoutLocale !== "/login" && !isAdmin) {
+    return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
   }
 
   return NextResponse.rewrite(
-    new URL(`/admin.dub.co${path === "/" ? "" : path}`, req.url),
+    new URL(
+      `/${locale}/admin.dub.co${pathWithoutLocale === "/" ? "" : pathWithoutLocale}`,
+      req.url,
+    ),
   );
 }

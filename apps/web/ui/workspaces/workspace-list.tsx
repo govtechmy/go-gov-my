@@ -1,12 +1,12 @@
 "use client";
 
-import useWorkspaces from "@/lib/swr/use-workspaces";
 import NoWorkspacesPlaceholder from "@/ui/workspaces/no-workspaces-placeholder";
 import WorkspaceCard from "@/ui/workspaces/workspace-card";
 import WorkspaceCardPlaceholder from "./workspace-card-placeholder";
+import { useWorkspaceListContext } from "./workspace-list-context";
 
 export default function WorkspaceList() {
-  const { workspaces, loading } = useWorkspaces();
+  const { workspaces, loading } = useWorkspaceListContext();
 
   if (loading) {
     return Array.from({ length: 6 }).map((_, i) => (

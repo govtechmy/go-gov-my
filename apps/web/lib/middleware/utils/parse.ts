@@ -14,7 +14,8 @@ export const parse = (req: NextRequest) => {
   let path = req.nextUrl.pathname;
 
   // if path has no locale, add in default locale
-  if (path == "/") path = `/${DEFAULT_LOCALE}${path}`;
+  if (path === "/" || !LOCALES.some((locale) => path.startsWith(`/${locale}/`)))
+    path = `/${DEFAULT_LOCALE}${path}`;
 
   let locale = decodeURIComponent(path.split("/")[1]);
   const pathWithoutLocale = "/" + path.split("/").slice(2).join("/");

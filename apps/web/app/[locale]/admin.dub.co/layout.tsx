@@ -1,5 +1,6 @@
 import { Background } from "@dub/ui";
 import { ReactNode } from "react";
+import Providers from "./providers";
 
 export default async function AdminLayout({
   children,
@@ -10,7 +11,7 @@ export default async function AdminLayout({
     <>
       <Background />
       <div className="relative z-10 flex h-screen w-screen justify-center">
-        {children}
+        <Providers>{children}</Providers>
       </div>
     </>
   );
