@@ -14,7 +14,8 @@
     "publish-utils": "turbo build --filter='@dub/utils' && cd packages/utils && npm publish && cd ../../",
     "script": "echo 'Run this script in apps/web'",
     "test": "turbo run test",
-    "prepare": "husky"
+    "prepare": "husky",
+    "generate-openapi": "tsx ./apps/web/scripts/generate-openapi.ts"
   },
   "devDependencies": {
     "@gogovmy/tailwind-config": "workspace:*",
