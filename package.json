@@ -13,7 +13,8 @@
     "publish-ui": "turbo build --filter='@dub/ui' && cd packages/ui && npm publish && cd ../../",
     "publish-utils": "turbo build --filter='@dub/utils' && cd packages/utils && npm publish && cd ../../",
     "script": "echo 'Run this script in apps/web'",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@gogovmy/tailwind-config": "workspace:*",
@@ -24,5 +25,8 @@
     "tsconfig": "workspace:*",
     "turbo": "^1.12.5"
   },
-  "packageManager": "pnpm@8.6.10"
+  "packageManager": "pnpm@8.6.10",
+  "dependencies": {
+    "husky": "^9.0.11"
+  }
 }
