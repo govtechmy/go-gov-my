@@ -79,6 +79,8 @@
     "migrate": "links have been migrated to a custom workspace.",
     "read": "Read the changelog.",
     "not_found_title": "Workspace Not Found",
+    "no_workspace": "No Workspace has been created",
+    "not_workspace_desc": "Welcome! It looks like you haven't created any workspaces yet. Get started by creating a new workspace.",
     "not_found_desc": "Bummer! The workspace you are looking for does not exist. You either  typed in the wrong URL or don't have access to this workspace.",
     "back": "Back to my workspaces",
     "workspace_id": "Workspace ID",
