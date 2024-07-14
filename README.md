@@ -17,8 +17,13 @@
     <a href="#introduction"><strong>Introduction</strong></a> ·
     <a href="#features"><strong>Features</strong></a> ·
     <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
-    <a href="#self-hosting"><strong>Self-hosting</strong></a> ·
+    <a href="#pre-requisites"><strong>Pre-Requisites</strong></a> ·
+    <a href="#setup-local-environment-variables"><strong>Setup Local Environment Variables</strong></a> ·
+    <a href="#working-directories"><strong>Working Directories</strong></a>
+    <a href="#infrastructure-&-application-architecture"><strong>Infrastructure & Application Architecture</strong></a>
+    <a href="#local-development"><strong>Local Development</strong></a>
     <a href="#contributing"><strong>Contributing</strong></a>
+    <a href="#license"><strong>License</strong></a>
 </p>
 
 <br/>
