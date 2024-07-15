@@ -12,9 +12,13 @@ export const parse = (req: NextRequest) => {
 
   // path is the path of the URL (e.g. dub.co/stats/github -> /stats/github)
   let path = req.nextUrl.pathname;
+  const firstPathSegment = path.split("/").at(1);
 
   // if path has no locale, add in default locale
-  if (path === "/" || !LOCALES.some((locale) => path.startsWith(`/${locale}/`)))
+  if (
+    !firstPathSegment ||
+    !LOCALES.some((locale) => firstPathSegment === locale)
+  )
     path = `/${DEFAULT_LOCALE}${path}`;
 
   let locale = decodeURIComponent(path.split("/")[1]);
