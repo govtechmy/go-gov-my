@@ -1,7 +1,7 @@
 import { parse } from "@/lib/middleware/utils";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
-import { Session } from "../auth";
+import type { Session } from "../auth";
 import { isInternalAdmin } from "../auth/is-internal-admin";
 
 export default async function AdminMiddleware(req: NextRequest) {
