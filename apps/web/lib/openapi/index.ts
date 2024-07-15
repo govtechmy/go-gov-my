@@ -17,7 +17,7 @@ export const document = createDocument({
   info: {
     title: "GoGovMy API",
     description:
-      "GoGovMy is link management infrastructure for companies to create marketing campaigns, link sharing features, and referral programs.",
+      "GoGovMY - Malaysia's open-source link management infrastructure.",
     version: "0.0.1",
     contact: {
       name: "GoGovMy Support",
