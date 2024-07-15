@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"redirect-server/repository"
 
 	"github.com/elastic/go-elasticsearch/v7"
 )
@@ -12,7 +12,7 @@ func InitElasticsearch() *elasticsearch.Client {
 	var err error
 	esClient, err = elasticsearch.NewDefaultClient()
 	if err != nil {
-		log.Fatalf("Error creating the Elasticsearch client: %s", err)
+		logFatalHandler(repository.ErrInitClient, err)
 	}
 	return esClient
 }

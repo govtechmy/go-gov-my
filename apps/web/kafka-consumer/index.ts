@@ -1,11 +1,19 @@
 import { prisma } from "@/lib/prisma";
 import { Kafka } from "kafkajs";
-import { OUTBOX_ACTIONS } from "./actions";
+import { z } from "zod";
 
 const OUTBOX_TOPIC =
   process.env.OUTBOX_TOPIC || "ps-postgres.public.WebhookOutbox";
-const REDIRECT_SERVER_BASE_URL =
-  process.env.REDIRECT_SERVER_URL || "http://localhost:3000";
+
+const OutboxSchema = z.object({
+  id: z.string().min(1),
+  host: z.string().min(1),
+  payload: z.string().min(1),
+  createdAt: z.string().min(1),
+  action: z.string().min(1),
+  headers: z.string().min(1),
+  partitionKey: z.string().min(1),
+});
 
 async function main() {
   const kafkaBrokerUrl = process.env.KAFKA_BROKER_URL || "localhost:9092";
@@ -18,6 +26,9 @@ async function main() {
     groupId: "redirect-group",
     minBytes: 10e3, // 10KB
     maxBytes: 10e6, // 10MB
+    retry: {
+      retries: Number.MAX_SAFE_INTEGER,
+    },
   });
 
   await consumer.connect();
@@ -30,15 +41,14 @@ async function main() {
   log.info("Starting kafka consumer...");
 
   await consumer.run({
-    autoCommitInterval: 1000, // 1 second
-    eachMessage: async ({ message }) => {
+    autoCommit: false,
+    eachMessage: async ({ topic, partition, message }) => {
       if (!message.value) {
         return;
       }
 
       const processMessage = async (attempt = 0) => {
         try {
-          // expect a debezium event payload
           const { payload: debeziumPayload } = JSON.parse(
             message.value?.toString("utf8") || "{}",
           );
@@ -53,79 +63,57 @@ async function main() {
 
           if (debeziumPayload.op === "c") {
             // debeziumPayload.after is the newly inserted row in WebhookOutbox table
-            const { id: outboxId, payload, action } = debeziumPayload.after;
+            const {
+              id: outboxId,
+              host,
+              payload,
+              action,
+              headers,
+            } = await OutboxSchema.parseAsync(debeziumPayload.after);
 
-            log.info(debeziumPayload.after);
+            // This is where we should store the partition key id into the outbox table
 
             let response: Response;
 
-            switch (action) {
-              case OUTBOX_ACTIONS.CREATE_LINK:
-                log.info(
-                  "Sending a request to the redirect server: POST /links",
-                );
-                response = await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
-                  method: "POST",
-                  body: payload,
-                });
-                break;
-              case OUTBOX_ACTIONS.UPDATE_LINK:
-                log.info(
-                  "Sending a request to the redirect server: PUT /links",
-                );
-                response = await fetch(`${REDIRECT_SERVER_BASE_URL}/links`, {
-                  method: "PUT",
-                  body: payload,
-                });
-                break;
-              case OUTBOX_ACTIONS.DELETE_LINK:
-                const { id: linkId } = JSON.parse(payload);
-                log.info(
-                  `Sending a request to the redirect server: DELETE /links/${linkId}`,
-                );
-                response = await fetch(
-                  `${REDIRECT_SERVER_BASE_URL}/links/${linkId}`,
-                  {
-                    method: "DELETE",
-                  },
-                );
-                break;
-              default:
-                log.error(
-                  `Unhandled outbox action '${action}', ID = ${outboxId}`,
-                );
-                return;
-            }
+            log.info(
+              `Sending a request to the redirect server: ${action} ${host}`,
+            );
 
-            if (response.ok) {
-              log.info("Response to redirect-server was successful");
-              await prisma.webhookOutbox.delete({
-                where: { id: outboxId },
-              });
-              log.info(`WebhookOutbox row with ID ${outboxId} was deleted`);
-            } else {
-              log.error(
-                `Response to redirect-server was unsuccessful, status: ${response.status}, outboxId: ${outboxId}`,
-              );
-              throw new Error(
-                `Response to redirect-server was unsuccessful, status: ${response.status}`,
-              );
-            }
+            await fetch(host, {
+              method: action,
+              headers: JSON.parse(headers),
+              body: payload,
+            }).then(async (response) => {
+              if (response.ok) {
+                log.info("Response to redirect-server was successful");
+                await prisma.webhookOutbox.delete({ where: { id: outboxId } });
+                log.info(`WebhookOutbox row with ID ${outboxId} was deleted`);
+                await consumer.commitOffsets([
+                  {
+                    topic,
+                    partition,
+                    offset: (parseInt(message.offset, 10) + 1).toString(),
+                  },
+                ]);
+              } else {
+                log.error(
+                  `Response to redirect-server was unsuccessful, status: ${response.status}, outboxId: ${outboxId}`,
+                );
+                throw new Error(
+                  `Response to redirect-server was unsuccessful, status: ${response.status}`,
+                );
+              }
+            });
           }
         } catch (err) {
           console.error(`Attempt ${attempt + 1} failed:`, err);
 
-          const maxAttempts = 5;
-          const delay = Math.pow(2, attempt) * 1000; // Exponential backoff
+          // Lets do every 1 minute with a random jitter of 5 seconds
+          const delay = 60 * 1000 + Math.random() * 5000;
 
-          if (attempt < maxAttempts) {
-            log.info(`Retrying in ${delay / 1000} seconds...`);
-            setTimeout(() => processMessage(attempt + 1), delay);
-          } else {
-            log.error(
-              `Max retry attempts reached for message with offset ${message.offset}`,
-            );
-          }
+          log.info(`Retrying in ${(delay / 1000).toFixed(2)} seconds...`);
+
+          setTimeout(() => processMessage(attempt + 1), delay);
         }
       };
 

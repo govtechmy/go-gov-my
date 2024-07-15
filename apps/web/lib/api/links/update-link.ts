@@ -1,3 +1,4 @@
+import { processDTOLink } from "@/lib/dto/link.dto";
 import { prisma } from "@/lib/prisma";
 import { formatRedisLink, redis } from "@/lib/redis";
 import { isStored, storage } from "@/lib/storage";
@@ -8,7 +9,11 @@ import { Prisma } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
 import { OUTBOX_ACTIONS } from "kafka-consumer/actions";
 import { addToHistory } from "./add-to-history";
+import generateIdempotencyKey from "./create-idempotency-key";
 import { combineTagIds, transformLink } from "./utils";
+
+const REDIRECT_SERVER_BASE_URL =
+  process.env.REDIRECT_SERVER_URL || "http://localhost:3001";
 
 export async function updateLink({
   oldDomain = SHORT_DOMAIN,
@@ -121,6 +126,12 @@ export async function updateLink({
     },
   });
 
+  // Transform into DTOs
+  const linkDTO = await processDTOLink(response);
+
+  // For simplicity and centralized, lets create the idempotency key at this level
+  const headersJSON = generateIdempotencyKey(linkDTO.id, response.updatedAt);
+
   try {
     waitUntil(
       Promise.all([
@@ -144,8 +155,11 @@ export async function updateLink({
         prisma.webhookOutbox.create({
           data: {
             action: OUTBOX_ACTIONS.UPDATE_LINK,
-            host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
-            payload: response,
+            // host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
+            host: REDIRECT_SERVER_BASE_URL + "/links",
+            payload: linkDTO as unknown as Prisma.InputJsonValue,
+            headers: headersJSON,
+            partitionKey: linkDTO.slug,
           },
         }),
         addToHistory({

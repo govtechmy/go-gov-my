@@ -1,106 +1,99 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"io"
-	"log"
 	"net/http"
+	"redirect-server/repository"
+	"redirect-server/repository/es"
 	"strings"
-
-	"github.com/elastic/go-elasticsearch/v7/esapi"
 )
 
-type Link struct {
-	ID        string `json:"id"`
-	Key       string `json:"key"`
-	URL       string `json:"url"`
-	Expired   bool   `json:"expired"`
-	CreatedAt string `json:"createdAt"`
-}
+// [POST, PUT] Link
+func indexLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkRepo, idempotentResourceRepo *es.IdempotentResourceRepo) {
+	ctx := r.Context()
 
-// Adds a link into Elasticsearch. If the link already exists, the whole document is replaced.
-func indexLinkHandler(w http.ResponseWriter, r *http.Request) {
 	if !(r.Method == "POST" || r.Method == "PUT") {
-		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		errLinkHandler(w, repository.ErrMethodNotAllowed)
 		return
 	}
 
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		log.Printf("Error reading request body: %s", err)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		logHandler(repository.ErrReadBody, err)
+		errLinkHandler(w, repository.ErrInternalServer)
 		return
 	}
 
-	var link Link
+	idempotentResource, err := idempotentResourceRepo.TryValidateResources(r, body)
+
+	if err != nil {
+		logHandler(repository.ErrGeneralMessage, err)
+		errLinkHandler(w, err)
+		return
+	}
+
+	var link repository.Link
 	err = json.Unmarshal(body, &link)
 	if err != nil {
-		log.Printf("Error unmarshalling request body: %s", err)
-		http.Error(w, "Invalid body", http.StatusBadRequest)
+		logHandler(repository.ErrUnmarshalling, err)
+		errLinkHandler(w, repository.ErrBadRequest)
 		return
 	}
 
-	var buf bytes.Buffer
-	if err := json.NewEncoder(&buf).Encode(link); err != nil {
-		log.Printf("Error encoding document: %s", err)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	existingLink, err := linkRepo.GetLink(ctx, link.Slug)
+	if err != nil && err != repository.ErrLinkNotFound {
+		errLinkHandler(w, repository.ErrCheckExistingLink)
 		return
 	}
 
-	indexReq := esapi.IndexRequest{
-		Index:      indexName,
-		DocumentID: link.ID,
-		Body:       &buf,
-		Refresh:    "true",
-	}
-
-	res, err := indexReq.Do(r.Context(), esClient)
-	if err != nil {
-		log.Printf("Error indexing document in Elasticsearch: %s", err)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		return
-	}
-	defer res.Body.Close()
-
-	if res.IsError() {
-		log.Printf("[%s] Error indexing document ID=%s", res.Status(), link.ID)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	if r.Method == "POST" && existingLink != nil {
+		errLinkHandler(w, repository.ErrSlugExists)
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
+	if err := linkRepo.SaveLink(ctx, &link); err != nil {
+		errLinkHandler(w, repository.ErrInternalServer)
+		return
+	}
+
+	// idempotentResource = &repository.IdempotentResource{
+	// 	IdempotencyKey:       idempotencyKey,
+	// 	HashedRequestPayload: hashedReqPayload,
+	// }
+
+	// Only save idempotent resource if the link was saved successfully
+	if err := idempotentResourceRepo.SaveIdempotentResource(ctx, *idempotentResource); err != nil {
+		errLinkHandler(w, repository.ErrInternalServer)
+		return
+	}
+
+	if r.Method == "POST" {
+		w.WriteHeader(http.StatusCreated)
+	} else if r.Method == "PUT" {
+		w.WriteHeader(http.StatusNoContent)
+	}
 }
 
-// Deletes a link from Elasticsearch
-func deleteLinkHandler(w http.ResponseWriter, r *http.Request) {
+// [DELETE] Link
+func deleteLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkRepo) {
+	ctx := r.Context()
+
 	if r.Method != "DELETE" {
-		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		errLinkHandler(w, repository.ErrMethodNotAllowed)
 		return
 	}
 
 	linkId := strings.Split(r.URL.Path, "/")[2]
 	if linkId == "" {
-		http.Error(w, "Missing path parameter 'linkId'", http.StatusBadRequest)
+		errLinkHandler(w, repository.ErrMissingParameters)
 		return
 	}
 
-	deleteReq := esapi.DeleteRequest{
-		Index:      indexName,
-		DocumentID: linkId,
-	}
-
-	res, err := deleteReq.Do(r.Context(), esClient)
+	err := linkRepo.DeleteLink(ctx, linkId)
 	if err != nil {
-		log.Printf("Error deleting document in Elasticsearch: %s", err)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		return
-	}
-	defer res.Body.Close()
-
-	if res.IsError() {
-		log.Printf("[%s] Error deleting document ID=%s", res.Status(), linkId)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		logHandler(repository.ErrDeleting, err)
+		errLinkHandler(w, repository.ErrInternalServer)
 		return
 	}
 
