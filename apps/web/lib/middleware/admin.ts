@@ -1,13 +1,15 @@
 import { parse } from "@/lib/middleware/utils";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
+import { Session } from "../auth";
+import { isInternalAdmin } from "../auth/is-internal-admin";
 
 export default async function AdminMiddleware(req: NextRequest) {
   const { pathWithoutLocale, locale } = parse(req);
 
-  const session = await getToken({ req });
-  // TODO: Determine if user is an admin
-  let isAdmin = !!session;
+  const session = (await getToken({ req })) as unknown as Session;
+
+  const isAdmin = session ? isInternalAdmin(session) : false;
 
   if (pathWithoutLocale === "/login" && isAdmin) {
     return NextResponse.redirect(new URL(`/${locale}`, req.url));

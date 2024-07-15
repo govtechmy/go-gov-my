@@ -28,7 +28,7 @@ model User {
   email         String   @unique
   emailVerified DateTime?
   image         String?
-  agencyCode    String    @default("dev")
+  agencyCode    String    @default("govtech")
   role          UserRole  @default(staff)
 
   agency     Agency         @relation(fields: [agencyCode], references: [code])
@@ -108,7 +108,7 @@ model Project {
   name        String
   slug        String    @unique
   logo        String?
-  agencyCode  String    @default("dev")
+  agencyCode  String    @default("govtech")
 
   plan              String  @default("business")
   billingCycleStart Int // day of the month when the billing cycle starts

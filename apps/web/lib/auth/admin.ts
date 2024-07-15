@@ -1,4 +1,5 @@
 import { getSearchParams } from "@dub/utils";
+import { isInternalAdmin } from "./is-internal-admin";
 import { getSession } from "./utils";
 
 // Internal use only (for admin portal)
@@ -25,8 +26,7 @@ export const withAdmin =
       return new Response("Unauthorized: Login required.", { status: 401 });
     }
 
-    // TODO: Determine if user is admin
-    let isAdmin = !!session;
+    let isAdmin = !!isInternalAdmin(session);
     if (!isAdmin) {
       return new Response("Unauthorized: Not an admin.", { status: 401 });
     }
