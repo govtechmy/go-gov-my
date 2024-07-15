@@ -48,7 +48,7 @@ export default function APIKeyCreated({
             <Section className="my-8 text-center">
               <Link
                 className="rounded-full bg-black px-6 py-3 text-center text-[12px] font-semibold text-white no-underline"
-                href="https://app.dub.co/settings/tokens"
+                href="https://app.go.gov.my/settings/tokens"
               >
                 View API Keys
               </Link>
@@ -56,7 +56,7 @@ export default function APIKeyCreated({
             <Text className="text-sm leading-6 text-black">
               If you did not create this API key, you can{" "}
               <Link
-                href="https://app.dub.co/settings/tokens"
+                href="https://app.go.gov.my/settings/tokens"
                 className="text-black underline"
               >
                 <strong>delete this key</strong>
