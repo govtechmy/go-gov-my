@@ -42,14 +42,14 @@ export default function Layout({
                 <div className="flex items-center space-x-6">
                   <LocaleSwitcher />
                   <a
-                    href="https://dub.co/changelog"
+                    href="https://go.gov.my/changelog"
                     className="hidden text-sm text-gray-500 transition-colors hover:text-gray-700 sm:block"
                     target="_blank"
                   >
                     {messages?.layout?.changelog}
                   </a>
                   <a
-                    href="https://dub.co/help"
+                    href="https://go.gov.my/help"
                     className="hidden text-sm text-gray-500 transition-colors hover:text-gray-700 sm:block"
                     target="_blank"
                   >
