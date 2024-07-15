@@ -35,7 +35,7 @@ export default function DomainDeleted({
                 src={DUB_LOGO}
                 width="40"
                 height="40"
-                alt="Dub"
+                alt="GoGovMY"
                 className="mx-auto my-0"
               />
             </Section>

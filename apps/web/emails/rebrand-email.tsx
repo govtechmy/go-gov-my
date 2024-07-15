@@ -36,7 +36,7 @@ export default function RebrandEmail({
                 src={DUB_LOGO}
                 width="40"
                 height="40"
-                alt="Dub"
+                alt="GoGovMY"
                 className="mx-auto my-0"
               />
             </Section>
@@ -44,17 +44,21 @@ export default function RebrandEmail({
               Dub​.sh is rebranding to Dub​.co
             </Heading>
             <Section className="my-8">
-              <Img src={DUB_THUMBNAIL} alt="Dub" className="max-w-[500px]" />
+              <Img
+                src={DUB_THUMBNAIL}
+                alt="GoGovMY"
+                className="max-w-[500px]"
+              />
             </Section>
             <Text className="text-sm leading-6 text-black">
               Hey{name ? ` ${name}` : " there"}!
             </Text>
             <Text className="text-sm leading-6 text-black">
-              My name is Steven, and I'm the founder of Dub. Today, I have some
-              exciting news to share with you.
+              Hey! We're from GovTech. Today, we have some exciting news to
+              share with you.
             </Text>
             <Text className="text-sm font-bold leading-6 text-black">
-              Dub​.sh is rebranding to Dub​.co.
+              GoGovMY is rebranding to GoGovMy
             </Text>
             <Text className="text-sm leading-6 text-black">
               You can learn more about the rebrand and what's changing{" "}
@@ -132,11 +136,11 @@ export default function RebrandEmail({
             </Text>
 
             <Text className="text-sm leading-6 text-black">
-              Let me know if you have any questions or feedback. I'm always
+              Let us know if you have any questions or feedback. We're always
               happy to help!
             </Text>
             <Text className="text-sm font-light leading-6 text-gray-400">
-              Steven from Dub
+              GovTech Team
             </Text>
 
             <Footer email={email} marketing />

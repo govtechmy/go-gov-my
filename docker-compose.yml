@@ -186,7 +186,7 @@ services:
       - debezium
     networks:
       - my-network
-
+      
   go-api:
     container_name: go-api
     build:
@@ -227,12 +227,14 @@ services:
     depends_on:
       - elasticsearch
   status-page:
+
+  uptime-kuma:
     image: louislam/uptime-kuma:1
     restart: always
     volumes:
       - uptime-kuma:/app/data
     ports:
-      - 3002:3002
+      - 3001:3001
     networks:
       - my-network
 
@@ -244,3 +246,4 @@ volumes:
   ps-postgres:
   esdata:
   status-page:
+  uptime-kuma:
