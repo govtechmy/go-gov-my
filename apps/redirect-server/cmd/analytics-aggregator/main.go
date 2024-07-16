@@ -4,9 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"redirect-server/repository"
 	"redirect-server/repository/es"
 	"time"
+
+	"github.com/segmentio/kafka-go"
 )
 
 type LinkAnalytics struct {
@@ -23,29 +26,55 @@ type LinkAnalytics struct {
 type AggregatedValues = map[string]int
 
 func main() {
+	ctx := context.Background()
 	redirectMetadataRepo := es.NewRedirectMetadataRepo()
-
 	todayShortDate := time.Now().Format("2006-01-02")
 
 	// Get redirect metadata
 	// TODO: Get by date range
-	redirectMetadata, err := redirectMetadataRepo.GetRedirectMetadata(context.TODO())
+	slog.Info("getting redirect metadata")
+	redirectMetadata, err := redirectMetadataRepo.GetRedirectMetadata(ctx)
 	if err != nil {
 		panic(err)
 	}
 
 	// Aggregate
+	slog.Info("aggregating redirect metadata")
 	aggregatedMetadata, err := aggregate(redirectMetadata, todayShortDate)
 	if err != nil {
 		panic(err)
 	}
 
-	// TODO: 3. Send aggregated metadata to Kafka
+	// Send aggregated metadata to Kafka
+	slog.Info("sending aggregated metadata to Kafka")
 	json, err := json.MarshalIndent(aggregatedMetadata, "", "  ")
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(string(json))
+
+	kafkaWriter := &kafka.Writer{
+		Addr:                   kafka.TCP("localhost:9092"),
+		Topic:                  "redirect-analytics",
+		AllowAutoTopicCreation: true,
+		Logger: kafka.LoggerFunc(func(msg string, args ...any) {
+			slog.Info(fmt.Sprintf(msg, args...))
+		}),
+		ErrorLogger: kafka.LoggerFunc(func(msg string, args ...any) {
+			slog.Error(fmt.Sprintf(msg, args...))
+		}),
+	}
+
+	err = kafkaWriter.WriteMessages(ctx,
+		kafka.Message{
+			Key:   []byte("aggregatedData"),
+			Value: json,
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	slog.Info("finished without error")
 }
 
 func aggregate(redirectMetadata []repository.RedirectMetadata, shortDate string) ([]LinkAnalytics, error) {
