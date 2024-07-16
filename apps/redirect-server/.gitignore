@@ -1,1 +1,4 @@
 analytics-aggregator-offset
+
+# MaxMind IP lookup database
+*.mmdb

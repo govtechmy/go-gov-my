@@ -17,6 +17,7 @@ import (
 	"time"
 
 	"github.com/olivere/elastic/v7"
+	"github.com/oschwald/geoip2-golang"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.uber.org/zap"
@@ -37,12 +38,14 @@ func main() {
 	var elasticPassword string
 	var httpPort int
 	var telemetryURL string
+	var geolite2DBPath string
 	{
 		flag.StringVar(&elasticURL, "elastic-url", "http://localhost:9200", "Elasticsearch URL")
 		flag.StringVar(&elasticUser, "elastic-user", "elastic", "Elasticsearch username")
 		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
 		flag.IntVar(&httpPort, "http-port", 3000, "HTTP server port")
 		flag.StringVar(&telemetryURL, "telemetry-url", "localhost:4318", "OpenTelemetry HTTP endpoint URL")
+		flag.StringVar(&geolite2DBPath, "geolite2-path", "./GeoLite2-City.mmdb", "Path to GeoLite2 .mmdb file")
 	}
 	flag.Parse()
 
@@ -74,6 +77,11 @@ func main() {
 	fs := http.FileServer(http.Dir("public"))
 	http.Handle("/public/", http.StripPrefix("/public/", fs))
 
+	ipDB, err := geoip2.Open(geolite2DBPath)
+	if err != nil {
+		logger.Fatal("cannot load geolite2 database", zap.Error(err))
+	}
+	redirectLogger := NewRedirectLogger(os.Stdout, ipDB)
 
 	// todo: logger handler
 	// todo: metrics handler
@@ -106,6 +114,11 @@ func main() {
 				logger.Error("failed to execute template", zap.Error(err))
 			}
 			return
+		}
+
+		err = redirectLogger.Log(*r, *link)
+		if err != nil {
+			logger.Error("error logging redirect metadata", zap.Error(err))
 		}
 
 		if err := t.ExecuteTemplate(w, "wait.html", link); err != nil {

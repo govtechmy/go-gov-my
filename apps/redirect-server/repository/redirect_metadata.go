@@ -1,16 +1,71 @@
 package repository
 
-import "time"
+import (
+	"net"
+	"net/http"
+	"time"
+
+	"github.com/mileusna/useragent"
+	"github.com/oschwald/geoip2-golang"
+)
 
 type RedirectMetadata struct {
 	LinkID          string    `json:"linkId"`
-	CountryCode     string    `json:"countryCode"`
-	Latitude        float32   `json:"latitude"`
-	Longitude       float32   `json:"longitude"`
-	DeviceType      string    `json:"deviceType"`
-	Browser         string    `json:"browser"`
-	OperatingSystem string    `json:"operatingSystem"`
-	IPAddress       string    `json:"ipAddress"`
-	Referer         string    `json:"referer"`
+	LinkSlug        string    `json:"linkSlug"`
+	LinkURL         string    `json:"linkUrl"`
+	CountryCode     string    `json:"countryCode,omitempty"`
+	Latitude        float32   `json:"latitude,omitempty"`
+	Longitude       float32   `json:"longitude,omitempty"`
+	DeviceType      string    `json:"deviceType,omitempty"`
+	Browser         string    `json:"browser,omitempty"`
+	OperatingSystem string    `json:"operatingSystem,omitempty"`
+	IPAddress       string    `json:"ipAddress,omitempty"`
+	Referer         string    `json:"referer,omitempty"`
 	Timestamp       time.Time `json:"timestamp"`
+}
+
+func NewRedirectMetadata(req http.Request, ipDB *geoip2.Reader, link Link) RedirectMetadata {
+	redirectMetadata := RedirectMetadata{
+		LinkID:   link.ID,
+		LinkSlug: link.Slug,
+		LinkURL:  link.URL,
+		Referer:  req.Header.Get("Referer"),
+	}
+
+	// Parse Date
+	t, err := time.Parse("Mon, 02 Jan 2006 15:04:05 MST", req.Header.Get("Date"))
+	if err != nil {
+		t = time.Now() // Use current time if parse fails
+	}
+	redirectMetadata.Timestamp = t
+
+	// Parse User-Agent
+	userAgent := req.UserAgent()
+	if userAgent != "" {
+		ua := useragent.Parse(userAgent)
+		switch {
+		case ua.Desktop:
+			redirectMetadata.DeviceType = "desktop"
+		case ua.Mobile:
+			redirectMetadata.DeviceType = "mobile"
+		case ua.Tablet:
+			redirectMetadata.DeviceType = "tablet"
+		}
+		redirectMetadata.Browser = ua.Name
+		redirectMetadata.OperatingSystem = ua.OS
+	}
+
+	// Parse IP
+	ip := net.ParseIP(req.RemoteAddr)
+	if ip != nil && ipDB != nil {
+		redirectMetadata.IPAddress = ip.String()
+		city, err := ipDB.City(ip)
+		if err == nil && city != nil {
+			redirectMetadata.Longitude = float32(city.Location.Longitude)
+			redirectMetadata.Latitude = float32(city.Location.Longitude)
+			redirectMetadata.CountryCode = city.Country.IsoCode
+		}
+	}
+
+	return redirectMetadata
 }
