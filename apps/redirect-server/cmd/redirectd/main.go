@@ -81,6 +81,7 @@ func main() {
 	if err != nil {
 		logger.Fatal("cannot load geolite2 database", zap.Error(err))
 	}
+	defer ipDB.Close()
 	redirectLogger := NewRedirectLogger(os.Stdout, ipDB)
 
 	// todo: logger handler
