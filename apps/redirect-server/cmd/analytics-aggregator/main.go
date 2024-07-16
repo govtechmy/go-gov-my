@@ -2,117 +2,36 @@ package main
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 	"log/slog"
-	"redirect-server/repository"
 	"redirect-server/repository/es"
 	"time"
-
-	"github.com/segmentio/kafka-go"
 )
-
-type LinkAnalytics struct {
-	LinkID          string           `json:"linkId"`
-	Total           int              `json:"total"`
-	AggregationDate string           `json:"aggregationDate"` // UTC date in short format YYYY-MM-DD
-	CountryCode     AggregatedValues `json:"countryCode"`
-	DeviceType      AggregatedValues `json:"deviceType"`
-	Browser         AggregatedValues `json:"browser"`
-	OperatingSystem AggregatedValues `json:"operatingSystem"`
-	Referer         AggregatedValues `json:"referer"`
-}
-
-type AggregatedValues = map[string]int
 
 func main() {
 	ctx := context.Background()
 	redirectMetadataRepo := es.NewRedirectMetadataRepo()
 	todayShortDate := time.Now().Format("2006-01-02")
 
-	// Get redirect metadata
-	// TODO: Get by date range
+	kp := NewKafkaProducer("localhost:9200", "link-analytics")
+	defer kp.Close()
+
 	slog.Info("getting redirect metadata")
 	redirectMetadata, err := redirectMetadataRepo.GetRedirectMetadata(ctx)
 	if err != nil {
 		panic(err)
 	}
 
-	// Aggregate
 	slog.Info("aggregating redirect metadata")
-	aggregatedMetadata, err := aggregate(redirectMetadata, todayShortDate)
+	linkAnalytics, err := aggregateRedirectMetadata(redirectMetadata, todayShortDate)
 	if err != nil {
 		panic(err)
 	}
 
-	// Send aggregated metadata to Kafka
 	slog.Info("sending aggregated metadata to Kafka")
-	json, err := json.MarshalIndent(aggregatedMetadata, "", "  ")
-	if err != nil {
-		panic(err)
-	}
-
-	kafkaWriter := &kafka.Writer{
-		Addr:                   kafka.TCP("localhost:9092"),
-		Topic:                  "redirect-analytics",
-		AllowAutoTopicCreation: true,
-		Logger: kafka.LoggerFunc(func(msg string, args ...any) {
-			slog.Info(fmt.Sprintf(msg, args...))
-		}),
-		ErrorLogger: kafka.LoggerFunc(func(msg string, args ...any) {
-			slog.Error(fmt.Sprintf(msg, args...))
-		}),
-	}
-
-	err = kafkaWriter.WriteMessages(ctx,
-		kafka.Message{
-			Key:   []byte("aggregatedData"),
-			Value: json,
-		},
-	)
+	err = kp.SendLinkAnalytics(ctx, linkAnalytics)
 	if err != nil {
 		panic(err)
 	}
 
 	slog.Info("finished without error")
-}
-
-func aggregate(redirectMetadata []repository.RedirectMetadata, shortDate string) ([]LinkAnalytics, error) {
-	// Map LinkID to analytics
-	analyticsMap := make(map[string]*LinkAnalytics)
-
-	for _, metadata := range redirectMetadata {
-		a := analyticsMap[metadata.LinkID]
-		if a == nil {
-			a = NewLinkAnalytics(metadata.LinkID, shortDate)
-			analyticsMap[metadata.LinkID] = a
-		}
-
-		a.Total += 1
-		a.CountryCode[metadata.CountryCode] += 1
-		a.DeviceType[metadata.DeviceType] += 1
-		a.Browser[metadata.Browser] += 1
-		a.OperatingSystem[metadata.OperatingSystem] += 1
-		a.Referer[metadata.Referer] += 1
-	}
-
-	analytics := make([]LinkAnalytics, 0)
-	for _, a := range analyticsMap {
-		analytics = append(analytics, *a)
-	}
-
-	return analytics, nil
-}
-
-func NewLinkAnalytics(linkID string, shortDate string) *LinkAnalytics {
-	return &LinkAnalytics{
-		LinkID:          linkID,
-		Total:           0,
-		AggregationDate: shortDate,
-		CountryCode:     make(map[string]int),
-		DeviceType:      make(map[string]int),
-		Browser:         make(map[string]int),
-		OperatingSystem: make(map[string]int),
-		Referer:         make(map[string]int),
-	}
 }
