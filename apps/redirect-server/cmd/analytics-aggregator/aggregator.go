@@ -34,7 +34,9 @@ func (a *Aggregator) Run(ctx context.Context) error {
 		return err
 	}
 
-	slog.Info("sending link analytics to Kafka")
+	slog.Info("sending link analytics to Kafka",
+		slog.Int("numAnalytics", len(linkAnalytics)),
+	)
 	err = a.KafkaProducer.SendLinkAnalytics(ctx, linkAnalytics)
 	if err != nil {
 		return err
@@ -52,8 +54,8 @@ func (a *Aggregator) Run(ctx context.Context) error {
 func (a *Aggregator) getOffset() (time.Time, error) {
 	data, err := os.ReadFile(a.OffsetPath)
 	if os.IsNotExist(err) {
-		// If offset not found, use the time five minutes ago
-		fiveMinutesAgo := time.Now().Add(-5 * time.Minute)
+		// If offset not found, use the time N minutes ago
+		fiveMinutesAgo := time.Now().Add(-AGGREGATE_INTERVAL)
 		return fiveMinutesAgo, nil
 	}
 	if err != nil {

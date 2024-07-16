@@ -8,6 +8,8 @@ import (
 	"time"
 )
 
+const AGGREGATE_INTERVAL = 5 * time.Minute
+
 func main() {
 	var kafkaAddr string
 	var kafkaTopic string

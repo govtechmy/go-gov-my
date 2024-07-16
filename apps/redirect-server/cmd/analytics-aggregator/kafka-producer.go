@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log/slog"
+	"time"
 
 	"github.com/segmentio/kafka-go"
 )
@@ -30,21 +31,38 @@ func NewKafkaProducer(addr string, topic string) *KafkaProducer {
 }
 
 func (kp *KafkaProducer) SendLinkAnalytics(ctx context.Context, analytics []LinkAnalytics) error {
+	var err error
+
 	json, err := json.Marshal(analytics)
 	if err != nil {
 		return err
 	}
 
-	err = kp.w.WriteMessages(ctx,
-		kafka.Message{
-			Value: json,
-		},
-	)
-	if err != nil {
-		return err
+	const retries = 3
+	for i := 0; i < retries; i++ {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
+		err = kp.w.WriteMessages(ctx,
+			kafka.Message{
+				Value: json,
+			},
+		)
+
+		// Retry writing the message
+		if err != nil {
+			slog.Error(
+				"failed to write kafka message",
+				slog.Int("attempt", i+1),
+			)
+			time.Sleep(time.Millisecond * 500)
+			continue
+		}
+
+		break
 	}
 
-	return nil
+	return err
 }
 
 func (kp *KafkaProducer) Close() error {
