@@ -71,18 +71,35 @@ func NewRedirectMetadata(req http.Request, ipDB *geoip2.Reader, link Link) Redir
 	return redirectMetadata
 }
 
+// For zap.Logger to log
 func (redirectMetadata RedirectMetadata) MarshalLogObject(enc zapcore.ObjectEncoder) error {
 	enc.AddString("linkId", redirectMetadata.LinkID)
 	enc.AddString("linkSlug", redirectMetadata.LinkSlug)
 	enc.AddString("linkUrl", redirectMetadata.LinkURL)
-	enc.AddString("countryCode", redirectMetadata.CountryCode)
-	enc.AddFloat32("latitude", redirectMetadata.Latitude)
-	enc.AddFloat32("longitude", redirectMetadata.Longitude)
-	enc.AddString("deviceType", redirectMetadata.DeviceType)
-	enc.AddString("browser", redirectMetadata.Browser)
-	enc.AddString("operatingSystem", redirectMetadata.OperatingSystem)
-	enc.AddString("ipAddress", redirectMetadata.IPAddress)
-	enc.AddString("referer", redirectMetadata.Referer)
+	if redirectMetadata.CountryCode != "" {
+		enc.AddString("countryCode", redirectMetadata.CountryCode)
+	}
+	if redirectMetadata.Latitude != 0 {
+		enc.AddFloat32("latitude", redirectMetadata.Latitude)
+	}
+	if redirectMetadata.Longitude != 0 {
+		enc.AddFloat32("longitude", redirectMetadata.Longitude)
+	}
+	if redirectMetadata.DeviceType != "" {
+		enc.AddString("deviceType", redirectMetadata.DeviceType)
+	}
+	if redirectMetadata.Browser != "" {
+		enc.AddString("browser", redirectMetadata.Browser)
+	}
+	if redirectMetadata.OperatingSystem != "" {
+		enc.AddString("operatingSystem", redirectMetadata.OperatingSystem)
+	}
+	if redirectMetadata.IPAddress != "" {
+		enc.AddString("ipAddress", redirectMetadata.IPAddress)
+	}
+	if redirectMetadata.Referer != "" {
+		enc.AddString("referer", redirectMetadata.Referer)
+	}
 	enc.AddString("timestamp", redirectMetadata.Timestamp.Format(time.RFC3339))
 	return nil
 }
