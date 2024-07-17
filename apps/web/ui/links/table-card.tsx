@@ -10,12 +10,7 @@ import LinkHistoryModal from "@/ui/modals/link-history-modal";
 import { useLinkQRModal } from "@/ui/modals/link-qr-modal";
 import {
   BadgeTooltip,
-  Button,
   CopyButton,
-  IconMenu,
-  NumberTooltip,
-  Popover,
-  SimpleTooltipContent,
   Tooltip,
   useIntersectionObserver,
   useRouterStuff,
@@ -27,28 +22,15 @@ import {
   getApexDomain,
   isDubDomain,
   linkConstructor,
-  nFormatter,
   punycode,
   timeAgo,
 } from "@dub/utils";
-import {
-  Archive,
-  Copy,
-  CopyPlus,
-  Delete,
-  Edit3,
-  FolderInput,
-  Link,
-  MessageCircle,
-  QrCode,
-  TimerOff,
-} from "lucide-react";
+import { Archive, MessageCircle, TimerOff } from "lucide-react";
 import { useParams, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import { useTransferLinkModal } from "../modals/transfer-link-modal";
-import { Chart, CheckCircleFill, ThreeDots } from "../shared/icons";
 import LinkLogo from "./link-logo";
 
 export default function TableCard({
