@@ -7,15 +7,23 @@ import (
 	"os"
 	"redirect-server/repository/es"
 	"time"
+
+	"github.com/olivere/elastic/v7"
 )
 
 const AGGREGATE_INTERVAL = 5 * time.Minute
 
 func main() {
+	var elasticURL string
+	var elasticUser string
+	var elasticPassword string
 	var kafkaAddr string
 	var kafkaTopic string
 	var offsetPath string
 	{
+		flag.StringVar(&elasticURL, "elastic-url", "http://localhost:9200", "Elasticsearch URL")
+		flag.StringVar(&elasticUser, "elastic-user", "elastic", "Elasticsearch username")
+		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
 		flag.StringVar(&kafkaAddr, "kafka-addr", "localhost:9092", "Kafka address")
 		flag.StringVar(&kafkaTopic, "kafka-topic", "link-analytics", "Kafka topic")
 		flag.StringVar(&offsetPath, "offset-path", "./analytics-aggregator-offset", "Analytics aggregator offset")
@@ -27,10 +35,18 @@ func main() {
 	kafkaProducer := NewKafkaProducer(kafkaAddr, kafkaTopic)
 	defer kafkaProducer.Close()
 
+	esClient, err := elastic.NewSimpleClient(
+		elastic.SetURL(elasticURL),
+		elastic.SetBasicAuth(elasticUser, elasticPassword),
+	)
+	if err != nil {
+		panic(err)
+	}
+
 	aggregator := &Aggregator{
 		OffsetPath:           offsetPath,
 		KafkaProducer:        kafkaProducer,
-		RedirectMetadataRepo: es.NewRedirectMetadataRepo(),
+		RedirectMetadataRepo: es.NewRedirectMetadataRepo(esClient),
 	}
 
 	// Run the aggregator every 5 minutes
