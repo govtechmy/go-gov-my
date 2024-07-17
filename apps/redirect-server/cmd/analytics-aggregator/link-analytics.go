@@ -5,11 +5,11 @@ import "redirect-server/repository"
 type LinkAnalytics struct {
 	LinkID          string           `json:"linkId"`
 	Total           int              `json:"total"`
-	CountryCode     AggregatedValues `json:"countryCode:omitempty"`
-	DeviceType      AggregatedValues `json:"deviceType:omitempty"`
-	Browser         AggregatedValues `json:"browser:omitempty"`
-	OperatingSystem AggregatedValues `json:"operatingSystem:omitempty"`
-	Referer         AggregatedValues `json:"referer:omitempty"`
+	CountryCode     AggregatedValues `json:"countryCode,omitempty"`
+	DeviceType      AggregatedValues `json:"deviceType,omitempty"`
+	Browser         AggregatedValues `json:"browser,omitempty"`
+	OperatingSystem AggregatedValues `json:"operatingSystem,omitempty"`
+	Referer         AggregatedValues `json:"referer,omitempty"`
 }
 
 type AggregatedValues = map[string]int
