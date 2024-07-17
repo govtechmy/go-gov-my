@@ -186,7 +186,7 @@ services:
       - debezium
     networks:
       - my-network
-      
+
   go-api:
     container_name: go-api
     build:
@@ -226,7 +226,6 @@ services:
       - .:/app
     depends_on:
       - elasticsearch
-  status-page:
 
   uptime-kuma:
     image: louislam/uptime-kuma:1
