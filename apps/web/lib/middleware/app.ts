@@ -15,6 +15,10 @@ export default async function AppMiddleware(req: NextRequest) {
     user?: UserProps;
   };
 
+  if (pathWithoutLocale === "/home") {
+    return NextResponse.next();
+  }
+
   // if there's no session and the path isn't /login or /register, redirect to /login
   if (
     !session?.email &&
