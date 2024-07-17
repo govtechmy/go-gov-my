@@ -82,7 +82,6 @@ func main() {
 		logger.Fatal("cannot load geolite2 database", zap.Error(err))
 	}
 	defer ipDB.Close()
-	redirectLogger := NewRedirectLogger(os.Stdout, ipDB)
 
 	// todo: logger handler
 	// todo: metrics handler
@@ -117,10 +116,13 @@ func main() {
 			return
 		}
 
-		err = redirectLogger.Log(*r, *link)
-		if err != nil {
-			logger.Error("error logging redirect metadata", zap.Error(err))
-		}
+		// Log redirect metadata for analytics
+		redirectMetadata := repository.NewRedirectMetadata(*r, ipDB, *link)
+		logger.Info("redirect metadata created",
+			zap.String("slug", link.Slug),
+			zap.String("linkId", link.ID),
+			zap.Object("redirectMetadata", redirectMetadata),
+		)
 
 		if err := t.ExecuteTemplate(w, "wait.html", link); err != nil {
 			logger.Error("failed to execute template", zap.Error(err))

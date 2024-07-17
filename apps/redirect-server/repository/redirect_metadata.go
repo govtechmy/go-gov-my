@@ -7,6 +7,7 @@ import (
 
 	"github.com/mileusna/useragent"
 	"github.com/oschwald/geoip2-golang"
+	"go.uber.org/zap/zapcore"
 )
 
 type RedirectMetadata struct {
@@ -68,4 +69,20 @@ func NewRedirectMetadata(req http.Request, ipDB *geoip2.Reader, link Link) Redir
 	}
 
 	return redirectMetadata
+}
+
+func (redirectMetadata RedirectMetadata) MarshalLogObject(enc zapcore.ObjectEncoder) error {
+	enc.AddString("linkId", redirectMetadata.LinkID)
+	enc.AddString("linkSlug", redirectMetadata.LinkSlug)
+	enc.AddString("linkUrl", redirectMetadata.LinkURL)
+	enc.AddString("countryCode", redirectMetadata.CountryCode)
+	enc.AddFloat32("latitude", redirectMetadata.Latitude)
+	enc.AddFloat32("longitude", redirectMetadata.Longitude)
+	enc.AddString("deviceType", redirectMetadata.DeviceType)
+	enc.AddString("browser", redirectMetadata.Browser)
+	enc.AddString("operatingSystem", redirectMetadata.OperatingSystem)
+	enc.AddString("ipAddress", redirectMetadata.IPAddress)
+	enc.AddString("referer", redirectMetadata.Referer)
+	enc.AddString("timestamp", redirectMetadata.Timestamp.Format(time.RFC3339))
+	return nil
 }
