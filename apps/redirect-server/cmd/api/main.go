@@ -44,7 +44,7 @@ func main() {
 		flag.StringVar(&elasticURL, "elastic-url", "http://localhost:9200", "Elasticsearch URL")
 		flag.StringVar(&elasticUser, "elastic-user", "elastic", "Elasticsearch username")
 		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
-		flag.IntVar(&httpPort, "http-port", 3001, "HTTP server port")
+		flag.IntVar(&httpPort, "http-port", 3002, "HTTP server port")
 	}
 	flag.Parse()
 
