@@ -13,7 +13,7 @@ import generateIdempotencyKey from "./create-idempotency-key";
 import { combineTagIds, transformLink } from "./utils";
 
 const REDIRECT_SERVER_BASE_URL =
-  process.env.REDIRECT_SERVER_URL || "http://localhost:3001";
+  process.env.REDIRECT_SERVER_URL || "http://localhost:3002";
 
 export async function createLink(
   link: ProcessedLinkProps,

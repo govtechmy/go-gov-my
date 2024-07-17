@@ -2,8 +2,8 @@
 
 import useLinks from "@/lib/swr/use-links";
 import useLinksCount from "@/lib/swr/use-links-count";
-import { MaxWidthWrapper } from "@dub/ui";
-import { Suspense, useRef } from "react";
+import { CustomSelect, MaxWidthWrapper } from "@dub/ui";
+import { Suspense, useRef, useState } from "react";
 import { useLinkFiltersModal } from "../modals/link-filters-modal";
 import LinkCard from "./link-card";
 import LinkCardPlaceholder from "./link-card-placeholder";
@@ -11,6 +11,7 @@ import LinkFilters, { SearchBox } from "./link-filters";
 import LinkPagination from "./link-pagination";
 import LinkSort from "./link-sort";
 import NoLinksPlaceholder from "./no-links-placeholder";
+import TableCard from "./table-card";
 
 export default function LinksContainer({
   AddEditLinkButton,
@@ -21,6 +22,24 @@ export default function LinksContainer({
   const { data: count } = useLinksCount();
   const { LinkFiltersButton, LinkFiltersModal } = useLinkFiltersModal();
   const searchInputRef = useRef();
+  const [linkView, setLinkView] = useState("lv");
+
+  const handleChangeSelect = (e) => {
+    setLinkView(e?.value);
+  };
+
+  const options = [
+    {
+      label: "List View",
+      value: "lv",
+    },
+    {
+      label: "Table View",
+      value: "tv",
+    },
+  ];
+
+  const headers = ["Short Link", "Full Link", "Date Created"];
 
   return (
     <>
@@ -43,7 +62,12 @@ export default function LinksContainer({
           </div>
           <div className="col-span-1 auto-rows-min grid-cols-1 lg:col-span-5">
             <ul className="grid min-h-[66.5vh] auto-rows-min gap-3">
-              {links && !isValidating ? (
+              <CustomSelect
+                options={options}
+                onChange={async (e) => handleChangeSelect(e)}
+                defaultValue={0}
+              />
+              {linkView == options[0]?.value && links && !isValidating ? (
                 links.length > 0 ? (
                   links.map((props) => (
                     <Suspense key={props.id} fallback={<LinkCardPlaceholder />}>
@@ -53,6 +77,49 @@ export default function LinksContainer({
                 ) : (
                   <NoLinksPlaceholder AddEditLinkButton={AddEditLinkButton} />
                 )
+              ) : linkView == options[1]?.value && links && !isValidating ? (
+                <>
+                  {links.length > 0 ? (
+                    <>
+                      <div className="relative overflow-x-auto">
+                        <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+                          <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                              {headers.map((header) => {
+                                return (
+                                  <th
+                                    scope="col"
+                                    className="px-2 py-2"
+                                    key={header}
+                                  >
+                                    {header}
+                                  </th>
+                                );
+                              })}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {links.map((props) => (
+                              <Suspense
+                                key={props.id}
+                                fallback={<LinkCardPlaceholder />}
+                              >
+                                <TableCard props={props} />
+                              </Suspense>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      <NoLinksPlaceholder
+                        AddEditLinkButton={AddEditLinkButton}
+                      />
+                    </>
+                  )}
+                </>
               ) : (
                 Array.from({ length: 10 }).map((_, i) => (
                   <LinkCardPlaceholder key={i} />
