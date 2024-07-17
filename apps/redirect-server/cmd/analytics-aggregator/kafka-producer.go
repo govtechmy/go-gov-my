@@ -14,6 +14,13 @@ type KafkaProducer struct {
 	w *kafka.Writer
 }
 
+type KafkaLinkAnalyticsMessage struct {
+	ShortDate     string          `json:"shortDate"`
+	From          time.Time       `json:"from"`
+	To            time.Time       `json:"to"`
+	LinkAnalytics []LinkAnalytics `json:"linkAnalytics"`
+}
+
 func NewKafkaProducer(addr string, topic string) *KafkaProducer {
 	w := &kafka.Writer{
 		Addr:                   kafka.TCP(addr),
@@ -30,10 +37,17 @@ func NewKafkaProducer(addr string, topic string) *KafkaProducer {
 	return &KafkaProducer{w: w}
 }
 
-func (kp *KafkaProducer) SendLinkAnalytics(ctx context.Context, analytics []LinkAnalytics) error {
+func (kp *KafkaProducer) SendLinkAnalytics(ctx context.Context, shortDate string, from time.Time, to time.Time, analytics []LinkAnalytics) error {
 	var err error
 
-	json, err := json.Marshal(analytics)
+	message := KafkaLinkAnalyticsMessage{
+		ShortDate:     shortDate,
+		From:          from,
+		To:            to,
+		LinkAnalytics: analytics,
+	}
+
+	json, err := json.Marshal(message)
 	if err != nil {
 		return err
 	}

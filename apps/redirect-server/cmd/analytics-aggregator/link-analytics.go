@@ -5,7 +5,6 @@ import "redirect-server/repository"
 type LinkAnalytics struct {
 	LinkID          string           `json:"linkId"`
 	Total           int              `json:"total"`
-	AggregationDate string           `json:"aggregationDate"` // UTC date in short format YYYY-MM-DD
 	CountryCode     AggregatedValues `json:"countryCode"`
 	DeviceType      AggregatedValues `json:"deviceType"`
 	Browser         AggregatedValues `json:"browser"`
@@ -15,11 +14,10 @@ type LinkAnalytics struct {
 
 type AggregatedValues = map[string]int
 
-func NewLinkAnalytics(linkID string, shortDate string) *LinkAnalytics {
+func NewLinkAnalytics(linkID string) *LinkAnalytics {
 	return &LinkAnalytics{
 		LinkID:          linkID,
 		Total:           0,
-		AggregationDate: shortDate,
 		CountryCode:     make(map[string]int),
 		DeviceType:      make(map[string]int),
 		Browser:         make(map[string]int),
@@ -28,14 +26,14 @@ func NewLinkAnalytics(linkID string, shortDate string) *LinkAnalytics {
 	}
 }
 
-func aggregateRedirectMetadata(redirectMetadata []repository.RedirectMetadata, shortDate string) ([]LinkAnalytics, error) {
+func aggregateRedirectMetadata(redirectMetadata []repository.RedirectMetadata) ([]LinkAnalytics, error) {
 	// Map LinkID to analytics
 	analyticsMap := make(map[string]*LinkAnalytics)
 
 	for _, metadata := range redirectMetadata {
 		a := analyticsMap[metadata.LinkID]
 		if a == nil {
-			a = NewLinkAnalytics(metadata.LinkID, shortDate)
+			a = NewLinkAnalytics(metadata.LinkID)
 			analyticsMap[metadata.LinkID] = a
 		}
 

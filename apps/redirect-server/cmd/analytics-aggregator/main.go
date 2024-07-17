@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"log/slog"
+	"os"
 	"redirect-server/repository/es"
 	"time"
 )
@@ -37,10 +38,62 @@ func main() {
 	defer ticker.Stop()
 
 	for {
-		err := aggregator.Run(ctx)
+		from, err := getOffset(offsetPath)
 		if err != nil {
-			slog.Error("worker run failed", slog.String("errorMessage", err.Error()))
+			slog.Error("failed to get offset", slog.String("errorMessage", err.Error()))
 		}
+		to := time.Now()
+
+		// TODO: Handle case where 'from' and 'to' are different dates
+		if from.Format("2006-01-02") != to.Format("2006-01-02") {
+			slog.Warn("to and from have different dates",
+				slog.Time("from", from),
+				slog.Time("to", to),
+			)
+		}
+
+		shortDate := to.Format("2006-01-02")
+
+		err = aggregator.Run(ctx, shortDate, from, to)
+		if err != nil {
+			slog.Error("worker run failed",
+				slog.String("errorMessage", err.Error()),
+				slog.String("shortDate", shortDate),
+				slog.Time("from", from),
+				slog.Time("to", to),
+			)
+		} else {
+			saveOffset(offsetPath, to)
+		}
+
 		<-ticker.C
 	}
+}
+
+func getOffset(offsetPath string) (time.Time, error) {
+	data, err := os.ReadFile(offsetPath)
+	if os.IsNotExist(err) {
+		// If offset not found, use the time N minutes ago
+		fiveMinutesAgo := time.Now().Add(-AGGREGATE_INTERVAL)
+		return fiveMinutesAgo, nil
+	}
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	t, err := time.Parse(time.RFC3339, string(data))
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	return t, nil
+}
+
+func saveOffset(offsetPath string, t time.Time) error {
+	err := os.WriteFile(offsetPath, []byte(t.Format(time.RFC3339)), 0644)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
