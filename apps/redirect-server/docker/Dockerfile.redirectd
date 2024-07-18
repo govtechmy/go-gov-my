@@ -20,8 +20,8 @@ COPY templates /templates
 # We need this public assets !! Might change later if we serve static pages from NextJS
 COPY public /public
 
-# Expose port 3001 to the outside world
-EXPOSE 3001
+# Expose port 3000 to the outside world
+EXPOSE 3000
 
 # Command to run the executable
 CMD ["/redirectd"]

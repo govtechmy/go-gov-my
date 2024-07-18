@@ -186,14 +186,14 @@ services:
       - debezium
     networks:
       - my-network
-      
+
   go-api:
     container_name: go-api
     build:
       context: ./apps/redirect-server
       dockerfile: docker/Dockerfile.api
     ports:
-      - "3001:3001"
+      - "3002:3002"
     env_file:
       - .env
     environment:
@@ -226,7 +226,6 @@ services:
       - .:/app
     depends_on:
       - elasticsearch
-  status-page:
 
   uptime-kuma:
     image: louislam/uptime-kuma:1
