@@ -6,10 +6,11 @@ const data = {
   to: "2024-07-17T13:51:04.455631+08:00",
   linkAnalytics: [
     {
-      linkId: "5eeff8c4-4d11-43f0-9a05-43884758cabe",
+      linkId: "823044fc-a18f-448a-99c4-1b67f0640fd9",
       total: 3235,
       countryCode: {
         MY: 3235,
+        TH: {}
       },
       deviceType: {
         desktop: 1578,
@@ -36,37 +37,7 @@ const data = {
       },
     },
     {
-      linkId: "98792f85-662b-4819-86cb-f5c19cd11d6c",
-      total: 3324,
-      countryCode: {
-        MY: 3324,
-      },
-      deviceType: {
-        desktop: 1627,
-        mobile: 1697,
-      },
-      browser: {
-        chrome: 686,
-        edge: 693,
-        firefox: 644,
-        internet_explorer: 652,
-        opera: 649,
-      },
-      operatingSystem: {
-        android: 869,
-        ios: 828,
-        linux: 509,
-        macos: 555,
-        windows: 563,
-      },
-      referer: {
-        "https://facebook.com": 1101,
-        "https://twitter.com": 1137,
-        "https://x.com": 1086,
-      },
-    },
-    {
-      linkId: "f0175e9d-ca60-477d-aa10-545c10acd815",
+      linkId: "b9152968-bf44-4dbc-b545-333b5d0ee9ea",
       total: 3438,
       countryCode: {
         MY: 3438,

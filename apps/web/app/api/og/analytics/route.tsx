@@ -81,7 +81,7 @@ export async function GET(req: NextRequest) {
               <rect width="18" height="18" x="3" y="4" rx="2" />
               <path d="M3 10h18" />
             </svg>
-            <p tw="text-gray-700 ml-2 mt-4">Last 24 hours</p>
+            <p tw="text-gray-700 ml-2 mt-4">Today</p>
           </div>
         </div>
         <div tw="flex flex-col h-full w-full rounded-lg border border-gray-200 bg-white shadow-lg overflow-hidden">

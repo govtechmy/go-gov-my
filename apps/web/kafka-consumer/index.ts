@@ -146,6 +146,11 @@ async function main() {
         return;
       }
 
+      const data = JSON.parse(message?.value?.toString("utf8") || "{}")
+      const shortDate = data?.shortDate;
+      const from = data?.from;
+      const to = data?.to;
+
       function consumeAnalytics(link, shortDate: Date, from: Date, to: Date) {
         const dataObject = JSON.parse(JSON.stringify(link)) // deep clone
         delete dataObject?.linkId
@@ -159,7 +164,7 @@ async function main() {
       }
 
       function sumTwoObj(obj1, obj2) {
-        const clone = {}
+        const clone = {}  // deep clone
         for (const key in obj1) {
             if (obj1.hasOwnProperty(key)) {
                 clone[key] = obj1[key];
@@ -180,11 +185,6 @@ async function main() {
         }
         return clone
       }
-
-      const data = JSON.parse(message?.value?.toString("utf8"))
-      const shortDate = data?.shortDate;
-      const from = data?.from;
-      const to = data?.to;
     
       data?.linkAnalytics?.forEach(async(link)=> {
         const row = await prisma.analytics.findMany({
@@ -227,7 +227,7 @@ async function main() {
               data: consumeAnalytics(link, shortDate, from, to)
             }) 
           } catch(error) {
-              console.log("error", error)
+            console.log("error", error)
           }
         }
       })
