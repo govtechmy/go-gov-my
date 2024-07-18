@@ -9,7 +9,7 @@ import PasswordForm from "./form";
 const title = "Password Required";
 const description =
   "This link is password protected. Please enter the password to view it.";
-const image = "https://assets.dub.co/misc/password-protected.png";
+const image = "https://assets.go.gov.my/misc/password-protected.png";
 
 export async function generateMetadata({
   params,
@@ -130,7 +130,7 @@ export default async function PasswordProtectedLinkPage({
               className="h-10 w-10 rounded-full"
             />
           ) : (
-            <a href="https://dub.co" target="_blank" rel="noreferrer">
+            <a href="https://go.gov.my" target="_blank" rel="noreferrer">
               <Logo />
             </a>
           )}

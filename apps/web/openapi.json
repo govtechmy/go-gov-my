@@ -1,13 +1,13 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "Dub.co API",
-    "description": "Dub is link management infrastructure for companies to create marketing campaigns, link sharing features, and referral programs.",
+    "title": "GoGovMy API",
+    "description": "GoGovMy is link management infrastructure for companies to create marketing campaigns, link sharing features, and referral programs.",
     "version": "0.0.1",
     "contact": {
-      "name": "Dub.co Support",
-      "email": "support@dub.co",
-      "url": "https://dub.co/api"
+      "name": "GoGovMy Support",
+      "email": "support@go.gov.my",
+      "url": "https://go.gov.my/api"
     },
     "license": {
       "name": "AGPL-3.0 license",
@@ -183,17 +183,17 @@
                   "title": {
                     "type": "string",
                     "nullable": true,
-                    "description": "The title of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
+                    "description": "The title of the short link generated via `api.go.gov.my/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
                   },
                   "description": {
                     "type": "string",
                     "nullable": true,
-                    "description": "The description of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
+                    "description": "The description of the short link generated via `api.go.gov.my/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
                   },
                   "image": {
                     "type": "string",
                     "nullable": true,
-                    "description": "The image of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
+                    "description": "The image of the short link generated via `api.go.gov.my/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
                   },
                   "rewrite": {
                     "type": "boolean",
@@ -923,17 +923,17 @@
                   "title": {
                     "type": "string",
                     "nullable": true,
-                    "description": "The title of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
+                    "description": "The title of the short link generated via `api.go.gov.my/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
                   },
                   "description": {
                     "type": "string",
                     "nullable": true,
-                    "description": "The description of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
+                    "description": "The description of the short link generated via `api.go.gov.my/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
                   },
                   "image": {
                     "type": "string",
                     "nullable": true,
-                    "description": "The image of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
+                    "description": "The image of the short link generated via `api.go.gov.my/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
                   },
                   "rewrite": {
                     "type": "boolean",
@@ -1273,10 +1273,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -1515,10 +1515,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -1773,10 +1773,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -2017,10 +2017,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -2261,10 +2261,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -2519,10 +2519,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -2777,10 +2777,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -3035,10 +3035,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -3293,10 +3293,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -3551,10 +3551,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -3765,7 +3765,7 @@
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.count instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.count instead.",
         "x-speakeasy-deprecation-replacement": "getClicksCount",
         "deprecated": true,
         "parameters": [
@@ -3811,10 +3811,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -4010,7 +4010,7 @@
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.timeseries instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.timeseries instead.",
         "x-speakeasy-deprecation-replacement": "getTimeseriesByClicks",
         "deprecated": true,
         "parameters": [
@@ -4056,10 +4056,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -4271,7 +4271,7 @@
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.countries instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.countries instead.",
         "x-speakeasy-deprecation-replacement": "getCountriesByClicks",
         "deprecated": true,
         "parameters": [
@@ -4317,10 +4317,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -4518,7 +4518,7 @@
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.cities instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.cities instead.",
         "x-speakeasy-deprecation-replacement": "getCitiesByClicks",
         "deprecated": true,
         "parameters": [
@@ -4564,10 +4564,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -4765,7 +4765,7 @@
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.devices instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.devices instead.",
         "x-speakeasy-deprecation-replacement": "getDevicesByClicks",
         "deprecated": true,
         "parameters": [
@@ -4811,10 +4811,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -5026,7 +5026,7 @@
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.browsers instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.browsers instead.",
         "x-speakeasy-deprecation-replacement": "getBrowsersByClicks",
         "deprecated": true,
         "parameters": [
@@ -5072,10 +5072,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -5287,7 +5287,7 @@
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.os instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.os instead.",
         "x-speakeasy-deprecation-replacement": "getOSByClicks",
         "deprecated": true,
         "parameters": [
@@ -5333,10 +5333,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -5548,7 +5548,7 @@
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.referers instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.referers instead.",
         "x-speakeasy-deprecation-replacement": "getReferersByClicks",
         "deprecated": true,
         "parameters": [
@@ -5594,10 +5594,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -5809,7 +5809,7 @@
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.topLinks instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.topLinks instead.",
         "x-speakeasy-deprecation-replacement": "getTopLinksByClicks",
         "deprecated": true,
         "parameters": [
@@ -5855,10 +5855,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -6070,7 +6070,7 @@
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.topUrls instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.topUrls instead.",
         "x-speakeasy-deprecation-replacement": "getTopURLsByClicks",
         "deprecated": true,
         "parameters": [
@@ -6116,10 +6116,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on GoGovMy.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on GoGovMy."
             }
           },
           {
@@ -6725,7 +6725,7 @@
             "description": "The URL to retrieve metatags for.",
             "schema": {
               "type": "string",
-              "example": "https://dub.co",
+              "example": "https://go.gov.my",
               "description": "The URL to retrieve metatags for."
             },
             "required": true
@@ -6743,19 +6743,19 @@
                       "type": "string",
                       "nullable": true,
                       "description": "The meta title tag for the URL.",
-                      "example": "Dub.co - Link Management for Modern Marketing Teams"
+                      "example": "GoGovMy - Link Management for Modern Marketing Teams"
                     },
                     "description": {
                       "type": "string",
                       "nullable": true,
                       "description": "The meta description tag for the URL.",
-                      "example": "Dub.co is the open-source link management infrastructure ..."
+                      "example": "GoGovMy is the open-source link management infrastructure ..."
                     },
                     "image": {
                       "type": "string",
                       "nullable": true,
                       "description": "The OpenGraph image for the URL.",
-                      "example": "https://assets.dub.co/thumbnail.jpg"
+                      "example": "https://assets.go.gov.my/thumbnail.jpg"
                     }
                   },
                   "required": [
@@ -6840,17 +6840,17 @@
           "title": {
             "type": "string",
             "nullable": true,
-            "description": "The title of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
+            "description": "The title of the short link generated via `api.go.gov.my/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
           },
           "description": {
             "type": "string",
             "nullable": true,
-            "description": "The description of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
+            "description": "The description of the short link generated via `api.go.gov.my/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
           },
           "image": {
             "type": "string",
             "nullable": true,
-            "description": "The image of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
+            "description": "The image of the short link generated via `api.go.gov.my/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
           },
           "rewrite": {
             "type": "boolean",
@@ -7907,7 +7907,7 @@
           "qrCode": {
             "type": "string",
             "format": "uri",
-            "description": "The full URL of the QR code for the short link (e.g. `https://api.dub.co/qr?url=https://go.gov.my/try`)."
+            "description": "The full URL of the QR code for the short link (e.g. `https://api.go.gov.my/qr?url=https://go.gov.my/try`)."
           },
           "utm_source": {
             "type": "string",

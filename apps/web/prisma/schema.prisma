@@ -292,11 +292,13 @@ model Link {
   // @@fulltext([key, url])
 }
 model WebhookOutbox {
-  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  host       String
-  payload    Json
-  sentAt     DateTime  @default(now()) @db.Timestamptz
-  action     String
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  host          String
+  payload       Json
+  createdAt     DateTime  @default(now()) @db.Timestamptz
+  action        String
+  headers       Json
+  partitionKey  String
 }
 
 model LinkHistory {

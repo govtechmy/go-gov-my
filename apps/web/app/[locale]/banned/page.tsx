@@ -26,7 +26,7 @@ export default async function BannedPage() {
         </h1>
         <p className="text-lg text-gray-600">{message?.banned_desc}</p>
         <a
-          href="https://dub.co"
+          href="https://go.gov.my"
           className="rounded-full bg-gray-800 px-10 py-2 font-medium text-white transition-colors hover:bg-black"
         >
           {message?.create}

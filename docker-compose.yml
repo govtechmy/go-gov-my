@@ -3,6 +3,7 @@ version: "3.8"
 services:
   ps-postgres:
     image: postgres:13
+    container_name: ps-postgres
     restart: always
     env_file:
       - .env
@@ -27,6 +28,7 @@ services:
 
   redis:
     image: redis:7.2
+    container_name: redis
     restart: always
     ports:
       - 6379:6379
@@ -40,6 +42,7 @@ services:
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
+    container_name: elasticsearch
     restart: always
     environment:
       - discovery.type=single-node
@@ -48,6 +51,8 @@ services:
       - 9200:9200
     networks:
       - my-network
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
     logging:
       driver: "json-file"
       options:
@@ -60,6 +65,7 @@ services:
     mem_limit: 1g
 
   # filebeat:
+  #   container_name: filebeat
   #   image: docker.elastic.co/beats/filebeat:7.13.2
   #   restart: always
   #   volumes:
@@ -112,6 +118,7 @@ services:
 
   kafdrop:
     image: obsidiandynamics/kafdrop
+    container_name: kafdrop
     restart: always
     ports:
       - 9000:9000
@@ -124,6 +131,7 @@ services:
 
   debezium:
     image: debezium/connect:2.6
+    container_name: debezium
     environment:
       BOOTSTRAP_SERVERS: broker:29092
       GROUP_ID: 1
@@ -149,6 +157,7 @@ services:
 
   init-debezium-connector:
     image: curlimages/curl:8.8.0
+    container_name: init-debezium-connector
     depends_on:
       debezium:
         condition: service_healthy
@@ -164,23 +173,9 @@ services:
     networks:
       - my-network
 
-  # Disabled for now since we are using JSON payloads
-  # schema-registry:
-  #   hostname: schema-registry
-  #   container_name: schema-registry
-  #   image: confluentinc/cp-schema-registry:7.6.1
-  #   environment:
-  #     - SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL=zookeeper:2181
-  #     - SCHEMA_REGISTRY_HOST_NAME=schema-registry
-  #     - SCHEMA_REGISTRY_LISTENERS=http://schema-registry:8081,http://localhost:8081
-  #   ports:
-  #     - 8081:8081
-  #   depends_on: [zookeeper, broker]
-  #   networks:
-  #     - my-network
-
   debezium-ui:
     image: quay.io/debezium/debezium-ui:latest
+    container_name: debezium-ui
     platform: linux/amd64
     restart: always
     ports:
@@ -191,6 +186,46 @@ services:
       - debezium
     networks:
       - my-network
+
+  go-api:
+    container_name: go-api
+    build:
+      context: ./apps/redirect-server
+      dockerfile: docker/Dockerfile.api
+    ports:
+      - "3002:3002"
+    env_file:
+      - .env
+    environment:
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    command:
+      - "/api"
+      - "--elastic-url=http://elasticsearch:9200"
+    volumes:
+      - .:/app
+    depends_on:
+      - elasticsearch
+    networks:
+      - my-network
+
+  go-redirectd:
+    container_name: go-redirectd
+    build:
+      context: ./apps/redirect-server
+      dockerfile: docker/Dockerfile.redirectd
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+    command:
+      - "/redirectd"
+      - "--elastic-url=http://elasticsearch:9200"
+    volumes:
+      - .:/app
+    depends_on:
+      - elasticsearch
 
   uptime-kuma:
     image: louislam/uptime-kuma:1
@@ -204,7 +239,10 @@ services:
 
 networks:
   my-network:
+  my-internal-network:
 
 volumes:
   ps-postgres:
+  esdata:
+  status-page:
   uptime-kuma:
