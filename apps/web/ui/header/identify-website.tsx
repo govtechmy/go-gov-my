@@ -29,7 +29,7 @@ const IdentifyWebsite: React.FC = () => {
           <button className="w-full" onClick={() => setOpen(!open)}>
             <div className="text-brand-700 flex flex-wrap items-center gap-1.5 py-2.5 text-sm/4 max-sm:justify-between sm:py-1">
               <div className="flex items-center gap-1.5">
-                <Checkmark14PointStar className="size-4 text-blue-600 sm:size-5" />
+                <Checkmark14PointStar className="size-4 sm:size-5 text-blue-600" />
                 <span className="text-black-700">
                   {messages?.masthead?.masthead_title}
                 </span>
@@ -61,7 +61,7 @@ const IdentifyWebsite: React.FC = () => {
                       {messages?.masthead?.masthead_official_site_desc_domain}
                     </span>
                   </p>
-                  <p className="text-black-700 max-w-prose text-balance text-sm">
+                  <p className="text-black-700 text-balance max-w-prose text-sm">
                     {messages?.masthead?.masthead_official_site_desc_1}
                     <span className="font-semibold">
                       {" "}
@@ -78,9 +78,9 @@ const IdentifyWebsite: React.FC = () => {
                     {messages?.masthead?.masthead_ssl_title}{" "}
                     <span className="text-bold text-green-600">HTTPS</span>
                   </p>
-                  <div className="text-black-700 max-w-prose text-balance text-sm">
+                  <div className="text-black-700 text-balance max-w-prose text-sm">
                     {messages?.masthead?.masthead_ssl_desc_1}{" "}
-                    <SolidLock className="-ml-[3px] mb-0.5 mr-px inline size-3.5 text-green-600" />
+                    <SolidLock className="size-3.5 -ml-[3px] mb-0.5 mr-px inline text-green-600" />
                     {messages?.masthead?.masthead_ssl_or}{" "}
                     <span className="font-semibold">https://</span>{" "}
                     {messages?.masthead?.masthead_ssl_desc_2}{" "}

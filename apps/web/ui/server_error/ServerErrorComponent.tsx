@@ -3,7 +3,7 @@
 import Image from "next/image";
 import IdentifyWebsite from "../header/identify-website";
 
-const NotFoundComponent = () => {
+const ServerErrorComponent = () => {
   return (
     <div className="flex min-h-screen flex-col bg-gray-50">
       <div className="flex justify-center py-1">
@@ -11,10 +11,10 @@ const NotFoundComponent = () => {
       </div>
       <div className="flex flex-grow flex-col items-center justify-center bg-white px-4 text-center">
         <span className="mb-10 me-2 rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-600 dark:bg-red-900 dark:text-red-300">
-          404 ERROR
+          500 ERROR
         </span>
         <h1 className="mb-10 text-3xl font-bold leading-none tracking-wide text-gray-900 dark:text-white md:text-2xl lg:text-4xl">
-          Sorry, short link not found
+          Something went wrong
         </h1>
         <p className="mb-10 text-gray-700">
           For more help, please reach out to the agency <br /> that provided you
@@ -59,4 +59,4 @@ const NotFoundComponent = () => {
   );
 };
 
-export default NotFoundComponent;
+export default ServerErrorComponent;

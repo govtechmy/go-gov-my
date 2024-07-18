@@ -20,7 +20,8 @@ export default async function AppMiddleware(req: NextRequest) {
   if (
     pathWithoutLocale === "/home" ||
     pathWithoutLocale === "/notfound" ||
-    pathWithoutLocale === "/server_error"
+    pathWithoutLocale === "/server_error" ||
+    pathWithoutLocale === "/redirect"
   ) {
     return NextResponse.next();
   }
