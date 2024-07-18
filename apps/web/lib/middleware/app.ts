@@ -15,7 +15,13 @@ export default async function AppMiddleware(req: NextRequest) {
     user?: UserProps;
   };
 
-  if (pathWithoutLocale === "/home") {
+  // Farhan 18 Jul 24
+  // This is for temporary to view the static page, need to remove this once deploy
+  if (
+    pathWithoutLocale === "/home" ||
+    pathWithoutLocale === "/notfound" ||
+    pathWithoutLocale === "/server_error"
+  ) {
     return NextResponse.next();
   }
 
