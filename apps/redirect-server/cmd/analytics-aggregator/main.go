@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"log"
 	"log/slog"
 	"os"
 	"redirect-server/repository/es"
@@ -32,28 +33,37 @@ func main() {
 
 	ctx := context.Background()
 
-	kafkaProducer := NewKafkaProducer(kafkaAddr, kafkaTopic)
-	defer kafkaProducer.Close()
+	kafkaProducer, err := NewKafkaProducer(kafkaAddr, kafkaTopic)
+	if err != nil {
+		log.Fatalf("failed to intialize kafka producer: %s", err)
+	}
+	defer func() {
+		err := kafkaProducer.Close()
+		if err != nil {
+			log.Fatalf("failed to close kafka producer: %s", err)
+		}
+	}()
 
 	esClient, err := elastic.NewSimpleClient(
 		elastic.SetURL(elasticURL),
 		elastic.SetBasicAuth(elasticUser, elasticPassword),
 	)
 	if err != nil {
-		panic(err)
+		log.Fatalf("failed to intialize elasticsearch client: %s", err)
 	}
 
 	aggregator := &Aggregator{
 		OffsetPath:           offsetPath,
-		KafkaProducer:        kafkaProducer,
 		RedirectMetadataRepo: es.NewRedirectMetadataRepo(esClient),
 	}
 
 	// Run the aggregator every 5 minutes
-	ticker := time.NewTicker(5 * time.Minute)
+	ticker := time.NewTicker(AGGREGATE_INTERVAL)
 	defer ticker.Stop()
 
 	for {
+		<-ticker.C
+
 		from, err := getOffset(offsetPath)
 		if err != nil {
 			slog.Error("failed to get offset", slog.String("errorMessage", err.Error()))
@@ -70,19 +80,62 @@ func main() {
 
 		shortDate := to.Format("2006-01-02")
 
-		err = aggregator.Run(ctx, shortDate, from, to)
+		linkAnalytics, err := aggregator.Run(ctx, shortDate, from, to)
+
 		if err != nil {
-			slog.Error("worker run failed",
+			slog.Error("aggregator run failed",
 				slog.String("errorMessage", err.Error()),
 				slog.String("shortDate", shortDate),
 				slog.Time("from", from),
 				slog.Time("to", to),
 			)
-		} else {
-			saveOffset(offsetPath, to)
+			continue
 		}
 
-		<-ticker.C
+		slog.Info("finished running aggregator",
+			slog.String("shortDate", shortDate),
+			slog.Int("numAnalytics", len(linkAnalytics)),
+			slog.Time("from", from),
+			slog.Time("to", to),
+		)
+
+		if len(linkAnalytics) > 0 {
+			err = kafkaProducer.SendLinkAnalytics(ctx, shortDate, from, to, linkAnalytics)
+			if err != nil {
+				slog.Error("failed to send analytics to kafka",
+					slog.String("errorMessage", err.Error()),
+				)
+				continue
+			}
+
+			slog.Info("analytics sent to kafka",
+				slog.String("shortDate", shortDate),
+				slog.Int("numAnalytics", len(linkAnalytics)),
+				slog.Time("from", from),
+				slog.Time("to", to),
+			)
+		} else {
+			slog.Info("skipped sending analytics to kafka",
+				slog.String("shortDate", shortDate),
+				slog.Int("numAnalytics", len(linkAnalytics)),
+				slog.Time("from", from),
+				slog.Time("to", to),
+			)
+		}
+
+		err = saveOffset(offsetPath, to)
+		if err != nil {
+			slog.Error("failed to save offset",
+				slog.Time("currOffset", from),
+				slog.Time("newOffset", to),
+			)
+			// Panic because kafka message is already sent
+			panic(err)
+		}
+		slog.Info("offset saved",
+			slog.Time("prevOffset", from),
+			slog.Time("newOffset", to),
+		)
 	}
 }
 
@@ -97,7 +150,7 @@ func getOffset(offsetPath string) (time.Time, error) {
 		return time.Time{}, err
 	}
 
-	t, err := time.Parse(time.RFC3339, string(data))
+	t, err := time.Parse(time.RFC3339Nano, string(data))
 	if err != nil {
 		return time.Time{}, err
 	}
@@ -106,7 +159,7 @@ func getOffset(offsetPath string) (time.Time, error) {
 }
 
 func saveOffset(offsetPath string, t time.Time) error {
-	err := os.WriteFile(offsetPath, []byte(t.Format(time.RFC3339)), 0644)
+	err := os.WriteFile(offsetPath, []byte(t.Format(time.RFC3339Nano)), 0644)
 	if err != nil {
 		return err
 	}

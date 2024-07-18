@@ -3,15 +3,15 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log/slog"
 	"time"
 
-	"github.com/segmentio/kafka-go"
+	"github.com/IBM/sarama"
 )
 
 type KafkaProducer struct {
-	w *kafka.Writer
+	producer sarama.SyncProducer
+	topic    string
 }
 
 type KafkaLinkAnalyticsMessage struct {
@@ -21,20 +21,13 @@ type KafkaLinkAnalyticsMessage struct {
 	LinkAnalytics []LinkAnalytics `json:"linkAnalytics"`
 }
 
-func NewKafkaProducer(addr string, topic string) *KafkaProducer {
-	w := &kafka.Writer{
-		Addr:                   kafka.TCP(addr),
-		Topic:                  topic,
-		AllowAutoTopicCreation: true,
-		Logger: kafka.LoggerFunc(func(msg string, args ...any) {
-			slog.Info(fmt.Sprintf(msg, args...))
-		}),
-		ErrorLogger: kafka.LoggerFunc(func(msg string, args ...any) {
-			slog.Error(fmt.Sprintf(msg, args...))
-		}),
+func NewKafkaProducer(addr string, topic string) (*KafkaProducer, error) {
+	producer, err := sarama.NewSyncProducer([]string{addr}, nil)
+	if err != nil {
+		return nil, err
 	}
 
-	return &KafkaProducer{w: w}
+	return &KafkaProducer{producer: producer, topic: topic}, nil
 }
 
 func (kp *KafkaProducer) SendLinkAnalytics(ctx context.Context, shortDate string, from time.Time, to time.Time, analytics []LinkAnalytics) error {
@@ -54,14 +47,10 @@ func (kp *KafkaProducer) SendLinkAnalytics(ctx context.Context, shortDate string
 
 	const retries = 3
 	for i := 0; i < retries; i++ {
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
-
-		err = kp.w.WriteMessages(ctx,
-			kafka.Message{
-				Value: json,
-			},
-		)
+		partition, offset, err := kp.producer.SendMessage(&sarama.ProducerMessage{
+			Topic: kp.topic,
+			Value: sarama.ByteEncoder(json),
+		})
 
 		// Retry writing the message
 		if err != nil {
@@ -73,6 +62,10 @@ func (kp *KafkaProducer) SendLinkAnalytics(ctx context.Context, shortDate string
 			continue
 		}
 
+		slog.Info("kafka message sent",
+			slog.Int("partition", int(partition)),
+			slog.Int("offset", int(offset)),
+		)
 		break
 	}
 
@@ -80,5 +73,5 @@ func (kp *KafkaProducer) SendLinkAnalytics(ctx context.Context, shortDate string
 }
 
 func (kp *KafkaProducer) Close() error {
-	return kp.w.Close()
+	return kp.producer.Close()
 }

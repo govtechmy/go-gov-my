@@ -40,7 +40,7 @@ func (r *RedirectMetadataRepo) GetRedirectMetadata(ctx context.Context, from tim
 		return nil, ErrFetchingRedirectMetadata
 	}
 
-	metadata := make([]repository.RedirectMetadata, res.TotalHits())
+	metadata := make([]repository.RedirectMetadata, 0)
 
 	for _, hit := range res.Hits.Hits {
 		redirectMetadata := repository.RedirectMetadata{}
