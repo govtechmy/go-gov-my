@@ -32,9 +32,11 @@ func (r *RedirectMetadataRepo) GetRedirectMetadata(ctx context.Context, from tim
 		Index(REDIRECT_METADATA_INDEX).
 		Query(
 			elastic.NewRangeQuery("timestamp").
-				Gte(from).
-				Lt(to),
+				Gte(from.Format(time.RFC3339Nano)).
+				Lt(to.Format(time.RFC3339Nano)),
 		).
+		// TODO: Limit this and paginate the results
+		Size(10_000).
 		Do(ctx)
 	if err != nil {
 		return nil, ErrFetchingRedirectMetadata

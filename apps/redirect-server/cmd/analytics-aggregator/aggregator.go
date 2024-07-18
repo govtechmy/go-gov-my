@@ -12,13 +12,12 @@ type Aggregator struct {
 }
 
 func (a *Aggregator) Run(ctx context.Context, from time.Time, to time.Time) ([]LinkAnalytics, error) {
-	slog.Info("getting redirect metadata")
 	redirectMetadata, err := a.RedirectMetadataRepo.GetRedirectMetadata(ctx, from, to)
 	if err != nil {
 		return nil, err
 	}
+	slog.Info("fetched redirect metadata", slog.Int("numRedirectMetadata", len(redirectMetadata)))
 
-	slog.Info("aggregating redirect metadata")
 	linkAnalytics, err := aggregateRedirectMetadata(redirectMetadata)
 	if err != nil {
 		return nil, err
