@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"log"
 	"log/slog"
 	"os"
 	"redirect-server/repository/es"
@@ -32,15 +33,23 @@ func main() {
 
 	ctx := context.Background()
 
-	kafkaProducer := NewKafkaProducer(kafkaAddr, kafkaTopic)
-	defer kafkaProducer.Close()
+	kafkaProducer, err := NewKafkaProducer(kafkaAddr, kafkaTopic)
+	if err != nil {
+		log.Fatalf("failed to intialize kafka producer: %s", err)
+	}
+	defer func() {
+		err := kafkaProducer.Close()
+		if err != nil {
+			log.Fatalf("failed to close kafka producer: %s", err)
+		}
+	}()
 
 	esClient, err := elastic.NewSimpleClient(
 		elastic.SetURL(elasticURL),
 		elastic.SetBasicAuth(elasticUser, elasticPassword),
 	)
 	if err != nil {
-		panic(err)
+		log.Fatalf("failed to intialize elasticsearch client: %s", err)
 	}
 
 	aggregator := &Aggregator{

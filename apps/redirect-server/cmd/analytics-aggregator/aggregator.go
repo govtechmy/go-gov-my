@@ -34,6 +34,11 @@ func (a *Aggregator) Run(ctx context.Context, shortDate string, from time.Time, 
 		return err
 	}
 
-	slog.Info("analytics sent", slog.String("shortDate", shortDate))
+	slog.Info("analytics sent",
+		slog.String("shortDate", shortDate),
+		slog.Int("numAnalytics", len(linkAnalytics)),
+		slog.Time("from", from),
+		slog.Time("to", to),
+	)
 	return nil
 }
