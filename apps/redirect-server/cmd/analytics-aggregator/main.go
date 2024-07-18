@@ -53,7 +53,6 @@ func main() {
 	}
 
 	aggregator := &Aggregator{
-		OffsetPath:           offsetPath,
 		RedirectMetadataRepo: es.NewRedirectMetadataRepo(esClient),
 	}
 
@@ -80,7 +79,7 @@ func main() {
 
 		shortDate := to.Format("2006-01-02")
 
-		linkAnalytics, err := aggregator.Run(ctx, shortDate, from, to)
+		linkAnalytics, err := aggregator.Run(ctx, from, to)
 
 		if err != nil {
 			slog.Error("aggregator run failed",

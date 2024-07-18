@@ -8,11 +8,10 @@ import (
 )
 
 type Aggregator struct {
-	OffsetPath           string
 	RedirectMetadataRepo *es.RedirectMetadataRepo
 }
 
-func (a *Aggregator) Run(ctx context.Context, shortDate string, from time.Time, to time.Time) ([]LinkAnalytics, error) {
+func (a *Aggregator) Run(ctx context.Context, from time.Time, to time.Time) ([]LinkAnalytics, error) {
 	slog.Info("getting redirect metadata")
 	redirectMetadata, err := a.RedirectMetadataRepo.GetRedirectMetadata(ctx, from, to)
 	if err != nil {
