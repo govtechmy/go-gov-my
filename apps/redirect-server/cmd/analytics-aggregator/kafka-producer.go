@@ -15,10 +15,10 @@ type KafkaProducer struct {
 }
 
 type KafkaLinkAnalyticsMessage struct {
-	ShortDate     string          `json:"shortDate"`
-	From          time.Time       `json:"from"`
-	To            time.Time       `json:"to"`
-	LinkAnalytics []LinkAnalytics `json:"linkAnalytics"`
+	AggregatedDate string          `json:"aggregatedDate"`
+	From           time.Time       `json:"from"`
+	To             time.Time       `json:"to"`
+	LinkAnalytics  []LinkAnalytics `json:"linkAnalytics"`
 }
 
 func NewKafkaProducer(addr string, topic string) (*KafkaProducer, error) {
@@ -34,10 +34,10 @@ func (kp *KafkaProducer) SendLinkAnalytics(ctx context.Context, shortDate string
 	var err error
 
 	message := KafkaLinkAnalyticsMessage{
-		ShortDate:     shortDate,
-		From:          from,
-		To:            to,
-		LinkAnalytics: analytics,
+		AggregatedDate: shortDate,
+		From:           from,
+		To:             to,
+		LinkAnalytics:  analytics,
 	}
 
 	json, err := json.Marshal(message)

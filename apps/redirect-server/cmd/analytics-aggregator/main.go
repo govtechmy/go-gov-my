@@ -26,7 +26,7 @@ func main() {
 		flag.StringVar(&elasticUser, "elastic-user", "elastic", "Elasticsearch username")
 		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
 		flag.StringVar(&kafkaAddr, "kafka-addr", "localhost:9092", "Kafka address")
-		flag.StringVar(&kafkaTopic, "kafka-topic", "link-analytics", "Kafka topic")
+		flag.StringVar(&kafkaTopic, "kafka-topic", "link_analytics", "Kafka topic")
 		flag.StringVar(&offsetPath, "offset-path", "./analytics-aggregator-offset", "Analytics aggregator offset")
 	}
 	flag.Parse()
