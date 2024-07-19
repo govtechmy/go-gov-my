@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -86,6 +87,9 @@ func main() {
 	// todo: logger handler
 	// todo: metrics handler
 	// todo: err handler
+
+	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {io.WriteString(w, "OK")})
+	
 	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		slug := strings.TrimPrefix(r.URL.Path, "/")
