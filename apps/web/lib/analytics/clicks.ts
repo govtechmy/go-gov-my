@@ -2,10 +2,8 @@ import z from "@/lib/zod";
 import { headers } from "next/headers";
 import { prisma } from "../prisma";
 import { clickAnalyticsQuerySchema } from "../zod/schemas/analytics";
-import { AnalyticsEndpoints } from "./types";
-import Clicks from "@/ui/analytics/clicks";
 import { INTERVAL_DATA } from "./constants";
-import { getDaysDifference } from "@dub/utils";
+import { AnalyticsEndpoints } from "./types";
 
 export const getClicks = async (
   props: z.infer<typeof clickAnalyticsQuerySchema> & {
@@ -65,19 +63,18 @@ export const getClicks = async (
     return clone;
   }
 
-  let granularity: "minute" | "hour" | "day" | "month" = "day"; 
+  let granularity: "minute" | "hour" | "day" | "month" = "day";
   // const startDate: Date | String = new Date().toISOString().split('T')[0]  // fast way to get YYYY-MM-DD
-  // const endDate: Date | String = new Date().toISOString().split('T')[0]  
+  // const endDate: Date | String = new Date().toISOString().split('T')[0]
 
   if (interval === "24h") {
-    start = new Date()
-    end = new Date()
+    start = new Date();
+    end = new Date();
   } else {
-    start = INTERVAL_DATA[interval].startDate
+    start = INTERVAL_DATA[interval].startDate;
     end = new Date(Date.now());
     granularity = INTERVAL_DATA[interval].granularity;
   }
-
 
   // swap start and end if start is greater than end
   if (start > end) {
@@ -87,131 +84,139 @@ export const getClicks = async (
   // find the links and put it in an array string[]
   const links = await prisma.link.findMany({
     where: {
-      projectId: workspaceId
+      projectId: workspaceId,
     },
     select: {
-      id: true
-    }
-  })
-  const linkList = links.map((link)=>link.id)
+      id: true,
+    },
+  });
+  const linkList = links.map((link) => link.id);
   // find the relevant metadata for the links
   const analytics = await prisma.analytics.findMany({
     where: {
       AND: [
         { linkId: { in: linkList } },
-        { shortDate: {
-          gte: start
-        }},
-        { shortDate: {
-          lte: end
-        }}
-      ]
+        {
+          shortDate: {
+            gte: start,
+          },
+        },
+        {
+          shortDate: {
+            lte: end,
+          },
+        },
+      ],
     },
     select: {
       linkId: true,
       shortDate: true,
-      metadata: true
-    }
-  })
+      metadata: true,
+    },
+  });
 
   // for total clicks, we return just the value;
   // everything else we return an array of values
   if (endpoint === "count") {
-    const totalCount = analytics.reduce((accumulator, row)=>{
+    const totalCount = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata;
-      if (metadata?.total && !isNaN(metadata?.total)) return accumulator += metadata?.total
-      return accumulator
-    }, 0)
+      if (metadata?.total && !isNaN(metadata?.total))
+        return (accumulator += metadata?.total);
+      return accumulator;
+    }, 0);
     return totalCount;
   }
 
   if (endpoint === "countries") {
-    const countries = analytics.reduce((accumulator, row)=>{
+    const countries = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata;
-      if (metadata?.countryCode) return sumTwoObj(accumulator, metadata?.countryCode)
-      return accumulator
-    }, {})
-    return Object.keys(countries).map(key=>{
-      return {"country": key, "clicks": countries[key]}
-    })
+      if (metadata?.countryCode)
+        return sumTwoObj(accumulator, metadata?.countryCode);
+      return accumulator;
+    }, {});
+    return Object.keys(countries).map((key) => {
+      return { country: key, clicks: countries[key] };
+    });
   }
 
   if (endpoint === "top_links") {
     if (!workspaceId) {
       throw Error("failed to get top links, missing 'workspaceId'");
     }
-    const top_links = analytics.reduce((accumulator, row)=>{
+    const top_links = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata;
-        if (!isNaN(metadata?.total) && row?.linkId in accumulator) { 
-          accumulator[row?.linkId] += metadata?.total
-          return accumulator
-        }
-        accumulator[row?.linkId] = metadata?.total || 0;
-        return accumulator
-    }, {})
+      if (!isNaN(metadata?.total) && row?.linkId in accumulator) {
+        accumulator[row?.linkId] += metadata?.total;
+        return accumulator;
+      }
+      accumulator[row?.linkId] = metadata?.total || 0;
+      return accumulator;
+    }, {});
 
-    return Object.keys(top_links).map(key=>{
-      return {"link": key, "clicks": top_links[key]}
-    })
+    return Object.keys(top_links).map((key) => {
+      return { link: key, clicks: top_links[key] };
+    });
   }
 
   if (endpoint === "referers") {
-    const referers = analytics.reduce((accumulator, row)=>{
+    const referers = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata;
-      if (metadata?.referer) return sumTwoObj(accumulator, metadata?.referer)
-      return accumulator
-    }, {})
-    return Object.keys(referers).map(key=>{
-      return {"referer": key, "clicks": referers[key]}
-    })
+      if (metadata?.referer) return sumTwoObj(accumulator, metadata?.referer);
+      return accumulator;
+    }, {});
+    return Object.keys(referers).map((key) => {
+      return { referer: key, clicks: referers[key] };
+    });
   }
 
   if (endpoint === "devices") {
-    const devices = analytics.reduce((accumulator, row)=>{
+    const devices = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata;
-      if (metadata?.deviceType) return sumTwoObj(accumulator, metadata?.deviceType)
-      return accumulator
-    }, {})
-    return Object.keys(devices).map(key=>{
-      return {"device": key.toUpperCase(), "clicks": devices[key]}
-    })
+      if (metadata?.deviceType)
+        return sumTwoObj(accumulator, metadata?.deviceType);
+      return accumulator;
+    }, {});
+    return Object.keys(devices).map((key) => {
+      return { device: key.toUpperCase(), clicks: devices[key] };
+    });
   }
 
   if (endpoint === "browsers") {
-    const browsers = analytics.reduce((accumulator, row)=>{
+    const browsers = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata;
-      if (metadata?.browser) return sumTwoObj(accumulator, metadata?.browser)
-      return accumulator
-    }, {})
-    return Object.keys(browsers).map(key=>{
-      return {"browser": key, "clicks": browsers[key]}
-    })
+      if (metadata?.browser) return sumTwoObj(accumulator, metadata?.browser);
+      return accumulator;
+    }, {});
+    return Object.keys(browsers).map((key) => {
+      return { browser: key, clicks: browsers[key] };
+    });
   }
 
   if (endpoint === "os") {
-    const os = analytics.reduce((accumulator, row)=>{
+    const os = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata;
-      if (metadata?.operatingSystem) return sumTwoObj(accumulator, metadata?.operatingSystem)
-      return accumulator
-    }, {})
-    return Object.keys(os).map(key=>{
-      return {"os": key, "clicks": os[key]}
-    })
+      if (metadata?.operatingSystem)
+        return sumTwoObj(accumulator, metadata?.operatingSystem);
+      return accumulator;
+    }, {});
+    return Object.keys(os).map((key) => {
+      return { os: key, clicks: os[key] };
+    });
   }
 
   if (endpoint === "timeseries") {
-    const timeseries = analytics.reduce((accumulator, row)=>{
+    const timeseries = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata;
       if (row?.shortDate in accumulator) {
         accumulator[row?.shortDate] += metadata?.total;
-        return accumulator
+        return accumulator;
       }
-      accumulator[row?.shortDate] = metadata?.total
-      return accumulator
-    }, {})
-    return Object.keys(timeseries).map(key=>{
-      return {"start": key, "clicks": timeseries[key]}
-    })
+      accumulator[row?.shortDate] = metadata?.total;
+      return accumulator;
+    }, {});
+    return Object.keys(timeseries).map((key) => {
+      return { start: key, clicks: timeseries[key] };
+    });
   }
 
   // return no data for other endpoints for now

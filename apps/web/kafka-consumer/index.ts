@@ -5,8 +5,7 @@ import { z } from "zod";
 const OUTBOX_TOPIC =
   process.env.OUTBOX_TOPIC || "ps-postgres.public.WebhookOutbox";
 
-const ANALYTIC_TOPIC =
-  process.env.ANALYTIC_TOPIC || "link_analytics";
+const ANALYTIC_TOPIC = process.env.ANALYTIC_TOPIC || "link_analytics";
 
 const OutboxSchema = z.object({
   id: z.string().min(1),
@@ -146,95 +145,94 @@ async function main() {
         return;
       }
 
-      const data = JSON.parse(message?.value?.toString("utf8") || "{}")
+      const data = JSON.parse(message?.value?.toString("utf8") || "{}");
       const shortDate = data?.shortDate;
       const from = data?.from;
       const to = data?.to;
 
       function consumeAnalytics(link, shortDate: Date, from: Date, to: Date) {
-        const dataObject = JSON.parse(JSON.stringify(link)) // deep clone
-        delete dataObject?.linkId
+        const dataObject = JSON.parse(JSON.stringify(link)); // deep clone
+        delete dataObject?.linkId;
         return {
-            "shortDate": new Date(shortDate),
-            "linkId": link?.linkId,
-            "from": from,
-            "to": to,
-            "metadata": dataObject
-        }
+          shortDate: new Date(shortDate),
+          linkId: link?.linkId,
+          from: from,
+          to: to,
+          metadata: dataObject,
+        };
       }
 
       function sumTwoObj(obj1, obj2) {
-        const clone = {}  // deep clone
+        const clone = {}; // deep clone
         for (const key in obj1) {
-            if (obj1.hasOwnProperty(key)) {
-                clone[key] = obj1[key];
-            }
+          if (obj1.hasOwnProperty(key)) {
+            clone[key] = obj1[key];
+          }
         }
         for (const key in obj2) {
-            if (obj2.hasOwnProperty(key)) {
-                if (typeof obj2[key] === "number") {
-                    if (clone.hasOwnProperty(key)) {
-                        clone[key] += obj2[key];
-                    } else {
-                        clone[key] = obj2[key];
-                    }
-                } else if (typeof obj2[key] === "object") {
-                    clone[key] = sumTwoObj(obj2[key], clone[key])
-                }
+          if (obj2.hasOwnProperty(key)) {
+            if (typeof obj2[key] === "number") {
+              if (clone.hasOwnProperty(key)) {
+                clone[key] += obj2[key];
+              } else {
+                clone[key] = obj2[key];
+              }
+            } else if (typeof obj2[key] === "object") {
+              clone[key] = sumTwoObj(obj2[key], clone[key]);
             }
+          }
         }
-        return clone
+        return clone;
       }
-    
-      data?.linkAnalytics?.forEach(async(link)=> {
+
+      data?.linkAnalytics?.forEach(async (link) => {
         const row = await prisma.analytics.findMany({
           where: {
             AND: [
               {
-                shortDate: new Date(shortDate)
+                shortDate: new Date(shortDate),
               },
               {
                 linkId: {
-                  equals: link?.linkId
-                }
-              }
-            ]
+                  equals: link?.linkId,
+                },
+              },
+            ],
           },
-          take: 1
-        })
+          take: 1,
+        });
         if (row.length > 0) {
-            const metaDataFromDb = row[0]?.metadata
-            const combineMetaData = sumTwoObj(metaDataFromDb,  consumeAnalytics(link, shortDate, from, to)?.metadata)
-            try {
-                await prisma.analytics.update({
-                    where: {
-                    id: row[0].id
-                    },
-                    data: {
-                        metadata: combineMetaData,
-                        from: from,
-                        to: to,
-                    }
-                })
-            } catch(error) {
-              console.log("error", error)
-            }
-    
+          const metaDataFromDb = row[0]?.metadata;
+          const combineMetaData = sumTwoObj(
+            metaDataFromDb,
+            consumeAnalytics(link, shortDate, from, to)?.metadata,
+          );
+          try {
+            await prisma.analytics.update({
+              where: {
+                id: row[0].id,
+              },
+              data: {
+                metadata: combineMetaData,
+                from: from,
+                to: to,
+              },
+            });
+          } catch (error) {
+            console.log("error", error);
+          }
         } else {
           // INSERT FRESH ROW
           try {
             await prisma.analytics.create({
-              data: consumeAnalytics(link, shortDate, from, to)
-            }) 
-          } catch(error) {
-            console.log("error", error)
+              data: consumeAnalytics(link, shortDate, from, to),
+            });
+          } catch (error) {
+            console.log("error", error);
           }
         }
-      })
-    }
-     
-
-
+      });
+    },
   });
 }
 

@@ -10,7 +10,7 @@ const data = {
       total: 3235,
       countryCode: {
         MY: 3235,
-        TH: {}
+        TH: {},
       },
       deviceType: {
         desktop: 1578,
