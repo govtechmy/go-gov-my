@@ -201,6 +201,7 @@ go-gov-my
 # Application Dashboard: Port 8888
 # Administrator Dashbaord: Port 8888 with sub-domain {{admin.localhot:8888}}
 # Redirect Server: Port 3000
+# Redirect Server API (Internal): Port 3002
 # Documentation App: Port 3334
 
 ----- Services -----
