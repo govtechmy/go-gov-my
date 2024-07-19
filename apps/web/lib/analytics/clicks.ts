@@ -214,6 +214,8 @@ export const getClicks = async (
       accumulator[row?.aggregatedDate] = metadata?.total;
       return accumulator;
     }, {});
+    if (JSON.stringify(timeseries) === "{}")
+      return [{ start: new Date(), clicks: 0 }];
     return Object.keys(timeseries).map((key) => {
       return { start: key, clicks: timeseries[key] };
     });
