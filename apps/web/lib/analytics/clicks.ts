@@ -97,12 +97,12 @@ export const getClicks = async (
       AND: [
         { linkId: { in: linkList } },
         {
-          shortDate: {
+          aggregatedDate: {
             gte: start,
           },
         },
         {
-          shortDate: {
+          aggregatedDate: {
             lte: end,
           },
         },
@@ -110,7 +110,7 @@ export const getClicks = async (
     },
     select: {
       linkId: true,
-      shortDate: true,
+      aggregatedDate: true,
       metadata: true,
     },
   });
@@ -207,11 +207,11 @@ export const getClicks = async (
   if (endpoint === "timeseries") {
     const timeseries = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata;
-      if (row?.shortDate in accumulator) {
-        accumulator[row?.shortDate] += metadata?.total;
+      if (row?.aggregatedDate in accumulator) {
+        accumulator[row?.aggregatedDate] += metadata?.total;
         return accumulator;
       }
-      accumulator[row?.shortDate] = metadata?.total;
+      accumulator[row?.aggregatedDate] = metadata?.total;
       return accumulator;
     }, {});
     return Object.keys(timeseries).map((key) => {

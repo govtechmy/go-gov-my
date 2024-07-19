@@ -397,12 +397,12 @@ model jackson_ttl {
 }
 
 model Analytics {
-  id         String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  linkId     String
-  from       DateTime
-  to         DateTime
-  shortDate  DateTime   @db.Date
-  metadata   Json       @db.Json
-  createdAt  DateTime   @default(now()) @db.Timestamptz
-  updatedAt  DateTime   @updatedAt
+  id                    String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  linkId                String
+  from                  DateTime
+  to                    DateTime
+  aggregatedDate        DateTime   @db.Date
+  metadata              Json       @db.Json
+  createdAt             DateTime   @default(now()) @db.Timestamptz
+  updatedAt             DateTime   @updatedAt
 }

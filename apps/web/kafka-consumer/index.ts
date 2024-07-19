@@ -146,15 +146,20 @@ async function main() {
       }
 
       const data = JSON.parse(message?.value?.toString("utf8") || "{}");
-      const shortDate = data?.shortDate;
+      const aggregatedDate = data?.aggregatedDate;
       const from = data?.from;
       const to = data?.to;
 
-      function consumeAnalytics(link, shortDate: Date, from: Date, to: Date) {
+      function consumeAnalytics(
+        link,
+        aggregatedDate: Date,
+        from: Date,
+        to: Date,
+      ) {
         const dataObject = JSON.parse(JSON.stringify(link)); // deep clone
         delete dataObject?.linkId;
         return {
-          shortDate: new Date(shortDate),
+          aggregatedDate: new Date(aggregatedDate),
           linkId: link?.linkId,
           from: from,
           to: to,
@@ -190,7 +195,7 @@ async function main() {
           where: {
             AND: [
               {
-                shortDate: new Date(shortDate),
+                aggregatedDate: new Date(aggregatedDate),
               },
               {
                 linkId: {
@@ -205,7 +210,7 @@ async function main() {
           const metaDataFromDb = row[0]?.metadata;
           const combineMetaData = sumTwoObj(
             metaDataFromDb,
-            consumeAnalytics(link, shortDate, from, to)?.metadata,
+            consumeAnalytics(link, aggregatedDate, from, to)?.metadata,
           );
           try {
             await prisma.analytics.update({
@@ -225,7 +230,7 @@ async function main() {
           // INSERT FRESH ROW
           try {
             await prisma.analytics.create({
-              data: consumeAnalytics(link, shortDate, from, to),
+              data: consumeAnalytics(link, aggregatedDate, from, to),
             });
           } catch (error) {
             console.log("error", error);

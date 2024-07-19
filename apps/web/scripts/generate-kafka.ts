@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 
 const data = {
-  shortDate: "2024-07-17",
+  aggregatedDate: "2024-07-17",
   from: "2024-07-17T13:11:39+08:00",
   to: "2024-07-17T13:51:04.455631+08:00",
   linkAnalytics: [
@@ -70,7 +70,7 @@ const data = {
 };
 
 type KafkaData = {
-  shortDate: Date;
+  aggregatedDate: Date;
   from: Date;
   to: Date;
   linkAnalytics: AnalyticsType[];
@@ -98,14 +98,14 @@ interface AnalyticsType {
 
 function consumeAnalytics(
   link: AnalyticsType,
-  shortDate: Date,
+  aggregatedDate: Date,
   from: Date,
   to: Date,
 ) {
   const dataObject = JSON.parse(JSON.stringify(link)); // deep clone
   delete dataObject?.linkId;
   return {
-    shortDate: new Date(shortDate),
+    aggregatedDate: new Date(aggregatedDate),
     linkId: link?.linkId,
     from: from,
     to: to,
@@ -140,7 +140,7 @@ async function main(data) {
   const message = {
     value: data,
   };
-  const shortDate = message?.value?.shortDate;
+  const aggregatedDate = message?.value?.aggregatedDate;
   const from = message?.value?.from;
   const to = message?.value?.to;
 
@@ -149,7 +149,7 @@ async function main(data) {
       where: {
         AND: [
           {
-            shortDate: new Date(shortDate),
+            aggregatedDate: new Date(aggregatedDate),
           },
           {
             linkId: {
@@ -167,7 +167,7 @@ async function main(data) {
       console.log("metaData", metaData);
       const combine = sumTwoObj(
         metaData,
-        consumeAnalytics(link, shortDate, from, to)?.metadata,
+        consumeAnalytics(link, aggregatedDate, from, to)?.metadata,
       );
       console.log("combine", combine);
       try {
@@ -189,7 +189,7 @@ async function main(data) {
       // INSERT FRESH ROW
       try {
         await prisma.analytics.create({
-          data: consumeAnalytics(link, shortDate, from, to),
+          data: consumeAnalytics(link, aggregatedDate, from, to),
         });
       } catch (error) {
         console.log("error", error);
