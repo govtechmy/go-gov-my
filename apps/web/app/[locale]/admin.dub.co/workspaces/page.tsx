@@ -104,7 +104,7 @@ export default function Page() {
   );
 }
 
-export const SearchInput = (props: {
+const SearchInput = (props: {
   value: string;
   onChange: (val: string) => void;
   onClear: () => void;
