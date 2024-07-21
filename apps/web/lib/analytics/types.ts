@@ -1,3 +1,4 @@
+import { JsonValue } from "@prisma/client/runtime/library";
 import { intervals } from "./constants";
 
 export type IntervalProps = (typeof intervals)[number];
@@ -15,3 +16,24 @@ export type AnalyticsEndpoints =
 export type LocationTabs = "countries" | "cities";
 export type TopLinksTabs = "link" | "url";
 export type DeviceTabs = "devices" | "browsers" | "os";
+
+export type ObjectProps = {
+  [key: string]: number | ObjectProps
+}
+
+export type MetadataProps = {
+  total: number,
+  [key: string]: number | ObjectProps
+}
+
+export type AnalyticProps = {
+  linkId: String,
+  aggregatedDate: Date,
+  metadata: MetadataProps
+}
+
+export type AnalyticFromDBProps = {
+  linkId: string,
+  aggregatedDate: Date,
+  metadata: JsonValue
+}[]
