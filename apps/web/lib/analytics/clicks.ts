@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { prisma } from "../prisma";
 import { clickAnalyticsQuerySchema } from "../zod/schemas/analytics";
 import { INTERVAL_DATA } from "./constants";
-import { AnalyticsEndpoints } from "./types";
+import { AnalyticFromDBProps, AnalyticProps, AnalyticsEndpoints, MetadataProps } from "./types";
 
 export const getClicks = async (
   props: z.infer<typeof clickAnalyticsQuerySchema> & {
@@ -92,7 +92,7 @@ export const getClicks = async (
   });
   const linkList = links.map((link) => link.id);
   // find the relevant metadata for the links
-  const analytics = await prisma.analytics.findMany({
+  const analytics: AnalyticFromDBProps = await prisma.analytics.findMany({
     where: {
       AND: [
         { linkId: { in: linkList } },
@@ -119,7 +119,7 @@ export const getClicks = async (
   // everything else we return an array of values
   if (endpoint === "count") {
     const totalCount = analytics.reduce((accumulator, row) => {
-      const metadata = row?.metadata;
+      const metadata = row?.metadata as MetadataProps;
       if (metadata?.total && !isNaN(metadata?.total))
         return (accumulator += metadata?.total);
       return accumulator;
@@ -129,7 +129,7 @@ export const getClicks = async (
 
   if (endpoint === "countries") {
     const countries = analytics.reduce((accumulator, row) => {
-      const metadata = row?.metadata;
+      const metadata = row?.metadata as MetadataProps;
       if (metadata?.countryCode)
         return sumTwoObj(accumulator, metadata?.countryCode);
       return accumulator;
@@ -144,7 +144,7 @@ export const getClicks = async (
       throw Error("failed to get top links, missing 'workspaceId'");
     }
     const top_links = analytics.reduce((accumulator, row) => {
-      const metadata = row?.metadata;
+      const metadata = row?.metadata as MetadataProps;
       if (!isNaN(metadata?.total) && row?.linkId in accumulator) {
         accumulator[row?.linkId] += metadata?.total;
         return accumulator;
@@ -160,7 +160,7 @@ export const getClicks = async (
 
   if (endpoint === "referers") {
     const referers = analytics.reduce((accumulator, row) => {
-      const metadata = row?.metadata;
+      const metadata = row?.metadata as MetadataProps;
       if (metadata?.referer) return sumTwoObj(accumulator, metadata?.referer);
       return accumulator;
     }, {});
@@ -171,7 +171,7 @@ export const getClicks = async (
 
   if (endpoint === "devices") {
     const devices = analytics.reduce((accumulator, row) => {
-      const metadata = row?.metadata;
+      const metadata = row?.metadata as MetadataProps;
       if (metadata?.deviceType)
         return sumTwoObj(accumulator, metadata?.deviceType);
       return accumulator;
@@ -183,7 +183,7 @@ export const getClicks = async (
 
   if (endpoint === "browsers") {
     const browsers = analytics.reduce((accumulator, row) => {
-      const metadata = row?.metadata;
+      const metadata = row?.metadata as MetadataProps;
       if (metadata?.browser) return sumTwoObj(accumulator, metadata?.browser);
       return accumulator;
     }, {});
@@ -194,7 +194,7 @@ export const getClicks = async (
 
   if (endpoint === "os") {
     const os = analytics.reduce((accumulator, row) => {
-      const metadata = row?.metadata;
+      const metadata = row?.metadata as MetadataProps;
       if (metadata?.operatingSystem)
         return sumTwoObj(accumulator, metadata?.operatingSystem);
       return accumulator;
@@ -206,12 +206,12 @@ export const getClicks = async (
 
   if (endpoint === "timeseries") {
     const timeseries = analytics.reduce((accumulator, row) => {
-      const metadata = row?.metadata;
-      if (row?.aggregatedDate in accumulator) {
-        accumulator[row?.aggregatedDate] += metadata?.total;
+      const metadata = row?.metadata  as MetadataProps;
+      if (row?.aggregatedDate.toString() in accumulator) {
+        accumulator[row?.aggregatedDate.toString()] += metadata?.total;
         return accumulator;
       }
-      accumulator[row?.aggregatedDate] = metadata?.total;
+      accumulator[row?.aggregatedDate.toString()] = metadata?.total;
       return accumulator;
     }, {});
     if (JSON.stringify(timeseries) === "{}")
