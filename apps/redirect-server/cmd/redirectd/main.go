@@ -24,6 +24,10 @@ import (
 	"go.uber.org/zap"
 )
 
+type WaitPageProps struct {
+	URL string
+}
+
 func main() {
 	loggerConfig := zap.NewProductionConfig()
 	loggerConfig.OutputPaths = []string{"stdout"}
@@ -130,7 +134,13 @@ func main() {
 			zap.Object("redirectMetadata", redirectMetadata),
 		)
 
-		if err := t.ExecuteTemplate(w, "wait.html", link); err != nil {
+		// Do not use link.URL, use redirectMetadata.LinkURL instead.
+		// Redirect URL could be a geo-specific/ios/android link.
+		redirectURL := redirectMetadata.LinkURL
+
+		if err := t.ExecuteTemplate(w, "wait.html", WaitPageProps{
+			URL: redirectURL,
+		}); err != nil {
 			logger.Error("failed to execute template", zap.Error(err))
 		}
 	}), "handleLinkVisit"))
