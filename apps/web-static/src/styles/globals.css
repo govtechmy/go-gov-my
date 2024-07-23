@@ -1,0 +1,245 @@
+/* src/styles/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  font-family: "poppins-medium";
+  color: rgb(var(--foreground-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.font-Poppins {
+  font-family: 'Poppins';
+}
+
+@media only screen and (max-width: 800px) {
+  .responsive {
+    flex-direction: column;
+  }
+}
+
+@media only screen and (min-width: 800px) {
+  .responsive {
+    flex-direction: row;
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+}
+
+@media only screen and (max-width: 1210px) {
+  .responsive2 {
+    flex-direction: column;
+    gap: 20px 0;
+    justify-content: center;
+  }
+}
+
+@media only screen and (min-width: 1210px) {
+  .responsive2 {
+    flex-direction: row;
+    justify-content: flex-start;
+    button:nth-child(2) {
+      margin-left: 20px;
+    }
+  }
+}
+
+.fadeInEffect {
+  animation: fadeInAnimation ease 5s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+.fadeInEffect-alt {
+  animation: fadeInAnimation-alt ease 5s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+
+@keyframes fadeInAnimation {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+}
+
+@keyframes fadeInAnimation-alt {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* .moveUp {
+  animation-name:
+    moveUp, moveUp2;
+  animation-duration:
+    5000ms, 5000ms;
+  animation-timing-function:
+    ease-in, ease-out;
+  animation-iteration-count:
+    infinite, infinite
+} */
+
+.secUrl {
+  animation: secUrl 10s infinite;
+}
+
+.secLink {
+  animation: secLink 10s infinite;
+}
+
+.linkSecured {
+  animation: linkSecured 10s infinite;
+}
+
+@keyframes secUrl {
+  0% {
+    bottom: 0px;
+    left: 20%;
+  }
+  10% {
+    bottom: 40%;
+    left: 20%;
+  }
+  20% {
+    bottom: 40%;
+    left: 20%;
+  }
+  35% {
+    bottom: 10%;
+    left: 20%;
+  }
+  50% {
+    bottom: 10%;
+    left: 20%;
+  }
+  65% {
+    bottom: 10%;
+    left: 20%;
+  }
+  70% {
+    bottom: -70px;
+    left: 20%;
+  }
+  100% {
+    bottom: -70px;
+    left: 20%;
+  }
+}
+
+@keyframes secLink {
+  0% {
+    width: 0px;
+    bottom: 40%;
+    left: 30%;
+  }
+  50% {
+    width: 0%;
+    bottom: 40%;
+  }
+  60% {
+    width: 100%;
+    bottom: 40%;
+  }
+  85% {
+    width: 100%;
+    bottom: 15%;
+  }
+  100% {
+    width: 100%;
+    bottom: -100%;
+  }
+}
+
+@keyframes linkSecured {
+  0% {
+    top: -30%;
+    left: 30%;
+  }
+  60% {
+    top: -30%;
+    left: 30%;
+  }
+  85% {
+    top: 30%
+  }
+  100% {
+    top: 110%
+  }
+}
+
+@keyframes magnifyingGlass {
+  0% {
+    bottom: -10%;
+    right: -50%;
+  }
+  35% {
+    bottom: -10%;
+    right: -50%;
+  }
+  65% {
+    bottom: -10%;
+    right: 50%;
+  }
+  100% {
+    right: 50%;
+    bottom: -100%;
+  }
+}
+
+.img-magnifier-container {
+  border: 1px solid #c9c8c3;
+  border-radius: 50%;
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  background: transparent;
+  animation: magnifyingGlass 10s infinite;
+  right: -50%;
+  bottom: -10%;
+}
+
+@font-face {
+  font-family: 'poppins-medium';
+  src: url('/font/Poppins/Poppins-Medium.ttf');
+}
+
+.font-poppins-med {
+  font-family: "poppins-medium";
+}
+
+@font-face {
+  font-family: 'inter-medium';
+  src: url('/font/Inter/Inter-Medium.ttf');
+}
+
+.font-inter-med {
+  font-family: "inter-medium";
+}
