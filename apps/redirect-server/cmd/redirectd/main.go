@@ -25,7 +25,9 @@ import (
 )
 
 func main() {
-	logger := zap.Must(zap.NewProduction())
+	loggerConfig := zap.NewProductionConfig()
+	loggerConfig.OutputPaths = []string{"stdout"}
+	logger := zap.Must(loggerConfig.Build())
 
 	// golang-lint mentioned it should check for err
 	defer func() {
@@ -88,8 +90,8 @@ func main() {
 	// todo: metrics handler
 	// todo: err handler
 
-	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {io.WriteString(w, "OK")})
-	
+	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) { io.WriteString(w, "OK") })
+
 	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		slug := strings.TrimPrefix(r.URL.Path, "/")
