@@ -49,7 +49,7 @@ const LandingPage = () => {
           </div>
           <div className="font-inter-med text-center text-[14px]">
             with official email from
-            <span className="rounded border-[1px] border-[#E4E4E7]">@mohe</span>
+            <span className="rounded border-[1px] border-[#E4E4E7] px-1 mx-1 py-1 ">@mohe</span>
             .gov.my
           </div>
           <div className="responsive font-inter-med flex flex-row justify-between">
@@ -92,14 +92,14 @@ const LandingPage = () => {
           Here's the data and stats from our products
         </div>
         <div className="responsive flex flex-row p-6">
-          <div className="mx-6 my-8 flex-1 items-center justify-center rounded-[19px] border-[0.5px] border-[#E4E4E7] p-8">
+          <div className="mx-6 my-8 flex-1 items-center justify-center rounded-[16px] border-[0.5px] border-[#E4E4E7] p-8">
             <div className="flex flex-col items-center text-center">
-              <Stats name="PUBLIC OFFICERS" number="126,065" />
-              <Stats name="LINKS CREATED" number="7,875,789" />
-              <Stats name="CLICKS SERVED" number="7,651,587" />
+              <Stats name="PUBLIC OFFICERS" img_path="/images/home/GovMy.png" number="126,065" />
+              <Stats name="LINKS CREATED" img_path="/images/home/Link.png" number="7,875,789" />
+              <Stats name="CLICKS SERVED" img_path="/images/home/Vector.png" number="7,651,587" />
             </div>
           </div>
-          <div className="mx-6 my-8 flex-[4] rounded-[19px] border-[0.5px] border-[#E4E4E7] p-8">
+          <div className="mx-6 my-8 flex-[4] rounded-[16px] border-[0.5px] border-[#E4E4E7] p-8">
             <img src="/images/home/chart.png" className="m-auto" />
           </div>
         </div>
@@ -130,12 +130,12 @@ const LandingPage = () => {
 };
 export default LandingPage;
 
-const Stats = ({ name, number }: { name: string; number: string }) => {
+const Stats = ({ name, number, img_path }: { name: string; number: string; img_path: string }) => {
   return (
     <>
-      <div className="leading-20px font-inter-med text-[14px] font-semibold text-[#2563EB]">
-        {name.toUpperCase()}
-        <div className="font-poppins-med mb-8 mt-2 text-[36px] font-semibold leading-[44px] text-[#18181B]">
+      <div className="leading-20px font-inter-med text-[14px] leading-[12px] tracking-[0.1rem] font-semibold text-[#2563EB] ">
+        <div className="flex flex-row gap-4 items-center"><img src={img_path} />{name.toUpperCase()}</div>
+        <div className="font-poppins-med mb-8 mt-2 text-[36px] font-semibold leading-[44px] text-left text-[#18181B]">
           {number}
         </div>
       </div>
@@ -155,14 +155,14 @@ const Card = ({
   img_path: string;
 }) => {
   return (
-    <div className="font-inter-med my-2 flex-1">
-      <div className="my-12">
+    <div className="font-inter-med my-10 flex-1">
+      <div className="my-6">
         <img src={img_path} className="m-auto" />
       </div>
       <div className="my-2 text-center text-[16px] font-semibold leading-[24px] text-[#1D4ED8]">
         {title}
       </div>
-      <div className="break-word my-2 text-center text-[14px] leading-[20px] text-[#27272A]">
+      <div className="break-word my-2 text-center text-[14px] leading-[20px] text-[#27272A] font-normal">
         <p>{line1}</p>
         <p>{line2}</p>
       </div>
