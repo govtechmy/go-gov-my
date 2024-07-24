@@ -20,7 +20,7 @@ const LandingPage = () => {
               go.gov.my
             </span>{" "}
             short links can only be created by public officers, so you can be
-            sure it's from a trustworthy source.
+            sure it&apos;s from a trustworthy source.
           </div>
           <div className="responsive2 mt-4 flex flex-row">
             <CreateLinkBtn />
@@ -91,7 +91,7 @@ const LandingPage = () => {
           Our performance so far
         </div>
         <div className="font-inter-med mt-[30px] text-center text-[14px] font-normal leading-[20px]">
-          Here's the data and stats from our products
+          Here&apos;s the data and stats from our products
         </div>
         <div className="responsive flex flex-row p-6">
           <div className="mx-6 my-8 flex-1 items-center justify-center rounded-[16px] border-[0.5px] border-[#E4E4E7] p-8">
