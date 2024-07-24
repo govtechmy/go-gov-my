@@ -2,10 +2,12 @@ import AnimatedTitle from "@/ui/home/AnimatedTitle";
 import CreateLinkBtn from "./CreateLinkBtn";
 import Footer from "./Footer";
 import TopMenu from "./TopMenu";
+import Identity from "./Identity";
 
 const LandingPage = () => {
   return (
     <>
+      <Identity/>
       <TopMenu />
       <div className="responsive font-poppins-med mt-[150px] flex flex-row justify-evenly px-4 py-6">
         <div className="min-w-[150px] flex-1 py-10 pl-6 pr-10">
