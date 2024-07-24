@@ -12,6 +12,6 @@ type Link struct {
 	ExpiresAt        *time.Time        `json:"expiresAt,omitempty"`
 	Ios              string            `json:"ios,omitempty"`
 	Android          string            `json:"android,omitempty"`
-	Geo              map[string]string `json:"geo"`
+	Geo              map[string]string `json:"geo,omitempty"`
 	UploadedImageUrl string            `json:"uploadedImageUrl,omitempty"`
 }
