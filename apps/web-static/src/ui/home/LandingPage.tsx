@@ -59,13 +59,13 @@ const LandingPage = () => {
               title="Anti-phishing"
               line1="Use go.gov.my to shorten links, ensuring they"
               line2="are trusted and official."
-              img_path="/images/home/thumbsup.png"
+              img_path="images/home/thumbsup.png"
             />
             <Card
               title="Customized"
               line1="Shorten and share links to save space and "
               line2="make them easier to remember."
-              img_path="/images/home/customized.png"
+              img_path="images/home/customized.png"
             />
           </div>
           <div className="responsive flex flex-row justify-between">
@@ -73,13 +73,13 @@ const LandingPage = () => {
               title="File sharing"
               line1="Upload your file and share it with a trusted"
               line2="go.gov.my short link."
-              img_path="/images/home/filesharing.png"
+              img_path="images/home/filesharing.png"
             />
             <Card
               title="Analytics"
               line1="Track your link's click rate easily through our"
               line2="web interface."
-              img_path="/images/home/analytics.png"
+              img_path="images/home/analytics.png"
             />
           </div>
         </div>
@@ -96,20 +96,20 @@ const LandingPage = () => {
         <div className="responsive flex flex-row p-6">
           <div className="mx-6 my-8 flex-1 items-center justify-center rounded-[16px] border-[0.5px] border-[#E4E4E7] p-8">
             <div className="flex flex-col items-center text-center">
-              <Stats name="PUBLIC OFFICERS" img_path="/images/home/GovMy.png" number="126,065" />
-              <Stats name="LINKS CREATED" img_path="/images/home/Link.png" number="7,875,789" />
-              <Stats name="CLICKS SERVED" img_path="/images/home/Vector.png" number="7,651,587" />
+              <Stats name="PUBLIC OFFICERS" img_path="images/home/GovMy.png" number="126,065" />
+              <Stats name="LINKS CREATED" img_path="images/home/Link.png" number="7,875,789" />
+              <Stats name="CLICKS SERVED" img_path="images/home/Vector.png" number="7,651,587" />
             </div>
           </div>
           <div className="mx-6 my-8 flex-[4] rounded-[16px] border-[0.5px] border-[#E4E4E7] p-8">
-            <img src="/images/home/chart.png" className="m-auto" />
+            <img src="images/home/chart.png" className="m-auto" />
           </div>
         </div>
       </div>
       <div className="mb-[70px] text-center">
         <div className="">
           <img
-            src="/images/home/GoGovMY.png"
+            src="images/home/GoGovMY.png"
             className="m-auto inline-block p-2"
           />
           <span className="font-poppins-med font-bold">GoGovMy</span>
