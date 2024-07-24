@@ -2,6 +2,6 @@
 
 module.exports = {
   output: "export",
-  basePath: '/out',
   reactStrictMode: true,
+  assetPrefix: "/out"
 };

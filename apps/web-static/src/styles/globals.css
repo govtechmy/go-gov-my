@@ -228,7 +228,7 @@ body {
 
 @font-face {
   font-family: 'poppins-medium';
-  src: url('font/Poppins/Poppins-Medium.ttf');
+  src: url('/font/Poppins/Poppins-Medium.ttf');
 }
 
 .font-poppins-med {
@@ -237,7 +237,7 @@ body {
 
 @font-face {
   font-family: 'inter-medium';
-  src: url('font/Inter/Inter-Medium.ttf');
+  src: url('/font/Inter/Inter-Medium.ttf');
 }
 
 .font-inter-med {
