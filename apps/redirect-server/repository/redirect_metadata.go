@@ -29,7 +29,6 @@ func NewRedirectMetadata(req http.Request, ipDB *geoip2.Reader, link Link) Redir
 	redirectMetadata := RedirectMetadata{
 		LinkID:   link.ID,
 		LinkSlug: link.Slug,
-		LinkURL:  link.URL,
 		Referer:  req.Header.Get("Referer"),
 	}
 
@@ -66,6 +65,20 @@ func NewRedirectMetadata(req http.Request, ipDB *geoip2.Reader, link Link) Redir
 			redirectMetadata.Latitude = float32(city.Location.Longitude)
 			redirectMetadata.CountryCode = city.Country.IsoCode
 		}
+	}
+
+	// Determine link URL (default, geo-specific, ios or android)
+	countryCode := redirectMetadata.CountryCode
+	os := redirectMetadata.OperatingSystem
+
+	if countryCode != "" && link.Geo != nil && link.Geo[countryCode] != "" {
+		redirectMetadata.LinkURL = link.Geo[countryCode]
+	} else if os == "iOS" && link.Ios != "" {
+		redirectMetadata.LinkURL = link.Ios
+	} else if os == "Android" && link.Android != "" {
+		redirectMetadata.LinkURL = link.Android
+	} else {
+		redirectMetadata.LinkURL = link.URL
 	}
 
 	return redirectMetadata

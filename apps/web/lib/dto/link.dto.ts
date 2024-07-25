@@ -6,6 +6,7 @@ export interface LinkDTO {
   expiresAt: Date | null; // link expiry
   ios: string | null; // for ios url redir link
   android: string | null; // for android redir link
+  geo: Record<string, string>; // geo-specific links
   createdAt: Date | null;
 }
 
@@ -18,6 +19,7 @@ export async function processDTOLink(response: any): Promise<LinkDTO> {
     expiresAt: response.expiresAt,
     ios: response.ios,
     android: response.android,
+    geo: response.geo,
     createdAt: response.createdAt,
   };
 
