@@ -25,7 +25,10 @@ import (
 )
 
 type WaitPageProps struct {
-	URL string
+	URL         string
+	Title       string
+	Description string
+	ImageURL    string
 }
 
 func main() {
@@ -139,7 +142,10 @@ func main() {
 		redirectURL := redirectMetadata.LinkURL
 
 		if err := t.ExecuteTemplate(w, "wait.html", WaitPageProps{
-			URL: redirectURL,
+			URL:         redirectURL,
+			Title:       link.Title,
+			Description: link.Description,
+			ImageURL:    link.ImageURL,
 		}); err != nil {
 			logger.Error("failed to execute template", zap.Error(err))
 		}
