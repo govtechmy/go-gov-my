@@ -1,167 +1,189 @@
 package main
 
 import (
-	"context"
+	"encoding/json"
+	"errors"
 	"flag"
 	"log"
 	"log/slog"
-	"os"
-	"redirect-server/repository/es"
+	"redirect-server/repository"
 	"time"
 
-	"github.com/olivere/elastic/v7"
+	"github.com/IBM/sarama"
 )
 
-const AGGREGATE_INTERVAL = 5 * time.Minute
+const SEND_INTERVAL = 1 * time.Minute
+
+type application struct {
+	kafkaConsumer      sarama.PartitionConsumer
+	kafkaProducer      sarama.SyncProducer
+	kafkaProducerTopic string
+	lastSendAttemptAt  time.Time
+	linkAnalytics      map[string]*LinkAnalytics
+}
+
+type RedirectMetadataLog struct {
+	RedirectMetadata repository.RedirectMetadata `json:"redirectMetadata"`
+}
 
 func main() {
-	var elasticURL string
-	var elasticUser string
-	var elasticPassword string
 	var kafkaAddr string
-	var kafkaTopic string
+	var kafkaProducerTopic string
+	var kafkaConsumerTopic string
 	var offsetPath string
 	{
-		flag.StringVar(&elasticURL, "elastic-url", "http://localhost:9200", "Elasticsearch URL")
-		flag.StringVar(&elasticUser, "elastic-user", "elastic", "Elasticsearch username")
-		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
 		flag.StringVar(&kafkaAddr, "kafka-addr", "localhost:9092", "Kafka address")
-		flag.StringVar(&kafkaTopic, "kafka-topic", "link_analytics", "Kafka topic")
+		flag.StringVar(&kafkaProducerTopic, "producer-topic", "link_analytics", "Kafka producer topic")
+		flag.StringVar(&kafkaConsumerTopic, "consumer-topic", "redirect_logs", "Kafka consumer topic")
 		flag.StringVar(&offsetPath, "offset-path", "./analytics-aggregator-offset", "Analytics aggregator offset")
 	}
 	flag.Parse()
 
-	ctx := context.Background()
-
-	kafkaProducer, err := NewKafkaProducer(kafkaAddr, kafkaTopic)
+	kafkaProducer, err := sarama.NewSyncProducer([]string{kafkaAddr}, nil)
 	if err != nil {
-		log.Fatalf("failed to intialize kafka producer: %s", err)
+		panic(err)
 	}
 	defer func() {
 		err := kafkaProducer.Close()
 		if err != nil {
-			log.Fatalf("failed to close kafka producer: %s", err)
+			log.Fatalln(err)
 		}
 	}()
 
-	esClient, err := elastic.NewSimpleClient(
-		elastic.SetURL(elasticURL),
-		elastic.SetBasicAuth(elasticUser, elasticPassword),
-	)
+	consumer, err := sarama.NewConsumer([]string{kafkaAddr}, nil)
 	if err != nil {
-		log.Fatalf("failed to intialize elasticsearch client: %s", err)
+		panic(err)
 	}
+	defer func() {
+		if err := consumer.Close(); err != nil {
+			log.Fatalln(err)
+		}
+	}()
 
-	aggregator := &Aggregator{
-		RedirectMetadataRepo: es.NewRedirectMetadataRepo(esClient),
+	partitionConsumer, err := consumer.ConsumePartition(kafkaConsumerTopic, 0, sarama.OffsetNewest)
+	if err != nil {
+		panic(err)
 	}
+	defer func() {
+		if err := partitionConsumer.Close(); err != nil {
+			log.Fatalln(err)
+		}
+	}()
 
-	// Run the aggregator every 5 minutes
-	ticker := time.NewTicker(AGGREGATE_INTERVAL)
+	// Send analytics every SEND_INTERVAL
+	ticker := time.NewTicker(SEND_INTERVAL)
 	defer ticker.Stop()
 
+	app := &application{
+		kafkaConsumer:      partitionConsumer,
+		kafkaProducer:      kafkaProducer,
+		kafkaProducerTopic: kafkaProducerTopic,
+		lastSendAttemptAt:  time.Now(),
+		linkAnalytics:      make(map[string]*LinkAnalytics),
+	}
+
 	for {
-		<-ticker.C
-
-		from, err := getOffset(offsetPath)
-		if err != nil {
-			slog.Error("failed to get offset", slog.String("errorMessage", err.Error()))
-		}
-		to := time.Now()
-
-		// TODO: Handle case where 'from' and 'to' are different dates
-		if from.Format("2006-01-02") != to.Format("2006-01-02") {
-			slog.Warn("to and from have different dates",
-				slog.Time("from", from),
-				slog.Time("to", to),
-			)
-		}
-
-		shortDate := to.Format("2006-01-02")
-
-		linkAnalytics, err := aggregator.Run(ctx, from, to)
-
-		if err != nil {
-			slog.Error("aggregator run failed",
-				slog.String("errorMessage", err.Error()),
-				slog.String("shortDate", shortDate),
-				slog.Time("from", from),
-				slog.Time("to", to),
-			)
-			continue
-		}
-
-		slog.Info("finished running aggregator",
-			slog.String("shortDate", shortDate),
-			slog.Int("numAnalytics", len(linkAnalytics)),
-			slog.Time("from", from),
-			slog.Time("to", to),
-		)
-
-		if len(linkAnalytics) > 0 {
-			err = kafkaProducer.SendLinkAnalytics(ctx, shortDate, from, to, linkAnalytics)
+		select {
+		case msg := <-app.kafkaConsumer.Messages():
+			var log RedirectMetadataLog
+			err := json.Unmarshal(msg.Value, &log)
 			if err != nil {
-				slog.Error("failed to send analytics to kafka",
-					slog.String("errorMessage", err.Error()),
-				)
-				continue
+				slog.Error("failed to unmarshal kafka message")
+				break
 			}
-
-			slog.Info("analytics sent to kafka",
-				slog.String("shortDate", shortDate),
-				slog.Int("numAnalytics", len(linkAnalytics)),
-				slog.Time("from", from),
-				slog.Time("to", to),
-			)
-		} else {
-			slog.Info("skipped sending analytics to kafka",
-				slog.String("shortDate", shortDate),
-				slog.Int("numAnalytics", len(linkAnalytics)),
-				slog.Time("from", from),
-				slog.Time("to", to),
-			)
+			app.aggregateRedirectMetadata(log.RedirectMetadata)
+		case <-ticker.C:
+			if len(app.linkAnalytics) == 0 {
+				// no analytics to send, skip sending kafka message
+				break
+			}
+			err := app.sendAnalytics()
+			if err != nil {
+				slog.Error("failed to send analytics", slog.String("errMessage", err.Error()))
+			}
 		}
 
-		err = saveOffset(offsetPath, to)
-		if err != nil {
-			slog.Error("failed to save offset",
-				slog.Time("currOffset", from),
-				slog.Time("newOffset", to),
-			)
-			// Panic because kafka message is already sent
-			panic(err)
-		}
-		slog.Info("offset saved",
-			slog.Time("prevOffset", from),
-			slog.Time("newOffset", to),
-		)
 	}
 }
 
-func getOffset(offsetPath string) (time.Time, error) {
-	data, err := os.ReadFile(offsetPath)
-	if os.IsNotExist(err) {
-		// If offset not found, use the time N minutes ago
-		fiveMinutesAgo := time.Now().Add(-AGGREGATE_INTERVAL)
-		return fiveMinutesAgo, nil
-	}
-	if err != nil {
-		return time.Time{}, err
+func (app application) aggregateRedirectMetadata(rm repository.RedirectMetadata) {
+	a := app.linkAnalytics[rm.LinkID]
+	if a == nil {
+		a = NewLinkAnalytics(rm.LinkID)
+		app.linkAnalytics[rm.LinkID] = a
 	}
 
-	t, err := time.Parse(time.RFC3339Nano, string(data))
-	if err != nil {
-		return time.Time{}, err
+	a.Total += 1
+	a.LinkSlug[rm.LinkSlug] += 1
+	a.LinkUrl[rm.LinkURL] += 1
+	if rm.CountryCode != "" {
+		a.CountryCode[rm.CountryCode] += 1
 	}
-
-	return t, nil
+	if rm.DeviceType != "" {
+		a.DeviceType[rm.DeviceType] += 1
+	}
+	if rm.Browser != "" {
+		a.Browser[rm.Browser] += 1
+	}
+	if rm.OperatingSystem != "" {
+		a.OperatingSystem[rm.OperatingSystem] += 1
+	}
+	if rm.Referer != "" {
+		a.Referer[rm.Referer] += 1
+	}
 }
 
-func saveOffset(offsetPath string, t time.Time) error {
-	err := os.WriteFile(offsetPath, []byte(t.Format(time.RFC3339Nano)), 0644)
+func (app *application) sendAnalytics() error {
+	linkAnalyticsList := make([]LinkAnalytics, 0)
+	for _, a := range app.linkAnalytics {
+		linkAnalyticsList = append(linkAnalyticsList, *a)
+	}
+
+	lastSendAttemptAt := app.lastSendAttemptAt
+	now := time.Now()
+	shortDate := now.Format("2006-01-02")
+
+	message := KafkaLinkAnalyticsMessage{
+		AggregatedDate: shortDate,
+		From:           lastSendAttemptAt,
+		To:             now,
+		LinkAnalytics:  linkAnalyticsList,
+	}
+
+	json, err := json.Marshal(message)
 	if err != nil {
 		return err
 	}
 
-	return nil
+	retries := 3
+	for retries > 0 {
+		partition, offset, err := app.kafkaProducer.SendMessage(&sarama.ProducerMessage{
+			Topic: app.kafkaProducerTopic,
+			Value: sarama.ByteEncoder(json),
+		})
+
+		// Retry writing the message
+		if err != nil {
+			retries--
+			slog.Error(
+				"failed to send kafka message",
+				slog.Int("retriesLeft", retries),
+				slog.String("errMessage", err.Error()),
+			)
+			time.Sleep(time.Millisecond * 500)
+			continue
+		}
+
+		slog.Info("kafka message sent",
+			slog.Int("numAnalytics", len(linkAnalyticsList)),
+			slog.String("topic", app.kafkaProducerTopic),
+			slog.Int("partition", int(partition)),
+			slog.Int("offset", int(offset)),
+		)
+		app.lastSendAttemptAt = now
+		app.linkAnalytics = make(map[string]*LinkAnalytics)
+		return nil
+	}
+
+	return errors.New("failed to send kafka message, no more retries")
 }

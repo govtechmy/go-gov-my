@@ -92,6 +92,18 @@ services:
     depends_on:
       init-elasticsearch:
         condition: service_completed_successfully
+  
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.13.2
+    env_file:
+      - .env
+    ports:
+      - "5044:5044"
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+      - ./logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+    networks:
+      - my-network
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.1
