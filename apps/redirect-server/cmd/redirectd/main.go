@@ -128,9 +128,11 @@ func main() {
 
 		// Log redirect metadata for analytics
 		redirectMetadata := repository.NewRedirectMetadata(*r, ipDB, *link)
-		logger.Info("redirect metadata created",
-			zap.String("slug", link.Slug),
+		logger.Info("redirect analytics",
+			zap.String("linkSlug", link.Slug),
 			zap.String("linkId", link.ID),
+			zap.String("userAgent", r.UserAgent()),
+			zap.String("ip", r.RemoteAddr),
 			zap.Object("redirectMetadata", redirectMetadata),
 		)
 

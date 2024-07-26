@@ -1,12 +1,6 @@
 output:
-  elasticsearch:
-    hosts: ["http://elasticsearch:9200"]
-    pipelines:
-      # This pipeline is created in the init-elasticsearch.sh script
-      # It processes and stores the redirectMetadata logs from redirectd
-      - pipeline: redirect_metadata_pipeline
-        when:
-          has_fields: ["json.redirectMetadata"]
+  logstash:
+    hosts: ["logstash:5044"]
 
 filebeat:
   inputs:
@@ -16,4 +10,5 @@ filebeat:
         - /usr/share/filebeat/logs/*
       parsers:
         - ndjson:
+            keys_under_root: true
             add_error_key: true
