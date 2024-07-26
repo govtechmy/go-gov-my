@@ -3,7 +3,11 @@ import { headers } from "next/headers";
 import { prisma } from "../prisma";
 import { clickAnalyticsQuerySchema } from "../zod/schemas/analytics";
 import { INTERVAL_DATA } from "./constants";
-import { AnalyticFromDBProps, AnalyticProps, AnalyticsEndpoints, MetadataProps } from "./types";
+import {
+  AnalyticFromDBProps,
+  AnalyticsEndpoints,
+  MetadataProps,
+} from "./types";
 
 export const getClicks = async (
   props: z.infer<typeof clickAnalyticsQuerySchema> & {
@@ -206,7 +210,7 @@ export const getClicks = async (
 
   if (endpoint === "timeseries") {
     const timeseries = analytics.reduce((accumulator, row) => {
-      const metadata = row?.metadata  as MetadataProps;
+      const metadata = row?.metadata as MetadataProps;
       if (row?.aggregatedDate.toString() in accumulator) {
         accumulator[row?.aggregatedDate.toString()] += metadata?.total;
         return accumulator;

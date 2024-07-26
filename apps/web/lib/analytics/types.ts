@@ -18,22 +18,22 @@ export type TopLinksTabs = "link" | "url";
 export type DeviceTabs = "devices" | "browsers" | "os";
 
 export type ObjectProps = {
-  [key: string]: number | ObjectProps
-}
+  [key: string]: number | ObjectProps;
+};
 
 export type MetadataProps = {
-  total: number,
-  [key: string]: number | ObjectProps
-}
+  total: number;
+  [key: string]: number | ObjectProps;
+};
 
 export type AnalyticProps = {
-  linkId: String,
-  aggregatedDate: Date,
-  metadata: MetadataProps
-}
+  linkId: String;
+  aggregatedDate: Date;
+  metadata: MetadataProps;
+};
 
 export type AnalyticFromDBProps = {
-  linkId: string,
-  aggregatedDate: Date,
-  metadata: JsonValue
-}[]
+  linkId: string;
+  aggregatedDate: Date;
+  metadata: JsonValue;
+}[];
