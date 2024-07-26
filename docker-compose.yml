@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   ps-postgres:
     image: postgres:13
@@ -53,6 +51,11 @@ services:
       - my-network
     volumes:
       - esdata:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://elasticsearch:9200"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
     logging:
       driver: "json-file"
       options:
@@ -64,22 +67,43 @@ services:
         hard: -1
     mem_limit: 1g
 
-  # filebeat:
-  #   container_name: filebeat
-  #   image: docker.elastic.co/beats/filebeat:7.13.2
-  #   restart: always
-  #   volumes:
-  #     - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
-  #     - ./logs:/usr/share/filebeat/logs
-  #   networks:
-  #     - my-network
-  #   depends_on:
-  #     - elasticsearch
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-size: "10m"
-  #       max-file: "3"
+  init-elasticsearch:
+    image: curlimages/curl:8.8.0
+    container_name: init-elasticsearch
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    volumes:
+      - ./init-elasticsearch.sh:/home/curl_user/init-elasticsearch.sh
+    entrypoint: /home/curl_user/init-elasticsearch.sh
+    networks:
+      - my-network
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:7.13.2
+    restart: always
+    volumes:
+      - filebeatdata:/usr/share/filebeat/data:rw
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      # Logs for filebeat to ingest
+      - ./apps/redirect-server/logs:/usr/share/filebeat/logs:ro
+    networks:
+      - my-network
+    depends_on:
+      init-elasticsearch:
+        condition: service_completed_successfully
+  
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.13.2
+    env_file:
+      - .env
+    ports:
+      - "5044:5044"
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+      - ./logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+    networks:
+      - my-network
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.1
@@ -147,7 +171,7 @@ services:
     depends_on: [broker, ps-postgres]
     healthcheck:
       test: ["CMD", "curl", "-f", "http://debezium:8083/connectors"]
-      interval: 10s
+      interval: 3s
       timeout: 5s
       retries: 5
     ports:
@@ -187,45 +211,47 @@ services:
     networks:
       - my-network
 
-  go-api:
-    container_name: go-api
-    build:
-      context: ./apps/redirect-server
-      dockerfile: docker/Dockerfile.api
-    ports:
-      - "3002:3002"
-    env_file:
-      - .env
-    environment:
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-    command:
-      - "/api"
-      - "--elastic-url=http://elasticsearch:9200"
-    volumes:
-      - .:/app
-    depends_on:
-      - elasticsearch
-    networks:
-      - my-network
+  # Comment this out during development
+  # go-api:
+  #   container_name: go-api
+  #   build:
+  #     context: ./apps/redirect-server
+  #     dockerfile: docker/Dockerfile.api
+  #   ports:
+  #     - "3002:3002"
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+  #   command:
+  #     - "/api"
+  #     - "--elastic-url=http://elasticsearch:9200"
+  #   volumes:
+  #     - .:/app
+  #   depends_on:
+  #     - elasticsearch
+  #   networks:
+  #     - my-network
 
-  go-redirectd:
-    container_name: go-redirectd
-    build:
-      context: ./apps/redirect-server
-      dockerfile: docker/Dockerfile.redirectd
-    ports:
-      - "3000:3000"
-    env_file:
-      - .env
-    environment:
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-    command:
-      - "/redirectd"
-      - "--elastic-url=http://elasticsearch:9200"
-    volumes:
-      - .:/app
-    depends_on:
-      - elasticsearch
+  # Comment this out during development
+  # go-redirectd:
+  #   container_name: go-redirectd
+  #   build:
+  #     context: ./apps/redirect-server
+  #     dockerfile: docker/Dockerfile.redirectd
+  #   ports:
+  #     - "3000:3000"
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+  #   command:
+  #     - "/redirectd"
+  #     - "--elastic-url=http://elasticsearch:9200"
+  #   volumes:
+  #     - .:/app
+  #   depends_on:
+  #     - elasticsearch
 
   uptime-kuma:
     image: louislam/uptime-kuma:1
@@ -239,10 +265,10 @@ services:
 
 networks:
   my-network:
-  my-internal-network:
 
 volumes:
   ps-postgres:
   esdata:
+  filebeatdata:
   status-page:
   uptime-kuma:

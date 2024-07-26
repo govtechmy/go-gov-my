@@ -1,0 +1,14 @@
+output:
+  logstash:
+    hosts: ["logstash:5044"]
+
+filebeat:
+  inputs:
+    - type: filestream
+      id: redirect-server-filestream
+      paths:
+        - /usr/share/filebeat/logs/*
+      parsers:
+        - ndjson:
+            keys_under_root: true
+            add_error_key: true

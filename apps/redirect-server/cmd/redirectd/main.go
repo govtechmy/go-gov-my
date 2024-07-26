@@ -24,8 +24,17 @@ import (
 	"go.uber.org/zap"
 )
 
+type WaitPageProps struct {
+	URL         string
+	Title       string
+	Description string
+	ImageURL    string
+}
+
 func main() {
-	logger := zap.Must(zap.NewProduction())
+	loggerConfig := zap.NewProductionConfig()
+	loggerConfig.OutputPaths = []string{"stdout"}
+	logger := zap.Must(loggerConfig.Build())
 
 	// golang-lint mentioned it should check for err
 	defer func() {
@@ -88,8 +97,8 @@ func main() {
 	// todo: metrics handler
 	// todo: err handler
 
-	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {io.WriteString(w, "OK")})
-	
+	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) { io.WriteString(w, "OK") })
+
 	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		slug := strings.TrimPrefix(r.URL.Path, "/")
@@ -122,13 +131,24 @@ func main() {
 
 		// Log redirect metadata for analytics
 		redirectMetadata := repository.NewRedirectMetadata(*r, ipDB, *link)
-		logger.Info("redirect metadata created",
-			zap.String("slug", link.Slug),
+		logger.Info("redirect analytics",
+			zap.String("linkSlug", link.Slug),
 			zap.String("linkId", link.ID),
+			zap.String("userAgent", r.UserAgent()),
+			zap.String("ip", r.RemoteAddr),
 			zap.Object("redirectMetadata", redirectMetadata),
 		)
 
-		if err := t.ExecuteTemplate(w, "wait.html", link); err != nil {
+		// Do not use link.URL, use redirectMetadata.LinkURL instead.
+		// Redirect URL could be a geo-specific/ios/android link.
+		redirectURL := redirectMetadata.LinkURL
+
+		if err := t.ExecuteTemplate(w, "wait.html", WaitPageProps{
+			URL:         redirectURL,
+			Title:       link.Title,
+			Description: link.Description,
+			ImageURL:    link.ImageURL,
+		}); err != nil {
 			logger.Error("failed to execute template", zap.Error(err))
 		}
 	}), "handleLinkVisit"))
