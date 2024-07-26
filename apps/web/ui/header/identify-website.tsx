@@ -32,7 +32,7 @@ const IdentifyWebsite: React.FC = () => {
               height={25}
               alt="Logo Jata Negara"
             />
-            <Checkmark14PointStar className="mx-2 size-4 text-blue-600 sm:size-5" />
+            <Checkmark14PointStar className="size-4 sm:size-5 mx-2 text-blue-600" />
             <span className="text-black-700">
               {messages?.masthead?.masthead_title}
             </span>
@@ -62,7 +62,7 @@ const IdentifyWebsite: React.FC = () => {
                     </span>
                   </p>
 
-                  <p className="text-black-700 max-w-prose text-balance text-sm">
+                  <p className="text-black-700 text-balance max-w-prose text-sm">
                     {messages?.masthead?.masthead_official_site_desc}
                   </p>
                 </div>
@@ -75,9 +75,9 @@ const IdentifyWebsite: React.FC = () => {
                     {messages?.masthead?.masthead_ssl_title}{" "}
                     <span className="font-semibold text-green-600"> HTTPS</span>
                   </p>
-                  <div className="text-black-700 max-w-prose text-balance text-sm">
+                  <div className="text-black-700 text-balance max-w-prose text-sm">
                     {messages?.masthead?.masthead_ssl_desc_1}{" "}
-                    <SolidLock className="inline size-4 text-green-600" />{" "}
+                    <SolidLock className="size-4 inline text-green-600" />{" "}
                     {messages?.masthead?.masthead_ssl_or}{" "}
                     <span className="font-semibold text-green-600">
                       https://
