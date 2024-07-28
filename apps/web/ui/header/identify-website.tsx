@@ -1,7 +1,6 @@
 "use client";
 
 import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import Image from "next/image";
 import React, { useState } from "react";
 import Checkmark14PointStar from "../icons/checkmark";
 import ChevronDown from "../icons/chevron";
@@ -18,71 +17,72 @@ const IdentifyWebsite: React.FC = () => {
   return (
     <>
       <div
-        className={
+        className={cn(
+          "z-[99]",
           open
-            ? "from-washed-100 to-outline-200 bg-gradient-to-b from-[84.74%] to-100% "
-            : "bg-washed-100 "
-        }
+            ? "from-washed-100 to-outline-200 bg-gradient-to-b from-[84.74%] to-100%"
+            : "bg-washed-100",
+        )}
       >
         <div className="container">
-          <div className="text-brand-700 m-1 flex flex-wrap items-center justify-center py-1 text-sm leading-4">
-            <Image
-              src="/jata_logo.png"
-              width={25}
-              height={25}
-              alt="Logo Jata Negara"
-            />
-            <Checkmark14PointStar className="size-4 sm:size-5 mx-2 text-blue-600" />
-            <span className="text-black-700">
-              {messages?.masthead?.masthead_title}
-            </span>
-            <button
-              className="ml-2 flex items-center gap-0.5 text-blue-600"
-              onClick={() => setOpen(!open)}
-            >
-              {messages?.masthead?.masthead_subtitle}
-              <ChevronDown
-                className={cn(
-                  "size-4 text-blue-600 transition duration-200",
-                  open ? "rotate-180" : "",
-                )}
-              />
-            </button>
-          </div>
+          <button className="w-full" onClick={() => setOpen(!open)}>
+            <div className="text-brand-700 flex flex-wrap items-center gap-1.5 py-2.5 text-sm/4 max-sm:justify-between sm:py-1">
+              <div className="flex items-center gap-1.5">
+                <Checkmark14PointStar className="size-4 sm:size-5 text-blue-600" />
+                <span className="text-black-700">
+                  {messages?.masthead?.masthead_title}
+                </span>
+              </div>
+              <div className="max-sm:bg-outline-200 flex items-center gap-0.5 max-sm:rounded-md max-sm:px-1">
+                <span className="hidden tracking-[-0.01em] text-blue-600 sm:block">
+                  {messages?.masthead?.masthead_subtitle}
+                </span>
+                <ChevronDown
+                  className={cn("size-4 transition", open ? "rotate-180" : "")}
+                />
+              </div>
+            </div>
+          </button>
           <Collapse isOpen={open}>
-            <div className="grid grid-cols-1 gap-6 pb-8 pt-6 sm:grid-cols-2">
+            <div className="gap-4.5 pt-4.5 grid grid-cols-1 px-2 pb-6 sm:grid-cols-2 sm:gap-6 sm:pb-8 sm:pt-6">
+              <span className="text-brand-700 static pb-5 text-sm text-blue-600 sm:hidden">
+                {messages?.masthead?.masthead_subtitle}
+              </span>
+
               <div className="flex gap-3">
-                <GovMY className="text-foreground-success shrink-0 text-green-600" />
+                <GovMY className="text-dim-500 shrink-0" />
                 <div className="space-y-1.5">
-                  <p className="font-medium">
+                  <p className="font-medium max-sm:text-sm">
+                    {" "}
                     {messages?.masthead?.masthead_official_site_title}{" "}
-                    <span className="font-semibold text-green-600">
+                    <span className="text-bold strong">
                       {" "}
-                      .gov.my
+                      {messages?.masthead?.masthead_official_site_desc_domain}
                     </span>
                   </p>
-
                   <p className="text-black-700 text-balance max-w-prose text-sm">
-                    {messages?.masthead?.masthead_official_site_desc}
+                    {messages?.masthead?.masthead_official_site_desc_1}
+                    <span className="font-semibold">
+                      {" "}
+                      {messages?.masthead?.masthead_official_site_desc_domain}
+                    </span>
+                    {messages?.masthead?.masthead_official_site_desc_2}
                   </p>
                 </div>
               </div>
               <div className="flex gap-3">
-                <Lock className="text-foreground-success shrink-0 text-orange-400" />
+                <Lock className="text-dim-500 shrink-0" />
                 <div className="space-y-1.5">
-                  <p className="font-medium">
-                    {" "}
+                  <p className="font-medium max-sm:text-sm">
                     {messages?.masthead?.masthead_ssl_title}{" "}
-                    <span className="font-semibold text-green-600"> HTTPS</span>
+                    <span className="text-bold text-green-600">HTTPS</span>
                   </p>
                   <div className="text-black-700 text-balance max-w-prose text-sm">
                     {messages?.masthead?.masthead_ssl_desc_1}{" "}
-                    <SolidLock className="size-4 inline text-green-600" />{" "}
+                    <SolidLock className="size-3.5 -ml-[3px] mb-0.5 mr-px inline text-green-600" />
                     {messages?.masthead?.masthead_ssl_or}{" "}
-                    <span className="font-semibold text-green-600">
-                      https://
-                    </span>{" "}
-                    {messages?.masthead?.masthead_ssl_desc_2}
+                    <span className="font-semibold">https://</span>{" "}
+                    {messages?.masthead?.masthead_ssl_desc_2}{" "}
                   </div>
                 </div>
               </div>

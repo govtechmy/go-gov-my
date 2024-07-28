@@ -140,18 +140,18 @@ services:
     networks:
       - my-network
 
-  kafdrop:
-    image: obsidiandynamics/kafdrop
-    container_name: kafdrop
-    restart: always
-    ports:
-      - 9000:9000
-    environment:
-      KAFKA_BROKER_CONNECT: "broker:29092"
-    depends_on:
-      - broker
-    networks:
-      - my-network
+  # kafdrop:
+  #   image: obsidiandynamics/kafdrop
+  #   container_name: kafdrop
+  #   restart: always
+  #   ports:
+  #     - 9000:9000
+  #   environment:
+  #     KAFKA_BROKER_CONNECT: "broker:29092"
+  #   depends_on:
+  #     - broker
+  #   networks:
+  #     - my-network
 
   debezium:
     image: debezium/connect:2.6
@@ -197,19 +197,19 @@ services:
     networks:
       - my-network
 
-  debezium-ui:
-    image: quay.io/debezium/debezium-ui:latest
-    container_name: debezium-ui
-    platform: linux/amd64
-    restart: always
-    ports:
-      - "8080:8080"
-    environment:
-      - KAFKA_CONNECT_URIS=http://debezium:8083
-    depends_on:
-      - debezium
-    networks:
-      - my-network
+  # debezium-ui:
+  #   image: quay.io/debezium/debezium-ui:latest
+  #   container_name: debezium-ui
+  #   platform: linux/amd64
+  #   restart: always
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     - KAFKA_CONNECT_URIS=http://debezium:8083
+  #   depends_on:
+  #     - debezium
+  #   networks:
+  #     - my-network
 
   # Comment this out during development
   # go-api:
@@ -232,6 +232,7 @@ services:
   #     - elasticsearch
   #   networks:
   #     - my-network
+
 
   # Comment this out during development
   # go-redirectd:

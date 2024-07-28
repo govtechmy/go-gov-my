@@ -57,6 +57,11 @@ func main() {
 		flag.StringVar(&telemetryURL, "telemetry-url", "localhost:4318", "OpenTelemetry HTTP endpoint URL")
 		flag.StringVar(&geolite2DBPath, "geolite2-path", "./GeoLite2-City.mmdb", "Path to GeoLite2 .mmdb file")
 	}
+	baseURL := os.Getenv("NEXTJS_BASE_URL")
+    if baseURL == "" {
+        log.Fatal("BASE_URL is not set in the environment variables")
+    }
+
 	flag.Parse()
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
@@ -110,10 +115,7 @@ func main() {
 				zap.String("ip", r.RemoteAddr),
 				zap.String("user-agent", r.UserAgent()),
 				zap.String("code", "link_not_found")) // Filebeat will run to collect link not found errors over this code
-			w.WriteHeader(http.StatusNotFound)
-			if err := t.ExecuteTemplate(w, "notfound.html", nil); err != nil {
-				logger.Error("failed to execute template", zap.Error(err))
-			}
+			http.Redirect(w, r, fmt.Sprintf("%s/en/notfound", baseURL), http.StatusSeeOther)
 			return
 		}
 		if err != nil {
@@ -122,10 +124,7 @@ func main() {
 				zap.String("ip", r.RemoteAddr),
 				zap.String("user-agent", r.UserAgent()),
 				zap.Error(err))
-			w.WriteHeader(http.StatusInternalServerError)
-			if err := t.ExecuteTemplate(w, "server_error.html", nil); err != nil {
-				logger.Error("failed to execute template", zap.Error(err))
-			}
+			http.Redirect(w, r, fmt.Sprintf("%s/en/server_error", baseURL), http.StatusSeeOther)
 			return
 		}
 
