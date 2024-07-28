@@ -3,7 +3,9 @@
     "masthead_title": "Portal Rasmi Kerajaan Malaysia",
     "masthead_subtitle": "Bagaimana mengenal pasti?",
     "masthead_official_site_title": "Pautan portal rasmi berakhir dengan .gov.my",
-    "masthead_official_site_desc": "Sekiranya anda melihat pautan selain .gov.my, segera tutupkan halaman itu walaupun ia menyerupai portal rasmi!",
+    "masthead_official_site_desc_1": "Sekiranya anda melihat pautan selain ",
+    "masthead_official_site_desc_domain": ".gov.my",
+    "masthead_official_site_desc_2": ", segera tutupkan halaman itu walaupun ia menyerupai portal rasmi!",
     "masthead_ssl_title": "Portal yang selamat menggunakan HTTPS",
     "masthead_ssl_desc_1": "Periksa ikon loker (",
     "masthead_ssl_or": ") atau",
@@ -376,6 +378,7 @@
   "INTERVAL_DISPLAYS": {
     "Last hour": "Satu Jam Lepas",
     "Last 24 hours": "24 Jam Lepas",
+    "Today": "Hari ini",
     "Last 7 days": "7 Hari Lepas",
     "Last 30 days": "30 Hari Lepas",
     "Last 3 months": "3 Bulan Lepas",

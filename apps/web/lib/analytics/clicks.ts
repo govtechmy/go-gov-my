@@ -2,7 +2,12 @@ import z from "@/lib/zod";
 import { headers } from "next/headers";
 import { prisma } from "../prisma";
 import { clickAnalyticsQuerySchema } from "../zod/schemas/analytics";
-import { AnalyticsEndpoints } from "./types";
+import { INTERVAL_DATA } from "./constants";
+import {
+  AnalyticFromDBProps,
+  AnalyticsEndpoints,
+  MetadataProps,
+} from "./types";
 
 export const getClicks = async (
   props: z.infer<typeof clickAnalyticsQuerySchema> & {
@@ -39,87 +44,187 @@ export const getClicks = async (
     return response[0]["clicks"];
   }
 
+  function sumTwoObj(obj1, obj2) {
+    const clone = {};
+    for (const key in obj1) {
+      if (obj1.hasOwnProperty(key)) {
+        clone[key] = obj1[key];
+      }
+    }
+    for (const key in obj2) {
+      if (obj2.hasOwnProperty(key)) {
+        if (typeof obj2[key] === "number") {
+          if (clone.hasOwnProperty(key)) {
+            clone[key] += obj2[key];
+          } else {
+            clone[key] = obj2[key];
+          }
+        } else if (typeof obj2[key] === "object") {
+          clone[key] = sumTwoObj(obj2[key], clone[key]);
+        }
+      }
+    }
+    return clone;
+  }
+
+  let granularity: "minute" | "hour" | "day" | "month" = "day";
+  // const startDate: Date | String = new Date().toISOString().split('T')[0]  // fast way to get YYYY-MM-DD
+  // const endDate: Date | String = new Date().toISOString().split('T')[0]
+
+  if (interval === "24h") {
+    start = new Date();
+    end = new Date();
+  } else {
+    start = INTERVAL_DATA[interval].startDate;
+    end = new Date(Date.now());
+    granularity = INTERVAL_DATA[interval].granularity;
+  }
+
+  // swap start and end if start is greater than end
+  if (start > end) {
+    [start, end] = [end, start];
+  }
+
+  // find the links and put it in an array string[]
+  const links = await prisma.link.findMany({
+    where: {
+      projectId: workspaceId,
+    },
+    select: {
+      id: true,
+    },
+  });
+  const linkList = links.map((link) => link.id);
+  // find the relevant metadata for the links
+  const analytics: AnalyticFromDBProps = await prisma.analytics.findMany({
+    where: {
+      AND: [
+        { linkId: { in: linkList } },
+        {
+          aggregatedDate: {
+            gte: start,
+          },
+        },
+        {
+          aggregatedDate: {
+            lte: end,
+          },
+        },
+      ],
+    },
+    select: {
+      linkId: true,
+      aggregatedDate: true,
+      metadata: true,
+    },
+  });
+
   // for total clicks, we return just the value;
   // everything else we return an array of values
   if (endpoint === "count") {
-    return 230;
+    const totalCount = analytics.reduce((accumulator, row) => {
+      const metadata = row?.metadata as MetadataProps;
+      if (metadata?.total && !isNaN(metadata?.total))
+        return (accumulator += metadata?.total);
+      return accumulator;
+    }, 0);
+    return totalCount;
   }
 
   if (endpoint === "countries") {
-    return [
-      { country: "MY", clicks: 100 },
-      { country: "ID", clicks: 50 },
-      { country: "SG", clicks: 40 },
-      { country: "TH", clicks: 20 },
-      { country: "VN", clicks: 10 },
-      { country: "PH", clicks: 10 },
-    ];
+    const countries = analytics.reduce((accumulator, row) => {
+      const metadata = row?.metadata as MetadataProps;
+      if (metadata?.countryCode)
+        return sumTwoObj(accumulator, metadata?.countryCode);
+      return accumulator;
+    }, {});
+    return Object.keys(countries).map((key) => {
+      return { country: key, clicks: countries[key] };
+    });
   }
 
   if (endpoint === "top_links") {
     if (!workspaceId) {
       throw Error("failed to get top links, missing 'workspaceId'");
     }
-    const links = await prisma.link.findMany({
-      where: { projectId: workspaceId.replace("ws_", "") },
-      orderBy: { clicks: "desc" },
-    });
+    const top_links = analytics.reduce((accumulator, row) => {
+      const metadata = row?.metadata as MetadataProps;
+      if (!isNaN(metadata?.total) && row?.linkId in accumulator) {
+        accumulator[row?.linkId] += metadata?.total;
+        return accumulator;
+      }
+      accumulator[row?.linkId] = metadata?.total || 0;
+      return accumulator;
+    }, {});
 
-    return links.map((link) => ({
-      link: link.id,
-      clicks: link.clicks,
-    }));
+    return Object.keys(top_links).map((key) => {
+      return { link: key, clicks: top_links[key] };
+    });
   }
 
   if (endpoint === "referers") {
-    return [
-      { referer: "(direct)", clicks: 100 },
-      { referer: "facebook.com", clicks: 80 },
-      { referer: "x.com", clicks: 50 },
-    ];
+    const referers = analytics.reduce((accumulator, row) => {
+      const metadata = row?.metadata as MetadataProps;
+      if (metadata?.referer) return sumTwoObj(accumulator, metadata?.referer);
+      return accumulator;
+    }, {});
+    return Object.keys(referers).map((key) => {
+      return { referer: key, clicks: referers[key] };
+    });
   }
 
   if (endpoint === "devices") {
-    return [
-      { device: "Mobile", clicks: 200 },
-      { device: "Desktop", clicks: 30 },
-    ];
+    const devices = analytics.reduce((accumulator, row) => {
+      const metadata = row?.metadata as MetadataProps;
+      if (metadata?.deviceType)
+        return sumTwoObj(accumulator, metadata?.deviceType);
+      return accumulator;
+    }, {});
+    return Object.keys(devices).map((key) => {
+      return { device: key.toUpperCase(), clicks: devices[key] };
+    });
   }
 
   if (endpoint === "browsers") {
-    return [
-      { browser: "Chrome", clicks: 150 },
-      { browser: "Edge", clicks: 50 },
-      { browser: "Firefox", clicks: 30 },
-    ];
+    const browsers = analytics.reduce((accumulator, row) => {
+      const metadata = row?.metadata as MetadataProps;
+      if (metadata?.browser) return sumTwoObj(accumulator, metadata?.browser);
+      return accumulator;
+    }, {});
+    return Object.keys(browsers).map((key) => {
+      return { browser: key, clicks: browsers[key] };
+    });
   }
 
   if (endpoint === "os") {
-    return [
-      { os: "Android", clicks: 150 },
-      { os: "iOS", clicks: 50 },
-      { os: "Linux", clicks: 30 },
-    ];
+    const os = analytics.reduce((accumulator, row) => {
+      const metadata = row?.metadata as MetadataProps;
+      if (metadata?.operatingSystem)
+        return sumTwoObj(accumulator, metadata?.operatingSystem);
+      return accumulator;
+    }, {});
+    return Object.keys(os).map((key) => {
+      return { os: key, clicks: os[key] };
+    });
   }
 
   if (endpoint === "timeseries") {
-    return [
-      { start: dateNHoursFromNow(0), clicks: 10 },
-      { start: dateNHoursFromNow(1), clicks: 15 },
-      { start: dateNHoursFromNow(2), clicks: 8 },
-      { start: dateNHoursFromNow(3), clicks: 20 },
-    ];
+    const timeseries = analytics.reduce((accumulator, row) => {
+      const metadata = row?.metadata as MetadataProps;
+      if (row?.aggregatedDate.toString() in accumulator) {
+        accumulator[row?.aggregatedDate.toString()] += metadata?.total;
+        return accumulator;
+      }
+      accumulator[row?.aggregatedDate.toString()] = metadata?.total;
+      return accumulator;
+    }, {});
+    if (JSON.stringify(timeseries) === "{}")
+      return [{ start: new Date(), clicks: 0 }];
+    return Object.keys(timeseries).map((key) => {
+      return { start: key, clicks: timeseries[key] };
+    });
   }
 
   // return no data for other endpoints for now
   return [];
 };
-
-/**
- * Generate dummy date.
- */
-function dateNHoursFromNow(n: number) {
-  const date = new Date();
-  date.setHours(date.getHours() + n);
-  return date;
-}

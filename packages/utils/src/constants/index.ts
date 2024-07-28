@@ -74,7 +74,7 @@ export const DUB_DOMAINS = [
     target: `https://${APP_DOMAIN}`,
     type: "redirect",
     clicks: 0,
-    allowedHostnames: [],
+    allowedHostnames: [] as string[],
     projectId: DUB_WORKSPACE_ID,
   },
 ];

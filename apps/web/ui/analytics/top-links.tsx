@@ -24,7 +24,7 @@ export default function TopLinks() {
     } else {
       setTab("link");
     }
-  }, [domain, key]);
+  }, [key]);
 
   const { data } = useSWR<
     ({ domain: string; key: string } & {
@@ -98,10 +98,8 @@ export default function TopLinks() {
             )
           ) : (
             <TabSelect
-              options={["Links", "Domains"]}
-              selected={
-                root === "false" ? "Links" : root === "true" ? "Domains" : null
-              }
+              options={["Links"]}
+              selected="Links"
               selectAction={(option) =>
                 queryParams({
                   ...((root === "false" && option === "Links") ||

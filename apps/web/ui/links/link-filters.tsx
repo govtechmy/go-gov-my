@@ -51,7 +51,7 @@ export default function LinkFilters() {
         set: { showArchived: "true" },
       });
     }
-  }, [pathname, searchParams]);
+  }, [pathname, queryParams, searchParams]);
 
   const showClearButton = useMemo(() => {
     return [
@@ -126,20 +126,23 @@ export const SearchBox = ({ searchInputRef }) => {
   }, 500);
   const { isValidating } = useLinks();
 
-  const onKeyDown = useCallback((e: KeyboardEvent) => {
-    const target = e.target as HTMLElement;
-    // only focus on filter input when:
-    // - user is not typing in an input or textarea
-    // - there is no existing modal backdrop (i.e. no other modal is open)
-    if (
-      e.key === "/" &&
-      target.tagName !== "INPUT" &&
-      target.tagName !== "TEXTAREA"
-    ) {
-      e.preventDefault();
-      searchInputRef.current?.focus();
-    }
-  }, []);
+  const onKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      // only focus on filter input when:
+      // - user is not typing in an input or textarea
+      // - there is no existing modal backdrop (i.e. no other modal is open)
+      if (
+        e.key === "/" &&
+        target.tagName !== "INPUT" &&
+        target.tagName !== "TEXTAREA"
+      ) {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    },
+    [searchInputRef],
+  );
 
   useEffect(() => {
     document.addEventListener("keydown", onKeyDown);
@@ -197,6 +200,7 @@ const TagsFilter = ({
 
   const { AddEditTagModal, AddTagButton } = useAddEditTagModal();
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const selectedTagIds =
     searchParams?.get("tagIds")?.split(",")?.filter(Boolean) ?? [];
 
@@ -216,7 +220,7 @@ const TagsFilter = ({
         ],
       });
     },
-    [selectedTagIds],
+    [queryParams, selectedTagIds],
   );
 
   const options = useMemo(() => {

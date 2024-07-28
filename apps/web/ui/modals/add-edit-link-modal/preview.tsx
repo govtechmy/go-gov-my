@@ -235,7 +235,7 @@ const ImagePreview = ({
       // Delay to prevent flickering
       setTimeout(() => setResizing(false), 500);
     },
-    [],
+    [onImageChange],
   );
 
   const previewImage = useMemo(() => {
@@ -274,7 +274,7 @@ const ImagePreview = ({
         </div>
       );
     }
-  }, [image, generatingMetatags, resizing]);
+  }, [generatingMetatags, resizing, image, onImageChange, message?.enter_link]);
 
   return (
     <>

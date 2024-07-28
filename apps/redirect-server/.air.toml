@@ -3,11 +3,12 @@ testdata_dir = "testdata"
 tmp_dir = "tmp"
 
 [build]
-  bin = "tmp/main"
-  cmd = "go build -o tmp/main ./cmd/api"
+  bin = "./tmp/analytics-aggregator & ./tmp/api & ./tmp/redirectd > ./logs/redirectd.log"
+  cmd = "go build -o ./tmp/ ./cmd/..."
   include_ext = ["go", "tpl", "tmpl", "html"]
   log = "build-errors.log"
   post_cmd = ["chmod +x tmp/main"]
+  deflay = 1000000
 
 [run]
   cmd = "./tmp/main"
