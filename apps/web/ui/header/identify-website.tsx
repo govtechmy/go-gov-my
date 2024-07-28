@@ -11,7 +11,6 @@ import { cn } from "./cn";
 import Collapse from "./layout";
 
 const IdentifyWebsite: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const { messages, locale } = useIntlClientHook();
   const [open, setOpen] = useState(false);
 

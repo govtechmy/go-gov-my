@@ -1,0 +1,5 @@
+analytics-aggregator-offset
+logs/
+
+# MaxMind IP lookup database
+*.mmdb

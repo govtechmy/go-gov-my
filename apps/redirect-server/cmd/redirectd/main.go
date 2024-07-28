@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -17,13 +18,23 @@ import (
 	"time"
 
 	"github.com/olivere/elastic/v7"
+	"github.com/oschwald/geoip2-golang"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.uber.org/zap"
 )
 
+type WaitPageProps struct {
+	URL         string
+	Title       string
+	Description string
+	ImageURL    string
+}
+
 func main() {
-	logger := zap.Must(zap.NewProduction())
+	loggerConfig := zap.NewProductionConfig()
+	loggerConfig.OutputPaths = []string{"stdout"}
+	logger := zap.Must(loggerConfig.Build())
 
 	// golang-lint mentioned it should check for err
 	defer func() {
@@ -37,12 +48,14 @@ func main() {
 	var elasticPassword string
 	var httpPort int
 	var telemetryURL string
+	var geolite2DBPath string
 	{
 		flag.StringVar(&elasticURL, "elastic-url", "http://localhost:9200", "Elasticsearch URL")
 		flag.StringVar(&elasticUser, "elastic-user", "elastic", "Elasticsearch username")
 		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
 		flag.IntVar(&httpPort, "http-port", 3000, "HTTP server port")
 		flag.StringVar(&telemetryURL, "telemetry-url", "localhost:4318", "OpenTelemetry HTTP endpoint URL")
+		flag.StringVar(&geolite2DBPath, "geolite2-path", "./GeoLite2-City.mmdb", "Path to GeoLite2 .mmdb file")
 	}
 	baseURL := os.Getenv("NEXTJS_BASE_URL")
     if baseURL == "" {
@@ -79,10 +92,18 @@ func main() {
 	fs := http.FileServer(http.Dir("public"))
 	http.Handle("/public/", http.StripPrefix("/public/", fs))
 
+	ipDB, err := geoip2.Open(geolite2DBPath)
+	if err != nil {
+		logger.Fatal("cannot load geolite2 database", zap.Error(err))
+	}
+	defer ipDB.Close()
 
 	// todo: logger handler
 	// todo: metrics handler
 	// todo: err handler
+
+	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) { io.WriteString(w, "OK") })
+
 	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		slug := strings.TrimPrefix(r.URL.Path, "/")
@@ -107,7 +128,26 @@ func main() {
 			return
 		}
 
-		if err := t.ExecuteTemplate(w, "wait.html", link); err != nil {
+		// Log redirect metadata for analytics
+		redirectMetadata := repository.NewRedirectMetadata(*r, ipDB, *link)
+		logger.Info("redirect analytics",
+			zap.String("linkSlug", link.Slug),
+			zap.String("linkId", link.ID),
+			zap.String("userAgent", r.UserAgent()),
+			zap.String("ip", r.RemoteAddr),
+			zap.Object("redirectMetadata", redirectMetadata),
+		)
+
+		// Do not use link.URL, use redirectMetadata.LinkURL instead.
+		// Redirect URL could be a geo-specific/ios/android link.
+		redirectURL := redirectMetadata.LinkURL
+
+		if err := t.ExecuteTemplate(w, "wait.html", WaitPageProps{
+			URL:         redirectURL,
+			Title:       link.Title,
+			Description: link.Description,
+			ImageURL:    link.ImageURL,
+		}); err != nil {
 			logger.Error("failed to execute template", zap.Error(err))
 		}
 	}), "handleLinkVisit"))
