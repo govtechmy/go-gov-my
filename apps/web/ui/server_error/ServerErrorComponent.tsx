@@ -10,19 +10,25 @@ const ServerErrorComponent = () => {
         <IdentifyWebsite />
       </div>
       <div className="flex flex-grow flex-col items-center justify-center bg-white px-4 text-center">
-        <span className="mb-10 me-2 rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-600 dark:bg-red-900 dark:text-red-300">
+        <span className="mb-5 me-2 rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-600 dark:bg-red-900 dark:text-red-300">
           500 ERROR
         </span>
-        <h1 className="mb-10 text-3xl font-bold leading-none tracking-wide text-gray-900 dark:text-white md:text-2xl lg:text-4xl">
+        <h1 className="mb-5 text-3xl font-bold leading-none tracking-wide text-gray-900 dark:text-white md:text-2xl lg:text-4xl">
           Something went wrong
         </h1>
         <p className="mb-10 text-gray-700">
-          For more help, please reach out to the agency <br /> that provided you
+          For more help, please reach out to the agency that <br /> provided you
           with this short link.
         </p>
-        <p className="text-gray-700">
+        {/* <p className="text-gray-700">
           You&apos;ll be redirected to the home page in <b>10 Seconds.</b>
-        </p>
+        </p> */}
+        <a
+          href="https://go.gov.my/"
+          className="mb-2 me-2 rounded-lg bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+        >
+          Return to Home Page
+        </a>
         <footer className="mt-20 w-full py-4 text-center text-gray-600">
           <div className="flex justify-center space-x-4">
             <Image
