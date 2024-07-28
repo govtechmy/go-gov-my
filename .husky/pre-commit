@@ -1,2 +1,2 @@
-pnpm format
-pnpm prettier-check
+pnpm run format
+pnpm run prettier-check

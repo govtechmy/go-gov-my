@@ -1,4 +1,7 @@
 services:
+  ######################
+  # Required Container #
+  ######################
   ps-postgres:
     image: postgres:13
     container_name: ps-postgres
@@ -85,14 +88,13 @@ services:
     volumes:
       - filebeatdata:/usr/share/filebeat/data:rw
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-      # Logs for filebeat to ingest
       - ./apps/redirect-server/logs:/usr/share/filebeat/logs:ro
     networks:
       - my-network
     depends_on:
       init-elasticsearch:
         condition: service_completed_successfully
-  
+
   logstash:
     image: docker.elastic.co/logstash/logstash:7.13.2
     env_file:
@@ -140,19 +142,6 @@ services:
     networks:
       - my-network
 
-  # kafdrop:
-  #   image: obsidiandynamics/kafdrop
-  #   container_name: kafdrop
-  #   restart: always
-  #   ports:
-  #     - 9000:9000
-  #   environment:
-  #     KAFKA_BROKER_CONNECT: "broker:29092"
-  #   depends_on:
-  #     - broker
-  #   networks:
-  #     - my-network
-
   debezium:
     image: debezium/connect:2.6
     container_name: debezium
@@ -197,63 +186,6 @@ services:
     networks:
       - my-network
 
-  # debezium-ui:
-  #   image: quay.io/debezium/debezium-ui:latest
-  #   container_name: debezium-ui
-  #   platform: linux/amd64
-  #   restart: always
-  #   ports:
-  #     - "8080:8080"
-  #   environment:
-  #     - KAFKA_CONNECT_URIS=http://debezium:8083
-  #   depends_on:
-  #     - debezium
-  #   networks:
-  #     - my-network
-
-  # Comment this out during development
-  # go-api:
-  #   container_name: go-api
-  #   build:
-  #     context: ./apps/redirect-server
-  #     dockerfile: docker/Dockerfile.api
-  #   ports:
-  #     - "3002:3002"
-  #   env_file:
-  #     - .env
-  #   environment:
-  #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-  #   command:
-  #     - "/api"
-  #     - "--elastic-url=http://elasticsearch:9200"
-  #   volumes:
-  #     - .:/app
-  #   depends_on:
-  #     - elasticsearch
-  #   networks:
-  #     - my-network
-
-
-  # Comment this out during development
-  # go-redirectd:
-  #   container_name: go-redirectd
-  #   build:
-  #     context: ./apps/redirect-server
-  #     dockerfile: docker/Dockerfile.redirectd
-  #   ports:
-  #     - "3000:3000"
-  #   env_file:
-  #     - .env
-  #   environment:
-  #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-  #   command:
-  #     - "/redirectd"
-  #     - "--elastic-url=http://elasticsearch:9200"
-  #   volumes:
-  #     - .:/app
-  #   depends_on:
-  #     - elasticsearch
-
   uptime-kuma:
     image: louislam/uptime-kuma:1
     restart: always
@@ -263,6 +195,80 @@ services:
       - 3001:3001
     networks:
       - my-network
+
+##########################
+# Optional Container     #
+# Mainly for Development #
+##########################
+
+# kafdrop:
+#   image: obsidiandynamics/kafdrop
+#   container_name: kafdrop
+#   restart: always
+#   ports:
+#     - 9000:9000
+#   environment:
+#     KAFKA_BROKER_CONNECT: "broker:29092"
+#   depends_on:
+#     - broker
+#   networks:
+#     - my-network
+
+# debezium-ui:
+#   image: quay.io/debezium/debezium-ui:latest
+#   container_name: debezium-ui
+#   platform: linux/amd64
+#   restart: always
+#   ports:
+#     - "8080:8080"
+#   environment:
+#     - KAFKA_CONNECT_URIS=http://debezium:8083
+#   depends_on:
+#     - debezium
+#   networks:
+#     - my-network
+
+# Comment this out during development
+# go-api:
+#   container_name: go-api
+#   build:
+#     context: ./apps/redirect-server
+#     dockerfile: docker/Dockerfile.api
+#   ports:
+#     - "3002:3002"
+#   env_file:
+#     - .env
+#   environment:
+#     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+#   command:
+#     - "/api"
+#     - "--elastic-url=http://elasticsearch:9200"
+#   volumes:
+#     - .:/app
+#   depends_on:
+#     - elasticsearch
+#   networks:
+#     - my-network
+
+# Comment this out during development
+# go-redirectd:
+#   container_name: go-redirectd
+#   build:
+#     context: ./apps/redirect-server
+#     dockerfile: docker/Dockerfile.redirectd
+#   ports:
+#     - "3000:3000"
+#   env_file:
+#     - .env
+#   environment:
+#     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+#   command:
+#     - "/redirectd"
+#     - "--elastic-url=http://elasticsearch:9200"
+#   volumes:
+#     - .:/app
+#   depends_on:
+#     - elasticsearch
 
 networks:
   my-network:
