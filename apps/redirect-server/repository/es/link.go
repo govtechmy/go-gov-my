@@ -25,7 +25,9 @@ func (r *LinkRepo) GetLink(ctx context.Context, slug string) (*repository.Link, 
 	res, err := r.esClient.Search().
 		Index(linkIndex).
 		Query(
-			elastic.NewTermQuery("slug", slug),
+			// Query against 'slug.keyword' since term queries don't work well
+			// with the default text type in the 'slug' field.
+			elastic.NewTermQuery("slug.keyword", slug),
 		).
 		Size(1).
 		Do(ctx)
@@ -44,8 +46,6 @@ func (r *LinkRepo) GetLink(ctx context.Context, slug string) (*repository.Link, 
 
 	return &link, nil
 }
-
-
 
 func (r *LinkRepo) SaveLink(ctx context.Context, link *repository.Link) error {
 	_, err := r.esClient.Index(). // not thread-safe

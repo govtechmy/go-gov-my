@@ -7,8 +7,10 @@ tmp_dir = "tmp"
   cmd = "go build -o ./tmp/ ./cmd/..."
   include_ext = ["go", "tpl", "tmpl", "html"]
   log = "build-errors.log"
-  post_cmd = ["chmod +x tmp/main"]
-  deflay = 1000000
+  send_interrupt = true
+  delay = 500
+  kill_delay = 500
+  rerun_delay = 500
 
 [run]
   cmd = "./tmp/main"
