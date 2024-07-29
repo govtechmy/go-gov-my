@@ -15,17 +15,6 @@ export default async function AppMiddleware(req: NextRequest) {
     user?: UserProps;
   };
 
-  // Farhan 18 Jul 24
-  // This is for temporary to view the static page, need to remove this once deploy
-  if (
-    pathWithoutLocale === "/home" ||
-    pathWithoutLocale === "/notfound" ||
-    pathWithoutLocale === "/server_error" ||
-    pathWithoutLocale === "/redirect"
-  ) {
-    return NextResponse.next();
-  }
-
   // if there's no session and the path isn't /login or /register, redirect to /login
   if (
     !session?.email &&
