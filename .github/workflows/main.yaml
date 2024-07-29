@@ -1,5 +1,4 @@
-name: Deploy to Production
-
+name: Deploy to staging
 on:
   push:
     branches:
@@ -7,8 +6,6 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:
-
 jobs:
   deploy:
     steps:
