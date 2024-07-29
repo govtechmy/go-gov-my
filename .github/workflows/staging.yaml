@@ -1,5 +1,6 @@
 name: Deploy to Staging
-
+env:
+  IMAGE: gogov-redirectd
 on:
   push:
     branches:
@@ -8,22 +9,18 @@ on:
     branches:
       - staging
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
           version: 8
-
       - name: Install dependencies
         run: pnpm install
-
       - name: Check prettier format
         run: pnpm run prettier-check
 
@@ -32,34 +29,48 @@ jobs:
 
     #   - name: Run Unit Test
     #     run: pnpm run test
-#   deploy:
-#     name: deploy to cluster
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Configure AWS credentials
-#         uses: aws-actions/configure-aws-credentials@v1
-#         with:
-#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_STAGING }}
-#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_STAGING }}
-#           aws-region: us-east-2
-
-#       - name: Login to Amazon ECR
-#         id: login-ecr
-#         uses: aws-actions/amazon-ecr-login@v1
-
-#       - name: deploy to cluster
-#         uses: kodermax/kubectl-aws-eks@main
-#         env:
-#           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_STAGING }}
-#           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-#           ECR_REPOSITORY: my-app
-#           IMAGE_TAG: ${{ github.sha }}
-#         with:
-#           args: set image deployment/$ECR_REPOSITORY $ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
-#       - name: Verify deployment
-#         uses: kodermax/kubectl-aws-eks@main
-#         env:
-#           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA_STAGING }}
-#         with:
-#           args: rollout status deployment/my-app
+  deploy:
+    needs: [build]
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::767397910274:role/github-oidc-provider-aws
+          aws-region: ap-southeast-1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}
+          tags: |
+            type=sha
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v5
+        with:
+          context: apps/redirect-server
+          file: apps/redirect-server/docker/Dockerfile.redirectd
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+      - name: Log out of Amazon ECR
+        run: docker logout ${{ steps.login-ecr.outputs.registry }}
+      - name: Deploy with Spinnaker
+        run: |
+          curl --request POST \
+              --url https://spin-gate.govtechmy.dev/webhooks/webhook/github \
+              --header 'Content-Type: application/json' \
+              --data '{
+                "secret": "${{ secrets.SPINNAKER_SECRET }}",
+                "artifacts": [
+                  {
+                    "type": "docker/image",
+                    "reference": "${{ steps.meta.outputs.tags }}",
+                    "name": "${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}",
+                    "version": "${{ steps.meta.outputs.version }}"
+                  }
+                ]
+              }'
