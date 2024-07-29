@@ -8,7 +8,7 @@ export default function HomeNavBar() {
       email: "farhan.gunz@gmail.com",
     },
   };
-  //   const session = undefined;
+  //   const session = undefined; // add comment to trigger changes
 
   return (
     <>
