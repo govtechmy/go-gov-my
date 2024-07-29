@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - staging
+      - feat/deploy1
   pull_request:
     branches:
       - staging
