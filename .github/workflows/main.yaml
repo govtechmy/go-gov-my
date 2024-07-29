@@ -35,8 +35,8 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
         with:
-          context: apps/redirect-server
-          file: apps/redirect-server/docker/Dockerfile.redirectd
+          context: ./apps/redirect-server
+          file: ./apps/redirect-server/docker/Dockerfile.redirectd
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
