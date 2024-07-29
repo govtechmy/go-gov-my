@@ -1,0 +1,268 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    </head>
+    <body>
+        <style>
+            main {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 99vh;
+                text-align: center;
+                color: #18181B;
+            }
+            @font-face {
+                font-family: Poppins;
+                src: url('../public/font/Poppins-Medium.ttf');
+            }
+            @font-face {
+                font-family: Inter;
+                src: url('../public/font/Inter-Regular.ttf');
+            }
+            footer {
+                position: static;
+                bottom: 0;
+                padding-bottom: 50px;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+            }
+            .left {
+                text-align: left;
+            }
+            .right {
+                text-align: right;
+                border-right: 1px solid #D4D4D8;
+            }
+            .inputPage {
+                display: block;
+            }
+            .redirectPage {
+                display: none;
+            }
+            .warning {
+                color: red;
+                text-align: center;
+                font-family: "Poppins";
+                display: none;
+            }
+            .poppins {
+                font-family: "Poppins";
+            }
+            .inter {
+                font-family: "Inter";
+            }
+            img {
+                margin: auto
+            }
+            header {
+                position: absolute;
+                top: 0;
+                background-color: #F4F4F5;
+                width: 100%;
+                padding-top: 6px;
+                padding-bottom: 6px;
+                padding-left: 25%;
+                padding-right: 25%;
+                text-align: left;
+            }
+            .flex {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 1rem;
+                padding-left: 10%
+            }
+            .flex-1 {
+                flex: 1
+            }
+            .flex-2 {
+                flex: 2
+            }
+            .flex-3 {
+                flex: 3
+            }
+            .flex-4 {
+                flex: 4
+            }
+            a {
+                color: blue;
+                text-decoration: none;
+            }
+            .text-right {
+                text-align: right;
+            }
+            .size14 {
+                font-size: 14
+            }
+            .rotate {
+                rotate: 180deg;
+            }
+            @media screen and (min-width: 380px) {
+                /* WEB */
+                .header-text {
+                    font-size: 30px;
+                    line-height: 38px;
+                    font-weight: 600;
+                    font-family: "Poppins";
+                    width: 400px;
+                    height: 32px;
+                }
+                .description-text {
+                    font-size: 16px;
+                    line-height: 24px;
+                    font-weight: 400;
+                    font-family: "Inter";
+                    width: 400px;
+                    height: 24px;
+                }
+                .input-text {
+                    border-radius: 4px;
+                    border: 1px solid #E4E4E7;
+                    padding: 10px;
+                    width: 400px;
+                    height: 44px;
+                }
+                .form-group {
+                    margin: 0.7rem;
+                    padding: 0.7rem;
+                }
+                .btn {
+                    text-align: center;
+                    background-color: #2563EB;
+                    color: white;
+                    border-radius: 4px;
+                    width: 400px;
+                    height: 44px;
+                    border: none;
+                }
+                .btn:disabled {
+                    background-color: #96B7FF;
+                    cursor: not-allowed;
+                }
+                .footer-item {
+                    padding-left: 15px;
+                    padding-right: 15px;
+                    color: #18181B;
+                    font-size: 14px;
+                    font-weight: 600;
+                    line-height: 20px;
+                    font-family: "Poppins";
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 1rem;
+                }
+                .footer-text {
+                    display: block
+                }
+            }
+            @media screen and (max-width: 380px) {
+                /* MOBILE */
+                .header-text {
+                    font-size: 24px;
+                    line-height: 31px;
+                    font-weight: 600;
+                    font-family: "Poppins";
+                    max-width: 339px;
+                    height: 32px;
+                }
+                .description-text {
+                    font-size: 16px;
+                    line-height: 24px;
+                    font-weight: 400;
+                    font-family: "Inter";
+                    max-width: 339px;
+                    height: 20px;
+                }
+                .form-group {
+                    margin: 0.7rem;
+                    padding: 0.7rem;
+                }
+                .input-text {
+                    border-radius: 4px;
+                    border: 1px solid #E4E4E7;
+                    padding: 10px;
+                    max-width: 339px;
+                    width: 100%;
+                    height: 40px;
+                }
+                .btn {
+                    text-align: center;
+                    background-color: #2563EB;
+                    color: white;
+                    border-radius: 4px;
+                    max-width: 339px;
+                    width: 100%;
+                    height: 40px;
+                    border: none;
+                }
+                .btn:disabled {
+                    background-color: #96B7FF;
+                    cursor: not-allowed;
+                }
+                .footer-item {
+                    padding-left: 15px;
+                    padding-right: 15px;
+                    color: #18181B;
+                    font-size: 14px;
+                    font-weight: 600;
+                    line-height: 20px;
+                    font-family: "Poppins";
+                }
+                .footer-text {
+                    display: none
+                }
+            }
+        </style>
+        <main >
+            <header>
+                <div class="flex">
+                    <div class=" text-right"><img src="../public/images/Malaysia Flag.png" /></div>
+                    <div class="inter size14">
+                        Official Malaysia Government Website 
+                        <a href="" id="text">Here's how you know </a>
+                    </div>
+                    
+                </div>
+                <!-- <img src="images/Malaysia Flag.png" />Official Malaysia Government Website <a href="">Here's how you know</a> -->
+            </header>
+            <div id="inputPage">
+                <img src="../public/images/GoGovMY.png"/>
+                <div class="header-text form-group">Password required</div>
+                <div class="description-text form-group">Please enter the password to view protected link.</div>
+                <div class="form-group">
+                    <input type="password" id="passwordField" placeholder="Enter Your Password" class="input-text"/>
+                </div>
+                <div class="form-group">
+                    <button class="btn" disabled="true" id="contBtn">Continue</button>
+                </div>
+                <p class="warning" id="warning">Wrong Password</p>
+            </div>
+        </main>
+        <footer>
+            <div class="footer-item right"><img src="../public/images/Jata Negara.png" /><div class="footer-text">Government of Malaysia</div></div>
+            <div class="footer-item left"><img src="../public/images/Link.png" /><div class="footer-text">go.gov.my</div</div>
+        </footer>
+        <script>
+            document.getElementById("passwordField").addEventListener("keyup", ()=>{
+                console.log(document.getElementById("passwordField").value.length)
+                if (document.getElementById("passwordField").value.length > 0) {
+                    document.getElementById("contBtn").disabled = false
+                } else {
+                    document.getElementById("contBtn").disabled = true
+                }
+            })
+            document.getElementById("contBtn").addEventListener("click", ()=>{
+                document.location.href = `/{{.slug}}/${document.getElementById("passwordField").value}`
+            })
+            const urlParams = new URLSearchParams(window.location.search);
+            const wrong_password = urlParams.get('wrong_password');
+            if (wrong_password === "1") {
+                document.getElementById("warning").style.display = "block"
+            }
+        </script>
+    </body>
+</html>
