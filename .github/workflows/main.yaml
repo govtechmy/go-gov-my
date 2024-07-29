@@ -1,4 +1,6 @@
 name: Deploy to staging
+env:
+  IMAGE: gogov-redirectd
 on:
   push:
     branches:
