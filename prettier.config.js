@@ -8,6 +8,6 @@ module.exports = {
   plugins: [
     // comment for better diff
     "prettier-plugin-organize-imports",
-    "prettier-plugin-tailwindcss",
+    "prettier-plugin-tailwindcss", 
   ],
 };
