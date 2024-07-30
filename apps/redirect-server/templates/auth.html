@@ -244,7 +244,7 @@
         </main>
         <footer>
             <div class="footer-item right"><img src="../public/images/Jata Negara.png" /><div class="footer-text">Government of Malaysia</div></div>
-            <div class="footer-item left"><img src="../public/images/Link.png" /><div class="footer-text">go.gov.my</div</div>
+            <div class="footer-item left"><img src="../public/images/Link.png" /><div class="footer-text">go.gov.my</div></div>
         </footer>
         <script>
             document.getElementById("passwordField").addEventListener("keyup", ()=>{
@@ -256,7 +256,7 @@
                 }
             })
             document.getElementById("contBtn").addEventListener("click", ()=>{
-                document.location.href = `/{{.slug}}/${document.getElementById("passwordField").value}`
+                document.location.href = `/{{.Slug}}/${document.getElementById("passwordField").value}`
             })
             const urlParams = new URLSearchParams(window.location.search);
             const wrong_password = urlParams.get('wrong_password');
