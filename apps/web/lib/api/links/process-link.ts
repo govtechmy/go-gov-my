@@ -43,7 +43,6 @@ export async function processLink<T extends Record<string, any>>({
     }
 > {
   let {
-    domain,
     key,
     url,
     image,
@@ -107,10 +106,7 @@ export async function processLink<T extends Record<string, any>>({
     }
   }
 
-  // if domain is not defined, set it to the workspace's primary domain
-  if (!domain) {
-    domain = workspace?.domains?.find((d) => d.primary)?.slug || SHORT_DOMAIN;
-  }
+  const domain = SHORT_DOMAIN;
 
   // checks for SHORT_DOMAIN links
   if (domain === SHORT_DOMAIN) {
@@ -149,14 +145,6 @@ export async function processLink<T extends Record<string, any>>({
         code: "unprocessable_entity",
       };
     }
-
-    // else, check if the domain belongs to the workspace
-  } else if (!workspace?.domains?.find((d) => d.slug === domain)) {
-    return {
-      link: payload,
-      error: "Domain does not belong to workspace.",
-      code: "forbidden",
-    };
   }
 
   if (!key) {

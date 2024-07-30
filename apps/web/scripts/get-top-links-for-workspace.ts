@@ -21,11 +21,6 @@ async function main() {
           user: true,
         },
       },
-      domains: {
-        where: {
-          verified: true,
-        },
-      },
       sentEmails: true,
       createdAt: true,
     },

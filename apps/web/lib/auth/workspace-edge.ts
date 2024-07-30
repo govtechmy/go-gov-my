@@ -210,12 +210,6 @@ export const withWorkspaceEdge = (
               role: true,
             },
           },
-          domains: {
-            select: {
-              slug: true,
-              primary: true,
-            },
-          },
         },
       })) as WorkspaceProps;
 

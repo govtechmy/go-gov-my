@@ -43,7 +43,6 @@ export const POST = withAdmin(async ({ req }) => {
               usage: true,
               _count: {
                 select: {
-                  domains: true,
                   links: true,
                 },
               },
@@ -75,7 +74,6 @@ export const POST = withAdmin(async ({ req }) => {
     workspaces: response.projects.map(({ project }) => ({
       ...project,
       clicks: project.usage,
-      domains: project._count.domains,
       links: project._count.links,
     })),
     impersonateUrl: await getImpersonateUrl(response.email),

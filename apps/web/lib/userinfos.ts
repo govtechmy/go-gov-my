@@ -6,7 +6,6 @@ export const getWorkspaceViaEdge = async (workspaceId: string) => {
   const workspace = await prisma.project.findUnique({
     where: { id: workspaceId.replace("ws_", "") },
     include: {
-      domains: true, // Include domains relation
       users: true, // Include users relation
     },
   });

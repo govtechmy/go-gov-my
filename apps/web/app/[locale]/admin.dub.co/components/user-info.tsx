@@ -15,7 +15,6 @@ export interface UserInfoProps {
     slug: string;
     plan: string;
     clicks: number;
-    domains: number;
     links: number;
   }[];
   impersonateUrl: string;
@@ -84,12 +83,6 @@ export default function UserInfo({ data }: { data: UserInfoProps }) {
               <span className="text-gray-500">
                 {capitalize(workspace.plan)}
               </span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="font-medium text-gray-700">
-                {message?.domains}
-              </span>
-              <span className="text-gray-500">{workspace.domains}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="font-medium text-gray-700">

@@ -48,7 +48,6 @@ export const expectedWorkspace: Partial<Project> = {
   usageLimit: expect.any(Number),
   linksUsage: expect.any(Number),
   linksLimit: expect.any(Number),
-  domainsLimit: expect.any(Number),
   tagsLimit: expect.any(Number),
   usersLimit: expect.any(Number),
   plan: expect.any(String),

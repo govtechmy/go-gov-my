@@ -6,12 +6,7 @@ import {
 import { prisma } from "@/lib/prisma";
 import { ratelimit } from "@/lib/redis/ratelimit";
 import { PlanProps, WorkspaceProps } from "@/lib/types";
-import {
-  API_DOMAIN,
-  DUB_WORKSPACE_ID,
-  getSearchParams,
-  isDubDomain,
-} from "@dub/utils";
+import { API_DOMAIN, getSearchParams } from "@dub/utils";
 import { Link as LinkProps } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
 import { hashToken } from "./hash-token";
@@ -56,7 +51,6 @@ export const withWorkspace = (
     needNotExceededClicks, // if the action needs the user to not have exceeded their clicks usage
     needNotExceededLinks, // if the action needs the user to not have exceeded their links usage
     skipLinkChecks, // special case for /api/links/exists – skip link checks
-    domainChecks,
   }: {
     requiredPlan?: Array<PlanProps>;
     /** The workspace roles that are required for the user. Does not apply to super admins. */
@@ -64,7 +58,6 @@ export const withWorkspace = (
     needNotExceededClicks?: boolean;
     needNotExceededLinks?: boolean;
     skipLinkChecks?: boolean;
-    domainChecks?: boolean;
   } = {},
 ) => {
   return async (
@@ -212,12 +205,6 @@ export const withWorkspace = (
                 role: true,
               },
             },
-            domains: {
-              select: {
-                slug: true,
-                primary: true,
-              },
-            },
           },
         }),
         linkId
@@ -264,25 +251,6 @@ export const withWorkspace = (
             },
           },
         })) as LinkProps;
-      }
-
-      // if domain is defined:
-      // - it's a dub domain and domainChecks is required, check if the user is part of the dub workspace
-      // - it's a custom domain, check if the domain belongs to the workspace
-      if (domain) {
-        if (isDubDomain(domain)) {
-          if (domainChecks && workspace.id !== DUB_WORKSPACE_ID) {
-            throw new DubApiError({
-              code: "forbidden",
-              message: "Domain does not belong to workspace.",
-            });
-          }
-        } else if (!workspace.domains.find((d) => d.slug === domain)) {
-          throw new DubApiError({
-            code: "forbidden",
-            message: "Domain does not belong to workspace.",
-          });
-        }
       }
 
       // null if user is not part of the workspace
