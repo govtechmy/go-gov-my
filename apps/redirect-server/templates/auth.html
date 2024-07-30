@@ -248,7 +248,6 @@
         </footer>
         <script>
             document.getElementById("passwordField").addEventListener("keyup", ()=>{
-                console.log(document.getElementById("passwordField").value.length)
                 if (document.getElementById("passwordField").value.length > 0) {
                     document.getElementById("contBtn").disabled = false
                 } else {
@@ -256,11 +255,10 @@
                 }
             })
             document.getElementById("contBtn").addEventListener("click", ()=>{
-                document.location.href = `/{{.Slug}}/${document.getElementById("passwordField").value}`
+                document.location.href = `/{{.Slug}}/?password=${document.getElementById("passwordField").value}`
             })
-            const urlParams = new URLSearchParams(window.location.search);
-            const wrong_password = urlParams.get('wrong_password');
-            if (wrong_password === "1") {
+            console.log("{{.WrongPassword}}", `{{.WrongPassword}}`)
+            if (`{{.WrongPassword}}` === "true") {
                 document.getElementById("warning").style.display = "block"
             }
         </script>
