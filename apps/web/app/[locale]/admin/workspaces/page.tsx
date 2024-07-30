@@ -155,7 +155,7 @@ function WorkspaceCard({
 }: Pick<WorkspaceProps, "id" | "name" | "slug" | "logo" | "usage" | "plan">) {
   const { messages, locale } = useIntlClientHook();
   const { data: linkCount } = useSWR<number>(
-    `/api/links/count?workspaceId=${id}`,
+    `/api/admin/links/count?workspaceId=${id}`,
     fetcher,
   );
 
