@@ -10,19 +10,16 @@ import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
 import { subscribe } from "../flodesk";
 import { isStored, storage } from "../storage";
-
-const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
+import { IS_PRODUCTION, SESSION_TOKEN_NAME } from "./constants";
 
 const prisma = new PrismaClient();
-
-const isLocal = process.env.NODE_ENV === "development";
 
 export const authOptions: NextAuthOptions = {
   providers: [
     EmailProvider({
       async sendVerificationRequest({ identifier, url }) {
         // For now the dev and prod should be the same unless we want to handle them email differently later.
-        if (process.env.NODE_ENV === "development") {
+        if (!IS_PRODUCTION) {
           await sendEmail({
             email: identifier,
             subject: `Your ${process.env.NEXT_PUBLIC_APP_NAME} Login Link`,
@@ -47,16 +44,16 @@ export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
   cookies: {
     sessionToken: {
-      name: `${VERCEL_DEPLOYMENT ? "__Secure-" : ""}next-auth.session-token`,
+      name: SESSION_TOKEN_NAME,
       options: {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
         // When working on localhost, the cookie domain must be omitted entirely (https://stackoverflow.com/a/1188145)
-        domain: VERCEL_DEPLOYMENT
+        domain: IS_PRODUCTION
           ? `.${process.env.NEXT_PUBLIC_APP_DOMAIN}`
           : undefined,
-        secure: VERCEL_DEPLOYMENT,
+        secure: IS_PRODUCTION,
       },
     },
   },
@@ -71,7 +68,7 @@ export const authOptions: NextAuthOptions = {
         return false;
       }
 
-      if (!allowedDomain(user.email, isLocal)) {
+      if (!allowedDomain(user.email, !IS_PRODUCTION)) {
         return false;
       }
 
@@ -191,9 +188,3 @@ export const authOptions: NextAuthOptions = {
     },
   },
 };
-
-// function PrismaAdapter(
-//   prisma: PrismaClient<{ adapter: PrismaPlanetScale }, never, DefaultArgs>,
-// ): import("next-auth/adapters").Adapter | undefined {
-//   throw new Error("Function not implemented.");
-// }

@@ -1,7 +1,6 @@
 import { ApiMiddleware, AppMiddleware, LinkMiddleware } from "@/lib/middleware";
 import { parse } from "@/lib/middleware/utils";
 import {
-  ADMIN_HOSTNAMES,
   API_HOSTNAMES,
   APP_HOSTNAMES,
   DEFAULT_REDIRECTS,
@@ -26,7 +25,12 @@ export const config = {
 };
 
 export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
-  const { domain, path, key } = parse(req);
+  const { domain, path, key, pathWithoutLocale } = parse(req);
+
+  // for Admin
+  if (pathWithoutLocale.startsWith("/admin")) {
+    return AdminMiddleware(req);
+  }
 
   // for App
   if (APP_HOSTNAMES.has(domain)) {
@@ -46,11 +50,6 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
   // default redirects for SHORT_DOMAIN
   if (domain === SHORT_DOMAIN && DEFAULT_REDIRECTS[key]) {
     return NextResponse.redirect(DEFAULT_REDIRECTS[key]);
-  }
-
-  // for Admin
-  if (ADMIN_HOSTNAMES.has(domain)) {
-    return AdminMiddleware(req);
   }
 
   // key must be defined for link redirects
