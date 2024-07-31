@@ -19,12 +19,19 @@ func main() {
 	var elasticPassword string
 	var httpPort int
 	{
-		flag.StringVar(&elasticURL, "elastic-url", "http://localhost:9200", "Elasticsearch URL")
-		flag.StringVar(&elasticUser, "elastic-user", "elastic", "Elasticsearch username")
+		flag.StringVar(&elasticURL, "elastic-url", os.Getenv("ELASTIC_URL"), "Elasticsearch URL e.g. http://localhost:9200")
+		flag.StringVar(&elasticUser, "elastic-user", os.Getenv("ELASTIC_USER"), "Elasticsearch username")
 		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
 		flag.IntVar(&httpPort, "http-port", 3002, "HTTP server port")
 	}
 	flag.Parse()
+
+	if elasticURL == "" {
+		elasticURL = "http://localhost:9200"
+	}
+	if elasticUser == "" {
+		elasticUser = "elastic"
+	}
 
 	esClient, err := elastic.NewSimpleClient(
 		elastic.SetURL(elasticURL),
