@@ -6,7 +6,7 @@ datasource db {
   url          = env("DATABASE_URL")
   directUrl    = env("DIRECT_URL")
   extensions   = [pgcrypto(map: "pgcrypto", schema: "public")]
-  relationMode = "prisma"
+  relationMode = "foreignKeys"
 }
 
 generator client {
