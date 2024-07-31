@@ -1,4 +1,4 @@
-name: Deploy to staging
+name: Deploy go-redirectd
 env:
   IMAGE: gogov-redirectd
 on:
