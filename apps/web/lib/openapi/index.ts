@@ -1,5 +1,4 @@
 import { openApiErrorResponses } from "@/lib/openapi/responses";
-import { DomainSchema } from "@/lib/zod/schemas/domains";
 import { LinkSchema } from "@/lib/zod/schemas/links";
 import { TagSchema } from "@/lib/zod/schemas/tags";
 import { WorkspaceSchema } from "@/lib/zod/schemas/workspaces";
@@ -48,7 +47,6 @@ export const document = createDocument({
       LinkSchema,
       WorkspaceSchema,
       TagSchema,
-      DomainSchema,
     },
     securitySchemes: {
       token: {

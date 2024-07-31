@@ -7,11 +7,6 @@ async function main() {
       slug: true,
       plan: true,
       usage: true,
-      _count: {
-        select: {
-          domains: true,
-        },
-      },
     },
     orderBy: {
       usage: "desc",
