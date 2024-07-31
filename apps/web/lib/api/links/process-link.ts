@@ -22,7 +22,7 @@ export async function processLink<T extends Record<string, any>>({
   skipKeyChecks = false, // only skip when key doesn't change (e.g. when editing a link)
 }: {
   payload: NewLinkProps & T;
-  workspace?: WorkspaceProps;
+  workspace: WorkspaceProps;
   userId?: string;
   bulk?: boolean;
   skipKeyChecks?: boolean;
@@ -241,7 +241,7 @@ export async function processLink<T extends Record<string, any>>({
       expiresAt,
       expiredUrl,
       // make sure projectId is set to the current workspace
-      projectId: workspace?.id || null,
+      projectId: workspace.id,
       // if userId is passed, set it (we don't change the userId if it's already set, e.g. when editing a link)
       ...(userId && {
         userId,

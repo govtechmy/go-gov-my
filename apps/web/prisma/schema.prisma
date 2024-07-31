@@ -224,8 +224,8 @@ model Link {
   userId String? @db.Uuid
 
   // Project that the link belongs to
-  project       Project? @relation(fields: [projectId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  projectId     String?  @db.Uuid
+  project       Project @relation(fields: [projectId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  projectId     String  @db.Uuid
 
   publicStats Boolean   @default(false) // whether to show public stats or not
   clicks      Int       @default(0) // number of clicks
