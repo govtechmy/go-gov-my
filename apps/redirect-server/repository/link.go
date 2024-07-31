@@ -16,4 +16,5 @@ type Link struct {
 	Title       string            `json:"title,omitempty"`
 	Description string            `json:"description,omitempty"`
 	ImageURL    string            `json:"imageUrl,omitempty"`
+	Password	string			  `json:"password,omitempty"`
 }

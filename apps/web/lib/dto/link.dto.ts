@@ -12,6 +12,7 @@ export interface LinkDTO {
   imageUrl: string | null; // image URL for OG meta tags
   title: string | null;
   description: string | null;
+  password: string | null;
   createdAt: Date | null;
 }
 
@@ -31,6 +32,7 @@ export async function processDTOLink(response: LinkProps): Promise<LinkDTO> {
     imageUrl: response.image,
     title: response.title,
     description: response.description,
+    password: response.password,
     createdAt: response.createdAt,
   };
 
