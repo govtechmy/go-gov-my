@@ -6,33 +6,11 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
 	"redirect-server/repository/es"
 
-	"github.com/joho/godotenv"
 	"github.com/olivere/elastic/v7"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
-
-const (
-	ENV_DEVELOPMENT = "development"
-	ENV_PRODUCTION  = "production"
-)
-
-func init() {
-	// Construct the path to the .env file in the root directory
-	rootDir, err := filepath.Abs(filepath.Join(".", "..", ".."))
-	if err != nil {
-		log.Fatalf("Error constructing root directory path: %s", err)
-	}
-	envPath := filepath.Join(rootDir, ".env")
-
-	// Load the .env file
-	err = godotenv.Load(envPath)
-	if err != nil {
-		log.Printf("Error loading .env file: %s", err)
-	}
-}
 
 func main() {
 
