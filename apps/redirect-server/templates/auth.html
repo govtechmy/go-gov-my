@@ -45,7 +45,6 @@
                 color: red;
                 text-align: center;
                 font-family: "Poppins";
-                display: none;
             }
             .poppins {
                 font-family: "Poppins";
@@ -231,15 +230,19 @@
             </header>
             <div id="inputPage">
                 <img src="../public/images/GoGovMY.png"/>
-                <div class="header-text form-group">Password required</div>
-                <div class="description-text form-group">Please enter the password to view protected link.</div>
-                <div class="form-group">
-                    <input type="password" id="passwordField" placeholder="Enter Your Password" class="input-text"/>
-                </div>
-                <div class="form-group">
-                    <button class="btn" disabled="true" id="contBtn">Continue</button>
-                </div>
-                <p class="warning" id="warning">Wrong Password</p>
+                <form method="GET" action="/{{.Slug}}">
+                    <h1 class="header-text form-group">Password required</h1>
+                    <p class="description-text form-group">Please enter the password to view protected link.</p>
+                    <div class="form-group">
+                        <input name="password" type="password" id="passwordField" placeholder="Enter Your Password" class="input-text" tabindex="1" />
+                    </div>
+                    <div class="form-group">
+                        <button class="btn" disabled="true" id="contBtn" type="submit">Continue</button>
+                    </div>
+                    {{if .WrongPassword}}
+                        <p class="warning" id="warning">Wrong Password</p>
+                    {{end}}
+                </form>
             </div>
         </main>
         <footer>
@@ -254,13 +257,6 @@
                     document.getElementById("contBtn").disabled = true
                 }
             })
-            document.getElementById("contBtn").addEventListener("click", ()=>{
-                document.location.href = `/{{.Slug}}/?password=${document.getElementById("passwordField").value}`
-            })
-            console.log("{{.WrongPassword}}", `{{.WrongPassword}}`)
-            if (`{{.WrongPassword}}` === "true") {
-                document.getElementById("warning").style.display = "block"
-            }
         </script>
     </body>
 </html>

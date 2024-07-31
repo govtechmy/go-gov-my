@@ -32,10 +32,9 @@ type WaitPageProps struct {
 }
 
 type AuthPageProps struct {
-	Slug 			string
-	WrongPassword 	bool
+	Slug          string
+	WrongPassword bool
 }
-
 
 func main() {
 	loggerConfig := zap.NewProductionConfig()
@@ -138,7 +137,7 @@ func main() {
 		// LINK IS PASSWORD PROTECTED BUT USER DID NOT PROVIDE PASSWORD, REDIRECT TO AUTH PAGE
 		if link.Password != "" && user_input_password == "" {
 			if err := t.ExecuteTemplate(w, "auth.html", AuthPageProps{
-				Slug: slug,
+				Slug:          slug,
 				WrongPassword: false,
 			}); err != nil {
 				logger.Error("failed to execute template", zap.Error(err))
@@ -149,7 +148,7 @@ func main() {
 		// LINK IS PASSWORD PROTECTED AND USER PROVIDED WRONG PASSWORD
 		if link.Password != "" && user_input_password != link.Password && user_input_password != "" {
 			if err := t.ExecuteTemplate(w, "auth.html", AuthPageProps{
-				Slug: slug,
+				Slug:          slug,
 				WrongPassword: true,
 			}); err != nil {
 				logger.Error("failed to execute template", zap.Error(err))
