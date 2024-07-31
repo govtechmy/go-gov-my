@@ -62,12 +62,6 @@ export const GET = withSession(async ({ session, searchParams }) => {
           role: true,
         },
       },
-      domains: {
-        select: {
-          slug: true,
-          primary: true,
-        },
-      },
     },
   });
 
@@ -147,14 +141,6 @@ export const POST = withSession(async ({ req, session }) => {
       },
     },
     include: {
-      domains: {
-        select: {
-          id: true,
-          slug: true,
-          primary: true,
-          createdAt: true,
-        },
-      },
       users: {
         select: {
           role: true,
@@ -166,10 +152,6 @@ export const POST = withSession(async ({ req, session }) => {
   const response = {
     ...projectResponse,
     id: `ws_${projectResponse.id}`,
-    domains: projectResponse.domains.map(({ slug, primary }) => ({
-      slug,
-      primary,
-    })),
   };
 
   return NextResponse.json(response);

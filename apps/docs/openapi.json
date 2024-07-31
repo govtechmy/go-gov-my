@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "GoGovMy API",
-    "description": "GoGovMy is link management infrastructure for companies to create marketing campaigns, link sharing features, and referral programs.",
+    "description": "GoGovMY - Malaysia's open-source link management infrastructure.",
     "version": "0.0.1",
     "contact": {
       "name": "GoGovMy Support",
@@ -1285,7 +1285,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -1527,7 +1526,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -1785,7 +1783,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -2029,7 +2026,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -2273,7 +2269,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -2531,7 +2526,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -2789,7 +2783,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -3047,7 +3040,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -3305,7 +3297,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -3563,7 +3554,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -3823,7 +3813,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -4068,7 +4057,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -4329,7 +4317,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -4576,7 +4563,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -4823,7 +4809,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -5084,7 +5069,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -5345,7 +5329,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -5606,7 +5589,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -5867,7 +5849,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -6128,7 +6109,6 @@
             "schema": {
               "type": "string",
               "enum": [
-                "1h",
                 "24h",
                 "7d",
                 "30d",
@@ -8027,10 +8007,6 @@
             "type": "number",
             "description": "The links limit of the workspace."
           },
-          "domainsLimit": {
-            "type": "number",
-            "description": "The domains limit of the workspace."
-          },
           "tagsLimit": {
             "type": "number",
             "description": "The tags limit of the workspace."
@@ -8080,29 +8056,6 @@
             },
             "description": "The role of the authenticated user in the workspace."
           },
-          "domains": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "slug": {
-                  "type": "string",
-                  "description": "The domain name.",
-                  "example": "acme.com"
-                },
-                "primary": {
-                  "type": "boolean",
-                  "default": false,
-                  "description": "Whether the domain is the primary domain for the workspace."
-                }
-              },
-              "required": [
-                "slug",
-                "primary"
-              ]
-            },
-            "description": "The domains of the workspace."
-          },
           "inviteCode": {
             "type": "string",
             "nullable": true,
@@ -8118,14 +8071,12 @@
           "usageLimit",
           "linksUsage",
           "linksLimit",
-          "domainsLimit",
           "tagsLimit",
           "usersLimit",
           "plan",
           "billingCycleStart",
           "createdAt",
           "users",
-          "domains",
           "inviteCode"
         ],
         "title": "Workspace"
@@ -8161,78 +8112,6 @@
           "color"
         ],
         "title": "Tag"
-      },
-      "DomainSchema": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "The unique identifier of the domain."
-          },
-          "slug": {
-            "type": "string",
-            "description": "The domain name.",
-            "example": "acme.com"
-          },
-          "verified": {
-            "type": "boolean",
-            "default": false,
-            "description": "Whether the domain is verified."
-          },
-          "primary": {
-            "type": "boolean",
-            "default": false,
-            "description": "Whether the domain is the primary domain for the workspace."
-          },
-          "archived": {
-            "type": "boolean",
-            "description": "Whether the domain is archived.",
-            "default": false
-          },
-          "placeholder": {
-            "type": "string",
-            "description": "Provide context to your teammates in the link creation modal by showing them an example of a link to be shortened.",
-            "default": "https://dub.co/help/article/what-is-dub",
-            "example": "https://dub.co/help/article/what-is-dub"
-          },
-          "expiredUrl": {
-            "type": "string",
-            "nullable": true,
-            "description": "The URL to redirect to when a link under this domain has expired.",
-            "example": "https://acme.com/expired"
-          },
-          "target": {
-            "type": "string",
-            "nullable": true,
-            "description": "The page your users will get redirected to when they visit your domain.",
-            "example": "https://acme.com/landing"
-          },
-          "type": {
-            "type": "string",
-            "description": "The type of redirect to use for this domain.",
-            "enum": [
-              "redirect",
-              "rewrite"
-            ]
-          },
-          "clicks": {
-            "type": "number",
-            "description": "The number of clicks on the domain.",
-            "default": 0
-          }
-        },
-        "required": [
-          "id",
-          "slug",
-          "verified",
-          "primary",
-          "archived",
-          "placeholder",
-          "expiredUrl",
-          "target",
-          "type",
-          "clicks"
-        ]
       },
       "linkGeoTargeting": {
         "type": "object",

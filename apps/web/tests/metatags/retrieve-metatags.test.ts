@@ -18,6 +18,7 @@ test("GET /metatags", async (ctx) => {
     title: "X. It’s what’s happening",
     description:
       "From breaking news and entertainment to sports and politics, get the full story with all the live commentary.",
-    image: "https://abs.twimg.com/favicons/twitter.3.ico",
+    image:
+      "https://abs.twimg.com/responsive-web/server-ssr/icon-ios.77d25eba.png",
   });
 });

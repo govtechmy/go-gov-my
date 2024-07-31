@@ -4,12 +4,10 @@ import { prisma } from "@/lib/prisma";
 import { NewLinkProps, ProcessedLinkProps, WorkspaceProps } from "@/lib/types";
 import { checkIfUserExists, getRandomKey } from "@/lib/userinfos";
 import {
-  DUB_DOMAINS,
   SHORT_DOMAIN,
   getApexDomain,
   getDomainWithoutWWW,
   getUrlFromString,
-  isDubDomain,
   isValidUrl,
   log,
   parseDateTime,
@@ -24,7 +22,7 @@ export async function processLink<T extends Record<string, any>>({
   skipKeyChecks = false, // only skip when key doesn't change (e.g. when editing a link)
 }: {
   payload: NewLinkProps & T;
-  workspace?: WorkspaceProps;
+  workspace: WorkspaceProps;
   userId?: string;
   bulk?: boolean;
   skipKeyChecks?: boolean;
@@ -42,21 +40,7 @@ export async function processLink<T extends Record<string, any>>({
       status?: never;
     }
 > {
-  let {
-    domain,
-    key,
-    url,
-    image,
-    proxy,
-    password,
-    rewrite,
-    expiredUrl,
-    ios,
-    android,
-    geo,
-    tagNames,
-    createdAt,
-  } = payload;
+  let { key, url, image, proxy, rewrite, expiredUrl, tagNames } = payload;
 
   let expiresAt: string | Date | null | undefined = payload.expiresAt;
 
@@ -79,83 +63,27 @@ export async function processLink<T extends Record<string, any>>({
     };
   }
 
-  // free plan restrictions (after Jan 19, 2024)
-  if (
-    (!workspace || workspace.plan === "free") &&
-    (!createdAt || new Date(createdAt) > new Date("2024-01-19"))
-  ) {
-    if (proxy || password || rewrite || expiresAt || ios || android || geo) {
-      const proFeaturesString = [
-        proxy && "custom social media cards",
-        password && "password protection",
-        rewrite && "link cloaking",
-        expiresAt && "link expiration",
-        ios && "iOS targeting",
-        android && "Android targeting",
-        geo && "geo targeting",
-      ]
-        .filter(Boolean)
-        .join(", ")
-        // final one should be "and" instead of comma
-        .replace(/, ([^,]*)$/, " and $1");
+  // In GoGovMy, we removed custom domains. All links must use SHORT_DOMAIN.
+  const domain = SHORT_DOMAIN;
 
+  // check if user exists (if userId is passed)
+  if (userId) {
+    const userExists = await checkIfUserExists(userId);
+    if (!userExists) {
       return {
         link: payload,
-        error: `You can only use ${proFeaturesString} on a Pro plan and above. Upgrade to Pro to use these features.`,
-        code: "forbidden",
+        error: "Session expired. Please log in again.",
+        code: "not_found",
       };
     }
   }
 
-  // if domain is not defined, set it to the workspace's primary domain
-  if (!domain) {
-    domain = workspace?.domains?.find((d) => d.primary)?.slug || SHORT_DOMAIN;
-  }
-
-  // checks for SHORT_DOMAIN links
-  if (domain === SHORT_DOMAIN) {
-    // check if user exists (if userId is passed)
-    if (userId) {
-      const userExists = await checkIfUserExists(userId);
-      if (!userExists) {
-        return {
-          link: payload,
-          error: "Session expired. Please log in again.",
-          code: "not_found",
-        };
-      }
-    }
-
-    const isMaliciousLink = await maliciousLinkCheck(url);
-    if (isMaliciousLink) {
-      return {
-        link: payload,
-        error: "Malicious URL detected",
-        code: "unprocessable_entity",
-      };
-    }
-
-    // checks for other Dub-owned domains (chatg.pt, spti.fi, etc.)
-  } else if (isDubDomain(domain)) {
-    // coerce type with ! cause we already checked if it exists
-    const { allowedHostnames } = DUB_DOMAINS.find((d) => d.slug === domain)!;
-    const urlDomain = getDomainWithoutWWW(url) || "";
-    if (allowedHostnames && !allowedHostnames.includes(urlDomain)) {
-      return {
-        link: payload,
-        error: `Invalid url. You can only use ${domain} short links for URLs starting with ${allowedHostnames
-          .map((d) => `\`${d}\``)
-          .join(", ")}.`,
-        code: "unprocessable_entity",
-      };
-    }
-
-    // else, check if the domain belongs to the workspace
-  } else if (!workspace?.domains?.find((d) => d.slug === domain)) {
+  const isMaliciousLink = await maliciousLinkCheck(url);
+  if (isMaliciousLink) {
     return {
       link: payload,
-      error: "Domain does not belong to workspace.",
-      code: "forbidden",
+      error: "Malicious URL detected",
+      code: "unprocessable_entity",
     };
   }
 
@@ -163,7 +91,6 @@ export async function processLink<T extends Record<string, any>>({
     key = await getRandomKey({
       domain,
       prefix: payload["prefix"],
-      long: domain === "loooooooo.ng",
     });
   } else if (!skipKeyChecks) {
     const processedKey = processKey(key);
@@ -314,7 +241,7 @@ export async function processLink<T extends Record<string, any>>({
       expiresAt,
       expiredUrl,
       // make sure projectId is set to the current workspace
-      projectId: workspace?.id || null,
+      projectId: workspace.id,
       // if userId is passed, set it (we don't change the userId if it's already set, e.g. when editing a link)
       ...(userId && {
         userId,

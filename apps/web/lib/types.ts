@@ -74,22 +74,14 @@ export interface WorkspaceProps {
   aiLimit: number;
   linksUsage: number;
   linksLimit: number;
-  domainsLimit: number;
   tagsLimit: number;
   usersLimit: number;
   plan: PlanProps;
   billingCycleStart: number;
   createdAt: Date;
-  domains: {
-    slug: string;
-    primary: boolean;
-  }[];
   users: {
     role: RoleProps;
   }[];
-  metadata?: {
-    defaultDomains?: string[];
-  };
   inviteCode: string;
 }
 
@@ -104,34 +96,6 @@ export interface UserProps {
 
 export interface WorkspaceUserProps extends UserProps {
   role: RoleProps;
-}
-
-export type DomainVerificationStatusProps =
-  | "Valid Configuration"
-  | "Invalid Configuration"
-  | "Conflicting DNS Records"
-  | "Pending Verification"
-  | "Domain Not Found"
-  | "Unknown Error";
-
-export interface DomainProps {
-  id: string;
-  slug: string;
-  verified: boolean;
-  primary: boolean;
-  archived: boolean;
-  publicStats: boolean;
-  target?: string;
-  type: string;
-  placeholder?: string;
-  clicks: number;
-  projectId: string;
-  expiredUrl?: string;
-}
-export interface RedisDomainProps {
-  id: string;
-  url?: string;
-  projectId: string;
 }
 
 export type NewLinkProps = z.infer<typeof createLinkBodySchema>;
