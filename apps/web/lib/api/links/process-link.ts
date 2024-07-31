@@ -4,12 +4,10 @@ import { prisma } from "@/lib/prisma";
 import { NewLinkProps, ProcessedLinkProps, WorkspaceProps } from "@/lib/types";
 import { checkIfUserExists, getRandomKey } from "@/lib/userinfos";
 import {
-  DUB_DOMAINS,
   SHORT_DOMAIN,
   getApexDomain,
   getDomainWithoutWWW,
   getUrlFromString,
-  isDubDomain,
   isValidUrl,
   log,
   parseDateTime,
@@ -42,20 +40,7 @@ export async function processLink<T extends Record<string, any>>({
       status?: never;
     }
 > {
-  let {
-    key,
-    url,
-    image,
-    proxy,
-    password,
-    rewrite,
-    expiredUrl,
-    ios,
-    android,
-    geo,
-    tagNames,
-    createdAt,
-  } = payload;
+  let { key, url, image, proxy, rewrite, expiredUrl, tagNames } = payload;
 
   let expiresAt: string | Date | null | undefined = payload.expiresAt;
 
@@ -78,80 +63,34 @@ export async function processLink<T extends Record<string, any>>({
     };
   }
 
-  // free plan restrictions (after Jan 19, 2024)
-  if (
-    (!workspace || workspace.plan === "free") &&
-    (!createdAt || new Date(createdAt) > new Date("2024-01-19"))
-  ) {
-    if (proxy || password || rewrite || expiresAt || ios || android || geo) {
-      const proFeaturesString = [
-        proxy && "custom social media cards",
-        password && "password protection",
-        rewrite && "link cloaking",
-        expiresAt && "link expiration",
-        ios && "iOS targeting",
-        android && "Android targeting",
-        geo && "geo targeting",
-      ]
-        .filter(Boolean)
-        .join(", ")
-        // final one should be "and" instead of comma
-        .replace(/, ([^,]*)$/, " and $1");
+  // In GoGovMy, we removed custom domains. All links must use SHORT_DOMAIN.
+  const domain = SHORT_DOMAIN;
 
+  // check if user exists (if userId is passed)
+  if (userId) {
+    const userExists = await checkIfUserExists(userId);
+    if (!userExists) {
       return {
         link: payload,
-        error: `You can only use ${proFeaturesString} on a Pro plan and above. Upgrade to Pro to use these features.`,
-        code: "forbidden",
+        error: "Session expired. Please log in again.",
+        code: "not_found",
       };
     }
   }
 
-  const domain = SHORT_DOMAIN;
-
-  // checks for SHORT_DOMAIN links
-  if (domain === SHORT_DOMAIN) {
-    // check if user exists (if userId is passed)
-    if (userId) {
-      const userExists = await checkIfUserExists(userId);
-      if (!userExists) {
-        return {
-          link: payload,
-          error: "Session expired. Please log in again.",
-          code: "not_found",
-        };
-      }
-    }
-
-    const isMaliciousLink = await maliciousLinkCheck(url);
-    if (isMaliciousLink) {
-      return {
-        link: payload,
-        error: "Malicious URL detected",
-        code: "unprocessable_entity",
-      };
-    }
-
-    // checks for other Dub-owned domains (chatg.pt, spti.fi, etc.)
-  } else if (isDubDomain(domain)) {
-    // coerce type with ! cause we already checked if it exists
-    const { allowedHostnames } = DUB_DOMAINS.find((d) => d.slug === domain)!;
-    const urlDomain = getDomainWithoutWWW(url) || "";
-    if (allowedHostnames && !allowedHostnames.includes(urlDomain)) {
-      return {
-        link: payload,
-        error: `Invalid url. You can only use ${domain} short links for URLs starting with ${allowedHostnames
-          .map((d) => `\`${d}\``)
-          .join(", ")}.`,
-        code: "unprocessable_entity",
-      };
-    }
+  const isMaliciousLink = await maliciousLinkCheck(url);
+  if (isMaliciousLink) {
+    return {
+      link: payload,
+      error: "Malicious URL detected",
+      code: "unprocessable_entity",
+    };
   }
 
   if (!key) {
     key = await getRandomKey({
       domain,
       prefix: payload["prefix"],
-      long: domain === "loooooooo.ng",
     });
   } else if (!skipKeyChecks) {
     const processedKey = processKey(key);

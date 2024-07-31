@@ -63,14 +63,12 @@ export const getLink = async ({
 export async function getRandomKey({
   domain,
   prefix,
-  long,
 }: {
   domain: string;
   prefix?: string;
-  long?: boolean;
 }): Promise<string> {
   /* recursively get random key till it gets one that's available */
-  let key = long ? nanoid(69) : nanoid();
+  let key = nanoid();
   if (prefix) {
     key = `${prefix.replace(/^\/|\/$/g, "")}/${key}`;
   }
@@ -82,7 +80,7 @@ export async function getRandomKey({
   });
   if (link) {
     // by the off chance that key already exists
-    return getRandomKey({ domain, prefix, long });
+    return getRandomKey({ domain, prefix });
   } else {
     return key;
   }
