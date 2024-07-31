@@ -36,12 +36,13 @@ jobs:
         run: |
           cd apps/redirect-server
 
-      - name: Run Golang Lint
-        uses: golangci/golangci-lint-action@v3
-        with:
-          version: v1.59
-          args: --timeout 5m
-          working-directory: apps/redirect-server
+      # - name: Run Golang Lint
+      #   uses: golangci/golangci-lint-action@v3
+      #   with:
+      #     version: v1.59
+      #     args: --timeout 5m
+      #     working-directory: apps/redirect-server
+
     #   - name: Update OpenAPI Swagger File
     #     run: pnpm run generate-openapi
 

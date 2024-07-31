@@ -1,6 +1,6 @@
 import { useRouterStuff } from "@dub/ui";
 import { fetcher } from "@dub/utils";
-import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import useSWR from "swr";
 import useWorkspace from "./use-workspace";
 
@@ -11,13 +11,9 @@ export default function useLinksCount({
 } = {}) {
   const { id } = useWorkspace();
   const { getQueryString } = useRouterStuff();
+  const { data: session } = useSession();
 
-  const [admin, setAdmin] = useState(false);
-  useEffect(() => {
-    if (window.location.host.startsWith("admin.")) {
-      setAdmin(true);
-    }
-  }, []);
+  const admin = session?.user.role === "super_admin";
 
   const { data, error } = useSWR<any>(
     id
