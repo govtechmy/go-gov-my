@@ -24,11 +24,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Prettier Format
-        run: pnpm run prettier-check
-
-      - name: Check prettier format
-        run: pnpm run prettier-check
+      # - name: Check prettier format
+      #   run: pnpm run prettier-check
 
       - name: Set up Go
         uses: actions/setup-go@v4

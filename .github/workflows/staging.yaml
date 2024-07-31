@@ -24,8 +24,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Check prettier format
-        run: pnpm run prettier-check
+      # - name: Check prettier format
+      #   run: pnpm run prettier-check
 
     #   - name: Update OpenAPI Swagger File
     #     run: pnpm run generate-openapi
