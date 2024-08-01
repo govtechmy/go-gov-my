@@ -1,6 +1,6 @@
-name: Deploy web-nextjs
+name: Deploy gogov-web
 env:
-  IMAGE: gogov-web-nextjs
+  IMAGE: gogov-web
 on:
   push:
     branches:
