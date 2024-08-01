@@ -23,7 +23,7 @@ const IdentifyWebsite: React.FC = () => {
           <button className="w-full" onClick={() => setOpen(!open)}>
             <div className="text-brand-700 flex flex-wrap items-center gap-1.5 py-2.5 text-sm/4 max-sm:justify-between sm:py-1">
               <div className="flex items-center gap-1.5">
-                <div className="size-4 text-blue-600 sm:size-5">
+                <div className="size-4 sm:size-5 text-blue-600">
                   <svg
                     width="20"
                     height="20"
@@ -118,7 +118,7 @@ const IdentifyWebsite: React.FC = () => {
                     Official government websites end with
                     <span className="text-bold strong">.gov.my</span>
                   </p>
-                  <p className="text-black-700 max-w-prose text-balance text-sm">
+                  <p className="text-black-700 text-balance max-w-prose text-sm">
                     If the link does not end with
                     <span className="font-semibold">.gov.my</span>, exit the
                     website immediately even if it looks similar.
@@ -148,9 +148,9 @@ const IdentifyWebsite: React.FC = () => {
                     Secure websites use
                     <span className="text-bold text-green-600">HTTPS</span>
                   </p>
-                  <div className="text-black-700 max-w-prose text-balance text-sm">
+                  <div className="text-black-700 text-balance max-w-prose text-sm">
                     If the link does not end with
-                    <div className="-ml-[3px] mb-0.5 mr-px inline size-3.5 text-green-600">
+                    <div className="size-3.5 -ml-[3px] mb-0.5 mr-px inline text-green-600">
                       <svg
                         width="12"
                         height="14"
