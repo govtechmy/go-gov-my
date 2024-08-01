@@ -12,8 +12,6 @@ RUN ["npm", "install", "turbo", "--global" ]
 
 COPY . .
 
-COPY .env ./apps/web
-
 COPY .gitignore ./apps/web
 
 # COPY packages ./packages
