@@ -14,6 +14,10 @@ COPY . .
 
 COPY .gitignore ./apps/web
 
+ENV REDIS_URL=redis://localhost:6379
+
+ENV REDIS_PORT=6379
+
 # COPY packages ./packages
 
 # RUN cd packages/ui && pnpm i && pnpm build
