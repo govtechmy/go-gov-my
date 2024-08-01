@@ -6,6 +6,7 @@ import (
 	"flag"
 	"log"
 	"log/slog"
+	"os"
 	"redirect-server/repository"
 	"time"
 
@@ -32,7 +33,7 @@ func main() {
 	var kafkaConsumerTopic string
 	var offsetPath string
 	{
-		flag.StringVar(&kafkaAddr, "kafka-addr", "localhost:9092", "Kafka address")
+		flag.StringVar(&kafkaAddr, "kafka-addr", os.Getenv("KAFKA_ADDR"), "Kafka address e.g. localhost:9092")
 		flag.StringVar(&kafkaProducerTopic, "producer-topic", "link_analytics", "Kafka producer topic")
 		flag.StringVar(&kafkaConsumerTopic, "consumer-topic", "redirect_logs", "Kafka consumer topic")
 		flag.StringVar(&offsetPath, "offset-path", "./analytics-aggregator-offset", "Analytics aggregator offset")
