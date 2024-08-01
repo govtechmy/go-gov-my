@@ -32,7 +32,7 @@ func (r *LinkRepo) GetLink(ctx context.Context, slug string) (*repository.Link, 
 		Size(1).
 		Do(ctx)
 	if err != nil {
-		return nil, repository.ErrInternalServer
+		return nil, err
 	}
 
 	if len(res.Hits.Hits) == 0 {
