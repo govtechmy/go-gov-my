@@ -14,6 +14,6 @@ const sdk = new NodeSDK({
   traceExporter: new ConsoleSpanExporter(),
 });
 
-if (process.env.NODE_ENV !== "development") {
+if (process.env.NODE_ENV == "development") {
   sdk.start();
 }

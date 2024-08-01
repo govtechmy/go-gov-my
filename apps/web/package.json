@@ -6,7 +6,7 @@
     "dev": "concurrently --kill-others -c auto -n nextjs,prisma,email,kafka-consumer \"next dev --turbo --port 8888\" \"prisma generate && prisma studio --browser none\" \"email dev --port 3333\" \"npm:start-kafka-consumer\"",
     "build": "prisma generate & next build",
     "lint": "next lint",
-    "start": "next start",
+    "start": "next start -p 8888",
     "script": "tsx ./scripts/run.ts",
     "test": "vitest -no-file-parallelism",
     "generate-openapi": "tsx ./scripts/generate-openapi.ts",
