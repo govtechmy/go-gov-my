@@ -31,6 +31,11 @@ type WaitPageProps struct {
 	ImageURL    string
 }
 
+type AuthPageProps struct {
+	Slug          string
+	WrongPassword bool
+}
+
 func main() {
 	loggerConfig := zap.NewProductionConfig()
 	loggerConfig.OutputPaths = []string{"stdout"}
@@ -107,6 +112,7 @@ func main() {
 	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		slug := strings.TrimPrefix(r.URL.Path, "/")
+		user_input_password := r.URL.Query().Get("password")
 
 		link, err := linkRepo.GetLink(ctx, slug)
 		if err == repository.ErrLinkNotFound {
@@ -125,6 +131,28 @@ func main() {
 				zap.String("user-agent", r.UserAgent()),
 				zap.Error(err))
 			http.Redirect(w, r, fmt.Sprintf("%s/en/server_error", baseURL), http.StatusSeeOther)
+			return
+		}
+
+		// LINK IS PASSWORD PROTECTED BUT USER DID NOT PROVIDE PASSWORD, REDIRECT TO AUTH PAGE
+		if link.Password != "" && user_input_password == "" {
+			if err := t.ExecuteTemplate(w, "auth.html", AuthPageProps{
+				Slug:          slug,
+				WrongPassword: false,
+			}); err != nil {
+				logger.Error("failed to execute template", zap.Error(err))
+			}
+			return
+		}
+
+		// LINK IS PASSWORD PROTECTED AND USER PROVIDED WRONG PASSWORD
+		if link.Password != "" && user_input_password != link.Password && user_input_password != "" {
+			if err := t.ExecuteTemplate(w, "auth.html", AuthPageProps{
+				Slug:          slug,
+				WrongPassword: true,
+			}); err != nil {
+				logger.Error("failed to execute template", zap.Error(err))
+			}
 			return
 		}
 

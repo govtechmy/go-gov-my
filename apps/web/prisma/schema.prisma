@@ -6,7 +6,7 @@ datasource db {
   url          = env("DATABASE_URL")
   directUrl    = env("DIRECT_URL")
   extensions   = [pgcrypto(map: "pgcrypto", schema: "public")]
-  relationMode = "prisma"
+  relationMode = "foreignKeys"
 }
 
 generator client {
@@ -119,7 +119,6 @@ model Project {
   aiLimit           Int    @default(10)
   linksUsage        Int    @default(0)
   linksLimit        Int    @default(25)
-  domainsLimit      Int    @default(3)
   tagsLimit         Int    @default(5)
   usersLimit        Int    @default(1)
 
@@ -127,7 +126,6 @@ model Project {
   invites    ProjectInvite[]
   sentEmails SentEmail[]
   links      Link[]
-  domains    Domain[]
   tags       Tag[]
 
   createdAt DateTime @default(now()) @db.Timestamptz
@@ -191,37 +189,6 @@ model SentEmail {
   @@index([projectId])
 }
 
-model Domain {
-  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  slug        String   @unique
-  verified    Boolean  @default(false)
-  placeholder String   @default("https://dub.co/help/article/what-is-dub")
-  description String?
-  primary     Boolean  @default(false)
-  archived    Boolean  @default(false)
-  expiredUrl  String? // URL to redirect to for expired links
-  lastChecked DateTime @default(now()) @db.Timestamptz
-  links       Link[]
-  project     Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId   String?  @db.Uuid
-
-  // TODO: migrate these attributes to Link model
-  target      String?
-  type        String    @default("redirect")
-  clicks      Int       @default(0)
-  lastClicked DateTime? // when the link was last clicked
-  publicStats Boolean   @default(false)
-
-  // these attributes will exist on both Link and Domain models
-  createdAt DateTime @default(now()) @db.Timestamptz
-  updatedAt DateTime @updatedAt
-
-  @@index(projectId)
-  @@index(clicks(sort: Desc))
-  @@index(lastClicked)
-  @@index(lastChecked(sort: Asc))
-}
-
 model Link {
   id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   domain     String // domain of the link (e.g. dub.sh) – also stored on Redis
@@ -257,10 +224,8 @@ model Link {
   userId String? @db.Uuid
 
   // Project that the link belongs to
-  project       Project? @relation(fields: [projectId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  projectId     String?  @db.Uuid
-  // Relational reference to the project domain
-  projectDomain Domain?  @relation(fields: [domain], references: [slug], onUpdate: Cascade, onDelete: Cascade)
+  project       Project @relation(fields: [projectId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  projectId     String  @db.Uuid
 
   publicStats Boolean   @default(false) // whether to show public stats or not
   clicks      Int       @default(0) // number of clicks
@@ -367,34 +332,6 @@ model LinkTag {
   @@unique([linkId, tagId])
   @@index(linkId)
   @@index(tagId)
-}
-
-model jackson_index {
-  id       Int    @id @default(autoincrement())
-  key      String @db.VarChar(250)
-  storeKey String @db.VarChar(250)
-
-  @@index([key], map: "_jackson_index_key")
-  @@index([key, storeKey], map: "_jackson_index_key_store")
-}
-
-model jackson_store {
-  key        String    @id @db.VarChar(250)
-  value      String    @db.Text
-  iv         String?   @db.VarChar(64)
-  tag        String?   @db.VarChar(64)
-  namespace  String?   @db.VarChar(64)
-  createdAt  DateTime  @default(now()) @db.Timestamptz
-  modifiedAt DateTime? @db.Timestamp(0)
-
-  @@index([namespace], map: "_jackson_store_namespace")
-}
-
-model jackson_ttl {
-  key       String @id @db.VarChar(250)
-  expiresAt BigInt
-
-  @@index([expiresAt], map: "_jackson_ttl_expires_at")
 }
 
 model Analytics {

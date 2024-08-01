@@ -2,7 +2,6 @@ import { isReservedKey } from "@/lib/edge-config";
 import z from "@/lib/zod";
 import { DEFAULT_REDIRECTS, validSlugRegex } from "@dub/utils";
 import slugify from "@sindresorhus/slugify";
-import { DomainSchema } from "./domains";
 import { planSchema, roleSchema } from "./misc";
 
 export const workspaceIdSchema = z.object({
@@ -26,7 +25,6 @@ export const WorkspaceSchema = z
     usageLimit: z.number().describe("The usage limit of the workspace."),
     linksUsage: z.number().describe("The links usage of the workspace."),
     linksLimit: z.number().describe("The links limit of the workspace."),
-    domainsLimit: z.number().describe("The domains limit of the workspace."),
     tagsLimit: z.number().describe("The tags limit of the workspace."),
     usersLimit: z.number().describe("The users limit of the workspace."),
     plan: planSchema,
@@ -45,14 +43,6 @@ export const WorkspaceSchema = z
         }),
       )
       .describe("The role of the authenticated user in the workspace."),
-    domains: z
-      .array(
-        DomainSchema.pick({
-          slug: true,
-          primary: true,
-        }),
-      )
-      .describe("The domains of the workspace."),
     inviteCode: z
       .string()
       .nullable()
