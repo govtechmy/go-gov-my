@@ -12,6 +12,7 @@ RUN go build -o /redirectd ./cmd/redirectd
 
 FROM alpine:latest
 
+COPY --from=builder /app/GeoLite2-City.mmdb /GeoLite2-City.mmdb
 COPY --from=builder /redirectd /redirectd
 
 # We need this templates assets !! Might change later if we serve static pages from NextJS

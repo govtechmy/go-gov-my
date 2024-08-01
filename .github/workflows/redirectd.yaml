@@ -1,6 +1,8 @@
 name: Deploy go-redirectd
 env:
   IMAGE: gogov-redirectd
+  MAXMIND_ACCOUNT_ID: ${{ secrets.MAXMIND_ACCOUNT_ID }}
+  MAMXIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
 on:
   push:
     branches:
@@ -34,6 +36,8 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}
           tags: |
             type=sha
+      - name: Setup Maxmind GeoIP database
+        run: ./setup-geoip-db.sh
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
         with:
