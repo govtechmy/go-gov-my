@@ -2,7 +2,8 @@ name: Deploy go-redirectd
 env:
   IMAGE: gogov-redirectd
   MAXMIND_ACCOUNT_ID: ${{ secrets.MAXMIND_ACCOUNT_ID }}
-  MAMXIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
+  MAXMIND_LICENSE_KEY: ${{ secrets.MAXMIND_LICENSE_KEY }}
+  MAXMIND_DB_PERMALINK: ${{ vars.MAXMIND_DB_PERMALINK }}
 on:
   push:
     branches:

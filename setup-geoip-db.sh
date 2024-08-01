@@ -6,8 +6,28 @@
 # - MAXMIND_DB_PERMALINK
 # Get these by signing up for a dev account at https://www.maxmind.com
 
-# Download and extract
+if [ -z "${MAXMIND_ACCOUNT_ID}" ]; then
+  echo "Error: Environment variable MAXMIND_ACCOUNT_ID is not set."
+  exit 1
+fi
+if [ -z "${MAXMIND_LICENSE_KEY}" ]; then
+  echo "Error: Environment variable MAXMIND_LICENSE_KEY is not set."
+  exit 1
+fi
+if [ -z "${MAXMIND_DB_PERMALINK}" ]; then
+  echo "Error: Environment variable MAXMIND_DB_PERMALINK is not set."
+  exit 1
+fi
+
+# Download
 curl -L -u "$MAXMIND_ACCOUNT_ID:$MAXMIND_LICENSE_KEY" "$MAXMIND_DB_PERMALINK" -o maxmind-db.tar.gz
+
+if [ $? -ne 0 ]; then
+  echo "Curl command failed."
+  exit 1
+fi
+
+# Extract
 tar -xzf maxmind-db.tar.gz
 
 # Find the extracted folder that starts with GeoLite2-City
