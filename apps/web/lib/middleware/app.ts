@@ -15,10 +15,6 @@ export default async function AppMiddleware(req: NextRequest) {
     user?: UserProps;
   };
 
-  console.log("sessionxxx", session);
-  console.log("reqxxx", req);
-  console.log("process.env.NEXTAUTH_SECRETxx", process.env.NEXTAUTH_SECRET)
-
   // Farhan 18 Jul 24
   // This is for temporary to view the static page, need to remove this once deploy
   if (
@@ -36,7 +32,6 @@ export default async function AppMiddleware(req: NextRequest) {
     pathWithoutLocale !== "/login" &&
     pathWithoutLocale !== "/register"
   ) {
-    console.log("proxxx1")
     const response = NextResponse.redirect(
       new URL(
         `/${locale}/login${pathWithoutLocale === "/" ? "" : `?next=${encodeURIComponent(fullPathWithoutLocale)}`}`,
@@ -48,7 +43,6 @@ export default async function AppMiddleware(req: NextRequest) {
 
     // if there's a session
   } else if (session?.email) {
-    console.log("proxxx2")
     // if the user was created in the last 10s
     // (this is a workaround because the `isNewUser` flag is triggered when a user does `dangerousEmailAccountLinking`)
     if (
@@ -73,7 +67,7 @@ export default async function AppMiddleware(req: NextRequest) {
       return response;
     }
   }
-  console.log("proxxx3")
+
   // otherwise, rewrite the path to /app
   const headers = new Headers(req.headers);
   headers.set("NEXT_LOCALE", locale);
