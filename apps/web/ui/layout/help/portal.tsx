@@ -1,6 +1,7 @@
 "use client";
 
 import { Popover, useResizeObserver } from "@dub/ui";
+import { fetcher } from "@dub/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { XIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -28,7 +29,9 @@ export function HelpButton({
 
   const { data: session } = useSession();
 
-  useEffect(() => {}, [session]);
+  useEffect(() => {
+    session && fetcher("/api/support");
+  }, [session]);
 
   return (
     <HelpContext.Provider value={{ popularHelpArticles, allHelpArticles }}>
