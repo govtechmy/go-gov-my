@@ -17,6 +17,7 @@ export default async function AppMiddleware(req: NextRequest) {
 
   console.log("sessionxxx", session);
   console.log("reqxxx", req);
+  console.log("process.env.NEXTAUTH_SECRETxx", process.env.NEXTAUTH_SECRET)
 
   // Farhan 18 Jul 24
   // This is for temporary to view the static page, need to remove this once deploy
