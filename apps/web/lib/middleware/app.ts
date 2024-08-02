@@ -15,6 +15,8 @@ export default async function AppMiddleware(req: NextRequest) {
     user?: UserProps;
   };
 
+  console.log("sessionxxx", session)
+
   // Farhan 18 Jul 24
   // This is for temporary to view the static page, need to remove this once deploy
   if (
