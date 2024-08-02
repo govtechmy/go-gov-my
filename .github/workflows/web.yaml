@@ -1,6 +1,7 @@
 name: Deploy gogov-web
 env:
-  IMAGE: gogov-dashboard
+  DASHBOARD_IMAGE: gogov-dashboard
+  OUTBOX_IMAGE: gogov-web-outbox
 on:
   push:
     branches:
@@ -11,8 +12,8 @@ on:
       - main
   workflow_dispatch:
 permissions:
-  id-token: write   # This is required for requesting the JWT
-  contents: read    # This is required for actions/checkout
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -27,19 +28,35 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      - name: Extract metadata (tags, labels) for Docker
+      - name: Extract metadata (tags, labels) for Docker (dashboard)
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: |
-            ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.DASHBOARD_IMAGE }}
           tags: |
             type=sha
-      - name: Build and push Docker images
+      - name: Build and push Docker images (dashboard)
         uses: docker/build-push-action@v5
         with:
           context: .
           file: Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+      - name: Extract metadata (tags, labels) for Docker (outbox)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ steps.login-ecr.outputs.registry }}/${{ env.OUTBOX_IMAGE }}
+          tags: |
+            type=sha
+      - name: Build and push Docker images (outbox)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile.outbox
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -56,7 +73,13 @@ jobs:
                   {
                     "type": "docker/image",
                     "reference": "${{ steps.meta.outputs.tags }}",
-                    "name": "${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}",
+                    "name": "${{ steps.login-ecr.outputs.registry }}/${{ env.DASHBOARD }}",
+                    "version": "${{ steps.meta.outputs.version }}"
+                  },
+                  {
+                    "type": "docker/image",
+                    "reference": "${{ steps.meta.outputs.tags }}",
+                    "name": "${{ steps.login-ecr.outputs.registry }}/${{ env.OUTBOX_IMAGE }}",
                     "version": "${{ steps.meta.outputs.version }}"
                   }
                 ]

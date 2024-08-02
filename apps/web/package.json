@@ -10,7 +10,8 @@
     "script": "tsx ./scripts/run.ts",
     "test": "vitest -no-file-parallelism",
     "generate-openapi": "tsx ./scripts/generate-openapi.ts",
-    "start-kafka-consumer": "tsx --env-file=.env ./kafka-consumer/index.ts"
+    "start-kafka-consumer": "tsx --env-file=.env ./kafka-consumer/index.ts",
+    "build-outbox": "tsx esbuild-outbox.config.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.20.4",
@@ -120,6 +121,7 @@
     "array-to-ndjson": "^1.0.1",
     "autoprefixer": "^10.4.16",
     "dotenv-flow": "^4.0.0",
+    "esbuild": "^0.23.0",
     "eslint-config-next": "14.2.3",
     "papaparse": "^5.4.1",
     "postcss": "^8.4.31",

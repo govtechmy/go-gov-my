@@ -20,7 +20,7 @@ const OutboxSchema = z.object({
 async function main() {
   const kafkaBrokerUrl = process.env.KAFKA_BROKER_URL || "localhost:9092";
   const kafka = new Kafka({
-    clientId: process.env.NEXT_PUBLIC_APP_SHORT_DOMAIN || "go.gov.my",
+    clientId: "gogov-web-outbox",
     brokers: [kafkaBrokerUrl],
   });
 

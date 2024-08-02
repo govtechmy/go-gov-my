@@ -1,0 +1,28 @@
+FROM node:20-alpine AS base
+
+FROM base AS builder
+RUN apk update
+RUN apk add --no-cache libc6-compat
+
+RUN npm i -g pnpm@9.1.3
+ENV PNPM_HOME=/root/.local/share/pnpm
+ENV PATH=$PATH:$PNPM_HOME
+
+WORKDIR /app
+
+COPY . .
+
+RUN pnpm install
+
+WORKDIR /app/apps/web
+RUN npx prisma generate
+RUN pnpm build-outbox
+
+FROM base AS runner
+RUN apk update
+RUN apk add --no-cache libc6-compat
+WORKDIR /gogov-outbox
+
+COPY --from=builder /app/apps/web/dist/outbox ./
+
+CMD ["node", "index.js"]
