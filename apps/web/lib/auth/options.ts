@@ -1,7 +1,5 @@
-import { isBlacklistedEmail } from "@/lib/edge-config";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
-import { allowedDomain } from "app/[locale]/app.dub.co/(auth)/login/allowedDomain";
 import { sendEmail } from "emails";
 import LoginLink from "emails/login-link";
 import WelcomeEmail from "emails/welcome-email";
@@ -64,13 +62,19 @@ export const authOptions: NextAuthOptions = {
     signIn: async ({ user, account, profile }) => {
       console.log({ user, account, profile });
 
-      if (!user.email || (await isBlacklistedEmail(user.email))) {
+      if (!user.email) {
         return false;
       }
 
-      if (!allowedDomain(user.email, !IS_PRODUCTION)) {
-        return false;
-      }
+      // TODO: Remove dub.co's isBlacklistedEmail function
+      // if (!user.email || (await isBlacklistedEmail(user.email))) {
+      //   return false;
+      // }
+
+      // Disabling for now to test
+      // if (!allowedDomain(user.email, !IS_PRODUCTION)) {
+      //   return false;
+      // }
 
       if (account?.provider === "google") {
         const userExists = await prisma.user.findUnique({
