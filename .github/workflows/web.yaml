@@ -29,7 +29,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
       - name: Extract metadata (tags, labels) for Docker (dashboard)
-        id: meta
+        id: dashboard-meta
         uses: docker/metadata-action@v5
         with:
           images: |
@@ -42,10 +42,10 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.dashboard-meta.outputs.tags }}
+          labels: ${{ steps.dashboard-meta.outputs.labels }}
       - name: Extract metadata (tags, labels) for Docker (outbox)
-        id: meta
+        id: outbox-meta
         uses: docker/metadata-action@v5
         with:
           images: |
@@ -58,8 +58,8 @@ jobs:
           context: .
           file: Dockerfile.outbox
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.outbox-meta.outputs.tags }}
+          labels: ${{ steps.outbox-meta.outputs.labels }}
       - name: Log out of Amazon ECR
         run: docker logout ${{ steps.login-ecr.outputs.registry }}
       - name: Deploy with Spinnaker
@@ -72,15 +72,15 @@ jobs:
                 "artifacts": [
                   {
                     "type": "docker/image",
-                    "reference": "${{ steps.meta.outputs.tags }}",
+                    "reference": "${{ steps.dashboard-meta.outputs.tags }}",
                     "name": "${{ steps.login-ecr.outputs.registry }}/${{ env.DASHBOARD }}",
-                    "version": "${{ steps.meta.outputs.version }}"
+                    "version": "${{ steps.dashboard-meta.outputs.version }}"
                   },
                   {
                     "type": "docker/image",
-                    "reference": "${{ steps.meta.outputs.tags }}",
+                    "reference": "${{ steps.outbox-meta.outputs.tags }}",
                     "name": "${{ steps.login-ecr.outputs.registry }}/${{ env.OUTBOX_IMAGE }}",
-                    "version": "${{ steps.meta.outputs.version }}"
+                    "version": "${{ steps.outbox-meta.outputs.version }}"
                   }
                 ]
               }'
