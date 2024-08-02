@@ -1,4 +1,4 @@
-name: Deploy gogov-web
+name: Deploy gogov-web-outbox
 env:
   IMAGE: gogov-web-outbox
 on:
@@ -27,22 +27,6 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      - name: Extract metadata (tags, labels) for Docker (dashboard)
-        id: dashboard-meta
-        uses: docker/metadata-action@v5
-        with:
-          images: |
-            ${{ steps.login-ecr.outputs.registry }}/${{ env.DASHBOARD_IMAGE }}
-          tags: |
-            type=sha
-      - name: Build and push Docker images (dashboard)
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: Dockerfile
-          push: true
-          tags: ${{ steps.dashboard-meta.outputs.tags }}
-          labels: ${{ steps.dashboard-meta.outputs.labels }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
