@@ -14,7 +14,7 @@ COPY . .
 
 COPY .gitignore ./apps/web
 
-ENV REDIS_URL=redis://localhost:6379
+ENV REDIS_URL=redis://10.10.1.100
 
 ENV REDIS_PORT=6379
 
