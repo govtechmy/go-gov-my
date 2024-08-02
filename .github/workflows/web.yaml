@@ -73,7 +73,7 @@ jobs:
                   {
                     "type": "docker/image",
                     "reference": "${{ steps.dashboard-meta.outputs.tags }}",
-                    "name": "${{ steps.login-ecr.outputs.registry }}/${{ env.DASHBOARD }}",
+                    "name": "${{ steps.login-ecr.outputs.registry }}/${{ env.DASHBOARD_IMAGE }}",
                     "version": "${{ steps.dashboard-meta.outputs.version }}"
                   },
                   {
