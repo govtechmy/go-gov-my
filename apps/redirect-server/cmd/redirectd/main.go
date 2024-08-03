@@ -54,6 +54,7 @@ func main() {
 	var httpPort int
 	var telemetryURL string
 	var geolite2DBPath string
+	var baseURL string
 	{
 		flag.StringVar(&elasticURL, "elastic-url", os.Getenv("ELASTIC_URL"), "Elasticsearch URL e.g. http://localhost:9200")
 		flag.StringVar(&elasticUser, "elastic-user", os.Getenv("ELASTIC_USER"), "Elasticsearch username")
@@ -61,10 +62,7 @@ func main() {
 		flag.IntVar(&httpPort, "http-port", 3000, "HTTP server port")
 		flag.StringVar(&telemetryURL, "telemetry-url", os.Getenv("TELEMETRY_URL"), "OpenTelemetry HTTP endpoint URL e.g. localhost:4318")
 		flag.StringVar(&geolite2DBPath, "geolite2-path", "./GeoLite2-City.mmdb", "Path to GeoLite2 .mmdb file")
-	}
-	baseURL := os.Getenv("NEXTJS_BASE_URL")
-	if baseURL == "" {
-		log.Fatal("NEXTJS_BASE_URL is not set in the environment variables")
+		flag.StringVar(&baseURL, "base-url", os.Getenv("NEXTJS_BASE_URL"), "Base URL for the frontend")
 	}
 
 	flag.Parse()

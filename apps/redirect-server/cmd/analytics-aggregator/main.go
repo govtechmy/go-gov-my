@@ -1,19 +1,25 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"flag"
+	"fmt"
 	"log"
 	"log/slog"
 	"os"
 	"redirect-server/repository"
+	"redirect-server/repository/es"
 	"time"
 
 	"github.com/IBM/sarama"
+	"github.com/olivere/elastic/v7"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	"go.uber.org/zap"
 )
 
-const SEND_INTERVAL = 1 * time.Minute
+const SEND_INTERVAL = 5 * time.Minute
 
 type application struct {
 	kafkaConsumer      sarama.PartitionConsumer
@@ -21,6 +27,7 @@ type application struct {
 	kafkaProducerTopic string
 	lastSendAttemptAt  time.Time
 	linkAnalytics      map[string]*LinkAnalytics
+	esRepo             *es.AnalyticRepo
 }
 
 type RedirectMetadataLog struct {
@@ -28,17 +35,47 @@ type RedirectMetadataLog struct {
 }
 
 func main() {
+
+	loggerConfig := zap.NewProductionConfig()
+	loggerConfig.OutputPaths = []string{"stdout"}
+	logger := zap.Must(loggerConfig.Build())
+
+	// golang-lint mentioned it should check for err
+	defer func() {
+		if err := logger.Sync(); err != nil {
+			fmt.Fprintf(os.Stderr, "Failed to sync logger: %v\n", err)
+		}
+	}()
+
 	var kafkaAddr string
 	var kafkaProducerTopic string
 	var kafkaConsumerTopic string
 	var offsetPath string
+	var elasticURL string
+	var elasticUser string
+	var elasticPassword string
 	{
 		flag.StringVar(&kafkaAddr, "kafka-addr", os.Getenv("KAFKA_ADDR"), "Kafka address e.g. localhost:9092")
 		flag.StringVar(&kafkaProducerTopic, "producer-topic", "link_analytics", "Kafka producer topic")
 		flag.StringVar(&kafkaConsumerTopic, "consumer-topic", "redirect_logs", "Kafka consumer topic")
 		flag.StringVar(&offsetPath, "offset-path", "./analytics-aggregator-offset", "Analytics aggregator offset")
+		flag.StringVar(&elasticURL, "elastic-url", os.Getenv("ELASTIC_URL"), "Elasticsearch URL e.g. http://localhost:9200")
+		flag.StringVar(&elasticUser, "elastic-user", os.Getenv("ELASTIC_USER"), "Elasticsearch username")
+		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
 	}
 	flag.Parse()
+
+	esClient, err := elastic.NewSimpleClient(
+		elastic.SetURL(elasticURL),
+		elastic.SetBasicAuth(elasticUser, elasticPassword),
+		elastic.SetHttpClient(otelhttp.DefaultClient),
+	)
+	
+	if err != nil {
+		logger.Fatal("cannot initiate Elasticsearch client", zap.Error(err))
+	}
+
+	esRepo := es.NewAnalyticRepo(esClient)
 
 	kafkaProducer, err := sarama.NewSyncProducer([]string{kafkaAddr}, nil)
 	if err != nil {
@@ -81,6 +118,7 @@ func main() {
 		kafkaProducerTopic: kafkaProducerTopic,
 		lastSendAttemptAt:  time.Now(),
 		linkAnalytics:      make(map[string]*LinkAnalytics),
+		esRepo:             esRepo,
 	}
 
 	for {
@@ -136,6 +174,7 @@ func (app application) aggregateRedirectMetadata(rm repository.RedirectMetadata)
 
 func (app *application) sendAnalytics() error {
 	linkAnalyticsList := make([]LinkAnalytics, 0)
+	l := make([]repository.LinkAnalytics, 0)
 	for _, a := range app.linkAnalytics {
 		linkAnalyticsList = append(linkAnalyticsList, *a)
 	}
@@ -149,6 +188,13 @@ func (app *application) sendAnalytics() error {
 		From:           lastSendAttemptAt,
 		To:             now,
 		LinkAnalytics:  linkAnalyticsList,
+	}
+
+	m := repository.KafkaLinkAnalyticsMessage{
+		AggregatedDate: shortDate,
+		From:           lastSendAttemptAt,
+		To:             now,
+		LinkAnalytics:  l,
 	}
 
 	json, err := json.Marshal(message)
@@ -181,6 +227,15 @@ func (app *application) sendAnalytics() error {
 			slog.Int("partition", int(partition)),
 			slog.Int("offset", int(offset)),
 		)
+
+		// Send data to Elasticsearch
+		err = app.esRepo.SaveAggregatedAnalytic(context.Background(), &m)
+		if err != nil {
+			return err
+		}
+
+		slog.Info("elasticsearch document created")
+	
 		app.lastSendAttemptAt = now
 		app.linkAnalytics = make(map[string]*LinkAnalytics)
 		return nil

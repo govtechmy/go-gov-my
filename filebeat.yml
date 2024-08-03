@@ -1,23 +1,18 @@
-## Run ln -s ../../../filebeat.yml .kube/redirectd/overlays/staging/filebeat.yml to update
-## .kube can't read outside of the directory
+output.kafka:
+  hosts: ["localhost:9092"]
+  topic: "redirect_logs"
+  partition.hash:
+    hash: ["linkId"]
+    reachable_only: false
+    random: false
 
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: filebeat-config
-data:
-  filebeat.yml: |
-    output:
-      logstash:
-        hosts: ["logstash:5044"]
-
-    filebeat:
-      inputs:
-        - type: filestream
-          id: redirect-server-filestream
-          paths:
-            - /usr/share/filebeat/logs/*
-          parsers:
-            - ndjson:
-                keys_under_root: true
-                add_error_key: true
+filebeat:
+  inputs:
+    - type: filestream
+      id: redirect-server-filestream
+      paths:
+        - /usr/share/filebeat/logs/*
+      parsers:
+        - ndjson:
+            keys_under_root: true
+            add_error_key: true
