@@ -58,11 +58,10 @@ func main() {
 	// Get log file path from environment variable
 	// Local: /apps/redirect-server/logs/redirectd.log
 	// Server: /usr/share/filebeat/logs/redirectd.log
-    logFilePath := os.Getenv("LOG_FILE_PATH")
-    if logFilePath == "" {
-        log.Fatalf("LOG_FILE_PATH environment variable is not set")
-		// logFilePath = "../logs/redirectd.log"
-    }
+	logFilePath := os.Getenv("LOG_FILE_PATH")
+	if logFilePath == "" {
+		log.Fatalf("LOG_FILE_PATH environment variable is not set")
+	}
 
 	// Ensure the directory exists
 	logDir := filepath.Dir(logFilePath)
@@ -71,28 +70,28 @@ func main() {
 	}
 
 	// Initialize log file for successful link visits
-    logFile, err := os.OpenFile(logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-    if err != nil {
-        log.Fatalf("failed to open log file: %v", err)
-    }
-    defer logFile.Close()
+	logFile, err := os.OpenFile(logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		log.Fatalf("failed to open log file: %v", err)
+	}
+	defer logFile.Close()
 
-    // Configure stdout logger
-    stdoutLogger, err := zap.NewProduction()
-    if err != nil {
-        log.Fatalf("failed to initialize stdout logger: %v", err)
-    }
-    defer stdoutLogger.Sync()
+	// Configure stdout logger
+	stdoutLogger, err := zap.NewProduction()
+	if err != nil {
+		log.Fatalf("failed to initialize stdout logger: %v", err)
+	}
+	defer stdoutLogger.Sync()
 
-    // Configure file logger for successful link visits
-    w := zapcore.AddSync(logFile)
-    core := zapcore.NewCore(
-        zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()),
-        w,
-        zap.InfoLevel,
-    )
-    fileLogger := zap.New(core)
-    defer fileLogger.Sync()
+	// Configure file logger for successful link visits
+	w := zapcore.AddSync(logFile)
+	core := zapcore.NewCore(
+		zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()),
+		w,
+		zap.InfoLevel,
+	)
+	fileLogger := zap.New(core)
+	defer fileLogger.Sync()
 
 	var elasticURL string
 	var elasticUser string
