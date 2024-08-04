@@ -174,10 +174,10 @@ module.exports = {
         has: [
           {
             type: "host",
-            value: "staging.go.gov.my",
+            value: "pautan.org",
           },
         ],
-        destination: "https://go.gov.my",
+        destination: "https://pautan.org",
         permanent: true,
         statusCode: 301,
       },
@@ -186,10 +186,10 @@ module.exports = {
         has: [
           {
             type: "host",
-            value: "preview.go.gov.my",
+            value: "preview.pautan.org",
           },
         ],
-        destination: "https://preview.go.gov.my",
+        destination: "https://preview.pautan.org",
         permanent: true,
         statusCode: 301,
       },
