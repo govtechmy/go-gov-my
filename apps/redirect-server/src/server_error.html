@@ -8,15 +8,15 @@
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
     />
-    <link rel="icon" href="../public/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
     <style>
       @font-face {
         font-family: Poppins;
-        src: url("../public/font/Poppins-Medium.ttf");
+        src: url("/font/Poppins-Medium.ttf");
       }
       @font-face {
         font-family: Inter;
-        src: url("../public/font/Inter-Regular.ttf");
+        src: url("/font/Inter-Regular.ttf");
       }
       .poppins {
         font-family: "Poppins";
@@ -249,13 +249,14 @@
         >
           Something went wrong
         </h1>
-        <p class="inter mb-10 text-gray-700">
+        <p class="poppins mb-10 text-gray-700">
           For more help, please reach out to the agency that <br />
           provided you with this short link.
         </p>
         <a
-          href="https://go.gov.my/"
-          class="inter mb-2 me-2 rounded-lg bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+          href="#"
+          id="home-link"
+          class="poppins mb-2 me-2 rounded-lg bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
         >
           Return to Home Page
         </a>
@@ -265,7 +266,7 @@
     <footer class="w-full bg-white py-6 text-center text-gray-600 lg:py-8">
       <div class="flex justify-center space-x-4 py-4">
         <img
-          src="../public/_static/jata_logo.png"
+          src="/_static/jata_logo.png"
           class="h-7 w-8"
           alt="Logo Jata Negara"
         />
@@ -278,13 +279,13 @@
         </a>
         <span class="hidden text-gray-300 lg:inline">|</span>
         <img
-          src="../public/android-chrome-512x512.png"
+          src="/android-chrome-512x512.png"
           class="h-7 w-7"
           alt="GoGovMy Logo"
         />
         <a
-          href="https://go.gov.my/"
-          target="_blank"
+          href="#"
+          id="footer-link"
           class="poppins hidden font-bold text-black hover:text-gray-500 lg:inline"
         >
           go.gov.my
@@ -301,6 +302,23 @@
           collapseContent.classList.toggle("open");
           toggleIcon.classList.toggle("rotate-180");
         });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const toggleButton = document.getElementById("toggle-button");
+        const collapseContent = document.getElementById("collapse-content");
+        const toggleIcon = document.getElementById("toggle-icon");
+
+        toggleButton.addEventListener("click", function () {
+          collapseContent.classList.toggle("open");
+          toggleIcon.classList.toggle("rotate-180");
+        });
+
+        // Set the base URL dynamically
+        const baseURL = `${window.location.protocol}//app.${window.location.host}`;
+        document.getElementById("home-link").href = `${baseURL}/en/home`;
+        document.getElementById("footer-link").href = `${baseURL}/en/home`;
       });
     </script>
   </body>

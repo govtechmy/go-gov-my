@@ -54,9 +54,22 @@
     <!-- Include the Rive library -->
     <script src="https://unpkg.com/@rive-app/canvas@latest"></script>
     <script>
-      setTimeout(function () {
-        window.location.href = "{{.URL}}";
-      }, 5000);
+      document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectURL = urlParams.get("url");
+        const title = urlParams.get("title");
+        const description = urlParams.get("description");
+        const imageUrl = urlParams.get("imageUrl");
+
+        // Set a timeout for redirection
+        setTimeout(() => {
+          window.location.href = redirectURL;
+        }, 5000);
+
+        // Update the 'Skip ahead' button href
+        const skipButton = document.getElementById("skip-redirect");
+        skipButton.href = redirectURL;
+      });
     </script>
   </head>
   <body class="flex min-h-screen flex-col bg-gray-50">
@@ -268,7 +281,7 @@
           You'll be redirected to the site in 5 seconds...
         </p>
         <a
-          href="{{.URL}}"
+          id="skip-redirect"
           type="button"
           class="poppins mb-5 me-2 flex items-center rounded-lg bg-blue-700 px-2.5 py-2.5 text-center text-sm text-white hover:bg-blue-500 focus:outline-none focus:ring-4 focus:ring-[#4285F4]/50 dark:focus:ring-[#4285F4]/55"
         >
@@ -315,8 +328,8 @@
           alt="GoGovMy Logo"
         />
         <a
-          href="https://go.gov.my/"
-          target="_blank"
+          href="#"
+          id="footer-link"
           class="poppins hidden font-bold text-black hover:text-gray-500 lg:inline"
         >
           go.gov.my
@@ -351,6 +364,22 @@
             r.resizeDrawingSurfaceToCanvas();
           },
         });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const toggleButton = document.getElementById("toggle-button");
+        const collapseContent = document.getElementById("collapse-content");
+        const toggleIcon = document.getElementById("toggle-icon");
+
+        toggleButton.addEventListener("click", function () {
+          collapseContent.classList.toggle("open");
+          toggleIcon.classList.toggle("rotate-180");
+        });
+
+        // Set the base URL dynamically
+        const baseURL = `${window.location.protocol}//app.${window.location.host}`;
+        document.getElementById("footer-link").href = `${baseURL}/en/home`;
       });
     </script>
   </body>

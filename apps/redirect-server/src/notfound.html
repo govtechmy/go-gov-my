@@ -254,7 +254,8 @@
           provided you with this short link.
         </p>
         <a
-          href="https://go.gov.my/"
+          href="#"
+          id="home-link"
           class="inter mb-2 me-2 rounded-lg bg-black px-5 py-2.5 text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
         >
           Return to Home Page
@@ -283,8 +284,8 @@
           alt="GoGovMy Logo"
         />
         <a
-          href="https://go.gov.my/"
-          target="_blank"
+          href="#"
+          id="footer-link"
           class="poppins hidden font-bold text-black hover:text-gray-500 lg:inline"
         >
           go.gov.my
@@ -301,6 +302,23 @@
           collapseContent.classList.toggle("open");
           toggleIcon.classList.toggle("rotate-180");
         });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const toggleButton = document.getElementById("toggle-button");
+        const collapseContent = document.getElementById("collapse-content");
+        const toggleIcon = document.getElementById("toggle-icon");
+
+        toggleButton.addEventListener("click", function () {
+          collapseContent.classList.toggle("open");
+          toggleIcon.classList.toggle("rotate-180");
+        });
+
+        // Set the base URL dynamically
+        const baseURL = `${window.location.protocol}//app.${window.location.host}`;
+        document.getElementById("home-link").href = `${baseURL}/en/home`;
+        document.getElementById("footer-link").href = `${baseURL}/en/home`;
       });
     </script>
   </body>

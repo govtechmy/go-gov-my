@@ -4,7 +4,6 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"html/template"
 	"io"
 	"log"
 	"net/http"
@@ -110,7 +109,7 @@ func main() {
 		flag.IntVar(&httpPort, "http-port", 3000, "HTTP server port")
 		flag.StringVar(&telemetryURL, "telemetry-url", os.Getenv("TELEMETRY_URL"), "OpenTelemetry HTTP endpoint URL e.g. localhost:4318")
 		flag.StringVar(&geolite2DBPath, "geolite2-path", "./GeoLite2-City.mmdb", "Path to GeoLite2 .mmdb file")
-		flag.StringVar(&baseURL, "base-url", os.Getenv("NEXTJS_BASE_URL"), "Base URL for the frontend")
+		flag.StringVar(&baseURL, "base-url", os.Getenv("VITE_BASE_URL"), "The static page for GO: http://localhost:5713")
 	}
 
 	flag.Parse()
@@ -135,13 +134,11 @@ func main() {
 
 	linkRepo := es.NewLinkRepo(esClient)
 
-	t, err := template.ParseGlob("templates/*.html")
-	if err != nil {
-		logger.Fatal("cannot load html templates", zap.Error(err))
-	}
-
+	// fs := http.FileServer(http.Dir("public"))
+	// http.Handle("/public/", http.StripPrefix("/public/", fs))
 	fs := http.FileServer(http.Dir("public"))
-	http.Handle("/public/", http.StripPrefix("/public/", fs))
+	http.Handle("/", fs)
+
 
 	ipDB, err := geoip2.Open(geolite2DBPath)
 	if err != nil {
@@ -167,7 +164,7 @@ func main() {
 				zap.String("ip", getClientIP(r)),
 				zap.String("user-agent", r.UserAgent()),
 				zap.String("code", "link_not_found")) // Filebeat will run to collect link not found errors over this code
-			http.Redirect(w, r, fmt.Sprintf("%s/en/notfound", baseURL), http.StatusSeeOther)
+			http.Redirect(w, r, fmt.Sprintf("%s/notfound", baseURL), http.StatusSeeOther)
 			return
 		}
 		if err != nil {
@@ -176,29 +173,19 @@ func main() {
 				zap.String("ip", getClientIP(r)),
 				zap.String("user-agent", r.UserAgent()),
 				zap.Error(err))
-			http.Redirect(w, r, fmt.Sprintf("%s/en/server_error", baseURL), http.StatusSeeOther)
+			http.Redirect(w, r, fmt.Sprintf("%s/server_error", baseURL), http.StatusSeeOther)
 			return
 		}
 
 		// LINK IS PASSWORD PROTECTED BUT USER DID NOT PROVIDE PASSWORD, REDIRECT TO AUTH PAGE
 		if link.Password != "" && user_input_password == "" {
-			if err := t.ExecuteTemplate(w, "auth.html", AuthPageProps{
-				Slug:          slug,
-				WrongPassword: false,
-			}); err != nil {
-				logger.Error("failed to execute template", zap.Error(err))
-			}
+			http.Redirect(w, r, fmt.Sprintf("%s/auth?slug=%s", baseURL, slug), http.StatusSeeOther)
 			return
 		}
 
 		// LINK IS PASSWORD PROTECTED AND USER PROVIDED WRONG PASSWORD
 		if link.Password != "" && user_input_password != link.Password && user_input_password != "" {
-			if err := t.ExecuteTemplate(w, "auth.html", AuthPageProps{
-				Slug:          slug,
-				WrongPassword: true,
-			}); err != nil {
-				logger.Error("failed to execute template", zap.Error(err))
-			}
+			http.Redirect(w, r, fmt.Sprintf("%s/auth?slug=%s&wrongPassword=true", baseURL, slug), http.StatusSeeOther)
 			return
 		}
 
@@ -214,16 +201,22 @@ func main() {
 
 		// Do not use link.URL, use redirectMetadata.LinkURL instead.
 		// Redirect URL could be a geo-specific/ios/android link.
-		redirectURL := redirectMetadata.LinkURL
+		// redirectURL := redirectMetadata.LinkURL
 
-		if err := t.ExecuteTemplate(w, "wait.html", WaitPageProps{
-			URL:         redirectURL,
-			Title:       link.Title,
-			Description: link.Description,
-			ImageURL:    link.ImageURL,
-		}); err != nil {
-			logger.Error("failed to execute template", zap.Error(err))
-		}
+		// if err := t.ExecuteTemplate(w, "wait.html", WaitPageProps{
+		// 	URL:         redirectURL,
+		// 	Title:       link.Title,
+		// 	Description: link.Description,
+		// 	ImageURL:    link.ImageURL,
+		// }); err != nil {
+		// 	logger.Error("failed to execute template", zap.Error(err))
+		// }
+
+		// Redirect URL could be a geo-specific/ios/android link.
+		redirectURL := fmt.Sprintf("%s/redirect?url=%s&title=%s&description=%s&imageUrl=%s",
+		baseURL, redirectMetadata.LinkURL, link.Title, link.Description, link.ImageURL)
+		http.Redirect(w, r, redirectURL, http.StatusSeeOther)
+
 	}), "handleLinkVisit"))
 
 	srv := &http.Server{
