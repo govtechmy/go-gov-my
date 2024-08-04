@@ -77,11 +77,15 @@ func main() {
 	defer logFile.Close()
 
 	// Configure stdout logger
-	stdoutLogger, err := zap.NewProduction()
-	if err != nil {
-		log.Fatalf("failed to initialize stdout logger: %v", err)
-	}
-	defer stdoutLogger.Sync()
+	loggerConfig := zap.NewProductionConfig()
+	loggerConfig.OutputPaths = []string{"stdout"}
+	stdoutLogger := zap.Must(loggerConfig.Build())
+	// golang-lint mentioned it should check for err
+	defer func() {
+		if err := stdoutLogger.Sync(); err != nil {
+			fmt.Fprintf(os.Stderr, "Failed to sync logger: %v\n", err)
+		}
+	}()
 
 	// Configure file logger for successful link visits
 	w := zapcore.AddSync(logFile)
