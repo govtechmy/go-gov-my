@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"redirect-server/repository/es"
 
 	"github.com/olivere/elastic/v7"
@@ -19,14 +20,9 @@ func main() {
 	var elasticPassword string
 	var httpPort int
 	{
-		// flag.StringVar(&elasticURL, "elastic-url", os.Getenv("ELASTIC_URL"), "Elasticsearch URL e.g. http://localhost:9200")
-		// flag.StringVar(&elasticUser, "elastic-user", os.Getenv("ELASTIC_USER"), "Elasticsearch username")
-		// flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
-		// flag.IntVar(&httpPort, "http-port", 3002, "HTTP server port")
-
-		flag.StringVar(&elasticURL, "elastic-url", "http://localhost:9200", "Elasticsearch URL e.g. http://localhost:9200")
-		flag.StringVar(&elasticUser, "elastic-user","elastic", "Elasticsearch username")
-		flag.StringVar(&elasticPassword, "elastic-password", "", "Elasticsearch password")
+		flag.StringVar(&elasticURL, "elastic-url", os.Getenv("ELASTIC_URL"), "Elasticsearch URL e.g. http://localhost:9200")
+		flag.StringVar(&elasticUser, "elastic-user", os.Getenv("ELASTIC_USER"), "Elasticsearch username")
+		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
 		flag.IntVar(&httpPort, "http-port", 3002, "HTTP server port")
 	}
 	flag.Parse()
