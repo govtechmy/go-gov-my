@@ -1,6 +1,18 @@
 {
-    "name": "redirect-server",
-    "scripts": {
-        "dev": "air || echo 'warning: could not start dev server, command \"air\" failed'"
-    }
+  "name": "redirect-server",
+  "private": true,
+  "version": "0.0.1",
+  "author": {
+    "name": "Farhan Fazli"
+  },
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev-go": "air || echo 'warning: could not start dev server, command \"air\" failed'",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.3.4"
+  }
 }
