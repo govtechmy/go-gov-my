@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"path/filepath"
 	redirectserver "redirect-server"
 	"redirect-server/repository"
 	"redirect-server/repository/es"
@@ -22,6 +23,7 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 type WaitPageProps struct {
@@ -53,16 +55,44 @@ func getClientIP(r *http.Request) string {
 
 
 func main() {
-	loggerConfig := zap.NewProductionConfig()
-	loggerConfig.OutputPaths = []string{"stdout"}
-	logger := zap.Must(loggerConfig.Build())
+	// Get log file path from environment variable
+	// Local: /apps/redirect-server/logs/redirectd.log
+	// Server: /usr/share/filebeat/logs/redirectd.log
+    logFilePath := os.Getenv("LOG_FILE_PATH")
+    if logFilePath == "" {
+        log.Fatalf("LOG_FILE_PATH environment variable is not set")
+		// logFilePath = "../logs/redirectd.log"
+    }
 
-	// golang-lint mentioned it should check for err
-	defer func() {
-		if err := logger.Sync(); err != nil {
-			fmt.Fprintf(os.Stderr, "Failed to sync logger: %v\n", err)
-		}
-	}()
+	// Ensure the directory exists
+	logDir := filepath.Dir(logFilePath)
+	if err := os.MkdirAll(logDir, 0755); err != nil {
+		log.Fatalf("failed to create log directory: %v", err)
+	}
+
+	// Initialize log file for successful link visits
+    logFile, err := os.OpenFile(logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+    if err != nil {
+        log.Fatalf("failed to open log file: %v", err)
+    }
+    defer logFile.Close()
+
+    // Configure stdout logger
+    stdoutLogger, err := zap.NewProduction()
+    if err != nil {
+        log.Fatalf("failed to initialize stdout logger: %v", err)
+    }
+    defer stdoutLogger.Sync()
+
+    // Configure file logger for successful link visits
+    w := zapcore.AddSync(logFile)
+    core := zapcore.NewCore(
+        zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()),
+        w,
+        zap.InfoLevel,
+    )
+    fileLogger := zap.New(core)
+    defer fileLogger.Sync()
 
 	var elasticURL string
 	var elasticUser string
@@ -98,14 +128,14 @@ func main() {
 		elastic.SetHttpClient(otelhttp.DefaultClient),
 	)
 	if err != nil {
-		logger.Fatal("cannot initiate Elasticsearch client", zap.Error(err))
+		stdoutLogger.Fatal("cannot initiate Elasticsearch client", zap.Error(err))
 	}
 
 	linkRepo := es.NewLinkRepo(esClient)
 
 	t, err := template.ParseGlob("templates/*.html")
 	if err != nil {
-		logger.Fatal("cannot load html templates", zap.Error(err))
+		stdoutLogger.Fatal("cannot load html templates", zap.Error(err))
 	}
 
 	fs := http.FileServer(http.Dir("public"))
@@ -113,7 +143,7 @@ func main() {
 
 	ipDB, err := geoip2.Open(geolite2DBPath)
 	if err != nil {
-		logger.Fatal("cannot load geolite2 database", zap.Error(err))
+		stdoutLogger.Fatal("cannot load geolite2 database", zap.Error(err))
 	}
 	defer ipDB.Close()
 
@@ -130,7 +160,7 @@ func main() {
 
 		link, err := linkRepo.GetLink(ctx, slug)
 		if err == repository.ErrLinkNotFound {
-			logger.Info("link not found",
+			stdoutLogger.Info("link not found",
 				zap.String("slug", slug),
 				zap.String("ip", getClientIP(r)),
 				zap.String("user-agent", r.UserAgent()),
@@ -139,7 +169,7 @@ func main() {
 			return
 		}
 		if err != nil {
-			logger.Error("error fetching link",
+			stdoutLogger.Error("error fetching link",
 				zap.String("slug", slug),
 				zap.String("ip", getClientIP(r)),
 				zap.String("user-agent", r.UserAgent()),
@@ -154,7 +184,7 @@ func main() {
 				Slug:          slug,
 				WrongPassword: false,
 			}); err != nil {
-				logger.Error("failed to execute template", zap.Error(err))
+				stdoutLogger.Error("failed to execute template", zap.Error(err))
 			}
 			return
 		}
@@ -165,14 +195,14 @@ func main() {
 				Slug:          slug,
 				WrongPassword: true,
 			}); err != nil {
-				logger.Error("failed to execute template", zap.Error(err))
+				stdoutLogger.Error("failed to execute template", zap.Error(err))
 			}
 			return
 		}
 
 		// Log redirect metadata for analytics
 		redirectMetadata := repository.NewRedirectMetadata(*r, ipDB, *link)
-		logger.Info("redirect analytics",
+		fileLogger.Info("redirect analytics",
 			zap.String("linkSlug", link.Slug),
 			zap.String("linkId", link.ID),
 			zap.String("userAgent", r.UserAgent()),
@@ -190,7 +220,7 @@ func main() {
 			Description: link.Description,
 			ImageURL:    link.ImageURL,
 		}); err != nil {
-			logger.Error("failed to execute template", zap.Error(err))
+			stdoutLogger.Error("failed to execute template", zap.Error(err))
 		}
 	}), "handleLinkVisit"))
 
@@ -202,7 +232,7 @@ func main() {
 	go func() {
 		if err := srv.ListenAndServe(); err == http.ErrServerClosed {
 		} else if err != nil {
-			logger.Fatal("failed to stop http server gracefully",
+			stdoutLogger.Fatal("failed to stop http server gracefully",
 				zap.Error(err))
 		}
 	}()
@@ -213,6 +243,6 @@ func main() {
 	defer stop()
 
 	if err := srv.Shutdown(shutdownCtx); err != nil {
-		logger.Fatal("", zap.Error(err))
+		stdoutLogger.Fatal("", zap.Error(err))
 	}
 }
