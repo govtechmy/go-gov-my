@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"path/filepath"
 	redirectserver "redirect-server"
 	"redirect-server/repository"
 	"redirect-server/repository/es"
@@ -22,6 +23,7 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 type WaitPageProps struct {
@@ -53,6 +55,36 @@ func getClientIP(r *http.Request) string {
 
 
 func main() {
+
+	logFilePath := os.Getenv("LOG_FILE_PATH")
+	if logFilePath == "" {
+		log.Fatalf("LOG_FILE_PATH environment variable is not set")
+	}
+
+	// Ensure the directory exists
+	logDir := filepath.Dir(logFilePath)
+	if err := os.MkdirAll(logDir, 0755); err != nil {
+		log.Fatalf("failed to create log directory: %v", err)
+	}
+
+	// Initialize log file for successful link visits
+	logFile, err := os.OpenFile(logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		log.Fatalf("failed to open log file: %v", err)
+	}
+	defer logFile.Close()
+
+	// Configure file logger for successful link visits
+	w := zapcore.AddSync(logFile)
+	core := zapcore.NewCore(
+		zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()),
+		w,
+		zap.InfoLevel,
+	)
+	fileLogger := zap.New(core)
+	defer fileLogger.Sync()
+
+	
 	loggerConfig := zap.NewProductionConfig()
 	loggerConfig.OutputPaths = []string{"stdout"}
 	logger := zap.Must(loggerConfig.Build())
@@ -172,7 +204,7 @@ func main() {
 
 		// Log redirect metadata for analytics
 		redirectMetadata := repository.NewRedirectMetadata(*r, ipDB, *link)
-		logger.Info("redirect analytics",
+		fileLogger.Info("redirect analytics",
 			zap.String("linkSlug", link.Slug),
 			zap.String("linkId", link.ID),
 			zap.String("userAgent", r.UserAgent()),
