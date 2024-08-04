@@ -196,23 +196,23 @@ services:
     networks:
       - my-network
 
-##########################
-# Optional Container     #
-# Mainly for Development #
-##########################
+  ##########################
+  # Optional Container     #
+  # Mainly for Development #
+  ##########################
 
-# kafdrop:
-#   image: obsidiandynamics/kafdrop
-#   container_name: kafdrop
-#   restart: always
-#   ports:
-#     - 9000:9000
-#   environment:
-#     KAFKA_BROKER_CONNECT: "broker:29092"
-#   depends_on:
-#     - broker
-#   networks:
-#     - my-network
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    container_name: kafdrop
+    restart: always
+    ports:
+      - 9000:9000
+    environment:
+      KAFKA_BROKER_CONNECT: "broker:29092"
+    depends_on:
+      - broker
+    networks:
+      - my-network
 
 # debezium-ui:
 #   image: quay.io/debezium/debezium-ui:latest
