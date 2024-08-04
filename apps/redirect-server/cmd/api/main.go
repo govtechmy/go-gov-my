@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -47,6 +48,8 @@ func main() {
 
 	// todo: add tracing
 	// todo: split into internal and public endpoint
+	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) { io.WriteString(w, "OK") })
+	
 	http.HandleFunc("/links", func(w http.ResponseWriter, r *http.Request) {
 		indexLinkHandler(w, r, linkRepo, idempotentResourceRepo)
 	})

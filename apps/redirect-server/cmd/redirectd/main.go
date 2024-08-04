@@ -36,6 +36,22 @@ type AuthPageProps struct {
 	WrongPassword bool
 }
 
+// TODO: refactor and move to a common package
+func getClientIP(r *http.Request) string {
+	// Get the IP from the X-Forwarded-For header, if available
+	xff := r.Header.Get("X-Forwarded-For")
+	if xff != "" {
+		// The X-Forwarded-For header can contain a comma-separated list of IPs
+		ips := strings.Split(xff, ",")
+		if len(ips) > 0 {
+			return strings.TrimSpace(ips[0])
+		}
+	}
+	// Fall back to the remote address if X-Forwarded-For is not set
+	return r.RemoteAddr
+}
+
+
 func main() {
 	loggerConfig := zap.NewProductionConfig()
 	loggerConfig.OutputPaths = []string{"stdout"}
@@ -54,6 +70,7 @@ func main() {
 	var httpPort int
 	var telemetryURL string
 	var geolite2DBPath string
+	var baseURL string
 	{
 		flag.StringVar(&elasticURL, "elastic-url", os.Getenv("ELASTIC_URL"), "Elasticsearch URL e.g. http://localhost:9200")
 		flag.StringVar(&elasticUser, "elastic-user", os.Getenv("ELASTIC_USER"), "Elasticsearch username")
@@ -61,10 +78,7 @@ func main() {
 		flag.IntVar(&httpPort, "http-port", 3000, "HTTP server port")
 		flag.StringVar(&telemetryURL, "telemetry-url", os.Getenv("TELEMETRY_URL"), "OpenTelemetry HTTP endpoint URL e.g. localhost:4318")
 		flag.StringVar(&geolite2DBPath, "geolite2-path", "./GeoLite2-City.mmdb", "Path to GeoLite2 .mmdb file")
-	}
-	baseURL := os.Getenv("NEXTJS_BASE_URL")
-	if baseURL == "" {
-		log.Fatal("NEXTJS_BASE_URL is not set in the environment variables")
+		flag.StringVar(&baseURL, "base-url", os.Getenv("NEXTJS_BASE_URL"), "Base URL for the frontend")
 	}
 
 	flag.Parse()
@@ -118,7 +132,7 @@ func main() {
 		if err == repository.ErrLinkNotFound {
 			logger.Info("link not found",
 				zap.String("slug", slug),
-				zap.String("ip", r.RemoteAddr),
+				zap.String("ip", getClientIP(r)),
 				zap.String("user-agent", r.UserAgent()),
 				zap.String("code", "link_not_found")) // Filebeat will run to collect link not found errors over this code
 			http.Redirect(w, r, fmt.Sprintf("%s/en/notfound", baseURL), http.StatusSeeOther)
@@ -127,7 +141,7 @@ func main() {
 		if err != nil {
 			logger.Error("error fetching link",
 				zap.String("slug", slug),
-				zap.String("ip", r.RemoteAddr),
+				zap.String("ip", getClientIP(r)),
 				zap.String("user-agent", r.UserAgent()),
 				zap.Error(err))
 			http.Redirect(w, r, fmt.Sprintf("%s/en/server_error", baseURL), http.StatusSeeOther)
@@ -162,7 +176,7 @@ func main() {
 			zap.String("linkSlug", link.Slug),
 			zap.String("linkId", link.ID),
 			zap.String("userAgent", r.UserAgent()),
-			zap.String("ip", r.RemoteAddr),
+			zap.String("ip", getClientIP(r)),
 			zap.Object("redirectMetadata", redirectMetadata),
 		)
 
