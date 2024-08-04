@@ -1,6 +1,6 @@
 {
   "name": "@dub/ui",
-  "description": "UI components for Dub.co",
+  "description": "UI components for go.gov.my",
   "version": "0.1.24",
   "sideEffects": false,
   "main": "./dist/index.js",
@@ -62,18 +62,18 @@
     "use-debounce": "^8.0.4",
     "vaul": "^0.9.0"
   },
-  "author": "Steven Tey <stevensteel97@gmail.com>",
-  "homepage": "https://dub.co",
+  "author": "GovTechMy",
+  "homepage": "https://go.gov.my/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/steven-tey/dub.git"
+    "url": "git+https://github.com/govtechmy/go-gov-my.git"
   },
   "bugs": {
-    "url": "https://github.com/steven-tey/dub/issues"
+    "url": "https://github.com/govtechmy/go-gov-my/issues"
   },
   "keywords": [
-    "dub",
-    "dub.co",
+    "go.gov.my",
+    "app.go.gov.my",
     "ui"
   ],
   "publishConfig": {
