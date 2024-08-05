@@ -148,7 +148,7 @@ export const getClicks = async (
   if (endpoint === "cities") {
     const cities = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata as MetadataProps;
-      if (metadata.city) return sumTwoObj(accumulator, metadata?.countryCode);
+      if (metadata.city) return sumTwoObj(accumulator, metadata?.city);
       return accumulator;
     }, {});
     return Object.keys(cities)
