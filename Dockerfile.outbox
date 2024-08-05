@@ -21,4 +21,4 @@ WORKDIR /gogov-outbox
 
 COPY --from=builder /app/apps/web/dist/outbox ./
 
-CMD ["node", "--include-source-maps","index.js"]
+CMD ["node", "--enable-source-maps","index.js"]
