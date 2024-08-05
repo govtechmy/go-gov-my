@@ -42,7 +42,9 @@ export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
   cookies: {
     sessionToken: {
-      name: SESSION_TOKEN_NAME,
+      name: IS_PRODUCTION
+        ? `__Secure-${SESSION_TOKEN_NAME}`
+        : SESSION_TOKEN_NAME,
       options: {
         httpOnly: true,
         sameSite: "lax",
