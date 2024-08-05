@@ -8,13 +8,14 @@ on:
   push:
     branches:
       - main
+      - feat/deploy1
   pull_request:
     branches:
       - main
   workflow_dispatch:
 permissions:
-  id-token: write   # This is required for requesting the JWT
-  contents: read    # This is required for actions/checkout
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
 jobs:
   deploy:
     runs-on: ubuntu-latest
