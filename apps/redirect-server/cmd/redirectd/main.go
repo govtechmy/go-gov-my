@@ -32,9 +32,14 @@ type WaitPageProps struct {
 	ImageURL    string
 }
 
-type AuthPageProps struct {
-	Slug          string
-	WrongPassword bool
+type AuthPostProps struct {
+	Password	string
+	Slug		string
+}
+
+type PostReturnProps struct {
+	Status		bool
+	Message		string
 }
 
 // TODO: refactor and move to a common package
@@ -155,7 +160,6 @@ func main() {
 	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		slug := strings.TrimPrefix(r.URL.Path, "/")
-		user_input_password := r.URL.Query().Get("password")
 
 		link, err := linkRepo.GetLink(ctx, slug)
 		if err == repository.ErrLinkNotFound {
@@ -177,15 +181,9 @@ func main() {
 			return
 		}
 
-		// LINK IS PASSWORD PROTECTED BUT USER DID NOT PROVIDE PASSWORD, REDIRECT TO AUTH PAGE
-		if link.Password != "" && user_input_password == "" {
+		// LINK IS PASSWORD PROTECTED , REDIRECT TO AUTH PAGE
+		if link.Password != "" {
 			http.Redirect(w, r, fmt.Sprintf("%s/auth?slug=%s", baseURL, slug), http.StatusSeeOther)
-			return
-		}
-
-		// LINK IS PASSWORD PROTECTED AND USER PROVIDED WRONG PASSWORD
-		if link.Password != "" && user_input_password != link.Password && user_input_password != "" {
-			http.Redirect(w, r, fmt.Sprintf("%s/auth?slug=%s&wrongPassword=true", baseURL, slug), http.StatusSeeOther)
 			return
 		}
 
@@ -218,6 +216,90 @@ func main() {
 		http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 
 	}), "handleLinkVisit"))
+
+	http.Handle("/auth", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		if r.Method == "POST" {
+			decoder := json.NewDecoder(r.Body)
+			var t = AuthPostProps
+			err := decoder.Decode(&t)
+			user_input_password := t.Password
+			slug := t.Slug
+			if err != nil {
+				logger.Info("password auth error",
+				zap.String("slug", slug),
+				zap.String("ip", getClientIP(r)),
+				zap.String("user-agent", r.UserAgent()),
+				zap.String("code", "auth_password_error"))
+				var returnStruct PostReturnProps
+				returnStruct.Status = false
+				returnStruct.Message = "Unable to find Password in Post"
+				w.Header().Add("Content-Type", "application/json")
+				w.WriteHeader(http.StatusInternalServerError)
+				json.NewEncoder(w).Encode(returnStruct)
+				return
+			}
+
+			link, err := linkRepo.GetLink(ctx, slug)
+			if err == repository.ErrLinkNotFound {
+				logger.Info("link not found",
+					zap.String("slug", slug),
+					zap.String("ip", getClientIP(r)),
+					zap.String("user-agent", r.UserAgent()),
+					zap.String("code", "link_not_found")) // Filebeat will run to collect link not found errors over this code
+					var returnStruct PostReturnProps
+					returnStruct.Status = false
+					returnStruct.Message = "Unable to find link"
+					w.Header().Add("Content-Type", "application/json")
+					w.WriteHeader(http.StatusInternalServerError)
+					json.NewEncoder(w).Encode(returnStruct)
+				return
+			}
+			if err != nil {
+				logger.Error("error fetching link",
+					zap.String("slug", slug),
+					zap.String("ip", getClientIP(r)),
+					zap.String("user-agent", r.UserAgent()),
+					zap.Error(err))
+					var returnStruct PostReturnProps
+					returnStruct.Status = false
+					returnStruct.Message = "Unable to fetch link"
+					w.Header().Add("Content-Type", "application/json")
+					w.WriteHeader(http.StatusInternalServerError)
+					json.NewEncoder(w).Encode(returnStruct)
+				return
+			}
+
+			// LINK IS PASSWORD PROTECTED AND USER PROVIDED CORRECT PASSWORD
+			if link.Password != "" && user_input_password == link.Password && user_input_password != "" {
+				var returnStruct PostReturnProps
+				returnStruct.Status = true
+				returnStruct.Message = "Password Authenticated"
+				w.Header().Add("Content-Type", "application/json")
+				w.WriteHeader(http.StatusOK)
+				json.NewEncoder(w).Encode(returnStruct)
+				return
+			}
+
+			// USER PROVIDE WRONG PASSWORD
+			var returnStruct PostReturnProps
+			returnStruct.Status = false
+			returnStruct.Message = "Wrong Password"
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnauthorized)
+			json.NewEncoder(w).Encode(returnStruct)
+			return
+
+		}
+		var returnStruct PostReturnProps
+		returnStruct.Status = false
+		returnStruct.Message = "Method not allowed"
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(returnStruct)
+		return	
+	
+	}), "handleAuthPassword"))
 
 	srv := &http.Server{
 		Addr:    fmt.Sprintf("0.0.0.0:%d", httpPort),
