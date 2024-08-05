@@ -14,11 +14,5 @@ RUN pnpm install
 
 WORKDIR /app/apps/web
 RUN npx prisma generate
-RUN pnpm build-outbox
 
-FROM base AS runner
-WORKDIR /gogov-outbox
-
-COPY --from=builder /app/apps/web/dist/outbox ./
-
-CMD ["node", "--enable-source-maps","index.js"]
+CMD ["npx", "tsx", "./kafka-consumer/index.ts"]
