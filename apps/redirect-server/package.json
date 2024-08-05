@@ -7,12 +7,6 @@
   },
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "dev-go": "air || echo 'warning: could not start dev server, command \"air\" failed'",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "vite": "^5.3.4"
+    "dev": "air || echo 'warning: could not start dev server, command \"air\" failed'"
   }
 }
