@@ -145,6 +145,21 @@ export const getClicks = async (
       .sort((a, b) => b.clicks - a.clicks);
   }
 
+  if (endpoint === "cities") {
+    const cities = analytics.reduce((accumulator, row) => {
+      const metadata = row?.metadata as MetadataProps;
+      if (metadata.city) return sumTwoObj(accumulator, metadata?.countryCode);
+      return accumulator;
+    }, {});
+    return Object.keys(cities)
+      .map((key) => {
+        const [country, city] = key.split(":");
+        return { country, city, clicks: cities[key] };
+      })
+      .filter(({ country, city }) => country?.length > 0 && city?.length > 0)
+      .sort((a, b) => b.clicks - a.clicks);
+  }
+
   if (endpoint === "top_links") {
     if (!workspaceId) {
       throw Error("failed to get top links, missing 'workspaceId'");

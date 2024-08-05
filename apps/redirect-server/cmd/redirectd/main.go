@@ -132,6 +132,9 @@ func main() {
 		logger.Fatal("cannot load geolite2 database", zap.Error(err))
 	}
 	defer ipDB.Close()
+	logger.Info("geolite2 database loaded",
+		zap.Any("metadata", ipDB.Metadata()),
+	)
 
 	// todo: logger handler
 	// todo: metrics handler
@@ -189,6 +192,13 @@ func main() {
 		// Log redirect metadata for analytics
 		redirectMetadata := repository.NewRedirectMetadata(*r, ipDB, *link)
 		fileLogger.Info("redirect analytics",
+			zap.String("linkSlug", link.Slug),
+			zap.String("linkId", link.ID),
+			zap.String("userAgent", r.UserAgent()),
+			zap.String("ip", utils.GetClientIP(r)),
+			zap.Object("redirectMetadata", redirectMetadata),
+		)
+		logger.Info("redirect analytics",
 			zap.String("linkSlug", link.Slug),
 			zap.String("linkId", link.ID),
 			zap.String("userAgent", r.UserAgent()),

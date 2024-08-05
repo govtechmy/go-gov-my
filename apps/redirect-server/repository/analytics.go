@@ -8,6 +8,7 @@ type LinkAnalytics struct {
 	LinkSlug        AggregatedValues `json:"linkSlug"`
 	LinkUrl         AggregatedValues `json:"linkUrl"`
 	CountryCode     AggregatedValues `json:"countryCode"`
+	City            AggregatedValues `json:"city"`
 	DeviceType      AggregatedValues `json:"deviceType"`
 	Browser         AggregatedValues `json:"browser"`
 	OperatingSystem AggregatedValues `json:"operatingSystem"`
@@ -23,6 +24,7 @@ func NewLinkAnalytics(linkID string) *LinkAnalytics {
 		LinkSlug:        make(map[string]int),
 		LinkUrl:         make(map[string]int),
 		CountryCode:     make(map[string]int),
+		City:            make(map[string]int),
 		DeviceType:      make(map[string]int),
 		Browser:         make(map[string]int),
 		OperatingSystem: make(map[string]int),

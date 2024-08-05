@@ -27,7 +27,7 @@ type application struct {
 	kafkaProducer      sarama.SyncProducer
 	kafkaProducerTopic string
 	lastSendAttemptAt  time.Time
-	linkAnalytics      map[string]*LinkAnalytics
+	linkAnalytics      map[string]*repository.LinkAnalytics
 	esRepo             *es.AnalyticRepo
 }
 
@@ -71,7 +71,7 @@ func main() {
 		elastic.SetBasicAuth(elasticUser, elasticPassword),
 		elastic.SetHttpClient(otelhttp.DefaultClient),
 	)
-	
+
 	if err != nil {
 		logger.Fatal("cannot initiate Elasticsearch client", zap.Error(err))
 	}
@@ -118,7 +118,7 @@ func main() {
 		kafkaProducer:      kafkaProducer,
 		kafkaProducerTopic: kafkaProducerTopic,
 		lastSendAttemptAt:  time.Now(),
-		linkAnalytics:      make(map[string]*LinkAnalytics),
+		linkAnalytics:      make(map[string]*repository.LinkAnalytics),
 		esRepo:             esRepo,
 	}
 
@@ -149,7 +149,7 @@ func main() {
 func (app application) aggregateRedirectMetadata(rm repository.RedirectMetadata) {
 	a := app.linkAnalytics[rm.LinkID]
 	if a == nil {
-		a = NewLinkAnalytics(rm.LinkID)
+		a = repository.NewLinkAnalytics(rm.LinkID)
 		app.linkAnalytics[rm.LinkID] = a
 	}
 
@@ -158,6 +158,9 @@ func (app application) aggregateRedirectMetadata(rm repository.RedirectMetadata)
 	a.LinkUrl[rm.LinkURL] += 1
 	if rm.CountryCode != "" {
 		a.CountryCode[rm.CountryCode] += 1
+	}
+	if rm.City != "" {
+		a.City[rm.City] += 1
 	}
 	if rm.DeviceType != "" {
 		a.DeviceType[rm.DeviceType] += 1
@@ -177,7 +180,7 @@ func (app *application) sendAnalytics() error {
 
 	// TODO: Refactor this to use the repository.LinkAnalytics struct
 
-	linkAnalyticsList := make([]LinkAnalytics, 0)
+	linkAnalyticsList := make([]repository.LinkAnalytics, 0)
 
 	for _, a := range app.linkAnalytics {
 		linkAnalyticsList = append(linkAnalyticsList, *a)
@@ -187,7 +190,7 @@ func (app *application) sendAnalytics() error {
 	now := time.Now()
 	shortDate := now.Format("2006-01-02")
 
-	message := KafkaLinkAnalyticsMessage{
+	message := repository.KafkaLinkAnalyticsMessage{
 		AggregatedDate: shortDate,
 		From:           lastSendAttemptAt,
 		To:             now,
@@ -255,9 +258,9 @@ func (app *application) sendAnalytics() error {
 		}
 
 		slog.Info("elasticsearch document created")
-	
+
 		app.lastSendAttemptAt = now
-		app.linkAnalytics = make(map[string]*LinkAnalytics)
+		app.linkAnalytics = make(map[string]*repository.LinkAnalytics)
 		return nil
 	}
 
