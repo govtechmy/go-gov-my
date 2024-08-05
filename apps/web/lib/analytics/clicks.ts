@@ -138,9 +138,11 @@ export const getClicks = async (
         return sumTwoObj(accumulator, metadata?.countryCode);
       return accumulator;
     }, {});
-    return Object.keys(countries).map((key) => {
-      return { country: key, clicks: countries[key] };
-    });
+    return Object.keys(countries)
+      .map((key) => {
+        return { country: key, clicks: countries[key] };
+      })
+      .sort((a, b) => b.clicks - a.clicks);
   }
 
   if (endpoint === "top_links") {
@@ -157,9 +159,11 @@ export const getClicks = async (
       return accumulator;
     }, {});
 
-    return Object.keys(top_links).map((key) => {
-      return { link: key, clicks: top_links[key] };
-    });
+    return Object.keys(top_links)
+      .map((key) => {
+        return { link: key, clicks: top_links[key] };
+      })
+      .sort((a, b) => b.clicks - a.clicks);
   }
 
   if (endpoint === "referers") {
@@ -168,9 +172,11 @@ export const getClicks = async (
       if (metadata?.referer) return sumTwoObj(accumulator, metadata?.referer);
       return accumulator;
     }, {});
-    return Object.keys(referers).map((key) => {
-      return { referer: key, clicks: referers[key] };
-    });
+    return Object.keys(referers)
+      .map((key) => {
+        return { referer: key, clicks: referers[key] };
+      })
+      .sort((a, b) => b.clicks - a.clicks);
   }
 
   if (endpoint === "devices") {
@@ -180,9 +186,11 @@ export const getClicks = async (
         return sumTwoObj(accumulator, metadata?.deviceType);
       return accumulator;
     }, {});
-    return Object.keys(devices).map((key) => {
-      return { device: key.toUpperCase(), clicks: devices[key] };
-    });
+    return Object.keys(devices)
+      .map((key) => {
+        return { device: key.toUpperCase(), clicks: devices[key] };
+      })
+      .sort((a, b) => b.clicks - a.clicks);
   }
 
   if (endpoint === "browsers") {
@@ -191,9 +199,11 @@ export const getClicks = async (
       if (metadata?.browser) return sumTwoObj(accumulator, metadata?.browser);
       return accumulator;
     }, {});
-    return Object.keys(browsers).map((key) => {
-      return { browser: key, clicks: browsers[key] };
-    });
+    return Object.keys(browsers)
+      .map((key) => {
+        return { browser: key, clicks: browsers[key] };
+      })
+      .sort((a, b) => b.clicks - a.clicks);
   }
 
   if (endpoint === "os") {
@@ -203,9 +213,11 @@ export const getClicks = async (
         return sumTwoObj(accumulator, metadata?.operatingSystem);
       return accumulator;
     }, {});
-    return Object.keys(os).map((key) => {
-      return { os: key, clicks: os[key] };
-    });
+    return Object.keys(os)
+      .map((key) => {
+        return { os: key, clicks: os[key] };
+      })
+      .sort((a, b) => b.clicks - a.clicks);
   }
 
   if (endpoint === "timeseries") {
@@ -220,9 +232,11 @@ export const getClicks = async (
     }, {});
     if (JSON.stringify(timeseries) === "{}")
       return [{ start: new Date(), clicks: 0 }];
-    return Object.keys(timeseries).map((key) => {
-      return { start: key, clicks: timeseries[key] };
-    });
+    return Object.keys(timeseries)
+      .map((key) => {
+        return { start: key, clicks: timeseries[key] };
+      })
+      .sort((a, b) => b.clicks - a.clicks);
   }
 
   // return no data for other endpoints for now
