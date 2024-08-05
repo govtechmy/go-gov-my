@@ -3,6 +3,7 @@ package repository
 import (
 	"net"
 	"net/http"
+	"redirect-server/utils"
 	"time"
 
 	"github.com/mileusna/useragent"
@@ -56,7 +57,7 @@ func NewRedirectMetadata(req http.Request, ipDB *geoip2.Reader, link Link) Redir
 	}
 
 	// Parse IP
-	ip := net.ParseIP(req.RemoteAddr)
+	ip := net.ParseIP(utils.GetClientIP(&req))
 	if ip != nil && ipDB != nil {
 		redirectMetadata.IPAddress = ip.String()
 		city, err := ipDB.City(ip)

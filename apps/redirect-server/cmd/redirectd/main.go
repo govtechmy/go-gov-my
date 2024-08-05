@@ -14,6 +14,7 @@ import (
 	redirectserver "redirect-server"
 	"redirect-server/repository"
 	"redirect-server/repository/es"
+	"redirect-server/utils"
 	"strings"
 	"syscall"
 	"time"
@@ -37,22 +38,6 @@ type AuthPageProps struct {
 	Slug          string
 	WrongPassword bool
 }
-
-// TODO: refactor and move to a common package
-func getClientIP(r *http.Request) string {
-	// Get the IP from the X-Forwarded-For header, if available
-	xff := r.Header.Get("X-Forwarded-For")
-	if xff != "" {
-		// The X-Forwarded-For header can contain a comma-separated list of IPs
-		ips := strings.Split(xff, ",")
-		if len(ips) > 0 {
-			return strings.TrimSpace(ips[0])
-		}
-	}
-	// Fall back to the remote address if X-Forwarded-For is not set
-	return r.RemoteAddr
-}
-
 
 func main() {
 
@@ -84,7 +69,6 @@ func main() {
 	fileLogger := zap.New(core)
 	defer fileLogger.Sync()
 
-	
 	loggerConfig := zap.NewProductionConfig()
 	loggerConfig.OutputPaths = []string{"stdout"}
 	logger := zap.Must(loggerConfig.Build())
@@ -164,7 +148,7 @@ func main() {
 		if err == repository.ErrLinkNotFound {
 			logger.Info("link not found",
 				zap.String("slug", slug),
-				zap.String("ip", getClientIP(r)),
+				zap.String("ip", utils.GetClientIP(r)),
 				zap.String("user-agent", r.UserAgent()),
 				zap.String("code", "link_not_found")) // Filebeat will run to collect link not found errors over this code
 			http.Redirect(w, r, fmt.Sprintf("%s/en/notfound", baseURL), http.StatusSeeOther)
@@ -173,7 +157,7 @@ func main() {
 		if err != nil {
 			logger.Error("error fetching link",
 				zap.String("slug", slug),
-				zap.String("ip", getClientIP(r)),
+				zap.String("ip", utils.GetClientIP(r)),
 				zap.String("user-agent", r.UserAgent()),
 				zap.Error(err))
 			http.Redirect(w, r, fmt.Sprintf("%s/en/server_error", baseURL), http.StatusSeeOther)
@@ -208,7 +192,7 @@ func main() {
 			zap.String("linkSlug", link.Slug),
 			zap.String("linkId", link.ID),
 			zap.String("userAgent", r.UserAgent()),
-			zap.String("ip", getClientIP(r)),
+			zap.String("ip", utils.GetClientIP(r)),
 			zap.Object("redirectMetadata", redirectMetadata),
 		)
 
