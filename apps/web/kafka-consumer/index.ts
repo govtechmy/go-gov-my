@@ -2,11 +2,6 @@ import { prisma } from "@/lib/prisma";
 import { Kafka } from "kafkajs";
 import { z } from "zod";
 
-const OUTBOX_TOPIC =
-  process.env.OUTBOX_TOPIC || "ps-postgres.public.WebhookOutbox";
-
-const ANALYTIC_TOPIC = process.env.ANALYTIC_TOPIC || "link_analytics";
-
 const OutboxSchema = z.object({
   id: z.string().min(1),
   host: z.string().min(1),
@@ -18,10 +13,24 @@ const OutboxSchema = z.object({
 });
 
 async function main() {
-  const kafkaBrokerUrl = process.env.KAFKA_BROKER_URL || "localhost:9092";
+  const OUTBOX_TOPIC = process.env.OUTBOX_TOPIC;
+  if (!OUTBOX_TOPIC) {
+    throw Error("Missing env var OUTBOX_TOPIC");
+  }
+
+  const ANALYTIC_TOPIC = process.env.ANALYTIC_TOPIC;
+  if (!ANALYTIC_TOPIC) {
+    throw Error("Missing env var ANALYTIC_TOPIC");
+  }
+
+  const KAFKA_BROKER_URL = process.env.KAFKA_BROKER_URL;
+  if (!KAFKA_BROKER_URL) {
+    throw Error("Missing env var KAFKA_BROKER_URL");
+  }
+
   const kafka = new Kafka({
     clientId: "gogov-web-outbox",
-    brokers: [kafkaBrokerUrl],
+    brokers: [KAFKA_BROKER_URL],
   });
 
   const consumer = kafka.consumer({
