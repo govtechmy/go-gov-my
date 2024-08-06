@@ -105,7 +105,7 @@
     "select_tags": "Select Tags",
     "destination": "Destination URL",
     "invalid_url": "Invalid URL",
-    "press_enter": "press <strong>Enter</strong> ↵ to submit",
+    "press_enter": "press Enter ↵ to submit",
     "too_long": "Short links longer than 25 characters will show up differently on some platforms.",
     "not_found": "Link Not Found",
     "bummer": "Bummer! The link you are looking for does not exist. You either typed  in the wrong URL or don't have access to this link.",
