@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
@@ -33,13 +34,13 @@ type WaitPageProps struct {
 }
 
 type AuthPostProps struct {
-	Password	string
-	Slug		string
+	Password string
+	Slug     string
 }
 
 type PostReturnProps struct {
-	Status		bool
-	Message		string
+	Status  bool
+	Message string
 }
 
 // TODO: refactor and move to a common package
@@ -56,7 +57,6 @@ func getClientIP(r *http.Request) string {
 	// Fall back to the remote address if X-Forwarded-For is not set
 	return r.RemoteAddr
 }
-
 
 func main() {
 
@@ -88,7 +88,6 @@ func main() {
 	fileLogger := zap.New(core)
 	defer fileLogger.Sync()
 
-	
 	loggerConfig := zap.NewProductionConfig()
 	loggerConfig.OutputPaths = []string{"stdout"}
 	logger := zap.Must(loggerConfig.Build())
@@ -143,7 +142,6 @@ func main() {
 	// http.Handle("/public/", http.StripPrefix("/public/", fs))
 	fs := http.FileServer(http.Dir("public"))
 	http.Handle("/", fs)
-
 
 	ipDB, err := geoip2.Open(geolite2DBPath)
 	if err != nil {
@@ -212,7 +210,7 @@ func main() {
 
 		// Redirect URL could be a geo-specific/ios/android link.
 		redirectURL := fmt.Sprintf("%s/redirect?url=%s&title=%s&description=%s&imageUrl=%s",
-		baseURL, redirectMetadata.LinkURL, link.Title, link.Description, link.ImageURL)
+			baseURL, redirectMetadata.LinkURL, link.Title, link.Description, link.ImageURL)
 		http.Redirect(w, r, redirectURL, http.StatusSeeOther)
 
 	}), "handleLinkVisit"))
@@ -221,16 +219,16 @@ func main() {
 		ctx := r.Context()
 		if r.Method == "POST" {
 			decoder := json.NewDecoder(r.Body)
-			var t = AuthPostProps
+			var t AuthPostProps
 			err := decoder.Decode(&t)
 			user_input_password := t.Password
 			slug := t.Slug
 			if err != nil {
 				logger.Info("password auth error",
-				zap.String("slug", slug),
-				zap.String("ip", getClientIP(r)),
-				zap.String("user-agent", r.UserAgent()),
-				zap.String("code", "auth_password_error"))
+					zap.String("slug", slug),
+					zap.String("ip", getClientIP(r)),
+					zap.String("user-agent", r.UserAgent()),
+					zap.String("code", "auth_password_error"))
 				var returnStruct PostReturnProps
 				returnStruct.Status = false
 				returnStruct.Message = "Unable to find Password in Post"
@@ -247,12 +245,12 @@ func main() {
 					zap.String("ip", getClientIP(r)),
 					zap.String("user-agent", r.UserAgent()),
 					zap.String("code", "link_not_found")) // Filebeat will run to collect link not found errors over this code
-					var returnStruct PostReturnProps
-					returnStruct.Status = false
-					returnStruct.Message = "Unable to find link"
-					w.Header().Add("Content-Type", "application/json")
-					w.WriteHeader(http.StatusInternalServerError)
-					json.NewEncoder(w).Encode(returnStruct)
+				var returnStruct PostReturnProps
+				returnStruct.Status = false
+				returnStruct.Message = "Unable to find link"
+				w.Header().Add("Content-Type", "application/json")
+				w.WriteHeader(http.StatusInternalServerError)
+				json.NewEncoder(w).Encode(returnStruct)
 				return
 			}
 			if err != nil {
@@ -261,12 +259,12 @@ func main() {
 					zap.String("ip", getClientIP(r)),
 					zap.String("user-agent", r.UserAgent()),
 					zap.Error(err))
-					var returnStruct PostReturnProps
-					returnStruct.Status = false
-					returnStruct.Message = "Unable to fetch link"
-					w.Header().Add("Content-Type", "application/json")
-					w.WriteHeader(http.StatusInternalServerError)
-					json.NewEncoder(w).Encode(returnStruct)
+				var returnStruct PostReturnProps
+				returnStruct.Status = false
+				returnStruct.Message = "Unable to fetch link"
+				w.Header().Add("Content-Type", "application/json")
+				w.WriteHeader(http.StatusInternalServerError)
+				json.NewEncoder(w).Encode(returnStruct)
 				return
 			}
 
@@ -297,8 +295,8 @@ func main() {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		json.NewEncoder(w).Encode(returnStruct)
-		return	
-	
+		return
+
 	}), "handleAuthPassword"))
 
 	srv := &http.Server{
