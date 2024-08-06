@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 	"redirect-server/repository"
 	"redirect-server/repository/es"
@@ -17,7 +18,14 @@ func indexLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkR
 
 	ctx := r.Context()
 
-	idempotentResource, err := repository.NewIdempotentResource(*r)
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		logHandler(repository.ErrGeneralMessage, err)
+		errLinkHandler(w, err)
+		return
+	}
+
+	idempotentResource, err := repository.NewIdempotentResource(*r, body)
 	if err != nil {
 		logHandler(repository.ErrGeneralMessage, err)
 		errLinkHandler(w, err)
@@ -44,7 +52,7 @@ func indexLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkR
 	}
 
 	var link repository.Link
-	err = json.NewDecoder(r.Body).Decode(&link)
+	err = json.Unmarshal(body, &link)
 	if err != nil {
 		logHandler(repository.ErrUnmarshalling, err)
 		errLinkHandler(w, err)

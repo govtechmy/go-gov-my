@@ -3,7 +3,6 @@ package repository
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"io"
 	"net/http"
 )
 
@@ -13,17 +12,13 @@ type IdempotentResource struct {
 }
 
 // Create an IdempotentResource from a http request
-func NewIdempotentResource(req http.Request) (*IdempotentResource, error) {
+func NewIdempotentResource(req http.Request, body []byte) (*IdempotentResource, error) {
 	// Check if header exists
 	idempotencyKey := req.Header.Get("X-Idempotency-Key")
 	if idempotencyKey == "" {
 		return nil, ErrIdempotentMissingHeaders
 	}
 
-	body, err := io.ReadAll(req.Body)
-	if err != nil {
-		return nil, err
-	}
 	hash := md5.Sum(body)
 	hashedReqPayload := hex.EncodeToString(hash[:])
 
