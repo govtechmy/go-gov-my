@@ -77,9 +77,8 @@ func main() {
 	defer stop()
 
 	if err := srv.Shutdown(shutdownCtx); err != nil {
-		log.Fatal("Memaksa menurunkan server...", zap.Error(err))
+		log.Fatal("Forcing the server to shut down..", zap.Error(err))
 	}
 
-	// log.Fatal(srv.ListenAndServe())
 	
 }
