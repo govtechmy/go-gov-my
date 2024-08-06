@@ -61,5 +61,10 @@ func (r *LinkRepo) DeleteLink(ctx context.Context, linkId string) error {
 		Index(linkIndex).
 		Id(linkId).
 		Do(ctx)
+
+	if elastic.IsNotFound(err) {
+		return nil
+	}
+
 	return err
 }

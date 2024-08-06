@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"io"
 	"net/http"
 	"redirect-server/repository"
 	"redirect-server/repository/es"
@@ -11,67 +10,59 @@ import (
 
 // [POST, PUT] Link
 func indexLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkRepo, idempotentResourceRepo *es.IdempotentResourceRepo) {
-	ctx := r.Context()
-
 	if !(r.Method == "POST" || r.Method == "PUT") {
 		errLinkHandler(w, repository.ErrMethodNotAllowed)
 		return
 	}
 
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		logHandler(repository.ErrReadBody, err)
-		errLinkHandler(w, repository.ErrInternalServer)
-		return
-	}
+	ctx := r.Context()
 
-	idempotentResource, err := idempotentResourceRepo.TryValidateResources(r, body)
-
+	idempotentResource, err := repository.NewIdempotentResource(*r)
 	if err != nil {
 		logHandler(repository.ErrGeneralMessage, err)
 		errLinkHandler(w, err)
 		return
 	}
 
+	savedIdempotentResource, err := idempotentResourceRepo.GetSavedIdempotentResource(ctx, idempotentResource.IdempotencyKey)
+	if err != nil {
+		logHandler(repository.ErrGeneralMessage, err)
+		errLinkHandler(w, err)
+		return
+	}
+
+	// If idempotent resource was already saved before
+	if savedIdempotentResource != nil {
+		// If the request payloads don't match
+		if idempotentResource.HashedRequestPayload != savedIdempotentResource.HashedRequestPayload {
+			logHandler(repository.ErrGeneralMessage, repository.ErrIdempotentBadRequest)
+			errLinkHandler(w, repository.ErrIdempotentBadRequest)
+			return
+		}
+		// Return early with successful response
+		return
+	}
+
 	var link repository.Link
-	err = json.Unmarshal(body, &link)
+	err = json.NewDecoder(r.Body).Decode(&link)
 	if err != nil {
 		logHandler(repository.ErrUnmarshalling, err)
-		errLinkHandler(w, repository.ErrBadRequest)
-		return
-	}
-
-	existingLink, err := linkRepo.GetLink(ctx, link.Slug)
-	if err != nil && err != repository.ErrLinkNotFound {
-		errLinkHandler(w, repository.ErrCheckExistingLink)
-		return
-	}
-
-	if r.Method == "POST" && existingLink != nil {
-		errLinkHandler(w, repository.ErrSlugExists)
+		errLinkHandler(w, err)
 		return
 	}
 
 	if err := linkRepo.SaveLink(ctx, &link); err != nil {
-		errLinkHandler(w, repository.ErrInternalServer)
+		logHandler(repository.ErrGeneralMessage, err)
+		errLinkHandler(w, err)
 		return
 	}
 
-	// idempotentResource = &repository.IdempotentResource{
-	// 	IdempotencyKey:       idempotencyKey,
-	// 	HashedRequestPayload: hashedReqPayload,
-	// }
-
-	// Only save idempotent resource if the link was saved successfully
-	if err := idempotentResourceRepo.SaveIdempotentResource(ctx, *idempotentResource); err != nil {
-		errLinkHandler(w, repository.ErrInternalServer)
+	// Save idempotent resource when link is saved successfuly
+	err = idempotentResourceRepo.SaveIdempotentResource(ctx, *idempotentResource)
+	if err != nil {
+		logHandler(repository.ErrGeneralMessage, err)
+		errLinkHandler(w, err)
 		return
-	}
-
-	if r.Method == "POST" {
-		w.WriteHeader(http.StatusCreated)
-	} else if r.Method == "PUT" {
-		w.WriteHeader(http.StatusNoContent)
 	}
 }
 
@@ -93,9 +84,7 @@ func deleteLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.Link
 	err := linkRepo.DeleteLink(ctx, linkId)
 	if err != nil {
 		logHandler(repository.ErrDeleting, err)
-		errLinkHandler(w, repository.ErrInternalServer)
+		errLinkHandler(w, err)
 		return
 	}
-
-	w.WriteHeader(http.StatusNoContent)
 }
