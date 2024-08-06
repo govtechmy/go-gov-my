@@ -113,18 +113,6 @@ func main() {
 		}
 	}()
 
-	
-	//// Lets comment this out
-	// partitionConsumer, err := consumer.ConsumePartition(kafkaConsumerTopic, 0, sarama.OffsetNewest)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// defer func() {
-	// 	if err := partitionConsumer.Close(); err != nil {
-	// 		log.Fatalln(err)
-	// 	}
-	// }()
-
 	// Send analytics every SEND_INTERVAL
 	ticker := time.NewTicker(SEND_INTERVAL)
 	defer ticker.Stop()
@@ -158,31 +146,6 @@ func main() {
 	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
 	<-sigterm
 	cancel()
-	
-	// app.sendAnalyticsAndCommitOffsets(ctx)
-
-	// for {
-	// 	select {
-	// 	case msg := <-app.kafkaConsumer.Messages():
-	// 		var log RedirectMetadataLog
-	// 		err := json.Unmarshal(msg.Value, &log)
-	// 		if err != nil {
-	// 			slog.Error("failed to unmarshal kafka message")
-	// 			break
-	// 		}
-	// 		app.aggregateRedirectMetadata(log.RedirectMetadata)
-	// 	case <-ticker.C:
-	// 		if len(app.linkAnalytics) == 0 {
-	// 			// no analytics to send, skip sending kafka message
-	// 			break
-	// 		}
-	// 		err := app.sendAnalytics()
-	// 		if err != nil {
-	// 			slog.Error("failed to send analytics", slog.String("errMessage", err.Error()))
-	// 		}
-	// 	}
-
-	// }
 }
 
 func (app *application) Setup(_ sarama.ConsumerGroupSession) error {
