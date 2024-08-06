@@ -187,6 +187,10 @@ func (app *application) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sar
 					intervalStart = intervalEnd                                // Update interval start time
 				}
 			}
+		
+		// Not sure why this happen but it seems like it doesn't dispose the context properly...
+		case <-sess.Context().Done():
+			return nil
 		}
 	}
 }

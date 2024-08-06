@@ -1,16 +1,21 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
 	"redirect-server/repository/es"
+	"syscall"
+	"time"
 
 	"github.com/olivere/elastic/v7"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	"go.uber.org/zap"
 )
 
 func main() {
@@ -26,6 +31,9 @@ func main() {
 		flag.IntVar(&httpPort, "http-port", 3002, "HTTP server port")
 	}
 	flag.Parse()
+
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
+	defer stop()
 
 	if elasticURL == "" {
 		elasticURL = "http://localhost:9200"
@@ -63,5 +71,15 @@ func main() {
 		Handler: http.DefaultServeMux,
 	}
 
-	log.Fatal(srv.ListenAndServe())
+	<-ctx.Done()
+
+	shutdownCtx, stop := context.WithTimeout(context.Background(), 60*time.Second)
+	defer stop()
+
+	if err := srv.Shutdown(shutdownCtx); err != nil {
+		log.Fatal("Memaksa menurunkan server...", zap.Error(err))
+	}
+
+	// log.Fatal(srv.ListenAndServe())
+	
 }
