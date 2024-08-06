@@ -229,46 +229,46 @@ services:
   #     - my-network
 
   # Comment this out during development
-  go-api:
-    container_name: go-api
-    build:
-      context: ./apps/redirect-server
-      dockerfile: docker/Dockerfile.api
-    ports:
-      - "3002:3002"
-    env_file:
-      - .env
-    environment:
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-    command:
-      - "/api"
-      - "--elastic-url=http://elasticsearch:9200"
-    volumes:
-      - .:/app
-    depends_on:
-      - elasticsearch
-    networks:
-      - my-network
+  # go-api:
+  #   container_name: go-api
+  #   build:
+  #     context: ./apps/redirect-server
+  #     dockerfile: docker/Dockerfile.api
+  #   ports:
+  #     - "3002:3002"
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+  #   command:
+  #     - "/api"
+  #     - "--elastic-url=http://elasticsearch:9200"
+  #   volumes:
+  #     - .:/app
+  #   depends_on:
+  #     - elasticsearch
+  #   networks:
+  #     - my-network
 
   # Comment this out during development
-  go-redirectd:
-    container_name: go-redirectd
-    build:
-      context: ./apps/redirect-server
-      dockerfile: docker/Dockerfile.redirectd
-    ports:
-      - "3000:3000"
-    env_file:
-      - .env
-    environment:
-      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-    command:
-      - "/redirectd"
-      - "--elastic-url=http://elasticsearch:9200"
-    volumes:
-      - .:/app
-    depends_on:
-      - elasticsearch
+  # go-redirectd:
+  #   container_name: go-redirectd
+  #   build:
+  #     context: ./apps/redirect-server
+  #     dockerfile: docker/Dockerfile.redirectd
+  #   ports:
+  #     - "3000:3000"
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+  #   command:
+  #     - "/redirectd"
+  #     - "--elastic-url=http://elasticsearch:9200"
+  #   volumes:
+  #     - .:/app
+  #   depends_on:
+  #     - elasticsearch
 
 networks:
   my-network:
