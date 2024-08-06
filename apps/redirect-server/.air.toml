@@ -3,7 +3,11 @@ testdata_dir = "testdata"
 tmp_dir = "tmp"
 
 [build]
-  bin = "./tmp/analytics-aggregator & ./tmp/api & ./tmp/redirectd > ./logs/redirectd.log"
+  full_bin = """
+  ELASTIC_URL=http://localhost:9200 KAFKA_ADDR=localhost:9092 ./tmp/analytics-aggregator & 
+  ELSATIC_URL=http://localhost:9200 ./tmp/api & 
+  ELASTIC_URL=http://localhost:9200 NEXTJS_BASE_URL=http://localhost:8888 LOG_FILE_PATH=./logs/redirectd.log ./tmp/redirectd
+  """
   cmd = "go build -o ./tmp/ ./cmd/..."
   include_ext = ["go", "tpl", "tmpl", "html"]
   log = "build-errors.log"

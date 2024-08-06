@@ -29,8 +29,6 @@ type application struct {
 	kafkaConsumerGroup sarama.ConsumerGroup
 	kafkaProducer      sarama.SyncProducer
 	kafkaProducerTopic string
-	lastSendAttemptAt  time.Time
-	linkAnalytics      map[string]*repository.LinkAnalytics
 	esRepo             *es.AnalyticRepo
 }
 
@@ -101,7 +99,7 @@ func main() {
 			log.Fatalln(err)
 		}
 	}()
-	
+
 	// Change this to use Consumer Group instead of Consumer and send by group
 	consumerGroup, err := sarama.NewConsumerGroup([]string{kafkaAddr}, groupID, config)
 	if err != nil {
@@ -122,8 +120,6 @@ func main() {
 		kafkaConsumerGroup: consumerGroup,
 		kafkaProducer:      kafkaProducer,
 		kafkaProducerTopic: kafkaProducerTopic,
-		lastSendAttemptAt:  time.Now(),
-		linkAnalytics:      make(map[string]*repository.LinkAnalytics),
 		esRepo:             esRepo,
 	}
 
@@ -160,6 +156,12 @@ func (app *application) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sar
 	ticker := time.NewTicker(SEND_INTERVAL)
 	defer ticker.Stop()
 
+	// Make a map of link IDs to their aggregated analytics
+	linkAnalytics := make(map[string]*repository.LinkAnalytics)
+
+	// Keep track of the time between send intervals
+	var intervalStart time.Time = time.Now()
+
 	for {
 		select {
 		case msg := <-claim.Messages():
@@ -168,27 +170,32 @@ func (app *application) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sar
 			if err != nil {
 				break
 			}
-			app.aggregateRedirectMetadata(log.RedirectMetadata)
+			app.aggregateRedirectMetadata(linkAnalytics, log.RedirectMetadata)
 			sess.MarkMessage(msg, "") // https://github.com/IBM/sarama/issues/1780
 
 		case <-ticker.C:
-			if len(app.linkAnalytics) > 0 {
-				err := app.sendAnalytics() // Send the analytics aggregated 
+			if len(linkAnalytics) > 0 {
+				intervalEnd := time.Now()
+				err := app.sendAnalytics(linkAnalytics, intervalStart, intervalEnd) // Send the analytics aggregated
 				if err != nil {
-					log.Printf("failed to send analytics: %v", err)
+					slog.Error("failed to send analytics",
+						slog.String("errorMessage:", err.Error()),
+					)
 				} else {
-					sess.Commit() // Commit the offset after successful processing
+					sess.Commit()                                              // Commit the offset after successful processing
+					linkAnalytics = make(map[string]*repository.LinkAnalytics) // Re-make the link analytics map
+					intervalStart = intervalEnd                                // Update interval start time
 				}
 			}
 		}
 	}
 }
 
-func (app application) aggregateRedirectMetadata(rm repository.RedirectMetadata) {
-	a := app.linkAnalytics[rm.LinkID]
+func (app application) aggregateRedirectMetadata(linkAnalytics map[string]*repository.LinkAnalytics, rm repository.RedirectMetadata) {
+	a := linkAnalytics[rm.LinkID]
 	if a == nil {
 		a = repository.NewLinkAnalytics(rm.LinkID)
-		app.linkAnalytics[rm.LinkID] = a
+		linkAnalytics[rm.LinkID] = a
 	}
 
 	a.Total += 1
@@ -214,48 +221,17 @@ func (app application) aggregateRedirectMetadata(rm repository.RedirectMetadata)
 	}
 }
 
-func (app *application) sendAnalytics() error {
-
-	// TODO: Refactor this to use the repository.LinkAnalytics struct
-
+func (app *application) sendAnalytics(linkAnalytics map[string]*repository.LinkAnalytics, from time.Time, to time.Time) error {
 	linkAnalyticsList := make([]repository.LinkAnalytics, 0)
-
-	for _, a := range app.linkAnalytics {
+	for _, a := range linkAnalytics {
 		linkAnalyticsList = append(linkAnalyticsList, *a)
 	}
 
-	lastSendAttemptAt := app.lastSendAttemptAt
-	now := time.Now()
-	shortDate := now.Format("2006-01-02")
-
 	message := repository.KafkaLinkAnalyticsMessage{
-		AggregatedDate: shortDate,
-		From:           lastSendAttemptAt,
-		To:             now,
+		AggregatedDate: from.Format("2006-01-02"),
+		From:           from,
+		To:             to,
 		LinkAnalytics:  linkAnalyticsList,
-	}
-
-	// Map to repository.LinkAnalytics for Elasticsearch
-	l := make([]repository.LinkAnalytics, len(linkAnalyticsList))
-	for i, a := range linkAnalyticsList {
-		l[i] = repository.LinkAnalytics{
-			LinkID:          a.LinkID,
-			Total:           a.Total,
-			LinkSlug:        a.LinkSlug,
-			LinkUrl:         a.LinkUrl,
-			CountryCode:     a.CountryCode,
-			DeviceType:      a.DeviceType,
-			Browser:         a.Browser,
-			OperatingSystem: a.OperatingSystem,
-			Referer:         a.Referer,
-		}
-	}
-
-	m := repository.KafkaLinkAnalyticsMessage{
-		AggregatedDate: shortDate,
-		From:           lastSendAttemptAt,
-		To:             now,
-		LinkAnalytics:  l,
 	}
 
 	json, err := json.Marshal(message)
@@ -290,15 +266,13 @@ func (app *application) sendAnalytics() error {
 		)
 
 		// Send data to Elasticsearch
-		err = app.esRepo.SaveAggregatedAnalytic(context.Background(), &m)
+		err = app.esRepo.SaveAggregatedAnalytic(context.Background(), &message)
 		if err != nil {
 			return err
 		}
 
 		slog.Info("elasticsearch document created")
 
-		app.lastSendAttemptAt = now
-		app.linkAnalytics = make(map[string]*repository.LinkAnalytics)
 		return nil
 	}
 
