@@ -1,6 +1,5 @@
 import { useIntlHook } from "@/lib/middleware/utils/useI18n";
 import Header from "@/ui/header/header";
-import HelpPortal from "@/ui/layout/help";
 import NavTabs from "@/ui/layout/nav-tabs";
 import UserDropdown from "@/ui/layout/user-dropdown";
 import WorkspaceSwitcher from "@/ui/layout/workspace-switcher";
@@ -65,7 +64,6 @@ export default function Layout({
           </div>
           {children}
         </div>
-        <HelpPortal />
       </MessagesProvider>
     </Providers>
   );
