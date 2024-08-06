@@ -31,6 +31,11 @@ func (r *IdempotentResourceRepo) GetSavedIdempotentResource(ctx context.Context,
 		return nil, err
 	}
 
+	// No saved idempotent resource
+	if len(res.Hits.Hits) == 0 {
+		return nil, nil
+	}
+
 	var savedIdempotentResource repository.IdempotentResource
 	if err := json.Unmarshal(res.Hits.Hits[0].Source, &savedIdempotentResource); err != nil {
 		return nil, err
