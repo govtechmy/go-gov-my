@@ -10,6 +10,11 @@ const REDIRECT_SEGMENTS = [
 /** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: false,
+  env: {
+    NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME || "GoGovMy",
+    NEXT_PUBLIC_APP_DOMAIN: process.env.NEXT_PUBLIC_APP_DOMAIN || "app.pautan.org",
+    NEXT_PUBLIC_APP_SHORT_DOMAIN: process.env.NEXT_PUBLIC_APP_SHORT_DOMAIN || "pautan.org"
+  },
   experimental: {
     serverComponentsExternalPackages: [
       "@react-email/components",
