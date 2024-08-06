@@ -9,8 +9,10 @@ import (
 	"log"
 	"log/slog"
 	"os"
+	"os/signal"
 	"redirect-server/repository"
 	"redirect-server/repository/es"
+	"syscall"
 	"time"
 
 	"github.com/IBM/sarama"
@@ -23,7 +25,8 @@ import (
 const SEND_INTERVAL = 1 * time.Minute
 
 type application struct {
-	kafkaConsumer      sarama.PartitionConsumer
+	// Lets use consumer by group
+	kafkaConsumerGroup sarama.ConsumerGroup
 	kafkaProducer      sarama.SyncProducer
 	kafkaProducerTopic string
 	lastSendAttemptAt  time.Time
@@ -55,16 +58,26 @@ func main() {
 	var elasticURL string
 	var elasticUser string
 	var elasticPassword string
+	var groupID string
 	{
 		flag.StringVar(&kafkaAddr, "kafka-addr", os.Getenv("KAFKA_ADDR"), "Kafka address e.g. localhost:9092")
 		flag.StringVar(&kafkaProducerTopic, "producer-topic", "link_analytics", "Kafka producer topic")
 		flag.StringVar(&kafkaConsumerTopic, "consumer-topic", "redirect_logs", "Kafka consumer topic")
+		// Declare the Group ID
+		flag.StringVar(&groupID, "group-id", "analytics-aggregator", "Kafka consumer group ID")
 		flag.StringVar(&offsetPath, "offset-path", "./analytics-aggregator-offset", "Analytics aggregator offset")
 		flag.StringVar(&elasticURL, "elastic-url", os.Getenv("ELASTIC_URL"), "Elasticsearch URL e.g. http://localhost:9200")
 		flag.StringVar(&elasticUser, "elastic-user", os.Getenv("ELASTIC_USER"), "Elasticsearch username")
 		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
 	}
 	flag.Parse()
+
+	// Config AutoCommit to false
+	config := sarama.NewConfig()
+	config.Version = sarama.V2_1_0_0
+	config.Consumer.Group.Rebalance.Strategy = sarama.NewBalanceStrategyRoundRobin()
+	config.Consumer.Offsets.Initial = sarama.OffsetNewest
+	config.Consumer.Offsets.AutoCommit.Enable = false // Disable auto-commit
 
 	esClient, err := elastic.NewSimpleClient(
 		elastic.SetURL(elasticURL),
@@ -88,33 +101,37 @@ func main() {
 			log.Fatalln(err)
 		}
 	}()
-
-	consumer, err := sarama.NewConsumer([]string{kafkaAddr}, nil)
+	
+	// Change this to use Consumer Group instead of Consumer and send by group
+	consumerGroup, err := sarama.NewConsumerGroup([]string{kafkaAddr}, groupID, config)
 	if err != nil {
 		panic(err)
 	}
 	defer func() {
-		if err := consumer.Close(); err != nil {
+		if err := consumerGroup.Close(); err != nil {
 			log.Fatalln(err)
 		}
 	}()
 
-	partitionConsumer, err := consumer.ConsumePartition(kafkaConsumerTopic, 0, sarama.OffsetNewest)
-	if err != nil {
-		panic(err)
-	}
-	defer func() {
-		if err := partitionConsumer.Close(); err != nil {
-			log.Fatalln(err)
-		}
-	}()
+	
+	//// Lets comment this out
+	// partitionConsumer, err := consumer.ConsumePartition(kafkaConsumerTopic, 0, sarama.OffsetNewest)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// defer func() {
+	// 	if err := partitionConsumer.Close(); err != nil {
+	// 		log.Fatalln(err)
+	// 	}
+	// }()
 
 	// Send analytics every SEND_INTERVAL
 	ticker := time.NewTicker(SEND_INTERVAL)
 	defer ticker.Stop()
 
 	app := &application{
-		kafkaConsumer:      partitionConsumer,
+		// Init the consumer group
+		kafkaConsumerGroup: consumerGroup,
 		kafkaProducer:      kafkaProducer,
 		kafkaProducerTopic: kafkaProducerTopic,
 		lastSendAttemptAt:  time.Now(),
@@ -122,27 +139,85 @@ func main() {
 		esRepo:             esRepo,
 	}
 
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	go func() {
+		for {
+			// Tell the kafka to consume the message with the group config
+			if err := consumerGroup.Consume(ctx, []string{kafkaConsumerTopic}, app); err != nil {
+				log.Fatalf("Error from consumer: %v", err)
+			}
+			if ctx.Err() != nil {
+				return
+			}
+		}
+	}()
+
+	sigterm := make(chan os.Signal, 1)
+	signal.Notify(sigterm, syscall.SIGINT, syscall.SIGTERM)
+	<-sigterm
+	cancel()
+	
+	// app.sendAnalyticsAndCommitOffsets(ctx)
+
+	// for {
+	// 	select {
+	// 	case msg := <-app.kafkaConsumer.Messages():
+	// 		var log RedirectMetadataLog
+	// 		err := json.Unmarshal(msg.Value, &log)
+	// 		if err != nil {
+	// 			slog.Error("failed to unmarshal kafka message")
+	// 			break
+	// 		}
+	// 		app.aggregateRedirectMetadata(log.RedirectMetadata)
+	// 	case <-ticker.C:
+	// 		if len(app.linkAnalytics) == 0 {
+	// 			// no analytics to send, skip sending kafka message
+	// 			break
+	// 		}
+	// 		err := app.sendAnalytics()
+	// 		if err != nil {
+	// 			slog.Error("failed to send analytics", slog.String("errMessage", err.Error()))
+	// 		}
+	// 	}
+
+	// }
+}
+
+func (app *application) Setup(_ sarama.ConsumerGroupSession) error {
+	return nil
+}
+
+func (app *application) Cleanup(_ sarama.ConsumerGroupSession) error {
+	return nil
+}
+
+func (app *application) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
+	ticker := time.NewTicker(SEND_INTERVAL)
+	defer ticker.Stop()
+
 	for {
 		select {
-		case msg := <-app.kafkaConsumer.Messages():
+		case msg := <-claim.Messages():
 			var log RedirectMetadataLog
 			err := json.Unmarshal(msg.Value, &log)
 			if err != nil {
-				slog.Error("failed to unmarshal kafka message")
 				break
 			}
 			app.aggregateRedirectMetadata(log.RedirectMetadata)
+			sess.MarkMessage(msg, "") // https://github.com/IBM/sarama/issues/1780
+
 		case <-ticker.C:
-			if len(app.linkAnalytics) == 0 {
-				// no analytics to send, skip sending kafka message
-				break
-			}
-			err := app.sendAnalytics()
-			if err != nil {
-				slog.Error("failed to send analytics", slog.String("errMessage", err.Error()))
+			if len(app.linkAnalytics) > 0 {
+				err := app.sendAnalytics() // Send the analytics aggregated 
+				if err != nil {
+					log.Printf("failed to send analytics: %v", err)
+				} else {
+					sess.Commit() // Commit the offset after successful processing
+				}
 			}
 		}
-
 	}
 }
 
