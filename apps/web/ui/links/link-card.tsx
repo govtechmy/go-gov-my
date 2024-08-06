@@ -74,6 +74,7 @@ export default function LinkCard({
     tags,
     comments,
     user,
+    clicks,
   } = props;
 
   const searchParams = useSearchParams();
@@ -117,23 +118,24 @@ export default function LinkCard({
   const isVisible = !!entry?.isIntersecting;
 
   // TODO: Fix analytics API
-  const { data: clicks } = useSWR<number>(
-    // only fetch clicks if the link is visible and there's a slug and the usage is not exceeded
-    isVisible &&
-      workspaceId &&
-      !exceededClicks &&
-      `/api/analytics/clicks?workspaceId=${workspaceId}&linkId=${id}&interval=all&`,
-    (url) =>
-      fetcher(url, {
-        headers: {
-          "Request-Source": process.env.NEXT_PUBLIC_APP_DOMAIN!,
-        },
-      }),
-    {
-      fallbackData: props.clicks,
-      dedupingInterval: 60000,
-    },
-  );
+  // NOT SURE WHO ADDED THIS API CALL, CLICKS CAN BE TAKEN FROM PROPS
+  // const { data: clicks } = useSWR<number>(
+  //   // only fetch clicks if the link is visible and there's a slug and the usage is not exceeded
+  //   isVisible &&
+  //     workspaceId &&
+  //     !exceededClicks &&
+  //     `/api/analytics/clicks?workspaceId=${workspaceId}&linkId=${id}&interval=all&`,
+  //   (url) =>
+  //     fetcher(url, {
+  //       headers: {
+  //         "Request-Source": process.env.NEXT_PUBLIC_APP_DOMAIN!,
+  //       },
+  //     }),
+  //   {
+  //     fallbackData: props.clicks,
+  //     dedupingInterval: 60000,
+  //   },
+  // );
 
   const { setShowLinkQRModal, LinkQRModal } = useLinkQRModal({
     props,
