@@ -53,7 +53,6 @@ export function constructMetadata({
         card: "summary_large_image",
         images: [image],
       }),
-      creator: "@dubdotco",
     },
     icons,
     metadataBase: new URL(HOME_DOMAIN),
