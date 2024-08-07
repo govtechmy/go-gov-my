@@ -72,14 +72,9 @@ export const getClicks = async (
   // const startDate: Date | String = new Date().toISOString().split('T')[0]  // fast way to get YYYY-MM-DD
   // const endDate: Date | String = new Date().toISOString().split('T')[0]
 
-  if (interval === "24h") {
-    start = new Date();
-    end = new Date();
-  } else {
-    start = INTERVAL_DATA[interval].startDate;
-    end = new Date(Date.now());
-    granularity = INTERVAL_DATA[interval].granularity;
-  }
+  start = INTERVAL_DATA[interval].startDate;
+  end = new Date(Date.now());
+  granularity = INTERVAL_DATA[interval].granularity;
 
   // swap start and end if start is greater than end
   if (start > end) {

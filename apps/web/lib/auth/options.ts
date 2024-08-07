@@ -18,11 +18,7 @@ export const authOptions: NextAuthOptions = {
       async sendVerificationRequest({ identifier, url }) {
         // For now the dev and prod should be the same unless we want to handle them email differently later.
         if (!IS_PRODUCTION) {
-          await sendEmail({
-            email: identifier,
-            subject: `Your ${process.env.NEXT_PUBLIC_APP_NAME} Login Link`,
-            react: LoginLink({ url, email: identifier }),
-          });
+          console.log({ url });
           return;
         }
         await sendEmail({
