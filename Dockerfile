@@ -9,7 +9,7 @@ RUN ["npm", "install", "-g", "pnpm"]
 
 COPY . .
 
-RUN ["pnpm", "turbo", "prune", "web"]
+RUN ["pnpm", "prune", "web"]
 
 RUN ["cd", "out"]
 
