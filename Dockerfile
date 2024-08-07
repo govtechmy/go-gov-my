@@ -5,11 +5,11 @@ RUN apk update && apk upgrade
 WORKDIR /app
 
 #install pnpm first
-RUN ["npm", "install", "-g", "pnpm"]
+RUN ["npm", "install", "-g", "pnpm" "turbo"]
 
 COPY . .
 
-RUN ["pnpm", "prune", "web"]
+RUN ["pnpm", "turbo", "prune", "web"]
 
 RUN cd out
 
