@@ -70,7 +70,7 @@ export default function UserDropdown() {
               />
             </Link>
             <Link
-              href="https://dub.co/changelog"
+              href="https://github.com/govtechmy/go-gov-my/releases"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => {

@@ -127,7 +127,7 @@ export default function RebrandEmail({
             <Text className="text-sm leading-6 text-black">
               Check out our{" "}
               <Link
-                href="https://dub.co/changelog"
+                href="https://github.com/govtechmy/go-gov-my/releases"
                 className="font-medium text-blue-600 no-underline"
               >
                 changelog

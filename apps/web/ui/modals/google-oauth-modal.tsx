@@ -34,7 +34,7 @@ function GoogleOauthModal({
           {message?.google_desc_2}{" "}
           <a
             className="underline underline-offset-4 transition-colors hover:text-black"
-            href="https://dub.co/changelog/sign-in-with-google"
+            href="https://github.com/govtechmy/go-gov-my/releases"
             target="_blank"
             rel="noopener noreferrer"
           >
