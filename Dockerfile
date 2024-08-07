@@ -11,7 +11,7 @@ COPY . .
 
 RUN ["pnpm", "prune", "web"]
 
-RUN ["cd", "out"]
+RUN cd out
 
 ARG NEXT_PUBLIC_APP_NAME
 ARG NEXT_PUBLIC_APP_DOMAIN
