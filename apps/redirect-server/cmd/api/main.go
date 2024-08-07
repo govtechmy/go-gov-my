@@ -15,7 +15,6 @@ import (
 
 	"github.com/olivere/elastic/v7"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
-	"go.uber.org/zap"
 )
 
 func main() {
@@ -57,7 +56,7 @@ func main() {
 	// todo: add tracing
 	// todo: split into internal and public endpoint
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) { io.WriteString(w, "OK") })
-	
+
 	http.HandleFunc("/links", func(w http.ResponseWriter, r *http.Request) {
 		indexLinkHandler(w, r, linkRepo, idempotentResourceRepo)
 	})
@@ -71,14 +70,23 @@ func main() {
 		Handler: http.DefaultServeMux,
 	}
 
+	go func() {
+		err := srv.ListenAndServe()
+		if err == http.ErrServerClosed {
+			return
+		}
+		if err != nil {
+			log.Printf("error after listen and serve: %s\n", err)
+		}
+	}()
+
 	<-ctx.Done()
 
 	shutdownCtx, stop := context.WithTimeout(context.Background(), 60*time.Second)
 	defer stop()
 
 	if err := srv.Shutdown(shutdownCtx); err != nil {
-		log.Fatal("Forcing the server to shut down..", zap.Error(err))
+		log.Fatalf("error shuting down the server: %s\n", err)
 	}
 
-	
 }
