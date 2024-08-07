@@ -30,6 +30,7 @@ export function InputSelect({
   selectedItem,
   setSelectedItem,
   className,
+  containerClassName,
   disabled,
   adjustForMobile,
   icon,
@@ -40,6 +41,7 @@ export function InputSelect({
   selectedItem: InputSelectItemProps | null;
   setSelectedItem: Dispatch<SetStateAction<InputSelectItemProps | null>>;
   className?: string;
+  containerClassName?: string;
   disabled?: boolean;
   adjustForMobile?: boolean;
   icon?: ReactNode;
@@ -175,7 +177,11 @@ export function InputSelect({
     return (
       <Drawer.Root open={openCommandList} onOpenChange={setOpenCommandList}>
         <Drawer.Trigger className="sm:hidden" asChild>
-          <Command ref={commandRef} className="relative" loop>
+          <Command
+            ref={commandRef}
+            className={cn("relative", containerClassName)}
+            loop
+          >
             <div
               className={cn(
                 "group relative rounded-md border border-gray-300 bg-white px-1 focus-within:border-gray-500 focus-within:ring-1 focus-within:ring-gray-500 md:min-w-[140px]",
@@ -203,7 +209,11 @@ export function InputSelect({
         <Drawer.Overlay className="fixed inset-0 z-40 bg-gray-100 bg-opacity-10 backdrop-blur" />
         <Drawer.Portal>
           <Drawer.Content className="fixed bottom-0 left-0 right-0 z-50 mt-24 rounded-t-lg border-t border-gray-200 bg-white">
-            <Command ref={commandRef} className="relative" loop>
+            <Command
+              ref={commandRef}
+              className={cn("relative", containerClassName)}
+              loop
+            >
               <div
                 className={cn(
                   "group relative mb-2 rounded-t-md border-b border-gray-300 bg-white p-1 sm:border sm:py-0 sm:focus-within:border-gray-500 sm:focus-within:ring-1 sm:focus-within:ring-gray-200",
@@ -254,7 +264,11 @@ export function InputSelect({
   }
 
   return (
-    <Command ref={commandRef} className="relative" loop>
+    <Command
+      ref={commandRef}
+      className={cn("relative", containerClassName)}
+      loop
+    >
       <div
         className={cn(
           "group rounded-md border border-gray-200 bg-white px-1 transition-all focus-within:border-gray-500 focus-within:ring-4 focus-within:ring-gray-200",
