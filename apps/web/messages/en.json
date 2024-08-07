@@ -166,7 +166,7 @@
   "tokens": {
     "create_api_key": "Create New API Key",
     "enter_key": "Enter a unique name for your API key to differentiate it from other keys.",
-    "learn_more": "Learn more about Dub's API.",
+    "learn_more": "Learn more about GoGovMY API.",
     "success": "Successfully created a new token!",
     "error": "Something went wrong.",
     "your_api_keys": "Your API Keys",
