@@ -1,3 +1,4 @@
+import { useIntlHook } from "@/lib/middleware/utils/useI18n";
 import { getLink } from "@/lib/userinfos";
 import Analytics from "@/ui/analytics";
 import { constructMetadata } from "@dub/utils";
@@ -9,7 +10,7 @@ export const runtime = "edge";
 export async function generateMetadata({
   params,
 }: {
-  params: { domain: string; key: string };
+  params: { domain: string; key: string; locale: string };
 }) {
   const data = await getLink(params);
 
@@ -17,9 +18,9 @@ export async function generateMetadata({
   if (!data?.publicStats) {
     return;
   }
-
+  const { messages } = useIntlHook(params.locale);
   return constructMetadata({
-    title: `Analytics for ${params.domain}/${params.key} – ${process.env.NEXT_PUBLIC_APP_NAME}`,
+    title: `${messages?.metadata?.analytics} ${params.domain}/${params.key} – ${process.env.NEXT_PUBLIC_APP_NAME}`,
     image: `https://${params.domain}/api/og/analytics?domain=${params.domain}&key=${params.key}`,
   });
 }

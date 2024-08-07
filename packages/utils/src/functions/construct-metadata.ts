@@ -2,8 +2,9 @@ import { Metadata } from "next";
 import { DUB_THUMBNAIL, HOME_DOMAIN } from "../constants";
 
 export function constructMetadata({
-  title = `${process.env.NEXT_PUBLIC_APP_NAME} - Link Management for Modern Marketing Teams`,
-  description = `${process.env.NEXT_PUBLIC_APP_NAME} is the open-source link management infrastructure for modern marketing teams to create, share, and track short links.`,
+  locale,
+  title,
+  description,
   image = DUB_THUMBNAIL,
   icons = [
     {
@@ -26,12 +27,21 @@ export function constructMetadata({
   ],
   noIndex = false,
 }: {
+  locale?: string;
   title?: string;
   description?: string;
   image?: string | null;
   icons?: Metadata["icons"];
   noIndex?: boolean;
 } = {}): Metadata {
+  if (!title && locale === "en")
+    title = `${process.env.NEXT_PUBLIC_APP_NAME} - Link Management for Modern Marketing Teams`;
+  if (!title && locale === "ms")
+    title = `${process.env.NEXT_PUBLIC_APP_NAME} - Pengurusan Penghubung untuk Pemasaran Moden`;
+  if (!description && locale === "en")
+    description = `${process.env.NEXT_PUBLIC_APP_NAME} is the open-source link management infrastructure for modern marketing teams to create, share, and track short links.`;
+  if (!description && locale === "ms")
+    description = `${process.env.NEXT_PUBLIC_APP_NAME} - adalah infrastruktur pengurusan penghubung sumber terbuka untuk pemasaran moden bagi cipta, kongsi dan jejaki penghubung pendek`;
   return {
     title,
     description,

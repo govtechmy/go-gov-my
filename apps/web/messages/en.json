@@ -192,7 +192,7 @@
   },
   "expired": {
     "expired_link": "Expired Link",
-    "expired_desc": "This link has expired. Please contact the owner of this link to get a  new one.",
+    "expired_desc": "This link has expired. Please contact the owner of this link to get a new one.",
     "create": "Create Your Free Branded Link"
   },
   "password": {
@@ -417,5 +417,16 @@
     "invite_link": "Invite Link",
     "invite_link_desc": "Allow other people to join your workspace through the link below.",
     "reset": "Reset invite link"
+  },
+  "metadata": {
+    "default_title": " Link Management for Modern Marketing Teams",
+    "default_description": " is the open-source link management infrastructure for modern marketing teams to create, share, and track short links.",
+    "sign_in_to": "Sign in to ",
+    "welcome_to": "Welcome to ",
+    "banned_link": "Banned Link",
+    "banned_desc": "This link has been banned for violating our terms of service.",
+    "expired_link": "Expired Link ",
+    "expired_desc": "This link has expired. Please contact the owner of this link to get a new one.",
+    "analytics": "Analytics for "
   }
 }
