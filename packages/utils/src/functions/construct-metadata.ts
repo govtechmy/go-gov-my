@@ -34,14 +34,18 @@ export function constructMetadata({
   icons?: Metadata["icons"];
   noIndex?: boolean;
 } = {}): Metadata {
-  if (!title && locale === "en")
-    title = `${process.env.NEXT_PUBLIC_APP_NAME} - Link Shortener for Malaysia Government`;
-  if (!title && locale === "ms")
+  if (!title && locale === "ms") {
     title = `${process.env.NEXT_PUBLIC_APP_NAME} - Pengurusan Pautan untuk Kerajaan Malaysia`;
-  if (!description && locale === "en")
-    description = `${process.env.NEXT_PUBLIC_APP_NAME} is the official link shortener for the Malaysia government.`;
-  if (!description && locale === "ms")
     description = `${process.env.NEXT_PUBLIC_APP_NAME} - sebuah portal rasmi Kerajaan Malaysia untuk memendekkan pautan.`;
+    image =
+      "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaMs.png";
+  } else {
+    // Default english
+    title = `${process.env.NEXT_PUBLIC_APP_NAME} - Link Shortener for Malaysia Government`;
+    description = `${process.env.NEXT_PUBLIC_APP_NAME} is the official link shortener for the Malaysia government.`;
+    image =
+      "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaEn.png";
+  }
   return {
     title,
     description,
