@@ -25,9 +25,7 @@ func (r *LinkRepo) GetLink(ctx context.Context, slug string) (*repository.Link, 
 	res, err := r.esClient.Search().
 		Index(linkIndex).
 		Query(
-			// Query against 'slug.keyword' since term queries don't work well
-			// with the default text type in the 'slug' field.
-			elastic.NewTermQuery("slug.keyword", slug),
+			elastic.NewTermQuery("slug", slug),
 		).
 		Size(1).
 		Do(ctx)

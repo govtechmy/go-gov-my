@@ -23,7 +23,7 @@ func (r *IdempotentResourceRepo) GetSavedIdempotentResource(ctx context.Context,
 	res, err := r.esClient.Search().
 		Index(idempotentResourceIndex).
 		Query(
-			elastic.NewTermQuery("idempotency_key.keyword", idempotencyKey),
+			elastic.NewTermQuery("idempotency_key", idempotencyKey),
 		).
 		Size(1).
 		Do(ctx)
