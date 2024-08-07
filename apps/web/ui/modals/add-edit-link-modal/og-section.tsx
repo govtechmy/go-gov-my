@@ -174,7 +174,7 @@ export default function OGSection({
               <SimpleTooltipContent
                 title="Customize how your links look when shared on social media."
                 cta="Learn more."
-                href="https://dub.co/help/article/custom-social-media-cards"
+                href="https://github.com/govtechmy/go-gov-my/discussions"
               />
             }
           />

@@ -98,7 +98,7 @@ function AddWorkspaceModalHelper({
           {messages?.workspace?.create_title}
         </h3>
         <a
-          href="https://dub.co/help/article/what-is-a-workspace"
+          href="https://github.com/govtechmy/go-gov-my/discussions"
           target="_blank"
           className="-translate-y-2 text-center text-xs text-gray-500 underline underline-offset-4 hover:text-gray-800"
         >

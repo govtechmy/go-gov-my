@@ -141,7 +141,7 @@ CREATE TABLE "Domain" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "slug" TEXT NOT NULL,
     "verified" BOOLEAN NOT NULL DEFAULT false,
-    "placeholder" TEXT NOT NULL DEFAULT 'https://dub.co/help/article/what-is-dub',
+    "placeholder" TEXT NOT NULL DEFAULT 'https://github.com/govtechmy/go-gov-my/discussions',
     "description" TEXT,
     "primary" BOOLEAN NOT NULL DEFAULT false,
     "archived" BOOLEAN NOT NULL DEFAULT false,

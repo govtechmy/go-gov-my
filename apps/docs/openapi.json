@@ -6399,7 +6399,7 @@
             "description": "The URL to retrieve metatags for.",
             "schema": {
               "type": "string",
-              "example": "https://dub.co",
+              "example": "https://go.gov.my/",
               "description": "The URL to retrieve metatags for."
             },
             "required": true
@@ -9381,7 +9381,7 @@
                     "doc_url": {
                       "type": "string",
                       "description": "A link to our documentation with more details about this error code",
-                      "example": "https://dub.co/docs/api-reference/errors#bad-request"
+                      "example": "https://go.gov.my/docs/api-reference/errors#bad-request"
                     }
                   },
                   "required": ["code", "message"]
@@ -9417,7 +9417,7 @@
                     "doc_url": {
                       "type": "string",
                       "description": "A link to our documentation with more details about this error code",
-                      "example": "https://dub.co/docs/api-reference/errors#unauthorized"
+                      "example": "https://go.gov.my/docs/api-reference/errors#unauthorized"
                     }
                   },
                   "required": ["code", "message"]
@@ -9453,7 +9453,7 @@
                     "doc_url": {
                       "type": "string",
                       "description": "A link to our documentation with more details about this error code",
-                      "example": "https://dub.co/docs/api-reference/errors#forbidden"
+                      "example": "https://go.gov.my/docs/api-reference/errors#forbidden"
                     }
                   },
                   "required": ["code", "message"]
@@ -9489,7 +9489,7 @@
                     "doc_url": {
                       "type": "string",
                       "description": "A link to our documentation with more details about this error code",
-                      "example": "https://dub.co/docs/api-reference/errors#not-found"
+                      "example": "https://go.gov.my/docs/api-reference/errors#not-found"
                     }
                   },
                   "required": ["code", "message"]
@@ -9525,7 +9525,7 @@
                     "doc_url": {
                       "type": "string",
                       "description": "A link to our documentation with more details about this error code",
-                      "example": "https://dub.co/docs/api-reference/errors#conflict"
+                      "example": "https://go.gov.my/docs/api-reference/errors#conflict"
                     }
                   },
                   "required": ["code", "message"]
@@ -9561,7 +9561,7 @@
                     "doc_url": {
                       "type": "string",
                       "description": "A link to our documentation with more details about this error code",
-                      "example": "https://dub.co/docs/api-reference/errors#invite-expired"
+                      "example": "https://go.gov.my/docs/api-reference/errors#invite-expired"
                     }
                   },
                   "required": ["code", "message"]
@@ -9597,7 +9597,7 @@
                     "doc_url": {
                       "type": "string",
                       "description": "A link to our documentation with more details about this error code",
-                      "example": "https://dub.co/docs/api-reference/errors#unprocessable-entity"
+                      "example": "https://go.gov.my/docs/api-reference/errors#unprocessable-entity"
                     }
                   },
                   "required": ["code", "message"]
@@ -9633,7 +9633,7 @@
                     "doc_url": {
                       "type": "string",
                       "description": "A link to our documentation with more details about this error code",
-                      "example": "https://dub.co/docs/api-reference/errors#rate-limit_exceeded"
+                      "example": "https://go.gov.my/docs/api-reference/errors#rate-limit_exceeded"
                     }
                   },
                   "required": ["code", "message"]
@@ -9669,7 +9669,7 @@
                     "doc_url": {
                       "type": "string",
                       "description": "A link to our documentation with more details about this error code",
-                      "example": "https://dub.co/docs/api-reference/errors#internal-server_error"
+                      "example": "https://go.gov.my/docs/api-reference/errors#internal-server_error"
                     }
                   },
                   "required": ["code", "message"]

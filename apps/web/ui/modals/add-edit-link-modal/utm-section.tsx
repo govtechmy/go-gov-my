@@ -64,7 +64,7 @@ export default function UTMSection({
               <SimpleTooltipContent
                 title="Add UTM parameters to your short links for conversion tracking."
                 cta="Learn more."
-                href="https://dub.co/help/article/utm-builder"
+                href="https://github.com/govtechmy/go-gov-my/discussions"
               />
             }
           />

@@ -92,7 +92,7 @@ function AddEditTagModal({
           <p className="text-sm text-gray-500">
             {message?.use_tag}{" "}
             <a
-              href="https://dub.co/help/article/how-to-use-tags#what-is-a-tag"
+              href="https://github.com/govtechmy/go-gov-my/discussions"
               target="_blank"
               rel="noopener noreferrer"
               className="underline underline-offset-4 hover:text-gray-800"

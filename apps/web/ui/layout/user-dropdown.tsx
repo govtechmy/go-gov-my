@@ -49,7 +49,7 @@ export default function UserDropdown() {
               )}
             </Link>
             <Link
-              href="https://dub.co/help"
+              href="https://github.com/govtechmy/go-gov-my/discussions"
               onClick={() => setOpenPopover(false)}
               target="_blank"
               className="w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"

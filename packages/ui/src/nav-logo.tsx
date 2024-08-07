@@ -112,7 +112,12 @@ export function NavLogo({
             <ContextMenuButton
               text="Brand Guidelines"
               variant="outline"
-              onClick={() => window.open("https://dub.co/brand", "_blank")}
+              onClick={() =>
+                window.open(
+                  `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}/brand`,
+                  "_blank",
+                )
+              }
               icon={<BoxSelect strokeWidth={2} className="h-4 w-4" />}
             />
             {/* If it's in the app or it's a domain placeholder page (not dub.co homepage), show the home button */}
@@ -120,14 +125,24 @@ export function NavLogo({
               <ContextMenuButton
                 text="Home Page"
                 variant="outline"
-                onClick={() => window.open("https://dub.co", "_blank")}
+                onClick={() =>
+                  window.open(
+                    `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}`,
+                    "_blank",
+                  )
+                }
                 icon={<Home strokeWidth={2} className="h-4 w-4" />}
               />
             ) : (
               <ContextMenuButton
                 text="Dashboard"
                 variant="outline"
-                onClick={() => window.open("https://app.dub.co", "_blank")}
+                onClick={() =>
+                  window.open(
+                    `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}`,
+                    "_blank",
+                  )
+                }
                 icon={<LayoutGrid strokeWidth={2} className="h-4 w-4" />}
               />
             )}

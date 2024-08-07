@@ -47,7 +47,7 @@ export default function PasswordSection({
               <SimpleTooltipContent
                 title="Restrict access to your short links by encrypting it with a password."
                 cta="Learn more."
-                href="https://dub.co/help/article/password-protected-links"
+                href="https://github.com/govtechmy/go-gov-my/discussions"
               />
             }
           />

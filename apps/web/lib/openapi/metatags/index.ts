@@ -12,7 +12,7 @@ const getMetatags: ZodOpenApiOperationObject = {
     query: getUrlQuerySchema.merge(
       z.object({
         url: z.string().openapi({
-          example: "https://dub.co",
+          example: "https://go.gov.my",
           description: "The URL to retrieve metatags for.",
         }),
       }),

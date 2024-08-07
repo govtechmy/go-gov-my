@@ -448,7 +448,7 @@ export default function LinkCard({
                     <SimpleTooltipContent
                       title="This link is password-protected."
                       cta="Learn more."
-                      href="https://dub.co/help/article/password-protected-links"
+                      href="https://github.com/govtechmy/go-gov-my/discussions"
                     />
                   }
                 >
@@ -544,7 +544,7 @@ export default function LinkCard({
                       <SimpleTooltipContent
                         title="Since this is a custom domain link, you can only transfer it to another workspace if you transfer the domain as well."
                         cta="Learn more."
-                        href="https://dub.co/help/article/how-to-transfer-domains"
+                        href="https://github.com/govtechmy/go-gov-my/discussions"
                       />
                     ),
                   })}

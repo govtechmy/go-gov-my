@@ -344,7 +344,7 @@ function AdvancedSettings({
                     <SimpleTooltipContent
                       title=""
                       cta={message?.update_qr}
-                      href="https://dub.co/help/article/custom-qr-codes"
+                      href="https://github.com/govtechmy/go-gov-my/discussions"
                     />
                   }
                 />
@@ -382,7 +382,7 @@ function AdvancedSettings({
                             });
                           },
                         }
-                      : { href: "https://dub.co/pricing" })}
+                      : { href: "https://go.gov.my/pricing" })}
                   />
                 }
               >

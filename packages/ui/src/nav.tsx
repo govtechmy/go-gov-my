@@ -42,14 +42,18 @@ export const navItems = [
 ];
 
 export function Nav({ theme = "light" }: { theme?: NavTheme }) {
-  const { domain = "dub.co" } = useParams() as { domain: string };
+  const { domain = `${process.env.NEXT_PUBLIC_APP_DOMAIN}` } = useParams() as {
+    domain: string;
+  };
   const createHref = (href: string) =>
-    domain === "dub.co" ? href : `https://dub.co${href}`;
+    domain === `${process.env.NEXT_PUBLIC_APP_DOMAIN}`
+      ? href
+      : `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}${href}`;
 
   const scrolled = useScroll(80);
   const selectedLayout = useSelectedLayoutSegment();
   const { data: session, isLoading } = useSWR(
-    domain === "dub.co" && "/api/auth/session",
+    domain === `${process.env.NEXT_PUBLIC_APP_DOMAIN}` && "/api/auth/session",
     fetcher,
     {
       dedupingInterval: 60000,

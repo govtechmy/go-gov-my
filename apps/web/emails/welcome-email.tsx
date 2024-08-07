@@ -67,7 +67,7 @@ export default function WelcomeEmail({
               </Link>{" "}
               and{" "}
               <Link
-                href="https://dub.co/help/article/how-to-add-custom-domain"
+                href="https://github.com/govtechmy/go-gov-my/discussions"
                 className="font-medium text-blue-600 no-underline"
               >
                 add your custom domain
@@ -76,7 +76,7 @@ export default function WelcomeEmail({
             <Text className="ml-1 text-sm leading-4 text-black">
               ◆ Create your first{" "}
               <Link
-                href="https://dub.co/help/article/how-to-create-link"
+                href="https://github.com/govtechmy/go-gov-my/discussions"
                 className="font-medium text-blue-600 no-underline"
               >
                 short link
@@ -85,7 +85,7 @@ export default function WelcomeEmail({
             <Text className="ml-1 text-sm leading-4 text-black">
               ◆ Check out our{" "}
               <Link
-                href="https://dub.co/api"
+                href="https://go.gov.my/api"
                 className="font-medium text-blue-600 no-underline"
               >
                 API documentation
