@@ -328,7 +328,7 @@ export default function OGSection({
                 minRows={3}
                 maxLength={240}
                 className="block w-full rounded-md border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm"
-                placeholder={`${process.env.NEXT_PUBLIC_APP_NAME} is open-source link management infrastructure for modern marketing teams.`}
+                placeholder={`${process.env.NEXT_PUBLIC_APP_NAME} is the official link shortener for the Malaysia government.`}
                 value={description || ""}
                 onChange={(e) => {
                   setData({

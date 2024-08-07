@@ -419,14 +419,14 @@
     "reset": "Tetapan semula alamat jemputan"
   },
   "metadata": {
-    "default_title": " Link Management for Modern Marketing Teams",
-    "default_description": " is the open-source link management infrastructure for modern marketing teams to create, share, and track short links.",
+    "default_title": " GoGovMY - Memendekkan pautan untuk Kerajaan Malaysia",
+    "default_description": " sebuah portal rasmi Kerajaan Malaysia untuk memendekkan pautan.",
     "sign_in_to": "Log masuk ke ",
     "welcome_to": "Selamat Datang ke ",
-    "banned_link": "Penhubung Haram",
-    "banned_desc": "Penghubung ini telah diharamkan kerana melanggari peraturan kami",
-    "expired_link": "Penghubung tamah tempoh",
-    "expired_desc": "Tempoh penghubung ini sudah tamat. Sila menghubungi pemilik untuk mendapatkan yang baru.",
-    "analytics": "Analitica untuk "
+    "banned_link": "Pautan Terlarang",
+    "banned_desc": "Pautan ini telah dilarang kerana melanggari peraturan",
+    "expired_link": "Pautan tamat tempoh",
+    "expired_desc": "Tempoh pautan ini sudah tamat. Sila hubungi pemilik pautan ini untuk mendapatkan pautan yang baharu.",
+    "analytics": "Analisa untuk "
   }
 }

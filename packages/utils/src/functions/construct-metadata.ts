@@ -35,13 +35,13 @@ export function constructMetadata({
   noIndex?: boolean;
 } = {}): Metadata {
   if (!title && locale === "en")
-    title = `${process.env.NEXT_PUBLIC_APP_NAME} - Link Management for Modern Marketing Teams`;
+    title = `${process.env.NEXT_PUBLIC_APP_NAME} - Link Shortener for Malaysia Government`;
   if (!title && locale === "ms")
-    title = `${process.env.NEXT_PUBLIC_APP_NAME} - Pengurusan Penghubung untuk Pemasaran Moden`;
+    title = `${process.env.NEXT_PUBLIC_APP_NAME} - Pengurusan Pautan untuk Kerajaan Malaysia`;
   if (!description && locale === "en")
-    description = `${process.env.NEXT_PUBLIC_APP_NAME} is the open-source link management infrastructure for modern marketing teams to create, share, and track short links.`;
+    description = `${process.env.NEXT_PUBLIC_APP_NAME} is the official link shortener for the Malaysia government.`;
   if (!description && locale === "ms")
-    description = `${process.env.NEXT_PUBLIC_APP_NAME} - adalah infrastruktur pengurusan penghubung sumber terbuka untuk pemasaran moden bagi cipta, kongsi dan jejaki penghubung pendek`;
+    description = `${process.env.NEXT_PUBLIC_APP_NAME} - sebuah portal rasmi Kerajaan Malaysia untuk memendekkan pautan.`;
   return {
     title,
     description,
