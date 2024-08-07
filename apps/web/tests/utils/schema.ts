@@ -49,7 +49,6 @@ export const expectedWorkspace: Partial<Project> = {
   linksUsage: expect.any(Number),
   linksLimit: expect.any(Number),
   tagsLimit: expect.any(Number),
-  usersLimit: expect.any(Number),
   plan: expect.any(String),
   billingCycleStart: expect.any(Number),
   inviteCode: expect.any(String),

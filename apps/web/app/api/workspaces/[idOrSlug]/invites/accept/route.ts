@@ -1,7 +1,5 @@
-import { exceededLimitError } from "@/lib/api/errors";
 import { withSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { PlanProps } from "@/lib/types";
 import { NextResponse } from "next/server";
 
 // POST /api/workspaces/[idOrSlug]/invites/accept – accept a workspace invite
@@ -20,12 +18,6 @@ export const POST = withSession(async ({ session, params }) => {
         select: {
           id: true,
           plan: true,
-          usersLimit: true,
-          _count: {
-            select: {
-              users: true,
-            },
-          },
         },
       },
     },
@@ -39,19 +31,6 @@ export const POST = withSession(async ({ session, params }) => {
   }
 
   const workspace = invite.project;
-
-  if (workspace._count.users >= workspace.usersLimit) {
-    return new Response(
-      exceededLimitError({
-        plan: workspace.plan as PlanProps,
-        limit: workspace.usersLimit,
-        type: "users",
-      }),
-      {
-        status: 403,
-      },
-    );
-  }
 
   const response = await Promise.all([
     prisma.projectUsers.create({

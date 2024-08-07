@@ -124,7 +124,6 @@ model Project {
   linksUsage        Int    @default(0)
   linksLimit        Int    @default(25)
   tagsLimit         Int    @default(5)
-  usersLimit        Int    @default(1)
 
   users      ProjectUsers[]
   invites    ProjectInvite[]
