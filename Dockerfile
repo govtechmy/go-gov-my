@@ -5,7 +5,10 @@ RUN apk update && apk upgrade
 WORKDIR /app
 
 #install pnpm first
-RUN ["npm", "install", "-g", "pnpm" "turbo"]
+RUN ["npm", "install", "-g", "pnpm"]
+
+#install turbo first
+RUN ["npm", "install", "-g", "turbo"]
 
 COPY . .
 
