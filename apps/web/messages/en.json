@@ -54,7 +54,8 @@
     "slug_desc": "This is your workspace's unique slug on ",
     "help_text": "Only lowercase letters, numbers, and dashes. Max 48 characters.",
     "only_owners_slug": "Only workspace owners can change the workspace slug.",
-    "success_update_slug": "Successfully updated workspace slug!"
+    "success_update_slug": "Successfully updated workspace slug!",
+    "success_create_workspace": "Successfully created a new workspace!"
   },
   "layout": {
     "changelog": "Changelog",

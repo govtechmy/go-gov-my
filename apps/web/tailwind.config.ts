@@ -20,6 +20,8 @@ const config: Pick<Config, "presets"> = {
             "infinite-scroll": "infinite-scroll 22s linear infinite",
             // Text appear animation
             "text-appear": "text-appear 0.15s ease",
+            // Logo popup animation in welcome flow
+            scaleBlur: "scaleBlur 1.0s ease-out",
           },
           keyframes: {
             ...sharedConfig?.theme?.extend?.keyframes,
@@ -38,6 +40,11 @@ const config: Pick<Config, "presets"> = {
                 opacity: "1",
                 transform: "rotateX(0deg) scale(1)",
               },
+            },
+            // Logo popup in welcome page
+            scaleBlur: {
+              "0%": { transform: "scale(0.25)", filter: "blur(4px)" },
+              "100%": { transform: "scale(1)", filter: "blur(0px)" },
             },
           },
         },

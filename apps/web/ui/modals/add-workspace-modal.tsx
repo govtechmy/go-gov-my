@@ -70,7 +70,8 @@ function AddWorkspaceModalHelper({
     }));
   }, [name]);
 
-  const welcomeFlow = pathname === "/welcome";
+  const welcomeFlow =
+    pathname === "/welcome" || pathname === `/${locale}/welcome`;
 
   const searchParams = useSearchParams();
   const { queryParams } = useRouterStuff();
@@ -120,13 +121,9 @@ function AddWorkspaceModalHelper({
             if (res.status === 200) {
               // track workspace creation event
               await mutate("/api/workspaces");
-              if (welcomeFlow) {
-                router.push(`/${locale}/welcome?type=upgrade&slug=${slug}`);
-              } else {
-                router.push(`/${locale}/${slug}`);
-                toast.success(messages?.tokens?.success);
-                setShowAddWorkspaceModal(false);
-              }
+              router.push(`/${locale}/${slug}`);
+              toast.success(messages.dashboard.success_create_workspace);
+              setShowAddWorkspaceModal(false);
             } else {
               const { error } = await res.json();
               const message = error.message;

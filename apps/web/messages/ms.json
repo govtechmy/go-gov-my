@@ -54,7 +54,8 @@
     "slug_desc": "Ini adalah Id ruang kerja anda yang unik dari ",
     "help_text": "Hanya huruf kecil, nombor dan tanda sempang dibenarkan. Maximum 48 huruf.",
     "only_owners_slug": "Hanya pemilik ruang kerja boleh mengubah id ruang kerja.",
-    "success_update_slug": "Berjaya mengubah id ruang kerja!"
+    "success_update_slug": "Berjaya mengubah id ruang kerja!",
+    "success_create_workspace": "Berjaya menjana ruang kerja baru!"
   },
   "layout": {
     "changelog": "Log Tukar",
