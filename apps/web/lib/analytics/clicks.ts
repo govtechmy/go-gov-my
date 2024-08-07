@@ -221,7 +221,7 @@ export const getClicks = async (
     }, {});
     return Object.keys(devices)
       .map((key) => {
-        return { device: key.toUpperCase(), clicks: devices[key] };
+        return { device: key, clicks: devices[key] };
       })
       .sort((a, b) => b.clicks - a.clicks);
   }
