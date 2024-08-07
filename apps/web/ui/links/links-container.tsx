@@ -3,6 +3,7 @@
 import useLinks from "@/lib/swr/use-links";
 import useLinksCount from "@/lib/swr/use-links-count";
 import { CustomSelect, MaxWidthWrapper } from "@dub/ui";
+import { Rows3Icon } from "lucide-react";
 import { Suspense, useRef, useState } from "react";
 import { useLinkFiltersModal } from "../modals/link-filters-modal";
 import LinkCard from "./link-card";
@@ -63,6 +64,7 @@ export default function LinksContainer({
           <div className="col-span-1 auto-rows-min grid-cols-1 lg:col-span-5">
             <ul className="grid min-h-[66.5vh] auto-rows-min gap-3">
               <CustomSelect
+                icon={<Rows3Icon className="h-4 w-4" />}
                 options={options}
                 onChange={async (e) => handleChangeSelect(e)}
                 defaultValue={0}
