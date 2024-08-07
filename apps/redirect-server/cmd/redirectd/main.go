@@ -142,7 +142,14 @@ func main() {
 
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) { io.WriteString(w, "OK") })
 
-	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	// Add ratelimiter to prevent ddos
+	http.Handle("/", utils.RateLimiter(otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		userAgent := r.Header.Get("User-Agent")
+		if utils.IsBot(userAgent) {
+			http.Error(w, "Forbidden", http.StatusForbidden)
+			return
+		}
+
 		ctx := r.Context()
 		slug := strings.TrimPrefix(r.URL.Path, "/")
 		user_input_password := r.URL.Query().Get("password")
@@ -189,36 +196,47 @@ func main() {
 			return
 		}
 
-		// Log redirect metadata for analytics
-		redirectMetadata := repository.NewRedirectMetadata(*r, ipDB, *link)
-		fileLogger.Info("redirect analytics",
-			zap.String("linkSlug", link.Slug),
-			zap.String("linkId", link.ID),
-			zap.String("userAgent", r.UserAgent()),
-			zap.String("ip", utils.GetClientIP(r)),
-			zap.Object("redirectMetadata", redirectMetadata),
-		)
-		logger.Info("redirect analytics",
-			zap.String("linkSlug", link.Slug),
-			zap.String("linkId", link.ID),
-			zap.String("userAgent", r.UserAgent()),
-			zap.String("ip", utils.GetClientIP(r)),
-			zap.Object("redirectMetadata", redirectMetadata),
-		)
+		// Log redirect metadata for analytics, if not a bot
+		if !utils.IsBot(userAgent) {
+			redirectMetadata := repository.NewRedirectMetadata(*r, ipDB, *link)
+			fileLogger.Info("redirect analytics",
+				zap.String("linkSlug", link.Slug),
+				zap.String("linkId", link.ID),
+				zap.String("userAgent", r.UserAgent()),
+				zap.String("ip", utils.GetClientIP(r)),
+				zap.Object("redirectMetadata", redirectMetadata),
+			)
+			logger.Info("redirect analytics",
+				zap.String("linkSlug", link.Slug),
+				zap.String("linkId", link.ID),
+				zap.String("userAgent", r.UserAgent()),
+				zap.String("ip", utils.GetClientIP(r)),
+				zap.Object("redirectMetadata", redirectMetadata),
+			)
 
-		// Do not use link.URL, use redirectMetadata.LinkURL instead.
-		// Redirect URL could be a geo-specific/ios/android link.
-		redirectURL := redirectMetadata.LinkURL
-
-		if err := t.ExecuteTemplate(w, "wait.html", WaitPageProps{
-			URL:         redirectURL,
-			Title:       link.Title,
-			Description: link.Description,
-			ImageURL:    link.ImageURL,
-		}); err != nil {
-			logger.Error("failed to execute template", zap.Error(err))
+			// Do not use link.URL, use redirectMetadata.LinkURL instead.
+			// Redirect URL could be a geo-specific/ios/android link.
+			redirectURL := redirectMetadata.LinkURL
+			if err := t.ExecuteTemplate(w, "wait.html", WaitPageProps{
+				URL:         redirectURL,
+				Title:       link.Title,
+				Description: link.Description,
+				ImageURL:    link.ImageURL,
+			}); err != nil {
+				logger.Error("failed to execute template", zap.Error(err))
+			}
+		} else {
+			// If this is a bot...
+			// We should have a specific page for bot detected, but for now redirect to server_error
+			logger.Error("Bot Detected - Not Allowed",
+				zap.String("slug", slug),
+				zap.String("ip", utils.GetClientIP(r)),
+				zap.String("user-agent", r.UserAgent()),
+				zap.Error(err))
+			http.Redirect(w, r, fmt.Sprintf("%s/en/server_error", baseURL), http.StatusMethodNotAllowed)
+			return
 		}
-	}), "handleLinkVisit"))
+	}), "handleLinkVisit")))
 
 	srv := &http.Server{
 		Addr:    fmt.Sprintf("0.0.0.0:%d", httpPort),

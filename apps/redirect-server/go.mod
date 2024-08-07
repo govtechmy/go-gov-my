@@ -19,6 +19,8 @@ require (
 	go.uber.org/zap v1.27.0
 )
 
+require golang.org/x/time v0.6.0 // indirect
+
 require (
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
