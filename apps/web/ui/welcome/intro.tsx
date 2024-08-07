@@ -46,7 +46,7 @@ export default function Intro() {
           className="max-w-md text-gray-600 transition-colors sm:text-lg"
           variants={STAGGER_CHILD_VARIANTS}
         >
-          {process.env.NEXT_PUBLIC_APP_NAME} {messages.welcome.welcome_desc}
+          {`${process.env.NEXT_PUBLIC_APP_NAME} ${messages.welcome.welcome_desc}`}
         </motion.p>
         <motion.button
           variants={STAGGER_CHILD_VARIANTS}
