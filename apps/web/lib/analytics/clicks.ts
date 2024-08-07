@@ -15,7 +15,8 @@ export const getClicks = async (
     endpoint?: AnalyticsEndpoints;
   },
 ) => {
-  let { workspaceId, endpoint, linkId, interval, start, end } = props;
+  let { workspaceId, endpoint, linkId, interval, start, end, domain, key } =
+    props;
 
   // get all-time clicks count if:
   // 1. linkId is defined
@@ -89,6 +90,8 @@ export const getClicks = async (
   const links = await prisma.link.findMany({
     where: {
       projectId: workspaceId,
+      ...(domain && { domain }),
+      ...(key && { key }),
     },
     select: {
       id: true,
@@ -178,6 +181,21 @@ export const getClicks = async (
       .map((key) => {
         return { link: key, clicks: top_links[key] };
       })
+      .sort((a, b) => b.clicks - a.clicks);
+  }
+
+  if (endpoint === "top_urls") {
+    const top_urls = analytics.reduce<Record<string, number>>(
+      (accumulator, row) => {
+        const metadata = row.metadata as MetadataProps;
+        if ("linkUrl" in metadata)
+          return sumTwoObj(accumulator, metadata["linkUrl"]);
+        return accumulator;
+      },
+      {},
+    );
+    return Object.entries(top_urls)
+      .map(([url, clicks]) => ({ url, clicks }))
       .sort((a, b) => b.clicks - a.clicks);
   }
 
