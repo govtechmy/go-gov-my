@@ -9,6 +9,10 @@ RUN ["npm", "install", "-g", "pnpm"]
 
 COPY . .
 
+RUN ["pnpm", "turbo", "prune", "web"]
+
+RUN ["cd", "out"]
+
 ARG NEXT_PUBLIC_APP_NAME
 ARG NEXT_PUBLIC_APP_DOMAIN
 ARG NEXT_PUBLIC_APP_SHORT_DOMAIN
