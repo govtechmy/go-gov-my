@@ -1,4 +1,4 @@
-import { useIntlHook } from "@/lib/middleware/utils/useI18n";
+import { nonHooki18nFunc } from "@/lib/middleware/utils/useI18n";
 import { getLink } from "@/lib/userinfos";
 import Analytics from "@/ui/analytics";
 import { constructMetadata } from "@dub/utils";
@@ -18,7 +18,7 @@ export async function generateMetadata({
   if (!data?.publicStats) {
     return;
   }
-  const { messages } = useIntlHook(params.locale);
+  const { messages } = nonHooki18nFunc(params.locale);
   return constructMetadata({
     title: `${messages?.metadata?.analytics} ${params.domain}/${params.key} – ${process.env.NEXT_PUBLIC_APP_NAME}`,
     image: `https://${params.domain}/api/og/analytics?domain=${params.domain}&key=${params.key}`,

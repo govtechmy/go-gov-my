@@ -1,4 +1,4 @@
-import { useIntlHook } from "@/lib/middleware/utils/useI18n";
+import { nonHooki18nFunc } from "@/lib/middleware/utils/useI18n";
 import { Background } from "@dub/ui";
 import { constructMetadata } from "@dub/utils";
 import { Suspense } from "react";
@@ -8,7 +8,7 @@ export const runtime = "nodejs";
 
 export async function generateMetadata({ params }) {
   const { locale } = params;
-  const { messages } = useIntlHook(locale);
+  const { messages } = nonHooki18nFunc(locale);
   return constructMetadata({
     title: `${messages?.metadata?.welcome_to} ${process.env.NEXT_PUBLIC_APP_NAME}`,
   });

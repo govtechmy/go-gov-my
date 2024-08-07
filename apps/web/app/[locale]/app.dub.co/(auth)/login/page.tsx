@@ -1,4 +1,4 @@
-import { useIntlHook } from "@/lib/middleware/utils/useI18n";
+import { nonHooki18nFunc, useIntlHook } from "@/lib/middleware/utils/useI18n";
 import { Button, Logo } from "@dub/ui";
 import { HOME_DOMAIN, constructMetadata } from "@dub/utils";
 import { Suspense } from "react";
@@ -6,7 +6,7 @@ import LoginForm from "./form";
 
 export async function generateMetadata({ params }) {
   const { locale } = params;
-  const { messages } = useIntlHook(locale);
+  const { messages } = nonHooki18nFunc(locale);
   return constructMetadata({
     title: `${messages?.metadata?.sign_in_to} ${process.env.NEXT_PUBLIC_APP_NAME}`,
   });
