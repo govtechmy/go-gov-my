@@ -200,6 +200,7 @@ async function main() {
       }
 
       data?.linkAnalytics?.forEach(async (link) => {
+        // INPUT INTO ANALYTICS
         const row = await prisma.analytics.findMany({
           where: {
             AND: [
@@ -245,6 +246,40 @@ async function main() {
             console.log("error", error);
           }
         }
+        // INPUT INTO LINKS IF LINKID EXISTS
+        async function processAddLinkClicks(attempt = 0) {
+          if (link?.total && link?.linkId) {
+            try {
+              const linkRow = await prisma.link.findMany({
+                where: {
+                  id: link.linkId,
+                },
+                take: 1,
+              });
+              if (linkRow.length > 0) {
+                const aggregatedClicks = (linkRow[0].clicks || 0) + link.total;
+                await prisma.link.update({
+                  where: {
+                    id: link.linkId,
+                  },
+                  data: {
+                    clicks: aggregatedClicks,
+                  },
+                });
+              }
+            } catch (error) {
+              console.error(`Attempt ${attempt + 1} failed:`, error);
+
+              // Lets do every 1 minute with a random jitter of 5 seconds
+              const delay = 60 * 1000 + Math.random() * 5000;
+
+              log.info(`Retrying in ${(delay / 1000).toFixed(2)} seconds...`);
+
+              setTimeout(() => processAddLinkClicks(attempt + 1), delay);
+            }
+          }
+        }
+        processAddLinkClicks();
       });
     },
   });
