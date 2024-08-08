@@ -159,6 +159,9 @@ func (app *application) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sar
 	// Make a map of link IDs to their aggregated analytics
 	linkAnalytics := make(map[string]*repository.LinkAnalytics)
 
+	// An array of RedirectMetadataLog (Individual metadata // non aggregated data)
+	var individualMetadata []repository.RedirectMetadata
+
 	// Keep track of the time between send intervals
 	var intervalStart time.Time = time.Now()
 
@@ -171,11 +174,31 @@ func (app *application) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sar
 				break
 			}
 			app.aggregateRedirectMetadata(linkAnalytics, log.RedirectMetadata)
+
+			// Collect individual metadata to batch save later
+			// We won't do it here because we're doing manual commit, so if the kafka is
+			// rebalanced or replayed, then it will have a duplication in the ES
+			individualMetadata = append(individualMetadata, log.RedirectMetadata)
+
+			slog.Info("elasticsearch document created")
+
 			sess.MarkMessage(msg, "") // https://github.com/IBM/sarama/issues/1780
 
 		case <-ticker.C:
 			if len(linkAnalytics) > 0 {
 				intervalEnd := time.Now()
+
+				// Save individual metadata into elasticsearch first...
+				for _, metadata := range individualMetadata {
+					err := app.saveIndividualMetadata(metadata)
+					if err != nil {
+						slog.Error("failed to save metadata to Elasticsearch", slog.String("errMessage", err.Error()))
+					}
+				}
+
+				// Clear individual metadata array after saving to avoid ES duplication
+				individualMetadata = []repository.RedirectMetadata{}
+
 				err := app.sendAnalytics(linkAnalytics, intervalStart, intervalEnd) // Send the analytics aggregated
 				if err != nil {
 					slog.Error("failed to send analytics",
@@ -269,16 +292,12 @@ func (app *application) sendAnalytics(linkAnalytics map[string]*repository.LinkA
 			slog.Int("offset", int(offset)),
 		)
 
-		// Send data to Elasticsearch
-		err = app.esRepo.SaveAggregatedAnalytic(context.Background(), &message)
-		if err != nil {
-			return err
-		}
-
-		slog.Info("elasticsearch document created")
-
 		return nil
 	}
 
 	return errors.New("failed to send kafka message, no more retries")
+}
+
+func (app *application) saveIndividualMetadata(metadata repository.RedirectMetadata) error {
+	return app.esRepo.SaveIndividualAnalytic(context.Background(), &metadata)
 }

@@ -19,7 +19,7 @@ func NewAnalyticRepo(esClient *elastic.Client) *AnalyticRepo {
 	return &AnalyticRepo{esClient: esClient}
 }
 
-func (r *AnalyticRepo) SaveAggregatedAnalytic(ctx context.Context, analytics *repository.KafkaLinkAnalyticsMessage ) error {
+func (r *AnalyticRepo) SaveIndividualAnalytic(ctx context.Context, analytics *repository.RedirectMetadata ) error {
 	_, err := r.esClient.Index().
 		Index(redirectIndex).
 		BodyJson(analytics).
