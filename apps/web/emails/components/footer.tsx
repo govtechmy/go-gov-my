@@ -10,8 +10,8 @@ export default function Footer({ email }: { email: string }) {
           This email was intended for{" "}
           <span className="text-black">{email}</span>. If you were not expecting
           this email, you can ignore this email. If you are concerned about your
-          account&apos;s safety, please reply to this email to get in touch with
-          us.
+          account&apos;s safety, please contact our support team at{" "}
+          <a href="mailto:support@tech.gov.my">support@tech.gov.my</a>.
         </Text>
       </Fragment>
     </Tailwind>
