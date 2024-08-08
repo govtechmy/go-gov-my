@@ -201,28 +201,28 @@ async function main() {
 
       data?.linkAnalytics?.forEach(async (link) => {
         // INPUT INTO ANALYTICS
-        const row = await prisma.analytics.findMany({
-          where: {
-            AND: [
-              {
-                aggregatedDate: new Date(aggregatedDate),
-              },
-              {
-                linkId: {
-                  equals: link?.linkId,
+        try {
+          const row = await prisma.analytics.findMany({
+            where: {
+              AND: [
+                {
+                  aggregatedDate: new Date(aggregatedDate),
                 },
-              },
-            ],
-          },
-          take: 1,
-        });
-        if (row.length > 0) {
-          const metaDataFromDb = row[0]?.metadata;
-          const combineMetaData = sumTwoObj(
-            metaDataFromDb,
-            consumeAnalytics(link, aggregatedDate, from, to)?.metadata,
-          );
-          try {
+                {
+                  linkId: {
+                    equals: link?.linkId,
+                  },
+                },
+              ],
+            },
+            take: 1,
+          });
+          if (row.length > 0) {
+            const metaDataFromDb = row[0]?.metadata;
+            const combineMetaData = sumTwoObj(
+              metaDataFromDb,
+              consumeAnalytics(link, aggregatedDate, from, to)?.metadata,
+            );
             await prisma.analytics.update({
               where: {
                 id: row[0].id,
@@ -233,18 +233,18 @@ async function main() {
                 to: to,
               },
             });
-          } catch (error) {
-            console.log("error", error);
+          } else {
+            // INSERT FRESH ROW
+            try {
+              await prisma.analytics.create({
+                data: consumeAnalytics(link, aggregatedDate, from, to),
+              });
+            } catch (error) {
+              console.log("error", error);
+            }
           }
-        } else {
-          // INSERT FRESH ROW
-          try {
-            await prisma.analytics.create({
-              data: consumeAnalytics(link, aggregatedDate, from, to),
-            });
-          } catch (error) {
-            console.log("error", error);
-          }
+        } catch (error) {
+          console.log("error", error);
         }
         // INPUT INTO LINKS IF LINKID EXISTS
         async function processAddLinkClicks(attempt = 0) {
