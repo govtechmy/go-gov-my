@@ -38,13 +38,13 @@ export function constructMetadata({
     title = `${process.env.NEXT_PUBLIC_APP_NAME} - Pengurusan Pautan untuk Kerajaan Malaysia`;
     description = `${process.env.NEXT_PUBLIC_APP_NAME} - sebuah portal rasmi Kerajaan Malaysia untuk memendekkan pautan.`;
     image =
-      "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaMs.png";
+      "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaMs-min.png";
   } else {
     // Default english
     title = `${process.env.NEXT_PUBLIC_APP_NAME} - Link Shortener for Malaysia Government`;
     description = `${process.env.NEXT_PUBLIC_APP_NAME} is the official link shortener for the Malaysia government.`;
     image =
-      "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaEn.png";
+      "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaEn-min.png";
   }
   return {
     title,
