@@ -13,11 +13,11 @@ COPY . .
 
 RUN ["pnpm", "turbo", "prune", "web"]
 
-RUN cd out
+WORKDIR /app/out
 
 RUN pnpm install
 
-WORKDIR /app/apps/web
+WORKDIR /app/out/apps/web
 RUN npx prisma generate
 
 CMD ["npx", "tsx", "./kafka-consumer/index.ts"]
