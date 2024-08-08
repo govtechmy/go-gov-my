@@ -39,7 +39,7 @@
     "add": "Add",
     "search": "Search",
     "show_my_links_only": "Show my links only",
-    "include_archive_links": "Include Archive Links",
+    "include_archive_links": "Include archived Links",
     "no_tags_yet": "No Tags Yet",
     "no_tags_match_search": "No tags match your search.",
     "showing": "Showing",
@@ -54,7 +54,8 @@
     "slug_desc": "This is your workspace's unique slug on ",
     "help_text": "Only lowercase letters, numbers, and dashes. Max 48 characters.",
     "only_owners_slug": "Only workspace owners can change the workspace slug.",
-    "success_update_slug": "Successfully updated workspace slug!"
+    "success_update_slug": "Successfully updated workspace slug!",
+    "success_create_workspace": "Successfully created a new workspace!"
   },
   "layout": {
     "changelog": "Changelog",
@@ -105,7 +106,7 @@
     "select_tags": "Select Tags",
     "destination": "Destination URL",
     "invalid_url": "Invalid URL",
-    "press_enter": "press <strong>Enter</strong> ↵ to submit",
+    "press_enter": "press Enter ↵ to submit",
     "too_long": "Short links longer than 25 characters will show up differently on some platforms.",
     "not_found": "Link Not Found",
     "bummer": "Bummer! The link you are looking for does not exist. You either typed  in the wrong URL or don't have access to this link.",
@@ -166,7 +167,7 @@
   "tokens": {
     "create_api_key": "Create New API Key",
     "enter_key": "Enter a unique name for your API key to differentiate it from other keys.",
-    "learn_more": "Learn more about Dub's API.",
+    "learn_more": "Learn more about GoGovMY API.",
     "success": "Successfully created a new token!",
     "error": "Something went wrong.",
     "your_api_keys": "Your API Keys",
@@ -192,7 +193,7 @@
   },
   "expired": {
     "expired_link": "Expired Link",
-    "expired_desc": "This link has expired. Please contact the owner of this link to get a  new one.",
+    "expired_desc": "This link has expired. Please contact the owner of this link to get a new one.",
     "create": "Create Your Free Branded Link"
   },
   "password": {
@@ -372,7 +373,7 @@
   },
   "welcome": {
     "welcome_to": "Welcome to ",
-    "welcome_desc": "gives you marketing superpowers  with short links that stand out.",
+    "welcome_desc": "is the official link shortener for the Malaysia government.",
     "get_started": "Get Started"
   },
   "INTERVAL_DISPLAYS": {
@@ -417,5 +418,16 @@
     "invite_link": "Invite Link",
     "invite_link_desc": "Allow other people to join your workspace through the link below.",
     "reset": "Reset invite link"
+  },
+  "metadata": {
+    "default_title": "GoGovMY - Link shortener for the Malaysia government.",
+    "default_description": " is the official link shortener for the Malaysia government.",
+    "sign_in_to": "Sign in to ",
+    "welcome_to": "Welcome to ",
+    "banned_link": "Banned Link",
+    "banned_desc": "This link has been banned for violating our terms of service.",
+    "expired_link": "Expired Link ",
+    "expired_desc": "This link has expired. Please contact the owner of this link to get a new one.",
+    "analytics": "Analytics for "
   }
 }

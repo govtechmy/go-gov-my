@@ -37,7 +37,7 @@ import DomainResponse from "/snippets/domain-response.mdx";
 <ParamField
   body="placeholder"
   type="string | null"
-  default="https://go.gov.my/help/article/what-is-dub"
+  default="https://github.com/govtechmy/go-gov-my/discussions"
 >
   Provide context to your teammates in the link creation modal by showing them
   an example of a link to be shortened.
@@ -67,7 +67,7 @@ await GoGovMy.domains.update("go.gov.my", {
   verified: false,
   primary: true,
   archived: false,
-  placeholder: "https://go.gov.my/help/article/what-is-dub",
+  placeholder: "https://github.com/govtechmy/go-gov-my/discussions",
   expiredUrl: "https://go.gov.my/expired",
   target: "https://go.gov.my/home",
   type: "redirect",

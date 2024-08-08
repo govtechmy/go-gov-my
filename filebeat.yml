@@ -1,6 +1,10 @@
-output:
-  logstash:
-    hosts: ["logstash:5044"]
+output.kafka:
+  hosts: ["broker:29092"]
+  topic: "redirect_logs"
+  partition.hash:
+    hash: ["linkId"]
+    reachable_only: false
+    random: false
 
 filebeat:
   inputs:

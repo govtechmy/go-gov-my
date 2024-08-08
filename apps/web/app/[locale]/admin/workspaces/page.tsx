@@ -2,7 +2,6 @@
 
 import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { WorkspaceProps } from "@/lib/types";
-import PlanBadge from "@/ui/workspaces/plan-badge";
 import {
   BlurImage,
   LoadingSpinner,
@@ -181,7 +180,7 @@ function WorkspaceCard({
               </h2>
             </div>
           </div>
-          <PlanBadge plan={plan} />
+          {/* <PlanBadge plan={plan} /> */}
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-1 text-gray-500">

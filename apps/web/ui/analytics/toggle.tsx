@@ -11,8 +11,8 @@ import { useContext } from "react";
 import { AnalyticsContext } from ".";
 import DateRangePicker from "./date-range-picker";
 import ExportButton from "./export-button";
-import FilterBar from "./filter-bar";
 import SharePopover from "./share-popover";
+import TagSelector from "./tag-selector";
 
 export default function Toggle() {
   const { basePath, domain, key, url, admin } = useContext(AnalyticsContext);
@@ -80,7 +80,7 @@ export default function Toggle() {
               "w-full md:w-auto": key,
             })}
           >
-            {!isPublicStatsPage && !key && !admin && <FilterBar />}
+            {!isPublicStatsPage && !key && !admin && <TagSelector />}
             {!isPublicStatsPage && key && <SharePopover />}
             <div
               className={cn("flex w-full items-center gap-2", {

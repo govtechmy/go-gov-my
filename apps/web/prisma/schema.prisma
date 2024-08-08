@@ -12,6 +12,10 @@ datasource db {
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["postgresqlExtensions"]
+
+  // Use engine type "binary" for esbuild to bundle prisma correctly when
+  // building the outbox kafka consumer
+  engineType      = "binary"
 }
 
 model Agency {
@@ -120,7 +124,6 @@ model Project {
   linksUsage        Int    @default(0)
   linksLimit        Int    @default(25)
   tagsLimit         Int    @default(5)
-  usersLimit        Int    @default(1)
 
   users      ProjectUsers[]
   invites    ProjectInvite[]

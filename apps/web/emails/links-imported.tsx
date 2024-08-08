@@ -142,7 +142,7 @@ export default function LinksImported({
             <Text className="text-sm leading-6 text-black">
               If you haven't already{" "}
               <Link
-                href="https://dub.co/help/article/how-to-add-custom-domain#step-2-configure-your-domain"
+                href="https://github.com/govtechmy/go-gov-my/discussions"
                 className="font-medium text-blue-600 no-underline"
               >
                 configured your domain{domains.length > 1 ? "s" : ""}

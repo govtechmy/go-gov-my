@@ -1,12 +1,16 @@
-import { useIntlHook } from "@/lib/middleware/utils/useI18n";
+import { nonHooki18nFunc, useIntlHook } from "@/lib/middleware/utils/useI18n";
 import { Button, Logo } from "@dub/ui";
 import { HOME_DOMAIN, constructMetadata } from "@dub/utils";
 import { Suspense } from "react";
 import LoginForm from "./form";
 
-export const metadata = constructMetadata({
-  title: `Sign in to ${process.env.NEXT_PUBLIC_APP_NAME}`,
-});
+export async function generateMetadata({ params }) {
+  const { locale } = params;
+  const { messages } = nonHooki18nFunc(locale);
+  return constructMetadata({
+    title: `${messages?.metadata?.sign_in_to} ${process.env.NEXT_PUBLIC_APP_NAME}`,
+  });
+}
 
 export default function LoginPage() {
   const { messages } = useIntlHook();

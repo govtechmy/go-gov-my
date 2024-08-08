@@ -73,7 +73,7 @@ export function NavMobile({ theme = "light" }: { theme?: NavTheme }) {
                     href={
                       domain === "dub.co"
                         ? `/${slug}`
-                        : `https://dub.co/${slug}`
+                        : `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}/${slug}`
                     }
                     onClick={() => setOpen(false)}
                     className="flex w-full space-x-2"
@@ -89,7 +89,9 @@ export function NavMobile({ theme = "light" }: { theme?: NavTheme }) {
             <li key={slug} className="py-3">
               <Link
                 href={
-                  domain === "dub.co" ? `/${slug}` : `https://dub.co/${slug}`
+                  domain === "dub.co"
+                    ? `/${slug}`
+                    : `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}/${slug}`
                 }
                 onClick={() => setOpen(false)}
                 className="flex w-full font-semibold capitalize"

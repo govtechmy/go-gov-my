@@ -1,46 +1,57 @@
 #!/bin/sh
 
-ELASTICSEARCH_URL='http://elasticsearch:9200'
+ELASTIC_USERNAME=elastic
+ELASTIC_PASSWORD=elastic
+ELASTIC_URL='http://elasticsearch:9200'
 
-# Create indices
-curl -X PUT -w '\n' "$ELASTICSEARCH_URL/links" --fail
-curl -X PUT -w '\n' "$ELASTICSEARCH_URL/idempotent_resources" --fail
-curl -X PUT -w '\n' "$ELASTICSEARCH_URL/redirect_metadata" --fail
+# Create redirect_metadata index
+curl -u $ELASTIC_USERNAME:$ELASTIC_PASSWORD \
+ -X PUT "$ELASTIC_URL/redirect_metadata"
 
-REDIRECT_METADATA_PIPELINE_ID='redirect_metadata_pipeline'
+# Create idempotent_resources index
+curl -u $ELASTIC_USERNAME:$ELASTIC_PASSWORD \
+ -X PUT "$ELASTIC_URL/idempotent_resources?pretty" \
+ -H 'Content-Type: application/json' \
+ -d '{
+  "mappings": {
+    "dynamic": false,
+    "properties": {
+      "idempotency_key": {
+        "type": "keyword"
+      },
+      "hashed_request_payload": {
+        "type": "keyword"
+      }
+    }
+  }
+ }'
 
-REDIRECT_METADATA_PIPELINE_CONFIG=$(cat <<EOF
-{
-    "description": "Processes the redirect_metadata logs from filebeat",
-    "processors": [
-        {
-            "set": {
-                "description": "Change the destination index",
-                "field": "_index",
-                "value": "redirect_metadata"
-            }
-        },
-        {
-            "script": {
-                "description": "Remove filebeat fields",
-                "source": "ctx.remove('agent'); ctx.remove('host'); ctx.remove('ecs'); ctx.remove('input'); ctx.remove('log');"
-            }
-        },
-        {
-            "script": {
-                "description": "Move the fields in json.redirectMetadata to root",
-                "source": "for (entry in ctx['json'].redirectMetadata.entrySet()) { ctx[entry.getKey()] = entry.getValue() } ctx.remove('json');"
-            }
-        }  
-    ]
-}
-EOF
-)
-
-# Create redirect_metadata_pipeline for filebeat
-curl "$ELASTICSEARCH_URL/_ingest/pipeline/$REDIRECT_METADATA_PIPELINE_ID" \
---request 'PUT' \
---header 'Content-Type: application/json' \
---data "$REDIRECT_METADATA_PIPELINE_CONFIG" \
---fail \
--v
+# Create links index
+curl -u $ELASTIC_USERNAME:$ELASTIC_PASSWORD \
+ -X PUT "$ELASTIC_URL/links?pretty" \
+ -H 'Content-Type: application/json' \
+ -d'{
+  "mappings": {
+    "dynamic": false,
+    "properties": {
+      "description": {
+        "type": "text"
+      },
+      "id": {
+        "type": "keyword"
+      },
+      "imageUrl": {
+        "type": "keyword"
+      },
+      "slug": {
+        "type": "keyword"
+      },
+      "title": {
+        "type": "text"
+      },
+      "url": {
+        "type": "keyword"
+      }
+    }
+  }
+ }'

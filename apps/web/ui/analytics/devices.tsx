@@ -42,7 +42,10 @@ export default function Devices() {
               className="h-4 w-4"
             />
           ),
-          title: d[singularTabName],
+          title:
+            singularTabName === "device"
+              ? capitalizeFirstLetter(d[singularTabName])
+              : d[singularTabName],
           href: queryParams({
             set: {
               [singularTabName]: d[singularTabName],
@@ -109,4 +112,9 @@ export default function Devices() {
       </div>
     </>
   );
+}
+
+function capitalizeFirstLetter(str: string) {
+  if (str.length === 0) return str;
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }

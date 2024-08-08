@@ -39,7 +39,7 @@ export default function IOSSection({
               <SimpleTooltipContent
                 title="Redirect your iOS users to a different link."
                 cta="Learn more about device targeting."
-                href="https://dub.co/help/article/device-targeting"
+                href="https://github.com/govtechmy/go-gov-my/discussions"
               />
             }
           />

@@ -50,7 +50,7 @@ export default function GeoSection({
               <SimpleTooltipContent
                 title="Redirect your users to different links based on their location."
                 cta="Learn more about geo targeting."
-                href="https://dub.co/help/article/geo-targeting"
+                href="https://github.com/govtechmy/go-gov-my/discussions"
               />
             }
           />

@@ -4,7 +4,10 @@ import { TooltipProvider } from "@dub/ui/src/tooltip";
 import { cn, constructMetadata } from "@dub/utils";
 import { Toaster } from "sonner";
 
-export const metadata = constructMetadata();
+export async function generateMetadata({ params }) {
+  const { locale } = params;
+  return constructMetadata({ locale });
+}
 
 export default function RootLayout({
   children,

@@ -482,7 +482,7 @@ function AddEditLinkModal({
                     name="url"
                     id={`url-${randomIdx}`}
                     required
-                    placeholder="https://dub.co/help/article/what-is-dub"
+                    placeholder="https://github.com/govtechmy/go-gov-my/discussions"
                     value={url}
                     autoFocus={!key && !isMobile}
                     autoComplete="off"

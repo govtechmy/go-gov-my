@@ -1,135 +1,78 @@
 "use client";
 
-import { MutableRefObject, useEffect, useRef, useState } from "react";
+import { ChevronDown } from "lucide-react";
+import { ReactNode, useState } from "react";
+import { IconMenu } from "./icon-menu";
+import { Tick } from "./icons";
+import { Popover } from "./popover";
 
 type Option = {
   label: string;
   value: string;
 };
 type CustomSelectProps = {
+  icon: ReactNode;
   options: Option[];
   onChange: (newValue: Option) => void;
   defaultValue: number;
 };
 
-const Icon = ({ isOpen }: { isOpen: Boolean }) => {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width="18"
-      height="18"
-      stroke="#222"
-      strokeWidth="1.5"
-      fill="none"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={isOpen ? "translate rotate-180 duration-300 ease-in-out" : ""}
-    >
-      <polyline points="6 9 12 15 18 9"></polyline>
-    </svg>
-  );
-};
-
-const Tick = () => {
-  return (
-    <div className="m-1 text-blue-500">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-        aria-hidden="true"
-        data-slot="icon"
-        className="text-primary dark:text-primary-dark h-4 w-4"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z"
-          clip-rule="evenodd"
-        ></path>
-      </svg>
-    </div>
-  );
-};
-
 export function CustomSelect({
+  icon,
   options,
   onChange,
   defaultValue,
 }: CustomSelectProps) {
   const [showMenu, setShowMenu] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(options[defaultValue]);
-  const inputRef = useRef() as MutableRefObject<HTMLDivElement>;
-
-  useEffect(() => {
-    const handler = (e: { target: any }) => {
-      if (inputRef.current && !inputRef.current?.contains(e.target)) {
-        setShowMenu(false);
-      }
-    };
-
-    window.addEventListener("click", handler);
-    return () => {
-      window.removeEventListener("click", handler);
-    };
-  }, []);
-
-  const handleInputClick = () => {
-    setShowMenu((showMenu) => !showMenu);
-  };
-
-  const getDisplay = () => {
-    return selectedValue.label;
-  };
+  const [selectedOption, setSelectedOption] = useState(options[defaultValue]);
 
   const onItemClick = (option: Option) => {
     let newValue;
     newValue = option;
-    setSelectedValue(newValue);
+    setSelectedOption(newValue);
     onChange(newValue);
+    setShowMenu(false);
   };
 
   const isSelected = (option: Option) => {
-    if (!selectedValue) {
+    if (!selectedOption) {
       return false;
     }
-
-    return selectedValue.value === option.value;
-  };
-
-  const getOptions = () => {
-    return options;
+    return selectedOption.value === option.value;
   };
 
   return (
-    <div className="border-1 relative w-max cursor-pointer rounded text-left duration-300 ease-in-out ">
-      <div
-        ref={inputRef}
-        onClick={handleInputClick}
-        className="shadow-button active:bg-washed hover:dark:bg-washed-dark/50 active:dark:bg-washed-dark border-outline dark:border-washed-dark hover:border-outlineHover hover:dark:border-outlineHover-dark flex w-fit select-none items-center gap-1.5 rounded-md border bg-white px-3 py-1.5 text-start text-sm font-medium text-black outline-none dark:bg-black dark:text-white"
-      >
-        <div className={`dropdown-selected-value`}>{getDisplay()}</div>
-        <div>
-          <div>
-            <Icon isOpen={showMenu} />
-          </div>
-        </div>
-      </div>
-
-      {showMenu && (
-        <div
-          className={`absolute z-[99] mt-1 max-h-[312px] min-h-[50px] w-max overflow-auto rounded-lg border-2 border-[#dbdbdb] bg-white`}
-        >
-          {getOptions().map((option) => (
-            <div
+    <Popover
+      content={
+        <div className="w-full p-2 md:w-48">
+          {options.map((option) => (
+            <button
+              key={option.value}
               onClick={() => onItemClick(option)}
-              key={option?.value}
-              className={`flex flex-row p-2 text-black hover:bg-[#F1F5F9] ${isSelected(option) && "font-semibold"}`}
+              className="flex w-full items-center justify-between space-x-2 rounded-md px-1 py-2 hover:bg-gray-100 active:bg-gray-200"
             >
-              {option?.label} {isSelected(option) && <Tick />}
-            </div>
+              <IconMenu text={option.label} icon={null} />
+              {isSelected(option) && (
+                <Tick className="h-4 w-4" aria-hidden="true" />
+              )}
+            </button>
           ))}
         </div>
-      )}
-    </div>
+      }
+      openPopover={showMenu}
+      setOpenPopover={setShowMenu}
+    >
+      <button
+        onClick={() => setShowMenu((prev) => !prev)}
+        className="flex w-fit items-center justify-between space-x-2 rounded-md bg-white px-3 py-2.5 shadow transition-all duration-75 hover:shadow-md"
+      >
+        <IconMenu text={selectedOption.label} icon={icon} />
+        <ChevronDown
+          className={`h-5 w-5 text-gray-400 ${
+            showMenu ? "rotate-180 transform" : ""
+          } transition-all duration-75`}
+        />
+      </button>
+    </Popover>
   );
 }

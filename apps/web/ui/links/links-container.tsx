@@ -3,7 +3,9 @@
 import useLinks from "@/lib/swr/use-links";
 import useLinksCount from "@/lib/swr/use-links-count";
 import { CustomSelect, MaxWidthWrapper } from "@dub/ui";
-import { Suspense, useRef, useState } from "react";
+import { cn } from "@dub/utils";
+import { Rows2Icon, Rows3Icon } from "lucide-react";
+import { ReactNode, Suspense, useRef, useState } from "react";
 import { useLinkFiltersModal } from "../modals/link-filters-modal";
 import LinkCard from "./link-card";
 import LinkCardPlaceholder from "./link-card-placeholder";
@@ -11,7 +13,8 @@ import LinkFilters, { SearchBox } from "./link-filters";
 import LinkPagination from "./link-pagination";
 import LinkSort from "./link-sort";
 import NoLinksPlaceholder from "./no-links-placeholder";
-import TableCard from "./table-card";
+
+type LinkView = "cards" | "compact";
 
 export default function LinksContainer({
   AddEditLinkButton,
@@ -22,24 +25,19 @@ export default function LinksContainer({
   const { data: count } = useLinksCount();
   const { LinkFiltersButton, LinkFiltersModal } = useLinkFiltersModal();
   const searchInputRef = useRef();
-  const [linkView, setLinkView] = useState("lv");
+  const [linkView, setLinkView] = useState<LinkView>("cards");
 
-  const handleChangeSelect = (e) => {
-    setLinkView(e?.value);
-  };
-
-  const options = [
-    {
-      label: "List View",
-      value: "lv",
-    },
-    {
-      label: "Table View",
-      value: "tv",
-    },
+  const options: { label: string; value: LinkView }[] = [
+    { label: "Card View", value: "cards" },
+    { label: "Compact View", value: "compact" },
   ];
 
-  const headers = ["Short Link", "Full Link", "Date Created"];
+  const viewIcon: Record<LinkView, ReactNode> = {
+    cards: <Rows2Icon className="h-4 w-4" />,
+    compact: <Rows3Icon className="h-4 w-4" />,
+  };
+
+  const compact = linkView === "compact";
 
   return (
     <>
@@ -61,65 +59,30 @@ export default function LinksContainer({
             </Suspense>
           </div>
           <div className="col-span-1 auto-rows-min grid-cols-1 lg:col-span-5">
-            <ul className="grid min-h-[66.5vh] auto-rows-min gap-3">
+            <div className="mb-4">
               <CustomSelect
+                icon={viewIcon[linkView]}
                 options={options}
-                onChange={async (e) => handleChangeSelect(e)}
+                onChange={async (e) => setLinkView(e.value as LinkView)}
                 defaultValue={0}
               />
-              {linkView == options[0]?.value && links && !isValidating ? (
+            </div>
+            <ul
+              className={cn(
+                "grid min-h-[66.5vh] auto-rows-min gap-3",
+                compact && "gap-0",
+              )}
+            >
+              {links && !isValidating ? (
                 links.length > 0 ? (
                   links.map((props) => (
                     <Suspense key={props.id} fallback={<LinkCardPlaceholder />}>
-                      <LinkCard props={props} />
+                      <LinkCard props={props} compact={compact} />
                     </Suspense>
                   ))
                 ) : (
                   <NoLinksPlaceholder AddEditLinkButton={AddEditLinkButton} />
                 )
-              ) : linkView == options[1]?.value && links && !isValidating ? (
-                <>
-                  {links.length > 0 ? (
-                    <>
-                      <div className="relative overflow-x-auto">
-                        <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
-                          <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
-                            <tr>
-                              {headers.map((header) => {
-                                return (
-                                  <th
-                                    scope="col"
-                                    className="px-2 py-2"
-                                    key={header}
-                                  >
-                                    {header}
-                                  </th>
-                                );
-                              })}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {links.map((props) => (
-                              <Suspense
-                                key={props.id}
-                                fallback={<LinkCardPlaceholder />}
-                              >
-                                <TableCard props={props} />
-                              </Suspense>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      {" "}
-                      <NoLinksPlaceholder
-                        AddEditLinkButton={AddEditLinkButton}
-                      />
-                    </>
-                  )}
-                </>
               ) : (
                 Array.from({ length: 10 }).map((_, i) => (
                   <LinkCardPlaceholder key={i} />

@@ -2,8 +2,9 @@ import { Metadata } from "next";
 import { DUB_THUMBNAIL, HOME_DOMAIN } from "../constants";
 
 export function constructMetadata({
-  title = `${process.env.NEXT_PUBLIC_APP_NAME} - Link Management for Modern Marketing Teams`,
-  description = `${process.env.NEXT_PUBLIC_APP_NAME} is the open-source link management infrastructure for modern marketing teams to create, share, and track short links.`,
+  locale,
+  title,
+  description,
   image = DUB_THUMBNAIL,
   icons = [
     {
@@ -26,12 +27,25 @@ export function constructMetadata({
   ],
   noIndex = false,
 }: {
+  locale?: string;
   title?: string;
   description?: string;
   image?: string | null;
   icons?: Metadata["icons"];
   noIndex?: boolean;
 } = {}): Metadata {
+  if (!title && locale === "ms") {
+    title = `${process.env.NEXT_PUBLIC_APP_NAME} - Pengurusan Pautan untuk Kerajaan Malaysia`;
+    description = `${process.env.NEXT_PUBLIC_APP_NAME} - sebuah portal rasmi Kerajaan Malaysia untuk memendekkan pautan.`;
+    image =
+      "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaMs.png";
+  } else {
+    // Default english
+    title = `${process.env.NEXT_PUBLIC_APP_NAME} - Link Shortener for Malaysia Government`;
+    description = `${process.env.NEXT_PUBLIC_APP_NAME} is the official link shortener for the Malaysia government.`;
+    image =
+      "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaEn.png";
+  }
   return {
     title,
     description,
@@ -53,7 +67,6 @@ export function constructMetadata({
         card: "summary_large_image",
         images: [image],
       }),
-      creator: "@dubdotco",
     },
     icons,
     metadataBase: new URL(HOME_DOMAIN),

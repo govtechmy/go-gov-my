@@ -1,21 +1,18 @@
 "use client";
 
 import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useLinksCount from "@/lib/swr/use-links-count";
 import useUsers from "@/lib/swr/use-users";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { ModalContext } from "@/ui/modals/provider";
 import { Badge } from "@dub/ui";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useContext, useMemo } from "react";
 
 export default function NavTabs() {
   const pathname = usePathname();
   const { slug } = useParams() as { slug?: string };
-  const domain = useSearchParams()?.get("domain");
-  const { loading, error } = useWorkspace();
   const { messages, locale } = useIntlClientHook();
   const message = messages?.dashboard;
 
@@ -25,9 +22,7 @@ export default function NavTabs() {
     { name: message?.settings, href: `/${locale}/${slug}/settings` },
   ];
 
-  const { data: linksCount } = useLinksCount();
-
-  if (!slug || error) return null;
+  if (!slug) return null;
 
   return (
     <div className="scrollbar-hide mb-[-3px] flex h-12 items-center justify-start space-x-2 overflow-x-auto">
@@ -50,26 +45,29 @@ export default function NavTabs() {
           )}
         </Link>
       ))}
-      {slug && !loading && !error && !domain && linksCount === 0 && (
-        <OnboardingChecklist />
-      )}
+      <OnboardingChecklist />
     </div>
   );
 }
 const OnboardingChecklist = () => {
   const { setShowCompleteSetupModal } = useContext(ModalContext);
-  const { data: links } = useLinksCount();
   const { users } = useUsers();
   const { users: invites } = useUsers({ invites: true });
+  const { error, loading, linksUsage = 0 } = useWorkspace();
+
+  const { messages } = useIntlClientHook();
+  const message = messages?.layout;
 
   const remainder = useMemo(() => {
     return (
-      (links > 0 ? 0 : 1) +
+      (linksUsage > 0 ? 0 : 1) +
       ((users && users.length > 1) || (invites && invites.length > 0) ? 0 : 1)
     );
-  }, [links, invites, users]);
-  const { messages } = useIntlClientHook();
-  const message = messages?.layout;
+  }, [linksUsage, invites, users]);
+
+  if (remainder === 0 || error || loading) {
+    return null;
+  }
 
   return (
     <button
