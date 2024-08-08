@@ -15,7 +15,7 @@ export default function DeviceIcon({
     return (
       <BlurImage
         src={
-          display === "Desktop"
+          display === "desktop"
             ? `https://faisalman.github.io/ua-parser-js/images/types/default.png`
             : `https://faisalman.github.io/ua-parser-js/images/types/${display.toLowerCase()}.png`
         }
@@ -43,7 +43,7 @@ export default function DeviceIcon({
       );
     }
   } else if (tab === "os") {
-    if (display === "Mac OS") {
+    if (display === "macOS") {
       return (
         <BlurImage
           src="/_static/icons/macos.png"

@@ -18,7 +18,7 @@ describe.runIf(env.CI)("Link Redirects", async () => {
   test("root", async () => {
     const response = await fetch(h.baseUrl, fetchOptions);
 
-    expect(response.headers.get("location")).toBe("https://dub.co/");
+    expect(response.headers.get("location")).toBe("https://go.gov.my/");
     expect(response.headers.get("x-powered-by")).toBe(poweredBy);
     expect(response.status).toBe(301);
   });
@@ -74,7 +74,7 @@ describe.runIf(env.CI)("Link Redirects", async () => {
       fetchOptions,
     );
 
-    expect(response.headers.get("location")).toBe("https://dub.co/");
+    expect(response.headers.get("location")).toBe("https://go.gov.my/");
     expect(response.headers.get("x-powered-by")).toBe(poweredBy);
     expect(response.status).toBe(302);
   });

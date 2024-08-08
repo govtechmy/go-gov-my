@@ -3,10 +3,14 @@ import ImpersonateUser from "./components/impersonate-user";
 import ImpersonateWorkspace from "./components/impersonate-workspace";
 import RefreshDomain from "./components/refresh-domain";
 
-export const metadata = constructMetadata({
-  title: "Dub Admin",
-  noIndex: true,
-});
+export async function generateMetadata({ params }) {
+  const { locale } = params;
+  return constructMetadata({
+    locale,
+    title: "Dub Admin",
+    noIndex: true,
+  });
+}
 
 export default function AdminPage() {
   return (

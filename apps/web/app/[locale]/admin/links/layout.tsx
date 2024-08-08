@@ -4,7 +4,12 @@ import Link from "next/link";
 import { ReactNode } from "react";
 
 export const dynamic = "force-static";
-export const metadata = constructMetadata();
+export async function generateMetadata({ params }) {
+  const { locale } = params;
+  return constructMetadata({
+    locale,
+  });
+}
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (

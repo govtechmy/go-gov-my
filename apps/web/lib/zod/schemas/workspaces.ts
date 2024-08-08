@@ -26,7 +26,6 @@ export const WorkspaceSchema = z
     linksUsage: z.number().describe("The links usage of the workspace."),
     linksLimit: z.number().describe("The links limit of the workspace."),
     tagsLimit: z.number().describe("The tags limit of the workspace."),
-    usersLimit: z.number().describe("The users limit of the workspace."),
     plan: planSchema,
     billingCycleStart: z
       .number()

@@ -21,7 +21,7 @@ const IdentifyWebsite: React.FC = () => {
       >
         <div className="container">
           <button className="w-full" onClick={() => setOpen(!open)}>
-            <div className="text-brand-700 flex flex-wrap items-center gap-1.5 py-2.5 text-sm/4 max-sm:justify-between sm:py-1">
+            <div className="text-brand-700 ml-2 flex flex-wrap items-center gap-1.5 py-4 text-sm/4 max-sm:justify-between sm:py-1">
               <div className="flex items-center gap-1.5">
                 <div className="size-4 sm:size-5 text-blue-600">
                   <svg

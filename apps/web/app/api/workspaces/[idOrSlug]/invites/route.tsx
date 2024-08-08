@@ -1,4 +1,4 @@
-import { DubApiError, exceededLimitError } from "@/lib/api/errors";
+import { DubApiError } from "@/lib/api/errors";
 import { inviteUser } from "@/lib/api/users";
 import { withWorkspace } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -54,17 +54,6 @@ export const POST = withWorkspace(
       throw new DubApiError({
         code: "bad_request",
         message: "User already exists in this workspace.",
-      });
-    }
-
-    if (workspaceUserCount + workspaceInviteCount >= workspace.usersLimit) {
-      throw new DubApiError({
-        code: "exceeded_limit",
-        message: exceededLimitError({
-          plan: workspace.plan,
-          limit: workspace.usersLimit,
-          type: "users",
-        }),
       });
     }
 

@@ -41,7 +41,7 @@ export default function AndroidSection({
               <SimpleTooltipContent
                 title="Redirect your Android users to a different link."
                 cta="Learn more about device targeting."
-                href="https://dub.co/help/article/device-targeting"
+                href="hhttps://github.com/govtechmy/go-gov-my/discussions"
               />
             }
           />

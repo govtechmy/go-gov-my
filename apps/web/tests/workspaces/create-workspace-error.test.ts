@@ -20,7 +20,7 @@ test("should not create workspace with slug in use", async (ctx) => {
     error: {
       code: "conflict",
       message: "Slug is already in use.",
-      doc_url: "https://dub.co/docs/api-reference/errors#conflict",
+      doc_url: "https://go.gov.my/docs/api-reference/errors#conflict",
     },
   });
 });

@@ -70,7 +70,8 @@ function AddWorkspaceModalHelper({
     }));
   }, [name]);
 
-  const welcomeFlow = pathname === "/welcome";
+  const welcomeFlow =
+    pathname === "/welcome" || pathname === `/${locale}/welcome`;
 
   const searchParams = useSearchParams();
   const { queryParams } = useRouterStuff();
@@ -98,7 +99,7 @@ function AddWorkspaceModalHelper({
           {messages?.workspace?.create_title}
         </h3>
         <a
-          href="https://dub.co/help/article/what-is-a-workspace"
+          href="https://github.com/govtechmy/go-gov-my/discussions"
           target="_blank"
           className="-translate-y-2 text-center text-xs text-gray-500 underline underline-offset-4 hover:text-gray-800"
         >
@@ -120,13 +121,9 @@ function AddWorkspaceModalHelper({
             if (res.status === 200) {
               // track workspace creation event
               await mutate("/api/workspaces");
-              if (welcomeFlow) {
-                router.push(`/${locale}/welcome?type=upgrade&slug=${slug}`);
-              } else {
-                router.push(`/${locale}/${slug}`);
-                toast.success(messages?.tokens?.success);
-                setShowAddWorkspaceModal(false);
-              }
+              router.push(`/${locale}/${slug}`);
+              toast.success(messages.dashboard.success_create_workspace);
+              setShowAddWorkspaceModal(false);
             } else {
               const { error } = await res.json();
               const message = error.message;

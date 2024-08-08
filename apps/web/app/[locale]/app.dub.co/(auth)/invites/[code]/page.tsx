@@ -59,18 +59,12 @@ async function VerifyInvite({ code }: { code: string }) {
     select: {
       id: true,
       slug: true,
-      usersLimit: true,
       users: {
         where: {
           userId: session.user.id,
         },
         select: {
           role: true,
-        },
-      },
-      _count: {
-        select: {
-          users: true,
         },
       },
     },
@@ -90,15 +84,6 @@ async function VerifyInvite({ code }: { code: string }) {
   // check if user is already in the workspace
   if (workspace.users.length > 0) {
     redirect(`/${workspace.slug}`);
-  }
-
-  if (workspace._count.users >= workspace.usersLimit) {
-    return (
-      <PageCopy
-        title="User Limit Reached"
-        message="The workspace you are trying to join is currently full. Please contact the workspace owner for more information."
-      />
-    );
   }
 
   await prisma.projectUsers.create({

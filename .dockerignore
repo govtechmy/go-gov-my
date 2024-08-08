@@ -7,3 +7,5 @@ apps/web/.next/
 .dockerignore
 Dockerfile
 docker-compose.yml
+Dockerfile.outbox
+.env

@@ -14,6 +14,7 @@ const sdk = new NodeSDK({
   traceExporter: new ConsoleSpanExporter(),
 });
 
-if (process.env.NODE_ENV !== "development") {
-  sdk.start();
+if (process.env.NODE_ENV === "production") {
+  // Disable open telmetry for now so the logs can be read
+  // sdk.start();
 }

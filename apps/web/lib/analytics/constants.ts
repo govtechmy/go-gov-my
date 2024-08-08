@@ -1,18 +1,6 @@
-export const intervals = [
-  "24h",
-  "7d",
-  "30d",
-  "90d",
-  "ytd",
-  "1y",
-  "all",
-] as const;
+export const intervals = ["7d", "30d", "90d", "ytd", "1y", "all"] as const;
 
 export const INTERVAL_DISPLAYS = [
-  {
-    display: "Today",
-    value: "24h",
-  },
   {
     display: "Last 7 days",
     value: "7d",

@@ -63,7 +63,7 @@ export default function RebrandEmail({
             <Text className="text-sm leading-6 text-black">
               You can learn more about the rebrand and what's changing{" "}
               <Link
-                href="https://dub.co/blog/rebrand"
+                href="https://github.com/govtechmy/go-gov-my/discussions"
                 className="font-medium text-blue-600 no-underline"
               >
                 in this blog post
@@ -85,7 +85,7 @@ export default function RebrandEmail({
             <Text className="ml-1 text-sm leading-6 text-black">
               ◆{" "}
               <Link
-                href="https://dub.co/blog/migration-assistants"
+                href="https://github.com/govtechmy/go-gov-my/discussions"
                 className="font-bold text-blue-600 no-underline"
               >
                 Migration Assistants
@@ -95,7 +95,7 @@ export default function RebrandEmail({
             <Text className="ml-1 text-sm leading-6 text-black">
               ◆{" "}
               <Link
-                href="https://dub.co/help"
+                href="https://github.com/govtechmy/go-gov-my/discussions"
                 className="font-bold text-blue-600 no-underline"
               >
                 Dub Help Center
@@ -127,7 +127,7 @@ export default function RebrandEmail({
             <Text className="text-sm leading-6 text-black">
               Check out our{" "}
               <Link
-                href="https://dub.co/changelog"
+                href="https://github.com/govtechmy/go-gov-my/releases"
                 className="font-medium text-blue-600 no-underline"
               >
                 changelog
