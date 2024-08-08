@@ -48,15 +48,17 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import useSWR, { mutate } from "swr";
 import { useTransferLinkModal } from "../modals/transfer-link-modal";
 import LinkLogo from "./link-logo";
 
 export default function LinkCard({
+  compact = false,
   props,
 }: {
+  compact?: boolean;
   props: LinkWithTagsProps & {
     user: UserProps;
   };
@@ -200,22 +202,25 @@ export default function LinkCard({
     }
   }, [selected]);
 
-  const handlClickOnLinkCard = (e: any) => {
-    // Check if the clicked element is a linkRef or one of its descendants
-    const isLinkCardClick =
-      linkRef.current && linkRef.current.contains(e.target);
+  const handlClickOnLinkCard = useCallback(
+    (e: any) => {
+      // Check if the clicked element is a linkRef or one of its descendants
+      const isLinkCardClick =
+        linkRef.current && linkRef.current.contains(e.target);
 
-    // Check if the clicked element is an <a> or <button> element
-    const isExcludedElement =
-      e.target.tagName.toLowerCase() === "a" ||
-      e.target.tagName.toLowerCase() === "button";
+      // Check if the clicked element is an <a> or <button> element
+      const isExcludedElement =
+        e.target.tagName.toLowerCase() === "a" ||
+        e.target.tagName.toLowerCase() === "button";
 
-    if (isLinkCardClick && !isExcludedElement) {
-      setSelected(!selected);
-    } else {
-      setSelected(false);
-    }
-  };
+      if (isLinkCardClick && !isExcludedElement) {
+        setSelected(!selected);
+      } else {
+        setSelected(false);
+      }
+    },
+    [selected],
+  );
 
   useEffect(() => {
     if (isVisible) {
@@ -224,61 +229,75 @@ export default function LinkCard({
     return () => {
       document.removeEventListener("click", handlClickOnLinkCard);
     };
-  }, [handlClickOnLinkCard]);
+  }, [handlClickOnLinkCard, isVisible]);
 
   const [copiedLinkId, setCopiedLinkId] = useState(false);
 
-  const copyLinkId = () => {
+  const copyLinkId = useCallback(() => {
     navigator.clipboard.writeText(id);
     setCopiedLinkId(true);
     toast.success("Link ID copied!");
     setTimeout(() => setCopiedLinkId(false), 3000);
-  };
+  }, [id]);
 
-  const onKeyDown = (e: any) => {
-    const key = e.key.toLowerCase();
-    // only run shortcut logic if:
-    // - usage is not exceeded
-    // - link is selected or the 3 dots menu is open
-    // - the key pressed is one of the shortcuts
-    // - there is no existing modal backdrop
-    if (
-      (selected || openPopover) &&
-      ["e", "d", "q", "a", "t", "i", "x", "h"].includes(key)
-    ) {
-      setSelected(false);
-      e.preventDefault();
-      switch (key) {
-        case "e":
-          setShowAddEditLinkModal(true);
-          break;
-        case "d":
-          setShowDuplicateLinkModal(true);
-          break;
-        case "q":
-          setShowLinkQRModal(true);
-          break;
-        case "a":
-          setShowArchiveLinkModal(true);
-          break;
-        case "t":
-          if (isDubDomain(domain)) {
-            setShowTransferLinkModal(true);
-          }
-          break;
-        case "i":
-          copyLinkId();
-          break;
-        case "x":
-          setShowDeleteLinkModal(true);
-          break;
-        case "h":
-          setShowHistory(true);
-          break;
+  const onKeyDown = useCallback(
+    (e: any) => {
+      const key = e.key.toLowerCase();
+      // only run shortcut logic if:
+      // - usage is not exceeded
+      // - link is selected or the 3 dots menu is open
+      // - the key pressed is one of the shortcuts
+      // - there is no existing modal backdrop
+      if (
+        (selected || openPopover) &&
+        ["e", "d", "q", "a", "t", "i", "x", "h"].includes(key)
+      ) {
+        setSelected(false);
+        e.preventDefault();
+        switch (key) {
+          case "e":
+            setShowAddEditLinkModal(true);
+            break;
+          case "d":
+            setShowDuplicateLinkModal(true);
+            break;
+          case "q":
+            setShowLinkQRModal(true);
+            break;
+          case "a":
+            setShowArchiveLinkModal(true);
+            break;
+          case "t":
+            if (isDubDomain(domain)) {
+              setShowTransferLinkModal(true);
+            }
+            break;
+          case "i":
+            copyLinkId();
+            break;
+          case "x":
+            setShowDeleteLinkModal(true);
+            break;
+          case "h":
+            setShowHistory(true);
+            break;
+        }
+        setOpenPopover(false);
       }
-      setOpenPopover(false);
-    }
-  };
+    },
+    [
+      copyLinkId,
+      domain,
+      openPopover,
+      selected,
+      setShowAddEditLinkModal,
+      setShowArchiveLinkModal,
+      setShowDeleteLinkModal,
+      setShowDuplicateLinkModal,
+      setShowLinkQRModal,
+      setShowTransferLinkModal,
+    ],
+  );
 
   useEffect(() => {
     document.addEventListener("keydown", onKeyDown);
@@ -290,9 +309,12 @@ export default function LinkCard({
   return (
     <li
       ref={linkRef}
-      className={`${
-        selected ? "border-black" : "border-gray-50"
-      } relative rounded-lg border-2 bg-white p-3 pr-1 shadow transition-all hover:shadow-md sm:p-4`}
+      className={cn(
+        selected ? "border-black" : "border-gray-50",
+        compact
+          ? "relative border-l border-r border-t border-gray-200  bg-white p-2 transition-all first:rounded-t-lg last:rounded-b-lg last:border-b"
+          : "relative rounded-lg border-2 bg-white p-3 pr-1 shadow transition-all hover:shadow-md sm:p-4",
+      )}
     >
       {isVisible && (
         <>
@@ -321,22 +343,43 @@ export default function LinkCard({
                   : "This link has expired. It will still show up in your dashboard, but users will get an 'Expired Link' page when they click on it."
               }
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-300 px-0 sm:h-10 sm:w-10">
+              <div
+                className={cn(
+                  compact
+                    ? "flex h-5 w-5 items-center justify-center rounded-full bg-gray-300 px-0 sm:h-6 sm:w-6"
+                    : "flex h-8 w-8 items-center justify-center rounded-full bg-gray-300 px-0 sm:h-10 sm:w-10",
+                )}
+              >
                 {archived ? (
-                  <Archive className="h-4 w-4 text-gray-500 sm:h-5 sm:w-5" />
+                  <Archive
+                    className={cn(
+                      compact
+                        ? "h-2 w-2 text-gray-500 sm:h-3 sm:w-3"
+                        : "h-4 w-4 text-gray-500 sm:h-5 sm:w-5",
+                    )}
+                  />
                 ) : (
-                  <TimerOff className="h-4 w-4 text-gray-500 sm:h-5 sm:w-5" />
+                  <TimerOff
+                    className={cn(
+                      compact
+                        ? "h-2 w-2 text-gray-500 sm:h-3 sm:w-3"
+                        : "h-4 w-4 text-gray-500 sm:h-5 sm:w-5",
+                    )}
+                  />
                 )}
               </div>
             </Tooltip>
           ) : (
-            <LinkLogo apexDomain={apexDomain} />
+            <LinkLogo
+              className={cn(compact && "h-4 w-4 sm:h-6 sm:w-6")}
+              apexDomain={apexDomain}
+            />
           )}
           {/* 
             Here, we're manually setting ml-* values because if we do space-x-* in the parent div, 
             it messes up the tooltip positioning.
           */}
-          <div className="ml-2 sm:ml-4">
+          <div className={cn("ml-2 sm:ml-4", compact && "flex gap-3")}>
             <div className="flex max-w-fit flex-wrap items-center gap-x-2">
               {
                 <a
