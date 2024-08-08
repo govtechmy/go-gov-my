@@ -3,6 +3,7 @@ FROM node:20 AS base
 FROM base AS builder
 
 RUN npm i -g pnpm@9.1.3
+RUN npm i -g turbo@^1.12.5
 ENV PNPM_HOME=/root/.local/share/pnpm
 ENV PATH=$PATH:$PNPM_HOME
 
