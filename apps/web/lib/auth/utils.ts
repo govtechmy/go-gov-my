@@ -3,11 +3,12 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "./options";
 
 export interface Session {
+  // This must match the User model from Prisma
   user: {
     email: string;
     id: string;
-    name: string;
-    image?: string;
+    name?: string | null;
+    image?: string | null;
     role: UserRole;
     agencyCode: string;
   };
@@ -25,8 +26,8 @@ declare module "next-auth" {
     user: {
       email: string;
       id: string;
-      name: string;
-      image?: string;
+      name?: string | null;
+      image?: string | null;
       role: UserRole;
       agencyCode: string;
     };

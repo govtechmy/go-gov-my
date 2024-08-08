@@ -2,11 +2,9 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import { sendEmail } from "emails";
 import LoginLink from "emails/login-link";
-import WelcomeEmail from "emails/welcome-email";
 import { type NextAuthOptions } from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
-import { subscribe } from "../flodesk";
 import { isStored, storage } from "../storage";
 import { IS_PRODUCTION, SESSION_TOKEN_NAME } from "./constants";
 
@@ -141,36 +139,6 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     async signIn(message) {
-      if (message.isNewUser) {
-        const email = message.user.email as string;
-        const user = await prisma.user.findUnique({
-          where: { email },
-          select: {
-            name: true,
-            createdAt: true,
-          },
-        });
-        // only send the welcome email if the user was created in the last 10s
-        // (this is a workaround because the `isNewUser` flag is triggered when a user does `dangerousEmailAccountLinking`)
-        if (
-          user?.createdAt &&
-          new Date(user.createdAt).getTime() > Date.now() - 10000 &&
-          process.env.NEXT_PUBLIC_IS_DUB
-        ) {
-          await Promise.allSettled([
-            subscribe({ email, name: user.name || undefined }),
-            sendEmail({
-              subject: `Welcome to ${process.env.NEXT_PUBLIC_APP_DOMAIN}`,
-              email,
-              react: WelcomeEmail({
-                email,
-                name: user.name || null,
-              }),
-              marketing: true,
-            }),
-          ]);
-        }
-      }
       // lazily backup user avatar to R2
       const currentImage = message.user.image;
       if (currentImage && !isStored(currentImage)) {
