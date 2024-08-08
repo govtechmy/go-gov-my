@@ -12,6 +12,9 @@ const OutboxSchema = z.object({
   partitionKey: z.string().min(1),
 });
 
+// Todo: Seperate Kafka by Function Responsibility
+// Todo: Refactor and clean up the code
+
 async function main() {
   const OUTBOX_TOPIC = process.env.OUTBOX_TOPIC;
   if (!OUTBOX_TOPIC) {
@@ -66,6 +69,7 @@ async function main() {
   const log = consumer.logger();
   log.info("Starting kafka consumer...");
 
+  // Todo: Refactor this code...
   await consumer.run({
     autoCommit: false,
     eachMessage: async ({ topic, partition, message }) => {
@@ -147,6 +151,7 @@ async function main() {
     },
   });
 
+  // Todo: Refactor this code...
   await analyticConsumer.run({
     autoCommit: false,
     eachMessage: async ({ topic, partition, message }) => {
@@ -159,130 +164,141 @@ async function main() {
       const from = data?.from;
       const to = data?.to;
 
-      function consumeAnalytics(
-        link,
-        aggregatedDate: Date,
-        from: Date,
-        to: Date,
-      ) {
-        const dataObject = JSON.parse(JSON.stringify(link)); // deep clone
-        delete dataObject?.linkId;
-        return {
-          aggregatedDate: new Date(aggregatedDate),
-          linkId: link?.linkId,
-          from: from,
-          to: to,
-          metadata: dataObject,
-        };
-      }
-
-      function sumTwoObj(obj1, obj2) {
-        const clone = {}; // deep clone
-        for (const key in obj1) {
-          if (obj1.hasOwnProperty(key)) {
-            clone[key] = obj1[key];
-          }
-        }
-        for (const key in obj2) {
-          if (obj2.hasOwnProperty(key)) {
-            if (typeof obj2[key] === "number") {
-              if (clone.hasOwnProperty(key)) {
-                clone[key] += obj2[key];
-              } else {
-                clone[key] = obj2[key];
-              }
-            } else if (typeof obj2[key] === "object") {
-              clone[key] = sumTwoObj(obj2[key], clone[key]);
-            }
-          }
-        }
-        return clone;
-      }
-
-      data?.linkAnalytics?.forEach(async (link) => {
-        // INPUT INTO ANALYTICS
+      const processMessageAnalytics = async (attempt = 0) => {
         try {
-          const row = await prisma.analytics.findMany({
-            where: {
-              AND: [
-                {
-                  aggregatedDate: new Date(aggregatedDate),
-                },
-                {
-                  linkId: {
-                    equals: link?.linkId,
-                  },
-                },
-              ],
-            },
-            take: 1,
-          });
-          if (row.length > 0) {
-            const metaDataFromDb = row[0]?.metadata;
-            const combineMetaData = sumTwoObj(
-              metaDataFromDb,
-              consumeAnalytics(link, aggregatedDate, from, to)?.metadata,
-            );
-            await prisma.analytics.update({
+          data?.linkAnalytics?.forEach(async (link) => {
+            // 1. Get Analytics Rows
+            const row = await prisma.analytics.findMany({
               where: {
-                id: row[0].id,
+                AND: [
+                  {
+                    aggregatedDate: new Date(aggregatedDate),
+                  },
+                  {
+                    linkId: {
+                      equals: link?.linkId,
+                    },
+                  },
+                ],
               },
-              data: {
-                metadata: combineMetaData,
-                from: from,
-                to: to,
-              },
+              take: 1,
             });
-          } else {
-            // INSERT FRESH ROW
-            try {
+
+            // 2. Check if today record already exists?
+            if (row.length > 0) {
+              const metaDataFromDb = row[0]?.metadata;
+
+              // Sum metadata
+              const combineMetaData = sumTwoObj(
+                metaDataFromDb,
+                consumeAnalytics(link, aggregatedDate, from, to)?.metadata,
+              );
+
+              // Update records
+              await prisma.analytics.update({
+                where: {
+                  id: row[0].id,
+                },
+                data: {
+                  metadata: combineMetaData,
+                  from: from,
+                  to: to,
+                },
+              });
+            } else {
+              // 3. If not exists, create a new record (meaning new day)
               await prisma.analytics.create({
                 data: consumeAnalytics(link, aggregatedDate, from, to),
               });
-            } catch (error) {
-              console.log("error", error);
             }
-          }
-        } catch (error) {
-          console.log("error", error);
-        }
-        // INPUT INTO LINKS IF LINKID EXISTS
-        async function processAddLinkClicks(attempt = 0) {
-          if (link?.total && link?.linkId) {
-            try {
-              const linkRow = await prisma.link.findMany({
+
+            // Lets update the link.clicks table
+            if (link?.total && link?.linkId) {
+              // Find the link in the table
+              const linkDb = await prisma.link.findFirst({
                 where: {
                   id: link.linkId,
                 },
-                take: 1,
               });
-              if (linkRow.length > 0) {
-                const aggregatedClicks = (linkRow[0].clicks || 0) + link.total;
-                await prisma.link.update({
-                  where: {
-                    id: link.linkId,
-                  },
-                  data: {
-                    clicks: aggregatedClicks,
-                  },
-                });
+
+              // Let kafka retry until success if the link is not found
+              if (linkDb === null || linkDb === undefined) {
+                throw new Error("Link not found in the database");
               }
-            } catch (error) {
-              console.error(`Attempt ${attempt + 1} failed:`, error);
 
-              // Lets do every 1 minute with a random jitter of 5 seconds
-              const delay = 60 * 1000 + Math.random() * 5000;
+              const aggregatedClicks = linkDb.clicks + link.total;
 
-              log.info(`Retrying in ${(delay / 1000).toFixed(2)} seconds...`);
-
-              setTimeout(() => processAddLinkClicks(attempt + 1), delay);
+              await prisma.link.update({
+                where: {
+                  id: link.linkId,
+                },
+                data: {
+                  clicks: aggregatedClicks,
+                },
+              });
             }
-          }
+          });
+
+          // !!! Important: Don't forget to commit if success, otherwise we will always start from the first data
+          await analyticConsumer.commitOffsets([
+            {
+              topic,
+              partition,
+              offset: (parseInt(message.offset, 10) + 1).toString(),
+            },
+          ]);
+        } catch (err) {
+          console.error(`[Analytics] Attempt ${attempt + 1} failed:`, err);
+
+          // Lets do every 1 minute with a random jitter of 5 seconds
+          const delay = 60 * 1000 + Math.random() * 5000;
+
+          log.info(
+            `[Analytics] Retrying in ${(delay / 1000).toFixed(2)} seconds...`,
+          );
+
+          setTimeout(() => processMessageAnalytics(attempt + 1), delay);
         }
-        processAddLinkClicks();
-      });
+      };
+
+      processMessageAnalytics();
     },
   });
+}
+
+function consumeAnalytics(link, aggregatedDate: Date, from: Date, to: Date) {
+  const dataObject = JSON.parse(JSON.stringify(link)); // deep clone
+  delete dataObject?.linkId;
+  return {
+    aggregatedDate: new Date(aggregatedDate),
+    linkId: link?.linkId,
+    from: from,
+    to: to,
+    metadata: dataObject,
+  };
+}
+
+function sumTwoObj(obj1, obj2) {
+  const clone = {}; // deep clone
+  for (const key in obj1) {
+    if (obj1.hasOwnProperty(key)) {
+      clone[key] = obj1[key];
+    }
+  }
+  for (const key in obj2) {
+    if (obj2.hasOwnProperty(key)) {
+      if (typeof obj2[key] === "number") {
+        if (clone.hasOwnProperty(key)) {
+          clone[key] += obj2[key];
+        } else {
+          clone[key] = obj2[key];
+        }
+      } else if (typeof obj2[key] === "object") {
+        clone[key] = sumTwoObj(obj2[key], clone[key]);
+      }
+    }
+  }
+  return clone;
 }
 
 main();
