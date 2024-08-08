@@ -17,16 +17,12 @@ export const sendEmail = async ({
   email,
   subject,
   from,
-  text,
   react,
-  marketing,
 }: {
   email: string;
   subject: string;
   from?: string;
-  text?: string;
-  react?: ReactElement<any, string | JSXElementConstructor<any>>;
-  marketing?: boolean;
+  react: ReactElement<any, string | JSXElementConstructor<any>>;
 }): Promise<void> => {
   const sourceEmail = process.env.SES_EMAIL_SOURCE;
   if (!sourceEmail) {
@@ -38,14 +34,15 @@ export const sendEmail = async ({
     SES: { ses: sesClient, aws: { SendRawEmailCommand } },
   });
 
-  const htmlContent = react ? render(react) : "";
+  const htmlContent = render(react);
+  const textContent = render(react, { pretty: true });
 
   const params = {
     from: sourceEmail,
     to: email,
     subject: subject,
     html: htmlContent,
-    text: text || htmlContent, // Use the text field if provided, otherwise use html content
+    text: textContent,
   };
 
   // Send email using the transporter

@@ -13,14 +13,19 @@ import {
   Text,
 } from "@react-email/components";
 import Footer from "./components/footer";
+import { PREVIEW_PROPS } from "./preview-props";
 
-export default function LoginLink({
-  email = "name@agency.gov.my",
-  url = "http://localhost:8888/api/auth/callback/email?callbackUrl=http%3A%2F%2Fapp.localhost%3A3000%2Flogin&token=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&email=youremail@agency.gov.my",
-}: {
+type Props = {
   email: string;
   url: string;
-}) {
+};
+
+LoginLink.PreviewProps = {
+  email: PREVIEW_PROPS.USER.EMAIL,
+  url: `http://localhost:8888/api/auth/callback/email?callbackUrl=http%3A%2F%2Fapp.localhost%3A3000%2Flogin&token=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&email=${PREVIEW_PROPS.USER.EMAIL}`,
+} satisfies Props;
+
+export default function LoginLink({ email, url }: Props) {
   return (
     <Html>
       <Head />
@@ -33,7 +38,7 @@ export default function LoginLink({
                 src={DUB_LOGO}
                 width="40"
                 height="40"
-                alt="GoGovMY"
+                alt={APP_NAME}
                 className="mx-auto my-0"
               />
             </Section>
@@ -58,8 +63,7 @@ export default function LoginLink({
             <Text className="text-sm leading-6 text-black">
               or copy and paste this URL into your browser:
             </Text>
-            <Text className="max-w-sm flex-wrap break-words font-medium text-purple-600 no-underline">
-              {/* {url.replace(/^https?:\/\//, "")} */}
+            <Text className="max-w-sm flex-wrap break-all font-medium text-purple-600 no-underline">
               {url}
             </Text>
             <Footer email={email} />

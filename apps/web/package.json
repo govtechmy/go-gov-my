@@ -3,7 +3,8 @@
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
-    "dev": "concurrently --kill-others -c auto -n nextjs,prisma,email,kafka-consumer \"next dev --turbo --port 8888\" \"prisma generate && prisma studio --browser none\" \"email dev --port 3333\" \"npm:start-kafka-consumer\"",
+    "dev": "concurrently --kill-others -c auto -n nextjs,prisma,email,kafka-consumer \"next dev --turbo --port 8888\" \"prisma generate && prisma studio --browser none\" \"npm:dev:email\" \"npm:start-kafka-consumer\"",
+    "dev:email": "cross-env NEXT_PUBLIC_APP_NAME=GoGovMY NEXT_PUBLIC_APP_SHORT_DOMAIN=go.gov.my NEXT_PUBLIC_APP_DOMAIN=go.gov.my email dev --port 3333",
     "build": "prisma generate & next build",
     "lint": "next lint",
     "start": "next start -p 8888",
@@ -120,6 +121,7 @@
     "@types/topojson-client": "^3.1.1",
     "array-to-ndjson": "^1.0.1",
     "autoprefixer": "^10.4.16",
+    "cross-env": "^7.0.3",
     "dotenv-flow": "^4.0.0",
     "esbuild": "^0.23.0",
     "eslint-config-next": "14.2.3",
