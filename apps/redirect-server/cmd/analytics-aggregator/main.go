@@ -52,7 +52,6 @@ func main() {
 	var kafkaAddr string
 	var kafkaProducerTopic string
 	var kafkaConsumerTopic string
-	var offsetPath string
 	var elasticURL string
 	var elasticUser string
 	var elasticPassword string
@@ -63,7 +62,6 @@ func main() {
 		flag.StringVar(&kafkaConsumerTopic, "consumer-topic", "redirect_logs", "Kafka consumer topic")
 		// Declare the Group ID
 		flag.StringVar(&groupID, "group-id", "analytics-aggregator", "Kafka consumer group ID")
-		flag.StringVar(&offsetPath, "offset-path", "./analytics-aggregator-offset", "Analytics aggregator offset")
 		flag.StringVar(&elasticURL, "elastic-url", os.Getenv("ELASTIC_URL"), "Elasticsearch URL e.g. http://localhost:9200")
 		flag.StringVar(&elasticUser, "elastic-user", os.Getenv("ELASTIC_USER"), "Elasticsearch username")
 		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
@@ -81,6 +79,7 @@ func main() {
 		elastic.SetURL(elasticURL),
 		elastic.SetBasicAuth(elasticUser, elasticPassword),
 		elastic.SetHttpClient(otelhttp.DefaultClient),
+		elastic.SetRetrier(NewElasticRetrier()),
 	)
 
 	if err != nil {
