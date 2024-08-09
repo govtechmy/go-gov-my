@@ -520,7 +520,9 @@ export default function LinkCard({
               <p className="whitespace-nowrap text-sm text-gray-500">
                 {nFormatter(clicks)}
                 <span className="ml-1 hidden sm:inline-block">
-                  {messages?.workspace?.clicks}
+                  {clicks <= 1
+                    ? messages?.workspace?.click
+                    : messages?.workspace?.clicks}
                 </span>
               </p>
             </Link>
