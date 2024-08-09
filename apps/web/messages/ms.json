@@ -396,7 +396,8 @@
     "copy_link_id": "Salin ID",
     "delete": "Padam",
     "unarchive": "Nyaharkib",
-    "ban": "Gantung",
+    "ban": "Ban",
+    "unban": "Unban",
     "more_options": "Pilihan Lain"
   },
   "people": {

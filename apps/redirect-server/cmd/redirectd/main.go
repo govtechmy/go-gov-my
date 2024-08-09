@@ -154,10 +154,10 @@ func main() {
 				zap.String("ip", utils.GetClientIP(r)),
 				zap.String("user-agent", r.UserAgent()),
 				zap.String("code", "link_not_found")) // Filebeat will run to collect link not found errors over this code
-				w.WriteHeader(http.StatusNotFound)
-				if err := t.ExecuteTemplate(w, "notfound.html", nil); err != nil {
-					logger.Error("failed to execute template", zap.Error(err))
-				}
+			w.WriteHeader(http.StatusNotFound)
+			if err := t.ExecuteTemplate(w, "notfound.html", nil); err != nil {
+				logger.Error("failed to execute template", zap.Error(err))
+			}
 			return
 		}
 		if err != nil {
@@ -166,10 +166,19 @@ func main() {
 				zap.String("ip", utils.GetClientIP(r)),
 				zap.String("user-agent", r.UserAgent()),
 				zap.Error(err))
-				w.WriteHeader(http.StatusInternalServerError)
-				if err := t.ExecuteTemplate(w, "server_error.html", nil); err != nil {
-					logger.Error("failed to execute template", zap.Error(err))
-				}
+			w.WriteHeader(http.StatusInternalServerError)
+			if err := t.ExecuteTemplate(w, "server_error.html", nil); err != nil {
+				logger.Error("failed to execute template", zap.Error(err))
+			}
+			return
+		}
+
+		// If a link is banned, respond with the not found page
+		if link.Banned {
+			w.WriteHeader(http.StatusNotFound)
+			if err := t.ExecuteTemplate(w, "notfound.html", nil); err != nil {
+				logger.Error("failed to execute template", zap.Error(err))
+			}
 			return
 		}
 
