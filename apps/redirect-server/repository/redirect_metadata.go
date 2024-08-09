@@ -7,12 +7,14 @@ import (
 	"redirect-server/utils"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/mileusna/useragent"
 	"github.com/oschwald/geoip2-golang"
 	"go.uber.org/zap/zapcore"
 )
 
 type RedirectMetadata struct {
+	ID              string    `json:"id"`
 	LinkID          string    `json:"linkId"`
 	LinkSlug        string    `json:"linkSlug"`
 	LinkURL         string    `json:"linkUrl"`
@@ -30,6 +32,7 @@ type RedirectMetadata struct {
 
 func NewRedirectMetadata(req http.Request, ipDB *geoip2.Reader, link Link) RedirectMetadata {
 	redirectMetadata := RedirectMetadata{
+		ID:       uuid.NewString(),
 		LinkID:   link.ID,
 		LinkSlug: link.Slug,
 		Referer:  req.Header.Get("Referer"),
@@ -95,6 +98,7 @@ func NewRedirectMetadata(req http.Request, ipDB *geoip2.Reader, link Link) Redir
 
 // For zap.Logger to log
 func (redirectMetadata RedirectMetadata) MarshalLogObject(enc zapcore.ObjectEncoder) error {
+	enc.AddString("id", redirectMetadata.ID)
 	enc.AddString("linkId", redirectMetadata.LinkID)
 	enc.AddString("linkSlug", redirectMetadata.LinkSlug)
 	enc.AddString("linkUrl", redirectMetadata.LinkURL)

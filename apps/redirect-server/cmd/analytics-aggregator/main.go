@@ -180,8 +180,6 @@ func (app *application) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sar
 			// rebalanced or replayed, then it will have a duplication in the ES
 			individualMetadata = append(individualMetadata, log.RedirectMetadata)
 
-			slog.Info("elasticsearch document created")
-
 			sess.MarkMessage(msg, "") // https://github.com/IBM/sarama/issues/1780
 
 		case <-ticker.C:
@@ -189,6 +187,7 @@ func (app *application) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sar
 				intervalEnd := time.Now()
 
 				// Save individual metadata into elasticsearch first...
+				slog.Info("saving redirect metadatas to Elasticsearch")
 				for _, metadata := range individualMetadata {
 					err := app.saveIndividualMetadata(metadata)
 					if err != nil {
@@ -210,7 +209,7 @@ func (app *application) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sar
 					intervalStart = intervalEnd                                // Update interval start time
 				}
 			}
-		
+
 		// Not sure why this happen but it seems like it doesn't dispose the context properly...
 		case <-sess.Context().Done():
 			return nil

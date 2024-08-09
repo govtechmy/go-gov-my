@@ -19,10 +19,11 @@ func NewAnalyticRepo(esClient *elastic.Client) *AnalyticRepo {
 	return &AnalyticRepo{esClient: esClient}
 }
 
-func (r *AnalyticRepo) SaveIndividualAnalytic(ctx context.Context, analytics *repository.RedirectMetadata ) error {
+func (r *AnalyticRepo) SaveIndividualAnalytic(ctx context.Context, redirectMetadata *repository.RedirectMetadata) error {
 	_, err := r.esClient.Index().
+		Id(redirectMetadata.ID).
 		Index(redirectIndex).
-		BodyJson(analytics).
+		BodyJson(redirectMetadata).
 		Do(ctx)
 	return err
 }
