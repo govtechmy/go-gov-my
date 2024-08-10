@@ -7,7 +7,7 @@ import { SHORT_DOMAIN, getParamsFromURL, truncate } from "@dub/utils";
 import { trace } from "@opentelemetry/api";
 import { Prisma } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
-import { OUTBOX_ACTIONS } from "kafka-consumer/actions";
+import { OUTBOX_ACTIONS } from "kafka-consumer/utils/actions";
 import { addToHistory } from "./add-to-history";
 import generateIdempotencyKey from "./create-idempotency-key";
 import { combineTagIds, transformLink } from "./utils";
