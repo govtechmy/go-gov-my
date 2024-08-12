@@ -34,6 +34,7 @@ export function constructMetadata({
   icons?: Metadata["icons"];
   noIndex?: boolean;
 } = {}): Metadata {
+  console.log("description1", description, title, image);
   if (!title && locale === "ms") {
     title = `${process.env.NEXT_PUBLIC_APP_NAME} - Pengurusan Pautan untuk Kerajaan Malaysia`;
     image =
@@ -55,6 +56,7 @@ export function constructMetadata({
     image =
       "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaEn-min.png";
   }
+  console.log("description2", description, title, image);
   return {
     title,
     description,
