@@ -7,6 +7,7 @@ import Collapse from "./layout";
 
 const IdentifyWebsite: React.FC = () => {
   const { messages, locale } = useIntlClientHook();
+  const message = messages?.masthead;
   const [open, setOpen] = useState(false);
 
   return (
@@ -47,12 +48,12 @@ const IdentifyWebsite: React.FC = () => {
                   </svg>
                 </div>
                 <span className="text-black-700">
-                  An official Malaysian Government Website
+                  {message?.masthead_title}
                 </span>
               </div>
               <div className="max-sm:bg-outline-200 flex items-center gap-0.5 max-sm:rounded-md max-sm:px-1">
                 <span className="hidden tracking-[-0.01em] text-blue-600 sm:block">
-                  Here&apos;s how you know
+                  {message?.masthead_subtitle}
                 </span>
                 <div
                   className={cn("size-4 transition", open ? "rotate-180" : "")}
@@ -79,7 +80,7 @@ const IdentifyWebsite: React.FC = () => {
           <Collapse isOpen={open}>
             <div className="gap-4.5 pt-4.5 grid grid-cols-1 px-2 pb-6 sm:grid-cols-2 sm:gap-6 sm:pb-8 sm:pt-6">
               <span className="text-brand-700 static pb-5 text-sm text-blue-600 sm:hidden">
-                Here&apos;s how you know
+                {message?.masthead_subtitle}
               </span>
               <div className="flex gap-3">
                 <div className="text-dim-500 shrink-0">
@@ -115,13 +116,17 @@ const IdentifyWebsite: React.FC = () => {
                 </div>
                 <div className="space-y-1.5">
                   <p className="font-medium max-sm:text-sm">
-                    Official government websites end with
-                    <span className="text-bold strong">.gov.my</span>
+                    {message?.masthead_official_site_title}
+                    <span className="text-bold strong">
+                      {message?.masthead_official_site_desc_domain}
+                    </span>
                   </p>
                   <p className="text-black-700 text-balance max-w-prose text-sm">
-                    If the link does not end with
-                    <span className="font-semibold">.gov.my</span>, exit the
-                    website immediately even if it looks similar.
+                    {message?.masthead_official_site_desc_1}
+                    <span className="font-semibold">
+                      {message?.masthead_official_site_desc_domain}
+                    </span>
+                    {message?.masthead_official_site_desc_2}
                   </p>
                 </div>
               </div>
@@ -145,12 +150,12 @@ const IdentifyWebsite: React.FC = () => {
                 </div>
                 <div className="space-y-1.5">
                   <p className="font-medium max-sm:text-sm">
-                    Secure websites use
-                    <span className="text-bold text-green-600">HTTPS</span>
+                    {message?.masthead_ssl_title}
+                    <span className="text-bold text-green-600"> HTTPS</span>
                   </p>
                   <div className="text-black-700 text-balance max-w-prose text-sm">
-                    If the link does not end with
-                    <div className="size-3.5 -ml-[3px] mb-0.5 mr-px inline text-green-600">
+                    {message?.masthead_ssl_desc_1}&nbsp;&nbsp;&nbsp;
+                    <span className="size-3.5 -ml-[3px] mb-0.5 mr-px inline-block text-green-600">
                       <svg
                         width="12"
                         height="14"
@@ -170,11 +175,10 @@ const IdentifyWebsite: React.FC = () => {
                           strokeLinejoin="round"
                         />
                       </svg>
-                    </div>
-                    ) or
-                    <span className="font-semibold">https://</span>
-                    as an added precaution. Share sensitive information only on
-                    official, secure websites.
+                    </span>
+                    &nbsp; {message?.masthead_ssl_or}
+                    <span className="font-semibold"> https:// </span>
+                    {message?.masthead_ssl_desc_2}
                   </div>
                 </div>
               </div>
