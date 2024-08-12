@@ -34,29 +34,29 @@ export function constructMetadata({
   icons?: Metadata["icons"];
   noIndex?: boolean;
 } = {}): Metadata {
-  console.log("description1", description, title, image);
-  if (!title && locale === "ms") {
-    title = `${process.env.NEXT_PUBLIC_APP_NAME} - Pengurusan Pautan untuk Kerajaan Malaysia`;
-    image =
-      "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaMs-min.png";
+  if (!title) {
+    if (locale === "ms") {
+      title = `${process.env.NEXT_PUBLIC_APP_NAME} - Pengurusan Pautan untuk Kerajaan Malaysia`;
+    } else {
+      title = `${process.env.NEXT_PUBLIC_APP_NAME} - Link Shortener for Malaysia Government`;
+    }
   }
-  if (!description && locale === "ms") {
-    description = `${process.env.NEXT_PUBLIC_APP_NAME} - sebuah portal rasmi Kerajaan Malaysia untuk memendekkan pautan.`;
-    image =
-      "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaMs-min.png";
+  if (!description) {
+    if (locale === "ms") {
+      description = `${process.env.NEXT_PUBLIC_APP_NAME} - sebuah portal rasmi Kerajaan Malaysia untuk memendekkan pautan.`;
+    } else {
+      description = `${process.env.NEXT_PUBLIC_APP_NAME} is the official link shortener for the Malaysia government.`;
+    }
   }
-  if (!title && locale === "en") {
-    // Default english
-    title = `${process.env.NEXT_PUBLIC_APP_NAME} - Link Shortener for Malaysia Government`;
-    image =
-      "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaEn-min.png";
+  if (!image) {
+    if (locale === "ms") {
+      image =
+        "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaMs-min.png";
+    } else {
+      image =
+        "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaEn-min.png";
+    }
   }
-  if (!description && locale === "en") {
-    description = `${process.env.NEXT_PUBLIC_APP_NAME} is the official link shortener for the Malaysia government.`;
-    image =
-      "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaEn-min.png";
-  }
-  console.log("description2", description, title, image);
   return {
     title,
     description,
