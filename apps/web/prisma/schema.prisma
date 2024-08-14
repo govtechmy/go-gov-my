@@ -347,3 +347,9 @@ model Analytics {
   createdAt             DateTime   @default(now()) @db.Timestamptz
   updatedAt             DateTime   @updatedAt
 }
+
+model IdempotentResource {
+  idempotencyKey     String @id
+  hashedPayload      String
+  createdAt          DateTime   @default(now()) @db.Timestamptz
+}

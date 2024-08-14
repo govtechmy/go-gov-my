@@ -23,3 +23,5 @@ export const AnalyticsMessageSchema = z.object({
     }),
   ),
 });
+
+export type AnalyticsMessage = z.infer<typeof AnalyticsMessageSchema>;

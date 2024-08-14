@@ -1,3 +1,6 @@
+import { AnalyticsMessage } from "kafka-consumer/models/AnalyticsSchema";
+import crypto from "node:crypto";
+
 export function consumeAnalytics(
   link,
   aggregatedDate: Date,
@@ -36,4 +39,38 @@ export function sumTwoObj(obj1, obj2) {
     }
   }
   return clone;
+}
+
+function getIdempotencyKey(analyticsMessage: AnalyticsMessage): string {
+  const { from: date1, to: date2 } = analyticsMessage;
+
+  // Convert dates to ISO strings
+  const date1Str = new Date(date1).toISOString();
+  const date2Str = new Date(date2).toISOString();
+
+  // Combine the date strings
+  const combined = date1Str + date2Str;
+
+  // Create a hash of the combined string
+  const hash = crypto.createHash("sha256");
+  hash.update(combined);
+  return hash.digest("hex");
+}
+
+const getIdempotentPayload = (analyticsMessage: AnalyticsMessage) => {
+  const hash = crypto.createHash("sha256");
+  hash.update(JSON.stringify(analyticsMessage));
+  return hash.digest("hex");
+};
+
+export function toIdempotentResource(analyticsMessage: AnalyticsMessage): {
+  idempotencyKey: string;
+  hashedPayload: string;
+} {
+  const idempotencyKey = getIdempotencyKey(analyticsMessage);
+  const hashedPayload = getIdempotentPayload(analyticsMessage);
+  return {
+    idempotencyKey,
+    hashedPayload,
+  };
 }

@@ -1,7 +1,11 @@
 import { prisma } from "@/lib/prisma";
 import { AnalyticsMessageSchema } from "kafka-consumer/models/AnalyticsSchema";
 import type { Consumer, Logger } from "kafkajs";
-import { consumeAnalytics, sumTwoObj } from "../utils/analytics";
+import {
+  consumeAnalytics,
+  sumTwoObj,
+  toIdempotentResource,
+} from "../utils/analytics";
 import { retryWithDelay } from "../utils/retry";
 
 export async function runAnalyticConsumer(consumer: Consumer, log: Logger) {
@@ -20,6 +24,28 @@ export async function runAnalyticConsumer(consumer: Consumer, log: Logger) {
           JSON.parse(message.value.toString("utf8") || "{}"),
         );
         const { aggregatedDate, from, to } = data;
+        const { idempotencyKey, hashedPayload } = toIdempotentResource(data);
+
+        // Check if the message has been processed before
+        const idempotentResource = await prisma.idempotentResource.findUnique({
+          where: { idempotencyKey },
+        });
+        if (idempotentResource !== null) {
+          if (idempotentResource.hashedPayload !== hashedPayload) {
+            throw new Error(
+              "Idempotent resource hashed payload does not match",
+            );
+          }
+          // Commit offset and return early if the message is already processed
+          await consumer.commitOffsets([
+            {
+              topic,
+              partition,
+              offset: (parseInt(message.offset, 10) + 1).toString(),
+            },
+          ]);
+          return;
+        }
 
         const linkAnalyticsPromises = data.linkAnalytics.map(
           async (analytics) => {
@@ -71,6 +97,11 @@ export async function runAnalyticConsumer(consumer: Consumer, log: Logger) {
         );
 
         await Promise.all(linkAnalyticsPromises);
+
+        // Save the idempotent resource
+        await prisma.idempotentResource.create({
+          data: { idempotencyKey, hashedPayload },
+        });
 
         // Commit offset if success
         await consumer.commitOffsets([
