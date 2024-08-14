@@ -1,11 +1,11 @@
 import { Metadata } from "next";
-import { DUB_THUMBNAIL, HOME_DOMAIN } from "../constants";
+import { DUB_THUMBNAIL_EN, DUB_THUMBNAIL_MS, HOME_DOMAIN } from "../constants";
 
 export function constructMetadata({
   locale,
   title,
   description,
-  image = DUB_THUMBNAIL,
+  image,
   icons = [
     {
       rel: "apple-touch-icon",
@@ -50,11 +50,9 @@ export function constructMetadata({
   }
   if (!image) {
     if (locale === "ms") {
-      image =
-        "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaMs-min.png";
+      image = DUB_THUMBNAIL_MS;
     } else {
-      image =
-        "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaEn-min.png";
+      image = DUB_THUMBNAIL_EN;
     }
   }
   return {

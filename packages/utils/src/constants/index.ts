@@ -60,7 +60,8 @@ export const ADMIN_HOSTNAMES = new Set([
 ]);
 
 export const DUB_LOGO = `${APP_DOMAIN}/_static/logo.png`;
-export const DUB_THUMBNAIL = `/_static/GoGovMetaMs.png`;
+export const DUB_THUMBNAIL_MS = `https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaMs-min.png`;
+export const DUB_THUMBNAIL_EN = `https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaEn-min.png`;
 
 export const DUB_WORKSPACE_ID = "cl7pj5kq4006835rbjlt2ofka";
 export const LEGAL_WORKSPACE_ID = "clrflia0j0000vs7sqfhz9c7q";
