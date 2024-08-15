@@ -16,7 +16,7 @@ jobs:
       - name: Install AWS CLI
         run: sudo apt-get install -y awscli
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
       - name: Change working directory
         run: cd ./apps/redirect-pages/next-landing-page
       - name: Remove existing build (if any)
