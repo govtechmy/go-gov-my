@@ -54,7 +54,7 @@ export async function runAnalyticConsumer(consumer: Consumer, log: Logger) {
               const row = await prisma.analytics.findMany({
                 where: {
                   AND: [
-                    { aggregatedDate: aggregatedDate },
+                    { aggregatedDate: new Date(aggregatedDate) },
                     { linkId: { equals: analytics.linkId } },
                   ],
                 },
