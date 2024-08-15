@@ -9,6 +9,7 @@ export async function generateMetadata({ params }) {
   const { messages } = nonHooki18nFunc(locale);
   return constructMetadata({
     title: `${messages?.metadata?.sign_in_to} ${process.env.NEXT_PUBLIC_APP_NAME}`,
+    locale,
   });
 }
 

@@ -52,7 +52,6 @@ func main() {
 	var kafkaAddr string
 	var kafkaProducerTopic string
 	var kafkaConsumerTopic string
-	var offsetPath string
 	var elasticURL string
 	var elasticUser string
 	var elasticPassword string
@@ -63,7 +62,6 @@ func main() {
 		flag.StringVar(&kafkaConsumerTopic, "consumer-topic", "redirect_logs", "Kafka consumer topic")
 		// Declare the Group ID
 		flag.StringVar(&groupID, "group-id", "analytics-aggregator", "Kafka consumer group ID")
-		flag.StringVar(&offsetPath, "offset-path", "./analytics-aggregator-offset", "Analytics aggregator offset")
 		flag.StringVar(&elasticURL, "elastic-url", os.Getenv("ELASTIC_URL"), "Elasticsearch URL e.g. http://localhost:9200")
 		flag.StringVar(&elasticUser, "elastic-user", os.Getenv("ELASTIC_USER"), "Elasticsearch username")
 		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
@@ -81,6 +79,7 @@ func main() {
 		elastic.SetURL(elasticURL),
 		elastic.SetBasicAuth(elasticUser, elasticPassword),
 		elastic.SetHttpClient(otelhttp.DefaultClient),
+		elastic.SetRetrier(NewElasticRetrier()),
 	)
 
 	if err != nil {
@@ -159,6 +158,9 @@ func (app *application) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sar
 	// Make a map of link IDs to their aggregated analytics
 	linkAnalytics := make(map[string]*repository.LinkAnalytics)
 
+	// An array of RedirectMetadataLog (Individual metadata // non aggregated data)
+	var individualMetadata []repository.RedirectMetadata
+
 	// Keep track of the time between send intervals
 	var intervalStart time.Time = time.Now()
 
@@ -171,11 +173,30 @@ func (app *application) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sar
 				break
 			}
 			app.aggregateRedirectMetadata(linkAnalytics, log.RedirectMetadata)
+
+			// Collect individual metadata to batch save later
+			// We won't do it here because we're doing manual commit, so if the kafka is
+			// rebalanced or replayed, then it will have a duplication in the ES
+			individualMetadata = append(individualMetadata, log.RedirectMetadata)
+
 			sess.MarkMessage(msg, "") // https://github.com/IBM/sarama/issues/1780
 
 		case <-ticker.C:
 			if len(linkAnalytics) > 0 {
 				intervalEnd := time.Now()
+
+				// Save individual metadata into elasticsearch first...
+				slog.Info("saving redirect metadatas to Elasticsearch")
+				for _, metadata := range individualMetadata {
+					err := app.saveIndividualMetadata(metadata)
+					if err != nil {
+						slog.Error("failed to save metadata to Elasticsearch", slog.String("errMessage", err.Error()))
+					}
+				}
+
+				// Clear individual metadata array after saving to avoid ES duplication
+				individualMetadata = []repository.RedirectMetadata{}
+
 				err := app.sendAnalytics(linkAnalytics, intervalStart, intervalEnd) // Send the analytics aggregated
 				if err != nil {
 					slog.Error("failed to send analytics",
@@ -187,7 +208,7 @@ func (app *application) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sar
 					intervalStart = intervalEnd                                // Update interval start time
 				}
 			}
-		
+
 		// Not sure why this happen but it seems like it doesn't dispose the context properly...
 		case <-sess.Context().Done():
 			return nil
@@ -269,16 +290,12 @@ func (app *application) sendAnalytics(linkAnalytics map[string]*repository.LinkA
 			slog.Int("offset", int(offset)),
 		)
 
-		// Send data to Elasticsearch
-		err = app.esRepo.SaveAggregatedAnalytic(context.Background(), &message)
-		if err != nil {
-			return err
-		}
-
-		slog.Info("elasticsearch document created")
-
 		return nil
 	}
 
 	return errors.New("failed to send kafka message, no more retries")
+}
+
+func (app *application) saveIndividualMetadata(metadata repository.RedirectMetadata) error {
+	return app.esRepo.SaveIndividualAnalytic(context.Background(), &metadata)
 }

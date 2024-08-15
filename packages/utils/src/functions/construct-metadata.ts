@@ -1,11 +1,11 @@
 import { Metadata } from "next";
-import { DUB_THUMBNAIL, HOME_DOMAIN } from "../constants";
+import { DUB_THUMBNAIL_EN, DUB_THUMBNAIL_MS, HOME_DOMAIN } from "../constants";
 
 export function constructMetadata({
   locale,
   title,
   description,
-  image = DUB_THUMBNAIL,
+  image,
   icons = [
     {
       rel: "apple-touch-icon",
@@ -34,17 +34,26 @@ export function constructMetadata({
   icons?: Metadata["icons"];
   noIndex?: boolean;
 } = {}): Metadata {
-  if (!title && locale === "ms") {
-    title = `${process.env.NEXT_PUBLIC_APP_NAME} - Pengurusan Pautan untuk Kerajaan Malaysia`;
-    description = `${process.env.NEXT_PUBLIC_APP_NAME} - sebuah portal rasmi Kerajaan Malaysia untuk memendekkan pautan.`;
-    image =
-      "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaMs-min.png";
-  } else {
-    // Default english
-    title = `${process.env.NEXT_PUBLIC_APP_NAME} - Link Shortener for Malaysia Government`;
-    description = `${process.env.NEXT_PUBLIC_APP_NAME} is the official link shortener for the Malaysia government.`;
-    image =
-      "https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaEn-min.png";
+  if (!title) {
+    if (locale === "ms") {
+      title = `${process.env.NEXT_PUBLIC_APP_NAME} - Pengurusan Pautan untuk Kerajaan Malaysia`;
+    } else {
+      title = `${process.env.NEXT_PUBLIC_APP_NAME} - Link Shortener for Malaysia Government`;
+    }
+  }
+  if (!description) {
+    if (locale === "ms") {
+      description = `${process.env.NEXT_PUBLIC_APP_NAME} - sebuah portal rasmi Kerajaan Malaysia untuk memendekkan pautan.`;
+    } else {
+      description = `${process.env.NEXT_PUBLIC_APP_NAME} is the official link shortener for the Malaysia government.`;
+    }
+  }
+  if (!image) {
+    if (locale === "ms") {
+      image = DUB_THUMBNAIL_MS;
+    } else {
+      image = DUB_THUMBNAIL_EN;
+    }
   }
   return {
     title,

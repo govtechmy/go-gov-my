@@ -397,6 +397,7 @@
     "delete": "Delete",
     "unarchive": "Unarchive",
     "ban": "Ban",
+    "unban": "Unban",
     "more_options": "More Options"
   },
   "people": {

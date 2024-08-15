@@ -1,5 +1,5 @@
-import { LinkHistory } from "@/lib/api/links/add-to-history";
 import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
+import useLinkHistory from "@/lib/swr/use-link-history";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { LinkWithTagsProps, TagProps, UserProps } from "@/lib/types";
 import TagBadge from "@/ui/links/tag-badge";
@@ -25,7 +25,6 @@ import {
 import { LinkifyTooltipContent } from "@dub/ui/src/tooltip";
 import {
   cn,
-  fetcher,
   getApexDomain,
   isDubDomain,
   linkConstructor,
@@ -35,6 +34,7 @@ import {
 } from "@dub/utils";
 import {
   Archive,
+  Ban,
   Copy,
   CopyPlus,
   Edit3,
@@ -50,7 +50,7 @@ import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
-import useSWR, { mutate } from "swr";
+import { mutate } from "swr";
 import { useTransferLinkModal } from "../modals/transfer-link-modal";
 import LinkLogo from "./link-logo";
 
@@ -77,6 +77,7 @@ export default function LinkCard({
     comments,
     user,
     clicks,
+    banned,
   } = props;
 
   const searchParams = useSearchParams();
@@ -147,18 +148,13 @@ export default function LinkCard({
   });
   const [showHistory, setShowHistory] = useState(false);
 
-  const { data: history, isLoading: isLoadingHistory } = useSWR<LinkHistory[]>(
-    isVisible && `/api/links/${id}/history?workspaceId=${workspaceId}`,
-    async (input: RequestInfo, init?: RequestInit) => {
-      const history = await fetcher<LinkHistory[]>(input, init);
-      history.forEach((h) => {
-        // Convert the string timestamps to Date instance
-        h.timestamp = new Date(h.timestamp);
-        if (h.expiresAt) h.expiresAt = new Date(h.expiresAt);
-      });
-      return history;
-    },
-  );
+  const isGovtechAdmin = !slug;
+  const { data: history, isLoading: isLoadingHistory } = useLinkHistory({
+    linkId: id,
+    enabled: isVisible,
+    admin: isGovtechAdmin,
+    workspaceId: workspaceId!,
+  });
 
   // Duplicate link Modal
   const {
@@ -305,6 +301,29 @@ export default function LinkCard({
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [onKeyDown]);
+
+  function onClickBanButton() {
+    toast.promise(
+      (async () => {
+        await fetch(`/api/admin/links/${id}/ban`, {
+          method: "PUT",
+          body: JSON.stringify({ ban: !banned }),
+        });
+        await mutate(
+          (key) =>
+            typeof key === "string" && key.startsWith("/api/admin/links"),
+          undefined,
+          { revalidate: true },
+        );
+      })(),
+      {
+        loading: "Updating the link's ban status...",
+        success: "Updated the link's ban status!",
+        error: "Error updating the link's ban status",
+      },
+    );
+    setOpenPopover(false);
+  }
 
   return (
     <li
@@ -520,7 +539,9 @@ export default function LinkCard({
               <p className="whitespace-nowrap text-sm text-gray-500">
                 {nFormatter(clicks)}
                 <span className="ml-1 hidden sm:inline-block">
-                  {messages?.workspace?.clicks}
+                  {clicks <= 1
+                    ? messages?.workspace?.click
+                    : messages?.workspace?.clicks}
                 </span>
               </p>
             </Link>
@@ -628,37 +649,14 @@ export default function LinkCard({
                   shortcut="X"
                   className="h-9 px-2 font-medium"
                 />
-                {!slug && ( // this is only shown in admin mode (where there's no slug)
+                {isGovtechAdmin && (
                   <button
-                    onClick={() => {
-                      window.confirm(
-                        "Are you sure you want to ban this link? It will blacklist the domain and prevent any links from that domain from being created.",
-                      ) &&
-                        (setOpenPopover(false),
-                        toast.promise(
-                          fetch(`/api/admin/links/${id}/ban`, {
-                            method: "DELETE",
-                          }).then(async () => {
-                            await mutate(
-                              (key) =>
-                                typeof key === "string" &&
-                                key.startsWith("/api/admin/links"),
-                              undefined,
-                              { revalidate: true },
-                            );
-                          }),
-                          {
-                            loading: "Banning link...",
-                            success: "Link banned!",
-                            error: "Error banning link.",
-                          },
-                        ));
-                    }}
                     className="group flex w-full items-center justify-between rounded-md p-2 text-left text-sm font-medium text-red-600 transition-all duration-75 hover:bg-red-600 hover:text-white"
+                    onClick={() => onClickBanButton()}
                   >
                     <IconMenu
-                      text={message?.ban}
-                      icon={<Delete className="h-4 w-4" />}
+                      text={banned ? message.unban : message.ban}
+                      icon={<Ban className="h-4 w-4" />}
                     />
                     <kbd className="hidden rounded bg-red-100 px-2 py-0.5 text-xs font-light text-red-600 transition-all duration-75 group-hover:bg-red-500 group-hover:text-white sm:inline-block">
                       B
@@ -674,7 +672,7 @@ export default function LinkCard({
             <button
               type="button"
               onClick={() => {
-                setOpenPopover(!openPopover);
+                setOpenPopover((openPopover) => !openPopover);
               }}
               className="rounded-md px-1 py-2 transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
             >

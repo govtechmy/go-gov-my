@@ -8,7 +8,6 @@ go 1.21
 require (
 	github.com/IBM/sarama v1.43.2
 	github.com/elastic/go-elasticsearch/v7 v7.17.10
-	github.com/joho/godotenv v1.5.1
 	github.com/mileusna/useragent v1.3.4
 	github.com/olivere/elastic/v7 v7.0.32
 	github.com/oschwald/geoip2-golang v1.11.0
@@ -42,7 +41,6 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/klauspost/compress v1.17.8 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
-	github.com/olivere/elastic v6.2.37+incompatible
 	github.com/oschwald/maxminddb-golang v1.13.0 // indirect
 	github.com/pierrec/lz4/v4 v4.1.21 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
