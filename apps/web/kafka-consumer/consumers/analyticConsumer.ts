@@ -47,7 +47,7 @@ export async function runAnalyticConsumer(consumer: Consumer, log: Logger) {
           return;
         }
 
-        prisma.$transaction(async (tx) => {
+        await prisma.$transaction(async (tx) => {
           const linkAnalyticsPromises = data.linkAnalytics.map(
             async (analytics) => {
               // 1. Get Analytics Rows
