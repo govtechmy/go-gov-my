@@ -47,60 +47,66 @@ export async function runAnalyticConsumer(consumer: Consumer, log: Logger) {
           return;
         }
 
-        const linkAnalyticsPromises = data.linkAnalytics.map(
-          async (analytics) => {
-            // 1. Get Analytics Rows
-            const row = await prisma.analytics.findMany({
-              where: {
-                AND: [
-                  { aggregatedDate: aggregatedDate },
-                  { linkId: { equals: analytics.linkId } },
-                ],
-              },
-              take: 1,
-            });
-
-            // 2. Check if today record already exists
-            if (row.length > 0) {
-              const metaDataFromDb = row[0]?.metadata;
-
-              // Sum metadata
-              const combineMetaData = sumTwoObj(
-                metaDataFromDb,
-                consumeAnalytics(analytics, new Date(aggregatedDate), from, to)
-                  .metadata,
-              );
-
-              // Update records
-              await prisma.analytics.update({
-                where: { id: row[0].id },
-                data: { metadata: combineMetaData, from, to },
+        prisma.$transaction(async (tx) => {
+          const linkAnalyticsPromises = data.linkAnalytics.map(
+            async (analytics) => {
+              // 1. Get Analytics Rows
+              const row = await prisma.analytics.findMany({
+                where: {
+                  AND: [
+                    { aggregatedDate: aggregatedDate },
+                    { linkId: { equals: analytics.linkId } },
+                  ],
+                },
+                take: 1,
               });
-            } else {
-              // 3. If not exists, create a new record (meaning new day)
-              await prisma.analytics.create({
-                data: consumeAnalytics(
-                  analytics,
-                  new Date(aggregatedDate),
-                  from,
-                  to,
-                ),
+
+              // 2. Check if today record already exists
+              if (row.length > 0) {
+                const metaDataFromDb = row[0]?.metadata;
+
+                // Sum metadata
+                const combineMetaData = sumTwoObj(
+                  metaDataFromDb,
+                  consumeAnalytics(
+                    analytics,
+                    new Date(aggregatedDate),
+                    from,
+                    to,
+                  ).metadata,
+                );
+
+                // Update records
+                await tx.analytics.update({
+                  where: { id: row[0].id },
+                  data: { metadata: combineMetaData, from, to },
+                });
+              } else {
+                // 3. If not exists, create a new record (meaning new day)
+                await tx.analytics.create({
+                  data: consumeAnalytics(
+                    analytics,
+                    new Date(aggregatedDate),
+                    from,
+                    to,
+                  ),
+                });
+              }
+
+              // Increment the link's clicks column
+              await tx.link.update({
+                where: { id: analytics.linkId },
+                data: { clicks: { increment: analytics.total } },
               });
-            }
+            },
+          );
 
-            // Increment the link's clicks column
-            await prisma.link.update({
-              where: { id: analytics.linkId },
-              data: { clicks: { increment: analytics.total } },
-            });
-          },
-        );
+          await Promise.all(linkAnalyticsPromises);
 
-        await Promise.all(linkAnalyticsPromises);
-
-        // Save the idempotent resource
-        await prisma.idempotentResource.create({
-          data: { idempotencyKey, hashedPayload },
+          // Save the idempotent resource
+          await tx.idempotentResource.create({
+            data: { idempotencyKey, hashedPayload },
+          });
         });
 
         // Commit offset if success
