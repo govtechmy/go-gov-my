@@ -12,7 +12,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Node.js version
+          node-version: "20" # Node.js version
       - name: Install AWS CLI
         run: sudo apt-get install -y awscli
       - name: Install dependencies
@@ -22,7 +22,7 @@ jobs:
       - name: Remove existing build (if any)
         run: rm -r .next out
       - name: Generate static site
-        run: npm run generate
+        run: pnpm run generate
       - name: Deploy to S3
         run: |
           aws s3 sync ./out/static s3://gogov-landing --delete

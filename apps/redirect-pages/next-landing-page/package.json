@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "generate": "BUILD_MODE=ssg npm run build",
+    "generate": "BUILD_MODE=ssg next build",
     "serve": "npx serve out",
     "start": "next start",
     "lint": "next lint"
