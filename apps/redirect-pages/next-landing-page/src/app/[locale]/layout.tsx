@@ -70,7 +70,7 @@ export default async function Layout({ children, params: { locale } }: Props) {
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    <html lang={locale} data-build-version="0.0.1">
       <body
         className={cn(
           inter.className,
