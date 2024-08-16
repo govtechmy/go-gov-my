@@ -34,8 +34,7 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync out/static s3://gogov-landing --delete
-          aws s3 cp out/static/ s3://gogov-landing/ --recursive
+          aws s3 sync out s3://gogov-landing --delete
         env:
           AWS_REGION: ap-southeast-1
           AWS_ROLE_ARN: arn:aws:iam::767397910274:role/github-oidc-provider-aws
