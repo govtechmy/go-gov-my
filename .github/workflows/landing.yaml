@@ -9,24 +9,37 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "20" # Node.js version
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
       - name: Install AWS CLI
         run: sudo apt-get install -y awscli
+
       - name: Change working directory
         run: cd ./apps/redirect-pages/next-landing-page
+
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
+
       - name: Remove existing build (if any)
         run: rm -r .next out
+
       - name: Generate static site
-        run: npm run generate
+        run: pnpm run generate
+
       - name: Deploy to S3
         run: |
           aws s3 sync ./out/static s3://gogov-landing --delete
           aws s3 cp ./out/static/ s3://gogov-landing/ --recursive
+
         env:
           AWS_REGION: ap-southeast-1
           AWS_ROLE_ARN: arn:aws:iam::767397910274:role/github-oidc-provider-aws
