@@ -17,16 +17,11 @@ jobs:
         with:
           node-version: "20" # Node.js version
 
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8
-
       - name: Install AWS CLI
         run: sudo apt-get install -y awscli
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm install
         working-directory: ${{ env.WORK_DIR }}
 
       - name: Remove existing build (if any)
@@ -34,15 +29,15 @@ jobs:
         working-directory: ${{ env.WORK_DIR }}
 
       - name: Generate static site
-        run: pnpm run generate
+        run: npm run generate
         working-directory: ${{ env.WORK_DIR }}
 
       - name: Deploy to S3
         run: |
           aws s3 sync out/static s3://gogov-landing --delete
           aws s3 cp out/static/ s3://gogov-landing/ --recursive
-        working-directory: ${{ env.WORK_DIR }}
         env:
           AWS_REGION: ap-southeast-1
           AWS_ROLE_ARN: arn:aws:iam::767397910274:role/github-oidc-provider-aws
           AWS_ROLE_SESSION_NAME: .github/workflows/landing.yaml
+        working-directory: ${{ env.WORK_DIR }}
