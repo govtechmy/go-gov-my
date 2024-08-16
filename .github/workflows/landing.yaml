@@ -15,14 +15,14 @@ jobs:
           node-version: "20" # Node.js version
       - name: Install AWS CLI
         run: sudo apt-get install -y awscli
-      - name: Install dependencies
-        run: pnpm install
       - name: Change working directory
         run: cd ./apps/redirect-pages/next-landing-page
+      - name: Install dependencies
+        run: npm install
       - name: Remove existing build (if any)
         run: rm -r .next out
       - name: Generate static site
-        run: pnpm run generate
+        run: npm run generate
       - name: Deploy to S3
         run: |
           aws s3 sync ./out/static s3://gogov-landing --delete
