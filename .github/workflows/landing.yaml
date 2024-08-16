@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - feat/add-vite
+env:
+  WORK_DIR: apps/redirect-pages/next-landing-page
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -23,23 +25,23 @@ jobs:
       - name: Install AWS CLI
         run: sudo apt-get install -y awscli
 
-      - name: Change working directory
-        run: cd ./apps/redirect-pages/next-landing-page
-
       - name: Install dependencies
         run: pnpm install
+        working-directory: ${{ env.WORK_DIR }}
 
       - name: Remove existing build (if any)
         run: rm -rf .next out
+        working-directory: ${{ env.WORK_DIR }}
 
       - name: Generate static site
         run: pnpm run generate
+        working-directory: ${{ env.WORK_DIR }}
 
       - name: Deploy to S3
         run: |
-          aws s3 sync ./out/static s3://gogov-landing --delete
-          aws s3 cp ./out/static/ s3://gogov-landing/ --recursive
-
+          aws s3 sync out/static s3://gogov-landing --delete
+          aws s3 cp out/static/ s3://gogov-landing/ --recursive
+        working-directory: ${{ env.WORK_DIR }}
         env:
           AWS_REGION: ap-southeast-1
           AWS_ROLE_ARN: arn:aws:iam::767397910274:role/github-oidc-provider-aws
