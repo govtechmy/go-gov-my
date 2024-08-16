@@ -30,7 +30,7 @@ jobs:
         run: pnpm install
 
       - name: Remove existing build (if any)
-        run: rm -r .next out
+        run: rm -rf .next out
 
       - name: Generate static site
         run: pnpm run generate
