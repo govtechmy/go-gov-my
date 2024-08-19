@@ -5,6 +5,10 @@ on:
   push:
     branches:
       - staging
+    paths-ignore:
+      - apps/web/**
+      - apps/docs/**
+      - packages/**
   workflow_dispatch:
 permissions:
   id-token: write # This is required for requesting the JWT
