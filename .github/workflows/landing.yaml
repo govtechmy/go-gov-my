@@ -47,5 +47,5 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync out s3://gogov-landing --delete
+          aws s3 sync out s3://pautan.org --delete
         working-directory: ${{ env.WORK_DIR }}
