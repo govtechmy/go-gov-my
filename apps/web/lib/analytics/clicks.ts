@@ -120,6 +120,9 @@ export const getClicks = async (
         },
       ],
     },
+    orderBy: {
+      aggregatedDate: "asc",
+    },
     select: {
       linkId: true,
       aggregatedDate: true,
@@ -270,11 +273,9 @@ export const getClicks = async (
     }, {});
     if (JSON.stringify(timeseries) === "{}")
       return [{ start: new Date(), clicks: 0 }];
-    return Object.keys(timeseries)
-      .map((key) => {
-        return { start: key, clicks: timeseries[key] };
-      })
-      .sort((a, b) => b.clicks - a.clicks);
+    return Object.keys(timeseries).map((key) => {
+      return { start: key, clicks: timeseries[key] };
+    });
   }
 
   // return no data for other endpoints for now
