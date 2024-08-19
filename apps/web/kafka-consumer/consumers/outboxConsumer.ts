@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { Prisma } from "@prisma/client";
 import { OutboxSchema } from "../models/OutboxSchema";
 import { retryWithDelay } from "../utils/retry";
 
@@ -44,7 +44,7 @@ export async function runOutboxConsumer(consumer: any, log: any) {
               log.info(`WebhookOutbox with ID ${outboxId} has been processed`);
             } catch (error) {
               if (
-                error instanceof PrismaClientKnownRequestError &&
+                error instanceof Prisma.PrismaClientKnownRequestError &&
                 error.code === "P2025"
               ) {
                 log.warn(
