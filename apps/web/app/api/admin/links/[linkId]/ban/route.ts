@@ -8,7 +8,7 @@ import { waitUntil } from "@vercel/functions";
 import {
   OUTBOX_ACTIONS,
   REDIRECT_SERVER_BASE_URL,
-} from "kafka-consumer/actions";
+} from "kafka-consumer/utils/actions";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
