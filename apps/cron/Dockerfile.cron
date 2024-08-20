@@ -9,15 +9,10 @@ RUN ["npm", "install", "-g", "pnpm@9.1.3"]
 
 COPY . .
 
-ARG AWS_REGION
 ARG WEB_BASE
-ARG STORAGE_ACCESS_KEY_ID
-ARG STORAGE_SECRET_ACCESS_KEY
-ARG STORAGE_ENDPOINT
-ARG STORAGE_BASE_URL
 
 RUN ["pnpm", "i"]
 
 CMD ["sh", "-c", "node cron.ts"]
 
-EXPOSE 5000
+EXPOSE 5003

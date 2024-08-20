@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
       totalClicks: totalClicks._sum.clicks || 0,
     };
     const buf = Buffer.from(JSON.stringify(obj));
-    const { url } = await storage.upload("stats.json", buf);
+    const { url } = await storage.upload("public/stats.json", buf);
     console.log("url", url);
 
     return NextResponse.json({
