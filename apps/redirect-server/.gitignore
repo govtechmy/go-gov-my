@@ -1,5 +1,6 @@
 analytics-aggregator-offset
 logs/
+aggregator-failed-saves.log
 
 # MaxMind IP lookup database
 *.mmdb
