@@ -15,4 +15,4 @@ RUN ["pnpm", "i"]
 
 CMD ["sh", "-c", "node cron.ts"]
 
-EXPOSE 5003
+EXPOSE 5001
