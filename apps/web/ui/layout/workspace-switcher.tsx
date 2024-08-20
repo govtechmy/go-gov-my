@@ -82,7 +82,7 @@ export default function WorkspaceSwitcher() {
               width={20}
               height={20}
               alt={selected.id || selected.name}
-              className="h-8 w-8 flex-none overflow-hidden rounded-full"
+              className="h-8 w-8 flex-none overflow-hidden rounded-full object-cover"
             />
             <div
               className={`${
@@ -158,7 +158,7 @@ function WorkspaceList({
               width={20}
               height={20}
               alt={id}
-              className="h-7 w-7 shrink-0 overflow-hidden rounded-full"
+              className="h-7 w-7 shrink-0 overflow-hidden rounded-full object-cover"
             />
             <span
               className={`block truncate text-sm sm:max-w-[140px] ${
