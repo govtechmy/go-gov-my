@@ -36,7 +36,7 @@ export default function WorkspaceCard({
             <BlurImage
               src={logo || `${DICEBEAR_AVATAR_URL}${name}`}
               alt={id}
-              className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full"
+              className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full object-cover"
               width={48}
               height={48}
             />

@@ -30,6 +30,7 @@ type application struct {
 	kafkaProducer      sarama.SyncProducer
 	kafkaProducerTopic string
 	esRepo             *es.AnalyticRepo
+	failedSavesLogFile *os.File
 }
 
 type RedirectMetadataLog struct {
@@ -56,6 +57,7 @@ func main() {
 	var elasticUser string
 	var elasticPassword string
 	var groupID string
+	var failedSavesLogPath string
 	{
 		flag.StringVar(&kafkaAddr, "kafka-addr", os.Getenv("KAFKA_ADDR"), "Kafka address e.g. localhost:9092")
 		flag.StringVar(&kafkaProducerTopic, "producer-topic", "link_analytics", "Kafka producer topic")
@@ -65,6 +67,7 @@ func main() {
 		flag.StringVar(&elasticURL, "elastic-url", os.Getenv("ELASTIC_URL"), "Elasticsearch URL e.g. http://localhost:9200")
 		flag.StringVar(&elasticUser, "elastic-user", os.Getenv("ELASTIC_USER"), "Elasticsearch username")
 		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
+		flag.StringVar(&failedSavesLogPath, "failed-saves-path", os.Getenv("FAILED_SAVES_LOG_PATH"), "Path to a file that stores redirect metadatas which failed to save to Elasticsearch")
 	}
 	flag.Parse()
 
@@ -110,6 +113,15 @@ func main() {
 		}
 	}()
 
+	if failedSavesLogPath == "" {
+		log.Fatalln("FAILED_SAVES_LOG_PATH is not set")
+	}
+	failedSavesLogFile, err := os.OpenFile(failedSavesLogPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		panic(err)
+	}
+	defer failedSavesLogFile.Close()
+
 	// Send analytics every SEND_INTERVAL
 	ticker := time.NewTicker(SEND_INTERVAL)
 	defer ticker.Stop()
@@ -120,6 +132,7 @@ func main() {
 		kafkaProducer:      kafkaProducer,
 		kafkaProducerTopic: kafkaProducerTopic,
 		esRepo:             esRepo,
+		failedSavesLogFile: failedSavesLogFile,
 	}
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -191,6 +204,10 @@ func (app *application) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sar
 					err := app.saveIndividualMetadata(metadata)
 					if err != nil {
 						slog.Error("failed to save metadata to Elasticsearch", slog.String("errMessage", err.Error()))
+						err := app.saveIndividualMetadataToFallback(metadata)
+						if err != nil {
+							slog.Error("failed to save metadata to fallback", slog.String("errMessage", err.Error()))
+						}
 					}
 				}
 
@@ -298,4 +315,20 @@ func (app *application) sendAnalytics(linkAnalytics map[string]*repository.LinkA
 
 func (app *application) saveIndividualMetadata(metadata repository.RedirectMetadata) error {
 	return app.esRepo.SaveIndividualAnalytic(context.Background(), &metadata)
+}
+
+// Write the redirect metadata to a file in case saving to Elasticsearch fails
+func (app *application) saveIndividualMetadataToFallback(metadata repository.RedirectMetadata) error {
+	jsonData, err := json.Marshal(metadata)
+	if err != nil {
+		return err
+	}
+	jsonData = append(jsonData, '\n')
+
+	_, err = app.failedSavesLogFile.Write(jsonData)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

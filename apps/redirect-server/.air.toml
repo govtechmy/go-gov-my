@@ -4,7 +4,7 @@ tmp_dir = "tmp"
 
 [build]
   full_bin = """
-  ELASTIC_URL=http://localhost:9200 KAFKA_ADDR=localhost:9092 ./tmp/analytics-aggregator & 
+  ELASTIC_URL=http://localhost:9200 KAFKA_ADDR=localhost:9092 FAILED_SAVES_LOG_PATH=./aggregator-failed-saves.log ./tmp/analytics-aggregator & 
   ELSATIC_URL=http://localhost:9200 ./tmp/api & 
   ELASTIC_URL=http://localhost:9200 NEXTJS_BASE_URL=http://localhost:8888 LOG_FILE_PATH=./logs/redirectd.log ./tmp/redirectd
   """

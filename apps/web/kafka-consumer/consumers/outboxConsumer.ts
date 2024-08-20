@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { OutboxSchema } from "../models/OutboxSchema";
 import { retryWithDelay } from "../utils/retry";
 
@@ -38,7 +39,21 @@ export async function runOutboxConsumer(consumer: any, log: any) {
           });
 
           if (response.ok) {
-            await prisma.webhookOutbox.delete({ where: { id: outboxId } });
+            try {
+              await prisma.webhookOutbox.delete({ where: { id: outboxId } });
+              log.info(`WebhookOutbox with ID ${outboxId} has been processed`);
+            } catch (error) {
+              if (
+                error instanceof Prisma.PrismaClientKnownRequestError &&
+                error.code === "P2025"
+              ) {
+                log.warn(
+                  `WebhookOutbox with ID ${outboxId} was already processed before`,
+                );
+              } else {
+                throw error;
+              }
+            }
             await consumer.commitOffsets([
               {
                 topic,
@@ -46,7 +61,6 @@ export async function runOutboxConsumer(consumer: any, log: any) {
                 offset: (parseInt(message.offset, 10) + 1).toString(),
               },
             ]);
-            log.info(`WebhookOutbox row with ID ${outboxId} was deleted`);
           } else {
             throw new Error(
               `Response unsuccessful, status: ${response.status}`,
