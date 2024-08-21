@@ -124,6 +124,14 @@ func main() {
 		logger.Fatal("cannot load html templates", zap.Error(err))
 	}
 
+	redirectT, err := template.ParseFiles(
+		"templates/redirect/en-MY.html",
+		"templates/redirect/ms-MY.html",
+	)
+	if err != nil {
+		logger.Fatal("cannot load html (redirect) templates", zap.Error(err))
+	}
+
 	fs := http.FileServer(http.Dir("public"))
 	http.Handle("/public/", http.StripPrefix("/public/", fs))
 
@@ -225,7 +233,7 @@ func main() {
 		// Redirect URL could be a geo-specific/ios/android link.
 		redirectURL := redirectMetadata.LinkURL
 
-		if err := t.ExecuteTemplate(w, "wait.html", WaitPageProps{
+		if err := redirectT.ExecuteTemplate(w, "en-MY.html", WaitPageProps{
 			URL:         redirectURL,
 			Title:       link.Title,
 			Description: link.Description,
