@@ -7,12 +7,10 @@ WORKDIR /app
 #install pnpm first
 RUN ["npm", "install", "-g", "pnpm@9.1.3"]
 
-COPY . .
+COPY cron.ts /app
 
 ARG WEB_BASE
 
 RUN ["pnpm", "i"]
 
 CMD ["sh", "-c", "node cron.ts"]
-
-EXPOSE 5001
