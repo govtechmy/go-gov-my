@@ -9,7 +9,6 @@ RUN ["npm", "install", "-g", "pnpm@9.1.3"]
 
 COPY cron.js /app
 COPY package.json /app
-COPY package-lock.json /app
 
 RUN ["pnpm", "i"]
 
