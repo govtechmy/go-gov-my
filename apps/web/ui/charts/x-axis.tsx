@@ -64,12 +64,11 @@ export default function XAxis({
         tickFormat={(date) => tickFormat(date as Date)}
         tickLabelProps={(date, idx, { length }) => ({
           className: "transition-colors",
-          textAnchor:
-            idx === 0 ? "start" : idx === length - 1 ? "end" : "middle",
           fontSize: 12,
           fill: (tooltipData ? tooltipData.date === date : idx === length - 1)
             ? "#000"
             : "#00000066",
+          angle: 90,
         })}
       />
       {showGridLines && (
