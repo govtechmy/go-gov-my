@@ -5,20 +5,22 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
+    const api_key = req.headers.get("API_KEY");
+    if (api_key !== process.env.API_KEY) {
+      return NextResponse.json({
+        message: "WRONG API KEY",
+      });
+    }
+
     const userCount = await prisma.user.count();
 
-    console.log("userCount", userCount);
-
     const linkCount = await prisma.link.count();
-    console.log("linkCount", linkCount);
 
     const totalClicks = await prisma.link.aggregate({
       _sum: {
         clicks: true,
       },
     });
-
-    console.log("totalClicks", totalClicks);
 
     const obj = {
       userCount,
