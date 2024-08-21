@@ -20,15 +20,22 @@ export const colors = {
   brand300: "#96b7ff",
   brand200: "#c2d5ff",
   brand50: "#eff6ff",
+  brandTextOnlyDisabled: "#1d4ed866", // 40% opacity
 
   success300: "#83daa3",
   success200: "#bbf7d0",
   success50: "#f0fdf4",
 
+  grayTextOnlyDisabled: "#18181b66", // 40% opacity
+  grayWashed100: "#f4f4f5",
+  grayFocusWashed100: "#fafafa",
+  grayOutline300: "#d4d4d8",
+  grayDim500: "#71717a",
+
   whiteBackground0: "#ffffff",
   whiteFocusWhite100: "#ffffff",
   whiteFocusWhite200: "#ffffff",
-  whiteTextOnlyDisabled: "#ffffff66", // 40% opacity
+  whiteTextDisabled: "#ffffff66", // 40% opacity
   whiteForceWhite: "#ffffff",
 };
 
@@ -53,15 +60,22 @@ export const darkColors = {
   brand300: "#1e40af",
   brand200: "#1e3a8a",
   brand50: "#0f1836",
+  brandTextOnlyDisabled: "#588bfb66", // 40% opacity
 
   success300: "#166534",
   success200: "#14532d",
   success50: "#052e16",
 
+  grayTextOnlyDisabled: "#a1a1aa66", // 40% opacity
+  grayWashed100: "#1d1d21",
+  grayFocusWashed100: "#27272a",
+  grayOutline300: "#3f3f46",
+  grayDim500: "#a1a1aa",
+
   whiteBackground0: "#161619",
   whiteFocusWhite100: "#1d1d21",
   whiteFocusWhite200: "#27272a",
-  whiteTextOnlyDisabled: "#ffffff66", // 40% opacity
+  whiteTextDisabled: "#ffffff66", // 40% opacity
   whiteForceWhite: "#ffffff",
 };
 

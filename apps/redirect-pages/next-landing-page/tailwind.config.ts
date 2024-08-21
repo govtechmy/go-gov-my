@@ -23,19 +23,8 @@ const config: Config = {
       },
     },
     extend: {
-      gridTemplateColumns: {
-        16: "repeat(16, minmax(0, 1fr))",
-      },
       animation: {
-        ["cycle"]: "cycle", // Set duration using inline style
-      },
-      keyframes: {
-        ["cycle"]: {
-          "0%": { opacity: "1", transform: "translateY(0)" },
-          "25%": { opacity: "0", transform: "translateY(-8px)" },
-          "50%": { opacity: "0", transform: "translateY(8px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
+        // Define additional animations here
       },
       backgroundImage: {
         // Define gradient backgrounds here
@@ -46,11 +35,12 @@ const config: Config = {
       },
       colors: {
         brand: {
-          50: "rgb(var(--brand-50) / <alpha-value>)",
-          200: "rgb(var(--brand-200) / <alpha-value>)",
-          300: "rgb(var(--brand-300) / <alpha-value>)",
-          600: colors.blue[600],
-          700: colors.blue[700],
+          ["50"]: "rgb(var(--brand-50) / <alpha-value>)",
+          ["200"]: "rgb(var(--brand-200) / <alpha-value>)",
+          ["300"]: "rgb(var(--brand-300) / <alpha-value>)",
+          ["600"]: colors.blue[600],
+          ["700"]: colors.blue[700],
+          ["text_only-disabled"]: "rgb(var(--brand-text_only-disabled) / 0.4)",
         },
         foreground: {
           DEFAULT: "rgb(var(--brand-700) / <alpha-value>)",
@@ -76,6 +66,14 @@ const config: Config = {
           800: "rgb(var(--black-800) / <alpha-value>)",
           900: "rgb(var(--black-900) / <alpha-value>)",
         },
+        gray: {
+          ["text_only-disabled"]: "rgb(var(--gray-text_only-disabled) / 0.4)",
+          ["washed-100"]: "rgb(var(--gray-washed-100) / <alpha-value>)",
+          ["focus_washed-100"]:
+            "rgb(var(--gray-focus_washed-100) / <alpha-value>)",
+          ["outline-300"]: "rgb(var(--gray-outline-300) / <alpha-value>)",
+          ["dim-500"]: "rgb(var(--gray-dim-500) / <alpha-value>)",
+        },
         success: {
           50: "rgb(var(--success-50) / <alpha-value>)",
           200: "rgb(var(--success-200) / <alpha-value>)",
@@ -98,12 +96,14 @@ const config: Config = {
         body: ["var(--font-inter)"],
       },
       fontSize: {
-        ["control_sm"]: ["14px", "20px"],
         ["xs"]: ["12px", "18px"],
         ["sm"]: ["14px", "20px"],
         ["base"]: ["16px", "24px"],
         ["lg"]: ["18px", "26px"],
         ["xl"]: ["20px", "30px"],
+      },
+      keyframes: {
+        // Define additional keyframes here
       },
       spacing: {
         4.5: "18px",

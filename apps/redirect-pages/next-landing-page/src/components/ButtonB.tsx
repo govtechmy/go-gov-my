@@ -5,33 +5,45 @@ import { ReactNode } from "react";
 
 type Props = {
   target?: "_blank" | "_self" | "_parent" | "_top";
+  rel?: ("noreferrer" | "noopener")[];
   href?: string;
   iconEnd?: JSX.Element;
   disabled?: boolean;
   className?: string;
   children: ReactNode;
-  // TODO: To support more variants
-  variant: "primary";
+  variant: "primary" | "tertiary" | "tertiaryColor";
   size: "small" | "medium" | "large";
 };
 
 // TODO: To support dark mode
 const variants = cva(
   cn(
-    "text-black-700 text-pretty text-[1rem] text-start leading-[1.5rem] text-paragraph",
+    "focus:outline-none focus:ring-[0.1875rem]",
+    "rounded-[0.5rem]",
+    "font-medium",
+    "text-pretty text-[1rem] text-start leading-[1.5rem] text-paragraph",
+    "data-[disabled=true]:pointer-events-none",
+    "transition-transform active:translate-y-[0.0625rem]",
   ),
   {
     variants: {
       variant: {
         primary: cn(
-          "rounded-[0.5rem]",
-          "border border-brand-600 hover:border-brand-700 focus:border-brand-600 data-[disabled=true]:border-brand-200",
+          "focus:ring-brand-600/40",
+          "border border-brand-600 hover:border-brand-700 data-[disabled=true]:border-brand-200",
           "bg-brand-600 hover:bg-brand-700 focus:bg-brand-600 data-[disabled=true]:bg-brand-200",
           "text-white-force_white data-[disabled=true]:text-white-text_only-disabled",
-          "font-medium",
           "shadow-button",
-          "transition-transform active:translate-y-[0.0625rem]",
-          "data-[disabled=true]:pointer-events-none",
+        ),
+        tertiary: cn(
+          "focus:ring-brand-600/40",
+          "hover:bg-gray-focus_washed-100 focus:bg-white-force_white",
+          "text-black-700 data-[disabled=true]:text-gray-text_only-disabled",
+        ),
+        tertiaryColor: cn(
+          "focus:ring-brand-600/40",
+          "hover:bg-brand-50 focus:bg-white-force_white",
+          "text-brand-600 data-[disabled=true]:text-brand-text_only-disabled",
         ),
       },
       size: {
@@ -76,7 +88,12 @@ export default function ButtonB(props: Props) {
   );
 
   return props.href ? (
-    <a href={props.href} target={props.target} {...commonProps}>
+    <a
+      href={props.href}
+      rel={props.rel && props.rel.join(" ")}
+      target={props.target}
+      {...commonProps}
+    >
       {body}
     </a>
   ) : (

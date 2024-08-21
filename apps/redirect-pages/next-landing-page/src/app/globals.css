@@ -25,10 +25,17 @@
     --brand-300: 150 183 255;
     --brand-200: 194 213 255;
     --brand-50: 239 246 255;
+    --brand-text_only-disabled: 29, 78, 216;
 
     --success-300: 131 218 163;
     --success-200: 187 247 208;
     --success-50: 240 253 244;
+
+    --gray-text_only-disabled: 24 24 27;
+    --gray-washed-100: 244 244 245;
+    --gray-focus_washed-100: 244 244 245;
+    --gray-outline-300: 212 212 216;
+    --gray-dim-500: 113 113 122;
 
     --white-text_only-disabled: 255 255 255;
     --white-focus_white-200: 255 255 255;
@@ -58,12 +65,19 @@
     --brand-300: 30 64 175;
     --brand-200: 30 58 138;
     --brand-50: 15 24 54;
+    --brand-text_only-disabled: 88, 139, 251;
 
     --success-300: 22 101 52;
     --success-200: 20 83 45;
     --success-50: 5 46 22;
 
-    --white-text_only-disabled: 63 63 70;
+    --gray-text_only-disabled: 161 161 170;
+    --gray-washed-100: 29 29 33;
+    --gray-focus_washed-100: 39 39 42;
+    --gray-outline-300: 63 63 70;
+    --gray-dim-500: 161 161 170;
+
+    --white-text-disabled: 63 63 70;
     --white-focus_white-200: 39 39 42;
     --white-focus_white-100: 29 29 33;
     --white-background-0: 22 22 25;
