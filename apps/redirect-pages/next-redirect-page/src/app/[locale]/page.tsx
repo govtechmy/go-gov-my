@@ -13,7 +13,7 @@ type Props = {
   params: { locale: string };
 };
 
-const URL = "https://www.google.com";
+const URL = "{{.URL}}";
 const REDIRECT_SECONDS = 10;
 
 const quickLinks = [
