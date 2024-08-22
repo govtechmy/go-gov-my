@@ -1,16 +1,20 @@
-import { unstable_setRequestLocale } from "next-intl/server";
 import AnimatedRoundedText from "@/components/AnimatedRoundedText";
 import Action from "@/components/home/Action";
 import Hero from "@/components/home/Hero";
 import Preview from "@/components/home/Preview";
 import Stats from "@/components/home/Stats";
 import { keypath } from "@/lib/i18n";
-import { useTranslations } from "next-intl";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import React, { ReactNode } from "react";
 
 type Props = {
   params: { locale: string };
+};
+
+type StatsJson = {
+  userCount: number;
+  linkCount: number;
+  totalClicks: number;
 };
 
 const SEGMENTS = [
@@ -28,11 +32,16 @@ const SEGMENTS = [
 const ACTION_BASE_PATH = "pages.Home.Action";
 const PREVIEW_BASE_PATH = "pages.Home.Preview";
 
+async function getStats() {
+  const response = await fetch(process.env.STAT_JSON_URL);
+  return (await response.json()) as StatsJson;
+}
+
 export default async function Home({ params: { locale } }: Props) {
   unstable_setRequestLocale(locale);
 
-  // const t = useTranslations();
   const t = await getTranslations();
+  const stats = await getStats();
 
   return (
     <Main>
@@ -61,7 +70,13 @@ export default async function Home({ params: { locale } }: Props) {
           animation: item.animation,
         }))}
       />
-      <Stats />
+      <Stats
+        total={{
+          users: stats.userCount,
+          links: stats.linkCount,
+          clicks: stats.totalClicks,
+        }}
+      />
       <Action
         title={t(action.titleKey)}
         description={t.rich(action.descriptionKey, {

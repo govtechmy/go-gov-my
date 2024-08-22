@@ -16,6 +16,11 @@ import StatNumber from "./StatNumber";
 import StatTag from "./StatTag";
 
 type Props = {
+  total: {
+    users: number;
+    links: number;
+    clicks: number;
+  };
   className?: string;
 };
 
@@ -43,9 +48,9 @@ export default function Stats(props: Props) {
   const [currentSegment, setCurrentSegment] = useState(SEGMENT_PUBLIC_OFFICERS);
 
   const data = {
-    publicOfficers: 126065,
-    linksCreated: 7875789,
-    clicksServed: 7651587,
+    publicOfficers: props.total.users,
+    linksCreated: props.total.links,
+    clicksServed: props.total.clicks,
   };
 
   const [counters, setCounters] = useState([
