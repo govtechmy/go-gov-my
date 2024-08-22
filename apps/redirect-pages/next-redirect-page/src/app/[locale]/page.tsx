@@ -23,7 +23,7 @@ const quickLinks = [
     },
     href: "https://www.malaysia.gov.my/portal/",
     img: {
-      src: "/jata-negara.png",
+      src: `${process.env.ASSET_PREFIX}/jata-negara.png`,
       alt: {
         key: "pages.index.quickLinks.governmentOfMalaysia.img.alt",
       },
@@ -35,7 +35,7 @@ const quickLinks = [
     },
     href: "https://go.gov.my/",
     img: {
-      src: "/logo.svg",
+      src: `${process.env.ASSET_PREFIX}/logo.svg`,
       alt: {
         key: "pages.index.quickLinks.goGovMy.img.alt",
       },
@@ -80,6 +80,7 @@ export default async function Home({ params: { locale } }: Props) {
             })}
           </Paragraph>
           <AnimationCheckLink
+            src={`${process.env.ASSET_PREFIX}/rive/animation.riv`}
             className={cn(
               "mt-[1.5rem] md:mt-[2.5rem]",
               "overflow-hidden rounded-[2rem]",

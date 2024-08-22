@@ -5,12 +5,13 @@ import Rive from "@rive-app/react-canvas";
 
 type Props = {
   className?: string;
+  src: string;
 };
 
 export default function AnimationCheckLink(props: Props) {
   return (
     <Rive
-      src="/rive/animation.riv"
+      src={props.src}
       stateMachines="single"
       artboard="gogov"
       className={cn(

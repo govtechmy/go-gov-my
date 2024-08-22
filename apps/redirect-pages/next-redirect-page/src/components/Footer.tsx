@@ -28,7 +28,7 @@ export default function Footer(props: Props) {
           <div className="flex flex-col gap-4 lg:gap-4.5">
             <div className="flex items-center gap-x-2.5">
               <Image
-                src="/jata-negara.png"
+                src={`{process.env.ASSET_PREFIX}/jata-negara.png`}
                 width={28}
                 height={28}
                 className="h-auto w-auto"

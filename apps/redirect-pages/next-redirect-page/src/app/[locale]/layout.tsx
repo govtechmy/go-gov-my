@@ -38,21 +38,24 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "metadata" });
 
   return {
-    title: t("title"),
-    description: t("description"),
+    title: "{{.Title}}",
+    description: "{{.Description}}",
     openGraph: {
-      title: t("title"),
-      description: t("description"),
+      title: "{{.Title}}",
+      description: "{{.Description}}",
       siteName: t("openGraph.url.index", { baseUrl: process.env.APP_URL }),
       type: "website",
-      images: [
-        {
-          url: t("openGraph.images.1.url"),
-          alt: t("openGraph.images.1.alt"),
-          width: 1200,
-          height: 630,
-        },
-      ],
+    },
+    // Specfiy og images in 'other' instead of 'openGraph'. Otherwise, the
+    // template value '{{.ImageURL}}' will be considered a path and transformed
+    // to 'https://oursite.com/%7B%7B.ImageURL%7D%7D'
+    other: {
+      "og:image": "{{.ImageURL}}",
+      "og:image:width": 1200,
+      "og:image:hieght": 630,
+      "twitter:image": "{{.ImageURL}}",
+      "twitter:image:width": 1200,
+      "twitter:image:hieght": 630,
     },
   };
 }
