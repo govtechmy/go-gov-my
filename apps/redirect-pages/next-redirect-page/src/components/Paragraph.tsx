@@ -11,7 +11,7 @@ type Props = {
 };
 
 const variants = cva(
-  "text-black-700 text-pretty text-[1rem] text-start leading-[1.5rem] text-paragraph",
+  "text-black-700 text-pretty text-[1rem] text-start leading-[1.5rem]",
   {
     variants: {
       textSize: {

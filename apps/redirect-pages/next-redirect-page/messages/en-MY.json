@@ -30,7 +30,7 @@
 				"description": "You'll be redirected in <duration></duration>."
 			},
 			"links": {
-				"skip": "I have checked.<br></br> Skip ahead."
+				"skip": "I've checked the link.<br></br> Skip ahead."
 			},
 			"quickLinks": {
 				"governmentOfMalaysia": {

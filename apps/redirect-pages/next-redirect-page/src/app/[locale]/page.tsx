@@ -61,14 +61,14 @@ export default async function Home({ params: { locale } }: Props) {
         <Heading level={2} className="text-center md:text-start">
           {t("pages.index.verify.title")}
         </Heading>
-        <Paragraph textAlign="center" className="mt-[0.75rem] md:mt-[1rem]">
+        <Paragraph
+          textSize="small"
+          textAlign="center"
+          className="mt-[0.75rem] md:mt-[1rem]"
+        >
           {t.rich("pages.index.verify.description", {
             em: (chunks) => (
-              <RoundedText
-                variant="primary"
-                weight="medium"
-                className="mb-10 me-2 rounded-full bg-blue-50 px-2.5 py-1 text-blue-600 dark:bg-blue-900 dark:text-blue-300"
-              >
+              <RoundedText variant="primary" weight="medium" textSize="small">
                 go.gov.my
               </RoundedText>
             ),
@@ -78,6 +78,7 @@ export default async function Home({ params: { locale } }: Props) {
           className={cn(
             "mt-[1.5rem] md:mt-[2.5rem]",
             "overflow-hidden rounded-[2rem]",
+            "border-gray-outline-200 border",
           )}
         />
         <ButtonB

@@ -6,6 +6,7 @@ type Props = {
   className?: string;
   children: ReactNode;
   variant: "primary" | "outlined";
+  textSize?: "small";
   weight?: "medium";
   padding?: "small";
   borderRadius?: "small";
@@ -18,8 +19,11 @@ const variants = cva(cn("rounded-full", "px-[0.5rem] py-[0.25rem]"), {
       primary: "bg-brand-50 text-brand-600",
       outlined: "bg-transparent border-outline-200 border",
     },
+    textSize: {
+      small:
+        "text-[0.75rem] leading-[1.125rem] md:text-[1rem] md:leading-[1.5rem]",
+    },
     weight: {
-      normal: "",
       medium: "font-medium",
     },
     padding: {
@@ -42,6 +46,7 @@ export default function RoundedText(props: Props) {
         variants({
           variant: props.variant,
           weight: props.weight,
+          textSize: props.textSize,
           padding: props.padding,
           borderRadius: props.borderRadius,
         }),
