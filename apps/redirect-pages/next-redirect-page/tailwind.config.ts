@@ -23,6 +23,9 @@ const config: Config = {
       },
     },
     extend: {
+      screens: {
+        tall: { raw: "(min-height: 720px)" },
+      },
       animation: {
         // Define additional animations here
       },
