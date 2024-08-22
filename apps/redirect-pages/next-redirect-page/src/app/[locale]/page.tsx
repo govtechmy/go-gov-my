@@ -82,7 +82,7 @@ export default async function Home({ params: { locale } }: Props) {
           )}
         />
         <ButtonB
-          variant="tertiaryColor"
+          variant="primary"
           size="large"
           href={URL}
           rel={["noreferrer", "noopener"]}
