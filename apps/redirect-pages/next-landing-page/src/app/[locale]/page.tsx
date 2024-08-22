@@ -33,7 +33,14 @@ const ACTION_BASE_PATH = "pages.Home.Action";
 const PREVIEW_BASE_PATH = "pages.Home.Preview";
 
 async function getStats() {
-  const response = await fetch(process.env.STAT_JSON_URL);
+  const url = process.env.LANDING_STATS_JSON_URL;
+
+  if (!url) {
+    throw new Error("LANDING_STATS_JSON_URL is not set");
+  }
+
+  const response = await fetch(url);
+
   return (await response.json()) as StatsJson;
 }
 
