@@ -14,9 +14,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    env:
-      LANDING_STATS_JSON_URL: https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com/public/stats.json
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -37,6 +34,8 @@ jobs:
       - name: Generate static site
         run: npm run generate
         working-directory: ${{ env.WORK_DIR }}
+        env:
+          LANDING_STATS_JSON_URL: https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com/public/stats.json
 
       - name: Install AWS CLI
         run: sudo apt-get install -y awscli
