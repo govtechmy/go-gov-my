@@ -61,7 +61,15 @@ export default function XAxis({
         tickValues={tickValues}
         hideTicks
         stroke="#00000026"
-        tickFormat={(date) => tickFormat(date as Date)}
+        tickFormat={(date, idx, { length }) => {
+          // We hide every 5th, 7th, 9th, ... label after a certain length to
+          // avoid the labels from overlapping each other
+          const hidden = length > 4 && idx % 2 !== 0;
+          if (hidden) {
+            return undefined;
+          }
+          return tickFormat(date as Date);
+        }}
         tickLabelProps={(date, idx, { length }) => ({
           className: "transition-colors",
           textAnchor:
