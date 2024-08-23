@@ -34,7 +34,7 @@ export default function XAxis({
   const { tooltipData } = useChartTooltipContext();
 
   const tickValues = useMemo(() => {
-    const maxTicks = maxTicksProp ?? width < 450 ? 4 : width < 600 ? 6 : 8;
+    const maxTicks = maxTicksProp ?? width < 450 ? 2 : width < 600 ? 4 : 6;
 
     const tickInterval =
       getFactors(data.length).find((f) => (data.length + 1) / f <= maxTicks) ??
@@ -61,15 +61,7 @@ export default function XAxis({
         tickValues={tickValues}
         hideTicks
         stroke="#00000026"
-        tickFormat={(date, idx, { length }) => {
-          // We hide every 5th, 7th, 9th, ... label after a certain length to
-          // avoid the labels from overlapping each other
-          const hidden = length > 4 && idx % 2 !== 0;
-          if (hidden) {
-            return undefined;
-          }
-          return tickFormat(date as Date);
-        }}
+        tickFormat={(date) => tickFormat(date as Date)}
         tickLabelProps={(date, idx, { length }) => ({
           className: "transition-colors",
           textAnchor:
