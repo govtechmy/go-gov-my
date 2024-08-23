@@ -39,8 +39,8 @@ function TimeSeriesChartInner<T extends Datum>({
   tooltipContent = (d) => series[0].valueAccessor(d).toString(),
   margin: marginProp = {
     top: 12,
-    right: 12,
-    bottom: 80,
+    right: 4,
+    bottom: 32,
     left: 4,
   },
   padding = {
