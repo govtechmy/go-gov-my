@@ -20,7 +20,7 @@ export default function Masthead() {
         "z-[99]",
         open
           ? "bg-gradient-to-b from-washed-100 from-[84.74%] to-outline-200 to-100%"
-          : "bg-washed-100"
+          : "bg-washed-100",
       )}
     >
       <div className="container xl:px-0">
@@ -28,14 +28,14 @@ export default function Masthead() {
           className="h-[2.25rem] w-full md:h-[1.75rem]"
           onClick={() => setOpen(!open)}
         >
-          <div className="flex flex-wrap items-center gap-1.5 text-sm/4 text-brand-700 max-sm:justify-between sm:py-1">
+          <div className="max-sm:justify-between flex flex-wrap items-center gap-1.5 text-sm/4 text-brand-700 sm:py-1">
             <div className="flex items-center gap-1.5">
               <FlagMY className="h-[1rem] w-[2rem]" />
               <span className="text-black-700">
                 {t("official_gov_website")}
               </span>
             </div>
-            <div className="flex items-center gap-0.5 max-sm:rounded-md max-sm:bg-outline-200 max-sm:px-1">
+            <div className="max-sm:rounded-md max-sm:bg-outline-200 max-sm:px-1 flex items-center gap-0.5">
               <span className="hidden tracking-[-0.01em] sm:block">
                 {t("how_to_identify")}
               </span>
@@ -54,7 +54,7 @@ export default function Masthead() {
             <div className="flex gap-3">
               <GovMY className="size-[1.5rem] shrink-0 text-dim-500" />
               <div className="space-y-1.5">
-                <p className="font-medium max-sm:text-sm">{t("official")}</p>
+                <p className="max-sm:text-sm font-medium">{t("official")}</p>
                 <p className="max-w-prose text-balance text-sm text-black-700">
                   {t("not_govmy")}
                   <span className="font-semibold">.gov.my</span>
@@ -65,7 +65,7 @@ export default function Masthead() {
             <div className="flex gap-3">
               <EncryptedLock className="size-[1.5rem] shrink-0 text-dim-500" />
               <div className="space-y-1.5">
-                <p className="font-medium max-sm:text-sm">{t("secure")}</p>
+                <p className="max-sm:text-sm font-medium">{t("secure")}</p>
                 <div className="max-w-prose text-balance text-sm text-black-700">
                   {t("find_lock")}{" "}
                   <SolidLock className="-ml-[3px] mb-0.5 mr-px inline size-3.5" />

@@ -12,7 +12,7 @@ export default function BorderedSection(props: Props) {
     <section
       id={props.id}
       className={cn(
-        "lg:border-washed-100 container lg:border-x",
+        "container lg:border-x lg:border-washed-100",
         props.className,
       )}
     >
