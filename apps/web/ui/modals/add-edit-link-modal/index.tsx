@@ -61,6 +61,7 @@ import IOSSection from "./ios-section";
 import OGSection from "./og-section";
 import PasswordSection from "./password-section";
 import Preview from "./preview";
+import RefererBanSection from "./referer-ban-section.tsx";
 import TagsSection from "./tags-section";
 import UTMSection from "./utm-section";
 
@@ -686,6 +687,7 @@ function AddEditLinkModal({
 
             <div className="grid gap-5 px-4 md:px-16">
               <TagsSection {...{ props, data, setData }} />
+              <RefererBanSection {...{ props, data, setData }} />
               <CommentsSection {...{ props, data, setData }} />
               <UTMSection {...{ props, data, setData }} />
               <OGSection
@@ -830,6 +832,8 @@ export function useAddEditLinkModal({
   homepageDemo?: boolean;
 } = {}) {
   const [showAddEditLinkModal, setShowAddEditLinkModal] = useState(false);
+
+  console.log("xxxxx", props, duplicateProps);
 
   const AddEditLinkModalCallback = useCallback(() => {
     return (

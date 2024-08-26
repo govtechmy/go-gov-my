@@ -65,6 +65,7 @@ export const POST = withWorkspace(
     }
 
     try {
+      console.log("yyyyyy", link);
       const response = await createLink(link, {
         sessionUserId: session.user.id,
       });

@@ -15,6 +15,7 @@ import (
 	"redirect-server/repository"
 	"redirect-server/repository/es"
 	"redirect-server/utils"
+	"slices"
 	"strings"
 	"syscall"
 	"time"
@@ -37,6 +38,15 @@ type WaitPageProps struct {
 type AuthPageProps struct {
 	Slug          string
 	WrongPassword bool
+}
+
+func extractDomain(rawURL string) string {
+	reformedURL := strings.Replace(rawURL, "https://", "", 1)
+	reformedURL = strings.Replace(reformedURL, "http://", "", 1)
+	if strings.Contains(reformedURL, "/") {
+		reformedURL = strings.Split(reformedURL, "/")[0]
+	}
+	return reformedURL
 }
 
 func main() {
@@ -183,6 +193,16 @@ func main() {
 
 		// If a link is banned, respond with the not found page
 		if link.Banned {
+			w.WriteHeader(http.StatusNotFound)
+			if err := t.ExecuteTemplate(w, "notfound.html", nil); err != nil {
+				logger.Error("failed to execute template", zap.Error(err))
+			}
+			return
+		}
+
+		referer := r.Header.Get("referer")
+		refererSplice := strings.Split(link.DisallowedReferer, ",")
+		if slices.Contains(refererSplice, referer) {
 			w.WriteHeader(http.StatusNotFound)
 			if err := t.ExecuteTemplate(w, "notfound.html", nil); err != nil {
 				logger.Error("failed to execute template", zap.Error(err))

@@ -33,7 +33,10 @@ export async function createLink(
   const { utm_source, utm_medium, utm_campaign, utm_term, utm_content } =
     getParamsFromURL(url);
 
-  const { tagId, tagIds, tagNames, ...rest } = link;
+  const { tagId, tagIds, tagNames, disallowedReferer, ...rest } = link;
+
+  // console.log("linkxxx", link)
+  // return
 
   const response = await prisma.link.create({
     data: {
@@ -50,6 +53,7 @@ export async function createLink(
       utm_content,
       expiresAt: expiresAt ? new Date(expiresAt) : null,
       geo: geo || Prisma.JsonNull,
+      disallowedReferer,
 
       // Associate tags by tagNames
       ...(tagNames?.length &&

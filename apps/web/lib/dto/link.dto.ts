@@ -15,6 +15,7 @@ export interface LinkDTO {
   password: string | null;
   banned: boolean;
   createdAt: Date | null;
+  disallowedReferer: string | null;
 }
 
 // This should be able to reuse anywhere.
@@ -36,6 +37,7 @@ export async function processDTOLink(response: LinkProps): Promise<LinkDTO> {
     password: response.password,
     banned: response.banned,
     createdAt: response.createdAt,
+    disallowedReferer: response.disallowedReferer,
   };
 
   return linkDTO;

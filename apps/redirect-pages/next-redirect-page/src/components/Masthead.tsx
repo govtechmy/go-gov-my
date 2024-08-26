@@ -55,7 +55,7 @@ export default function Masthead() {
               <GovMY className="size-[1.5rem] shrink-0 text-dim-500" />
               <div className="space-y-1.5">
                 <p className="max-sm:text-sm font-medium">{t("official")}</p>
-                <p className="max-w-prose text-balance text-sm text-black-700">
+                <p className="text-balance max-w-prose text-sm text-black-700">
                   {t("not_govmy")}
                   <span className="font-semibold">.gov.my</span>
                   {t("close_site")}
@@ -66,9 +66,9 @@ export default function Masthead() {
               <EncryptedLock className="size-[1.5rem] shrink-0 text-dim-500" />
               <div className="space-y-1.5">
                 <p className="max-sm:text-sm font-medium">{t("secure")}</p>
-                <div className="max-w-prose text-balance text-sm text-black-700">
+                <div className="text-balance max-w-prose text-sm text-black-700">
                   {t("find_lock")}{" "}
-                  <SolidLock className="-ml-[3px] mb-0.5 mr-px inline size-3.5" />
+                  <SolidLock className="size-3.5 -ml-[3px] mb-0.5 mr-px inline" />
                   {t("or")}
                   <span className="font-semibold">https://</span>
                   {t("precaution")}
