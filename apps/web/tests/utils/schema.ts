@@ -8,6 +8,7 @@ export const expectedLink: Partial<Link> & { tagId: string | null } = {
   domain: SHORT_DOMAIN,
   trackConversion: false,
   archived: false,
+  banned: false,
   expiresAt: null,
   password: null,
   proxy: false,
