@@ -1,19 +1,8 @@
 import { LinkProps } from "@/lib/types";
 import { Button, InfoTooltip, SimpleTooltipContent, Switch } from "@dub/ui";
-import {
-  FADE_IN_ANIMATION_SETTINGS,
-  getParamsFromURL,
-  paramsMetadata,
-} from "@dub/utils";
+import { FADE_IN_ANIMATION_SETTINGS } from "@dub/utils";
 import { motion } from "framer-motion";
-import {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 
 export default function RefererBanSection({
   props,
@@ -27,16 +16,7 @@ export default function RefererBanSection({
   const [refererList, setRefererList] = useState<string[] | null>([]);
   const refererRef = useRef<HTMLInputElement>(null);
 
-  const { url } = data;
-
-  const params = useMemo(() => {
-    console.log(getParamsFromURL(url));
-    return getParamsFromURL(url);
-  }, [url]);
-
-  const [enabled, setEnabled] = useState(
-    paramsMetadata.some((param) => params[param.key]),
-  );
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
     setData({
@@ -57,6 +37,12 @@ export default function RefererBanSection({
       setData({ ...data, disallowedReferer: null });
     }
   }, [enabled]);
+
+  function extractHostname(url: string): string | null {
+    const regex = /^(?:https?:\/\/)?(?:www\.)?([^\.]+)/i;
+    const match = url.match(regex);
+    return match ? match[1] : null;
+  }
 
   return (
     <div className="relative border-b border-gray-200 pb-5">
@@ -100,7 +86,7 @@ export default function RefererBanSection({
               if (!refererList) return;
               if (refererList.find((value) => value === toAdd)) return;
               if (toAdd && toAdd != "") {
-                setRefererList([...refererList, toAdd]);
+                setRefererList([...refererList, extractHostname(toAdd)]);
                 refererRef.current.value = "";
               }
             }}
