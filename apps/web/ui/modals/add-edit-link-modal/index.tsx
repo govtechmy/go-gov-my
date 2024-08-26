@@ -833,8 +833,6 @@ export function useAddEditLinkModal({
 } = {}) {
   const [showAddEditLinkModal, setShowAddEditLinkModal] = useState(false);
 
-  console.log("xxxxx", props, duplicateProps);
-
   const AddEditLinkModalCallback = useCallback(() => {
     return (
       <AddEditLinkModal

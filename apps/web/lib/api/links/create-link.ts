@@ -35,9 +35,6 @@ export async function createLink(
 
   const { tagId, tagIds, tagNames, disallowedReferer, ...rest } = link;
 
-  // console.log("linkxxx", link)
-  // return
-
   const response = await prisma.link.create({
     data: {
       ...rest,
