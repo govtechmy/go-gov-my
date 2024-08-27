@@ -38,10 +38,10 @@ export default function RefererBanSection({
     }
   }, [enabled]);
 
-  function extractHostname(url: string): string | null {
+  function extractHostname(url: string): string {
     const regex = /^(?:https?:\/\/)?(?:www\.)?([^\.]+)/i;
     const match = url.match(regex);
-    return match ? match[1] : null;
+    return match ? match[1] : "";
   }
 
   return (
@@ -83,10 +83,15 @@ export default function RefererBanSection({
             onClick={() => {
               // CHECK IF ALREADY ADDED
               const toAdd = refererRef?.current?.value;
-              if (!refererList) return;
-              if (refererList.find((value) => value === toAdd)) return;
-              if (toAdd && toAdd != "") {
-                setRefererList([...refererList, extractHostname(toAdd)]);
+              if (!refererList) return; // if no refererList , quit
+              if (refererList.find((value) => value === toAdd)) return; // if referrer list already have the referer, quit, no duplicate
+              if (!toAdd) return; // if input box is empty, quit
+              const extractedHostName = extractHostname(toAdd);
+              if (extractedHostName && extractedHostName != "") {
+                setRefererList([
+                  ...refererList,
+                  extractHostname(extractedHostName),
+                ]);
                 refererRef.current.value = "";
               }
             }}
