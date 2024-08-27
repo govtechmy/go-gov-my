@@ -1,18 +1,17 @@
 import { nonHooki18nFunc } from "@/lib/middleware/utils/useI18n";
 import { getLink } from "@/lib/userinfos";
 import Analytics from "@/ui/analytics";
-import { constructMetadata } from "@dub/utils";
+import { APP_DOMAIN, constructMetadata, SHORT_DOMAIN } from "@dub/utils";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-
-export const runtime = "edge";
 
 export async function generateMetadata({
   params,
 }: {
-  params: { domain: string; key: string; locale: string };
+  params: { key: string; locale: string };
 }) {
-  const data = await getLink(params);
+  const domain = SHORT_DOMAIN;
+  const data = await getLink({ domain, key: params.key });
 
   // if the link doesn't exist or is explicitly private (publicStats === false)
   if (!data?.publicStats) {
@@ -20,17 +19,18 @@ export async function generateMetadata({
   }
   const { messages } = nonHooki18nFunc(params.locale);
   return constructMetadata({
-    title: `${messages?.metadata?.analytics} ${params.domain}/${params.key} – ${process.env.NEXT_PUBLIC_APP_NAME}`,
-    image: `https://${params.domain}/api/og/analytics?domain=${params.domain}&key=${params.key}`,
+    title: `${messages?.metadata?.analytics} ${domain}/${params.key} – ${process.env.NEXT_PUBLIC_APP_NAME}`,
+    image: `${APP_DOMAIN}/api/og/analytics?domain=${domain}&key=${params.key}`,
   });
 }
 
 export default async function StatsPage({
   params,
 }: {
-  params: { domain: string; key: string };
+  params: { key: string };
 }) {
-  const data = await getLink(params);
+  const domain = SHORT_DOMAIN;
+  const data = await getLink({ domain, key: params.key });
 
   if (!data?.publicStats) {
     notFound();
@@ -39,7 +39,7 @@ export default async function StatsPage({
   return (
     <Suspense fallback={<div className="h-screen w-full bg-gray-50" />}>
       {data && data.url && (
-        <Analytics staticDomain={params.domain} staticUrl={data.url} />
+        <Analytics staticDomain={domain} staticUrl={data.url} />
       )}
     </Suspense>
   );
