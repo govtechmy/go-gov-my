@@ -18,10 +18,18 @@
 		"name": "GoGovMY"
 	},
 	"common": {
-		"seconds": "{count, plural, =0 {0 saat} =1 {1 saat} other {# saat}}"
+		"seconds": "{count, plural, =0 {0 saat} =1 {1 saat} other {# saat}}",
+		"continue": "Teruskan",
+		"placeholders": {
+			"password": "Masukkan kata laluan"
+		}
 	},
 	"pages": {
 		"index": {
+			"password": {
+				"title": "Kata laluan diperlukan",
+				"description": "Sila masukkan kata laluan untuk melihat pautan dilindungi."
+			},
 			"verify": {
 				"title": "Sahkan bar alamat anda",
 				"description": "Berhati-hati dengan phishing, pastikan URL bermula dengan <em></em>"

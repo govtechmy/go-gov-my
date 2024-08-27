@@ -30,6 +30,7 @@ export const colors = {
   grayWashed100: "#f4f4f5",
   grayFocusWashed100: "#fafafa",
   grayOutline300: "#d4d4d8",
+  grayOutline200: "#e4e4e7",
   grayDim500: "#71717a",
 
   whiteBackground0: "#ffffff",
@@ -70,6 +71,7 @@ export const darkColors = {
   grayWashed100: "#1d1d21",
   grayFocusWashed100: "#27272a",
   grayOutline300: "#3f3f46",
+  grayOutline200: "#27272a",
   grayDim500: "#a1a1aa",
 
   whiteBackground0: "#161619",
