@@ -1,15 +1,26 @@
 {
 	"metadata": {
-		"title": "Sedang Mengalih... GoGovMY | Pautan Pendek yang Dipercayai untuk Rakyat Malaysia",
-		"description": "Pautan pendek go.gov.my hanya boleh dicipta oleh pegawai awam, jadi anda boleh yakin ia datang daripada sumber yang boleh dipercayai.",
-		"openGraph": {
-			"url": {
-				"index": "${baseUrl}"
-			},
-			"images": {
-				"1": {
-					"url": "https://i.imgur.com/KtR5IvP.png",
-					"alt": "Pautan Rasmi yang Dipercayai untuk Rakyat Malaysia"
+		"redirect": {
+			"title": "Sedang Mengalih... GoGovMY | Pautan Pendek yang Dipercayai untuk Rakyat Malaysia",
+			"description": "Pautan pendek go.gov.my hanya boleh dicipta oleh pegawai awam, jadi anda boleh yakin ia datang daripada sumber yang boleh dipercayai.",
+			"openGraph": {
+				"images": {
+					"1": {
+						"url": "https://i.imgur.com/KtR5IvP.png",
+						"alt": "Pautan Rasmi yang Dipercayai untuk Rakyat Malaysia"
+					}
+				}
+			}
+		},
+		"secure": {
+			"title": "Pautan Dilindungi - GoGovMY",
+			"description": "Pautan Rasmi yang Dipercayai untuk Rakyat Malaysia",
+			"openGraph": {
+				"images": {
+					"1": {
+						"url": "https://i.imgur.com/KtR5IvP.png",
+						"alt": "Pautan Rasmi yang Dipercayai untuk Rakyat Malaysia"
+					}
 				}
 			}
 		}

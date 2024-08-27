@@ -1,15 +1,26 @@
 {
 	"metadata": {
-		"title": "Redirecting... GoGovMY | Trusted Official Links for Malaysians",
-		"description": "go.gov.my short links can only be created by public officers, so you can be sure it's from a trustworthy source.",
-		"openGraph": {
-			"url": {
-				"index": "${baseUrl}"
-			},
-			"images": {
-				"1": {
-					"url": "https://i.imgur.com/EfRVASR.png",
-					"alt": "Trusted Official Links for Malaysians"
+		"redirect": {
+			"title": "Redirecting... GoGovMY | Trusted Official Links for Malaysians",
+			"description": "go.gov.my short links can only be created by public officers, so you can be sure it's from a trustworthy source.",
+			"openGraph": {
+				"images": {
+					"1": {
+						"url": "https://i.imgur.com/EfRVASR.png",
+						"alt": "Trusted Official Links for Malaysians"
+					}
+				}
+			}
+		},
+		"secure": {
+			"title": "Protected Link - GoGovMY",
+			"description": "Trusted Official Links for Malaysians",
+			"openGraph": {
+				"images": {
+					"1": {
+						"url": "https://i.imgur.com/EfRVASR.png",
+						"alt": "Trusted Official Links for Malaysians"
+					}
 				}
 			}
 		}

@@ -2,16 +2,55 @@ import ButtonB from "@/components/ButtonB";
 import Heading from "@/components/Heading";
 import { Paragraph } from "@/components/Paragraph";
 import RoundedText from "@/components/RoundedText";
+import QuickLinks from "@/components/page/common/QuickLinks";
 import AnimationCheckLink from "@/components/page/index/AnimationCheckLink";
 import Redirect from "@/components/page/index/Redirect";
-import QuickLinks from "@/components/page/common/QuickLinks";
-import { GOAPP_PARAM_URL } from "@/constants/goapp";
+import {
+  GOAPP_PARAM_DESCRIPTION,
+  GOAPP_PARAM_OG_IMAGE_URL,
+  GOAPP_PARAM_TITLE, GOAPP_PARAM_URL
+} from "@/constants/goapp";
 import IconArrowRight from "@/icons/arrow-right";
+import type { MetadataProps } from "@/lib/page";
 import { cn } from "@/lib/utils";
+import type { Metadata } from "next";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
+
+const META_TITLE = GOAPP_PARAM_TITLE;
+const META_DESCRIPTION = GOAPP_PARAM_DESCRIPTION;
+const META_OG_IMAGE_URL = GOAPP_PARAM_OG_IMAGE_URL;
 
 const URL = GOAPP_PARAM_URL;
 const REDIRECT_SECONDS = 10;
+
+export async function generateMetadata({
+  params: { locale },
+}: MetadataProps): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: "metadata" });
+
+  return {
+    title: META_TITLE,
+    description: META_DESCRIPTION,
+    openGraph: {
+      title: META_TITLE,
+      description: META_DESCRIPTION,
+      siteName: t("app.name"),
+      url: process.env.APP_URL,
+      type: "website",
+    },
+    // Specfiy og images in 'other' instead of 'openGraph'. Otherwise, the
+    // template value '{{.ImageURL}}' will be considered a path and transformed
+    // to 'https://oursite.com/%7B%7B.ImageURL%7D%7D'
+    other: {
+      "og:image": META_OG_IMAGE_URL,
+      "og:image:width": 1200,
+      "og:image:hieght": 630,
+      "twitter:image": META_OG_IMAGE_URL,
+      "twitter:image:width": 1200,
+      "twitter:image:hieght": 630,
+    },
+  };
+}
 
 export default async function PageIndex({ params: { locale } }: PageProps) {
   unstable_setRequestLocale(locale);

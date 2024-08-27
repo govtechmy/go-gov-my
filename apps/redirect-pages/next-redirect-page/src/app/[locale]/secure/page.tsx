@@ -1,13 +1,47 @@
 import Heading from "@/components/Heading";
-import QuickLinks from "@/components/page/common/QuickLinks";
-import SecureLinkForm from "@/components/page/secure/SecureLinkForm";
 import { Paragraph } from "@/components/Paragraph";
 import RoundedText from "@/components/RoundedText";
+import QuickLinks from "@/components/page/common/QuickLinks";
+import SecureLinkForm from "@/components/page/secure/SecureLinkForm";
 import { GOAPP_PARAM_URL } from "@/constants/goapp";
+import type { MetadataProps } from "@/lib/page";
 import { cn } from "@/lib/utils";
+import type { Metadata } from "next";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 const URL = GOAPP_PARAM_URL;
+
+export async function generateMetadata({
+  params: { locale },
+}: MetadataProps): Promise<Metadata> {
+  const t = await getTranslations({ locale, namespace: "metadata" });
+  const title = t("metadata.secure.title");
+  const description = t("metadata.secure.description");
+  const imageUrl = t("metadata.secure.openGraph.images.1.url");
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      siteName: t("app.name"),
+      url: process.env.APP_URL,
+      type: "website",
+    },
+    // Specfiy og images in 'other' instead of 'openGraph'. Otherwise, the
+    // template value '{{.ImageURL}}' will be considered a path and transformed
+    // to 'https://oursite.com/%7B%7B.ImageURL%7D%7D'
+    other: {
+      "og:image": imageUrl,
+      "og:image:width": 1200,
+      "og:image:hieght": 630,
+      "twitter:image": imageUrl,
+      "twitter:image:width": 1200,
+      "twitter:image:hieght": 630,
+    },
+  };
+}
 
 export default async function PageSecure({ params: { locale } }: PageProps) {
   unstable_setRequestLocale(locale);
