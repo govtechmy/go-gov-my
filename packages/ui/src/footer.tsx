@@ -22,9 +22,9 @@ export function Footer() {
   return (
     <footer>
       <MaxWidthWrapper className="relative z-10 overflow-hidden border border-b-0 border-gray-200 bg-white/50 px-8 py-16 backdrop-blur-lg md:rounded-t-2xl">
-        <div className="xl:flex xl:justify-between">
+        <div className="md:flex md:justify-between">
           <div className="flex items-center gap-6">
-            <Link href="/" className="block w-16 lg:w-24">
+            <Link href="/" className="block w-16 md:w-24">
               <span className="sr-only">
                 {process.env.NEXT_PUBLIC_APP_NAME} Logo
               </span>
@@ -45,7 +45,7 @@ export function Footer() {
               {ENABLE_STATUS_BADGE && <StatusBadge />}
             </div>
           </div>
-          <div className="mt-16 grid grid-cols-1 gap-12 xl:mt-0">
+          <div className="mt-16 grid grid-cols-1 gap-12 md:mt-0">
             <div>
               <h3 className="text-sm font-semibold text-gray-800">Legal</h3>
               <ul role="list" className="mt-4 space-y-4">
