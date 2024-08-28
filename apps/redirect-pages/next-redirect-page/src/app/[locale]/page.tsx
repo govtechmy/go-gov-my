@@ -2,49 +2,18 @@ import ButtonB from "@/components/ButtonB";
 import Heading from "@/components/Heading";
 import { Paragraph } from "@/components/Paragraph";
 import RoundedText from "@/components/RoundedText";
-import AnimationCheckLink from "@/components/home/AnimationCheckLink";
-import Redirect from "@/components/home/Redirect";
+import AnimationCheckLink from "@/components/page/index/AnimationCheckLink";
+import Redirect from "@/components/page/index/Redirect";
+import QuickLinks from "@/components/page/common/QuickLinks";
 import { GOAPP_PARAM_URL } from "@/constants/goapp";
 import IconArrowRight from "@/icons/arrow-right";
 import { cn } from "@/lib/utils";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
-import React from "react";
-
-type Props = {
-  params: { locale: string };
-};
 
 const URL = GOAPP_PARAM_URL;
 const REDIRECT_SECONDS = 10;
 
-const quickLinks = [
-  {
-    title: {
-      key: "pages.index.quickLinks.governmentOfMalaysia.title",
-    },
-    href: "https://www.malaysia.gov.my/portal/",
-    img: {
-      src: "/__goapp_public__/jata-negara.png",
-      alt: {
-        key: "pages.index.quickLinks.governmentOfMalaysia.img.alt",
-      },
-    },
-  },
-  {
-    title: {
-      key: "pages.index.quickLinks.goGovMy.title",
-    },
-    href: "https://go.gov.my/",
-    img: {
-      src: "/__goapp_public__/logo.svg",
-      alt: {
-        key: "pages.index.quickLinks.goGovMy.img.alt",
-      },
-    },
-  },
-];
-
-export default async function Home({ params: { locale } }: Props) {
+export default async function PageIndex({ params: { locale } }: PageProps) {
   unstable_setRequestLocale(locale);
 
   const t = await getTranslations();
@@ -120,57 +89,7 @@ export default async function Home({ params: { locale } }: Props) {
             </Paragraph>
           </div>
         </div>
-        <div
-          className={cn("flex-0 mt-[4rem] lg:mt-[7rem]", "w-full", "pb-[4rem]")}
-        >
-          <div className={cn("flex flex-row justify-center")}>
-            {quickLinks.map(({ title, href, img }, i) => (
-              <React.Fragment key={i}>
-                <div
-                  className={cn(
-                    "flex flex-row items-center",
-                    i % 2 === 0 ? cn("justify-end") : cn("justify-start"),
-                  )}
-                >
-                  <ButtonB
-                    variant="tertiary"
-                    size="small"
-                    href={href}
-                    target="_blank"
-                    className={cn(
-                      "flex flex-row items-center",
-                      "gap-x-[0.5rem]",
-                    )}
-                  >
-                    <img
-                      src={img.src}
-                      className="h-[1.75rem] w-[2.25rem] object-contain md:h-[1.5rem] md:w-[1.875rem]"
-                      alt={t(img.alt.key)}
-                    />
-                    <span
-                      className={cn(
-                        "hidden md:inline",
-                        "font-heading font-semibold text-black-900",
-                      )}
-                    >
-                      {t(title.key)}
-                    </span>
-                  </ButtonB>
-                </div>
-                {/* Show divider for items in the first column */}
-                {i % 2 === 0 && (
-                  <div
-                    className={cn(
-                      "mx-[0.75rem] my-auto md:mx-[1rem]",
-                      "h-[0.75rem] w-px",
-                      "bg-gray-outline-300",
-                    )}
-                  ></div>
-                )}
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
+        <QuickLinks />
       </main>
     </>
   );

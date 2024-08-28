@@ -4,15 +4,31 @@ import { cva } from "class-variance-authority";
 import { ReactNode } from "react";
 
 type Props = {
+  variant: "primary" | "tertiary" | "tertiaryColor";
+  size: "small" | "medium" | "large";
+  /**
+   * If &lt;a&gt;, the 'target' attribute of the link
+   */
   target?: "_blank" | "_self" | "_parent" | "_top";
+  /**
+   * If &lt;button&gt;, the 'type of the button
+   */
+  type?: "submit" | "button";
+  /**
+   * If &lt;a&gt;, the 'rel' attribute of the link
+   */
   rel?: ("noreferrer" | "noopener")[];
   href?: string;
+  align?: "center" | "start" | "end";
   iconEnd?: JSX.Element;
   disabled?: boolean;
   className?: string;
   children: ReactNode;
-  variant: "primary" | "tertiary" | "tertiaryColor";
-  size: "small" | "medium" | "large";
+  /**
+   * If &lt;button&gt;, the 'onClick' handler of the button
+   * @returns
+   */
+  onClick?: () => void;
 };
 
 // TODO: To support dark mode
@@ -22,7 +38,7 @@ const variants = cva(
     "rounded-[0.5rem]",
     "font-medium",
     "text-pretty text-[1rem] text-start leading-[1.5rem] text-paragraph",
-    "data-[disabled=true]:pointer-events-none",
+    "data-[disabled=true]:pointer-events-none data-[disabled=true]:cursor-not-allowed",
     "transition-transform active:translate-y-[0.0625rem]",
   ),
   {
@@ -57,13 +73,17 @@ const variants = cva(
           "text-[1rem] leading-[1.5rem]",
         ),
       },
+      align: {
+        center: "justify-center",
+        start: "justify-start",
+        end: "justify-end",
+      },
     },
   },
 );
 
 export default function ButtonB(props: Props) {
   const commonProps = {
-    ["disabled"]: props.disabled,
     ["data-disabled"]: props.disabled,
     ["className"]: cn(
       variants({
@@ -80,6 +100,7 @@ export default function ButtonB(props: Props) {
         "h-full",
         "flex flex-row flex-nowrap items-center",
         "gap-x-[0.5rem]",
+        variants({ align: props.align }),
       )}
     >
       {props.children}
@@ -97,6 +118,8 @@ export default function ButtonB(props: Props) {
       {body}
     </a>
   ) : (
-    <button {...commonProps}>{body}</button>
+    <button disabled={props.disabled} type={props.type} {...commonProps}>
+      {body}
+    </button>
   );
 }

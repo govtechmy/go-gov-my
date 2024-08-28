@@ -134,9 +134,10 @@ func main() {
 		logger.Fatal("cannot load html templates", zap.Error(err))
 	}
 
+	// add other languages (i.e. ms-MY) if necessary
 	redirectT, err := template.ParseFiles(
 		"templates/redirect/en-MY.html",
-		"templates/redirect/ms-MY.html",
+		"templates/redirect/en-MY/secure.html",
 	)
 	if err != nil {
 		logger.Fatal("cannot load html (redirect) templates", zap.Error(err))
@@ -212,7 +213,7 @@ func main() {
 
 		// LINK IS PASSWORD PROTECTED BUT USER DID NOT PROVIDE PASSWORD, REDIRECT TO AUTH PAGE
 		if link.Password != "" && user_input_password == "" {
-			if err := t.ExecuteTemplate(w, "auth.html", AuthPageProps{
+			if err := redirectT.ExecuteTemplate(w, "secure.html", AuthPageProps{
 				Slug:          slug,
 				WrongPassword: false,
 			}); err != nil {
@@ -223,7 +224,7 @@ func main() {
 
 		// LINK IS PASSWORD PROTECTED AND USER PROVIDED WRONG PASSWORD
 		if link.Password != "" && user_input_password != link.Password && user_input_password != "" {
-			if err := t.ExecuteTemplate(w, "auth.html", AuthPageProps{
+			if err := redirectT.ExecuteTemplate(w, "secure.html", AuthPageProps{
 				Slug:          slug,
 				WrongPassword: true,
 			}); err != nil {

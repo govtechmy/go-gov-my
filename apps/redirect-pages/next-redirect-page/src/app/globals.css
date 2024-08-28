@@ -35,6 +35,7 @@
     --gray-washed-100: 244 244 245;
     --gray-focus_washed-100: 244 244 245;
     --gray-outline-300: 212 212 216;
+    --gray-outline-200: 228 228 231;
     --gray-dim-500: 113 113 122;
 
     --white-text_only-disabled: 255 255 255;
@@ -75,6 +76,7 @@
     --gray-washed-100: 29 29 33;
     --gray-focus_washed-100: 39 39 42;
     --gray-outline-300: 63 63 70;
+    --gray-outline-200: 39 39 42;
     --gray-dim-500: 161 161 170;
 
     --white-text-disabled: 63 63 70;

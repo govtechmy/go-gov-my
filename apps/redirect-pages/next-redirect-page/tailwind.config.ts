@@ -74,6 +74,7 @@ const config: Config = {
           ["washed-100"]: "rgb(var(--gray-washed-100) / <alpha-value>)",
           ["focus_washed-100"]:
             "rgb(var(--gray-focus_washed-100) / <alpha-value>)",
+          ["outline-200"]: "rgb(var(--gray-outline-200) / <alpha-value>)", 
           ["outline-300"]: "rgb(var(--gray-outline-300) / <alpha-value>)",
           ["dim-500"]: "rgb(var(--gray-dim-500) / <alpha-value>)",
         },

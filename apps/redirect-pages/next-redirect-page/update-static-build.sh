@@ -7,8 +7,26 @@ BASE_DIR=../../redirect-server
 PUBLIC_FOLDER=$BASE_DIR/public/redirect
 TEMPLATES_FOLDER=$BASE_DIR/templates/redirect
 
+# public assets
 cp -r ./out/__goapp_public__/* $PUBLIC_FOLDER
 cp -r ./out/_next/static $PUBLIC_FOLDER
-cp ./out/*.txt $PUBLIC_FOLDER
 cp ./out/favicon.ico $PUBLIC_FOLDER
-cp ./out/*.html $TEMPLATES_FOLDER
+cp ./out/404.html $TEMPLATES_FOLDER
+
+# next page: '/' (i.e. /en-MY.html, /ms-MY.html)
+cp ./out/en-MY.txt $PUBLIC_FOLDER
+cp ./out/ms-MY.txt $PUBLIC_FOLDER
+cp ./out/en-MY.html $TEMPLATES_FOLDER
+cp ./out/ms-MY.html $TEMPLATES_FOLDER
+
+# next page: '/secure' (i.e. /secure/en-MY.html, /secure/ms-MY.html)
+mkdir -p $PUBLIC_FOLDER/en-MY
+mkdir -p $PUBLIC_FOLDER/ms-MY
+cp -r ./out/en-MY/secure.txt $PUBLIC_FOLDER/en-MY
+cp -r ./out/ms-MY/secure.txt $PUBLIC_FOLDER/ms-MY
+
+mkdir -p $TEMPLATES_FOLDER/en-MY
+mkdir -p $TEMPLATES_FOLDER/ms-MY
+cp -r ./out/en-MY/secure.html $TEMPLATES_FOLDER/en-MY
+cp -r ./out/ms-MY/secure.html $TEMPLATES_FOLDER/ms-MY 
+

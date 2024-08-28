@@ -18,10 +18,18 @@
 		"name": "GoGovMY"
 	},
 	"common": {
-		"seconds": "{count, plural, =0 {0 seconds} =1 {1 second} other {# seconds}}"
+		"seconds": "{count, plural, =0 {0 seconds} =1 {1 second} other {# seconds}}",
+		"continue": "Continue",
+		"placeholders": {
+			"password": "Enter the password"
+		}
 	},
 	"pages": {
 		"index": {
+			"password": {
+				"title": "Password required",
+				"description": "Please enter the password to view protected link."
+			},
 			"verify": {
 				"title": "Verify your address bar",
 				"description": "Be cautious of phishing, make sure the URL begins with <em></em>"
