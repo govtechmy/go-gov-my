@@ -3,17 +3,11 @@
 import { APP_NAME, cn, fetcher } from "@dub/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import { FEATURES_LIST } from "./content";
 import { MaxWidthWrapper } from "./max-width-wrapper";
 
 const navigation = {
-  features: FEATURES_LIST.map(({ shortTitle, slug }) => ({
-    name: shortTitle,
-    href: `/${slug}`,
-  })),
   legal: [
     { name: "Privacy", href: "/privacy" },
     { name: "Terms", href: "/terms" },
@@ -21,22 +15,16 @@ const navigation = {
   ],
 };
 
+// Disable the status badge for now since we have not deployed Uptime Kuma yet
+const ENABLE_STATUS_BADGE = false;
+
 export function Footer() {
-  const { domain = `${process.env.NEXT_PUBLIC_APP_DOMAIN}` } = useParams() as {
-    domain: string;
-  };
-
-  const createHref = (href: string) =>
-    domain === `${process.env.NEXT_PUBLIC_APP_DOMAIN}`
-      ? href
-      : `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}${href}`;
-
   return (
     <footer>
       <MaxWidthWrapper className="relative z-10 overflow-hidden border border-b-0 border-gray-200 bg-white/50 px-8 py-16 backdrop-blur-lg md:rounded-t-2xl">
         <div className="xl:flex xl:justify-between">
-          <div className="space-y-6">
-            <Link href={createHref("/")} className="block max-w-fit">
+          <div className="flex items-center gap-6">
+            <Link href="/" className="block w-16 lg:w-24">
               <span className="sr-only">
                 {process.env.NEXT_PUBLIC_APP_NAME} Logo
               </span>
@@ -48,38 +36,23 @@ export function Footer() {
                 height={96}
               />
             </Link>
-            <p className="max-w-xs text-sm text-gray-500">
-              {APP_NAME} – Malaysia's open-source link management
-              infrastructure.
-            </p>
-            {/* <p className="text-sm leading-5 text-gray-400">
-              © {new Date().getFullYear()} Dub Technologies, Inc.
-            </p> */}
-            <StatusBadge />
-          </div>
-          <div className="mt-16 grid grid-cols-2 gap-12 xl:mt-0">
-            <div>
-              <h3 className="text-sm font-semibold text-gray-800">Features</h3>
-              <ul role="list" className="mt-4 space-y-4">
-                {navigation.features.map((item) => (
-                  <li key={item.name}>
-                    <Link
-                      href={createHref(item.href)}
-                      className="text-sm text-gray-500 hover:text-gray-800"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+            <div className="space-y-4">
+              <p className="font-bold uppercase">Government of Malaysia</p>
+              <p className="max-w-xs text-sm text-gray-500">
+                {APP_NAME} – Malaysia's open-source link management
+                infrastructure.
+              </p>
+              {ENABLE_STATUS_BADGE && <StatusBadge />}
             </div>
+          </div>
+          <div className="mt-16 grid grid-cols-1 gap-12 xl:mt-0">
             <div>
               <h3 className="text-sm font-semibold text-gray-800">Legal</h3>
               <ul role="list" className="mt-4 space-y-4">
                 {navigation.legal.map((item) => (
                   <li key={item.name}>
                     <Link
-                      href={createHref(item.href)}
+                      href={item.href}
                       className="text-sm text-gray-500 hover:text-gray-800"
                     >
                       {item.name}
