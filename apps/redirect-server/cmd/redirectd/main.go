@@ -43,10 +43,12 @@ type AuthPageProps struct {
 func extractDomain(rawURL string) string {
 	reformedURL := strings.Replace(rawURL, "https://", "", 1)
 	reformedURL = strings.Replace(reformedURL, "http://", "", 1)
-	if strings.Contains(reformedURL, "/") {
-		reformedURL = strings.Split(reformedURL, "/")[0]
+	splitBySlash := strings.Split(reformedURL, "/")[0]
+	splitByDot := strings.Split(splitBySlash, ".")
+	if splitByDot[0] == "www" {
+		return splitByDot[1]
 	}
-	return reformedURL
+	return splitByDot[0]
 }
 
 func main() {
@@ -201,7 +203,8 @@ func main() {
 			return
 		}
 
-		referer := r.Header.Get("referer")
+		// Check if referer is in the black list
+		referer := extractDomain(r.Header.Get("referer"))
 		refererSplice := strings.Split(link.DisallowedReferer, ",")
 		if slices.Contains(refererSplice, referer) {
 			w.WriteHeader(http.StatusNotFound)
