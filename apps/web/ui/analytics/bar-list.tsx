@@ -166,6 +166,11 @@ export function LineItem({
 
   const { queryParams } = useRouterStuff();
 
+  // #264 - https://github.com/govtechmy/go-gov-my/issues/264
+  // For now, only items in the link tab can be clicked. Other tabs are not
+  // clickable since we are not able to filter by country, cities, devices, etc.
+  const clickable = tab === "link";
+
   const lineItem = useMemo(() => {
     const apexDomain =
       tab === "link"
@@ -192,7 +197,7 @@ export function LineItem({
         <div
           className={cn(
             "truncate text-sm text-gray-800",
-            href && "underline-offset-4 group-hover:underline",
+            clickable && href && "underline-offset-4 group-hover:underline",
           )}
         >
           {tab === "link" ? (
@@ -214,7 +219,7 @@ export function LineItem({
         </div>
       </div>
     );
-  }, [data, icon, tab, title]);
+  }, [data, icon, tab, title, href, clickable]);
 
   return (
     <Link
@@ -232,6 +237,7 @@ export function LineItem({
       }
       scroll={false}
       onClick={() => setShowModal(false)}
+      className={cn(!clickable && "pointer-events-none")}
     >
       <div className="group flex items-center justify-between hover:bg-gray-50">
         <div className="relative z-10 flex h-8 w-full max-w-[calc(100%-2rem)] items-center">
