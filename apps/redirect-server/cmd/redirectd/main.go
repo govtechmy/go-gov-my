@@ -154,6 +154,7 @@ func main() {
 	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		slug := strings.TrimPrefix(r.URL.Path, "/")
+		slugWithLeadingSlash := "/" + slug
 		user_input_password := r.URL.Query().Get("password")
 
 		link, err := linkRepo.GetLink(ctx, slug)
@@ -194,7 +195,7 @@ func main() {
 		// LINK IS PASSWORD PROTECTED BUT USER DID NOT PROVIDE PASSWORD, REDIRECT TO AUTH PAGE
 		if link.Password != "" && user_input_password == "" {
 			if err := redirectT.ExecuteTemplate(w, "secure.html", AuthPageProps{
-				Slug:          slug,
+				Slug:          slugWithLeadingSlash,
 				WrongPassword: false,
 			}); err != nil {
 				logger.Error("failed to execute template", zap.Error(err))
@@ -205,7 +206,7 @@ func main() {
 		// LINK IS PASSWORD PROTECTED AND USER PROVIDED WRONG PASSWORD
 		if link.Password != "" && user_input_password != link.Password && user_input_password != "" {
 			if err := redirectT.ExecuteTemplate(w, "secure.html", AuthPageProps{
-				Slug:          slug,
+				Slug:          slugWithLeadingSlash,
 				WrongPassword: true,
 			}); err != nil {
 				logger.Error("failed to execute template", zap.Error(err))

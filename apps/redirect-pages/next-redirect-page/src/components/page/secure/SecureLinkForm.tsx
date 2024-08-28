@@ -1,21 +1,12 @@
-"use client";
-
 import { GOAPP_PARAM_AUTH_URL } from "@/constants/goapp";
 import { cn } from "@/lib/utils";
-import ButtonB from "../../ButtonB";
-import Input from "../../Input";
-import IconArrowRight from "@/icons/arrow-right";
-import { useTranslations } from "next-intl";
-import { useState } from "react";
+import SecureLinkFormContent from "./SecureLinkFormContent";
 
 export default function SecureLinkForm() {
-  const t = useTranslations();
-  const [password, setPassword] = useState("");
-
   return (
     <form
       method="GET"
-      action={"/" + GOAPP_PARAM_AUTH_URL}
+      action={GOAPP_PARAM_AUTH_URL}
       className={cn(
         "mt-[2.25rem] md:mt-[2.5rem]",
         "flex flex-col items-center",
@@ -23,25 +14,7 @@ export default function SecureLinkForm() {
         "px-[1.125rem] lg:px-0",
       )}
     >
-      <Input
-        name="password"
-        type="password"
-        value={password}
-        onChange={setPassword}
-        placeholder={t("common.placeholders.password")}
-        className={cn("shrink-0")}
-      />
-      <ButtonB
-        disabled={!password}
-        type="submit"
-        variant="primary"
-        size="large"
-        align="center"
-        iconEnd={<IconArrowRight />}
-        className={cn("mt-[2rem]", "h-full w-full")}
-      >
-        <span className="text-center">{t("common.continue")}</span>
-      </ButtonB>
+     <SecureLinkFormContent />
     </form>
   );
 }

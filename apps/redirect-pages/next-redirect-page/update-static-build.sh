@@ -7,6 +7,12 @@ BASE_DIR=../../redirect-server
 PUBLIC_FOLDER=$BASE_DIR/public/redirect
 TEMPLATES_FOLDER=$BASE_DIR/templates/redirect
 
+rm -rf $PUBLIC_FOLDER
+rm -rf $TEMPLATES_FOLDER
+
+mkdir -p $PUBLIC_FOLDER
+mkdir -p $TEMPLATES_FOLDER
+
 # public assets
 cp -r ./out/__goapp_public__/* $PUBLIC_FOLDER
 cp -r ./out/_next/static $PUBLIC_FOLDER
