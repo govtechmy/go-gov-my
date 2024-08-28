@@ -1,38 +1,21 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
+	"os/signal"
 	"redirect-server/repository/es"
+	"syscall"
+	"time"
 
-	"github.com/joho/godotenv"
 	"github.com/olivere/elastic/v7"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
-
-const (
-	ENV_DEVELOPMENT = "development"
-	ENV_PRODUCTION  = "production"
-)
-
-func init() {
-	// Construct the path to the .env file in the root directory
-	rootDir, err := filepath.Abs(filepath.Join(".", "..", ".."))
-	if err != nil {
-		log.Fatalf("Error constructing root directory path: %s", err)
-	}
-	envPath := filepath.Join(rootDir, ".env")
-
-	// Load the .env file
-	err = godotenv.Load(envPath)
-	if err != nil {
-		log.Printf("Error loading .env file: %s", err)
-	}
-}
 
 func main() {
 
@@ -41,12 +24,22 @@ func main() {
 	var elasticPassword string
 	var httpPort int
 	{
-		flag.StringVar(&elasticURL, "elastic-url", "http://localhost:9200", "Elasticsearch URL")
-		flag.StringVar(&elasticUser, "elastic-user", "elastic", "Elasticsearch username")
+		flag.StringVar(&elasticURL, "elastic-url", os.Getenv("ELASTIC_URL"), "Elasticsearch URL e.g. http://localhost:9200")
+		flag.StringVar(&elasticUser, "elastic-user", os.Getenv("ELASTIC_USER"), "Elasticsearch username")
 		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
 		flag.IntVar(&httpPort, "http-port", 3002, "HTTP server port")
 	}
 	flag.Parse()
+
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
+	defer stop()
+
+	if elasticURL == "" {
+		elasticURL = "http://localhost:9200"
+	}
+	if elasticUser == "" {
+		elasticUser = "elastic"
+	}
 
 	esClient, err := elastic.NewSimpleClient(
 		elastic.SetURL(elasticURL),
@@ -62,6 +55,8 @@ func main() {
 
 	// todo: add tracing
 	// todo: split into internal and public endpoint
+	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) { io.WriteString(w, "OK") })
+
 	http.HandleFunc("/links", func(w http.ResponseWriter, r *http.Request) {
 		indexLinkHandler(w, r, linkRepo, idempotentResourceRepo)
 	})
@@ -75,5 +70,23 @@ func main() {
 		Handler: http.DefaultServeMux,
 	}
 
-	log.Fatal(srv.ListenAndServe())
+	go func() {
+		err := srv.ListenAndServe()
+		if err == http.ErrServerClosed {
+			return
+		}
+		if err != nil {
+			log.Printf("error after listen and serve: %s\n", err)
+		}
+	}()
+
+	<-ctx.Done()
+
+	shutdownCtx, stop := context.WithTimeout(context.Background(), 60*time.Second)
+	defer stop()
+
+	if err := srv.Shutdown(shutdownCtx); err != nil {
+		log.Fatalf("error shuting down the server: %s\n", err)
+	}
+
 }

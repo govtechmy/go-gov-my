@@ -19,7 +19,7 @@ const cases = [
           code: "unprocessable_entity",
           message: "custom: url: Invalid URL",
           doc_url:
-            "https://dub.co/docs/api-reference/errors#unprocessable-entity",
+            "https://go.gov.my/docs/api-reference/errors#unprocessable-entity",
         },
       },
     },
@@ -38,7 +38,7 @@ const cases = [
           code: "unprocessable_entity",
           message: "Invalid tagIds detected: invalid",
           doc_url:
-            "https://dub.co/docs/api-reference/errors#unprocessable-entity",
+            "https://go.gov.my/docs/api-reference/errors#unprocessable-entity",
         },
       },
     },

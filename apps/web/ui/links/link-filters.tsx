@@ -55,7 +55,6 @@ export default function LinkFilters() {
 
   const showClearButton = useMemo(() => {
     return [
-      "sort",
       "search",
       "domain",
       "userId",
@@ -486,7 +485,7 @@ const ArchiveFilter = () => {
   return (
     <div className="flex items-center justify-between py-6">
       <label className="text-sm font-medium text-gray-600">
-        {message?.show_my_links_only}
+        {message?.include_archive_links}
       </label>
       <Switch
         fn={() =>

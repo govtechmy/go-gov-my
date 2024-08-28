@@ -13,6 +13,7 @@ export interface LinkDTO {
   title: string | null;
   description: string | null;
   password: string | null;
+  banned: boolean;
   createdAt: Date | null;
 }
 
@@ -33,6 +34,7 @@ export async function processDTOLink(response: LinkProps): Promise<LinkDTO> {
     title: response.title,
     description: response.description,
     password: response.password,
+    banned: response.banned,
     createdAt: response.createdAt,
   };
 

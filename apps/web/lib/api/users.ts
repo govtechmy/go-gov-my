@@ -14,7 +14,7 @@ export async function inviteUser({
 }: {
   email: string;
   workspace: WorkspaceProps;
-  session?: Session;
+  session: Session;
 }) {
   // same method of generating a token as next-auth
   const token = randomBytes(32).toString("hex");
@@ -61,11 +61,10 @@ export async function inviteUser({
     email,
     react: WorkspaceInvite({
       email,
-      appName: process.env.NEXT_PUBLIC_APP_NAME as string,
       url,
       workspaceName: workspace.name,
-      workspaceUser: session?.user.name || null,
-      workspaceUserEmail: session?.user.email || null,
+      workspaceUser: session.user.name,
+      workspaceUserEmail: session.user.email,
     }),
   });
 }

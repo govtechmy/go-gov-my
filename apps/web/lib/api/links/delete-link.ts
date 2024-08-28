@@ -5,7 +5,7 @@ import { storage } from "@/lib/storage";
 import { trace } from "@opentelemetry/api";
 import { Prisma } from "@prisma/client";
 import { waitUntil } from "@vercel/functions";
-import { OUTBOX_ACTIONS } from "kafka-consumer/actions";
+import { OUTBOX_ACTIONS } from "kafka-consumer/utils/actions";
 import generateIdempotencyKey from "./create-idempotency-key";
 
 const REDIRECT_SERVER_BASE_URL =

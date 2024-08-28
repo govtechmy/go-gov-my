@@ -4,7 +4,6 @@ import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspaces from "@/lib/swr/use-workspaces";
 import { PlanProps, WorkspaceProps } from "@/lib/types";
 import { ModalContext } from "@/ui/modals/provider";
-import PlanBadge from "@/ui/workspaces/plan-badge";
 import { BlurImage, Popover, Tick } from "@dub/ui";
 import { DICEBEAR_AVATAR_URL } from "@dub/utils";
 import { ChevronsUpDown, PlusCircle } from "lucide-react";
@@ -83,7 +82,7 @@ export default function WorkspaceSwitcher() {
               width={20}
               height={20}
               alt={selected.id || selected.name}
-              className="h-8 w-8 flex-none overflow-hidden rounded-full"
+              className="h-8 w-8 flex-none overflow-hidden rounded-full object-cover"
             />
             <div
               className={`${
@@ -93,7 +92,7 @@ export default function WorkspaceSwitcher() {
               <span className="inline-block max-w-[100px] truncate text-sm font-medium sm:max-w-[200px]">
                 {selected.name}
               </span>
-              {selected.slug !== "/" && <PlanBadge plan={selected.plan} />}
+              {/* {selected.slug !== "/" && <PlanBadge plan={selected.plan} />} */}
             </div>
           </div>
           <ChevronsUpDown
@@ -159,7 +158,7 @@ function WorkspaceList({
               width={20}
               height={20}
               alt={id}
-              className="h-7 w-7 shrink-0 overflow-hidden rounded-full"
+              className="h-7 w-7 shrink-0 overflow-hidden rounded-full object-cover"
             />
             <span
               className={`block truncate text-sm sm:max-w-[140px] ${

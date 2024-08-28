@@ -12,6 +12,10 @@ datasource db {
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["postgresqlExtensions"]
+
+  // Use engine type "binary" for esbuild to bundle prisma correctly when
+  // building the outbox kafka consumer
+  engineType      = "binary"
 }
 
 model Agency {
@@ -120,7 +124,6 @@ model Project {
   linksUsage        Int    @default(0)
   linksLimit        Int    @default(25)
   tagsLimit         Int    @default(5)
-  usersLimit        Int    @default(1)
 
   users      ProjectUsers[]
   invites    ProjectInvite[]
@@ -199,6 +202,7 @@ model Link {
   expiredUrl String? // @db.LongText // URL to redirect the user to when the link is expired
   password   String? // password to access the link
   externalId String?
+  banned     Boolean   @default(false)
 
   trackConversion Boolean @default(false) // whether to track conversions or not
 
@@ -343,4 +347,10 @@ model Analytics {
   metadata              Json       @db.Json
   createdAt             DateTime   @default(now()) @db.Timestamptz
   updatedAt             DateTime   @updatedAt
+}
+
+model IdempotentResource {
+  idempotencyKey     String @id
+  hashedPayload      String
+  createdAt          DateTime   @default(now()) @db.Timestamptz
 }

@@ -23,3 +23,23 @@ export function useIntlHook(locale?: string) {
   // IF ALL FAILS, USE DEFAULT LOCALE
   return { messages: dictionaries[DEFAULT_LOCALE], locale: DEFAULT_LOCALE };
 }
+
+export function nonHooki18nFunc(locale?: string) {
+  const dictionaries = {
+    en: en,
+    ms: ms,
+  };
+
+  if (locale && isSupportedLocale(locale))
+    return { messages: dictionaries[locale], locale };
+
+  const headersList = headers();
+  const locale_header = headersList.get("NEXT_LOCALE");
+
+  if (locale_header && isSupportedLocale(locale_header)) {
+    return { messages: dictionaries[locale_header], locale: locale_header };
+  }
+
+  // IF ALL FAILS, USE DEFAULT LOCALE
+  return { messages: dictionaries[DEFAULT_LOCALE], locale: DEFAULT_LOCALE };
+}

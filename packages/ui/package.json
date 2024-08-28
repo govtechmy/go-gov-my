@@ -62,14 +62,14 @@
     "use-debounce": "^8.0.4",
     "vaul": "^0.9.0"
   },
-  "author": "Steven Tey <stevensteel97@gmail.com>",
-  "homepage": "https://dub.co",
+  "author": "Govtech MY <support@tech.gov.my>",
+  "homepage": "https://go.gov.my",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/steven-tey/dub.git"
+    "url": "git+https://github.com/govtechmy/go-gov-my.git"
   },
   "bugs": {
-    "url": "https://github.com/steven-tey/dub/issues"
+    "url": "https://github.com/govtechmy/go-gov-my/issues"
   },
   "keywords": [
     "dub",

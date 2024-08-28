@@ -1,5 +1,4 @@
 import { withSession } from "@/lib/auth";
-import { unsubscribe } from "@/lib/flodesk";
 import { prisma } from "@/lib/prisma";
 import { redis } from "@/lib/redis";
 import { storage } from "@/lib/storage";
@@ -93,7 +92,6 @@ export const DELETE = withSession(async ({ session }) => {
       // if the user has a custom avatar, delete it
       user.image?.startsWith(process.env.STORAGE_BASE_URL as string) &&
         storage.delete(`avatars/${session.user.id}`),
-      unsubscribe(session.user.email),
     ]);
     return NextResponse.json(response);
   }

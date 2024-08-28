@@ -20,7 +20,7 @@ export default function HelpPortal() {
 
 async function HelpPortalRSC() {
   const { popularHelpArticles, allHelpArticles } = await fetch(
-    "https://dub.co/api/content",
+    "https://go.gov.my/api/content",
   ).then((res) => res.json());
 
   return (

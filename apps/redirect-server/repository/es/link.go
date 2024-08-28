@@ -25,14 +25,12 @@ func (r *LinkRepo) GetLink(ctx context.Context, slug string) (*repository.Link, 
 	res, err := r.esClient.Search().
 		Index(linkIndex).
 		Query(
-			// Query against 'slug.keyword' since term queries don't work well
-			// with the default text type in the 'slug' field.
-			elastic.NewTermQuery("slug.keyword", slug),
+			elastic.NewTermQuery("slug", slug),
 		).
 		Size(1).
 		Do(ctx)
 	if err != nil {
-		return nil, repository.ErrInternalServer
+		return nil, err
 	}
 
 	if len(res.Hits.Hits) == 0 {
@@ -61,5 +59,10 @@ func (r *LinkRepo) DeleteLink(ctx context.Context, linkId string) error {
 		Index(linkIndex).
 		Id(linkId).
 		Do(ctx)
+
+	if elastic.IsNotFound(err) {
+		return nil
+	}
+
 	return err
 }

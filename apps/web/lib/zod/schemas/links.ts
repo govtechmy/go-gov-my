@@ -141,6 +141,11 @@ export const createLinkBodySchema = z.object({
     .optional()
     .default(false)
     .describe("Whether the short link is archived."),
+  banned: z
+    .boolean()
+    .optional()
+    .default(false)
+    .describe("Whether the short link is banned."),
   publicStats: z
     .boolean()
     .optional()
@@ -257,6 +262,7 @@ export const LinkSchema = z
       .boolean()
       .default(false)
       .describe("Whether the short link is archived."),
+    banned: z.boolean().describe("Whether the short link is banned."),
     expiresAt: z
       .string()
       .nullable()

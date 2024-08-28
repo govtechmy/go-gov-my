@@ -75,7 +75,6 @@ export interface WorkspaceProps {
   linksUsage: number;
   linksLimit: number;
   tagsLimit: number;
-  usersLimit: number;
   plan: PlanProps;
   billingCycleStart: number;
   createdAt: Date;

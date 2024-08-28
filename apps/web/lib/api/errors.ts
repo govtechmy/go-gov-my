@@ -60,7 +60,7 @@ const ErrorSchema = z.object({
     }),
     doc_url: z.string().optional().openapi({
       description: "A URL to more information about the error code reported.",
-      example: "https://dub.co/docs/api-reference",
+      example: "https://go.gov.my/docs/api-reference",
     }),
   }),
 });
@@ -87,7 +87,7 @@ export class DubApiError extends Error {
   }
 }
 
-const docErrorUrl = "https://dub.co/docs/api-reference/errors";
+const docErrorUrl = "https://go.gov.my/docs/api-reference/errors";
 
 export function fromZodError(error: ZodError): ErrorResponse {
   return {

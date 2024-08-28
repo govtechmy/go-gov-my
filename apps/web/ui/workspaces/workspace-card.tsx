@@ -7,7 +7,6 @@ import { DICEBEAR_AVATAR_URL, fetcher, nFormatter } from "@dub/utils";
 import { BarChart2, Link2 } from "lucide-react";
 import Link from "next/link";
 import useSWR from "swr";
-import PlanBadge from "./plan-badge";
 
 export default function WorkspaceCard({
   id,
@@ -37,7 +36,7 @@ export default function WorkspaceCard({
             <BlurImage
               src={logo || `${DICEBEAR_AVATAR_URL}${name}`}
               alt={id}
-              className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full"
+              className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full object-cover"
               width={48}
               height={48}
             />
@@ -47,7 +46,7 @@ export default function WorkspaceCard({
               </h2>
             </div>
           </div>
-          <PlanBadge plan={plan} />
+          {/* <PlanBadge plan={plan} /> */}
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-1 text-gray-500">

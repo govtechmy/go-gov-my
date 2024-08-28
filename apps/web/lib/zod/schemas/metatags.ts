@@ -6,14 +6,14 @@ export const metaTagsSchema = z.object({
     .nullable()
     .describe("The meta title tag for the URL.")
     .openapi({
-      example: "Dub.co - Link Management for Modern Marketing Teams",
+      example: "GoGovMY - Link shortener for the Malaysia government.",
     }),
   description: z
     .string()
     .nullable()
     .describe("The meta description tag for the URL.")
     .openapi({
-      example: "Dub.co is the open-source link management infrastructure ...",
+      example: "GoGovMY - Link shortener for the Malaysia government.",
     }),
   image: z
     .string()

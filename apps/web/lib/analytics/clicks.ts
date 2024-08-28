@@ -15,7 +15,17 @@ export const getClicks = async (
     endpoint?: AnalyticsEndpoints;
   },
 ) => {
-  let { workspaceId, endpoint, linkId, interval, start, end } = props;
+  let {
+    workspaceId,
+    endpoint,
+    linkId,
+    interval,
+    start,
+    end,
+    domain,
+    key,
+    tagId,
+  } = props;
 
   // get all-time clicks count if:
   // 1. linkId is defined
@@ -71,14 +81,9 @@ export const getClicks = async (
   // const startDate: Date | String = new Date().toISOString().split('T')[0]  // fast way to get YYYY-MM-DD
   // const endDate: Date | String = new Date().toISOString().split('T')[0]
 
-  if (interval === "24h") {
-    start = new Date();
-    end = new Date();
-  } else {
-    start = INTERVAL_DATA[interval].startDate;
-    end = new Date(Date.now());
-    granularity = INTERVAL_DATA[interval].granularity;
-  }
+  start = INTERVAL_DATA[interval].startDate;
+  end = new Date(Date.now());
+  granularity = INTERVAL_DATA[interval].granularity;
 
   // swap start and end if start is greater than end
   if (start > end) {
@@ -89,6 +94,9 @@ export const getClicks = async (
   const links = await prisma.link.findMany({
     where: {
       projectId: workspaceId,
+      ...(domain && { domain }),
+      ...(key && { key }),
+      ...(tagId && { tags: { some: { tagId } } }),
     },
     select: {
       id: true,
@@ -111,6 +119,9 @@ export const getClicks = async (
           },
         },
       ],
+    },
+    orderBy: {
+      aggregatedDate: "asc",
     },
     select: {
       linkId: true,
@@ -138,9 +149,26 @@ export const getClicks = async (
         return sumTwoObj(accumulator, metadata?.countryCode);
       return accumulator;
     }, {});
-    return Object.keys(countries).map((key) => {
-      return { country: key, clicks: countries[key] };
-    });
+    return Object.keys(countries)
+      .map((key) => {
+        return { country: key, clicks: countries[key] };
+      })
+      .sort((a, b) => b.clicks - a.clicks);
+  }
+
+  if (endpoint === "cities") {
+    const cities = analytics.reduce((accumulator, row) => {
+      const metadata = row?.metadata as MetadataProps;
+      if (metadata.city) return sumTwoObj(accumulator, metadata?.city);
+      return accumulator;
+    }, {});
+    return Object.keys(cities)
+      .map((key) => {
+        const [country, city] = key.split(":");
+        return { country, city, clicks: cities[key] };
+      })
+      .filter(({ country, city }) => country?.length > 0 && city?.length > 0)
+      .sort((a, b) => b.clicks - a.clicks);
   }
 
   if (endpoint === "top_links") {
@@ -157,9 +185,26 @@ export const getClicks = async (
       return accumulator;
     }, {});
 
-    return Object.keys(top_links).map((key) => {
-      return { link: key, clicks: top_links[key] };
-    });
+    return Object.keys(top_links)
+      .map((key) => {
+        return { link: key, clicks: top_links[key] };
+      })
+      .sort((a, b) => b.clicks - a.clicks);
+  }
+
+  if (endpoint === "top_urls") {
+    const top_urls = analytics.reduce<Record<string, number>>(
+      (accumulator, row) => {
+        const metadata = row.metadata as MetadataProps;
+        if ("linkUrl" in metadata)
+          return sumTwoObj(accumulator, metadata["linkUrl"]);
+        return accumulator;
+      },
+      {},
+    );
+    return Object.entries(top_urls)
+      .map(([url, clicks]) => ({ url, clicks }))
+      .sort((a, b) => b.clicks - a.clicks);
   }
 
   if (endpoint === "referers") {
@@ -168,9 +213,11 @@ export const getClicks = async (
       if (metadata?.referer) return sumTwoObj(accumulator, metadata?.referer);
       return accumulator;
     }, {});
-    return Object.keys(referers).map((key) => {
-      return { referer: key, clicks: referers[key] };
-    });
+    return Object.keys(referers)
+      .map((key) => {
+        return { referer: key, clicks: referers[key] };
+      })
+      .sort((a, b) => b.clicks - a.clicks);
   }
 
   if (endpoint === "devices") {
@@ -180,9 +227,11 @@ export const getClicks = async (
         return sumTwoObj(accumulator, metadata?.deviceType);
       return accumulator;
     }, {});
-    return Object.keys(devices).map((key) => {
-      return { device: key.toUpperCase(), clicks: devices[key] };
-    });
+    return Object.keys(devices)
+      .map((key) => {
+        return { device: key, clicks: devices[key] };
+      })
+      .sort((a, b) => b.clicks - a.clicks);
   }
 
   if (endpoint === "browsers") {
@@ -191,9 +240,11 @@ export const getClicks = async (
       if (metadata?.browser) return sumTwoObj(accumulator, metadata?.browser);
       return accumulator;
     }, {});
-    return Object.keys(browsers).map((key) => {
-      return { browser: key, clicks: browsers[key] };
-    });
+    return Object.keys(browsers)
+      .map((key) => {
+        return { browser: key, clicks: browsers[key] };
+      })
+      .sort((a, b) => b.clicks - a.clicks);
   }
 
   if (endpoint === "os") {
@@ -203,9 +254,11 @@ export const getClicks = async (
         return sumTwoObj(accumulator, metadata?.operatingSystem);
       return accumulator;
     }, {});
-    return Object.keys(os).map((key) => {
-      return { os: key, clicks: os[key] };
-    });
+    return Object.keys(os)
+      .map((key) => {
+        return { os: key, clicks: os[key] };
+      })
+      .sort((a, b) => b.clicks - a.clicks);
   }
 
   if (endpoint === "timeseries") {

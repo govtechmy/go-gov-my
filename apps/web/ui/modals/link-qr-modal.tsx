@@ -14,12 +14,10 @@ import {
   SimpleTooltipContent,
   Switch,
   Tooltip,
-  TooltipContent,
   useRouterStuff,
 } from "@dub/ui";
 import {
   APP_DOMAIN,
-  APP_HOSTNAMES,
   FADE_IN_ANIMATION_SETTINGS,
   getApexDomain,
   linkConstructor,
@@ -64,7 +62,7 @@ export function QRCodePicker({
   setShowLinkQRModal: Dispatch<SetStateAction<boolean>>;
 }) {
   const anchorRef = useRef<HTMLAnchorElement>(null);
-  const { logo, plan } = useWorkspace();
+  const { logo } = useWorkspace();
   const apexDomain = props.url ? getApexDomain(props.url) : null;
   const { messages, locale } = useIntlClientHook();
   const message = messages?.modal;
@@ -94,8 +92,7 @@ export function QRCodePicker({
       level: "Q", // QR Code error correction level: https://blog.qrstuff.com/general/qr-code-error-correction
       ...(showLogo && {
         imageSettings: {
-          src:
-            logo && plan !== "free" ? logo : `${APP_DOMAIN}/_static/logo.svg`,
+          src: logo ? logo : `${APP_DOMAIN}/_static/logo.svg`,
           height: 256,
           width: 256,
           excavate: true,
@@ -195,7 +192,7 @@ export function QRCodePicker({
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    `https://api.dub.co/qr?url=${linkConstructor({
+                    `${APP_DOMAIN}/api/qr?url=${linkConstructor({
                       key: props.key,
                       domain: props.domain,
                       searchParams: {
@@ -239,10 +236,7 @@ export function QRCodePicker({
                       ...(qrData.imageSettings && {
                         imageSettings: {
                           ...qrData.imageSettings,
-                          src:
-                            logo && plan !== "free"
-                              ? logo
-                              : `${APP_DOMAIN}/_static/logo.svg`,
+                          src: logo ? logo : `${APP_DOMAIN}/_static/logo.svg`,
                         },
                       }),
                     }),
@@ -344,64 +338,26 @@ function AdvancedSettings({
                     <SimpleTooltipContent
                       title=""
                       cta={message?.update_qr}
-                      href="https://dub.co/help/article/custom-qr-codes"
+                      href="https://github.com/govtechmy/go-gov-my/discussions"
                     />
                   }
                 />
               )}
             </label>
-            {plan !== "free" ? (
-              <div className="mt-1 flex items-center space-x-2">
-                <Switch
-                  fn={setShowLogo}
-                  checked={showLogo}
-                  trackDimensions="h-6 w-12"
-                  thumbDimensions="w-5 h-5"
-                  thumbTranslate="translate-x-6"
-                />
-                <p className="text-sm text-gray-600">
-                  {message?.show}{" "}
-                  {!slug || (!logo && process.env.NEXT_PUBLIC_APP_NAME)}{" "}
-                  {message?.logo}
-                </p>
-              </div>
-            ) : (
-              <Tooltip
-                content={
-                  <TooltipContent
-                    title="You need to be on the Pro plan and above to customize your QR Code logo."
-                    cta="Upgrade to Pro"
-                    {...(APP_HOSTNAMES.has(window.location.hostname)
-                      ? {
-                          onClick: () => {
-                            setShowLinkQRModal(false);
-                            queryParams({
-                              set: {
-                                upgrade: "pro",
-                              },
-                            });
-                          },
-                        }
-                      : { href: "https://dub.co/pricing" })}
-                  />
-                }
-              >
-                <div className="pointer-events-none mt-1 flex cursor-not-allowed items-center space-x-2 sm:pointer-events-auto">
-                  <Switch
-                    fn={setShowLogo}
-                    checked={showLogo}
-                    trackDimensions="h-6 w-12"
-                    thumbDimensions="w-5 h-5"
-                    thumbTranslate="translate-x-6"
-                    disabled={true}
-                  />
-                  <p className="text-sm text-gray-600">
-                    {message?.show} {process.env.NEXT_PUBLIC_APP_NAME}{" "}
-                    {message?.logo}
-                  </p>
-                </div>
-              </Tooltip>
-            )}
+            <div className="mt-1 flex items-center space-x-2">
+              <Switch
+                fn={setShowLogo}
+                checked={showLogo}
+                trackDimensions="h-6 w-12"
+                thumbDimensions="w-5 h-5"
+                thumbTranslate="translate-x-6"
+              />
+              <p className="text-sm text-gray-600">
+                {message?.show}{" "}
+                {!slug || (!logo && process.env.NEXT_PUBLIC_APP_NAME)}{" "}
+                {message?.logo}
+              </p>
+            </div>
           </div>
           <div>
             <label

@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
     ...(link.projectId && { workspaceId: link.projectId }),
     linkId: link.id,
     endpoint: "timeseries",
-    interval: "24h",
+    interval: "7d",
   });
 
   const clicks = data.reduce((acc, { clicks }) => acc + clicks, 0);
@@ -81,7 +81,7 @@ export async function GET(req: NextRequest) {
               <rect width="18" height="18" x="3" y="4" rx="2" />
               <path d="M3 10h18" />
             </svg>
-            <p tw="text-gray-700 ml-2 mt-4">Today</p>
+            <p tw="text-gray-700 ml-2 mt-4">This Week</p>
           </div>
         </div>
         <div tw="flex flex-col h-full w-full rounded-lg border border-gray-200 bg-white shadow-lg overflow-hidden">

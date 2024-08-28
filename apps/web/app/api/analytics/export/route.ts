@@ -124,7 +124,7 @@ export const GET = withWorkspace(
     return new Response(zipData, {
       headers: {
         "Content-Type": "application/zip",
-        "Content-Disposition": "attachment; filename=analytics_export.zip",
+        "Content-Disposition": 'attachment; filename="analytics_export.zip"',
       },
     });
   },

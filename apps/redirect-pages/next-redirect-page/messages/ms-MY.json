@@ -1,0 +1,89 @@
+{
+	"metadata": {
+		"redirect": {
+			"title": "Sedang Mengalih... GoGovMY | Pautan Pendek yang Dipercayai untuk Rakyat Malaysia",
+			"description": "Pautan pendek go.gov.my hanya boleh dicipta oleh pegawai awam, jadi anda boleh yakin ia datang daripada sumber yang boleh dipercayai.",
+			"openGraph": {
+				"images": {
+					"1": {
+						"url": "https://i.imgur.com/KtR5IvP.png",
+						"alt": "Pautan Rasmi yang Dipercayai untuk Rakyat Malaysia"
+					}
+				}
+			}
+		},
+		"secure": {
+			"title": "Pautan Dilindungi - GoGovMY",
+			"description": "Pautan Rasmi yang Dipercayai untuk Rakyat Malaysia",
+			"openGraph": {
+				"images": {
+					"1": {
+						"url": "https://i.imgur.com/KtR5IvP.png",
+						"alt": "Pautan Rasmi yang Dipercayai untuk Rakyat Malaysia"
+					}
+				}
+			}
+		}
+	},
+	"app": {
+		"name": "GoGovMY"
+	},
+	"common": {
+		"seconds": "{count, plural, =0 {0 saat} =1 {1 saat} other {# saat}}",
+		"continue": "Teruskan",
+		"placeholders": {
+			"password": "Masukkan kata laluan"
+		}
+	},
+	"pages": {
+		"index": {
+			"password": {
+				"title": "Kata laluan diperlukan",
+				"description": "Sila masukkan kata laluan untuk melihat pautan dilindungi."
+			},
+			"verify": {
+				"title": "Sahkan bar alamat anda",
+				"description": "Berhati-hati dengan phishing, pastikan URL bermula dengan <em></em>"
+			},
+			"redirect": {
+				"description": "Anda akan dialihkan dalam <duration></duration>."
+			},
+			"links": {
+				"skip": "Saya telah menyemak.<br></br> Langkau ke depan."
+			},
+			"quickLinks": {
+				"governmentOfMalaysia": {
+					"title": "Kerajaan Malaysia",
+					"img": {
+						"alt": "Jata Negara"
+					}
+				},
+				"goGovMy": {
+					"title": "go.gov.my",
+					"img": {
+						"alt": "Logo GoGovMY"
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"Masthead": {
+			"official_gov_website": "Portal Rasmi Kerajaan Malaysia",
+			"how_to_identify": "Kenal pasti begini",
+			"official": "Pautan portal rasmi berakhir dengan .gov.my",
+			"not_govmy": "Sekiranya anda melihat pautan selain ",
+			"close_site": ", segera tutupkan halaman itu walaupun ia menyerupai portal rasmi!",
+			"secure": "Portal yang selamat menggunakan HTTPS",
+			"find_lock": "Periksa ikon loker (",
+			"or": ") atau ",
+			"precaution": " di depan pautan. Sekiranya tiada, jangan kongsikan sebarang maklumat sensitif."
+		},
+		"Header": {},
+		"Footer": {
+			"copyright": "All Rights Reserved",
+			"last_update": "Last Updated",
+			"address": "Aras 13, 14 dan 15, Blok Menara, Menara Usahawan\nNo. 18, Persiaran Perdana, Presint 2\nPusat Pentadbiran Kerajaan Persekutuan\n62000 Putrajaya, Malaysia."
+		}
+	}
+}

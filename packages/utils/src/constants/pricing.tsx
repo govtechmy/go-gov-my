@@ -23,7 +23,7 @@ const BUSINESS_PLAN_MODIFIER = ({
 }) => ({
   name,
   tagline: "For larger teams with increased usage",
-  link: "https://go.gov.my/help/article/business-plan",
+  link: "https://github.com/govtechmy/go-gov-my/discussions",
   price: {
     monthly,
     yearly,
@@ -70,7 +70,7 @@ const BUSINESS_PLAN_MODIFIER = ({
       footnote: {
         title: "Organize your links with tags.",
         cta: "Learn more.",
-        href: "https://go.gov.my/help/article/how-to-use-tags",
+        href: "https://github.com/govtechmy/go-gov-my/discussions",
       },
     },
     { text: "Elevated support", footnote: "Email and chat support." },
@@ -80,7 +80,7 @@ const BUSINESS_PLAN_MODIFIER = ({
         title:
           "Set custom QR code logos, password-protected links logos, and more.",
         cta: "Learn more.",
-        href: "https://go.gov.my/help/article/custom-qr-codes",
+        href: "https://github.com/govtechmy/go-gov-my/discussions",
       },
     },
   ],
@@ -138,7 +138,7 @@ export const PLANS = [
   {
     name: "Pro",
     tagline: "For startups & small businesses",
-    link: "https://go.gov.my/help/article/pro-plan",
+    link: "https://github.com/govtechmy/go-gov-my/discussions",
     price: {
       monthly: 24,
       yearly: 19,
@@ -194,7 +194,7 @@ export const PLANS = [
           title:
             "Redirect vistors that land on the root of your domain (e.g. yourdomain.com) to a page of your choice.",
           cta: "Learn more.",
-          href: "https://go.gov.my/help/article/how-to-redirect-root-domain",
+          href: "https://github.com/govtechmy/go-gov-my/discussions",
         },
       },
       {

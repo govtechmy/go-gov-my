@@ -33,10 +33,10 @@ export default function TokensPageClient() {
         inputAttrs={{
           name: "name",
           defaultValue: "",
-          placeholder: "Jetpack API Key",
+          placeholder: "GoGovMy API Key",
           maxLength: 140,
         }}
-        helpText={`<a href='https://d.to/api' target='_blank'>${message?.learn_more}</a>`}
+        helpText={`<a href='https://github.com/govtechmy/go-gov-my/discussions' target='_blank'>${message?.learn_more}</a>`}
         buttonText="Submit"
         handleSubmit={(data) =>
           fetch("/api/user/tokens", {
