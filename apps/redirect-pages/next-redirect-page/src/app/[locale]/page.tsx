@@ -26,7 +26,7 @@ const REDIRECT_SECONDS = 10;
 export async function generateMetadata({
   params: { locale },
 }: MetadataProps): Promise<Metadata> {
-  const t = await getTranslations({ locale, namespace: "metadata" });
+  const t = await getTranslations({ locale });
 
   return {
     title: META_TITLE,

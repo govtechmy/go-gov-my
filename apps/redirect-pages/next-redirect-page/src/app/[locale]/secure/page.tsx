@@ -14,7 +14,7 @@ const URL = GOAPP_PARAM_URL;
 export async function generateMetadata({
   params: { locale },
 }: MetadataProps): Promise<Metadata> {
-  const t = await getTranslations({ locale, namespace: "metadata" });
+  const t = await getTranslations({ locale });
   const title = t("metadata.secure.title");
   const description = t("metadata.secure.description");
   const imageUrl = t("metadata.secure.openGraph.images.1.url");
