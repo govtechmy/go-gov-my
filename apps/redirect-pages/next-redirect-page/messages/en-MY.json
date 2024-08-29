@@ -1,7 +1,7 @@
 {
 	"metadata": {
-		"redirect": {
-			"title": "Redirecting... GoGovMY | Trusted Official Links for Malaysians",
+		"site": {
+			"title": "GoGovMY | Trusted Official Links for Malaysians",
 			"description": "go.gov.my short links can only be created by public officers, so you can be sure it's from a trustworthy source.",
 			"openGraph": {
 				"images": {
@@ -13,16 +13,12 @@
 			}
 		},
 		"secure": {
-			"title": "Protected Link - GoGovMY",
-			"description": "Trusted Official Links for Malaysians",
-			"openGraph": {
-				"images": {
-					"1": {
-						"url": "https://i.imgur.com/EfRVASR.png",
-						"alt": "Trusted Official Links for Malaysians"
-					}
-				}
-			}
+			"title": "Protected Link | GoGovMY",
+			"description": "Trusted Official Links for Malaysians"
+		},
+		"notFound": {
+			"title": "Sorry, short link not found | GoGovMY",
+			"description": "For more help, please reach out to the agency that provided you with this short link."
 		}
 	},
 	"app": {
@@ -36,6 +32,16 @@
 		}
 	},
 	"pages": {
+		"common": {
+			"redirect": {
+				"description": "You'll be redirected in <duration></duration>."
+			}
+		},
+		"notFound": {
+			"title": "Sorry, short link not found",
+			"description": "For more help, please reach out to the agency that provided you with this short link.",
+			"tag": "404 Error"
+		},
 		"index": {
 			"password": {
 				"title": "Password required",
@@ -44,9 +50,6 @@
 			"verify": {
 				"title": "Verify your address bar",
 				"description": "Be cautious of phishing, make sure the URL begins with <em></em>"
-			},
-			"redirect": {
-				"description": "You'll be redirected in <duration></duration>."
 			},
 			"links": {
 				"skip": "I've checked the link.<br></br> Skip ahead."

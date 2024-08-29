@@ -59,7 +59,7 @@ const variants = cva(
         tertiaryColor: cn(
           "focus:ring-brand-600/40",
           "hover:bg-brand-50 focus:bg-white-force_white",
-          "text-brand-600 data-[disabled=true]:text-brand-text_only-disabled",
+          "text-brand-600 data-[disabled=true]:text-brand-text_only",
         ),
       },
       size: {

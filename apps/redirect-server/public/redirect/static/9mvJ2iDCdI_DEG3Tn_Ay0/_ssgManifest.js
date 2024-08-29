@@ -1,0 +1,1 @@
+self.__SSG_MANIFEST=new Set(["\u002F[locale]","\u002F[locale]\u002Fnot-found","\u002F[locale]\u002Fsecure"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()

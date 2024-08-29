@@ -43,7 +43,7 @@ const config: Config = {
           ["300"]: "rgb(var(--brand-300) / <alpha-value>)",
           ["600"]: colors.blue[600],
           ["700"]: colors.blue[700],
-          ["text_only-disabled"]: "rgb(var(--brand-text_only-disabled) / 0.4)",
+          ["text_only"]: "rgb(var(--brand-text_only) / 0.4)",
         },
         foreground: {
           DEFAULT: "rgb(var(--brand-700) / <alpha-value>)",
@@ -84,6 +84,14 @@ const config: Config = {
           300: "rgb(var(--success-300) / <alpha-value>)",
           600: colors.green[600],
           700: colors.green[700],
+        },
+        danger: {
+          ["50"]: "rgb(var(--danger-50) / <alpha-value>)",
+          ["200"]: "rgb(var(--danger-200) / <alpha-value>)",
+          ["300"]: "rgb(var(--danger-300) / <alpha-value>)",
+          ["600"]: "rgb(var(--danger-600) / <alpha-value>)",
+          ["700"]: "rgb(var(--danger-700) / <alpha-value>)",
+          ["text_only"]: "rgb(var(--danger-text_only) / 0.4)",
         },
         white: {
           ["background-0"]: "rgb(var(--white-background-0) / <alpha-value>)",

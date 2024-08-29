@@ -20,7 +20,7 @@ export const colors = {
   brand300: "#96b7ff",
   brand200: "#c2d5ff",
   brand50: "#eff6ff",
-  brandTextOnlyDisabled: "#1d4ed866", // 40% opacity
+  brandTextOnly: "#1d4ed866", // 40% opacity
 
   success300: "#83daa3",
   success200: "#bbf7d0",
@@ -61,7 +61,7 @@ export const darkColors = {
   brand300: "#1e40af",
   brand200: "#1e3a8a",
   brand50: "#0f1836",
-  brandTextOnlyDisabled: "#588bfb66", // 40% opacity
+  brandTextOnly: "#588bfb66", // 40% opacity
 
   success300: "#166534",
   success200: "#14532d",

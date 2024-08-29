@@ -25,14 +25,21 @@ cp ./out/ms-MY.txt $PUBLIC_FOLDER
 cp ./out/en-MY.html $TEMPLATES_FOLDER
 cp ./out/ms-MY.html $TEMPLATES_FOLDER
 
-# next page: '/secure' (i.e. /secure/en-MY.html, /secure/ms-MY.html)
+# create folders for sub-path pages
 mkdir -p $PUBLIC_FOLDER/en-MY
 mkdir -p $PUBLIC_FOLDER/ms-MY
-cp -r ./out/en-MY/secure.txt $PUBLIC_FOLDER/en-MY
-cp -r ./out/ms-MY/secure.txt $PUBLIC_FOLDER/ms-MY
-
 mkdir -p $TEMPLATES_FOLDER/en-MY
 mkdir -p $TEMPLATES_FOLDER/ms-MY
+
+# next page: '/secure' (i.e. /secure/en-MY.html, /secure/ms-MY.html)
+cp -r ./out/en-MY/secure.txt $PUBLIC_FOLDER/en-MY
+cp -r ./out/ms-MY/secure.txt $PUBLIC_FOLDER/ms-MY
 cp -r ./out/en-MY/secure.html $TEMPLATES_FOLDER/en-MY
 cp -r ./out/ms-MY/secure.html $TEMPLATES_FOLDER/ms-MY 
+
+# next page: '/not-found' (i.e. /not-found/en-MY.html, /not-found/ms-MY.html)
+cp -r ./out/en-MY/not-found.txt $PUBLIC_FOLDER/en-MY
+cp -r ./out/ms-MY/not-found.txt $PUBLIC_FOLDER/ms-MY
+cp -r ./out/en-MY/not-found.html $TEMPLATES_FOLDER/en-MY
+cp -r ./out/ms-MY/not-found.html $TEMPLATES_FOLDER/ms-MY 
 

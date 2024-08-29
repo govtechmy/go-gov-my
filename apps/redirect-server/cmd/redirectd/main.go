@@ -128,6 +128,7 @@ func main() {
 	redirectT, err := template.ParseFiles(
 		"templates/redirect/en-MY.html",
 		"templates/redirect/en-MY/secure.html",
+		"templates/redirect/en-MY/not-found.html",
 	)
 	if err != nil {
 		logger.Fatal("cannot load html (redirect) templates", zap.Error(err))
@@ -165,7 +166,7 @@ func main() {
 				zap.String("user-agent", r.UserAgent()),
 				zap.String("code", "link_not_found")) // Filebeat will run to collect link not found errors over this code
 			w.WriteHeader(http.StatusNotFound)
-			if err := t.ExecuteTemplate(w, "notfound.html", nil); err != nil {
+			if err := redirectT.ExecuteTemplate(w, "not-found.html", nil); err != nil {
 				logger.Error("failed to execute template", zap.Error(err))
 			}
 			return
@@ -186,7 +187,7 @@ func main() {
 		// If a link is banned, respond with the not found page
 		if link.Banned {
 			w.WriteHeader(http.StatusNotFound)
-			if err := t.ExecuteTemplate(w, "notfound.html", nil); err != nil {
+			if err := redirectT.ExecuteTemplate(w, "not-found.html", nil); err != nil {
 				logger.Error("failed to execute template", zap.Error(err))
 			}
 			return

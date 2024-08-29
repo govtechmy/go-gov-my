@@ -1,7 +1,7 @@
 {
 	"metadata": {
-		"redirect": {
-			"title": "Sedang Mengalih... GoGovMY | Pautan Pendek yang Dipercayai untuk Rakyat Malaysia",
+		"site": {
+			"title": "GoGovMY  | Pautan Pendek yang Dipercayai untuk Rakyat Malaysia",
 			"description": "Pautan pendek go.gov.my hanya boleh dicipta oleh pegawai awam, jadi anda boleh yakin ia datang daripada sumber yang boleh dipercayai.",
 			"openGraph": {
 				"images": {
@@ -13,16 +13,12 @@
 			}
 		},
 		"secure": {
-			"title": "Pautan Dilindungi - GoGovMY",
-			"description": "Pautan Rasmi yang Dipercayai untuk Rakyat Malaysia",
-			"openGraph": {
-				"images": {
-					"1": {
-						"url": "https://i.imgur.com/KtR5IvP.png",
-						"alt": "Pautan Rasmi yang Dipercayai untuk Rakyat Malaysia"
-					}
-				}
-			}
+			"title": "Pautan Dilindungi | GoGovMY",
+			"description": "Pautan Rasmi yang Dipercayai untuk Rakyat Malaysia"
+		},
+		"notFound": {
+			"title": "Maaf, pautan pendek tidak ditemui | GoGovMY",
+			"description": "Untuk bantuan lebih lanjut, sila hubungi agensi yang menyediakan pautan pendek ini."
 		}
 	},
 	"app": {
@@ -36,6 +32,16 @@
 		}
 	},
 	"pages": {
+		"common": {
+			"redirect": {
+				"description": "Anda akan dialihkan dalam <duration></duration>."
+			}
+		},
+		"notFound": {
+			"title": "Maaf, pautan pendek tidak ditemui",
+			"description": "Untuk bantuan lebih lanjut, sila hubungi agensi yang menyediakan pautan pendek ini.",
+			"tag": "Ralat 404"
+		},
 		"index": {
 			"password": {
 				"title": "Kata laluan diperlukan",
@@ -44,9 +50,6 @@
 			"verify": {
 				"title": "Sahkan bar alamat anda",
 				"description": "Berhati-hati dengan phishing, pastikan URL bermula dengan <em></em>"
-			},
-			"redirect": {
-				"description": "Anda akan dialihkan dalam <duration></duration>."
 			},
 			"links": {
 				"skip": "Saya telah menyemak.<br></br> Langkau ke depan."
