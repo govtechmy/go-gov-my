@@ -29,10 +29,6 @@ export * from "./background";
 export * from "./footer";
 export * from "./max-width-wrapper";
 export * from "./nav";
-export * from "./nav-mobile";
-
-// content
-export * from "./content";
 
 // misc
 export * from "./blur-image";
