@@ -1,11 +1,9 @@
-"use client";
-
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
+import { useIntlHook } from "@/lib/middleware/utils/useI18n";
 import { MaxWidthWrapper } from "@dub/ui";
 import { FileX2 } from "lucide-react";
 
 export default function AnalyticsNotFound() {
-  const { messages, locale } = useIntlClientHook();
+  const { messages } = useIntlHook();
   const message = messages?.link;
   return (
     <MaxWidthWrapper>
