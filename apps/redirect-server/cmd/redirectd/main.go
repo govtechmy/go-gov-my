@@ -119,17 +119,14 @@ func main() {
 
 	linkRepo := es.NewLinkRepo(esClient)
 
-	t, err := template.ParseGlob("templates/*.html")
-	if err != nil {
-		logger.Fatal("cannot load html templates", zap.Error(err))
-	}
-
 	// add other languages (i.e. ms-MY) if necessary
 	redirectT, err := template.ParseFiles(
 		"templates/redirect/en-MY.html",
 		"templates/redirect/en-MY/secure.html",
 		"templates/redirect/en-MY/not-found.html",
+		"templates/redirect/en-MY/error.html",
 	)
+
 	if err != nil {
 		logger.Fatal("cannot load html (redirect) templates", zap.Error(err))
 	}
@@ -178,7 +175,7 @@ func main() {
 				zap.String("user-agent", r.UserAgent()),
 				zap.Error(err))
 			w.WriteHeader(http.StatusInternalServerError)
-			if err := t.ExecuteTemplate(w, "server_error.html", nil); err != nil {
+			if err := redirectT.ExecuteTemplate(w, "error.html", nil); err != nil {
 				logger.Error("failed to execute template", zap.Error(err))
 			}
 			return
