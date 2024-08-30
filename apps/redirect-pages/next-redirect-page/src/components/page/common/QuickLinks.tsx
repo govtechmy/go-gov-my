@@ -34,7 +34,7 @@ export default async function QuickLinks() {
   const t = await getTranslations();
 
   return (
-    <div className={cn("flex-0 mt-[4rem] lg:mt-[7rem]", "w-full", "pb-[4rem]")}>
+    <div className={cn("flex-0 pt-[4rem] lg:pt-[7rem]", "w-full", "pb-[4rem]")}>
       <div className={cn("flex flex-row justify-center")}>
         {quickLinks.map(({ title, href, img }, i) => (
           <React.Fragment key={i}>

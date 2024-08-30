@@ -19,6 +19,10 @@
 		"notFound": {
 			"title": "Sorry, short link not found | GoGovMY",
 			"description": "For more help, please reach out to the agency that provided you with this short link."
+		},
+		"serverError": {
+			"title": "Something went wrong | GoGovMY",
+			"description": "For more help, please reach out to the agency that provided you with this short link."
 		}
 	},
 	"app": {
@@ -37,16 +41,21 @@
 				"description": "You'll be redirected in <duration></duration>."
 			}
 		},
+		"error": {
+			"title": "Something went wrong",
+			"description": "For more help, please reach out to the agency that provided you with this short link.",
+			"tag": "500 Error"
+		},
 		"notFound": {
 			"title": "Sorry, short link not found",
 			"description": "For more help, please reach out to the agency that provided you with this short link.",
 			"tag": "404 Error"
 		},
+		"password": {
+			"title": "Password required",
+			"description": "Please enter the password to view protected link."
+		},
 		"index": {
-			"password": {
-				"title": "Password required",
-				"description": "Please enter the password to view protected link."
-			},
 			"verify": {
 				"title": "Verify your address bar",
 				"description": "Be cautious of phishing, make sure the URL begins with <em></em>"

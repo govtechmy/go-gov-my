@@ -31,15 +31,21 @@ mkdir -p $PUBLIC_FOLDER/ms-MY
 mkdir -p $TEMPLATES_FOLDER/en-MY
 mkdir -p $TEMPLATES_FOLDER/ms-MY
 
-# next page: '/secure' (i.e. /secure/en-MY.html, /secure/ms-MY.html)
+# next page: /secure
 cp -r ./out/en-MY/secure.txt $PUBLIC_FOLDER/en-MY
 cp -r ./out/ms-MY/secure.txt $PUBLIC_FOLDER/ms-MY
 cp -r ./out/en-MY/secure.html $TEMPLATES_FOLDER/en-MY
 cp -r ./out/ms-MY/secure.html $TEMPLATES_FOLDER/ms-MY 
 
-# next page: '/not-found' (i.e. /not-found/en-MY.html, /not-found/ms-MY.html)
+# next page: /not-found
 cp -r ./out/en-MY/not-found.txt $PUBLIC_FOLDER/en-MY
 cp -r ./out/ms-MY/not-found.txt $PUBLIC_FOLDER/ms-MY
 cp -r ./out/en-MY/not-found.html $TEMPLATES_FOLDER/en-MY
 cp -r ./out/ms-MY/not-found.html $TEMPLATES_FOLDER/ms-MY 
+
+# next page: /error
+cp -r ./out/en-MY/error.txt $PUBLIC_FOLDER/en-MY
+cp -r ./out/ms-MY/error.txt $PUBLIC_FOLDER/ms-MY
+cp -r ./out/en-MY/error.html $TEMPLATES_FOLDER/en-MY
+cp -r ./out/ms-MY/error.html $TEMPLATES_FOLDER/ms-MY 
 

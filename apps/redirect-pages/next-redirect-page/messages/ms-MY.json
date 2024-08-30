@@ -19,6 +19,10 @@
 		"notFound": {
 			"title": "Maaf, pautan pendek tidak ditemui | GoGovMY",
 			"description": "Untuk bantuan lebih lanjut, sila hubungi agensi yang menyediakan pautan pendek ini."
+		},
+		"serverError": {
+			"title": "Sesuatu tidak kena | GoGovMY",
+			"description": "Untuk bantuan lebih lanjut, sila hubungi agensi yang menyediakan pautan pendek ini."
 		}
 	},
 	"app": {
@@ -37,16 +41,21 @@
 				"description": "Anda akan dialihkan dalam <duration></duration>."
 			}
 		},
+		"error": {
+			"title": "Sesuatu tidak kena | GoGovMY",
+			"description": "Untuk bantuan lebih lanjut, sila hubungi agensi yang menyediakan pautan pendek ini.",
+			"tag": "Ralat 500"
+		},
 		"notFound": {
 			"title": "Maaf, pautan pendek tidak ditemui",
 			"description": "Untuk bantuan lebih lanjut, sila hubungi agensi yang menyediakan pautan pendek ini.",
 			"tag": "Ralat 404"
 		},
+		"password": {
+			"title": "Kata laluan diperlukan",
+			"description": "Sila masukkan kata laluan untuk melihat pautan dilindungi."
+		},
 		"index": {
-			"password": {
-				"title": "Kata laluan diperlukan",
-				"description": "Sila masukkan kata laluan untuk melihat pautan dilindungi."
-			},
 			"verify": {
 				"title": "Sahkan bar alamat anda",
 				"description": "Berhati-hati dengan phishing, pastikan URL bermula dengan <em></em>"
