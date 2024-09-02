@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
+import { createEncryptedMessage } from "kafka-consumer/utils/encryption";
 import { OutboxSchema } from "../models/OutboxSchema";
 import { retryWithDelay } from "../utils/retry";
 
@@ -30,12 +31,16 @@ export async function runOutboxConsumer(consumer: any, log: any) {
             headers,
           } = await OutboxSchema.parseAsync(debeziumPayload.after);
 
+          const encryptedPayload = await createEncryptedMessage(
+            Buffer.from(payload),
+          );
+
           log.info(`Sending request to redirect server: ${action} ${host}`);
 
           const response = await fetch(host, {
             method: action,
             headers: JSON.parse(headers),
-            body: payload,
+            body: JSON.stringify(encryptedPayload),
           });
 
           if (response.ok) {

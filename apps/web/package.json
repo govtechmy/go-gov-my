@@ -17,6 +17,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.20.4",
     "@aws-sdk/client-dynamodb": "^3.592.0",
+    "@aws-sdk/client-kms": "^3.637.0",
     "@aws-sdk/client-s3": "^3.592.0",
     "@aws-sdk/client-ses": "^3.592.0",
     "@chronark/zod-bird": "^0.3.9",
