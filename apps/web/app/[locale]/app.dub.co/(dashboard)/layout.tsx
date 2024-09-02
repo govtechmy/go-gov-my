@@ -43,7 +43,7 @@ export default function Layout({
                 </div>
                 <div className="flex items-center space-x-6">
                   <LocaleSwitcher />
-                  <a
+                  {/* <a
                     href="https://github.com/govtechmy/go-gov-my/releases"
                     className="hidden text-sm text-gray-500 transition-colors hover:text-gray-700 sm:block"
                     target="_blank"
@@ -56,7 +56,7 @@ export default function Layout({
                     target="_blank"
                   >
                     {messages?.layout?.help}
-                  </a>
+                  </a> */}
                   <UserDropdown />
                 </div>
               </div>
