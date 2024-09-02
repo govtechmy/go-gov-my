@@ -32,12 +32,12 @@ export default function UserDropdown() {
               <p className="truncate text-sm text-gray-500">
                 {session?.user?.email}
               </p>
-              {session && (
+              {/* {session && (
                 <div className="mt-1 flex gap-1">
                   <AgencyBadge agencyCode={session.user.agencyCode} />
                   <RoleBadge role={session.user.role} />
                 </div>
-              )}
+              )} */}
             </Link>
             <Link
               href={`/${locale}/settings`}
