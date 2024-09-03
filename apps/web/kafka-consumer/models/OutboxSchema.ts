@@ -8,4 +8,5 @@ export const OutboxSchema = z.object({
   action: z.string().min(1),
   headers: z.string().min(1),
   partitionKey: z.string().min(1),
+  encryptedSecrets: z.string().min(1).nullish(),
 });

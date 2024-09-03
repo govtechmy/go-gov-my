@@ -1,3 +1,4 @@
+import { encryptOutboxSecrets } from "kafka-consumer/utils/encryption";
 import { LinkProps } from "../types";
 
 // This should be like the object model
@@ -18,7 +19,9 @@ export interface LinkDTO {
 }
 
 // This should be able to reuse anywhere.
-export async function processDTOLink(response: LinkProps): Promise<LinkDTO> {
+export async function processDTOLink(
+  response: LinkProps,
+): Promise<{ payload: LinkDTO; encryptedSecrets: string | null }> {
   const linkDTO: LinkDTO = {
     id: response.id,
     slug: response.key,
@@ -38,5 +41,20 @@ export async function processDTOLink(response: LinkProps): Promise<LinkDTO> {
     createdAt: response.createdAt,
   };
 
-  return linkDTO;
+  const secrets: Record<string, string> = {};
+  let encryptedSecrets: string | null = null;
+
+  // If a password is set, store it as a secret
+  if (linkDTO.password !== null) {
+    const placeholder = "{{PASSWORD}}";
+    secrets[placeholder] = linkDTO.password;
+    linkDTO.password = placeholder;
+  }
+
+  const hasSecrets = Object.entries(secrets).length > 0;
+  if (hasSecrets) {
+    encryptedSecrets = await encryptOutboxSecrets(secrets);
+  }
+
+  return { payload: linkDTO, encryptedSecrets };
 }

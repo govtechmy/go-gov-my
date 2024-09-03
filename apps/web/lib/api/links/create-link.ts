@@ -96,12 +96,12 @@ export async function createLink(
   const uploadedImageUrl = `${process.env.STORAGE_BASE_URL}/images/${response.id}`;
 
   // Transform into DTOs
-  const linkDTO = await processDTOLink(response);
+  const { payload, encryptedSecrets } = await processDTOLink(response);
 
   // For simplicity and centralized, lets create the idempotency key at this level
   const headersJSON = generateIdempotencyKey(
-    linkDTO.id,
-    linkDTO.createdAt ?? new Date(),
+    payload.id,
+    payload.createdAt ?? new Date(),
   );
 
   try {
@@ -134,9 +134,10 @@ export async function createLink(
                 data: {
                   action: OUTBOX_ACTIONS.CREATE_LINK,
                   host: REDIRECT_SERVER_BASE_URL + "/links",
-                  payload: linkDTO as unknown as Prisma.InputJsonValue,
+                  payload: payload as unknown as Prisma.InputJsonValue,
                   headers: headersJSON,
-                  partitionKey: linkDTO.slug,
+                  partitionKey: payload.slug,
+                  encryptedSecrets,
                 },
               }),
             ]
@@ -145,9 +146,10 @@ export async function createLink(
                 data: {
                   action: OUTBOX_ACTIONS.CREATE_LINK,
                   host: REDIRECT_SERVER_BASE_URL + "/links",
-                  payload: linkDTO as unknown as Prisma.InputJsonValue,
+                  payload: payload as unknown as Prisma.InputJsonValue,
                   headers: headersJSON,
-                  partitionKey: linkDTO.slug,
+                  partitionKey: payload.slug,
+                  encryptedSecrets,
                 },
               }),
               addToHistory({

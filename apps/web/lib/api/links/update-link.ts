@@ -127,10 +127,10 @@ export async function updateLink({
   });
 
   // Transform into DTOs
-  const linkDTO = await processDTOLink(response);
+  const { payload, encryptedSecrets } = await processDTOLink(response);
 
   // For simplicity and centralized, lets create the idempotency key at this level
-  const headersJSON = generateIdempotencyKey(linkDTO.id, response.updatedAt);
+  const headersJSON = generateIdempotencyKey(payload.id, response.updatedAt);
 
   try {
     waitUntil(
@@ -157,9 +157,10 @@ export async function updateLink({
             action: OUTBOX_ACTIONS.UPDATE_LINK,
             // host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
             host: REDIRECT_SERVER_BASE_URL + "/links",
-            payload: linkDTO as unknown as Prisma.InputJsonValue,
+            payload: payload as unknown as Prisma.InputJsonValue,
             headers: headersJSON,
-            partitionKey: linkDTO.slug,
+            partitionKey: payload.slug,
+            encryptedSecrets,
           },
         }),
         addToHistory({
