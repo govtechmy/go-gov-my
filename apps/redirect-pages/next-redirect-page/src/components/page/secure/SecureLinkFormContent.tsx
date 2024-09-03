@@ -6,6 +6,8 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import ButtonB from "../../ButtonB";
 import Input from "../../Input";
+import { GOAPP_PARAM_AUTH_URL } from "@/constants/goapp";
+
 
 export default function SecureLinkFormContent() {
   const t = useTranslations();
@@ -23,12 +25,24 @@ export default function SecureLinkFormContent() {
       />
       <ButtonB
         disabled={!password}
-        type="submit"
+        type="button"
         variant="primary"
         size="large"
         align="center"
         iconEnd={<IconArrowRight />}
         className={cn("mt-[2rem]", "h-full w-full")}
+        onClick={()=>{
+          fetch("/auth", {
+            method: "POST",
+            body: JSON.stringify({
+              Password: password,
+              Slug: GOAPP_PARAM_AUTH_URL
+            })
+          }).then((value)=>value.json())
+          .then((value)=>{
+            console.log("value", value)
+          })
+        }}
       >
         <span className="text-center">{t("common.continue")}</span>
       </ButtonB>

@@ -5,8 +5,6 @@ import SecureLinkFormContent from "./SecureLinkFormContent";
 export default function SecureLinkForm() {
   return (
     <form
-      method="GET"
-      action={GOAPP_PARAM_AUTH_URL}
       className={cn(
         "mt-[2.25rem] md:mt-[2.5rem]",
         "flex flex-col items-center",

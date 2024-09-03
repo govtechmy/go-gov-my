@@ -7,7 +7,18 @@ import (
 	"redirect-server/repository"
 	"redirect-server/repository/es"
 	"strings"
+
+	"golang.org/x/crypto/bcrypt"
 )
+
+func HashPassword(password string) (string, error) {
+	// Generate a bcrypt hash of the password
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+	return string(hashedPassword), nil
+}
 
 // [POST, PUT] Link
 func indexLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkRepo, idempotentResourceRepo *es.IdempotentResourceRepo) {
@@ -57,6 +68,17 @@ func indexLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkR
 		logHandler(repository.ErrUnmarshalling, err)
 		errLinkHandler(w, err)
 		return
+	}
+
+	// begin the password hashing process
+	if link.Password != "" {
+		hashedPassword, err := HashPassword(link.Password)
+		if err != nil {
+			logHandler(repository.ErrUnmarshalling, err)
+			errLinkHandler(w, err)
+			return
+		}
+		link.Password = hashedPassword
 	}
 
 	if err := linkRepo.SaveLink(ctx, &link); err != nil {
