@@ -48,6 +48,7 @@ type AuthPostProps struct {
 type PostReturnProps struct {
 	Status  bool
 	Message string
+	URL     string
 }
 
 func main() {
@@ -302,9 +303,30 @@ func main() {
 			}
 
 			// LINK IS PASSWORD PROTECTED AND USER PROVIDED CORRECT PASSWORD
+			// Log redirect metadata for analytics
+			redirectMetadata := repository.NewRedirectMetadata(*r, ipDB, *link)
+			fileLogger.Info("redirect analytics",
+				zap.String("linkSlug", link.Slug),
+				zap.String("linkId", link.ID),
+				zap.String("userAgent", r.UserAgent()),
+				zap.String("ip", utils.GetClientIP(r)),
+				zap.Object("redirectMetadata", redirectMetadata),
+			)
+			logger.Info("redirect analytics",
+				zap.String("linkSlug", link.Slug),
+				zap.String("linkId", link.ID),
+				zap.String("userAgent", r.UserAgent()),
+				zap.String("ip", utils.GetClientIP(r)),
+				zap.Object("redirectMetadata", redirectMetadata),
+			)
+
+			// Do not use link.URL, use redirectMetadata.LinkURL instead.
+			// Redirect URL could be a geo-specific/ios/android link.
+			redirectURL := redirectMetadata.LinkURL
 			var returnStruct PostReturnProps
 			returnStruct.Status = true
 			returnStruct.Message = "Password Authenticated"
+			returnStruct.URL = redirectURL
 			w.Header().Add("Content-Type", "application/json")
 			w.WriteHeader(http.StatusOK)
 			json.NewEncoder(w).Encode(returnStruct)
