@@ -114,6 +114,7 @@ export default function ButtonB(props: Props) {
       rel={props.rel && props.rel.join(" ")}
       target={props.target}
       {...commonProps}
+      onClick={props.onClick}
     >
       {body}
     </a>
