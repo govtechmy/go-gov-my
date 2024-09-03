@@ -118,7 +118,7 @@ export default function ButtonB(props: Props) {
       {body}
     </a>
   ) : (
-    <button disabled={props.disabled} type={props.type} {...commonProps}>
+    <button disabled={props.disabled} type={props.type} onClick={props.onClick} {...commonProps}>
       {body}
     </button>
   );

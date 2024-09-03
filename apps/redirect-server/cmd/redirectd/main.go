@@ -164,7 +164,6 @@ func main() {
 	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		slug := strings.TrimPrefix(r.URL.Path, "/")
-		slugWithLeadingSlash := "/" + slug
 
 		link, err := linkRepo.GetLink(ctx, slug)
 		if err == repository.ErrLinkNotFound {
@@ -204,7 +203,7 @@ func main() {
 		// LINK IS PASSWORD PROTECTED , REDIRECT TO AUTH PAGE
 		if link.Password != "" {
 			if err := redirectT.ExecuteTemplate(w, "secure.html", AuthPageProps{
-				Slug: slugWithLeadingSlash,
+				Slug: slug,
 			}); err != nil {
 				logger.Error("failed to execute template", zap.Error(err))
 			}

@@ -2,7 +2,7 @@ import { GOAPP_PARAM_AUTH_URL } from "@/constants/goapp";
 import { cn } from "@/lib/utils";
 import SecureLinkFormContent from "./SecureLinkFormContent";
 
-export default function SecureLinkForm() {
+export default async function SecureLinkForm() {
   return (
     <form
       className={cn(
@@ -12,7 +12,7 @@ export default function SecureLinkForm() {
         "px-[1.125rem] lg:px-0",
       )}
     >
-     <SecureLinkFormContent />
+      <SecureLinkFormContent slug={GOAPP_PARAM_AUTH_URL} />
     </form>
   );
 }
