@@ -1,8 +1,48 @@
-import { GOAPP_PARAM_AUTH_URL } from "@/constants/goapp";
-import { cn } from "@/lib/utils";
-import SecureLinkFormContent from "./SecureLinkFormContent";
+"use client";
 
-export default async function SecureLinkForm() {
+import IconArrowRight from "@/icons/arrow-right";
+import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
+import { useRef, useState } from "react";
+import ButtonB from "../../ButtonB";
+import Input from "../../Input";
+
+type Props = {
+  slug: string;
+  onAuthenticated: (url: string) => void;
+};
+
+export default function SecureLinkFormContent(props: Props) {
+  const t = useTranslations();
+  const ref = useRef<HTMLInputElement>(null);
+  const [password, setPassword] = useState("");
+
+  async function authenticate() {
+    if (!ref.current) {
+      throw new Error("Mis-configured slug");
+    }
+
+    const response = await fetch("/auth", {
+      method: "POST",
+      body: JSON.stringify({
+        ["Password"]: password,
+        ["Slug"]: ref.current.value,
+      }),
+    });
+
+    if (!response.ok) {
+      setPassword("");
+      return;
+    }
+
+    const data = await response.json();
+    const { ["URL"]: url } = data;
+
+    if (url) {
+      props.onAuthenticated(url);
+    }
+  }
+
   return (
     <form
       className={cn(
@@ -12,7 +52,27 @@ export default async function SecureLinkForm() {
         "px-[1.125rem] lg:px-0",
       )}
     >
-      <SecureLinkFormContent slug={GOAPP_PARAM_AUTH_URL} />
+      <input ref={ref} type="hidden" value={props.slug} />
+      <Input
+        name="password"
+        type="password"
+        value={password}
+        onChange={setPassword}
+        placeholder={t("common.placeholders.password")}
+        className={cn("shrink-0")}
+      />
+      <ButtonB
+        disabled={!password}
+        type="button"
+        variant="primary"
+        size="large"
+        align="center"
+        iconEnd={<IconArrowRight />}
+        className={cn("mt-[2rem]", "h-full w-full")}
+        onClick={authenticate}
+      >
+        <span className="text-center">{t("common.continue")}</span>
+      </ButtonB>
     </form>
   );
 }
