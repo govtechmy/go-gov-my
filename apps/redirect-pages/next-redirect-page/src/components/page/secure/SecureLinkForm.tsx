@@ -51,6 +51,10 @@ export default function SecureLinkFormContent(props: Props) {
         "h-[2.5rem] w-[20.25rem] md:w-[25rem]",
         "px-[1.125rem] lg:px-0",
       )}
+      onSubmit={(e) => {
+        e.preventDefault();
+        authenticate();
+      }}
     >
       <input ref={ref} type="hidden" value={props.slug} />
       <Input
@@ -63,13 +67,12 @@ export default function SecureLinkFormContent(props: Props) {
       />
       <ButtonB
         disabled={!password}
-        type="button"
+        type="submit"
         variant="primary"
         size="large"
         align="center"
         iconEnd={<IconArrowRight />}
         className={cn("mt-[2rem]", "h-full w-full")}
-        onClick={authenticate}
       >
         <span className="text-center">{t("common.continue")}</span>
       </ButtonB>
