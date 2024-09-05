@@ -43,7 +43,8 @@ export default function Preview({
   const { title, description, image, url, password } = data;
   const [debouncedUrl] = useDebounce(url, 500);
   const hostname = useMemo(() => {
-    if (password) return "dub.co";
+    if (password)
+      return process.env.NEXT_PUBLIC_APP_SHORT_DOMAIN || "go.gov.my";
     return getDomainWithoutWWW(debouncedUrl);
   }, [password, debouncedUrl]);
   const { messages } = useIntlClientHook();
