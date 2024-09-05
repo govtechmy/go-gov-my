@@ -4,14 +4,11 @@ import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { LinkWithTagsProps } from "@/lib/types";
 import LinkLogo from "@/ui/links/link-logo";
-import { AlertCircleFill, Lock, Random, X } from "@/ui/shared/icons";
+import { AlertCircleFill, Lock, X } from "@/ui/shared/icons";
 import { UpgradeToProToast } from "@/ui/shared/upgrade-to-pro-toast";
 import {
   Button,
-  ButtonTooltip,
   LinkedIn,
-  LoadingCircle,
-  Magic,
   Modal,
   Tooltip,
   TooltipContent,
@@ -32,7 +29,6 @@ import {
   punycode,
   truncate,
 } from "@dub/utils";
-import { useCompletion } from "ai/react";
 import { TriangleAlert } from "lucide-react";
 import {
   useParams,
@@ -149,51 +145,51 @@ function AddEditLinkModal({
     props ? [props.key] : [],
   );
 
-  const {
-    completion,
-    isLoading: generatingAIKey,
-    complete,
-  } = useCompletion({
-    api: `/api/ai/completion?workspaceId=${workspaceId}`,
-    onError: (error) => {
-      if (error.message.includes("Upgrade to Pro")) {
-        toast.custom(() => (
-          <UpgradeToProToast
-            title="You've exceeded your AI usage limit"
-            message={error.message}
-          />
-        ));
-      } else {
-        toast.error(error.message);
-      }
-    },
-    onFinish: (_, completion) => {
-      setGeneratedKeys((prev) => [...prev, completion]);
-      mutateWorkspace();
-      runKeyChecks(completion);
-    },
-  });
+  // const {
+  //   completion,
+  //   isLoading: generatingAIKey,
+  //   complete,
+  // } = useCompletion({
+  //   api: `/api/ai/completion?workspaceId=${workspaceId}`,
+  //   onError: (error) => {
+  //     if (error.message.includes("Upgrade to Pro")) {
+  //       toast.custom(() => (
+  //         <UpgradeToProToast
+  //           title="You've exceeded your AI usage limit"
+  //           message={error.message}
+  //         />
+  //       ));
+  //     } else {
+  //       toast.error(error.message);
+  //     }
+  //   },
+  //   onFinish: (_, completion) => {
+  //     setGeneratedKeys((prev) => [...prev, completion]);
+  //     mutateWorkspace();
+  //     runKeyChecks(completion);
+  //   },
+  // });
 
-  const generateAIKey = useCallback(async () => {
-    setKeyError(null);
-    complete(
-      `For the following URL, suggest a relevant short link slug that is at most ${Math.max(25 - domain.length, 12)} characters long. 
-              
-        - URL: ${data.url}
-        - Meta title: ${data.title}
-        - Meta description: ${data.description}. 
+  // const generateAIKey = useCallback(async () => {
+  //   setKeyError(null);
+  //   complete(
+  //     `For the following URL, suggest a relevant short link slug that is at most ${Math.max(25 - domain.length, 12)} characters long.
 
-      Only respond with the short link slug and nothing else. Don't use quotation marks or special characters (dash and slash are allowed).
-      
-      Make sure your answer does not exist in this list of generated slugs: ${generatedKeys.join(", ")}`,
-    );
-  }, [data.url, data.title, data.description, generatedKeys]);
+  //       - URL: ${data.url}
+  //       - Meta title: ${data.title}
+  //       - Meta description: ${data.description}.
 
-  useEffect(() => {
-    if (completion) {
-      setData((prev) => ({ ...prev, key: completion }));
-    }
-  }, [completion]);
+  //     Only respond with the short link slug and nothing else. Don't use quotation marks or special characters (dash and slash are allowed).
+
+  //     Make sure your answer does not exist in this list of generated slugs: ${generatedKeys.join(", ")}`,
+  //   );
+  // }, [data.url, data.title, data.description, generatedKeys]);
+
+  // useEffect(() => {
+  //   if (completion) {
+  //     setData((prev) => ({ ...prev, key: completion }));
+  //   }
+  // }, [completion]);
 
   const [generatingMetatags, setGeneratingMetatags] = useState(
     props ? true : false,
@@ -528,37 +524,38 @@ function AddEditLinkModal({
                       <Lock className="h-3 w-3" />
                     </button>
                   ) : (
-                    <div className="flex items-center">
-                      <ButtonTooltip
-                        tooltipContent="Generate a random key"
-                        onClick={generateRandomKey}
-                        disabled={generatingRandomKey || generatingAIKey}
-                        className="flex h-6 w-6 items-center justify-center rounded-md text-gray-500 transition-colors duration-75 hover:bg-gray-100 active:bg-gray-200 disabled:cursor-not-allowed"
-                      >
-                        {generatingRandomKey ? (
-                          <LoadingCircle />
-                        ) : (
-                          <Random className="h-3 w-3" />
-                        )}
-                      </ButtonTooltip>
-                      <ButtonTooltip
-                        tooltipContent="Generate a key using AI"
-                        onClick={generateAIKey}
-                        disabled={
-                          generatingRandomKey ||
-                          generatingAIKey ||
-                          (aiLimit && aiUsage && aiUsage >= aiLimit) ||
-                          !url
-                        }
-                        className="flex h-6 w-6 items-center justify-center rounded-md text-gray-500 transition-colors duration-75 hover:bg-gray-100 active:bg-gray-200 disabled:cursor-not-allowed"
-                      >
-                        {generatingAIKey ? (
-                          <LoadingCircle />
-                        ) : (
-                          <Magic className="h-4 w-4" />
-                        )}
-                      </ButtonTooltip>
-                    </div>
+                    // <div className="flex items-center">
+                    //   <ButtonTooltip
+                    //     tooltipContent="Generate a random key"
+                    //     onClick={generateRandomKey}
+                    //     disabled={generatingRandomKey || generatingAIKey}
+                    //     className="flex h-6 w-6 items-center justify-center rounded-md text-gray-500 transition-colors duration-75 hover:bg-gray-100 active:bg-gray-200 disabled:cursor-not-allowed"
+                    //   >
+                    //     {generatingRandomKey ? (
+                    //       <LoadingCircle />
+                    //     ) : (
+                    //       <Random className="h-3 w-3" />
+                    //     )}
+                    //   </ButtonTooltip>
+                    //   <ButtonTooltip
+                    //     tooltipContent="Generate a key using AI"
+                    //     onClick={generateAIKey}
+                    //     disabled={
+                    //       generatingRandomKey ||
+                    //       generatingAIKey ||
+                    //       (aiLimit && aiUsage && aiUsage >= aiLimit) ||
+                    //       !url
+                    //     }
+                    //     className="flex h-6 w-6 items-center justify-center rounded-md text-gray-500 transition-colors duration-75 hover:bg-gray-100 active:bg-gray-200 disabled:cursor-not-allowed"
+                    //   >
+                    //     {generatingAIKey ? (
+                    //       <LoadingCircle />
+                    //     ) : (
+                    //       <Magic className="h-4 w-4" />
+                    //     )}
+                    //   </ButtonTooltip>
+                    // </div>
+                    <></>
                   )}
                 </div>
                 <div className="relative mt-1 flex rounded-md shadow-sm">
