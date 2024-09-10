@@ -33,7 +33,7 @@ export async function createLink(
   const { utm_source, utm_medium, utm_campaign, utm_term, utm_content } =
     getParamsFromURL(url);
 
-  const { tagId, tagIds, tagNames, ...rest } = link;
+  const { tagId, tagIds, tagNames, password, ...rest } = link;
 
   const response = await prisma.link.create({
     data: {
@@ -50,6 +50,7 @@ export async function createLink(
       utm_content,
       expiresAt: expiresAt ? new Date(expiresAt) : null,
       geo: geo || Prisma.JsonNull,
+      passwordEnabledAt: password ? new Date() : undefined,
 
       // Associate tags by tagNames
       ...(tagNames?.length &&
@@ -96,7 +97,10 @@ export async function createLink(
   const uploadedImageUrl = `${process.env.STORAGE_BASE_URL}/images/${response.id}`;
 
   // Transform into DTOs
-  const { payload, encryptedSecrets } = await processDTOLink(response);
+  const { payload, encryptedSecrets } = await processDTOLink({
+    ...response,
+    password,
+  });
 
   // For simplicity and centralized, lets create the idempotency key at this level
   const headersJSON = generateIdempotencyKey(

@@ -151,7 +151,6 @@ function UpdateMessages({
     "image",
     "ios",
     "key",
-    "password",
     "proxy",
     "publicStats",
     "title",

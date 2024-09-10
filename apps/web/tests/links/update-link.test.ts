@@ -1,5 +1,7 @@
+import { updateLinkBodySchema } from "@/lib/zod/schemas/links";
 import { Link } from "@prisma/client";
 import { afterAll, describe, expect, test } from "vitest";
+import { z } from "zod";
 import { randomId } from "../utils/helpers";
 import { IntegrationHarness } from "../utils/integration";
 import { link } from "../utils/resource";
@@ -23,16 +25,15 @@ describe.sequential("PATCH /links/{linkId}", async () => {
     },
   });
 
-  const toUpdate: Partial<Link> = {
+  const toUpdate: Partial<z.infer<typeof updateLinkBodySchema>> = {
     key: randomId(),
     url: "https://github.com/dubinc/dub",
     title: "Dub Inc",
     description: "Open-source link management infrastructure.",
     publicStats: true,
     comments: "This is a comment.",
-    expiresAt: new Date("2030-04-16T17:00:00.000Z"),
+    expiresAt: "2030-04-16T17:00:00.000Z",
     expiredUrl: "https://github.com/expired",
-    password: "link-password",
     ios: "https://apps.apple.com/app/1611158928",
     android:
       "https://play.google.com/store/apps/details?id=com.disney.disneyplus",
@@ -212,16 +213,15 @@ describe.sequential(
       },
     });
 
-    const toUpdate: Partial<Link> = {
+    const toUpdate: Partial<z.infer<typeof updateLinkBodySchema>> = {
       key: randomId(),
       url: "https://github.com/dubinc/dub",
       title: "Dub Inc",
       description: "Open-source link management infrastructure.",
       publicStats: true,
       comments: "This is a comment.",
-      expiresAt: new Date("2030-04-16T17:00:00.000Z"),
+      expiresAt: "2030-04-16T17:00:00.000Z",
       expiredUrl: "https://github.com/expired",
-      password: "link-password",
       ios: "https://apps.apple.com/app/1611158928",
       android:
         "https://play.google.com/store/apps/details?id=com.disney.disneyplus",

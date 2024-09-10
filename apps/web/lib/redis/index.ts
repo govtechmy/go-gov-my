@@ -12,7 +12,6 @@ export async function formatRedisLink(
     id,
     domain,
     url,
-    password,
     proxy,
     expiresAt,
     expiredUrl,
@@ -21,12 +20,10 @@ export async function formatRedisLink(
     geo,
     projectId,
   } = link;
-  const hasPassword = password && password.length > 0 ? true : false;
 
   return {
     id,
     url,
-    ...(hasPassword && { password: true }),
     ...(proxy && { proxy: true }),
     ...(expiresAt && { expiresAt: new Date(expiresAt) }),
     ...(expiredUrl && { expiredUrl }),

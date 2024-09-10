@@ -57,6 +57,7 @@ export async function updateLink({
     tagId,
     tagIds,
     tagNames,
+    password,
     ...rest
   } = updatedLink;
 
@@ -127,7 +128,10 @@ export async function updateLink({
   });
 
   // Transform into DTOs
-  const { payload, encryptedSecrets } = await processDTOLink(response);
+  const { payload, encryptedSecrets } = await processDTOLink({
+    ...response,
+    password,
+  });
 
   // For simplicity and centralized, lets create the idempotency key at this level
   const headersJSON = generateIdempotencyKey(payload.id, response.updatedAt);
