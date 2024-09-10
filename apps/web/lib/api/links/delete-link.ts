@@ -24,10 +24,10 @@ export async function deleteLink(linkId: string) {
   });
 
   // Transform into DTOs
-  const linkDTO = await processDTOLink(link);
+  const { payload, encryptedSecrets } = await processDTOLink(link);
 
   // For simplicity and centralized, lets create the idempotency key at this level
-  const headersJSON = generateIdempotencyKey(linkDTO.id, new Date());
+  const headersJSON = generateIdempotencyKey(payload.id, new Date());
 
   try {
     waitUntil(
@@ -52,9 +52,10 @@ export async function deleteLink(linkId: string) {
           data: {
             action: OUTBOX_ACTIONS.DELETE_LINK,
             host: REDIRECT_SERVER_BASE_URL + "/links/" + link.id,
-            payload: linkDTO as unknown as Prisma.InputJsonValue,
+            payload: payload as unknown as Prisma.InputJsonValue,
             headers: headersJSON,
-            partitionKey: linkDTO.slug,
+            partitionKey: payload.slug,
+            encryptedSecrets: encryptedSecrets,
           },
         }),
       ]),

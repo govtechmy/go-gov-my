@@ -1,39 +1,27 @@
 import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { LinkProps } from "@/lib/types";
 import { Eye, EyeOff } from "@/ui/shared/icons";
 import { ProBadgeTooltip } from "@/ui/shared/pro-badge-tooltip";
 import { SimpleTooltipContent, Switch } from "@dub/ui";
 import { FADE_IN_ANIMATION_SETTINGS } from "@dub/utils";
 import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useState } from "react";
+
+type Props = {
+  defaultEnabled: boolean;
+  onPasswordChange: (password: string) => void;
+  onPasswordDisable: () => void;
+};
 
 export default function PasswordSection({
-  props,
-  data,
-  setData,
-}: {
-  props?: LinkProps;
-  data: LinkProps;
-  setData: Dispatch<SetStateAction<LinkProps>>;
-}) {
-  const { messages, locale } = useIntlClientHook();
-  const message = messages?.modal;
-  const { password } = data;
-  const [enabled, setEnabled] = useState(!!password);
-  useEffect(() => {
-    if (enabled) {
-      // if enabling, add previous password if exists
-      setData({
-        ...data,
-        password: props?.password || password,
-      });
-    } else {
-      // if disabling, remove password
-      setData({ ...data, password: null });
-    }
-  }, [enabled]);
-
+  defaultEnabled,
+  onPasswordChange,
+  onPasswordDisable,
+}: Props) {
+  const { messages } = useIntlClientHook();
+  const message = messages.modal;
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [enabled, setEnabled] = useState(defaultEnabled);
 
   return (
     <div className="relative border-b border-gray-200 pb-5">
@@ -52,7 +40,15 @@ export default function PasswordSection({
             }
           />
         </div>
-        <Switch fn={() => setEnabled(!enabled)} checked={enabled} />
+        <Switch
+          fn={(checked: boolean) => {
+            setEnabled(checked);
+            if (!checked) {
+              onPasswordDisable();
+            }
+          }}
+          checked={enabled}
+        />
       </div>
       {enabled && (
         <motion.div
@@ -64,10 +60,11 @@ export default function PasswordSection({
             id="password"
             type={showPassword ? "text" : "password"}
             className="block w-full rounded-md border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm"
-            value={password || ""}
+            value={password}
             placeholder={message?.enter_password}
             onChange={(e) => {
-              setData({ ...data, password: e.target.value });
+              setPassword(e.target.value);
+              onPasswordChange(e.target.value);
             }}
             aria-invalid="true"
           />

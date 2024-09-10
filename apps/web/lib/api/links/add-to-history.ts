@@ -15,7 +15,6 @@ export type LinkHistory = Pick<
   | "image"
   | "ios"
   | "key"
-  | "password"
   | "proxy"
   | "publicStats"
   | "title"
@@ -52,7 +51,6 @@ export async function addToHistory(entry: LinkHistory): Promise<void> {
       geo: entry.geo || undefined,
       image: entry.image,
       ios: entry.ios,
-      password: entry.password,
       title: entry.title,
     },
   });

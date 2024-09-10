@@ -33,7 +33,7 @@ export async function createLink(
   const { utm_source, utm_medium, utm_campaign, utm_term, utm_content } =
     getParamsFromURL(url);
 
-  const { tagId, tagIds, tagNames, ...rest } = link;
+  const { tagId, tagIds, tagNames, password, ...rest } = link;
 
   const response = await prisma.link.create({
     data: {
@@ -50,6 +50,7 @@ export async function createLink(
       utm_content,
       expiresAt: expiresAt ? new Date(expiresAt) : null,
       geo: geo || Prisma.JsonNull,
+      passwordEnabledAt: password ? new Date() : undefined,
 
       // Associate tags by tagNames
       ...(tagNames?.length &&
@@ -96,12 +97,15 @@ export async function createLink(
   const uploadedImageUrl = `${process.env.STORAGE_BASE_URL}/images/${response.id}`;
 
   // Transform into DTOs
-  const linkDTO = await processDTOLink(response);
+  const { payload, encryptedSecrets } = await processDTOLink({
+    ...response,
+    password,
+  });
 
   // For simplicity and centralized, lets create the idempotency key at this level
   const headersJSON = generateIdempotencyKey(
-    linkDTO.id,
-    linkDTO.createdAt ?? new Date(),
+    payload.id,
+    payload.createdAt ?? new Date(),
   );
 
   try {
@@ -134,9 +138,10 @@ export async function createLink(
                 data: {
                   action: OUTBOX_ACTIONS.CREATE_LINK,
                   host: REDIRECT_SERVER_BASE_URL + "/links",
-                  payload: linkDTO as unknown as Prisma.InputJsonValue,
+                  payload: payload as unknown as Prisma.InputJsonValue,
                   headers: headersJSON,
-                  partitionKey: linkDTO.slug,
+                  partitionKey: payload.slug,
+                  encryptedSecrets,
                 },
               }),
             ]
@@ -145,9 +150,10 @@ export async function createLink(
                 data: {
                   action: OUTBOX_ACTIONS.CREATE_LINK,
                   host: REDIRECT_SERVER_BASE_URL + "/links",
-                  payload: linkDTO as unknown as Prisma.InputJsonValue,
+                  payload: payload as unknown as Prisma.InputJsonValue,
                   headers: headersJSON,
-                  partitionKey: linkDTO.slug,
+                  partitionKey: payload.slug,
+                  encryptedSecrets,
                 },
               }),
               addToHistory({

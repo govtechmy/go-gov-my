@@ -181,7 +181,7 @@ export const createLinkBodySchema = z.object({
     .describe("The URL to redirect to when the short link has expired."),
   password: z
     .string()
-    .nullish()
+    .optional()
     .describe(
       "The password required to access the destination URL of the short link.",
     ),
@@ -274,12 +274,10 @@ export const LinkSchema = z
       .url()
       .nullable()
       .describe("The URL to redirect to when the short link has expired."),
-    password: z
-      .string()
+    passwordEnabledAt: z.coerce
+      .date()
       .nullable()
-      .describe(
-        "The password required to access the destination URL of the short link.",
-      ),
+      .describe("The most recent date a password was set for the short link."),
     proxy: z
       .boolean()
       .default(false)

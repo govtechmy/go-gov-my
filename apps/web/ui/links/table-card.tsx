@@ -45,7 +45,6 @@ export default function TableCard({
     key,
     domain,
     url,
-    password,
     expiresAt,
     createdAt,
     lastClicked,

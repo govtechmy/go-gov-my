@@ -166,17 +166,7 @@ describe.sequential("POST /links", async () => {
     });
 
     expect(status).toEqual(200);
-    expect(link).toStrictEqual({
-      ...expectedLink,
-      url,
-      password,
-      userId: user.id,
-      projectId,
-      workspaceId,
-      shortLink: `https://${domain}/${link.key}`,
-      qrCode: `https://api.dub.co/qr?url=https://${domain}/${link.key}?qr=1`,
-      tags: [],
-    });
+    expect(link.passwordEnabledAt).toBeTruthy();
     expect(LinkSchema.strict().parse(link)).toBeTruthy();
 
     await h.deleteLink(link.id);

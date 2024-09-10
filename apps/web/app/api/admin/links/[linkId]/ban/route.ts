@@ -49,9 +49,9 @@ export const PUT = withAdmin(async ({ params, req }) => {
 
   waitUntil(
     (async () => {
-      const linkDTO = await processDTOLink(response);
+      const { payload, encryptedSecrets } = await processDTOLink(response);
       const headersJSON = generateIdempotencyKey(
-        linkDTO.id,
+        payload.id,
         response.updatedAt,
       );
 
@@ -59,9 +59,10 @@ export const PUT = withAdmin(async ({ params, req }) => {
         data: {
           action: OUTBOX_ACTIONS.UPDATE_LINK,
           host: REDIRECT_SERVER_BASE_URL + "/links",
-          payload: linkDTO as unknown as Prisma.InputJsonValue,
+          payload: payload as unknown as Prisma.InputJsonValue,
           headers: headersJSON,
-          partitionKey: linkDTO.slug,
+          partitionKey: payload.slug,
+          encryptedSecrets: encryptedSecrets,
         },
       });
     })(),
