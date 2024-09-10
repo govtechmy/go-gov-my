@@ -68,7 +68,7 @@ export default function LinkCard({
     key,
     domain,
     url,
-    password,
+    passwordEnabledAt,
     expiresAt,
     createdAt,
     lastClicked,
@@ -504,7 +504,7 @@ export default function LinkCard({
                 {timeAgo(createdAt)}
               </p>
               <p className="xs:block hidden">•</p>
-              {password && (
+              {passwordEnabledAt && (
                 <Tooltip
                   content={
                     <SimpleTooltipContent

@@ -13,14 +13,14 @@ export interface LinkDTO {
   imageUrl: string | null; // image URL for OG meta tags
   title: string | null;
   description: string | null;
-  password: string | null;
+  password?: string;
   banned: boolean;
   createdAt: Date | null;
 }
 
 // This should be able to reuse anywhere.
 export async function processDTOLink(
-  response: LinkProps,
+  response: LinkProps & { password?: string },
 ): Promise<{ payload: LinkDTO; encryptedSecrets: string | null }> {
   const linkDTO: LinkDTO = {
     id: response.id,
@@ -45,7 +45,7 @@ export async function processDTOLink(
   let encryptedSecrets: string | null = null;
 
   // If a password is set, store it as a secret
-  if (linkDTO.password !== null) {
+  if (linkDTO.password) {
     const placeholder = "{{PASSWORD}}";
     secrets[placeholder] = linkDTO.password;
     linkDTO.password = placeholder;

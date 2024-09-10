@@ -16,7 +16,6 @@ import {
   userAgent,
 } from "next/server";
 import { isBlacklistedReferrer } from "../edge-config";
-import { getLinkViaEdge } from "../userinfos";
 
 export default async function LinkMiddleware(
   req: NextRequest,
@@ -83,25 +82,6 @@ export default async function LinkMiddleware(
       new URL(`/inspect/${domain}/${encodeURIComponent(key)}+`, req.url),
       DUB_HEADERS,
     );
-  }
-
-  // if the link is password protected
-  if (password) {
-    const pw = req.nextUrl.searchParams.get("pw");
-
-    // rewrite to auth page (/password/[domain]/[key]) if:
-    // - no `pw` param is provided
-    // - the `pw` param is incorrect
-    // this will also ensure that no clicks are tracked unless the password is correct
-    if (!pw || (await getLinkViaEdge(domain, key))?.password !== pw) {
-      return NextResponse.rewrite(
-        new URL(`/password/${domain}/${encodeURIComponent(key)}`, req.url),
-        DUB_HEADERS,
-      );
-    } else if (pw) {
-      // strip it from the URL if it's correct
-      req.nextUrl.searchParams.delete("pw");
-    }
   }
 
   // if the link is banned

@@ -13,7 +13,7 @@ import {
   useResizeObserver,
 } from "@dub/ui";
 import { Button } from "@dub/ui/src/button";
-import { getDomainWithoutWWW, resizeImage } from "@dub/utils";
+import { getDomainWithoutWWW, resizeImage, SHORT_DOMAIN } from "@dub/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { Edit2, Link2, Upload } from "lucide-react";
 import {
@@ -40,12 +40,13 @@ export default function Preview({
   setData: Dispatch<SetStateAction<LinkProps>>;
   generatingMetatags: boolean;
 }) {
-  const { title, description, image, url, password } = data;
+  const { title, description, image, url, passwordEnabledAt } = data;
+  const passwordEnabled = passwordEnabledAt !== null;
   const [debouncedUrl] = useDebounce(url, 500);
   const hostname = useMemo(() => {
-    if (password) return "dub.co";
+    if (passwordEnabled) return SHORT_DOMAIN;
     return getDomainWithoutWWW(debouncedUrl);
-  }, [password, debouncedUrl]);
+  }, [passwordEnabled, debouncedUrl]);
   const { messages } = useIntlClientHook();
   const message = messages?.link;
 

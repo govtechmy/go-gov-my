@@ -64,6 +64,10 @@ import Preview from "./preview";
 import TagsSection from "./tags-section";
 import UTMSection from "./utm-section";
 
+export type FormValues = LinkWithTagsProps & {
+  password?: string;
+};
+
 function AddEditLinkModal({
   showAddEditLinkModal,
   setShowAddEditLinkModal,
@@ -95,7 +99,7 @@ function AddEditLinkModal({
   const [generatingRandomKey, setGeneratingRandomKey] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const [data, setData] = useState<LinkWithTagsProps>(
+  const [data, setData] = useState<FormValues>(
     props || duplicateProps || DEFAULT_LINK_PROPS,
   );
 
@@ -692,7 +696,15 @@ function AddEditLinkModal({
                 {...{ props, data, setData }}
                 generatingMetatags={generatingMetatags}
               />
-              <PasswordSection {...{ props, data, setData }} />
+              <PasswordSection
+                defaultEnabled={data.passwordEnabledAt !== null}
+                onPasswordChange={(password) =>
+                  setData((prev) => ({ ...prev, password }))
+                }
+                onPasswordDisable={() => {
+                  // TODO: Logic for disabling the password
+                }}
+              />
               <ExpirationSection {...{ props, data, setData }} />
               <IOSSection {...{ props, data, setData }} />
               <AndroidSection {...{ props, data, setData }} />
