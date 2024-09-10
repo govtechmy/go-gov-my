@@ -7,8 +7,8 @@ on:
       - staging
     paths-ignore:
       - apps/redirect-server/**
+      - apps/redirect-pages/**
       - apps/web/**
-      - apps/docs/**
       - packages/**
       - apps/cron/**
   workflow_dispatch:
@@ -41,7 +41,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockerfile
+          file: apps/docs/Dockerfile.docs
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
