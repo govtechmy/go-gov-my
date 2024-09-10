@@ -4,7 +4,7 @@ RUN apk update && apk upgrade
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY app/docs .
 
 RUN npm install -g npm@10.8.3
 
@@ -13,8 +13,6 @@ RUN npm install
 RUN npm install @mintlify/cli
 
 RUN npm install -g mintlify
-
-COPY . .
 
 EXPOSE 3334
 
