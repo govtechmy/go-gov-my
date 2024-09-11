@@ -7,13 +7,13 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 
 type Props = {
-  defaultEnabled: boolean;
+  passwordEnabledAt: Date | null;
   onPasswordChange: (password: string) => void;
   onPasswordDisable: () => void;
 };
 
 export default function PasswordSection({
-  defaultEnabled,
+  passwordEnabledAt,
   onPasswordChange,
   onPasswordDisable,
 }: Props) {
@@ -21,7 +21,8 @@ export default function PasswordSection({
   const message = messages.modal;
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [enabled, setEnabled] = useState(defaultEnabled);
+  const hasExistingPassword = !!passwordEnabledAt;
+  const [enabled, setEnabled] = useState(hasExistingPassword);
 
   return (
     <div className="relative border-b border-gray-200 pb-5">
@@ -41,11 +42,11 @@ export default function PasswordSection({
           />
         </div>
         <Switch
-          fn={(checked: boolean) => {
-            setEnabled(checked);
-            if (!checked) {
+          fn={(enabled: boolean) => {
+            if (!enabled) {
               onPasswordDisable();
             }
+            setEnabled(enabled);
           }}
           checked={enabled}
         />
@@ -80,6 +81,12 @@ export default function PasswordSection({
             )}
           </button>
         </motion.div>
+      )}
+      {passwordEnabledAt && (
+        <div className="mt-3 text-xs italic">
+          Last updated:{" "}
+          {new Date(passwordEnabledAt).toLocaleDateString("en-US")}
+        </div>
       )}
     </div>
   );

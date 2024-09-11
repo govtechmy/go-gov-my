@@ -52,6 +52,7 @@ import {
 } from "react";
 import { toast } from "sonner";
 import { mutate } from "swr";
+import useSWRMutation from "swr/mutation";
 import { useDebounce, useDebouncedCallback } from "use-debounce";
 import AndroidSection from "./android-section";
 import CommentsSection from "./comments-section";
@@ -113,7 +114,8 @@ function AddEditLinkModal({
     }
   }, [props, duplicateProps]);
 
-  const { domain, key, url, password, proxy } = data;
+  const { domain, key, url, proxy, passwordEnabledAt } = data;
+  const passwordEnabled = !!passwordEnabledAt;
 
   const generateRandomKey = useDebouncedCallback(async () => {
     if (generatingRandomKey) return;
@@ -205,7 +207,7 @@ function AddEditLinkModal({
   const [debouncedUrl] = useDebounce(getUrlWithoutUTMParams(url), 500);
   useEffect(() => {
     // if there's a password, no need to generate metatags
-    if (password) {
+    if (passwordEnabled) {
       setGeneratingMetatags(false);
       setData((prev) => ({
         ...prev,
@@ -252,7 +254,7 @@ function AddEditLinkModal({
     } else {
       setGeneratingMetatags(false);
     }
-  }, [debouncedUrl, password, showAddEditLinkModal, proxy]);
+  }, [debouncedUrl, passwordEnabled, showAddEditLinkModal, proxy]);
 
   const endpoint = useMemo(() => {
     if (props?.key) {
@@ -279,6 +281,11 @@ function AddEditLinkModal({
   }, []);
 
   const saveDisabled = useMemo(() => {
+    // Enable save if a password is typed in
+    if (data.password) {
+      return false;
+    }
+
     /* 
       Disable save if:
       - modal is not open
@@ -341,6 +348,33 @@ function AddEditLinkModal({
   }, [data.key, data.domain]);
 
   const randomLinkedInNonce = useMemo(() => nanoid(8), []);
+
+  const revalidateLinks = async () => {
+    await mutate(
+      (key) => typeof key === "string" && key.startsWith("/api/links"),
+      undefined,
+      { revalidate: true },
+    );
+  };
+
+  const disablePassword = useSWRMutation(
+    `/api/links/${data.id}/password?workspaceId=${workspaceId}`,
+    async (url: string) => {
+      const response = await fetch(url, { method: "DELETE" });
+      if (!response.ok) {
+        throw Error(`fetch failed, status: ${response.status} `);
+      }
+    },
+    {
+      onError: () => {
+        toast("Failed to disable password. Try again.");
+      },
+      onSuccess: async () => {
+        toast("Successfully disabled password.");
+        await revalidateLinks();
+      },
+    },
+  );
 
   return (
     <Modal
@@ -406,12 +440,7 @@ function AddEditLinkModal({
                 body: JSON.stringify(bodyData),
               }).then(async (res) => {
                 if (res.status === 200) {
-                  await mutate(
-                    (key) =>
-                      typeof key === "string" && key.startsWith("/api/links"),
-                    undefined,
-                    { revalidate: true },
-                  );
+                  await revalidateLinks();
                   // for welcome page, redirect to links page after adding a link
                   if (pathname === "/welcome") {
                     router.push(`/${locale}/links`);
@@ -697,12 +726,26 @@ function AddEditLinkModal({
                 generatingMetatags={generatingMetatags}
               />
               <PasswordSection
-                defaultEnabled={data.passwordEnabledAt !== null}
-                onPasswordChange={(password) =>
-                  setData((prev) => ({ ...prev, password }))
-                }
+                passwordEnabledAt={data.passwordEnabledAt}
+                onPasswordChange={(password) => {
+                  // If it's an empty string, use undefined as the value.
+                  // We don't want to let users set an empty string as the password.
+                  if (password === "") {
+                    setData((prev) => ({ ...prev, password: undefined }));
+                    return;
+                  }
+                  setData((prev) => ({ ...prev, password }));
+                }}
                 onPasswordDisable={() => {
-                  // TODO: Logic for disabling the password
+                  setData((prev) => ({ ...prev, password: undefined }));
+                  if (
+                    passwordEnabled &&
+                    window.confirm(
+                      "Are you sure you want to disable password protection?",
+                    )
+                  ) {
+                    disablePassword.trigger();
+                  }
                 }}
               />
               <ExpirationSection {...{ props, data, setData }} />

@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/signal"
 	"redirect-server/repository/es"
+	"strings"
 	"syscall"
 	"time"
 
@@ -62,7 +63,26 @@ func main() {
 	})
 
 	http.HandleFunc("/links/", func(w http.ResponseWriter, r *http.Request) {
-		deleteLinkHandler(w, r, linkRepo)
+		path := strings.TrimPrefix(r.URL.Path, "/links/")
+		parts := strings.Split(path, "/")
+
+		if len(parts) == 2 && parts[1] == "password" && r.Method == "DELETE" {
+			linkID := parts[0]
+			disableLinkPasswordHandler(w, r, linkID, linkRepo, idempotentResourceRepo)
+			return
+		}
+
+		if len(parts) == 1 && r.Method == "PATCH" {
+			updateLinkHandler(w, r, linkRepo, idempotentResourceRepo)
+			return
+		}
+
+		if len(parts) == 1 && r.Method == "DELETE" {
+			deleteLinkHandler(w, r, linkRepo)
+			return
+		}
+
+		w.WriteHeader(http.StatusNotFound)
 	})
 
 	srv := &http.Server{

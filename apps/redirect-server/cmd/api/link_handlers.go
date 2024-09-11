@@ -96,3 +96,125 @@ func deleteLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.Link
 		return
 	}
 }
+
+// [PATCH] Link
+func updateLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.LinkRepo, idempotentResourceRepo *es.IdempotentResourceRepo) {
+	if !(r.Method == "PATCH") {
+		errLinkHandler(w, repository.ErrMethodNotAllowed)
+		return
+	}
+
+	linkID := strings.Split(r.URL.Path, "/")[2]
+	if linkID == "" {
+		errLinkHandler(w, repository.ErrMissingParameters)
+		return
+	}
+
+	ctx := r.Context()
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		logHandler(repository.ErrGeneralMessage, err)
+		errLinkHandler(w, err)
+		return
+	}
+
+	idempotentResource, err := repository.NewIdempotentResource(*r, body)
+	if err != nil {
+		logHandler(repository.ErrGeneralMessage, err)
+		errLinkHandler(w, err)
+		return
+	}
+
+	savedIdempotentResource, err := idempotentResourceRepo.GetSavedIdempotentResource(ctx, idempotentResource.IdempotencyKey)
+	if err != nil {
+		logHandler(repository.ErrGeneralMessage, err)
+		errLinkHandler(w, err)
+		return
+	}
+
+	// If idempotent resource was already saved before
+	if savedIdempotentResource != nil {
+		// If the request payloads don't match
+		if idempotentResource.HashedRequestPayload != savedIdempotentResource.HashedRequestPayload {
+			logHandler(repository.ErrGeneralMessage, repository.ErrIdempotentBadRequest)
+			errLinkHandler(w, repository.ErrIdempotentBadRequest)
+			return
+		}
+		// Return early with successful response
+		return
+	}
+
+	var updateData repository.UpdateLinkData
+	err = json.Unmarshal(body, &updateData)
+	if err != nil {
+		logHandler(repository.ErrUnmarshalling, err)
+		errLinkHandler(w, err)
+		return
+	}
+
+	if err := linkRepo.UpdateLink(ctx, linkID, updateData); err != nil {
+		logHandler(repository.ErrGeneralMessage, err)
+		errLinkHandler(w, err)
+		return
+	}
+
+	// Save idempotent resource
+	err = idempotentResourceRepo.SaveIdempotentResource(ctx, *idempotentResource)
+	if err != nil {
+		logHandler(repository.ErrGeneralMessage, err)
+		errLinkHandler(w, err)
+		return
+	}
+}
+
+func disableLinkPasswordHandler(w http.ResponseWriter, r *http.Request, linkID string, linkRepo *es.LinkRepo, idempotentResourceRepo *es.IdempotentResourceRepo) {
+	ctx := r.Context()
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		logHandler(repository.ErrGeneralMessage, err)
+		errLinkHandler(w, err)
+		return
+	}
+
+	idempotentResource, err := repository.NewIdempotentResource(*r, body)
+	if err != nil {
+		logHandler(repository.ErrGeneralMessage, err)
+		errLinkHandler(w, err)
+		return
+	}
+
+	savedIdempotentResource, err := idempotentResourceRepo.GetSavedIdempotentResource(ctx, idempotentResource.IdempotencyKey)
+	if err != nil {
+		logHandler(repository.ErrGeneralMessage, err)
+		errLinkHandler(w, err)
+		return
+	}
+
+	// If idempotent resource was already saved before
+	if savedIdempotentResource != nil {
+		// If the request payloads don't match
+		if idempotentResource.HashedRequestPayload != savedIdempotentResource.HashedRequestPayload {
+			logHandler(repository.ErrGeneralMessage, repository.ErrIdempotentBadRequest)
+			errLinkHandler(w, repository.ErrIdempotentBadRequest)
+			return
+		}
+		// Return early with successful response
+		return
+	}
+
+	if err := linkRepo.DisableLinkPassword(ctx, linkID); err != nil {
+		logHandler(repository.ErrGeneralMessage, err)
+		errLinkHandler(w, err)
+		return
+	}
+
+	// Save idempotent resource
+	err = idempotentResourceRepo.SaveIdempotentResource(ctx, *idempotentResource)
+	if err != nil {
+		logHandler(repository.ErrGeneralMessage, err)
+		errLinkHandler(w, err)
+		return
+	}
+}

@@ -4,7 +4,7 @@ export const DEFAULT_LINK_PROPS: any = {
   domain: "",
   archived: false,
   expiresAt: null,
-  password: null,
+  passwordEnabledAt: null,
 
   title: null,
   description: null,

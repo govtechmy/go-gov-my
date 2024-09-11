@@ -83,6 +83,7 @@ export async function updateLink({
       utm_content,
       expiresAt: expiresAt ? new Date(expiresAt) : null,
       geo: geo || Prisma.JsonNull,
+      passwordEnabledAt: password ? new Date() : undefined,
 
       // Associate tags by tagNames
       ...(tagNames &&
@@ -159,8 +160,7 @@ export async function updateLink({
         prisma.webhookOutbox.create({
           data: {
             action: OUTBOX_ACTIONS.UPDATE_LINK,
-            // host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
-            host: REDIRECT_SERVER_BASE_URL + "/links",
+            host: `${REDIRECT_SERVER_BASE_URL}/links/${payload.id}`,
             payload: payload as unknown as Prisma.InputJsonValue,
             headers: headersJSON,
             partitionKey: payload.slug,
