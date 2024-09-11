@@ -11,7 +11,6 @@ import { constructMetadata } from "@dub/utils";
 import Link from "next/link";
 import { ReactNode, Suspense } from "react";
 import Providers from "./providers";
-
 export const dynamic = "force-static";
 export async function generateMetadata({ params }) {
   const { locale } = params;
@@ -43,20 +42,6 @@ export default function Layout({
                 </div>
                 <div className="flex items-center space-x-6">
                   <LocaleSwitcher />
-                  {/* <a
-                    href="https://github.com/govtechmy/go-gov-my/releases"
-                    className="hidden text-sm text-gray-500 transition-colors hover:text-gray-700 sm:block"
-                    target="_blank"
-                  >
-                    {messages?.layout?.changelog}
-                  </a>
-                  <a
-                    href="https://github.com/govtechmy/go-gov-my/discussions"
-                    className="hidden text-sm text-gray-500 transition-colors hover:text-gray-700 sm:block"
-                    target="_blank"
-                  >
-                    {messages?.layout?.help}
-                  </a> */}
                   <UserDropdown />
                 </div>
               </div>
