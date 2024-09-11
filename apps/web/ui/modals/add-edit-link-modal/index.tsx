@@ -737,15 +737,18 @@ function AddEditLinkModal({
                   setData((prev) => ({ ...prev, password }));
                 }}
                 onPasswordDisable={() => {
-                  setData((prev) => ({ ...prev, password: undefined }));
-                  if (
-                    passwordEnabled &&
-                    window.confirm(
+                  if (passwordEnabled) {
+                    const confirmDisable = window.confirm(
                       "Are you sure you want to disable password protection?",
-                    )
-                  ) {
-                    disablePassword.trigger();
+                    );
+                    if (confirmDisable) {
+                      setData((prev) => ({ ...prev, password: undefined }));
+                      disablePassword.trigger();
+                    }
+                    return confirmDisable;
                   }
+                  setData((prev) => ({ ...prev, password: undefined }));
+                  return true;
                 }}
               />
               <ExpirationSection {...{ props, data, setData }} />

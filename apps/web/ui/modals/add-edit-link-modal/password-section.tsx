@@ -9,7 +9,8 @@ import { useState } from "react";
 type Props = {
   passwordEnabledAt: Date | null;
   onPasswordChange: (password: string) => void;
-  onPasswordDisable: () => void;
+  /** Returns true if the password was successfully disabled */
+  onPasswordDisable: () => boolean;
 };
 
 export default function PasswordSection({
@@ -44,7 +45,10 @@ export default function PasswordSection({
         <Switch
           fn={(enabled: boolean) => {
             if (!enabled) {
-              onPasswordDisable();
+              const sucessfullyDisabled = onPasswordDisable();
+              if (!sucessfullyDisabled) {
+                return;
+              }
             }
             setEnabled(enabled);
           }}
