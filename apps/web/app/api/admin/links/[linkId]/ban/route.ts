@@ -58,7 +58,7 @@ export const PUT = withAdmin(async ({ params, req }) => {
       await prisma.webhookOutbox.create({
         data: {
           action: OUTBOX_ACTIONS.UPDATE_LINK,
-          host: REDIRECT_SERVER_BASE_URL + "/links",
+          host: `${REDIRECT_SERVER_BASE_URL}/links/${payload.id}`,
           payload: payload as unknown as Prisma.InputJsonValue,
           headers: headersJSON,
           partitionKey: payload.slug,

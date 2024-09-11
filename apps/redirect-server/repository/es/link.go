@@ -54,6 +54,15 @@ func (r *LinkRepo) SaveLink(ctx context.Context, link *repository.Link) error {
 	return err
 }
 
+func (r *LinkRepo) UpdateLink(ctx context.Context, linkID string, updateData repository.UpdateLinkData) error {
+	_, err := r.esClient.Update().
+		Index(linkIndex).
+		Id(linkID).
+		Doc(updateData).
+		Do(ctx)
+	return err
+}
+
 func (r *LinkRepo) DeleteLink(ctx context.Context, linkId string) error {
 	_, err := r.esClient.Delete().
 		Index(linkIndex).
@@ -64,5 +73,16 @@ func (r *LinkRepo) DeleteLink(ctx context.Context, linkId string) error {
 		return nil
 	}
 
+	return err
+}
+
+func (r *LinkRepo) DisableLinkPassword(ctx context.Context, linkID string) error {
+	_, err := r.esClient.Update().
+		Index(linkIndex).
+		Script(
+			elastic.NewScript("ctx._source.remove('password')"),
+		).
+		Id(linkID).
+		Do(ctx)
 	return err
 }
