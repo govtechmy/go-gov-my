@@ -2,9 +2,6 @@ import { DecryptCommand, EncryptCommand, KMSClient } from "@aws-sdk/client-kms";
 
 const kms = new KMSClient();
 
-if (!process.env.ENCRYPTION_KEY_ID) {
-  throw Error("missing env var 'ENCRYPTION_KEY_ID'");
-}
 const ENCRYPTION_KEY_ID = process.env.ENCRYPTION_KEY_ID;
 
 // Matches {{PASSWORD}}, {{API_KEY}}, {{SECRET_VALUE}}
