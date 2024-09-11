@@ -27,9 +27,9 @@ export default function LinksContainer({
   const searchInputRef = useRef();
   const [linkView, setLinkView] = useState<LinkView>("cards");
 
-  const options: { label: string; value: LinkView }[] = [
-    { label: "Card View", value: "cards" },
-    { label: "Compact View", value: "compact" },
+  const options: { label: string; value: LinkView; full: string }[] = [
+    { label: "Card View", value: "cards", full: "Card View" },
+    { label: "Compact View", value: "compact", full: "Compact View" },
   ];
 
   const viewIcon: Record<LinkView, ReactNode> = {

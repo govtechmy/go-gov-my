@@ -525,6 +525,18 @@ export default function LinkCard({
               >
                 {url}
               </a>
+              <p>•</p>
+              {expiresAt && (
+                <span className="text-xs text-gray-500">
+                  (Expires:{" "}
+                  {new Date(expiresAt).toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                  )
+                </span>
+              )}
             </div>
           </div>
         </div>
