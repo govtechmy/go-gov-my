@@ -209,7 +209,13 @@ function UpdateMessages({
       changes.push(
         <li>
           <strong>{formatKey(key)}</strong> {messages.link.history.was_set_to}{" "}
-          <strong>{currVal.toString()}</strong>
+          <strong>
+            {key === "geo"
+              ? Object.entries(currVal)
+                  .map(([k, v]) => `${k} : ${v}`)
+                  .join(", ")
+              : currVal?.toString()}
+          </strong>
         </li>,
       );
       continue;
@@ -230,8 +236,21 @@ function UpdateMessages({
         <li>
           <strong>{formatKey(key)}</strong>{" "}
           {messages.link.history.was_changed_from}{" "}
-          <strong>{prevVal?.toString()}</strong> {messages.link.history.to}{" "}
-          <strong>{currVal?.toString()}</strong>
+          <strong>
+            {key === "geo" && typeof prevVal === "object" && prevVal !== null
+              ? Object.entries(prevVal)
+                  .map(([k, v]) => `${k} : ${v}`)
+                  .join(", ")
+              : prevVal?.toString()}
+          </strong>{" "}
+          {messages.link.history.to}{" "}
+          <strong>
+            {key === "geo" && typeof currVal === "object" && currVal !== null
+              ? Object.entries(currVal)
+                  .map(([k, v]) => `${k} : ${v}`)
+                  .join(", ")
+              : currVal?.toString()}
+          </strong>
         </li>,
       );
       continue;
