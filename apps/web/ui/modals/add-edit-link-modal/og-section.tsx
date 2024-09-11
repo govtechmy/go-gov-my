@@ -1,24 +1,20 @@
 import useWorkspace from "@/lib/swr/use-workspace";
 import { LinkProps } from "@/lib/types";
 import { ProBadgeTooltip } from "@/ui/shared/pro-badge-tooltip";
-import { UpgradeToProToast } from "@/ui/shared/upgrade-to-pro-toast";
 import {
   ButtonTooltip,
   FileUpload,
   LoadingCircle,
-  Magic,
   Popover,
   SimpleTooltipContent,
   Switch,
   Unsplash,
 } from "@dub/ui";
 import { FADE_IN_ANIMATION_SETTINGS, resizeImage } from "@dub/utils";
-import { useCompletion } from "ai/react";
 import { motion } from "framer-motion";
 import { Link2 } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import { toast } from "sonner";
 import { usePromptModal } from "../prompt-modal";
 import UnsplashSearch from "./unsplash-search";
 
@@ -50,90 +46,90 @@ export default function OGSection({
 
   const { title, description, image, proxy } = data;
 
-  const {
-    completion: completionTitle,
-    isLoading: generatingTitle,
-    complete: completeTitle,
-  } = useCompletion({
-    api: `/api/ai/completion?workspaceId=${workspaceId}`,
-    id: "metatags-title-ai",
-    onError: (error) => {
-      if (error.message.includes("Upgrade to Pro")) {
-        toast.custom(() => (
-          <UpgradeToProToast
-            title="You've exceeded your AI usage limit"
-            message={error.message}
-          />
-        ));
-      } else {
-        toast.error(error.message);
-      }
-    },
-    onFinish: (_, completion) => {
-      mutate();
-    },
-  });
+  // const {
+  //   completion: completionTitle,
+  //   isLoading: generatingTitle,
+  //   complete: completeTitle,
+  // } = useCompletion({
+  //   api: `/api/ai/completion?workspaceId=${workspaceId}`,
+  //   id: "metatags-title-ai",
+  //   onError: (error) => {
+  //     if (error.message.includes("Upgrade to Pro")) {
+  //       toast.custom(() => (
+  //         <UpgradeToProToast
+  //           title="You've exceeded your AI usage limit"
+  //           message={error.message}
+  //         />
+  //       ));
+  //     } else {
+  //       toast.error(error.message);
+  //     }
+  //   },
+  //   onFinish: (_, completion) => {
+  //     mutate();
+  //   },
+  // });
 
-  const generateTitle = async () => {
-    completeTitle(
-      `You are an SEO expert. Generate an SEO-optimized meta title (max 120 characters) for the following URL:
-      
-      - URL: ${data.url}
-      - Meta title: ${data.title}
-      - Meta description: ${data.description}. 
+  // const generateTitle = async () => {
+  //   completeTitle(
+  //     `You are an SEO expert. Generate an SEO-optimized meta title (max 120 characters) for the following URL:
 
-      Only respond with the title without quotation marks or special characters.
-      `,
-    );
-  };
+  //     - URL: ${data.url}
+  //     - Meta title: ${data.title}
+  //     - Meta description: ${data.description}.
 
-  useEffect(() => {
-    if (completionTitle) {
-      setData((prev) => ({ ...prev, title: completionTitle }));
-    }
-  }, [completionTitle]);
+  //     Only respond with the title without quotation marks or special characters.
+  //     `,
+  //   );
+  // };
 
-  const {
-    completion: completionDescription,
-    isLoading: generatingDescription,
-    complete: completeDescription,
-  } = useCompletion({
-    api: `/api/ai/completion?workspaceId=${workspaceId}`,
-    id: "metatags-description-ai",
-    onError: (error) => {
-      if (error.message.includes("Upgrade to Pro")) {
-        toast.custom(() => (
-          <UpgradeToProToast
-            title="You've exceeded your AI usage limit"
-            message={error.message}
-          />
-        ));
-      } else {
-        toast.error(error.message);
-      }
-    },
-    onFinish: (_, completion) => {
-      mutate();
-    },
-  });
+  // useEffect(() => {
+  //   if (completionTitle) {
+  //     setData((prev) => ({ ...prev, title: completionTitle }));
+  //   }
+  // }, [completionTitle]);
 
-  const generateDescription = async () => {
-    completeDescription(
-      `You are an SEO expert. Generate an SEO-optimized meta description (max 240 characters) for the following URL:
+  // const {
+  //   completion: completionDescription,
+  //   isLoading: generatingDescription,
+  //   complete: completeDescription,
+  // } = useCompletion({
+  //   api: `/api/ai/completion?workspaceId=${workspaceId}`,
+  //   id: "metatags-description-ai",
+  //   onError: (error) => {
+  //     if (error.message.includes("Upgrade to Pro")) {
+  //       toast.custom(() => (
+  //         <UpgradeToProToast
+  //           title="You've exceeded your AI usage limit"
+  //           message={error.message}
+  //         />
+  //       ));
+  //     } else {
+  //       toast.error(error.message);
+  //     }
+  //   },
+  //   onFinish: (_, completion) => {
+  //     mutate();
+  //   },
+  // });
 
-      - URL: ${data.url}
-      - Meta title: ${data.title}
-      - Meta description: ${data.description}.
+  // const generateDescription = async () => {
+  //   completeDescription(
+  //     `You are an SEO expert. Generate an SEO-optimized meta description (max 240 characters) for the following URL:
 
-      Only respond with the description without quotation marks or special characters.`,
-    );
-  };
+  //     - URL: ${data.url}
+  //     - Meta title: ${data.title}
+  //     - Meta description: ${data.description}.
 
-  useEffect(() => {
-    if (completionDescription) {
-      setData((prev) => ({ ...prev, description: completionDescription }));
-    }
-  }, [completionDescription]);
+  //     Only respond with the description without quotation marks or special characters.`,
+  //   );
+  // };
+
+  // useEffect(() => {
+  //   if (completionDescription) {
+  //     setData((prev) => ({ ...prev, description: completionDescription }));
+  //   }
+  // }, [completionDescription]);
 
   useEffect(() => {
     if (proxy && props) {
@@ -257,7 +253,7 @@ export default function OGSection({
                 <p className="text-sm text-gray-500">
                   {title?.length || 0}/120
                 </p>
-                <ButtonTooltip
+                {/* <ButtonTooltip
                   tooltipContent="Generate an optimized title using AI."
                   onClick={generateTitle}
                   disabled={generatingTitle || !title || exceededAI}
@@ -268,7 +264,7 @@ export default function OGSection({
                   ) : (
                     <Magic className="h-4 w-4" />
                   )}
-                </ButtonTooltip>
+                </ButtonTooltip> */}
               </div>
             </div>
             <div className="relative mt-1 flex rounded-md shadow-sm">
@@ -302,7 +298,7 @@ export default function OGSection({
                 <p className="text-sm text-gray-500">
                   {description?.length || 0}/240
                 </p>
-                <ButtonTooltip
+                {/* <ButtonTooltip
                   tooltipContent="Generate an optimized description using AI."
                   onClick={generateDescription}
                   disabled={generatingDescription || !description}
@@ -313,7 +309,7 @@ export default function OGSection({
                   ) : (
                     <Magic className="h-4 w-4" />
                   )}
-                </ButtonTooltip>
+                </ButtonTooltip> */}
               </div>
             </div>
             <div className="relative mt-1 flex rounded-md shadow-sm">

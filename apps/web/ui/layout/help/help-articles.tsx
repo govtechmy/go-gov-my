@@ -2,7 +2,7 @@ import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { ExpandingArrow } from "@dub/ui";
 import { Command, useCommandState } from "cmdk";
 import Fuse from "fuse.js";
-import { ExternalLink, MessageSquareText } from "lucide-react";
+import { MessageSquareText } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { Dispatch, SetStateAction, useContext, useMemo, useRef } from "react";
 import Highlighter from "react-highlight-words";
@@ -70,14 +70,6 @@ export function HelpArticles({
         ) : (
           <div />
         )}
-        <a
-          href="https://github.com/govtechmy/go-gov-my/discussions"
-          target="_blank"
-          className="flex items-center space-x-2 hover:underline"
-        >
-          <p className="text-sm">{message?.help_center}</p>
-          <ExternalLink className="h-4 w-4" />
-        </a>
       </div>
     </div>
   );

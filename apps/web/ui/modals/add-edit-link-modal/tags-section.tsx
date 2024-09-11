@@ -10,7 +10,6 @@ import {
   SimpleTooltipContent,
   Tooltip,
 } from "@dub/ui";
-import { useCompletion } from "ai/react";
 import { Command, useCommandState } from "cmdk";
 import { Check, ChevronDown, Tag, X } from "lucide-react";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
@@ -43,53 +42,53 @@ export default function TagsSection({
     ?.map(({ name }) => name)
     .includes(inputValue.trim());
 
-  const { complete } = useCompletion({
-    api: `/api/ai/completion?workspaceId=${workspaceId}`,
-    body: {
-      model: "claude-3-haiku-20240307",
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-    onFinish: (_, completion) => {
-      mutateWorkspace();
-      if (completion) {
-        const completionArr = completion.split(", ");
-        const suggestedTags = completionArr
-          .map((tag: string) => {
-            return availableTags?.find(({ name }) => name === tag) || null;
-          })
-          .filter(Boolean);
-        setSuggestedTags(suggestedTags as TagProps[]);
-      }
-    },
-  });
+  // const { complete } = useCompletion({
+  //   api: `/api/ai/completion?workspaceId=${workspaceId}`,
+  //   body: {
+  //     model: "claude-3-haiku-20240307",
+  //   },
+  //   onError: (error) => {
+  //     toast.error(error.message);
+  //   },
+  //   onFinish: (_, completion) => {
+  //     mutateWorkspace();
+  //     if (completion) {
+  //       const completionArr = completion.split(", ");
+  //       const suggestedTags = completionArr
+  //         .map((tag: string) => {
+  //           return availableTags?.find(({ name }) => name === tag) || null;
+  //         })
+  //         .filter(Boolean);
+  //       setSuggestedTags(suggestedTags as TagProps[]);
+  //     }
+  //   },
+  // });
 
-  useEffect(() => {
-    if (
-      !linkId &&
-      url &&
-      title &&
-      description &&
-      !exceededAI &&
-      tags.length === 0 &&
-      suggestedTags.length === 0 &&
-      availableTags &&
-      availableTags.length > 0
-    ) {
-      complete(
-        `From the list of avaialble tags below, suggest relevant tags for this link: 
-        
-        - URL: ${url}
-        - Meta title: ${title}
-        - Meta description: ${description}. 
-        
-        Only return the tag names in comma-separated format, and nothing else. If there are no relevant tags, return an empty string.
-        
-        Available tags: ${availableTags.map(({ name }) => name).join(", ")}`,
-      );
-    }
-  }, [url, title, description]);
+  // useEffect(() => {
+  //   if (
+  //     !linkId &&
+  //     url &&
+  //     title &&
+  //     description &&
+  //     !exceededAI &&
+  //     tags.length === 0 &&
+  //     suggestedTags.length === 0 &&
+  //     availableTags &&
+  //     availableTags.length > 0
+  //   ) {
+  //     complete(
+  //       `From the list of avaialble tags below, suggest relevant tags for this link:
+
+  //       - URL: ${url}
+  //       - Meta title: ${title}
+  //       - Meta description: ${description}.
+
+  //       Only return the tag names in comma-separated format, and nothing else. If there are no relevant tags, return an empty string.
+
+  //       Available tags: ${availableTags.map(({ name }) => name).join(", ")}`,
+  //     );
+  //   }
+  // }, [url, title, description]);
 
   const [creatingTag, setCreatingTag] = useState(false);
 

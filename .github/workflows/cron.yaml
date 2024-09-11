@@ -7,6 +7,10 @@ on:
       - staging
     paths-ignore:
       - apps/redirect-server/**
+      - apps/redirect-pages/**
+      - apps/docs/**
+      - apps/web/**
+      - packages/**
   workflow_dispatch:
 permissions:
   id-token: write # This is required for requesting the JWT

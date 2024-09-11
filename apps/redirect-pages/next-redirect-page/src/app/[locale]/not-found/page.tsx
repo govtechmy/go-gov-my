@@ -1,6 +1,6 @@
 import Heading from "@/components/Heading";
 import Page from "@/components/page/common/Page";
-import Redirect from "@/components/page/index/Redirect";
+import Redirect from "@/components/page/common/RedirectContent/Redirect";
 import { Paragraph } from "@/components/Paragraph";
 import RoundedText from "@/components/RoundedText";
 import { getPageMetadata, MetadataProps } from "@/lib/page";

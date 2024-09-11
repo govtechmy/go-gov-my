@@ -2,11 +2,10 @@
 
 import { MessagesContext } from "@/ui/switcher/provider";
 import { Avatar, Badge, IconMenu, Popover } from "@dub/ui";
-import Cookies from "js-cookie";
-import { Edit3, HelpCircle, LogOut, Settings } from "lucide-react";
+import { LogOut, Settings } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 
 export default function UserDropdown() {
   const { data: session } = useSession();
@@ -14,14 +13,6 @@ export default function UserDropdown() {
   const messages = useContext(MessagesContext);
   const message = messages?.layout;
   const locale = messages?.language;
-
-  const [unreadChangelogs, setUnreadChangelogs] = useState(0);
-  useEffect(() => {
-    const lastReadChangelog = Cookies.get("lastReadChangelog");
-    if (!lastReadChangelog) {
-      setUnreadChangelogs(2);
-    }
-  }, []);
 
   return (
     <div className="relative inline-block pt-1.5">
@@ -41,23 +32,12 @@ export default function UserDropdown() {
               <p className="truncate text-sm text-gray-500">
                 {session?.user?.email}
               </p>
-              {session && (
+              {/* {session && (
                 <div className="mt-1 flex gap-1">
                   <AgencyBadge agencyCode={session.user.agencyCode} />
                   <RoleBadge role={session.user.role} />
                 </div>
-              )}
-            </Link>
-            <Link
-              href="https://github.com/govtechmy/go-gov-my/discussions"
-              onClick={() => setOpenPopover(false)}
-              target="_blank"
-              className="w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
-            >
-              <IconMenu
-                text={message?.help_centre}
-                icon={<HelpCircle className="h-4 w-4" />}
-              />
+              )} */}
             </Link>
             <Link
               href={`/${locale}/settings`}
@@ -68,24 +48,6 @@ export default function UserDropdown() {
                 text={message?.settings}
                 icon={<Settings className="h-4 w-4" />}
               />
-            </Link>
-            <Link
-              href="https://github.com/govtechmy/go-gov-my/releases"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => {
-                Cookies.set("lastReadChangelog", new Date().toISOString());
-                setOpenPopover(false);
-              }}
-              className="flex w-full justify-between rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
-            >
-              <IconMenu
-                text={message?.changelog}
-                icon={<Edit3 className="h-4 w-4" />}
-              />
-              {unreadChangelogs > 0 && (
-                <Badge variant="blue">{unreadChangelogs}</Badge>
-              )}
             </Link>
             <button
               className="w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
@@ -117,9 +79,6 @@ export default function UserDropdown() {
             />
           ) : (
             <div className="h-9 w-9 animate-pulse rounded-full border border-gray-300 bg-gray-100 sm:h-10 sm:w-10" />
-          )}
-          {unreadChangelogs > 0 && (
-            <div className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full border-2 border-white bg-blue-500" />
           )}
         </button>
       </Popover>

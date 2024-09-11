@@ -4,6 +4,7 @@ import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import React, { useState } from "react";
 import { cn } from "./cn";
 import Collapse from "./layout";
+import MalaysiaFlag from "./malaysia-flag";
 
 const IdentifyWebsite: React.FC = () => {
   const { messages, locale } = useIntlClientHook();
@@ -19,13 +20,15 @@ const IdentifyWebsite: React.FC = () => {
             ? "from-washed-100 to-outline-200 bg-gradient-to-b from-[84.74%] to-100%"
             : "bg-washed-100",
         )}
+        data-nosnippet
       >
         <div className="container">
           <button className="w-full" onClick={() => setOpen(!open)}>
             <div className="text-brand-700 ml-2 flex flex-wrap items-center gap-1.5 py-4 text-sm/4 max-sm:justify-between sm:py-1">
               <div className="flex items-center gap-1.5">
-                <div className="size-4 sm:size-5 text-blue-600">
-                  <svg
+                <div className="size-4 sm:size-5">
+                  <MalaysiaFlag />
+                  {/* <svg
                     width="20"
                     height="20"
                     viewBox="0 0 20 20"
@@ -45,7 +48,7 @@ const IdentifyWebsite: React.FC = () => {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     />
-                  </svg>
+                  </svg> */}
                 </div>
                 <span className="text-black-700">
                   {message?.masthead_title}

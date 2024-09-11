@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"html/template"
@@ -25,6 +26,7 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type WaitPageProps struct {
@@ -35,8 +37,18 @@ type WaitPageProps struct {
 }
 
 type AuthPageProps struct {
-	Slug          string
-	WrongPassword bool
+	Slug string
+}
+
+type AuthPostProps struct {
+	Password string `json:"password"`
+	Slug     string `json:"slug"`
+}
+
+type PostReturnProps struct {
+	Status  bool
+	Message string
+	URL     string
 }
 
 func main() {
@@ -152,8 +164,6 @@ func main() {
 	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		slug := strings.TrimPrefix(r.URL.Path, "/")
-		slugWithLeadingSlash := "/" + slug
-		user_input_password := r.URL.Query().Get("password")
 
 		link, err := linkRepo.GetLink(ctx, slug)
 		if err == repository.ErrLinkNotFound {
@@ -190,22 +200,10 @@ func main() {
 			return
 		}
 
-		// LINK IS PASSWORD PROTECTED BUT USER DID NOT PROVIDE PASSWORD, REDIRECT TO AUTH PAGE
-		if link.Password != "" && user_input_password == "" {
+		// LINK IS PASSWORD PROTECTED , REDIRECT TO AUTH PAGE
+		if link.Password != "" {
 			if err := redirectT.ExecuteTemplate(w, "secure.html", AuthPageProps{
-				Slug:          slugWithLeadingSlash,
-				WrongPassword: false,
-			}); err != nil {
-				logger.Error("failed to execute template", zap.Error(err))
-			}
-			return
-		}
-
-		// LINK IS PASSWORD PROTECTED AND USER PROVIDED WRONG PASSWORD
-		if link.Password != "" && user_input_password != link.Password && user_input_password != "" {
-			if err := redirectT.ExecuteTemplate(w, "secure.html", AuthPageProps{
-				Slug:          slugWithLeadingSlash,
-				WrongPassword: true,
+				Slug: slug,
 			}); err != nil {
 				logger.Error("failed to execute template", zap.Error(err))
 			}
@@ -242,6 +240,108 @@ func main() {
 			logger.Error("failed to execute template", zap.Error(err))
 		}
 	}), "handleLinkVisit"))
+
+	http.Handle("/auth", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		if r.Method == "POST" {
+			decoder := json.NewDecoder(r.Body)
+			var prop AuthPostProps
+			err := decoder.Decode(&prop)
+			user_input_password := prop.Password
+			slug := prop.Slug
+			if err != nil {
+				logger.Error("Unable to find post parameter in /auth")
+				var returnStruct PostReturnProps
+				returnStruct.Status = false
+				returnStruct.Message = "Unable to find POST parameters"
+				w.Header().Add("Content-Type", "application/json")
+				w.WriteHeader(http.StatusInternalServerError)
+				json.NewEncoder(w).Encode(returnStruct)
+				return
+			}
+
+			link, err := linkRepo.GetLink(ctx, slug)
+			if err == repository.ErrLinkNotFound {
+				logger.Info("link not found",
+					zap.String("slug", slug),
+					zap.String("ip", utils.GetClientIP(r)),
+					zap.String("user-agent", r.UserAgent()),
+					zap.String("code", "link_not_found")) // Filebeat will run to collect link not found errors over this code
+				var returnStruct PostReturnProps
+				returnStruct.Status = false
+				returnStruct.Message = "Unable to find link"
+				w.Header().Add("Content-Type", "application/json")
+				w.WriteHeader(http.StatusInternalServerError)
+				json.NewEncoder(w).Encode(returnStruct)
+				return
+			}
+			if err != nil {
+				logger.Error("error fetching link",
+					zap.String("slug", slug),
+					zap.String("ip", utils.GetClientIP(r)),
+					zap.String("user-agent", r.UserAgent()),
+					zap.Error(err))
+				var returnStruct PostReturnProps
+				returnStruct.Status = false
+				returnStruct.Message = "Unable to fetch link"
+				w.Header().Add("Content-Type", "application/json")
+				w.WriteHeader(http.StatusInternalServerError)
+				json.NewEncoder(w).Encode(returnStruct)
+				return
+			}
+
+			err = bcrypt.CompareHashAndPassword([]byte(link.Password), []byte(user_input_password))
+			if err != nil { // USER PROVIDE WRONG PASSWORD
+				var returnStruct PostReturnProps
+				returnStruct.Status = false
+				returnStruct.Message = "Wrong Password"
+				w.Header().Add("Content-Type", "application/json")
+				w.WriteHeader(http.StatusUnauthorized)
+				json.NewEncoder(w).Encode(returnStruct)
+				return
+			}
+
+			// LINK IS PASSWORD PROTECTED AND USER PROVIDED CORRECT PASSWORD
+			// Log redirect metadata for analytics
+			redirectMetadata := repository.NewRedirectMetadata(*r, ipDB, *link)
+			fileLogger.Info("redirect analytics",
+				zap.String("linkSlug", link.Slug),
+				zap.String("linkId", link.ID),
+				zap.String("userAgent", r.UserAgent()),
+				zap.String("ip", utils.GetClientIP(r)),
+				zap.Object("redirectMetadata", redirectMetadata),
+			)
+			logger.Info("redirect analytics",
+				zap.String("linkSlug", link.Slug),
+				zap.String("linkId", link.ID),
+				zap.String("userAgent", r.UserAgent()),
+				zap.String("ip", utils.GetClientIP(r)),
+				zap.Object("redirectMetadata", redirectMetadata),
+			)
+
+			// Do not use link.URL, use redirectMetadata.LinkURL instead.
+			// Redirect URL could be a geo-specific/ios/android link.
+			redirectURL := redirectMetadata.LinkURL
+			var returnStruct PostReturnProps
+			returnStruct.Status = true
+			returnStruct.Message = "Password Authenticated"
+			returnStruct.URL = redirectURL
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			json.NewEncoder(w).Encode(returnStruct)
+			return
+
+		}
+		// METHOD NOT ALLOWED
+		var returnStruct PostReturnProps
+		returnStruct.Status = false
+		returnStruct.Message = "Method not allowed"
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(returnStruct)
+		return
+
+	}), "handleAuthPassword"))
 
 	srv := &http.Server{
 		Addr:    fmt.Sprintf("0.0.0.0:%d", httpPort),
