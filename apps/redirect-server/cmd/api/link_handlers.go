@@ -175,6 +175,16 @@ func updateLinkHandler(w http.ResponseWriter, r *http.Request, linkRepo *es.Link
 		return
 	}
 
+	if updateData.Password != nil && *updateData.Password != "" {
+		hashedPassword, err := HashPassword(*updateData.Password)
+		if err != nil {
+			logHandler(repository.ErrUnmarshalling, err)
+			errLinkHandler(w, err)
+			return
+		}
+		*updateData.Password = hashedPassword
+	}
+
 	if err := linkRepo.UpdateLink(ctx, linkID, updateData); err != nil {
 		logHandler(repository.ErrGeneralMessage, err)
 		errLinkHandler(w, err)
