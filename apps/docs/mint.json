@@ -23,7 +23,7 @@
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:support@tech.gov.my"
+      "url": "https://github.com/govtechmy/go-gov-my/issues"
     }
   ],
   "topbarCtaButton": {

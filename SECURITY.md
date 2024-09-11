@@ -1,3 +1,3 @@
 # Security reports
 
-Please do not file an open issue for ongoing security bugs. Instead, email us directly with your findings at support@tech.gov.my.
+Please open an issue at https://github.com/govtechmy/go-gov-my/issues if you have any security findings.
