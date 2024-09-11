@@ -3,13 +3,15 @@
 import { ChevronDown } from "lucide-react";
 import { ReactNode, useState } from "react";
 import { IconMenu } from "./icon-menu";
-import { Tick } from "./icons";
+import CheckCircle from "./icons/check-circle";
 import { Popover } from "./popover";
 
 type Option = {
   label: string;
+  full: string;
   value: string;
 };
+
 type CustomSelectProps = {
   icon: ReactNode;
   options: Option[];
@@ -51,9 +53,9 @@ export function CustomSelect({
               onClick={() => onItemClick(option)}
               className="flex w-full items-center justify-between space-x-2 rounded-md px-1 py-2 hover:bg-gray-100 active:bg-gray-200"
             >
-              <IconMenu text={option.label} icon={null} />
+              <IconMenu text={option.full} icon={null} />
               {isSelected(option) && (
-                <Tick className="h-4 w-4" aria-hidden="true" />
+                <CheckCircle className="text-blue-600" aria-hidden="true" />
               )}
             </button>
           ))}
