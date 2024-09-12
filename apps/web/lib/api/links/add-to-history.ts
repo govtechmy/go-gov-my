@@ -3,10 +3,10 @@ import { LinkProps } from "@/lib/types";
 
 export type User = {
   id: string;
-  name: string;
+  name: string | null;
   email: string;
   emailVerified: Date | null;
-  image: string;
+  image: string | null;
   agencyCode: string;
   role: string;
   createdAt: Date;
@@ -42,7 +42,35 @@ export type LinkHistory = Pick<
   timestamp: Date;
 };
 
-export async function addToHistory(entry: LinkHistory): Promise<void> {
+export type LinkHistoryAdd = Pick<
+  LinkProps,
+  // Only pick these fields to store as history
+  | "android"
+  | "archived"
+  | "description"
+  | "domain"
+  | "expiredUrl"
+  | "expiresAt"
+  | "externalId"
+  | "geo"
+  | "image"
+  | "ios"
+  | "key"
+  | "proxy"
+  | "publicStats"
+  | "title"
+  | "trackConversion"
+  | "url"
+> & {
+  type: "create" | "update";
+  /** The id of the user who created/updated the link */
+  comittedByUserId: string;
+  /** The id of the link that was created/updated */
+  linkId: string;
+  timestamp: Date;
+};
+
+export async function addToHistory(entry: LinkHistoryAdd): Promise<void> {
   await prisma.linkHistory.create({
     data: {
       type: entry.type,

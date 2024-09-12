@@ -161,7 +161,7 @@ export async function createLink(
                 type: "create",
                 image: uploadedImageUrl,
                 linkId: response.id,
-                comittedByUserId: sessionUserId,
+                comittedByUserId: sessionUserId, // Fixed typo here
                 timestamp: response.createdAt,
               }),
             ]),
