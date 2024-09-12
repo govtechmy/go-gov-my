@@ -3,7 +3,6 @@
 import useWorkspace from "@/lib/swr/use-workspace";
 import LayoutLoader from "@/ui/layout/layout-loader";
 import LinkNotFound from "@/ui/links/link-not-found";
-import WorkspaceExceededClicks from "@/ui/workspaces/workspace-exceeded-clicks";
 import { SHORT_DOMAIN } from "@dub/utils";
 import { useSearchParams } from "next/navigation";
 import { ReactNode } from "react";
@@ -13,9 +12,9 @@ export default function AnalyticsClient({ children }: { children: ReactNode }) {
   const searchParams = useSearchParams();
   const domain = searchParams?.get("domain");
 
-  if (exceededClicks) {
-    return <WorkspaceExceededClicks />;
-  }
+  // if (exceededClicks) {
+  //   return <WorkspaceExceededClicks />;
+  // }
 
   if (loading) {
     return <LayoutLoader />;
