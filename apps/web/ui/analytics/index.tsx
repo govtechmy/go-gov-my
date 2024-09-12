@@ -13,6 +13,7 @@ import { createContext, useMemo } from "react";
 import useSWR from "swr";
 import Clicks from "./clicks";
 import Devices from "./devices";
+import CountryChart from "./geo-chart";
 import Locations from "./locations";
 import Referer from "./referer";
 import Toggle from "./toggle";
@@ -132,6 +133,7 @@ export default function Analytics({
         <Toggle />
         <div className="mx-auto grid max-w-4xl gap-5 px-2">
           <Clicks />
+          <CountryChart />
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <Locations />
             {!isPublicStatsPage && <TopLinks />}
