@@ -137,6 +137,7 @@ func main() {
 		"templates/redirect/en-MY/secure.html",
 		"templates/redirect/en-MY/not-found.html",
 		"templates/redirect/en-MY/error.html",
+		"templates/redirect/en-MY/expiry.html",
 	)
 
 	if err != nil {
@@ -186,6 +187,15 @@ func main() {
 				zap.Error(err))
 			w.WriteHeader(http.StatusInternalServerError)
 			if err := redirectT.ExecuteTemplate(w, "error.html", nil); err != nil {
+				logger.Error("failed to execute template", zap.Error(err))
+			}
+			return
+		}
+
+		// Check if the link has expired
+		if link.ExpiresAt != nil && time.Now().After(*link.ExpiresAt) {
+			w.WriteHeader(http.StatusGone)
+			if err := redirectT.ExecuteTemplate(w, "expiry.html", nil); err != nil {
 				logger.Error("failed to execute template", zap.Error(err))
 			}
 			return

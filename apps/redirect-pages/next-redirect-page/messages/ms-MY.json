@@ -23,6 +23,10 @@
 		"serverError": {
 			"title": "Sesuatu tidak kena | GoGovMY",
 			"description": "Untuk bantuan lebih lanjut, sila hubungi agensi yang menyediakan pautan pendek ini."
+		},
+		"expired": {
+			"title": "Maaf, pautan pendek telah tamat tempoh | GoGovMY",
+			"description": "Untuk bantuan lebih lanjut, sila hubungi agensi yang menyediakan pautan pendek ini."
 		}
 	},
 	"app": {
@@ -50,6 +54,11 @@
 			"title": "Maaf, pautan pendek tidak ditemui",
 			"description": "Untuk bantuan lebih lanjut, sila hubungi agensi yang menyediakan pautan pendek ini.",
 			"tag": "Ralat 404"
+		},
+		"expired": {
+			"title": "Maaf, pautan pendek telah tamat tempoh",
+			"description": "Untuk bantuan lebih lanjut, sila hubungi agensi yang menyediakan pautan pendek ini.",
+			"tag": "Tamat Tempoh"
 		},
 		"password": {
 			"title": "Kata laluan diperlukan",
