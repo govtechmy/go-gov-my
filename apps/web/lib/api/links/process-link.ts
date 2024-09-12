@@ -194,14 +194,15 @@ export async function processLink<T extends Record<string, any>>({
     }
   }
 
+  /// Farhan 20240912: We don't need this anymore since we are connecting to GovTech AWS SSO
   // custom social media image checks (see if R2 is configured)
-  if (proxy && !process.env.STORAGE_SECRET_ACCESS_KEY) {
-    return {
-      link: payload,
-      error: "Missing storage access key.",
-      code: "bad_request",
-    };
-  }
+  // if (proxy && !process.env.STORAGE_SECRET_ACCESS_KEY) {
+  //   return {
+  //     link: payload,
+  //     error: "Missing storage access key.",
+  //     code: "bad_request",
+  //   };
+  // }
 
   // expire date checks
   if (expiresAt) {
