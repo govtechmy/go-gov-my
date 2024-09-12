@@ -6,7 +6,7 @@ import LinksContainer from "@/ui/links/links-container";
 import { useAddEditLinkModal } from "@/ui/modals/add-edit-link-modal";
 import { MaxWidthWrapper } from "@dub/ui";
 import { Button } from "@dub/ui/src/button";
-import { saveAs } from "file-saver/dist/FileSaver";
+import { saveAs } from "file-saver";
 import { json2csv } from "json-2-csv";
 
 export default function WorkspaceLinksClient() {
@@ -66,6 +66,9 @@ export default function WorkspaceLinksClient() {
     return json2csv(data, {
       keys: headers,
       parseValue(fieldValue, defaultParser) {
+        if (fieldValue === null) {
+          return "";
+        }
         if (fieldValue instanceof Date) {
           return fieldValue.toISOString();
         }
