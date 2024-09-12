@@ -5,6 +5,10 @@
 /apps/redirect-pages/next-landing-page/node_modules
 /apps/redirect-pages/next-landing-page/.next/*
 /apps/redirect-pages/next-landing-page/.next/
+/apps/redirect-pages/next-landing-page/out/*
+/apps/redirect-pages/next-landing-page/out/
+/apps/redirect-pages/next-landing-page/.vercel/*
+/apps/redirect-pages/next-landing-page/out
 
 # dependencies
 /node_modules
