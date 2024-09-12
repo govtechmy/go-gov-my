@@ -23,6 +23,10 @@
 		"serverError": {
 			"title": "Something went wrong | GoGovMY",
 			"description": "For more help, please reach out to the agency that provided you with this short link."
+		},
+		"expired": {
+			"title": "Sorry, the link has expired",
+			"description": "For more help, please reach out to the agency that provided you with this short link."
 		}
 	},
 	"app": {
@@ -50,6 +54,11 @@
 			"title": "Sorry, short link not found",
 			"description": "For more help, please reach out to the agency that provided you with this short link.",
 			"tag": "404 Error"
+		},
+		"expired": {
+			"title": "Sorry, the link has expired",
+			"description": "For more help, please reach out to the agency that provided you with this short link.",
+			"tag": "Link Expired"
 		},
 		"password": {
 			"title": "Password required",

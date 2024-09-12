@@ -49,3 +49,8 @@ cp -r ./out/ms-MY/error.txt $PUBLIC_FOLDER/ms-MY
 cp -r ./out/en-MY/error.html $TEMPLATES_FOLDER/en-MY
 cp -r ./out/ms-MY/error.html $TEMPLATES_FOLDER/ms-MY 
 
+# next page: /expiry
+cp -r ./out/en-MY/expiry.txt $PUBLIC_FOLDER/en-MY
+cp -r ./out/ms-MY/expiry.txt $PUBLIC_FOLDER/ms-MY
+cp -r ./out/en-MY/expiry.html $TEMPLATES_FOLDER/en-MY
+cp -r ./out/ms-MY/expiry.html $TEMPLATES_FOLDER/ms-MY 
