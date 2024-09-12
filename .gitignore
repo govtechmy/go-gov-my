@@ -3,7 +3,9 @@
 #local certificates
 /apps/redirect-server/certificates
 /apps/redirect-pages/next-landing-page/node_modules
-/apps/redirect-pages/next-landing-page/.next
+/apps/redirect-pages/next-landing-page/.next/*
+/apps/redirect-pages/next-landing-page/.next/
+
 # dependencies
 /node_modules
 /.pnp
