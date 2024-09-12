@@ -28,6 +28,9 @@ export const GET = withAdmin(async ({ params }) => {
     where: {
       linkId: link.id,
     },
+    include: {
+      committedByUser: true,
+    },
     orderBy: {
       timestamp: "desc",
     },

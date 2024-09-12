@@ -15,6 +15,9 @@ export const GET = withWorkspace(async ({ link }) => {
     where: {
       linkId: link.id,
     },
+    include: {
+      committedByUser: true,
+    },
     orderBy: {
       timestamp: "desc",
     },

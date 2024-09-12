@@ -34,6 +34,7 @@ model User {
   image         String?
   agencyCode    String    @default("govtech")
   role          UserRole  @default(staff)
+  linkHistory LinkHistory[] // Relation to LinkHistory
 
   agency Agency @relation(fields: [agencyCode], references: [code])
 
@@ -50,6 +51,7 @@ model User {
 
 enum UserRole {
   staff
+  agency_admin
   super_admin
 }
 
@@ -275,6 +277,7 @@ model LinkHistory {
   id                String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   type              LinkHistoryType
   committedByUserId String?         @db.Uuid // The user who created/updated the link
+  committedByUser   User?           @relation(fields: [committedByUserId], references: [id])
   linkId            String          @db.Uuid
   link              Link            @relation(fields: [linkId], references: [id], onDelete: Cascade)
   timestamp         DateTime        @db.Timestamptz

@@ -63,7 +63,8 @@ function LinkHistoryTimeline({ history }: { history: LinkHistory[] }) {
               )}
               <div className="my-2 flex-1 rounded-lg border p-4">
                 <h3 className="mb-4">
-                  {messages.link.history.created_on} {formatDate(h.timestamp)}
+                  {messages.link.history.created_on} {formatDate(h.timestamp)}{" "}
+                  by <strong>{h.committedByUser.name}</strong>
                 </h3>
                 <ul className="ml-4 list-disc">
                   <li>
@@ -87,7 +88,8 @@ function LinkHistoryTimeline({ history }: { history: LinkHistory[] }) {
             <VerticalTimeline isFirst={i === 0} isLast={i === arr.length - 1} />
             <div className="my-2 flex-1 rounded-lg border p-4">
               <h3 className="mb-4">
-                {messages.link.history.changes_on} {formatDate(h.timestamp)}
+                {messages.link.history.changes_on} {formatDate(h.timestamp)} by{" "}
+                <strong>{h.committedByUser.name}</strong>
               </h3>
               <ul className="ml-4 list-disc">
                 <UpdateMessages prev={prevHistory} curr={h} />
@@ -235,15 +237,17 @@ function UpdateMessages({
       changes.push(
         <li>
           <strong>{formatKey(key)}</strong>{" "}
-          {messages.link.history.was_changed_from}{" "}
+          {key === "geo" && typeof prevVal === "object" && prevVal !== null
+            ? messages.link.history.was_set_to + " "
+            : messages.link.history.was_changed_from + " "}
           <strong>
             {key === "geo" && typeof prevVal === "object" && prevVal !== null
-              ? Object.entries(prevVal)
-                  .map(([k, v]) => `${k} : ${v}`)
-                  .join(", ")
+              ? " "
               : prevVal?.toString()}
           </strong>{" "}
-          {messages.link.history.to}{" "}
+          {key === "geo" && typeof prevVal === "object" && prevVal !== null
+            ? ""
+            : messages.link.history.to + " "}
           <strong>
             {key === "geo" && typeof currVal === "object" && currVal !== null
               ? Object.entries(currVal)

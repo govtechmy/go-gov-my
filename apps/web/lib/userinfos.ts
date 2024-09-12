@@ -32,6 +32,14 @@ export const checkIfUserExists = async (userId: string) => {
   return Boolean(user);
 };
 
+export const getUserInfos = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  return user;
+};
+
 export const getLinkViaEdge = async (domain: string, key: string) => {
   const link = await prisma.link.findFirst({
     where: {

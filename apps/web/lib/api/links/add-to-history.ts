@@ -1,6 +1,18 @@
 import { prisma } from "@/lib/prisma";
 import { LinkProps } from "@/lib/types";
 
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  emailVerified: Date | null;
+  image: string;
+  agencyCode: string;
+  role: string;
+  createdAt: Date;
+  subscribed: boolean;
+};
+
 export type LinkHistory = Pick<
   LinkProps,
   // Only pick these fields to store as history
@@ -24,6 +36,7 @@ export type LinkHistory = Pick<
   type: "create" | "update";
   /** The id of the user who created/updated the link */
   comittedByUserId: string;
+  committedByUser: User;
   /** The id of the link that was created/updated */
   linkId: string;
   timestamp: Date;
