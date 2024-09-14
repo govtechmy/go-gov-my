@@ -34,6 +34,7 @@
     "last_clicked": "Capaian terakhir",
     "analytics": "Statistik",
     "settings": "Tetapan",
+    "documentation": "Dokumentasi",
     "filter_links": "Tapis Pautan",
     "filter_tags": "Tapisan Penanda",
     "add": "Tambah",
@@ -63,6 +64,8 @@
     "help_centre": "Pusat Bantuan",
     "logout": "Log Keluar",
     "settings": "Tetapan",
+    "admin": "Portal Penyelenggara",
+    "documentation": "Dokumentasi",
     "onboarding": "Senarai semak"
   },
   "workspace": {

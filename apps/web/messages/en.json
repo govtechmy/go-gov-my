@@ -34,6 +34,7 @@
     "last_clicked": "Last Clicked",
     "analytics": "Analytics",
     "settings": "Settings",
+    "documentation": "Documentation",
     "filter_links": "Filter Links",
     "filter_tags": "Filter Tags",
     "add": "Add",
@@ -63,6 +64,8 @@
     "help_centre": "Help Centre",
     "logout": "Log out",
     "settings": "Settings",
+    "admin": "Admin Portal",
+    "documentation": "Documentation",
     "onboarding": "Onboarding Checklist"
   },
   "workspace": {

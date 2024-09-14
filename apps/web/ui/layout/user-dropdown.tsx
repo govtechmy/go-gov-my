@@ -2,7 +2,7 @@
 
 import { MessagesContext } from "@/ui/switcher/provider";
 import { Avatar, Badge, IconMenu, Popover } from "@dub/ui";
-import { LogOut, Settings } from "lucide-react";
+import { BookText, CircleGauge, LogOut, Settings } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useContext, useState } from "react";
@@ -38,6 +38,21 @@ export default function UserDropdown() {
                 </div>
               )}
             </Link>
+            {session?.user?.role === "super_admin" ||
+            session?.user?.role === "agency_admin" ? (
+              <Link
+                href={`/${locale}/admin`}
+                onClick={() => setOpenPopover(false)}
+                className="block w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
+              >
+                <IconMenu
+                  text={message?.admin}
+                  icon={<CircleGauge className="h-4 w-4" />}
+                />
+              </Link>
+            ) : (
+              <></>
+            )}
             <Link
               href={`/${locale}/settings`}
               onClick={() => setOpenPopover(false)}
@@ -46,6 +61,16 @@ export default function UserDropdown() {
               <IconMenu
                 text={message?.settings}
                 icon={<Settings className="h-4 w-4" />}
+              />
+            </Link>
+            <Link
+              href={`https://docs.${process.env.NEXT_PUBLIC_APP_SHORT_DOMAIN}`}
+              target="_blank"
+              className="block w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
+            >
+              <IconMenu
+                text={message?.documentation}
+                icon={<BookText className="h-4 w-4" />}
               />
             </Link>
             <button
