@@ -59,12 +59,13 @@
     "success_create_workspace": "Berjaya menjana ruang kerja baru!"
   },
   "layout": {
-    "changelog": "Maklumat Perisian",
+    "changelog": "Kemaskini Terkini",
     "help": "Bantuan",
     "help_centre": "Pusat Bantuan",
     "logout": "Log Keluar",
     "settings": "Tetapan",
     "admin": "Portal Penyelenggara",
+    "user": "Kembali ke Utama",
     "documentation": "Dokumentasi",
     "onboarding": "Senarai semak"
   },

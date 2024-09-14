@@ -1,18 +1,60 @@
-import { Background } from "@dub/ui";
-import { ReactNode } from "react";
+import { useIntlHook } from "@/lib/middleware/utils/useI18n";
+import Header from "@/ui/header/header";
+import AgencyLabel from "@/ui/layout/agency-label";
+import NavTabs from "@/ui/layout/nav-tabs";
+import UserDropdown from "@/ui/layout/user-dropdown";
+import WorkspaceSwitcher from "@/ui/layout/workspace-switcher";
+import { Divider } from "@/ui/shared/icons";
+import { MessagesProvider } from "@/ui/switcher/provider";
+import LocaleSwitcher from "@/ui/switcher/switcher";
+import { MaxWidthWrapper, NavLogo } from "@dub/ui";
+import { constructMetadata } from "@dub/utils";
+import Link from "next/link";
+import { ReactNode, Suspense } from "react";
 import Providers from "./providers";
+export const dynamic = "force-static";
+export async function generateMetadata({ params }) {
+  const { locale } = params;
+  return constructMetadata({ locale });
+}
 
-export default async function AdminLayout({
+export default function Layout({
   children,
+  params: { locale },
 }: {
   children: ReactNode;
+  params: { locale: string };
 }) {
+  const { messages } = useIntlHook(locale);
   return (
-    <>
-      <Background />
-      <div className="relative z-10 flex h-screen w-screen justify-center">
-        <Providers>{children}</Providers>
-      </div>
-    </>
+    <Providers>
+      <MessagesProvider messages={messages}>
+        <div className="min-h-screen w-full bg-gray-50">
+          <Header />
+          <div className="sticky left-0 right-0 top-0 z-20 border-b border-gray-200 bg-white">
+            <MaxWidthWrapper>
+              <div className="flex h-16 items-center justify-between">
+                <div className="flex items-center">
+                  <Link href={`/${locale}`} className="hidden sm:block">
+                    <NavLogo variant="symbol" isInApp />
+                  </Link>
+                  <Divider className="hidden h-8 w-8 text-gray-200 sm:ml-3 sm:block" />
+                  <WorkspaceSwitcher />
+                  <AgencyLabel />
+                </div>
+                <div className="flex items-center space-x-6">
+                  <LocaleSwitcher />
+                  <UserDropdown />
+                </div>
+              </div>
+              <Suspense fallback={<div className="h-12 w-full" />}>
+                <NavTabs />
+              </Suspense>
+            </MaxWidthWrapper>
+          </div>
+          {children}
+        </div>
+      </MessagesProvider>
+    </Providers>
   );
 }

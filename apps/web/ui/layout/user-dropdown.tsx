@@ -2,9 +2,18 @@
 
 import { MessagesContext } from "@/ui/switcher/provider";
 import { Avatar, Badge, IconMenu, Popover } from "@dub/ui";
-import { BookText, CircleGauge, LogOut, Settings } from "lucide-react";
+import {
+  AppWindow,
+  BadgeHelp,
+  BookText,
+  CircleGauge,
+  LogOut,
+  Replace,
+  Settings,
+} from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useContext, useState } from "react";
 
 export default function UserDropdown() {
@@ -13,6 +22,8 @@ export default function UserDropdown() {
   const messages = useContext(MessagesContext);
   const message = messages?.layout;
   const locale = messages?.language;
+  const pathname = usePathname();
+  const isAdminPath = pathname.includes("/admin");
 
   return (
     <div className="relative inline-block pt-1.5">
@@ -41,13 +52,19 @@ export default function UserDropdown() {
             {session?.user?.role === "super_admin" ||
             session?.user?.role === "agency_admin" ? (
               <Link
-                href={`/${locale}/admin`}
+                href={isAdminPath ? `/${locale}` : `/${locale}/admin`}
                 onClick={() => setOpenPopover(false)}
                 className="block w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
               >
                 <IconMenu
-                  text={message?.admin}
-                  icon={<CircleGauge className="h-4 w-4" />}
+                  text={!isAdminPath ? message?.admin : message?.user}
+                  icon={
+                    isAdminPath ? (
+                      <AppWindow className="h-4 w-4" />
+                    ) : (
+                      <CircleGauge className="h-4 w-4" />
+                    )
+                  }
                 />
               </Link>
             ) : (
@@ -71,6 +88,26 @@ export default function UserDropdown() {
               <IconMenu
                 text={message?.documentation}
                 icon={<BookText className="h-4 w-4" />}
+              />
+            </Link>
+            <Link
+              href={`https://github.com/govtechmy/go-gov-my/discussions`}
+              target="_blank"
+              className="block w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
+            >
+              <IconMenu
+                text={message?.help_centre}
+                icon={<BadgeHelp className="h-4 w-4" />}
+              />
+            </Link>
+            <Link
+              href={`https://github.com/govtechmy/go-gov-my/releases`}
+              target="_blank"
+              className="block w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
+            >
+              <IconMenu
+                text={message?.changelog}
+                icon={<Replace className="h-4 w-4" />}
               />
             </Link>
             <button

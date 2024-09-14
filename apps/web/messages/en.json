@@ -65,6 +65,7 @@
     "logout": "Log out",
     "settings": "Settings",
     "admin": "Admin Portal",
+    "user": "Back to Dashboard",
     "documentation": "Documentation",
     "onboarding": "Onboarding Checklist"
   },
