@@ -12,10 +12,6 @@ export default function AnalyticsClient({ children }: { children: ReactNode }) {
   const searchParams = useSearchParams();
   const domain = searchParams?.get("domain");
 
-  // if (exceededClicks) {
-  //   return <WorkspaceExceededClicks />;
-  // }
-
   if (loading) {
     return <LayoutLoader />;
   }

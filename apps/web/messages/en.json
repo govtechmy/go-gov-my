@@ -227,7 +227,7 @@
     "share_stat": "Share stats for",
     "public_stat": "Public Stats Page",
     "share_link": "Share Link",
-    "stat_desc": "Making stats public will allow anyone with the link to see the  stats for this short link.",
+    "stat_desc": "This analytics can only be shared among workspace team members.",
     "no_tag": "No tags found in this workspace",
     "add_tag": "Add a tag",
     "filter_tags": "Filter tags",

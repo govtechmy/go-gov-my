@@ -1,10 +1,4 @@
 "use client";
-/* 
-  This Analytics component lives in 2 different places:
-  1. Workspace analytics page, e.g. app.dub.co/dub/analytics
-  2. Public stats page, e.g. dub.co/stats/github, stey.me/stats/weathergpt
-*/
-
 import { VALID_ANALYTICS_FILTERS } from "@/lib/analytics/constants";
 import useWorkspace from "@/lib/swr/use-workspace";
 import { fetcher } from "@dub/utils";

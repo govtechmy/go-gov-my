@@ -1,12 +1,5 @@
 import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import {
-  Copy,
-  IconMenu,
-  Popover,
-  Switch,
-  Tick,
-  useOptimisticUpdate,
-} from "@dub/ui";
+import { Copy, IconMenu, Popover, Tick, useOptimisticUpdate } from "@dub/ui";
 import { linkConstructor } from "@dub/utils";
 import { Share2 } from "lucide-react";
 import { useContext, useState } from "react";
@@ -71,7 +64,7 @@ export default function SharePopover() {
               {linkConstructor({ key, domain, pretty: true })}
             </p>
           </div>
-          <div className="p-4">
+          {/* <div className="p-4">
             <div className="mb-2 flex items-center justify-between">
               <p className="font-semibold text-gray-800">
                 {message?.public_stat}
@@ -85,9 +78,10 @@ export default function SharePopover() {
               />
             </div>
             <p className="text-gray-500">{message?.stat_desc}</p>
-          </div>
+          </div> */}
           <div className="p-4">
             <p className="font-semibold text-gray-800">{message?.share_link}</p>
+            <p className="text-gray-500">{message?.stat_desc}</p>
             <div className="divide-x-200 mt-2 flex items-center justify-between divide-x overflow-hidden rounded-md border border-gray-200 bg-gray-100">
               <div className="scrollbar-hide overflow-scroll pl-2">
                 <p className="whitespace-nowrap text-gray-600">
