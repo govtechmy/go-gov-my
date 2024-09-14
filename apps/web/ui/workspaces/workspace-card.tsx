@@ -5,8 +5,11 @@ import { WorkspaceProps } from "@/lib/types";
 import { BlurImage, NumberTooltip } from "@dub/ui";
 import { DICEBEAR_AVATAR_URL, fetcher, nFormatter } from "@dub/utils";
 import { BarChart2, Link2 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
+import PlanBadge from "./plan-badge";
 
 export default function WorkspaceCard({
   id,
@@ -22,7 +25,43 @@ export default function WorkspaceCard({
   );
 
   const { messages, locale } = useIntlClientHook();
+  const { data: session } = useSession();
   const workspace_msg = messages?.workspace;
+
+  const [workspaceOwnership, setWorkspaceOwnership] = useState<
+    "member" | "owner" | "pemilik" | "ahli"
+  >(locale === "en" ? "member" : "ahli");
+
+  useEffect(() => {
+    const fetchOwnership = async () => {
+      if (session && session.user && session.user.id) {
+        try {
+          const response = await fetch(`/api/projectusers?workspaceId=${id}`);
+          if (response.ok) {
+            const data = await response.json();
+            if (data && data.projectUsers && data.projectUsers.length > 0) {
+              const role = data.projectUsers[0].role; // Assuming you want the role of the first entry
+              if (locale === "ms") {
+                role === "owner"
+                  ? setWorkspaceOwnership("pemilik")
+                  : setWorkspaceOwnership("ahli");
+              } else {
+                setWorkspaceOwnership(role);
+              }
+            } else {
+              console.error("Role not found in the response");
+            }
+          } else {
+            console.error("Failed to fetch workspace ownership data");
+          }
+        } catch (error) {
+          console.error("Error fetching workspace ownership data:", error);
+        }
+      }
+    };
+
+    fetchOwnership();
+  }, [session, locale]);
 
   return (
     <div className="group relative">
@@ -46,7 +85,7 @@ export default function WorkspaceCard({
               </h2>
             </div>
           </div>
-          {/* <PlanBadge plan={plan} /> */}
+          {workspaceOwnership && <PlanBadge plan={workspaceOwnership} />}
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-1 text-gray-500">

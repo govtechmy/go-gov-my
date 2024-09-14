@@ -32,12 +32,11 @@ export default function UserDropdown() {
               <p className="truncate text-sm text-gray-500">
                 {session?.user?.email}
               </p>
-              {/* {session && (
+              {session && (
                 <div className="mt-1 flex gap-1">
-                  <AgencyBadge agencyCode={session.user.agencyCode} />
                   <RoleBadge role={session.user.role} />
                 </div>
-              )} */}
+              )}
             </Link>
             <Link
               href={`/${locale}/settings`}
@@ -86,20 +85,22 @@ export default function UserDropdown() {
   );
 }
 
-function RoleBadge({ role }: { role: "staff" | "super_admin" }) {
+function RoleBadge({
+  role,
+}: {
+  role: "staff" | "super_admin" | "agency_admin";
+}) {
   const label = {
     staff: "Staff",
     super_admin: "Super Admin",
+    agency_admin: "Agency Admin",
   } as const;
 
   const variant = {
     staff: "default",
-    super_admin: "violet",
+    super_admin: "blue",
+    agency_admin: "violet",
   } as const;
 
   return <Badge variant={variant[role]}>{label[role]}</Badge>;
-}
-
-function AgencyBadge({ agencyCode }: { agencyCode: string }) {
-  return <Badge variant="black">{agencyCode}</Badge>;
 }

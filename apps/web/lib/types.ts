@@ -61,6 +61,8 @@ export type TagColorProps = (typeof tagColors)[number];
 
 export type PlanProps = (typeof plans)[number];
 
+export type OwnershipProps = (typeof ownership)[number];
+
 export type RoleProps = (typeof roles)[number];
 
 export interface WorkspaceProps {
@@ -112,6 +114,8 @@ export const plans = [
   "business max",
   "enterprise",
 ] as const;
+
+export const ownership = ["owner", "member", "ahli", "pemilik"] as const;
 
 export const roles = ["owner", "member"] as const;
 

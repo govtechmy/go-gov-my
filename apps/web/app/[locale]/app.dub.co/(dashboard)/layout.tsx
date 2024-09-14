@@ -1,5 +1,6 @@
 import { useIntlHook } from "@/lib/middleware/utils/useI18n";
 import Header from "@/ui/header/header";
+import AgencyLabel from "@/ui/layout/agency-label";
 import NavTabs from "@/ui/layout/nav-tabs";
 import UserDropdown from "@/ui/layout/user-dropdown";
 import WorkspaceSwitcher from "@/ui/layout/workspace-switcher";
@@ -39,6 +40,7 @@ export default function Layout({
                   </Link>
                   <Divider className="hidden h-8 w-8 text-gray-200 sm:ml-3 sm:block" />
                   <WorkspaceSwitcher />
+                  <AgencyLabel />
                 </div>
                 <div className="flex items-center space-x-6">
                   <LocaleSwitcher />
