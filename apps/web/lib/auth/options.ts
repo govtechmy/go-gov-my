@@ -68,9 +68,9 @@ export const authOptions: NextAuthOptions = {
       // }
 
       // Disabling for now to test
-      if (!allowedDomain(user.email, !IS_PRODUCTION)) {
-        return false;
-      }
+      // if (!allowedDomain(user.email, !IS_PRODUCTION)) {
+      //   return false;
+      // }
 
       if (account?.provider === "google") {
         const userExists = await prisma.user.findUnique({
