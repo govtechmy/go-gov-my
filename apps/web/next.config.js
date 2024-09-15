@@ -68,8 +68,29 @@ const nextConfig = {
       {
         hostname: "media.cleanshot.cloud", // only for staging purposes
       },
+      {
+        hostname: "gogov-web-dev.s3.ap-southeast-1.amazonaws.com",
+      },
+      {
+        hostname: "app.pautan.org",
+      },
+      {
+        hostname: "app.go.gov.my",
+      },
+      {
+        hostname: "pautan.org",
+      },
+      {
+        hostname: "go.gov.my",
+      },
     ],
-    domains: ['gogov-web-dev.s3.ap-southeast-1.amazonaws.com'],
+    domains: [
+      "gogov-web-dev.s3.ap-southeast-1.amazonaws.com",
+      "app.pautan.org",
+      "app.go.gov.my",
+      "pautan.org",
+      "go.gov.my",
+    ],
   },
   async headers() {
     return [
