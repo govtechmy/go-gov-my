@@ -385,7 +385,11 @@
       "workspace_banned": "Banned",
       "workspace_created": "Create At",
       "workspace_actions": "Actions",
-       "workspace_members": "Members"
+      "workspace_members": "Members",
+      "workspace_showing": "Showing",
+      "workspace_of": "of",
+      "workspace_previous": "Previous",
+      "workspace_next": "Next"
     }
   },
   "welcome": {

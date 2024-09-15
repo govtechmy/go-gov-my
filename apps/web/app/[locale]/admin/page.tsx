@@ -37,9 +37,14 @@ export default function AdminPage({
       </div>
 
       <div className="flex flex-col space-y-4 px-5 py-10">
-        <h2 className="text-xl font-semibold">Workspace & Link Management</h2>
+        <h2 className="text-xl font-semibold">
+          {messages?.admin?.workspace_management?.workspace_management_title}
+        </h2>
         <p className="text-sm text-gray-500">
-          Administrative actions to manage list of links and workspaces.
+          {
+            messages?.admin?.workspace_management
+              ?.workspace_management_description
+          }
         </p>
         <LinkManagement />
       </div>

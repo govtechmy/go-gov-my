@@ -385,7 +385,11 @@
       "workspace_banned": "Dilarang",
       "workspace_created": "Dicipta pada",
       "workspace_actions": "Kemaskini",
-      "workspace_members": "Ahli"
+      "workspace_members": "Ahli",
+      "workspace_showing": "Menunjukkan",
+      "workspace_of": "dari",
+      "workspace_previous": "Sebelum",
+      "workspace_next": "Selepas"
     }
   },
   "welcome": {

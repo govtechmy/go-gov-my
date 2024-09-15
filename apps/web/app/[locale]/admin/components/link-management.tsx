@@ -1,5 +1,6 @@
 "use client";
 
+import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
 import { LinkWithTagsProps } from "@/lib/types";
 import { useAddEditLinkModal } from "@/ui/modals/add-edit-link-modal";
 import { Link as PrismaLink } from "@prisma/client";
@@ -55,6 +56,7 @@ export default function LinkManagement() {
 
   const params = useParams();
   const locale = params.locale as string;
+  const { messages } = useIntlClientHook();
 
   const handleEditLink = (link: LinkWithRelations) => {
     const linkWithTags: ExtendedLinkWithTagsProps = {
@@ -137,7 +139,9 @@ export default function LinkManagement() {
           <input
             type="text"
             className="block w-full rounded-lg border border-gray-300 bg-white ps-10 pt-2 text-sm text-gray-900 focus:border-gray-500 focus:ring-gray-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-            placeholder="Search for links"
+            placeholder={
+              messages?.admin?.workspace_management?.workspace_search
+            }
             onChange={(e) => debouncedSearch(e.target.value)}
           />
         </div>
@@ -154,25 +158,25 @@ export default function LinkManagement() {
           <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Short Link
+                {messages?.admin?.workspace_management?.workspace_short_link}
               </th>
               <th scope="col" className="px-6 py-3">
-                Redirect URL
+                {messages?.admin?.workspace_management?.workspace_redirect_url}
               </th>
               <th scope="col" className="px-6 py-3">
-                Workspace
+                {messages?.admin?.workspace_management?.workspace_workspace}
               </th>
               <th scope="col" className="px-6 py-3">
-                Owner
+                {messages?.admin?.workspace_management?.workspace_owner}
               </th>
               <th scope="col" className="px-6 py-3">
-                Banned
+                {messages?.admin?.workspace_management?.workspace_banned}
               </th>
               <th scope="col" className="px-6 py-3">
-                Members
+                {messages?.admin?.workspace_management?.workspace_members}
               </th>
               <th scope="col" className="px-6 py-3">
-                Actions
+                {messages?.admin?.workspace_management?.workspace_actions}
               </th>
             </tr>
           </thead>
@@ -242,12 +246,12 @@ export default function LinkManagement() {
         aria-label="Table navigation"
       >
         <span className="mb-4 block w-full text-sm font-normal text-gray-500 dark:text-gray-400 md:mb-0 md:inline md:w-auto">
-          Showing{" "}
+          {messages?.admin?.workspace_management?.workspace_showing}{" "}
           <span className="font-semibold text-gray-900 dark:text-white">
             {links.length > 0 ? (page - 1) * 10 + 1 : 0}-
             {Math.min(page * 10, links.length)}
           </span>{" "}
-          of{" "}
+          {messages?.admin?.workspace_management?.workspace_of}{" "}
           <span className="font-semibold text-gray-900 dark:text-white">
             {links.length}
           </span>
@@ -259,7 +263,7 @@ export default function LinkManagement() {
               disabled={page === 1}
               className="ms-0 flex h-8 items-center justify-center rounded-s-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >
-              Previous
+              {messages?.admin?.workspace_management?.workspace_previous}
             </button>
           </li>
           {[...Array(totalPages)].map((_, i) => (
@@ -283,7 +287,7 @@ export default function LinkManagement() {
               disabled={page === totalPages}
               className="flex h-8 items-center justify-center rounded-e-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >
-              Next
+              {messages?.admin?.workspace_management?.workspace_next}
             </button>
           </li>
         </ul>
