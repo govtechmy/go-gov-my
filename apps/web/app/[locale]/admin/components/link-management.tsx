@@ -207,7 +207,7 @@ export default function LinkManagement() {
                       href={`${
                         process.env.NODE_ENV === "development"
                           ? `${window.location.origin}/${locale}/${link.project?.name.toLowerCase()}/settings/people`
-                          : `https://app.${window.location.host}/${locale}/${link.project?.name.toLowerCase()}/settings/people`
+                          : `https://${window.location.host}/${locale}/${link.project?.name.toLowerCase()}/settings/people`
                       }`}
                       target="_blank"
                       title={link.project?.name || "N/A"}
@@ -223,7 +223,7 @@ export default function LinkManagement() {
                       href={`${
                         process.env.NODE_ENV === "development"
                           ? `${window.location.origin}/${locale}/${link.project?.name.toLowerCase()}`
-                          : `https://app.${window.location.host}/${locale}/${link.project?.name.toLowerCase()}`
+                          : `https://${window.location.host}/${locale}/${link.project?.name.toLowerCase()}`
                       }`}
                       target="_blank"
                       title={link.project?.name || "N/A"}
