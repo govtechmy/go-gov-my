@@ -1,5 +1,6 @@
 import { constructMetadata } from "@dub/utils";
 import ImpersonateUser from "./components/impersonate-user";
+import MemberLists from "./components/member-lists";
 
 export async function generateMetadata({ params }) {
   const { locale } = params;
@@ -21,8 +22,10 @@ export default function AdminPage() {
 
       <div className="flex flex-col space-y-4 px-5 py-10">
         <h2 className="text-xl font-semibold">User Management</h2>
-        <p className="text-sm text-gray-500">Lorem Ipsum Dolor Sit Amet</p>
-        <ImpersonateUser />
+        <p className="text-sm text-gray-500">
+          Administrative actions to manage lists of users based on Roles.
+        </p>
+        <MemberLists />
       </div>
 
       <div className="flex flex-col space-y-4 px-5 py-10">

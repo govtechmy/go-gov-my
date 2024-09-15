@@ -8,6 +8,7 @@ import { MaxWidthWrapper } from "@dub/ui";
 import { Button } from "@dub/ui/src/button";
 import { saveAs } from "file-saver";
 import { json2csv } from "json-2-csv";
+import { Download } from "lucide-react";
 
 export default function WorkspaceLinksClient() {
   const { AddEditLinkModal, AddEditLinkButton } = useAddEditLinkModal();
@@ -110,7 +111,11 @@ export default function WorkspaceLinksClient() {
                 <AddEditLinkButton />
               </div>
               <div>
-                <Button text="Export to CSV" onClick={exportToCSV} />
+                <Button
+                  icon={<Download className="h-4 w-4" />}
+                  className="mb-2 me-2 inline-flex items-center rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-center text-sm font-medium text-black hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-500"
+                  onClick={exportToCSV}
+                />
               </div>
             </div>
           </div>
