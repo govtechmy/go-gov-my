@@ -360,20 +360,33 @@
     "complete": "Tamatkan langkah berikut dan mula kongsi pautan pendek anda."
   },
   "admin": {
-    "impersonate_user": "Menyamar sebagai Pengguna lain",
-    "get_login_user": "Dapatkan pautan log masuk untuk pengguna.",
-    "impersonate_workspace": "Menyamar ruang kerja lain",
-    "get_login_workspace": "Dapatkan pautan log masuk untuk pemilik ruang kerja lain.",
-    "refresh_domain": "Memperbaharui Domain",
-    "vercel": "Buang dan tambah semula dari Vercel",
-    "plan": "Pelan",
-    "domains": "Domains",
-    "links": "Pautan",
-    "clicks": "Capaian",
-    "ban_confirm_1": "Ini akan menyekat pengguna.",
-    "ban_confirm_2": "dan memadamkan semua pautan dan ruang kerja. Adakah anda pasti?",
-    "banned": "Pengguna telah disekat",
-    "confirm_ban": "Sahkan Sekatan"
+    "user_management": {
+      "user_management_title": "Kemaskini Ahli",
+      "user_management_description": "Tindakan pentadbiran untuk mengurus senarai ahli berdasarkan Peranan.",
+      "user_search": "Carian...",
+      "user_full_name": "Name Penuh",
+      "user_email": "Alamat Emel",
+      "user_agency": "Agensi",
+      "user_role": "Sebagai",
+      "user_created": "Dicipta pada",
+      "user_showing": "Menunjukkan",
+      "user_of": "dari",
+      "user_previous": "Sebelum",
+      "user_next": "Selepas"
+    },
+    "workspace_management": {
+      "workspace_management_title": "Kemaskini Ruang Kerja & Pautan",
+      "workspace_management_description": "Tindakan pentadbiran untuk mengurus senarai ruang kerja dan pautan berdasarkan Peranan.",
+      "workspace_search": "Carian...",
+      "workspace_short_link": "Pautan Pendek",
+      "workspace_redirect_url": "Ke Pautan",
+      "workspace_workspace": "Ruang Kerja",
+      "workspace_owner": "Pemilik",
+      "workspace_banned": "Dilarang",
+      "workspace_created": "Dicipta pada",
+      "workspace_actions": "Kemaskini",
+      "workspace_members": "Ahli"
+    }
   },
   "welcome": {
     "welcome_to": "Selamat Datang ke ",

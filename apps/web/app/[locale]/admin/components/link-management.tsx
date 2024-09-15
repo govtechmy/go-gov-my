@@ -1,30 +1,15 @@
 "use client";
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
+import { LinkWithTagsProps } from "@/lib/types";
+import { useAddEditLinkModal } from "@/ui/modals/add-edit-link-modal";
+import { Link as PrismaLink } from "@prisma/client";
 import { debounce } from "lodash";
-import { Download, User } from "lucide-react";
+import { Download, EllipsisVertical, Users } from "lucide-react";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
+import NextLink from "next/link";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CSVLink } from "react-csv";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  agencyCode: string;
-  role: string;
-  createdAt: string;
-  image: string | null;
-}
-
-type RoleType = "staff" | "agency_admin" | "super_admin";
-
-const roleDisplay: Record<RoleType, string> = {
-  staff: "Staff",
-  agency_admin: "Agency Administrator",
-  super_admin: "Super Administrator",
-};
 
 function formatDate(dateString: string): string {
   const date = new Date(dateString);
@@ -40,52 +25,67 @@ function formatDate(dateString: string): string {
     .replace(",", "");
 }
 
-const Avatar = ({ src, name }: { src: string | null; name: string }) => {
-  if (src) {
-    return (
-      <Image
-        src={src}
-        alt={`${name}'s avatar`}
-        width={40}
-        height={40}
-        className="rounded-full"
-      />
-    );
-  }
-  return (
-    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700">
-      <User className="h-6 w-6 text-gray-500 dark:text-gray-400" />
-    </div>
-  );
-};
+interface LinkWithRelations extends Omit<PrismaLink, "createdAt"> {
+  createdAt: string;
+  user: { name: string } | null;
+  project: { name: string } | null;
+}
 
-export default function MemberLists() {
+// Update the ExtendedLinkWithTagsProps interface
+interface ExtendedLinkWithTagsProps
+  extends Omit<LinkWithRelations, "project" | "user" | "createdAt"> {
+  tags: any[]; // Replace 'any' with the correct type for tags
+  projectId: string;
+  user: string;
+  createdAt: Date; // Change this to Date
+}
+
+export default function LinkManagement() {
   const { data: session } = useSession();
-  const [users, setUsers] = useState<User[]>([]);
+  const [links, setLinks] = useState<LinkWithRelations[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedLink, setSelectedLink] = useState<LinkWithTagsProps | null>(
+    null,
+  );
+  const { setShowAddEditLinkModal, AddEditLinkModal } = useAddEditLinkModal({
+    props: selectedLink || undefined,
+  });
 
-  const { messages } = useIntlClientHook();
+  const params = useParams();
+  const locale = params.locale as string;
 
-  const fetchUsers = async (pageNum: number, search: string) => {
+  const handleEditLink = (link: LinkWithRelations) => {
+    const linkWithTags: ExtendedLinkWithTagsProps = {
+      ...link,
+      tags: [], // Add tags if available in your data
+      projectId: link.project?.name ?? "",
+      user: link.user?.name ?? "",
+      createdAt: new Date(link.createdAt), // Convert string to Date
+    };
+    setSelectedLink(linkWithTags);
+    setShowAddEditLinkModal(true);
+  };
+
+  const fetchLinks = async (pageNum: number, search: string) => {
     try {
       const response = await fetch(
-        `/api/user/agency?page=${pageNum}&search=${search}`,
+        `/api/admin/workspaces?page=${pageNum}&search=${search}`,
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      setUsers(data.users);
+      setLinks(data.links);
       setTotalPages(data.totalPages);
     } catch (error) {
-      console.error("Fetching users failed:", error);
+      console.error("Fetching links failed:", error);
     }
   };
 
   useEffect(() => {
-    fetchUsers(page, searchTerm);
+    fetchLinks(page, searchTerm);
   }, [page, searchTerm]);
 
   const debouncedSearch = debounce((value: string) => {
@@ -93,13 +93,25 @@ export default function MemberLists() {
     setPage(1);
   }, 300);
 
-  const csvData = users.map((user) => ({
-    Name: user.name,
-    Email: user.email,
-    "Agency Code": user.agencyCode.toUpperCase(),
-    Role: roleDisplay[user.role as RoleType] || user.role,
-    "Created At": formatDate(user.createdAt),
+  const csvData = links.map((link) => ({
+    Key: link.key,
+    URL: link.url,
+    Domain: link.domain,
+    User: link.user?.name || "N/A",
+    Project: link.project?.name || "N/A",
+    "Created At": formatDate(link.createdAt),
   }));
+
+  const closeModal = () => {
+    setSelectedLink(null);
+    setShowAddEditLinkModal(false);
+  };
+
+  useEffect(() => {
+    if (selectedLink) {
+      setShowAddEditLinkModal(true);
+    }
+  }, [selectedLink, setShowAddEditLinkModal]);
 
   return (
     <div>
@@ -115,9 +127,9 @@ export default function MemberLists() {
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
               />
             </svg>
@@ -125,13 +137,13 @@ export default function MemberLists() {
           <input
             type="text"
             className="block w-full rounded-lg border border-gray-300 bg-white ps-10 pt-2 text-sm text-gray-900 focus:border-gray-500 focus:ring-gray-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-            placeholder={messages?.admin?.user_management?.user_search}
+            placeholder="Search for links"
             onChange={(e) => debouncedSearch(e.target.value)}
           />
         </div>
         <CSVLink
           data={csvData}
-          filename={`${new Date().toISOString()}-user-list.csv`}
+          filename={`${new Date().toISOString()}-link-list.csv`}
           className="inline-flex items-center rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-center text-sm font-medium text-black hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-500"
         >
           <Download className="h-4 w-4" />
@@ -142,46 +154,84 @@ export default function MemberLists() {
           <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Avatar
+                Short Link
               </th>
               <th scope="col" className="px-6 py-3">
-                {messages?.admin?.user_management?.user_full_name}
+                Redirect URL
               </th>
               <th scope="col" className="px-6 py-3">
-                {messages?.admin?.user_management?.user_email}
+                Workspace
               </th>
               <th scope="col" className="px-6 py-3">
-                {messages?.admin?.user_management?.user_agency}
+                Owner
               </th>
               <th scope="col" className="px-6 py-3">
-                {messages?.admin?.user_management?.user_role}
+                Banned
               </th>
               <th scope="col" className="px-6 py-3">
-                {messages?.admin?.user_management?.user_created}
+                Members
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Actions
               </th>
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {links.map((link) => (
               <tr
-                key={user.id}
+                key={link.id}
                 className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
               >
-                <td className="px-6 py-4">
-                  <Avatar src={user.image} name={user.name} />
+                <td className="px-6 py-4 text-blue-500 hover:text-blue-700">
+                  <NextLink
+                    href={`https://${link.domain}/${link.key}`}
+                    target="_blank"
+                  >
+                    {link.domain}/{link.key}
+                  </NextLink>
                 </td>
-                <th
-                  scope="row"
-                  className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
-                >
-                  {user.name}
-                </th>
-                <td className="px-6 py-4">{user.email}</td>
-                <td className="px-6 py-4">{user.agencyCode.toUpperCase()}</td>
-                <td className="px-6 py-4">
-                  {roleDisplay[user.role as RoleType] || user.role}
+                <td className="px-6 py-4 text-blue-500 hover:text-blue-700">
+                  <NextLink href={`${link.url}`} target="_blank">
+                    {link.url}
+                  </NextLink>
                 </td>
-                <td className="px-6 py-4">{formatDate(user.createdAt)}</td>
+                <td className="px-6 py-4 font-medium text-gray-800 hover:text-gray-900">
+                  {link.project?.name || "N/A"}
+                </td>
+                <td className="px-6 py-4">{link.user?.name || "N/A"}</td>
+                <td className="px-6 py-4">{link.banned ? "Yes" : "No"}</td>
+                <td className="px-6 py-4 text-blue-500 hover:text-blue-700">
+                  <div className="flex items-center">
+                    <NextLink
+                      className="ml-2 rounded-lg border border-gray-300 bg-white p-2 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-500"
+                      href={`${
+                        process.env.NODE_ENV === "development"
+                          ? `${window.location.origin}/${locale}/${link.project?.name.toLowerCase()}/settings/people`
+                          : `https://app.${window.location.host}/${locale}/${link.project?.name.toLowerCase()}/settings/people`
+                      }`}
+                      target="_blank"
+                      title={link.project?.name || "N/A"}
+                    >
+                      <Users className="h-5 w-5" />
+                    </NextLink>
+                  </div>
+                </td>
+                <td className="px-6 py-4 text-blue-500 hover:text-blue-700">
+                  <div className="flex items-center">
+                    <NextLink
+                      className="ml-2 rounded-lg border border-gray-300 bg-white p-2 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-500"
+                      href={`${
+                        process.env.NODE_ENV === "development"
+                          ? `${window.location.origin}/${locale}/${link.project?.name.toLowerCase()}`
+                          : `https://app.${window.location.host}/${locale}/${link.project?.name.toLowerCase()}`
+                      }`}
+                      target="_blank"
+                      title={link.project?.name || "N/A"}
+                    >
+                      <EllipsisVertical className="h-5 w-5" />
+                    </NextLink>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -192,14 +242,14 @@ export default function MemberLists() {
         aria-label="Table navigation"
       >
         <span className="mb-4 block w-full text-sm font-normal text-gray-500 dark:text-gray-400 md:mb-0 md:inline md:w-auto">
-          {messages?.admin?.user_management?.user_showing}{" "}
+          Showing{" "}
           <span className="font-semibold text-gray-900 dark:text-white">
-            {users.length > 0 ? (page - 1) * 10 + 1 : 0}-
-            {Math.min(page * 10, users.length)}
+            {links.length > 0 ? (page - 1) * 10 + 1 : 0}-
+            {Math.min(page * 10, links.length)}
           </span>{" "}
-          {messages?.admin?.user_management?.user_of}{" "}
+          of{" "}
           <span className="font-semibold text-gray-900 dark:text-white">
-            {users.length}
+            {links.length}
           </span>
         </span>
         <ul className="inline-flex h-8 -space-x-px text-sm rtl:space-x-reverse">
@@ -209,7 +259,7 @@ export default function MemberLists() {
               disabled={page === 1}
               className="ms-0 flex h-8 items-center justify-center rounded-s-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >
-              {messages?.admin?.user_management?.user_previous}
+              Previous
             </button>
           </li>
           {[...Array(totalPages)].map((_, i) => (
@@ -233,7 +283,7 @@ export default function MemberLists() {
               disabled={page === totalPages}
               className="flex h-8 items-center justify-center rounded-e-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >
-              {messages?.admin?.user_management?.user_next}
+              Next
             </button>
           </li>
         </ul>

@@ -8,7 +8,7 @@ const REDIRECT_SEGMENTS = [
 ];
 
 /** @type {import('next').NextConfig} */
-module.exports = {
+const nextConfig = {
   reactStrictMode: false,
   experimental: {
     serverComponentsExternalPackages: [
@@ -69,6 +69,7 @@ module.exports = {
         hostname: "media.cleanshot.cloud", // only for staging purposes
       },
     ],
+    domains: ['gogov-web-dev.s3.ap-southeast-1.amazonaws.com'],
   },
   async headers() {
     return [
@@ -208,3 +209,5 @@ module.exports = {
     ];
   },
 };
+
+module.exports = nextConfig;

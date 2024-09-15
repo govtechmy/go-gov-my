@@ -46,6 +46,7 @@ import {
   QrCode,
   TimerOff,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -119,26 +120,6 @@ export default function LinkCard({
   const linkRef = useRef<any>();
   const entry = useIntersectionObserver(linkRef, {});
   const isVisible = !!entry?.isIntersecting;
-
-  // TODO: Fix analytics API
-  // NOT SURE WHO ADDED THIS API CALL, CLICKS CAN BE TAKEN FROM PROPS
-  // const { data: clicks } = useSWR<number>(
-  //   // only fetch clicks if the link is visible and there's a slug and the usage is not exceeded
-  //   isVisible &&
-  //     workspaceId &&
-  //     !exceededClicks &&
-  //     `/api/analytics/clicks?workspaceId=${workspaceId}&linkId=${id}&interval=all&`,
-  //   (url) =>
-  //     fetcher(url, {
-  //       headers: {
-  //         "Request-Source": process.env.NEXT_PUBLIC_APP_DOMAIN!,
-  //       },
-  //     }),
-  //   {
-  //     fallbackData: props.clicks,
-  //     dedupingInterval: 60000,
-  //   },
-  // );
 
   const { setShowLinkQRModal, LinkQRModal } = useLinkQRModal({
     props,
@@ -324,6 +305,8 @@ export default function LinkCard({
     );
     setOpenPopover(false);
   }
+
+  const { data: session } = useSession();
 
   return (
     <li
@@ -661,7 +644,8 @@ export default function LinkCard({
                   shortcut="X"
                   className="h-9 px-2 font-medium"
                 />
-                {isGovtechAdmin && (
+                {(session?.user?.role === "super_admin" ||
+                  session?.user?.role === "agency_admin") && (
                   <button
                     className="group flex w-full items-center justify-between rounded-md p-2 text-left text-sm font-medium text-red-600 transition-all duration-75 hover:bg-red-600 hover:text-white"
                     onClick={() => onClickBanButton()}

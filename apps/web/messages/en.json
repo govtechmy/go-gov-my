@@ -360,20 +360,33 @@
     "complete": "Complete the following steps and start sharing your branded short links."
   },
   "admin": {
-    "impersonate_user": "Impersonate User",
-    "get_login_user": "Get a login link for a user.",
-    "impersonate_workspace": "Impersonate Workspace",
-    "get_login_workspace": "Get a login link for the owner of a workspace.",
-    "refresh_domain": "Refresh Domain",
-    "vercel": "Remove and re-add domain from Vercel",
-    "plan": "Plan",
-    "domains": "Domains",
-    "links": "Links",
-    "clicks": "Clicks",
-    "ban_confirm_1": "This will ban the user",
-    "ban_confirm_2": "and delete all their workspaces and links. Are you sure?",
-    "banned": "User has been banned",
-    "confirm_ban": "Confirm Ban"
+    "user_management": {
+      "user_management_title": "User Management",
+      "user_management_description": "Administrative actions to manage lists of users based on Roles.",
+      "user_search": "Search...",
+      "user_full_name": "Full Name",
+      "user_email": "Email Address",
+      "user_agency": "Agency",
+      "user_role": "Role",
+      "user_created": "Create At",
+      "user_showing": "Showing",
+      "user_of": "of",
+      "user_previous": "Previous",
+      "user_next": "Next"
+    },
+    "workspace_management": {
+      "workspace_management_title": "Workspace Management",
+      "workspace_management_description": "Administrative actions to manage lists of workspaces.",
+      "workspace_search": "Search...",
+      "workspace_short_link": "Short Link",
+      "workspace_redirect_url": "Redirect URL",
+      "workspace_workspace": "Workspace",
+      "workspace_owner": "Owner",
+      "workspace_banned": "Banned",
+      "workspace_created": "Create At",
+      "workspace_actions": "Actions",
+       "workspace_members": "Members"
+    }
   },
   "welcome": {
     "welcome_to": "Welcome to ",

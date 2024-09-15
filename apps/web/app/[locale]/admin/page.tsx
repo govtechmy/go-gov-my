@@ -1,5 +1,6 @@
+import { useIntlHook } from "@/lib/middleware/utils/useI18n";
 import { constructMetadata } from "@dub/utils";
-import ImpersonateUser from "./components/impersonate-user";
+import LinkManagement from "./components/link-management";
 import MemberLists from "./components/member-lists";
 
 export async function generateMetadata({ params }) {
@@ -11,19 +12,26 @@ export async function generateMetadata({ params }) {
   });
 }
 
-export default function AdminPage() {
+export default function AdminPage({
+  params: { locale },
+}: {
+  params: { locale: string };
+}) {
+  const { messages } = useIntlHook(locale);
   return (
     <div className="mx-auto flex w-full max-w-screen-lg flex-col divide-y divide-gray-200 overflow-auto bg-white">
       <div className="flex flex-col space-y-4 px-5 py-10">
         <h2 className="text-xl font-semibold">Analytics</h2>
         <p className="text-sm text-gray-500">Lorem Ipsum Dolor Sit Amet</p>
-        <ImpersonateUser />
+        {/* <LinkManagement /> */}
       </div>
 
       <div className="flex flex-col space-y-4 px-5 py-10">
-        <h2 className="text-xl font-semibold">User Management</h2>
+        <h2 className="text-xl font-semibold">
+          {messages?.admin?.user_management?.user_management_title}
+        </h2>
         <p className="text-sm text-gray-500">
-          Administrative actions to manage lists of users based on Roles.
+          {messages?.admin?.user_management?.user_management_description}
         </p>
         <MemberLists />
       </div>
@@ -31,39 +39,17 @@ export default function AdminPage() {
       <div className="flex flex-col space-y-4 px-5 py-10">
         <h2 className="text-xl font-semibold">Workspace & Link Management</h2>
         <p className="text-sm text-gray-500">
-          Lorem Ipsum Dolor Sit Amet (Include CSV Here)
+          Administrative actions to manage list of links and workspaces.
         </p>
-        <ImpersonateUser />
+        <LinkManagement />
       </div>
 
-      <div className="flex flex-col space-y-4 px-5 py-10">
+      {/* <div className="flex flex-col space-y-4 px-5 py-10">
         <h2 className="text-xl font-semibold">Email Domain Management</h2>
         <p className="text-sm text-gray-500">
           Lorem Ipsum Dolor Sit Amet (Include CSV Here)
         </p>
-        <ImpersonateUser />
-      </div>
-
-      {/* <div className="flex flex-col space-y-4 px-5 py-10">
-        <h2 className="text-xl font-semibold">Impersonate User</h2>
-        <p className="text-sm text-gray-500">Get a login link for a user.</p>
-        <ImpersonateUser />
-      </div> */}
-
-      {/* <div className="flex flex-col space-y-4 px-5 py-10">
-        <h2 className="text-xl font-semibold">Impersonate Workspace</h2>
-        <p className="text-sm text-gray-500">
-          Get a login link for the owner of a workspace.
-        </p>
-        <ImpersonateWorkspace />
-      </div> */}
-
-      {/* <div className="flex flex-col space-y-4 px-5 py-10">
-        <h2 className="text-xl font-semibold">Refresh Domain</h2>
-        <p className="text-sm text-gray-500">
-          Remove and re-add domain from Vercel
-        </p>
-        <RefreshDomain />
+        <LinkManagement />
       </div> */}
     </div>
   );
