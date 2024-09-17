@@ -19,26 +19,36 @@ export function consumeAnalytics(
 }
 
 export function sumTwoObj(obj1, obj2) {
-  const clone = {}; // deep clone
-  for (const key in obj1) {
-    if (obj1.hasOwnProperty(key)) {
-      clone[key] = obj1[key];
-    }
-  }
+  const clone = { ...obj1 };
   for (const key in obj2) {
     if (obj2.hasOwnProperty(key)) {
-      if (typeof obj2[key] === "number") {
-        if (clone.hasOwnProperty(key)) {
-          clone[key] += obj2[key];
-        } else {
-          clone[key] = obj2[key];
-        }
-      } else if (typeof obj2[key] === "object") {
-        clone[key] = sumTwoObj(obj2[key], clone[key]);
+      if (key === "asn" && Array.isArray(obj2[key])) {
+        clone[key] = mergeASNArrays(clone[key] || [], obj2[key]);
+      } else if (typeof obj2[key] === "number") {
+        clone[key] = (clone[key] || 0) + obj2[key];
+      } else if (typeof obj2[key] === "object" && !Array.isArray(obj2[key])) {
+        clone[key] = sumTwoObj(clone[key] || {}, obj2[key]);
+      } else {
+        clone[key] = obj2[key];
       }
     }
   }
   return clone;
+}
+
+function mergeASNArrays(arr1: any[], arr2: any[]): any[] {
+  const merged = [...arr1];
+  arr2.forEach((item) => {
+    const existingIndex = merged.findIndex(
+      (x) => x.asn === item.asn && x.organization === item.organization,
+    );
+    if (existingIndex >= 0) {
+      merged[existingIndex].clicks += item.clicks;
+    } else {
+      merged.push({ ...item });
+    }
+  });
+  return merged;
 }
 
 function getIdempotencyKey(analyticsMessage: AnalyticsMessage): string {

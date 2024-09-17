@@ -2,6 +2,12 @@ import { z } from "zod";
 
 const ClicksRecord = z.record(z.string(), z.number());
 
+const ASNInfo = z.object({
+  asn: z.string(),
+  organization: z.string(),
+  clicks: z.number(),
+});
+
 export const AnalyticsMessageSchema = z.object({
   aggregatedDate: z
     .string()
@@ -20,8 +26,7 @@ export const AnalyticsMessageSchema = z.object({
       browser: ClicksRecord,
       operatingSystem: ClicksRecord,
       referer: ClicksRecord,
-      asn: z.string().optional(),
-      asnOrganization: z.string().optional(),
+      asn: z.array(ASNInfo),
     }),
   ),
 });

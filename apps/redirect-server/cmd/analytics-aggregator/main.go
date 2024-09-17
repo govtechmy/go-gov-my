@@ -262,8 +262,21 @@ func (app *application) aggregateRedirectMetadata(linkAnalytics map[string]*repo
 		a.Referer[rm.Referer] += 1
 	}
 	if rm.ASN != "" {
-		asnKey := fmt.Sprintf("%s:%s", rm.ASN, rm.ASNOrganization)
-		a.ASN[asnKey] += 1
+		found := false
+		for i, asnInfo := range a.ASN {
+			if asnInfo.ASN == rm.ASN && asnInfo.Organization == rm.ASNOrganization {
+				a.ASN[i].Clicks++
+				found = true
+				break
+			}
+		}
+		if !found {
+			a.ASN = append(a.ASN, repository.ASNInfo{
+				ASN:          rm.ASN,
+				Organization: rm.ASNOrganization,
+				Clicks:       1,
+			})
+		}
 	}
 }
 
