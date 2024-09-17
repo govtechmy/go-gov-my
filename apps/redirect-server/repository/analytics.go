@@ -13,6 +13,8 @@ type LinkAnalytics struct {
 	Browser         AggregatedValues `json:"browser"`
 	OperatingSystem AggregatedValues `json:"operatingSystem"`
 	Referer         AggregatedValues `json:"referer"`
+	ASN             AggregatedValues `json:"asn"`
+	ASNOrganization AggregatedValues `json:"asnOrganization"`
 }
 
 type AggregatedValues = map[string]int
@@ -29,6 +31,8 @@ func NewLinkAnalytics(linkID string) *LinkAnalytics {
 		Browser:         make(map[string]int),
 		OperatingSystem: make(map[string]int),
 		Referer:         make(map[string]int),
+		ASN:             make(map[string]int),
+		ASNOrganization: make(map[string]int),
 	}
 }
 
