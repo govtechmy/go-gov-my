@@ -32,7 +32,7 @@ export default function Locale({ locale }: { locale: string }) {
   };
 
   const name: Record<string, { full: string; short: string }> = {
-    "en-MY": {
+    "en-GB": {
       full: "English",
       short: "EN",
     },

@@ -135,11 +135,11 @@ func main() {
 
 	// add other languages (i.e. ms-MY) if necessary
 	redirectT, err := template.ParseFiles(
-		"templates/redirect/en-MY.html",
-		"templates/redirect/en-MY/secure.html",
-		"templates/redirect/en-MY/not-found.html",
-		"templates/redirect/en-MY/error.html",
-		"templates/redirect/en-MY/expiry.html",
+		"templates/redirect/en-GB.html",
+		"templates/redirect/en-GB/secure.html",
+		"templates/redirect/en-GB/not-found.html",
+		"templates/redirect/en-GB/error.html",
+		"templates/redirect/en-GB/expiry.html",
 	)
 
 	if err != nil {
@@ -257,7 +257,7 @@ func main() {
 		// Redirect URL could be a geo-specific/ios/android link.
 		redirectURL := redirectMetadata.LinkURL
 
-		if err := redirectT.ExecuteTemplate(w, "en-MY.html", WaitPageProps{
+		if err := redirectT.ExecuteTemplate(w, "en-GB.html", WaitPageProps{
 			URL:         redirectURL,
 			Title:       link.Title,
 			Description: link.Description,

@@ -26,7 +26,7 @@ const poppins = Poppins({
 });
 
 export async function generateStaticParams() {
-  return [{ locale: "en-MY" }, { locale: "ms-MY" }];
+  return [{ locale: "en-GB" }, { locale: "ms-MY" }];
 }
 
 export default async function Layout({ children, params: { locale } }: Props) {

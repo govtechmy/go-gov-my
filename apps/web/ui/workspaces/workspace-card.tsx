@@ -30,7 +30,7 @@ export default function WorkspaceCard({
 
   const [workspaceOwnership, setWorkspaceOwnership] = useState<
     "member" | "owner" | "pemilik" | "ahli"
-  >(locale === "en" ? "member" : "ahli");
+  >(locale === "en-GB" ? "member" : "ahli");
 
   useEffect(() => {
     const fetchOwnership = async () => {

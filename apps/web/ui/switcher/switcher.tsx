@@ -14,12 +14,12 @@ export default function LocaleSwitcher() {
     {
       label: "BM",
       full: "Bahasa Melayu",
-      value: "ms",
+      value: "ms-MY",
     },
     {
       label: "EN",
       full: "English",
-      value: "en",
+      value: "en-GB",
     },
   ];
 

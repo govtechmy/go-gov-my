@@ -387,7 +387,7 @@ export default function TableCard({
             suppressHydrationWarning
           >
             {timeAgo(createdAt)}
-            {/* {new Date(createdAt).toLocaleDateString("en-MY")} */}
+            {/* {new Date(createdAt).toLocaleDateString("en-GB")} */}
           </p>
         </div>
       </td>

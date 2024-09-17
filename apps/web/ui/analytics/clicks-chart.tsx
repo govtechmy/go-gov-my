@@ -33,19 +33,19 @@ export default function ClicksChart() {
       switch (interval) {
         case "1h":
         case "24h":
-          return date.toLocaleTimeString("en-MY", {
+          return date.toLocaleTimeString("en-GB", {
             hour: "numeric",
             minute: "numeric",
           });
         case "1y":
         case "all":
-          return date.toLocaleDateString("en-MY", {
+          return date.toLocaleDateString("en-GB", {
             month: "short",
             day: "numeric",
             year: "2-digit",
           });
         default:
-          return date.toLocaleDateString("en-MY", {
+          return date.toLocaleDateString("en-GB", {
             month: "short",
             day: "numeric",
           });

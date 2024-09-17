@@ -19,38 +19,38 @@ cp -r ./out/_next/static $PUBLIC_FOLDER
 cp ./out/favicon.ico $PUBLIC_FOLDER
 cp ./out/404.html $TEMPLATES_FOLDER
 
-# next page: '/' (i.e. /en-MY.html, /ms-MY.html)
-cp ./out/en-MY.txt $PUBLIC_FOLDER
+# next page: '/' (i.e. /en-GB.html, /ms-MY.html)
+cp ./out/en-GB.txt $PUBLIC_FOLDER
 cp ./out/ms-MY.txt $PUBLIC_FOLDER
-cp ./out/en-MY.html $TEMPLATES_FOLDER
+cp ./out/en-GB.html $TEMPLATES_FOLDER
 cp ./out/ms-MY.html $TEMPLATES_FOLDER
 
 # create folders for sub-path pages
-mkdir -p $PUBLIC_FOLDER/en-MY
+mkdir -p $PUBLIC_FOLDER/en-GB
 mkdir -p $PUBLIC_FOLDER/ms-MY
-mkdir -p $TEMPLATES_FOLDER/en-MY
+mkdir -p $TEMPLATES_FOLDER/en-GB
 mkdir -p $TEMPLATES_FOLDER/ms-MY
 
 # next page: /secure
-cp -r ./out/en-MY/secure.txt $PUBLIC_FOLDER/en-MY
+cp -r ./out/en-GB/secure.txt $PUBLIC_FOLDER/en-GB
 cp -r ./out/ms-MY/secure.txt $PUBLIC_FOLDER/ms-MY
-cp -r ./out/en-MY/secure.html $TEMPLATES_FOLDER/en-MY
+cp -r ./out/en-GB/secure.html $TEMPLATES_FOLDER/en-GB
 cp -r ./out/ms-MY/secure.html $TEMPLATES_FOLDER/ms-MY 
 
 # next page: /not-found
-cp -r ./out/en-MY/not-found.txt $PUBLIC_FOLDER/en-MY
+cp -r ./out/en-GB/not-found.txt $PUBLIC_FOLDER/en-GB
 cp -r ./out/ms-MY/not-found.txt $PUBLIC_FOLDER/ms-MY
-cp -r ./out/en-MY/not-found.html $TEMPLATES_FOLDER/en-MY
+cp -r ./out/en-GB/not-found.html $TEMPLATES_FOLDER/en-GB
 cp -r ./out/ms-MY/not-found.html $TEMPLATES_FOLDER/ms-MY 
 
 # next page: /error
-cp -r ./out/en-MY/error.txt $PUBLIC_FOLDER/en-MY
+cp -r ./out/en-GB/error.txt $PUBLIC_FOLDER/en-GB
 cp -r ./out/ms-MY/error.txt $PUBLIC_FOLDER/ms-MY
-cp -r ./out/en-MY/error.html $TEMPLATES_FOLDER/en-MY
+cp -r ./out/en-GB/error.html $TEMPLATES_FOLDER/en-GB
 cp -r ./out/ms-MY/error.html $TEMPLATES_FOLDER/ms-MY 
 
 # next page: /expiry
-cp -r ./out/en-MY/expiry.txt $PUBLIC_FOLDER/en-MY
+cp -r ./out/en-GB/expiry.txt $PUBLIC_FOLDER/en-GB
 cp -r ./out/ms-MY/expiry.txt $PUBLIC_FOLDER/ms-MY
-cp -r ./out/en-MY/expiry.html $TEMPLATES_FOLDER/en-MY
+cp -r ./out/en-GB/expiry.html $TEMPLATES_FOLDER/en-GB
 cp -r ./out/ms-MY/expiry.html $TEMPLATES_FOLDER/ms-MY 

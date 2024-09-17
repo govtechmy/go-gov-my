@@ -34,7 +34,7 @@ const poppins = Poppins({
 });
 
 export async function generateStaticParams() {
-  return [{ locale: "en-MY" }, { locale: "ms-MY" }];
+  return [{ locale: "en-GB" }, { locale: "ms-MY" }];
 }
 
 export async function generateMetadata({
