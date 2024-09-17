@@ -278,6 +278,35 @@ export const getClicks = async (
     });
   }
 
+  if (endpoint === "asn") {
+    console.log("analytics", analytics);
+    const asnData = analytics.flatMap((entry) => {
+      const metadata = entry.metadata as {
+        asn?: Array<{ asn: string; organization: string; clicks: number }>;
+      };
+      return metadata.asn || [];
+    });
+
+    // Aggregate ASN data
+    const aggregatedAsnData = asnData.reduce<
+      Record<string, { asn: string; organization: string; clicks: number }>
+    >((acc, curr) => {
+      const key = `${curr.asn} - ${curr.organization}`;
+      if (acc[key]) {
+        acc[key].clicks += curr.clicks;
+      } else {
+        acc[key] = { ...curr };
+      }
+      return acc;
+    }, {});
+
+    const sortedAsnData = Object.values(aggregatedAsnData).sort(
+      (a, b) => b.clicks - a.clicks,
+    );
+
+    return sortedAsnData;
+  }
+
   // return no data for other endpoints for now
   return [];
 };

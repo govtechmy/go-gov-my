@@ -85,6 +85,7 @@ export const VALID_ANALYTICS_ENDPOINTS = [
   "referers",
   "top_links",
   "top_urls",
+  "asn",
 ] as const;
 
 export const DEPRECATED_ANALYTICS_ENDPOINTS = [

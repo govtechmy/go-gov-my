@@ -89,6 +89,7 @@ export const clickAnalyticsQuerySchema = z.object({
     .string()
     .optional()
     .describe("The referer to retrieve analytics for."),
+  asn: z.string().optional().describe("The ASN to retrieve analytics for."),
   url: z.string().optional().describe("The URL to retrieve analytics for."),
   tagId: z
     .string()
@@ -161,6 +162,11 @@ export const getClickAnalyticsResponse = {
       clicks: z.number().describe("The number of clicks from this city"),
     })
     .openapi({ ref: "clicksByCities" }),
+  asn: z.object({
+    asn: z.string().describe("The ASN of the IP address"),
+    organization: z.string().describe("The organization of the ASN"),
+    clicks: z.number().describe("The number of clicks from this ASN"),
+  }),
   devices: z.object({
     device: z.string().describe("The name of the device"),
     clicks: z.number().describe("The number of clicks from this device"),

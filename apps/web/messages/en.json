@@ -210,6 +210,7 @@
     "domain": "Domain",
     "link": "Link",
     "only": "Only",
+    "asn": "ASN",
     "total_clicks": "Total Clicks",
     "devices": "Devices",
     "no_data": "No data available",
