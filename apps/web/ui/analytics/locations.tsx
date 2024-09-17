@@ -41,7 +41,7 @@ export default function Locations() {
         data?.map((d) => ({
           icon:
             tab === "asn" ? (
-              <Network />
+              <Network className="h-4 w-4" />
             ) : (
               <img
                 alt={d.country}
