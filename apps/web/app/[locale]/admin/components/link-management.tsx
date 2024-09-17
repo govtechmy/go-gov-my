@@ -210,8 +210,8 @@ export default function LinkManagement() {
                       className="ml-2 rounded-lg border border-gray-300 bg-white p-2 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-500"
                       href={`${
                         process.env.NODE_ENV === "development"
-                          ? `${window.location.origin}/${locale}/${encodeURIComponent(link.project?.name?.toLowerCase() || "")}/settings/people`
-                          : `https://app.pautan.org/${locale}/${encodeURIComponent(link.project?.name?.toLowerCase() || "")}/settings/people`
+                          ? `${window.location.origin}/${locale}/${(link.project?.name?.toLowerCase() || "").replace(/\s+/g, "-")}/settings/people`
+                          : `https://app.pautan.org/${locale}/${(link.project?.name?.toLowerCase() || "").replace(/\s+/g, "-")}/settings/people`
                       }`}
                       target="_blank"
                       title={link.project?.name || "N/A"}
@@ -226,8 +226,8 @@ export default function LinkManagement() {
                       className="ml-2 rounded-lg border border-gray-300 bg-white p-2 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-500"
                       href={`${
                         process.env.NODE_ENV === "development"
-                          ? `${window.location.origin}/${locale}/${encodeURIComponent(link.project?.name?.toLowerCase() || "")}`
-                          : `https://${window.location.host}/${locale}/${encodeURIComponent(link.project?.name?.toLowerCase() || "")}`
+                          ? `${window.location.origin}/${locale}/${(link.project?.name?.toLowerCase() || "").replace(/\s+/g, "-")}`
+                          : `https://${window.location.host}/${locale}/${(link.project?.name?.toLowerCase() || "").replace(/\s+/g, "-")}`
                       }`}
                       target="_blank"
                       title={link.project?.name || "N/A"}
