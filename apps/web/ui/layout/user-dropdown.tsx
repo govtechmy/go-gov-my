@@ -4,11 +4,9 @@ import { MessagesContext } from "@/ui/switcher/provider";
 import { Avatar, Badge, IconMenu, Popover } from "@dub/ui";
 import {
   AppWindow,
-  BadgeHelp,
   BookText,
   CircleGauge,
   LogOut,
-  Replace,
   Settings,
 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
@@ -90,7 +88,7 @@ export default function UserDropdown() {
                 icon={<BookText className="h-4 w-4" />}
               />
             </Link>
-            <Link
+            {/* <Link
               href={`https://github.com/govtechmy/go-gov-my/discussions`}
               target="_blank"
               className="block w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
@@ -99,8 +97,8 @@ export default function UserDropdown() {
                 text={message?.help_centre}
                 icon={<BadgeHelp className="h-4 w-4" />}
               />
-            </Link>
-            <Link
+            </Link> */}
+            {/* <Link
               href={`https://github.com/govtechmy/go-gov-my/releases`}
               target="_blank"
               className="block w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
@@ -109,7 +107,7 @@ export default function UserDropdown() {
                 text={message?.changelog}
                 icon={<Replace className="h-4 w-4" />}
               />
-            </Link>
+            </Link> */}
             <button
               className="w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
               onClick={() => {

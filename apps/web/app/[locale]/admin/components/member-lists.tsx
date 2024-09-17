@@ -168,13 +168,13 @@ export default function MemberLists() {
                 className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
               >
                 <td className="px-6 py-4">
-                  <Avatar src={user.image} name={user.name} />
+                  <Avatar src={encodeURI(user.image || "")} name={user.name} />
                 </td>
                 <th
                   scope="row"
-                  className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+                  className="px-6 py-4 font-medium text-gray-900 dark:text-white"
                 >
-                  {user.name}
+                  <div className="max-w-[200px] break-words">{user.name}</div>
                 </th>
                 <td className="px-6 py-4">{user.email}</td>
                 <td className="px-6 py-4">{user.agencyCode.toUpperCase()}</td>
