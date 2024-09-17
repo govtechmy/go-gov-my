@@ -19,7 +19,9 @@ export const AnalyticsMessageSchema = z.object({
       deviceType: ClicksRecord,
       browser: ClicksRecord,
       operatingSystem: ClicksRecord,
-      referer: ClicksRecord
+      referer: ClicksRecord,
+      asn: z.string().optional(),
+      asnOrganization: z.string().optional(),
     }),
   ),
 });
