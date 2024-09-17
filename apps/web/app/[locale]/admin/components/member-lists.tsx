@@ -168,7 +168,10 @@ export default function MemberLists() {
                 className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
               >
                 <td className="px-6 py-4">
-                  <Avatar src={encodeURI(user.image || "")} name={user.name} />
+                  <Avatar
+                    src={(user.image || "").replace(/\s+/g, "-")}
+                    name={user.name}
+                  />
                 </td>
                 <th
                   scope="row"
