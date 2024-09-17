@@ -7,8 +7,8 @@ import ms from "../../../messages/ms.json";
 export function useIntlClientHook(locale?: string) {
   const params = useParams();
   const dictionaries = {
-    en: en,
-    ms: ms,
+    "en-GB": en,
+    "ms-MY": ms,
   };
   if (locale && isSupportedLocale(locale))
     return { messages: dictionaries[locale], locale };
