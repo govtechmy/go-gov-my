@@ -6,8 +6,8 @@ import ms from "../../../messages/ms.json";
 
 export function useIntlHook(locale?: string) {
   const dictionaries = {
-    en: en,
-    ms: ms,
+    "en-GB": en,
+    "ms-MY": ms,
   };
 
   if (locale && isSupportedLocale(locale))
@@ -26,8 +26,8 @@ export function useIntlHook(locale?: string) {
 
 export function nonHooki18nFunc(locale?: string) {
   const dictionaries = {
-    en: en,
-    ms: ms,
+    "en-GB": en,
+    "ms-MY": ms,
   };
 
   if (locale && isSupportedLocale(locale))

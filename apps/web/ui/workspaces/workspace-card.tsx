@@ -41,7 +41,7 @@ export default function WorkspaceCard({
             const data = await response.json();
             if (data && data.projectUsers && data.projectUsers.length > 0) {
               const role = data.projectUsers[0].role; // Assuming you want the role of the first entry
-              if (locale === "ms") {
+              if (locale === "ms-MY") {
                 role === "owner"
                   ? setWorkspaceOwnership("pemilik")
                   : setWorkspaceOwnership("ahli");

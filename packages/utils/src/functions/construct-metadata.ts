@@ -35,21 +35,21 @@ export function constructMetadata({
   noIndex?: boolean;
 } = {}): Metadata {
   if (!title) {
-    if (locale === "ms") {
+    if (locale === "ms-MY") {
       title = `${process.env.NEXT_PUBLIC_APP_NAME} - Pengurusan Pautan untuk Kerajaan Malaysia`;
     } else {
       title = `${process.env.NEXT_PUBLIC_APP_NAME} - Link Shortener for Malaysia Government`;
     }
   }
   if (!description) {
-    if (locale === "ms") {
+    if (locale === "ms-MY") {
       description = `${process.env.NEXT_PUBLIC_APP_NAME} - sebuah portal rasmi Kerajaan Malaysia untuk memendekkan pautan.`;
     } else {
       description = `${process.env.NEXT_PUBLIC_APP_NAME} is the official link shortener for the Malaysia government.`;
     }
   }
   if (!image) {
-    if (locale === "ms") {
+    if (locale === "ms-MY") {
       image = DUB_THUMBNAIL_MS;
     } else {
       image = DUB_THUMBNAIL_EN;
