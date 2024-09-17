@@ -61,9 +61,8 @@ export async function runAnalyticConsumer(consumer: Consumer, log: Logger) {
                 take: 1,
               });
 
-              // 2. Check if today record already exists
               if (row.length > 0) {
-                const metaDataFromDb = row[0]?.metadata;
+                const metaDataFromDb = row[0]?.metadata || {};
 
                 // Sum metadata
                 const combineMetaData = sumTwoObj(

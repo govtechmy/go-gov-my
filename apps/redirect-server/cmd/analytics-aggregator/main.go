@@ -233,7 +233,7 @@ func (app *application) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sar
 	}
 }
 
-func (app application) aggregateRedirectMetadata(linkAnalytics map[string]*repository.LinkAnalytics, rm repository.RedirectMetadata) {
+func (app *application) aggregateRedirectMetadata(linkAnalytics map[string]*repository.LinkAnalytics, rm repository.RedirectMetadata) {
 	a := linkAnalytics[rm.LinkID]
 	if a == nil {
 		a = repository.NewLinkAnalytics(rm.LinkID)
@@ -263,7 +263,7 @@ func (app application) aggregateRedirectMetadata(linkAnalytics map[string]*repos
 	}
 	if rm.ASN != "" {
 		asnKey := fmt.Sprintf("%s:%s", rm.ASN, rm.ASNOrganization)
-		a.ASN[asnKey]++
+		a.ASN[asnKey] += 1
 	}
 }
 

@@ -239,6 +239,8 @@ func main() {
 			zap.String("linkId", link.ID),
 			zap.String("userAgent", r.UserAgent()),
 			zap.String("ip", utils.GetClientIP(r)),
+			zap.String("asn", redirectMetadata.ASN),
+			zap.String("asnOrganization", redirectMetadata.ASNOrganization),
 			zap.Object("redirectMetadata", redirectMetadata),
 		)
 		logger.Info("redirect analytics",
@@ -246,6 +248,8 @@ func main() {
 			zap.String("linkId", link.ID),
 			zap.String("userAgent", r.UserAgent()),
 			zap.String("ip", utils.GetClientIP(r)),
+			zap.String("asn", redirectMetadata.ASN),
+			zap.String("asnOrganization", redirectMetadata.ASNOrganization),
 			zap.Object("redirectMetadata", redirectMetadata),
 		)
 
