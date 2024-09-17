@@ -24,7 +24,7 @@ if [ -z "${MAXMIND_ASN_DB_PERMALINK}" ]; then
   exit 1
 fi
 
-# Download
+# Downloads
 curl -L -u "$MAXMIND_ACCOUNT_ID:$MAXMIND_LICENSE_KEY" "$MAXMIND_DB_PERMALINK" -o maxmind-db.tar.gz
 
 if [ $? -ne 0 ]; then
