@@ -98,6 +98,7 @@ func main() {
 	var httpPort int
 	var telemetryURL string
 	var geolite2DBPath string
+	var geolite2ASNPath string
 	var baseURL string
 	{
 		flag.StringVar(&elasticURL, "elastic-url", os.Getenv("ELASTIC_URL"), "Elasticsearch URL e.g. http://localhost:9200")
@@ -106,6 +107,7 @@ func main() {
 		flag.IntVar(&httpPort, "http-port", 3000, "HTTP server port")
 		flag.StringVar(&telemetryURL, "telemetry-url", os.Getenv("TELEMETRY_URL"), "OpenTelemetry HTTP endpoint URL e.g. localhost:4318")
 		flag.StringVar(&geolite2DBPath, "geolite2-path", "./GeoLite2-City.mmdb", "Path to GeoLite2 .mmdb file")
+		flag.StringVar(&geolite2ASNPath, "geolite2-asn-path", "./GeoLite2-ASN.mmdb", "Path to GeoLite2 ASN .mmdb file")
 		flag.StringVar(&baseURL, "base-url", os.Getenv("NEXTJS_BASE_URL"), "Base URL for the frontend")
 	}
 
@@ -147,13 +149,23 @@ func main() {
 	fs := http.FileServer(http.Dir("public"))
 	http.Handle("/public/", http.StripPrefix("/public/", fs))
 
+	// Cities Informations
 	ipDB, err := geoip2.Open(geolite2DBPath)
 	if err != nil {
 		logger.Fatal("cannot load geolite2 database", zap.Error(err))
 	}
 	defer ipDB.Close()
+
+	// ASN Informations
+	asnDB, err := geoip2.Open(geolite2ASNPath)
+	if err != nil {
+		logger.Fatal("cannot load geolite2 ASN database", zap.Error(err))
+	}
+	defer asnDB.Close()
+
 	logger.Info("geolite2 database loaded",
-		zap.Any("metadata", ipDB.Metadata()),
+		zap.Any("city_metadata", ipDB.Metadata()),
+		zap.Any("asn_metadata", asnDB.Metadata()),
 	)
 
 	// todo: logger handler
@@ -221,7 +233,7 @@ func main() {
 		}
 
 		// Log redirect metadata for analytics
-		redirectMetadata := repository.NewRedirectMetadata(*r, ipDB, *link)
+		redirectMetadata := repository.NewRedirectMetadata(*r, ipDB, asnDB, *link)
 		fileLogger.Info("redirect analytics",
 			zap.String("linkSlug", link.Slug),
 			zap.String("linkId", link.ID),
@@ -313,7 +325,7 @@ func main() {
 
 			// LINK IS PASSWORD PROTECTED AND USER PROVIDED CORRECT PASSWORD
 			// Log redirect metadata for analytics
-			redirectMetadata := repository.NewRedirectMetadata(*r, ipDB, *link)
+			redirectMetadata := repository.NewRedirectMetadata(*r, ipDB, asnDB, *link)
 			fileLogger.Info("redirect analytics",
 				zap.String("linkSlug", link.Slug),
 				zap.String("linkId", link.ID),

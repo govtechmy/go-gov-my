@@ -34,7 +34,13 @@ func TestNewRedirectMetadata(t *testing.T) {
 		t.Fatalf("gotIP = %s, want %s", gotIP, IP)
 	}
 
-	redirMeta := repository.NewRedirectMetadata(req, ipDB, link)
+	asnDB, err := geoip2.Open("../GeoLite2-ASN.mmdb")
+	if err != nil {
+		t.Fatal("cannot load geolite2 database")
+	}
+	defer asnDB.Close()
+
+	redirMeta := repository.NewRedirectMetadata(req, ipDB, asnDB, link)
 
 	if redirMeta.CountryCode != "MY" {
 		t.Fatalf("CountryCode = %s; want MY", redirMeta.CountryCode)

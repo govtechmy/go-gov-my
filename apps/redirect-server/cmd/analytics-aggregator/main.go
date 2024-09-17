@@ -261,6 +261,10 @@ func (app application) aggregateRedirectMetadata(linkAnalytics map[string]*repos
 	if rm.Referer != "" {
 		a.Referer[rm.Referer] += 1
 	}
+	if rm.ASN != "" {
+		asnKey := fmt.Sprintf("%s:%s", rm.ASN, rm.ASNOrganization)
+		a.ASN[asnKey]++
+	}
 }
 
 func (app *application) sendAnalytics(linkAnalytics map[string]*repository.LinkAnalytics, from time.Time, to time.Time) error {
