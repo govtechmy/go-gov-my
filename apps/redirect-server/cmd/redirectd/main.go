@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"html/template"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -175,46 +174,9 @@ func main() {
 
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) { io.WriteString(w, "OK") })
 
-	http.Handle("/#/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// S3 website endpoint URL
-		s3WebsiteURL := "http://pautan.org.s3-website-ap-southeast-1.amazonaws.com/"
-
-		// Fetch the content from S3
-		resp, err := http.Get(s3WebsiteURL)
-		if err != nil {
-			logger.Error("failed to fetch S3 content", zap.Error(err))
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return
-		}
-		defer resp.Body.Close()
-
-		// Read the response body
-		body, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			logger.Error("failed to read S3 response", zap.Error(err))
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return
-		}
-
-		// Set the content type to HTML
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-
-		// Write the content to the response
-		_, err = w.Write(body)
-		if err != nil {
-			logger.Error("failed to write response", zap.Error(err))
-		}
-	}), "handleLandingPage"))
-
 	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		slug := strings.TrimPrefix(r.URL.Path, "/")
-
-		if slug == "" {
-			// Redirect to the landing page
-			http.Redirect(w, r, "/#/", http.StatusFound)
-			return
-		}
 
 		link, err := linkRepo.GetLink(ctx, slug)
 		if err == repository.ErrLinkNotFound {
