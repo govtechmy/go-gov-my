@@ -17,7 +17,12 @@ COPY --from=builder /app/GeoLite2-ASN.mmdb /GeoLite2-ASN.mmdb
 COPY --from=builder /redirectd /redirectd
 
 # We need this templates assets !! Might change later if we serve static pages from NextJS
-COPY templates /templates
+# COPY templates /templates
+# Copy templates directory
+COPY --from=builder /app/templates /templates
+
+# Verify templates
+RUN ls -R /templates
 
 # We need this public assets !! Might change later if we serve static pages from NextJS
 COPY public /public
