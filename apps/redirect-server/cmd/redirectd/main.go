@@ -174,9 +174,28 @@ func main() {
 
 	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) { io.WriteString(w, "OK") })
 
+	http.Handle("/#/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Execute the en-GB.html template for the landing page
+		if err := redirectT.ExecuteTemplate(w, "en-GB.html", WaitPageProps{
+			URL:         "",
+			Title:       "Welcome to Pautan",
+			Description: "Official URL shortener for Malaysian government",
+			ImageURL:    "", // Add a default image URL if needed
+		}); err != nil {
+			logger.Error("failed to execute landing page template", zap.Error(err))
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		}
+	}), "handleLandingPage"))
+
 	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		slug := strings.TrimPrefix(r.URL.Path, "/")
+
+		if slug == "" {
+			// Redirect to the landing page
+			http.Redirect(w, r, "/#/", http.StatusFound)
+			return
+		}
 
 		link, err := linkRepo.GetLink(ctx, slug)
 		if err == repository.ErrLinkNotFound {
@@ -365,7 +384,7 @@ func main() {
 		w.Header().Add("Content-Type", "application/json")
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		json.NewEncoder(w).Encode(returnStruct)
-		return
+		// return
 
 	}), "handleAuthPassword"))
 
