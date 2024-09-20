@@ -133,9 +133,13 @@ func main() {
 
 	linkRepo := es.NewLinkRepo(esClient)
 
+	landingT, err := template.ParseFiles("templates/landing/en-GB.html")
+	if err != nil {
+		logger.Fatal("cannot load landing page template", zap.Error(err))
+	}
+
 	// add other languages (i.e. ms-MY) if necessary
 	redirectT, err := template.ParseFiles(
-		"templates/landing/en-GB.html",
 		"templates/redirect/en-GB.html",
 		"templates/redirect/en-GB/secure.html",
 		"templates/redirect/en-GB/not-found.html",
@@ -181,7 +185,7 @@ func main() {
 
 		// If no slug is provided, show the landing page
 		if slug == "" {
-			if err := redirectT.ExecuteTemplate(w, "en-GB.html", nil); err != nil {
+			if err := landingT.Execute(w, nil); err != nil {
 				logger.Error("failed to execute landing page template", zap.Error(err))
 				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			}
