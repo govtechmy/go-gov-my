@@ -135,6 +135,7 @@ func main() {
 
 	// add other languages (i.e. ms-MY) if necessary
 	redirectT, err := template.ParseFiles(
+		"templates/landing/en-GB.html",
 		"templates/redirect/en-GB.html",
 		"templates/redirect/en-GB/secure.html",
 		"templates/redirect/en-GB/not-found.html",
@@ -177,6 +178,15 @@ func main() {
 	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		slug := strings.TrimPrefix(r.URL.Path, "/")
+
+		// If no slug is provided, show the landing page
+		if slug == "" {
+			if err := redirectT.ExecuteTemplate(w, "en-GB.html", nil); err != nil {
+				logger.Error("failed to execute landing page template", zap.Error(err))
+				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			}
+			return
+		}
 
 		link, err := linkRepo.GetLink(ctx, slug)
 		if err == repository.ErrLinkNotFound {
@@ -257,14 +267,9 @@ func main() {
 		// Redirect URL could be a geo-specific/ios/android link.
 		redirectURL := redirectMetadata.LinkURL
 
-		if err := redirectT.ExecuteTemplate(w, "en-GB.html", WaitPageProps{
-			URL:         redirectURL,
-			Title:       link.Title,
-			Description: link.Description,
-			ImageURL:    link.ImageURL,
-		}); err != nil {
-			logger.Error("failed to execute template", zap.Error(err))
-		}
+		// When redirecting, use a 302 (Found) status instead of 301 (Permanent Redirect)
+		// to avoid caching issues that could lead to redirect loops
+		http.Redirect(w, r, redirectURL, http.StatusFound)
 	}), "handleLinkVisit"))
 
 	http.Handle("/auth", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
