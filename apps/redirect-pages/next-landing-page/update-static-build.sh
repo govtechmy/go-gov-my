@@ -6,18 +6,25 @@ npm run generate
 # Define paths
 BASE_DIR=../../redirect-server
 TEMPLATES_FOLDER=$BASE_DIR/templates/landing
+PUBLIC_FOLDER=$BASE_DIR/public/landing
 
 # Remove existing landing folder if it exists
 rm -rf $TEMPLATES_FOLDER
+rm -rf $PUBLIC_FOLDER
 
 # Create new landing folder
 mkdir -p $TEMPLATES_FOLDER
+mkdir -p $PUBLIC_FOLDER
 
 # Copy the built files to the landing folder
 cp -r ./out/* $TEMPLATES_FOLDER
+# Copy public assets
+cp -r ./public/* $PUBLIC_FOLDER
 
 # Replace paths in HTML files
 find $TEMPLATES_FOLDER -type f \( -name "*.html" -o -name "*.js" -o -name "*.css" \) -exec sed -i '' -e 's/\/_next/\/public\/landing/g' {} +
+# Replace paths in HTML files
+find $TEMPLATES_FOLDER -type f \( -name "*.html" -o -name "*.js" -o -name "*.css" \) -exec sed -i '' -e 's/\/public\//\/public\/landing\//g' {} +
 
 # Create public/landing folder and copy static assets
 PUBLIC_LANDING_FOLDER=$BASE_DIR/public/landing
