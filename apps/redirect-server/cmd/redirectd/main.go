@@ -271,9 +271,14 @@ func main() {
 		// Redirect URL could be a geo-specific/ios/android link.
 		redirectURL := redirectMetadata.LinkURL
 
-		// When redirecting, use a 302 (Found) status instead of 301 (Permanent Redirect)
-		// to avoid caching issues that could lead to redirect loops
-		http.Redirect(w, r, redirectURL, http.StatusFound)
+		if err := redirectT.ExecuteTemplate(w, "en-GB.html", WaitPageProps{
+			URL:         redirectURL,
+			Title:       link.Title,
+			Description: link.Description,
+			ImageURL:    link.ImageURL,
+		}); err != nil {
+			logger.Error("failed to execute template", zap.Error(err))
+		}
 	}), "handleLinkVisit"))
 
 	http.Handle("/auth", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
