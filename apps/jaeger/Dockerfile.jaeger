@@ -15,6 +15,3 @@ EXPOSE 9411
 
 
 ENV COLLECTOR_ZIPKIN_HTTP_PORT=9411
-
-CMD ["./go", "run", "all-in-one/main.go"]
-# CMD ["--collector.zipkin.http-port=9411"]
