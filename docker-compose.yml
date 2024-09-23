@@ -1,7 +1,23 @@
+version: '3.8'
+
 services:
   ######################
   # Required Container #
   ######################
+  next-landing-page:
+    build:
+      context: ./apps/redirect-pages/next-landing-page
+      dockerfile: Dockerfile.nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./apps/redirect-pages/next-landing-page/nginx.conf:/etc/nginx/conf.d/default.conf
+    environment:
+      - NODE_ENV=production
+    #command: sh -c "npm run generate && nginx -g 'daemon off;'"
+    networks:
+      - my-network
+
   ps-postgres:
     image: postgres:13
     container_name: ps-postgres
@@ -279,3 +295,4 @@ volumes:
   filebeatdata:
   status-page:
   uptime-kuma:
+  node_modules:
