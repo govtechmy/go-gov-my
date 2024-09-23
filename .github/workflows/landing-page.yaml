@@ -1,6 +1,7 @@
 name: Deploy gogov-landing-page
 env:
   IMAGE: gogov-landing
+  LANDING_STATS_JSON_URL: ${{ vars.LANDING_STATS_JSON_URL_DEV }}
 on:
   push:
     branches:
