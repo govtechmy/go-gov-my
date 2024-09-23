@@ -45,6 +45,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            "LANDING_STATS_JSON_URL=${{ vars.LANDING_STATS_JSON_URL_DEV }}"
       - name: Log out of Amazon ECR
         run: docker logout ${{ steps.login-ecr.outputs.registry }}
       - name: Deploy with Spinnaker
