@@ -97,13 +97,6 @@ export default async function Layout({ children, params: { locale } }: Props) {
                       "components.Footer.links.title.openSource",
                     ),
                     links: [
-                      // {
-                      //   name: extract(
-                      //     messages,
-                      //     "components.Footer.links.name.github",
-                      //   ),
-                      //   href: URL_GITHUB,
-                      // },
                       {
                         name: extract(
                           messages,
