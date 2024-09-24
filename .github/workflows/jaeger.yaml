@@ -12,6 +12,8 @@ on:
       - apps/web/**
       - packages/**
       - apps/cron/**
+      - apps/prometheus/**
+      - apps/grafana/**
   workflow_dispatch:
 permissions:
   id-token: write # This is required for requesting the JWT
