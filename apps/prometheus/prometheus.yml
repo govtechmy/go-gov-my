@@ -1,0 +1,27 @@
+global:
+  scrape_interval: 60s
+  scrape_timeout: 45s
+  evaluation_interval: 60s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    honor_labels: true
+    honor_timestamps: true
+    scheme: http
+    scrape_interval: 60s
+    scrape_timeout: 55s
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'node_exporter'
+    honor_labels: true
+    scheme: http
+    scrape_interval: 10s
+    scrape_timeout: 9s
+    metrics_path: /metrics/node_exporter
+    file_sd_configs:
+      - files:
+        - /etc/prometheus/file_sd/couchbase.yml
+    static_configs:
+      - targets: ['localhost:9100']
