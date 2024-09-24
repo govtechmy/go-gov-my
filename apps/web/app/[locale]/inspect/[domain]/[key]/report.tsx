@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { LoadingSpinner } from "@dub/ui";
-import { cn } from "@dub/utils";
-import { Flag } from "lucide-react";
-import { useState } from "react";
+import { LoadingSpinner } from '@dub/ui';
+import { cn } from '@dub/utils';
+import { Flag } from 'lucide-react';
+import { useState } from 'react';
 
 export default function ReportButton({ link }: { link: string }) {
   const [opening, setOpening] = useState(false);
@@ -13,7 +13,7 @@ export default function ReportButton({ link }: { link: string }) {
       onClick={() => {
         setOpening(true);
         // @ts-ignore
-        window.Tally?.openPopup("mJpe4J", {
+        window.Tally?.openPopup('mJpe4J', {
           width: 540,
           hiddenFields: {
             link,
@@ -23,10 +23,10 @@ export default function ReportButton({ link }: { link: string }) {
       }}
       disabled={opening}
       className={cn(
-        "rounded-md p-2 transition-all duration-75 focus:outline-none",
+        'rounded-md p-2 transition-all duration-75 focus:outline-none',
         opening
-          ? "cursor-not-allowed bg-gray-100"
-          : "hover:bg-red-100 active:bg-red-200",
+          ? 'cursor-not-allowed bg-gray-100'
+          : 'hover:bg-red-100 active:bg-red-200',
       )}
     >
       <span className="sr-only">Report</span>

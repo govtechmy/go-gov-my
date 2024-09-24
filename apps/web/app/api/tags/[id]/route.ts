@@ -1,9 +1,9 @@
-import { DubApiError } from "@/lib/api/errors";
-import { withWorkspace } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { updateTagBodySchema } from "@/lib/zod/schemas/tags";
-import { trace } from "@opentelemetry/api";
-import { NextResponse } from "next/server";
+import { DubApiError } from '@/lib/api/errors';
+import { withWorkspace } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { updateTagBodySchema } from '@/lib/zod/schemas/tags';
+import { trace } from '@opentelemetry/api';
+import { NextResponse } from 'next/server';
 
 // PATCH /api/workspaces/[idOrSlug]/tags/[id] – update a tag for a workspace
 export const PATCH = withWorkspace(async ({ req, params, workspace }) => {
@@ -19,8 +19,8 @@ export const PATCH = withWorkspace(async ({ req, params, workspace }) => {
 
   if (!tag) {
     throw new DubApiError({
-      code: "not_found",
-      message: "Tag not found.",
+      code: 'not_found',
+      message: 'Tag not found.',
     });
   }
 
@@ -36,10 +36,10 @@ export const PATCH = withWorkspace(async ({ req, params, workspace }) => {
     });
     return NextResponse.json(response);
   } catch (error) {
-    if (error.code === "P2002") {
+    if (error.code === 'P2002') {
       throw new DubApiError({
-        code: "conflict",
-        message: "A tag with that name already exists.",
+        code: 'conflict',
+        message: 'A tag with that name already exists.',
       });
     }
 
@@ -52,8 +52,8 @@ export const PUT = PATCH;
 // DELETE /api/workspaces/[idOrSlug]/tags/[id] – delete a tag for a workspace
 export const DELETE = withWorkspace(async ({ params, workspace }) => {
   const { id } = params;
-  const tracer = trace.getTracer("default");
-  const span = tracer.startSpan("recordLinks");
+  const tracer = trace.getTracer('default');
+  const span = tracer.startSpan('recordLinks');
 
   try {
     const response = await prisma.tag.delete({
@@ -80,14 +80,14 @@ export const DELETE = withWorkspace(async ({ params, workspace }) => {
 
     if (!response) {
       throw new DubApiError({
-        code: "not_found",
-        message: "Tag not found.",
+        code: 'not_found',
+        message: 'Tag not found.',
       });
     }
 
     // Log results to OpenTelemetry
     response.links.forEach((link) => {
-      span.addEvent("recordLinks", {
+      span.addEvent('recordLinks', {
         link_id: link.link.id,
         domain: link.link.domain,
         key: link.link.key,
@@ -101,10 +101,10 @@ export const DELETE = withWorkspace(async ({ params, workspace }) => {
     return NextResponse.json(response);
   } catch (error) {
     span.recordException(error);
-    if (error.code === "P2025") {
+    if (error.code === 'P2025') {
       throw new DubApiError({
-        code: "not_found",
-        message: "Tag not found.",
+        code: 'not_found',
+        message: 'Tag not found.',
       });
     }
     return NextResponse.json({ error: error.message });

@@ -1,6 +1,6 @@
-import { Logo, MaxWidthWrapper } from "@dub/ui";
-import Link from "next/link";
-import { ReactNode } from "react";
+import { Logo, MaxWidthWrapper } from '@dub/ui';
+import Link from 'next/link';
+import { ReactNode } from 'react';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (

@@ -1,14 +1,14 @@
-import { Avatar, Button, Modal } from "@dub/ui";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { Avatar, Button, Modal } from '@dub/ui';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import {
   Dispatch,
   SetStateAction,
   useCallback,
   useMemo,
   useState,
-} from "react";
-import { toast } from "sonner";
+} from 'react';
+import { toast } from 'sonner';
 
 function DeleteAccountModal({
   showDeleteAccountModal,
@@ -24,9 +24,9 @@ function DeleteAccountModal({
   async function deleteAccount() {
     setDeleting(true);
     await fetch(`/api/user`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     }).then(async (res) => {
       if (res.status === 200) {
@@ -34,7 +34,7 @@ function DeleteAccountModal({
         // delay to allow for the route change to complete
         await new Promise((resolve) =>
           setTimeout(() => {
-            router.push("/register");
+            router.push('/register');
             resolve(null);
           }, 200),
         );
@@ -64,8 +64,8 @@ function DeleteAccountModal({
         onSubmit={async (e) => {
           e.preventDefault();
           toast.promise(deleteAccount(), {
-            loading: "Deleting account...",
-            success: "Account deleted successfully!",
+            loading: 'Deleting account...',
+            success: 'Account deleted successfully!',
             error: (err) => err,
           });
         }}
@@ -73,10 +73,10 @@ function DeleteAccountModal({
       >
         <div>
           <label htmlFor="verification" className="block text-sm text-gray-700">
-            To verify, type{" "}
+            To verify, type{' '}
             <span className="font-semibold text-black">
               confirm delete account
-            </span>{" "}
+            </span>{' '}
             below
           </label>
           <div className="relative mt-1 rounded-md shadow-sm">

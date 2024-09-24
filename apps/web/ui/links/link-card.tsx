@@ -1,14 +1,14 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useLinkHistory from "@/lib/swr/use-link-history";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { LinkWithTagsProps, TagProps, UserProps } from "@/lib/types";
-import TagBadge from "@/ui/links/tag-badge";
-import { useAddEditLinkModal } from "@/ui/modals/add-edit-link-modal";
-import { useArchiveLinkModal } from "@/ui/modals/archive-link-modal";
-import { useDeleteLinkModal } from "@/ui/modals/delete-link-modal";
-import LinkHistoryModal from "@/ui/modals/link-history-modal";
-import { useLinkQRModal } from "@/ui/modals/link-qr-modal";
-import { Chart, CheckCircleFill, Delete, ThreeDots } from "@/ui/shared/icons";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useLinkHistory from '@/lib/swr/use-link-history';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { LinkWithTagsProps, TagProps, UserProps } from '@/lib/types';
+import TagBadge from '@/ui/links/tag-badge';
+import { useAddEditLinkModal } from '@/ui/modals/add-edit-link-modal';
+import { useArchiveLinkModal } from '@/ui/modals/archive-link-modal';
+import { useDeleteLinkModal } from '@/ui/modals/delete-link-modal';
+import LinkHistoryModal from '@/ui/modals/link-history-modal';
+import { useLinkQRModal } from '@/ui/modals/link-qr-modal';
+import { Chart, CheckCircleFill, Delete, ThreeDots } from '@/ui/shared/icons';
 import {
   Avatar,
   BadgeTooltip,
@@ -21,8 +21,8 @@ import {
   Tooltip,
   useIntersectionObserver,
   useRouterStuff,
-} from "@dub/ui";
-import { LinkifyTooltipContent } from "@dub/ui/src/tooltip";
+} from '@dub/ui';
+import { LinkifyTooltipContent } from '@dub/ui/src/tooltip';
 import {
   cn,
   getApexDomain,
@@ -31,7 +31,7 @@ import {
   nFormatter,
   punycode,
   timeAgo,
-} from "@dub/utils";
+} from '@dub/utils';
 import {
   Archive,
   Ban,
@@ -45,15 +45,15 @@ import {
   MessageCircle,
   QrCode,
   TimerOff,
-} from "lucide-react";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { useParams, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { toast } from "sonner";
-import { mutate } from "swr";
-import { useTransferLinkModal } from "../modals/transfer-link-modal";
-import LinkLogo from "./link-logo";
+} from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { useParams, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
+import { useTransferLinkModal } from '../modals/transfer-link-modal';
+import LinkLogo from './link-logo';
 
 export default function LinkCard({
   compact = false,
@@ -90,7 +90,7 @@ export default function LinkCard({
     const primaryTagsCount = 1;
 
     const filteredTagIds =
-      searchParams?.get("tagIds")?.split(",")?.filter(Boolean) ?? [];
+      searchParams?.get('tagIds')?.split(',')?.filter(Boolean) ?? [];
 
     /*
       Sort tags so that the filtered tags are first. The most recently selected
@@ -173,7 +173,7 @@ export default function LinkCard({
 
   useEffect(() => {
     // if there's an existing modal backdrop and the link is selected, unselect it
-    const existingModalBackdrop = document.getElementById("modal-backdrop");
+    const existingModalBackdrop = document.getElementById('modal-backdrop');
     if (existingModalBackdrop && selected) {
       setSelected(false);
     }
@@ -187,8 +187,8 @@ export default function LinkCard({
 
       // Check if the clicked element is an <a> or <button> element
       const isExcludedElement =
-        e.target.tagName.toLowerCase() === "a" ||
-        e.target.tagName.toLowerCase() === "button";
+        e.target.tagName.toLowerCase() === 'a' ||
+        e.target.tagName.toLowerCase() === 'button';
 
       if (isLinkCardClick && !isExcludedElement) {
         setSelected(!selected);
@@ -201,10 +201,10 @@ export default function LinkCard({
 
   useEffect(() => {
     if (isVisible) {
-      document.addEventListener("click", handlClickOnLinkCard);
+      document.addEventListener('click', handlClickOnLinkCard);
     }
     return () => {
-      document.removeEventListener("click", handlClickOnLinkCard);
+      document.removeEventListener('click', handlClickOnLinkCard);
     };
   }, [handlClickOnLinkCard, isVisible]);
 
@@ -213,7 +213,7 @@ export default function LinkCard({
   const copyLinkId = useCallback(() => {
     navigator.clipboard.writeText(id);
     setCopiedLinkId(true);
-    toast.success("Link ID copied!");
+    toast.success('Link ID copied!');
     setTimeout(() => setCopiedLinkId(false), 3000);
   }, [id]);
 
@@ -227,35 +227,35 @@ export default function LinkCard({
       // - there is no existing modal backdrop
       if (
         (selected || openPopover) &&
-        ["e", "d", "q", "a", "t", "i", "x", "h"].includes(key)
+        ['e', 'd', 'q', 'a', 't', 'i', 'x', 'h'].includes(key)
       ) {
         setSelected(false);
         e.preventDefault();
         switch (key) {
-          case "e":
+          case 'e':
             setShowAddEditLinkModal(true);
             break;
-          case "d":
+          case 'd':
             setShowDuplicateLinkModal(true);
             break;
-          case "q":
+          case 'q':
             setShowLinkQRModal(true);
             break;
-          case "a":
+          case 'a':
             setShowArchiveLinkModal(true);
             break;
-          case "t":
+          case 't':
             if (isDubDomain(domain)) {
               setShowTransferLinkModal(true);
             }
             break;
-          case "i":
+          case 'i':
             copyLinkId();
             break;
-          case "x":
+          case 'x':
             setShowDeleteLinkModal(true);
             break;
-          case "h":
+          case 'h':
             setShowHistory(true);
             break;
         }
@@ -277,9 +277,9 @@ export default function LinkCard({
   );
 
   useEffect(() => {
-    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener('keydown', onKeyDown);
     return () => {
-      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener('keydown', onKeyDown);
     };
   }, [onKeyDown]);
 
@@ -287,12 +287,12 @@ export default function LinkCard({
     toast.promise(
       (async () => {
         await fetch(`/api/admin/links/${id}/ban`, {
-          method: "PUT",
+          method: 'PUT',
           body: JSON.stringify({ ban: !banned }),
         });
         await mutate(
           (key) =>
-            typeof key === "string" && key.startsWith("/api/admin/links"),
+            typeof key === 'string' && key.startsWith('/api/admin/links'),
           undefined,
           { revalidate: true },
         );
@@ -312,10 +312,10 @@ export default function LinkCard({
     <li
       ref={linkRef}
       className={cn(
-        selected ? "border-black" : "border-gray-50",
+        selected ? 'border-black' : 'border-gray-50',
         compact
-          ? "relative border-l border-r border-t border-gray-200  bg-white p-2 transition-all first:rounded-t-lg last:rounded-b-lg last:border-b"
-          : "relative rounded-lg border-2 bg-white p-3 pr-1 shadow transition-all hover:shadow-md sm:p-4",
+          ? 'relative border-l border-r border-t border-gray-200  bg-white p-2 transition-all first:rounded-t-lg last:rounded-b-lg last:border-b'
+          : 'relative rounded-lg border-2 bg-white p-3 pr-1 shadow transition-all hover:shadow-md sm:p-4',
       )}
     >
       {isVisible && (
@@ -348,24 +348,24 @@ export default function LinkCard({
               <div
                 className={cn(
                   compact
-                    ? "flex h-5 w-5 items-center justify-center rounded-full bg-gray-300 px-0 sm:h-6 sm:w-6"
-                    : "flex h-8 w-8 items-center justify-center rounded-full bg-gray-300 px-0 sm:h-10 sm:w-10",
+                    ? 'flex h-5 w-5 items-center justify-center rounded-full bg-gray-300 px-0 sm:h-6 sm:w-6'
+                    : 'flex h-8 w-8 items-center justify-center rounded-full bg-gray-300 px-0 sm:h-10 sm:w-10',
                 )}
               >
                 {archived ? (
                   <Archive
                     className={cn(
                       compact
-                        ? "h-2 w-2 text-gray-500 sm:h-3 sm:w-3"
-                        : "h-4 w-4 text-gray-500 sm:h-5 sm:w-5",
+                        ? 'h-2 w-2 text-gray-500 sm:h-3 sm:w-3'
+                        : 'h-4 w-4 text-gray-500 sm:h-5 sm:w-5',
                     )}
                   />
                 ) : (
                   <TimerOff
                     className={cn(
                       compact
-                        ? "h-2 w-2 text-gray-500 sm:h-3 sm:w-3"
-                        : "h-4 w-4 text-gray-500 sm:h-5 sm:w-5",
+                        ? 'h-2 w-2 text-gray-500 sm:h-3 sm:w-3'
+                        : 'h-4 w-4 text-gray-500 sm:h-5 sm:w-5',
                     )}
                   />
                 )}
@@ -373,7 +373,7 @@ export default function LinkCard({
             </Tooltip>
           ) : (
             <LinkLogo
-              className={cn(compact && "h-4 w-4 sm:h-6 sm:w-6")}
+              className={cn(compact && 'h-4 w-4 sm:h-6 sm:w-6')}
               apexDomain={apexDomain}
             />
           )}
@@ -381,14 +381,14 @@ export default function LinkCard({
             Here, we're manually setting ml-* values because if we do space-x-* in the parent div, 
             it messes up the tooltip positioning.
           */}
-          <div className={cn("ml-2 sm:ml-4", compact && "flex gap-3")}>
+          <div className={cn('ml-2 sm:ml-4', compact && 'flex gap-3')}>
             <div className="flex max-w-fit flex-wrap items-center gap-x-2">
               {
                 <a
                   className={cn(
-                    "max-w-[140px] truncate text-sm font-semibold text-blue-800 sm:max-w-[300px] sm:text-base md:max-w-[360px] xl:max-w-[500px]",
+                    'max-w-[140px] truncate text-sm font-semibold text-blue-800 sm:max-w-[300px] sm:text-base md:max-w-[360px] xl:max-w-[500px]',
                     {
-                      "text-gray-500": archived || expired,
+                      'text-gray-500': archived || expired,
                     },
                   )}
                   href={linkConstructor({
@@ -452,7 +452,7 @@ export default function LinkCard({
                     <Avatar user={user} className="h-10 w-10" />
                     <div className="mt-2 flex items-center space-x-1.5">
                       <p className="text-sm font-semibold text-gray-700">
-                        {user?.name || user?.email || "Anonymous User"}
+                        {user?.name || user?.email || 'Anonymous User'}
                       </p>
                       {!slug && // this is only shown in admin mode (where there's no slug)
                         user?.email && (
@@ -464,11 +464,11 @@ export default function LinkCard({
                         )}
                     </div>
                     <p className="mt-1 text-xs text-gray-500">
-                      {messages?.misc?.created}{" "}
-                      {new Date(createdAt).toLocaleDateString("en-us", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
+                      {messages?.misc?.created}{' '}
+                      {new Date(createdAt).toLocaleDateString('en-us', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
                       })}
                     </p>
                   </div>
@@ -511,11 +511,11 @@ export default function LinkCard({
               <p>•</p>
               {expiresAt && (
                 <span className="text-xs text-gray-500">
-                  (Expires:{" "}
-                  {new Date(expiresAt).toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
+                  (Expires:{' '}
+                  {new Date(expiresAt).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric',
                   })}
                   )
                 </span>
@@ -644,8 +644,8 @@ export default function LinkCard({
                   shortcut="X"
                   className="h-9 px-2 font-medium"
                 />
-                {(session?.user?.role === "super_admin" ||
-                  session?.user?.role === "agency_admin") && (
+                {(session?.user?.role === 'super_admin' ||
+                  session?.user?.role === 'agency_admin') && (
                   <button
                     className="group flex w-full items-center justify-between rounded-md p-2 text-left text-sm font-medium text-red-600 transition-all duration-75 hover:bg-red-600 hover:text-white"
                     onClick={() => onClickBanButton()}
@@ -687,7 +687,7 @@ function TagButton(tag: TagProps) {
   const searchParams = useSearchParams();
 
   const selectedTagIds =
-    searchParams?.get("tagIds")?.split(",")?.filter(Boolean) ?? [];
+    searchParams?.get('tagIds')?.split(',')?.filter(Boolean) ?? [];
 
   return (
     <button
@@ -698,9 +698,9 @@ function TagButton(tag: TagProps) {
 
         queryParams({
           set: {
-            tagIds: newTagIds.join(","),
+            tagIds: newTagIds.join(','),
           },
-          del: [...(newTagIds.length ? [] : ["tagIds"])],
+          del: [...(newTagIds.length ? [] : ['tagIds'])],
         });
       }}
       className="transition-all duration-75 hover:scale-105 active:scale-100"

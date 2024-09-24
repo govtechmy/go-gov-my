@@ -1,14 +1,14 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { Button, CopyButton, Logo, Modal } from "@dub/ui";
-import { APP_DOMAIN } from "@dub/utils";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { Button, CopyButton, Logo, Modal } from '@dub/ui';
+import { APP_DOMAIN } from '@dub/utils';
 import {
   Dispatch,
   SetStateAction,
   useCallback,
   useMemo,
   useState,
-} from "react";
+} from 'react';
 
 function InviteCodeModal({
   showInviteCodeModal,
@@ -55,7 +55,7 @@ function InviteCodeModal({
           onClick={() => {
             setResetting(true);
             fetch(`/api/workspaces/${id}/invites/reset`, {
-              method: "POST",
+              method: 'POST',
             }).then(async () => {
               await mutate();
               setResetting(false);

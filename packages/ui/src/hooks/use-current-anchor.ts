@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export function useCurrentAnchor() {
   const [currentAnchor, setCurrentAnchor] = useState<string | null>(null);
 
   useEffect(() => {
     const mdxContainer: HTMLElement | null = document.querySelector(
-      "[data-mdx-container]",
+      '[data-mdx-container]',
     );
     if (!mdxContainer) return;
 
@@ -43,7 +43,7 @@ export function useCurrentAnchor() {
         while (target && target.getBoundingClientRect().top > offsetBottom) {
           target = siblings.get(target)?.prev;
         }
-        if (target) setCurrentAnchor(target.getAttribute("href"));
+        if (target) setCurrentAnchor(target.getAttribute('href'));
       },
       {
         threshold: 1,
@@ -53,7 +53,7 @@ export function useCurrentAnchor() {
 
     const siblings = new Map();
 
-    const anchors = mdxContainer?.querySelectorAll("[data-mdx-heading]");
+    const anchors = mdxContainer?.querySelectorAll('[data-mdx-heading]');
     anchors.forEach((anchor) => observer.observe(anchor));
 
     return () => {
@@ -61,5 +61,5 @@ export function useCurrentAnchor() {
     };
   }, []);
 
-  return currentAnchor?.replace("#", "");
+  return currentAnchor?.replace('#', '');
 }

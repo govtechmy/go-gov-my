@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import LandingPage from "@/ui/home/LandingPage";
+import LandingPage from '@/ui/home/LandingPage';
 
 export default function Home() {
   // const { data: session} = useSession();

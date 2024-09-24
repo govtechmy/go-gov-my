@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useUsers from "@/lib/swr/use-users";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { ModalContext } from "@/ui/modals/provider";
-import { Badge } from "@dub/ui";
-import { motion } from "framer-motion";
-import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
-import { useContext, useMemo } from "react";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useUsers from '@/lib/swr/use-users';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { ModalContext } from '@/ui/modals/provider';
+import { Badge } from '@dub/ui';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { useParams, usePathname } from 'next/navigation';
+import { useContext, useMemo } from 'react';
 
 export default function NavTabs() {
   const pathname = usePathname();
@@ -32,7 +32,7 @@ export default function NavTabs() {
             <p className="text-sm text-gray-600 hover:text-black">{name}</p>
           </div>
           {(pathname === href ||
-            (href.endsWith("/settings") && pathname?.startsWith(href))) && (
+            (href.endsWith('/settings') && pathname?.startsWith(href))) && (
             <motion.div
               layoutId="indicator"
               transition={{

@@ -1,27 +1,27 @@
-import { anthropic } from "@/lib/anthropic";
-import { DubApiError, handleAndReturnErrorResponse } from "@/lib/api/errors";
-import { withWorkspaceEdge } from "@/lib/auth/workspace-edge";
-import { prisma } from "@/lib/prisma";
-import z from "@/lib/zod";
-import { waitUntil } from "@vercel/functions";
-import { AnthropicStream, StreamingTextResponse } from "ai";
+import { anthropic } from '@/lib/anthropic';
+import { DubApiError, handleAndReturnErrorResponse } from '@/lib/api/errors';
+import { withWorkspaceEdge } from '@/lib/auth/workspace-edge';
+import { prisma } from '@/lib/prisma';
+import z from '@/lib/zod';
+import { waitUntil } from '@vercel/functions';
+import { AnthropicStream, StreamingTextResponse } from 'ai';
 
 const completionSchema = z.object({
   prompt: z.string(),
   model: z
-    .enum(["claude-3-haiku-20240307", "claude-3-sonnet-20240229"])
+    .enum(['claude-3-haiku-20240307', 'claude-3-sonnet-20240229'])
     .optional()
-    .default("claude-3-sonnet-20240229"),
+    .default('claude-3-sonnet-20240229'),
 });
 
 // POST /api/ai/completion – Generate AI completion
 export const POST = withWorkspaceEdge(
   async ({ req, workspace }) => {
     if (!anthropic) {
-      console.error("Anthropic is not configured. Skipping the request.");
+      console.error('Anthropic is not configured. Skipping the request.');
       throw new DubApiError({
-        code: "bad_request",
-        message: "Anthropic API key is not configured.",
+        code: 'bad_request',
+        message: 'Anthropic API key is not configured.',
       });
     }
 
@@ -35,7 +35,7 @@ export const POST = withWorkspaceEdge(
       const response = await anthropic.messages.create({
         messages: [
           {
-            role: "user",
+            role: 'user',
             content: prompt,
           },
         ],
@@ -47,10 +47,10 @@ export const POST = withWorkspaceEdge(
       const stream = AnthropicStream(response);
 
       // only count usage for the sonnet model
-      if (model === "claude-3-sonnet-20240229") {
+      if (model === 'claude-3-sonnet-20240229') {
         waitUntil(
           prisma.project.update({
-            where: { id: workspace.id.replace("ws_", "") },
+            where: { id: workspace.id.replace('ws_', '') },
             data: {
               aiUsage: {
                 increment: 1,

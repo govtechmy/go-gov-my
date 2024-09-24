@@ -1,7 +1,72 @@
+# Top-most EditorConfig file
 root = true
 
+# Default settings for all files
 [*]
+charset = utf-8
 end_of_line = lf
 insert_final_newline = true
+trim_trailing_whitespace = true
 indent_style = space
 indent_size = 2
+
+# Markdown files
+[*.md]
+trim_trailing_whitespace = false
+max_line_length = 80
+
+# YAML files
+[*.{yml,yaml}]
+indent_size = 2
+
+# JSON files
+[*.json]
+indent_size = 2
+
+# TypeScript and JavaScript files
+[*.{ts,tsx,js,jsx}]
+indent_size = 2
+quote_type = single
+max_line_length = 100
+curly_bracket_next_line = false
+spaces_around_operators = true
+spaces_around_brackets = false
+indent_brace_style = K&R
+
+# Go files
+[*.go]
+indent_style = tab
+indent_size = 4
+
+# HTML files
+[*.{html,htm}]
+indent_size = 2
+
+# CSS, SCSS, and LESS files
+[*.{css,scss,less}]
+indent_size = 2
+
+# Shell scripts
+[*.sh]
+indent_size = 2
+switch_case_indent = true
+
+# Makefiles
+[Makefile]
+indent_style = tab
+
+# Batch files
+[*.bat]
+end_of_line = crlf
+
+# XML files
+[*.xml]
+indent_size = 2
+
+# Dockerfile
+[Dockerfile]
+indent_size = 4
+
+# .gitignore and .gitattributes files
+[.git*]
+indent_style = tab

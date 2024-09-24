@@ -12,11 +12,11 @@ export const log = async ({
   mention = false,
 }: {
   message: string;
-  type: "alerts" | "cron" | "links" | "subscribers" | "errors";
+  type: 'alerts' | 'cron' | 'links' | 'subscribers' | 'errors';
   mention?: boolean;
 }) => {
   if (
-    process.env.NODE_ENV === "development" ||
+    process.env.NODE_ENV === 'development' ||
     !process.env.DUB_SLACK_HOOK_ALERTS ||
     !process.env.DUB_SLACK_HOOK_CRON ||
     !process.env.DUB_SLACK_HOOK_LINKS ||
@@ -30,16 +30,16 @@ export const log = async ({
   if (!HOOK) return;
   try {
     return await fetch(HOOK, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         blocks: [
           {
-            type: "section",
+            type: 'section',
             text: {
-              type: "mrkdwn",
+              type: 'mrkdwn',
               // prettier-ignore
               text: `${mention ? "<@U0404G6J3NJ> " : ""}${(type === "alerts" || type === "errors") ? ":alert: " : ""}${message}`,
             },

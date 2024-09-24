@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma";
-import "dotenv-flow/config";
+import { prisma } from '@/lib/prisma';
+import 'dotenv-flow/config';
 
 async function main() {
   const [users, count] = await Promise.all([
@@ -22,7 +22,7 @@ async function main() {
           },
         },
       },
-      orderBy: { createdAt: "asc" },
+      orderBy: { createdAt: 'asc' },
       take: 100,
     }),
     prisma.user.count({

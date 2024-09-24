@@ -1,12 +1,12 @@
-import { Project, User } from "@prisma/client";
-import { type TaskContext } from "vitest";
-import { z } from "zod";
-import { HttpClient } from "../utils/http";
-import { env, integrationTestEnv } from "./env";
+import { Project, User } from '@prisma/client';
+import { type TaskContext } from 'vitest';
+import { z } from 'zod';
+import { HttpClient } from '../utils/http';
+import { env, integrationTestEnv } from './env';
 
 interface Resources {
-  user: Pick<User, "id">;
-  workspace: Pick<Project, "id" | "slug" | "name"> & { workspaceId: string };
+  user: Pick<User, 'id'>;
+  workspace: Pick<Project, 'id' | 'slug' | 'name'> & { workspaceId: string };
   apiKey: { token: string };
 }
 
@@ -24,7 +24,7 @@ export class IntegrationHarness {
     this.http = new HttpClient({
       baseUrl: `${this.baseUrl}/api`,
       headers: {
-        "x-api-key": this.env.E2E_TOKEN,
+        'x-api-key': this.env.E2E_TOKEN,
         Authorization: `Bearer ${this.env.E2E_TOKEN}`,
       },
     });

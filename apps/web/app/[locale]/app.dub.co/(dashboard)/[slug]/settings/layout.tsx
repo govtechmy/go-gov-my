@@ -1,6 +1,6 @@
-import { useIntlHook } from "@/lib/middleware/utils/useI18n";
-import SettingsLayout from "@/ui/layout/settings-layout";
-import { ReactNode } from "react";
+import { useIntlHook } from '@/lib/middleware/utils/useI18n';
+import SettingsLayout from '@/ui/layout/settings-layout';
+import { ReactNode } from 'react';
 
 export default function WorkspaceSettingsLayout({
   children,
@@ -17,7 +17,7 @@ export default function WorkspaceSettingsLayout({
     },
     {
       name: messages?.people?.people,
-      segment: "people",
+      segment: 'people',
     },
   ];
 

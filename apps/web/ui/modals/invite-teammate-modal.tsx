@@ -1,15 +1,15 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { BlurImage, Button, Logo, Modal, useMediaQuery } from "@dub/ui";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { BlurImage, Button, Logo, Modal, useMediaQuery } from '@dub/ui';
 import {
   Dispatch,
   SetStateAction,
   useCallback,
   useMemo,
   useState,
-} from "react";
-import { toast } from "sonner";
-import { mutate } from "swr";
+} from 'react';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
 
 function InviteTeammateModal({
   showInviteTeammateModal,
@@ -19,7 +19,7 @@ function InviteTeammateModal({
   setShowInviteTeammateModal: Dispatch<SetStateAction<boolean>>;
 }) {
   const [inviting, setInviting] = useState(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const { id, slug, logo } = useWorkspace();
   const { isMobile } = useMediaQuery();
   const { messages, locale } = useIntlClientHook();
@@ -34,7 +34,7 @@ function InviteTeammateModal({
         {logo ? (
           <BlurImage
             src={logo}
-            alt={"Invite Teammate"}
+            alt={'Invite Teammate'}
             className="h-10 w-10 rounded-full"
             width={20}
             height={20}
@@ -52,8 +52,8 @@ function InviteTeammateModal({
           e.preventDefault();
           setInviting(true);
           fetch(`/api/workspaces/${id}/invites`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email }),
           }).then(async (res) => {
             if (res.status === 200) {

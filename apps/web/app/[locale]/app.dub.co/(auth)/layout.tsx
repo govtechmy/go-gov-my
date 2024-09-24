@@ -1,8 +1,8 @@
-import { Background } from "@dub/ui";
-import { ReactNode } from "react";
-import Providers from "./providers";
+import { Background } from '@dub/ui';
+import { ReactNode } from 'react';
+import Providers from './providers';
 
-export const runtime = "edge";
+export const runtime = 'edge';
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (

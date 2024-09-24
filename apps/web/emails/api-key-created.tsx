@@ -1,4 +1,4 @@
-import { APP_DOMAIN, APP_NAME, DUB_LOGO, formatDate } from "@dub/utils";
+import { APP_DOMAIN, APP_NAME, DUB_LOGO, formatDate } from '@dub/utils';
 import {
   Body,
   Container,
@@ -11,10 +11,10 @@ import {
   Section,
   Tailwind,
   Text,
-} from "@react-email/components";
-import { Fragment } from "react";
-import Footer from "./components/footer";
-import { PREVIEW_PROPS } from "./preview-props";
+} from '@react-email/components';
+import { Fragment } from 'react';
+import Footer from './components/footer';
+import { PREVIEW_PROPS } from './preview-props';
 
 type Props = {
   email: string;
@@ -23,7 +23,7 @@ type Props = {
 
 APIKeyCreated.PreviewProps = {
   email: PREVIEW_PROPS.USER.EMAIL,
-  apiKeyName: "My API Key",
+  apiKeyName: 'My API Key',
 } satisfies Props;
 
 export default function APIKeyCreated({ email, apiKeyName }: Props) {
@@ -49,7 +49,7 @@ export default function APIKeyCreated({ email, apiKeyName }: Props) {
               </Heading>
               <Text className="text-sm leading-6 text-black">
                 You created a new API key for your {APP_NAME} account with the
-                name <strong>&apos;{apiKeyName}&apos;</strong> on{" "}
+                name <strong>&apos;{apiKeyName}&apos;</strong> on{' '}
                 {formatDate(new Date().toString())}.
               </Text>
               <Section className="my-8 text-center">
@@ -61,13 +61,13 @@ export default function APIKeyCreated({ email, apiKeyName }: Props) {
                 </Link>
               </Section>
               <Text className="text-sm leading-6 text-black">
-                If you did not create this API key, you can{" "}
+                If you did not create this API key, you can{' '}
                 <Link
                   href={`${APP_DOMAIN}/settings/tokens`}
                   className="text-black underline"
                 >
                   <strong>delete this key</strong>
-                </Link>{" "}
+                </Link>{' '}
                 from your account.
               </Text>
               <Footer email={email} />

@@ -1,16 +1,16 @@
-import { useRouterStuff } from "@dub/ui";
-import { fetcher } from "@dub/utils";
-import { useSession } from "next-auth/react";
-import useSWR from "swr";
-import { LinkWithTagsProps, UserProps } from "../types";
-import useWorkspace from "./use-workspace";
+import { useRouterStuff } from '@dub/ui';
+import { fetcher } from '@dub/utils';
+import { useSession } from 'next-auth/react';
+import useSWR from 'swr';
+import { LinkWithTagsProps, UserProps } from '../types';
+import useWorkspace from './use-workspace';
 
 export default function useLinks() {
   const { id } = useWorkspace();
   const { getQueryString } = useRouterStuff();
   const { data: session } = useSession();
 
-  const admin = session?.user.role === "super_admin";
+  const admin = session?.user.role === 'super_admin';
 
   const { data: links, isValidating } = useSWR<
     (LinkWithTagsProps & {
@@ -19,9 +19,9 @@ export default function useLinks() {
   >(
     id
       ? `/api/links${getQueryString(
-          { workspaceId: id, includeUser: "true" },
+          { workspaceId: id, includeUser: 'true' },
           {
-            ignore: ["import", "upgrade", "newLink"],
+            ignore: ['import', 'upgrade', 'newLink'],
           },
         )}`
       : admin

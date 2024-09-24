@@ -7,7 +7,7 @@ export default function AboutSection() {
             Created for Public Officers
           </h1>
           <p className="text-md lg:text-md text-center font-normal text-gray-500 dark:text-gray-400 sm:px-16 lg:px-48">
-            with official email from{" "}
+            with official email from{' '}
             <span className="mr-1 rounded-lg bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-500 dark:bg-gray-900 dark:text-gray-300">
               @mohe
             </span>

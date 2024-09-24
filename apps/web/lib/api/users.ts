@@ -1,11 +1,11 @@
-import { Session, hashToken } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { WorkspaceProps } from "@/lib/types";
-import { TWO_WEEKS_IN_SECONDS } from "@dub/utils";
-import { randomBytes } from "crypto";
-import { sendEmail } from "emails";
-import WorkspaceInvite from "emails/workspace-invite";
-import { DubApiError } from "./errors";
+import { Session, hashToken } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { WorkspaceProps } from '@/lib/types';
+import { TWO_WEEKS_IN_SECONDS } from '@dub/utils';
+import { randomBytes } from 'crypto';
+import { sendEmail } from 'emails';
+import WorkspaceInvite from 'emails/workspace-invite';
+import { DubApiError } from './errors';
 
 export async function inviteUser({
   email,
@@ -17,7 +17,7 @@ export async function inviteUser({
   session: Session;
 }) {
   // same method of generating a token as next-auth
-  const token = randomBytes(32).toString("hex");
+  const token = randomBytes(32).toString('hex');
   const expires = new Date(Date.now() + TWO_WEEKS_IN_SECONDS * 1000);
 
   // create a workspace invite record and a verification request token that lasts for a week
@@ -32,10 +32,10 @@ export async function inviteUser({
       },
     });
   } catch (error) {
-    if (error.code === "P2002") {
+    if (error.code === 'P2002') {
       throw new DubApiError({
-        code: "conflict",
-        message: "User has already been invited to this workspace.",
+        code: 'conflict',
+        message: 'User has already been invited to this workspace.',
       });
     }
   }

@@ -1,9 +1,9 @@
-import { withSession } from "@/lib/auth";
-import { plain, upsertPlainCustomer } from "@/lib/plain";
-import { AttachmentType } from "@team-plain/typescript-sdk";
-import { NextResponse } from "next/server";
+import { withSession } from '@/lib/auth';
+import { plain, upsertPlainCustomer } from '@/lib/plain';
+import { AttachmentType } from '@team-plain/typescript-sdk';
+import { NextResponse } from 'next/server';
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
 // POST /api/support/upload – get a signed URL to upload an attachment
 export const GET = withSession(async ({ searchParams, session }) => {
@@ -24,7 +24,7 @@ export const GET = withSession(async ({ searchParams, session }) => {
 
   if (!plainCustomerId) {
     return NextResponse.json({
-      error: "Plain customer not found",
+      error: 'Plain customer not found',
     });
   }
 
@@ -40,7 +40,7 @@ export const GET = withSession(async ({ searchParams, session }) => {
       error: res.error,
     });
   } else {
-    console.log("Attachment upload stuff:", res.data);
+    console.log('Attachment upload stuff:', res.data);
     return NextResponse.json(res.data);
   }
 });

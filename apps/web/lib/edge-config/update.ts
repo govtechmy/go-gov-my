@@ -1,19 +1,19 @@
-import { get } from "@vercel/edge-config";
+import { get } from '@vercel/edge-config';
 
 export const updateConfig = async ({
   key,
   value,
 }: {
   key:
-    | "domains"
-    | "whitelistedDomains"
-    | "terms"
-    | "referrers"
-    | "keys"
-    | "whitelist"
-    | "emails"
-    | "reserved"
-    | "reservedUsernames";
+    | 'domains'
+    | 'whitelistedDomains'
+    | 'terms'
+    | 'referrers'
+    | 'keys'
+    | 'whitelist'
+    | 'emails'
+    | 'reserved'
+    | 'reservedUsernames';
   value: string;
 }) => {
   const existingData = (await get(key)) as string[];
@@ -22,15 +22,15 @@ export const updateConfig = async ({
   return await fetch(
     `https://api.vercel.com/v1/edge-config/${process.env.EDGE_CONFIG_ID}/items?teamId=${process.env.TEAM_ID_VERCEL}`,
     {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
         Authorization: `Bearer ${process.env.AUTH_BEARER_TOKEN}`,
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         items: [
           {
-            operation: "update",
+            operation: 'update',
             key: key,
             value: newData,
           },

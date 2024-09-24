@@ -1,17 +1,17 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { ExpandingArrow } from "@dub/ui";
-import { Command, useCommandState } from "cmdk";
-import Fuse from "fuse.js";
-import { MessageSquareText } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { Dispatch, SetStateAction, useContext, useMemo, useRef } from "react";
-import Highlighter from "react-highlight-words";
-import { HelpContext } from "./portal";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { ExpandingArrow } from '@dub/ui';
+import { Command, useCommandState } from 'cmdk';
+import Fuse from 'fuse.js';
+import { MessageSquareText } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { Dispatch, SetStateAction, useContext, useMemo, useRef } from 'react';
+import Highlighter from 'react-highlight-words';
+import { HelpContext } from './portal';
 
 export function HelpArticles({
   setScreen,
 }: {
-  setScreen: Dispatch<SetStateAction<"main" | "contact">>;
+  setScreen: Dispatch<SetStateAction<'main' | 'contact'>>;
 }) {
   const { data: session } = useSession();
   const commandListRef = useRef<HTMLDivElement>(null);
@@ -43,7 +43,7 @@ export function HelpArticles({
             className="scrollbar-hide h-[22rem] overflow-scroll border-t border-gray-200 py-2 transition-all"
           >
             <Command.Empty
-              onClick={() => setScreen("contact")}
+              onClick={() => setScreen('contact')}
               className="flex cursor-pointer items-center space-x-2 rounded-md bg-gray-100 px-4 py-2 text-sm text-gray-600"
             >
               <MessageSquareText className="h-4 w-4 text-gray-400" />
@@ -61,7 +61,7 @@ export function HelpArticles({
       <div className="flex justify-between border-t border-gray-200 px-3 py-4 sm:px-6">
         {session ? (
           <button
-            onClick={() => setScreen("contact")}
+            onClick={() => setScreen('contact')}
             className="flex items-center space-x-2 hover:underline"
           >
             <MessageSquareText className="h-4 w-4" />
@@ -84,7 +84,7 @@ const CommandResults = () => {
   const fuse = useMemo(
     () =>
       new Fuse(ALL_HELP_CONTENT, {
-        keys: ["title", "searchableSummary"],
+        keys: ['title', 'searchableSummary'],
       }),
     [ALL_HELP_CONTENT],
   );
@@ -110,14 +110,14 @@ const CommandResults = () => {
       <div className="flex flex-col space-y-1">
         <Highlighter
           highlightClassName="underline bg-transparent text-purple-500"
-          searchWords={search.split(" ")}
+          searchWords={search.split(' ')}
           autoEscape={true}
           textToHighlight={title}
           className="text-sm font-medium text-gray-600 group-aria-selected:text-purple-600 sm:group-hover:text-purple-600"
         />
         <Highlighter
           highlightClassName="underline bg-transparent text-purple-500"
-          searchWords={search.split(" ")}
+          searchWords={search.split(' ')}
           autoEscape={true}
           textToHighlight={summary}
           className="line-clamp-1 text-xs text-gray-400"

@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma";
-import "dotenv-flow/config";
+import { prisma } from '@/lib/prisma';
+import 'dotenv-flow/config';
 
 async function main() {
   const workspaces = await prisma.project.findMany({
@@ -10,11 +10,11 @@ async function main() {
       linksLimit: true,
     },
     orderBy: {
-      linksUsage: "desc",
+      linksUsage: 'desc',
     },
     take: 100,
   });
-  console.table(workspaces, ["slug", "plan", "linksUsage", "linksLimit"]);
+  console.table(workspaces, ['slug', 'plan', 'linksUsage', 'linksLimit']);
 }
 
 main();

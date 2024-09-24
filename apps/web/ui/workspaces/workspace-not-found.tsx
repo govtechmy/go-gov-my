@@ -1,8 +1,8 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { MaxWidthWrapper } from "@dub/ui";
-import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
-import { useAddWorkspaceModal } from "../modals/add-workspace-modal";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { MaxWidthWrapper } from '@dub/ui';
+import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
+import { useAddWorkspaceModal } from '../modals/add-workspace-modal';
 
 export default function WorkspaceNotFound() {
   const { messages, locale } = useIntlClientHook();

@@ -1,9 +1,9 @@
-import { nonHooki18nFunc, useIntlHook } from "@/lib/middleware/utils/useI18n";
-import { Background, Footer, Nav } from "@dub/ui";
-import { APP_NAME, constructMetadata } from "@dub/utils";
-import { TimerOff } from "lucide-react";
+import { nonHooki18nFunc, useIntlHook } from '@/lib/middleware/utils/useI18n';
+import { Background, Footer, Nav } from '@dub/ui';
+import { APP_NAME, constructMetadata } from '@dub/utils';
+import { TimerOff } from 'lucide-react';
 
-export const runtime = "edge";
+export const runtime = 'edge';
 export async function generateMetadata({ params }) {
   const { locale } = params;
   const { messages } = nonHooki18nFunc(locale);

@@ -1,13 +1,13 @@
-import { DubApiError } from "@/lib/api/errors";
-import { deleteWorkspace } from "@/lib/api/workspaces";
-import { withWorkspace } from "@/lib/auth";
-import { isReservedKey } from "@/lib/edge-config";
-import { prisma } from "@/lib/prisma";
-import z from "@/lib/zod";
-import { WorkspaceSchema } from "@/lib/zod/schemas/workspaces";
-import { DEFAULT_REDIRECTS, trim, validSlugRegex } from "@dub/utils";
-import slugify from "@sindresorhus/slugify";
-import { NextResponse } from "next/server";
+import { DubApiError } from '@/lib/api/errors';
+import { deleteWorkspace } from '@/lib/api/workspaces';
+import { withWorkspace } from '@/lib/auth';
+import { isReservedKey } from '@/lib/edge-config';
+import { prisma } from '@/lib/prisma';
+import z from '@/lib/zod';
+import { WorkspaceSchema } from '@/lib/zod/schemas/workspaces';
+import { DEFAULT_REDIRECTS, trim, validSlugRegex } from '@dub/utils';
+import slugify from '@sindresorhus/slugify';
+import { NextResponse } from 'next/server';
 
 const updateWorkspaceSchema = z.object({
   name: z.preprocess(trim, z.string().min(1).max(32)).optional(),
@@ -16,16 +16,16 @@ const updateWorkspaceSchema = z.object({
       trim,
       z
         .string()
-        .min(3, "Slug must be at least 3 characters")
-        .max(48, "Slug must be less than 48 characters")
+        .min(3, 'Slug must be at least 3 characters')
+        .max(48, 'Slug must be less than 48 characters')
         .transform((v) => slugify(v))
         .refine((v) => validSlugRegex.test(v), {
-          message: "Invalid slug format",
+          message: 'Invalid slug format',
         })
         .refine(
           async (v) => !((await isReservedKey(v)) || DEFAULT_REDIRECTS[v]),
           {
-            message: "Cannot use reserved slugs",
+            message: 'Cannot use reserved slugs',
           },
         ),
     )
@@ -62,10 +62,10 @@ export const PUT = withWorkspace(
       });
       return NextResponse.json(response);
     } catch (error) {
-      if (error.code === "P2002") {
+      if (error.code === 'P2002') {
         throw new DubApiError({
-          code: "conflict",
-          message: "Workspace slug already exists.",
+          code: 'conflict',
+          message: 'Workspace slug already exists.',
         });
       }
 
@@ -73,7 +73,7 @@ export const PUT = withWorkspace(
     }
   },
   {
-    requiredRole: ["owner"],
+    requiredRole: ['owner'],
   },
 );
 
@@ -85,6 +85,6 @@ export const DELETE = withWorkspace(
     return NextResponse.json(workspace);
   },
   {
-    requiredRole: ["owner"],
+    requiredRole: ['owner'],
   },
 );

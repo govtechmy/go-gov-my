@@ -5,7 +5,7 @@ export default function generateIdempotencyKey(id: string, timestamp: Date) {
     id: id,
   };
 
-  const base64Key = Buffer.from(JSON.stringify(key)).toString("base64");
+  const base64Key = Buffer.from(JSON.stringify(key)).toString('base64');
 
-  return { "X-Idempotency-Key": base64Key, "Content-Type": "application/json" };
+  return { 'X-Idempotency-Key': base64Key, 'Content-Type': 'application/json' };
 }

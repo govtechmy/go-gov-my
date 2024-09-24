@@ -1,4 +1,4 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import {
   Badge,
   Button,
@@ -6,18 +6,18 @@ import {
   Modal,
   TokenAvatar,
   useMediaQuery,
-} from "@dub/ui";
-import { timeAgo } from "@dub/utils";
-import { Token } from "@prisma/client";
+} from '@dub/ui';
+import { timeAgo } from '@dub/utils';
+import { Token } from '@prisma/client';
 import {
   Dispatch,
   SetStateAction,
   useCallback,
   useMemo,
   useState,
-} from "react";
-import { toast } from "sonner";
-import { mutate } from "swr";
+} from 'react';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
 
 function DeleteTokenModal({
   showDeleteTokenModal,
@@ -58,7 +58,7 @@ function DeleteTokenModal({
               {token.name}
             </h3>
             <p className="text-xs text-gray-500" suppressHydrationWarning>
-              {message?.delete_api_desc}{" "}
+              {message?.delete_api_desc}{' '}
               {timeAgo(token.lastUsed, { withAgo: true })}
             </p>
           </div>
@@ -71,13 +71,13 @@ function DeleteTokenModal({
           onClick={() => {
             setRemoving(true);
             fetch(`/api/user/tokens?id=${token.id}`, {
-              method: "DELETE",
-              headers: { "Content-Type": "application/json" },
+              method: 'DELETE',
+              headers: { 'Content-Type': 'application/json' },
             }).then(async (res) => {
               setRemoving(false);
               if (res.status === 200) {
                 toast.success(message?.success_delete_api);
-                mutate("/api/user/tokens");
+                mutate('/api/user/tokens');
                 setShowDeleteTokenModal(false);
               } else {
                 const error = await res.text();

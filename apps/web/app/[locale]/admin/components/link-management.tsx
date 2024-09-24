@@ -1,32 +1,32 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { LinkWithTagsProps } from "@/lib/types";
-import { useAddEditLinkModal } from "@/ui/modals/add-edit-link-modal";
-import { Link as PrismaLink } from "@prisma/client";
-import { debounce } from "lodash";
-import { Download, EllipsisVertical, Users } from "lucide-react";
-import { useSession } from "next-auth/react";
-import NextLink from "next/link";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { CSVLink } from "react-csv";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { LinkWithTagsProps } from '@/lib/types';
+import { useAddEditLinkModal } from '@/ui/modals/add-edit-link-modal';
+import { Link as PrismaLink } from '@prisma/client';
+import { debounce } from 'lodash';
+import { Download, EllipsisVertical, Users } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import NextLink from 'next/link';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { CSVLink } from 'react-csv';
 
 function formatDate(dateString: string): string {
   const date = new Date(dateString);
   return date
-    .toLocaleString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+    .toLocaleString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
       hour12: true,
     })
-    .replace(",", "");
+    .replace(',', '');
 }
 
-interface LinkWithRelations extends Omit<PrismaLink, "createdAt"> {
+interface LinkWithRelations extends Omit<PrismaLink, 'createdAt'> {
   createdAt: string;
   user: { name: string } | null;
   project: { name: string } | null;
@@ -34,7 +34,7 @@ interface LinkWithRelations extends Omit<PrismaLink, "createdAt"> {
 
 // Update the ExtendedLinkWithTagsProps interface
 interface ExtendedLinkWithTagsProps
-  extends Omit<LinkWithRelations, "project" | "user" | "createdAt"> {
+  extends Omit<LinkWithRelations, 'project' | 'user' | 'createdAt'> {
   tags: any[]; // Replace 'any' with the correct type for tags
   projectId: string;
   user: string;
@@ -46,7 +46,7 @@ export default function LinkManagement() {
   const [links, setLinks] = useState<LinkWithRelations[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedLink, setSelectedLink] = useState<LinkWithTagsProps | null>(
     null,
   );
@@ -62,8 +62,8 @@ export default function LinkManagement() {
     const linkWithTags: ExtendedLinkWithTagsProps = {
       ...link,
       tags: [], // Add tags if available in your data
-      projectId: link.project?.name ?? "",
-      user: link.user?.name ?? "",
+      projectId: link.project?.name ?? '',
+      user: link.user?.name ?? '',
       createdAt: new Date(link.createdAt), // Convert string to Date
     };
     setSelectedLink(linkWithTags);
@@ -82,7 +82,7 @@ export default function LinkManagement() {
       setLinks(data.links);
       setTotalPages(data.totalPages);
     } catch (error) {
-      console.error("Fetching links failed:", error);
+      console.error('Fetching links failed:', error);
     }
   };
 
@@ -99,9 +99,9 @@ export default function LinkManagement() {
     Key: link.key,
     URL: link.url,
     Domain: link.domain,
-    User: link.user?.name || "N/A",
-    Project: link.project?.name || "N/A",
-    "Created At": formatDate(link.createdAt),
+    User: link.user?.name || 'N/A',
+    Project: link.project?.name || 'N/A',
+    'Created At': formatDate(link.createdAt),
   }));
 
   const closeModal = () => {
@@ -200,21 +200,21 @@ export default function LinkManagement() {
                   </NextLink>
                 </td>
                 <td className="px-6 py-4 font-medium text-gray-800 hover:text-gray-900">
-                  {link.project?.name || "N/A"}
+                  {link.project?.name || 'N/A'}
                 </td>
-                <td className="px-6 py-4">{link.user?.name || "N/A"}</td>
-                <td className="px-6 py-4">{link.banned ? "Yes" : "No"}</td>
+                <td className="px-6 py-4">{link.user?.name || 'N/A'}</td>
+                <td className="px-6 py-4">{link.banned ? 'Yes' : 'No'}</td>
                 <td className="px-6 py-4 text-blue-500 hover:text-blue-700">
                   <div className="flex items-center">
                     <NextLink
                       className="ml-2 rounded-lg border border-gray-300 bg-white p-2 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-500"
                       href={`${
-                        process.env.NODE_ENV === "development"
-                          ? `${window.location.origin}/${locale}/${(link.project?.name?.toLowerCase() || "").replace(/\s+/g, "-")}/settings/people`
-                          : `https://app.pautan.org/${locale}/${(link.project?.name?.toLowerCase() || "").replace(/\s+/g, "-")}/settings/people`
+                        process.env.NODE_ENV === 'development'
+                          ? `${window.location.origin}/${locale}/${(link.project?.name?.toLowerCase() || '').replace(/\s+/g, '-')}/settings/people`
+                          : `https://app.pautan.org/${locale}/${(link.project?.name?.toLowerCase() || '').replace(/\s+/g, '-')}/settings/people`
                       }`}
                       target="_blank"
-                      title={link.project?.name || "N/A"}
+                      title={link.project?.name || 'N/A'}
                     >
                       <Users className="h-5 w-5" />
                     </NextLink>
@@ -225,12 +225,12 @@ export default function LinkManagement() {
                     <NextLink
                       className="ml-2 rounded-lg border border-gray-300 bg-white p-2 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-500"
                       href={`${
-                        process.env.NODE_ENV === "development"
-                          ? `${window.location.origin}/${locale}/${(link.project?.name?.toLowerCase() || "").replace(/\s+/g, "-")}`
-                          : `https://${window.location.host}/${locale}/${(link.project?.name?.toLowerCase() || "").replace(/\s+/g, "-")}`
+                        process.env.NODE_ENV === 'development'
+                          ? `${window.location.origin}/${locale}/${(link.project?.name?.toLowerCase() || '').replace(/\s+/g, '-')}`
+                          : `https://${window.location.host}/${locale}/${(link.project?.name?.toLowerCase() || '').replace(/\s+/g, '-')}`
                       }`}
                       target="_blank"
-                      title={link.project?.name || "N/A"}
+                      title={link.project?.name || 'N/A'}
                     >
                       <EllipsisVertical className="h-5 w-5" />
                     </NextLink>
@@ -246,12 +246,12 @@ export default function LinkManagement() {
         aria-label="Table navigation"
       >
         <span className="mb-4 block w-full text-sm font-normal text-gray-500 dark:text-gray-400 md:mb-0 md:inline md:w-auto">
-          {messages?.admin?.workspace_management?.workspace_showing}{" "}
+          {messages?.admin?.workspace_management?.workspace_showing}{' '}
           <span className="font-semibold text-gray-900 dark:text-white">
             {links.length > 0 ? (page - 1) * 10 + 1 : 0}-
             {Math.min(page * 10, links.length)}
-          </span>{" "}
-          {messages?.admin?.workspace_management?.workspace_of}{" "}
+          </span>{' '}
+          {messages?.admin?.workspace_management?.workspace_of}{' '}
           <span className="font-semibold text-gray-900 dark:text-white">
             {links.length}
           </span>
@@ -270,11 +270,11 @@ export default function LinkManagement() {
             <li key={i}>
               <button
                 onClick={() => setPage(i + 1)}
-                aria-current={page === i + 1 ? "page" : undefined}
+                aria-current={page === i + 1 ? 'page' : undefined}
                 className={`flex h-8 items-center justify-center px-3 leading-tight ${
                   page === i + 1
-                    ? "border border-gray-300 bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-                    : "border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    ? 'border border-gray-300 bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
+                    : 'border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
                 }`}
               >
                 {i + 1}

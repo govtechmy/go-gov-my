@@ -1,8 +1,8 @@
-import { prisma } from "@/lib/prisma";
-import { ratelimit } from "@/lib/redis/ratelimit";
-import { getSearchParams } from "@dub/utils";
-import { DubApiError, handleAndReturnErrorResponse } from "../api/errors";
-import { hashToken } from "./hash-token";
+import { prisma } from '@/lib/prisma';
+import { ratelimit } from '@/lib/redis/ratelimit';
+import { getSearchParams } from '@dub/utils';
+import { DubApiError, handleAndReturnErrorResponse } from '../api/errors';
+import { hashToken } from './hash-token';
 
 interface withApiAuthHandler {
   ({
@@ -28,16 +28,16 @@ export const withApiAuth = (handler: withApiAuthHandler, {}: {} = {}) => {
     let headers = {};
 
     try {
-      const authorizationHeader = req.headers.get("Authorization");
+      const authorizationHeader = req.headers.get('Authorization');
       if (authorizationHeader) {
-        if (!authorizationHeader.includes("Bearer ")) {
+        if (!authorizationHeader.includes('Bearer ')) {
           throw new DubApiError({
-            code: "bad_request",
+            code: 'bad_request',
             message:
               "Misconfigured authorization header. Did you forget to add 'Bearer '? Learn more: https://d.to/auth",
           });
         }
-        const apiKey = req.headers.get("x-api-key") || "";
+        const apiKey = req.headers.get('x-api-key') || '';
 
         const hashedKey = await hashToken(apiKey);
 
@@ -48,28 +48,28 @@ export const withApiAuth = (handler: withApiAuthHandler, {}: {} = {}) => {
         });
         if (!token) {
           throw new DubApiError({
-            code: "unauthorized",
-            message: "Unauthorized: Invalid API key.",
+            code: 'unauthorized',
+            message: 'Unauthorized: Invalid API key.',
           });
         }
 
         const { success, limit, reset, remaining } = await ratelimit(
           apiKey,
           600,
-          "1 m",
+          '1 m',
         );
 
         headers = {
-          "Retry-After": reset.toString(),
-          "X-RateLimit-Limit": limit.toString(),
-          "X-RateLimit-Remaining": remaining.toString(),
-          "X-RateLimit-Reset": reset.toString(),
+          'Retry-After': reset.toString(),
+          'X-RateLimit-Limit': limit.toString(),
+          'X-RateLimit-Remaining': remaining.toString(),
+          'X-RateLimit-Reset': reset.toString(),
         };
 
         if (!success) {
           throw new DubApiError({
-            code: "rate_limit_exceeded",
-            message: "Too many requests.",
+            code: 'rate_limit_exceeded',
+            message: 'Too many requests.',
           });
         }
 

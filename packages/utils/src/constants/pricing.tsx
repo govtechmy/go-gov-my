@@ -1,7 +1,7 @@
-import { nFormatter } from "../functions";
+import { nFormatter } from '../functions';
 
 const BUSINESS_PLAN_MODIFIER = ({
-  name = "Business",
+  name = 'Business',
   monthly = 59,
   yearly = 49,
   links = 5000,
@@ -22,8 +22,8 @@ const BUSINESS_PLAN_MODIFIER = ({
   ids: string[];
 }) => ({
   name,
-  tagline: "For larger teams with increased usage",
-  link: "https://github.com/govtechmy/go-gov-my/discussions",
+  tagline: 'For larger teams with increased usage',
+  link: 'https://github.com/govtechmy/go-gov-my/discussions',
   price: {
     monthly,
     yearly,
@@ -38,49 +38,49 @@ const BUSINESS_PLAN_MODIFIER = ({
     ai: 1000,
   },
   colors: {
-    bg: "bg-sky-900",
-    text: "text-sky-900",
+    bg: 'bg-sky-900',
+    text: 'text-sky-900',
   },
   cta: {
-    text: "Get started with Business",
-    shortText: "Get started",
-    href: "https://app.go.gov.my/register",
-    color: "bg-sky-900 hover:bg-sky-800 hover:ring-sky-100",
+    text: 'Get started with Business',
+    shortText: 'Get started',
+    href: 'https://app.go.gov.my/register',
+    color: 'bg-sky-900 hover:bg-sky-800 hover:ring-sky-100',
   },
-  featureTitle: "Everything in Pro, plus:",
+  featureTitle: 'Everything in Pro, plus:',
   features: [
     { text: `${nFormatter(links, { full: true })} new links/mo` },
     {
       text: `${nFormatter(clicks)} tracked clicks/mo`,
     },
-    { text: "2-year analytics retention" },
+    { text: '2-year analytics retention' },
     { text: `${domains} custom domains` },
     { text: `${users} users` },
     {
       text: `Unlimited AI credits`,
       footnote: {
         title:
-          "Subject to fair use policy – you will be notified if you exceed the limit, which are high enough for frequent usage.",
-        cta: "Learn more.",
-        href: "https://go.gov.my/blog/introducing-dub-ai",
+          'Subject to fair use policy – you will be notified if you exceed the limit, which are high enough for frequent usage.',
+        cta: 'Learn more.',
+        href: 'https://go.gov.my/blog/introducing-dub-ai',
       },
     },
     {
       text: `${nFormatter(tags, { full: true })} tags`,
       footnote: {
-        title: "Organize your links with tags.",
-        cta: "Learn more.",
-        href: "https://github.com/govtechmy/go-gov-my/discussions",
+        title: 'Organize your links with tags.',
+        cta: 'Learn more.',
+        href: 'https://github.com/govtechmy/go-gov-my/discussions',
       },
     },
-    { text: "Elevated support", footnote: "Email and chat support." },
+    { text: 'Elevated support', footnote: 'Email and chat support.' },
     {
-      text: "Custom branding",
+      text: 'Custom branding',
       footnote: {
         title:
-          "Set custom QR code logos, password-protected links logos, and more.",
-        cta: "Learn more.",
-        href: "https://github.com/govtechmy/go-gov-my/discussions",
+          'Set custom QR code logos, password-protected links logos, and more.',
+        cta: 'Learn more.',
+        href: 'https://github.com/govtechmy/go-gov-my/discussions',
       },
     },
   ],
@@ -88,8 +88,8 @@ const BUSINESS_PLAN_MODIFIER = ({
 
 export const PLANS = [
   {
-    name: "Free",
-    tagline: "For hobby & side projects",
+    name: 'Free',
+    tagline: 'For hobby & side projects',
     price: {
       monthly: 0,
       yearly: 0,
@@ -103,52 +103,52 @@ export const PLANS = [
       ai: 10,
     },
     colors: {
-      bg: "bg-black",
-      text: "text-black",
+      bg: 'bg-black',
+      text: 'text-black',
     },
     cta: {
-      text: "Start for free",
-      href: "https://app.go.gov.my/register",
-      color: "bg-black hover:bg-gray-800 hover:ring-gray-200",
+      text: 'Start for free',
+      href: 'https://app.go.gov.my/register',
+      color: 'bg-black hover:bg-gray-800 hover:ring-gray-200',
     },
     featureTitle: "What's included:",
     features: [
-      { text: "25 new links/mo" },
+      { text: '25 new links/mo' },
       {
-        text: "1K tracked clicks/mo",
+        text: '1K tracked clicks/mo',
       },
-      { text: "30-day analytics retention" },
-      { text: "3 custom domains" },
-      { text: "1 user" },
-      { text: "10 AI credits/mo" },
+      { text: '30-day analytics retention' },
+      { text: '3 custom domains' },
+      { text: '1 user' },
+      { text: '10 AI credits/mo' },
       {
-        text: "Community support",
-        footnote: "Help center + GitHub discussions.",
+        text: 'Community support',
+        footnote: 'Help center + GitHub discussions.',
       },
       {
-        text: "API Access",
+        text: 'API Access',
         footnote: {
-          title: "Programatically manage your links using our REST API.",
-          cta: "Learn more.",
-          href: "https://go.gov.my/docs/api-reference/introduction",
+          title: 'Programatically manage your links using our REST API.',
+          cta: 'Learn more.',
+          href: 'https://go.gov.my/docs/api-reference/introduction',
         },
       },
     ],
   },
   {
-    name: "Pro",
-    tagline: "For startups & small businesses",
-    link: "https://github.com/govtechmy/go-gov-my/discussions",
+    name: 'Pro',
+    tagline: 'For startups & small businesses',
+    link: 'https://github.com/govtechmy/go-gov-my/discussions',
     price: {
       monthly: 24,
       yearly: 19,
       ids: [
-        "price_1LodNLAlJJEpqkPVQSrt33Lc", // old monthly
-        "price_1LodNLAlJJEpqkPVRxUyCQgZ", // old yearly
-        "price_1OTcQBAlJJEpqkPViGtGEsbb", // new monthly (test)
-        "price_1OYJeBAlJJEpqkPVLjTsjX0E", // new monthly (prod)
-        "price_1OTcQBAlJJEpqkPVYlCMqdLL", // new yearly (test)
-        "price_1OYJeBAlJJEpqkPVnPGEZeb0", // new yearly (prod)
+        'price_1LodNLAlJJEpqkPVQSrt33Lc', // old monthly
+        'price_1LodNLAlJJEpqkPVRxUyCQgZ', // old yearly
+        'price_1OTcQBAlJJEpqkPViGtGEsbb', // new monthly (test)
+        'price_1OYJeBAlJJEpqkPVLjTsjX0E', // new monthly (prod)
+        'price_1OTcQBAlJJEpqkPVYlCMqdLL', // new yearly (test)
+        'price_1OYJeBAlJJEpqkPVnPGEZeb0', // new yearly (prod)
       ],
     },
     limits: {
@@ -160,52 +160,52 @@ export const PLANS = [
       ai: 1000,
     },
     colors: {
-      bg: "bg-blue-500",
-      text: "text-blue-500",
+      bg: 'bg-blue-500',
+      text: 'text-blue-500',
     },
     cta: {
-      text: "Get started with Pro",
-      shortText: "Get started",
-      href: "https://app.go.gov.my/register",
-      color: "bg-blue-500 hover:bg-blue-600 hover:ring-blue-100",
+      text: 'Get started with Pro',
+      shortText: 'Get started',
+      href: 'https://app.go.gov.my/register',
+      color: 'bg-blue-500 hover:bg-blue-600 hover:ring-blue-100',
     },
-    featureTitle: "Everything in Free, plus:",
+    featureTitle: 'Everything in Free, plus:',
     features: [
-      { text: "1,000 new links/mo" },
+      { text: '1,000 new links/mo' },
       {
-        text: "50K tracked clicks/mo",
+        text: '50K tracked clicks/mo',
       },
-      { text: "1-year analytics retention" },
-      { text: "10 custom domains" },
-      { text: "5 users" },
+      { text: '1-year analytics retention' },
+      { text: '10 custom domains' },
+      { text: '5 users' },
       {
-        text: "Unlimited AI credits",
+        text: 'Unlimited AI credits',
         footnote: {
           title:
-            "Subject to fair use policy – you will be notified if you exceed the limit, which are high enough for frequent usage.",
-          cta: "Learn more.",
-          href: "https://go.gov.my/blog/introducing-dub-ai",
+            'Subject to fair use policy – you will be notified if you exceed the limit, which are high enough for frequent usage.',
+          cta: 'Learn more.',
+          href: 'https://go.gov.my/blog/introducing-dub-ai',
         },
       },
-      { text: "Basic support", footnote: "Basic email support." },
+      { text: 'Basic support', footnote: 'Basic email support.' },
       {
-        text: "Root domain redirect",
+        text: 'Root domain redirect',
         footnote: {
           title:
-            "Redirect vistors that land on the root of your domain (e.g. yourdomain.com) to a page of your choice.",
-          cta: "Learn more.",
-          href: "https://github.com/govtechmy/go-gov-my/discussions",
+            'Redirect vistors that land on the root of your domain (e.g. yourdomain.com) to a page of your choice.',
+          cta: 'Learn more.',
+          href: 'https://github.com/govtechmy/go-gov-my/discussions',
         },
       },
       {
-        text: "Advanced link features",
+        text: 'Advanced link features',
         footnote:
-          "Custom social media cards, password-protected links, link expiration, link cloaking, device targeting, geo targeting etc.",
+          'Custom social media cards, password-protected links, link expiration, link cloaking, device targeting, geo targeting etc.',
       },
     ],
   },
   BUSINESS_PLAN_MODIFIER({
-    name: "Business",
+    name: 'Business',
     monthly: 59,
     yearly: 49,
     links: 5000,
@@ -214,17 +214,17 @@ export const PLANS = [
     tags: 150,
     users: 15,
     ids: [
-      "price_1LodLoAlJJEpqkPV9rD0rlNL", // old monthly
-      "price_1LodLoAlJJEpqkPVJdwv5zrG", // oldest yearly
-      "price_1OZgmnAlJJEpqkPVOj4kV64R", // old yearly
-      "price_1OzNlmAlJJEpqkPV7s9HXNAC", // new monthly (test)
-      "price_1OzNmXAlJJEpqkPVYO89lTdx", // new yearly (test)
-      "price_1OzOFIAlJJEpqkPVJxzc9irl", // new monthly (prod)
-      "price_1OzOXMAlJJEpqkPV9ERrjjbw", // new yearly (prod)
+      'price_1LodLoAlJJEpqkPV9rD0rlNL', // old monthly
+      'price_1LodLoAlJJEpqkPVJdwv5zrG', // oldest yearly
+      'price_1OZgmnAlJJEpqkPVOj4kV64R', // old yearly
+      'price_1OzNlmAlJJEpqkPV7s9HXNAC', // new monthly (test)
+      'price_1OzNmXAlJJEpqkPVYO89lTdx', // new yearly (test)
+      'price_1OzOFIAlJJEpqkPVJxzc9irl', // new monthly (prod)
+      'price_1OzOXMAlJJEpqkPV9ERrjjbw', // new yearly (prod)
     ],
   }),
   BUSINESS_PLAN_MODIFIER({
-    name: "Business Plus",
+    name: 'Business Plus',
     monthly: 119,
     yearly: 99,
     links: 15000,
@@ -233,14 +233,14 @@ export const PLANS = [
     tags: 300,
     users: 40,
     ids: [
-      "price_1OnWu0AlJJEpqkPVWk4144ZG", // monthly (test)
-      "price_1OnWu0AlJJEpqkPVkDWVriAB", // yearly (test)
-      "price_1OnaK3AlJJEpqkPVaCfCPdHi", // monthly (prod)
-      "price_1OzObrAlJJEpqkPVh6D9HWGO", // yearly (prod)
+      'price_1OnWu0AlJJEpqkPVWk4144ZG', // monthly (test)
+      'price_1OnWu0AlJJEpqkPVkDWVriAB', // yearly (test)
+      'price_1OnaK3AlJJEpqkPVaCfCPdHi', // monthly (prod)
+      'price_1OzObrAlJJEpqkPVh6D9HWGO', // yearly (prod)
     ],
   }),
   BUSINESS_PLAN_MODIFIER({
-    name: "Business Extra",
+    name: 'Business Extra',
     monthly: 249,
     yearly: 199,
     links: 40000,
@@ -249,14 +249,14 @@ export const PLANS = [
     tags: 500,
     users: 100,
     ids: [
-      "price_1OnWvCAlJJEpqkPVLzLHx5QD", // monthly (test)
-      "price_1OnWvCAlJJEpqkPVHhCCvIOq", // yearly (test)
-      "price_1OnaKJAlJJEpqkPVeJSvPfJb", // monthly (prod)
-      "price_1OzOg1AlJJEpqkPVPlsrxoWm", // yearly (prod)
+      'price_1OnWvCAlJJEpqkPVLzLHx5QD', // monthly (test)
+      'price_1OnWvCAlJJEpqkPVHhCCvIOq', // yearly (test)
+      'price_1OnaKJAlJJEpqkPVeJSvPfJb', // monthly (prod)
+      'price_1OzOg1AlJJEpqkPVPlsrxoWm', // yearly (prod)
     ],
   }),
   BUSINESS_PLAN_MODIFIER({
-    name: "Business Max",
+    name: 'Business Max',
     monthly: 499,
     yearly: 399,
     links: 100000,
@@ -265,17 +265,17 @@ export const PLANS = [
     tags: 1000,
     users: 250,
     ids: [
-      "price_1OnWwLAlJJEpqkPVXtJyPqLk", // monthly (test)
-      "price_1OnWwLAlJJEpqkPV4eMbOkNh", // yearly (test)
-      "price_1OnaKOAlJJEpqkPVV6gkZPgt", // monthly (prod)
-      "price_1OzOh5AlJJEpqkPVtCSX7dlE", // yearly (prod)
+      'price_1OnWwLAlJJEpqkPVXtJyPqLk', // monthly (test)
+      'price_1OnWwLAlJJEpqkPV4eMbOkNh', // yearly (test)
+      'price_1OnaKOAlJJEpqkPVV6gkZPgt', // monthly (prod)
+      'price_1OzOh5AlJJEpqkPVtCSX7dlE', // yearly (prod)
     ],
   }),
   {
-    name: "Enterprise",
+    name: 'Enterprise',
     tagline:
       "Custom tailored plans for large enterprises. Whether you're running a SMS campaign with millions of short links or a large marketing campaign with billions of clicks, we've got you covered.",
-    link: "https://go.gov.my/enterprise",
+    link: 'https://go.gov.my/enterprise',
     price: {
       monthly: null,
       yearly: null,
@@ -286,33 +286,33 @@ export const PLANS = [
       domains: null,
     },
     colors: {
-      bg: "bg-violet-600",
-      text: "text-violet-600",
+      bg: 'bg-violet-600',
+      text: 'text-violet-600',
     },
     cta: {
-      text: "Contact us",
-      href: "/enterprise",
-      color: "bg-violet-600 hover:bg-violet-700 hover:ring-violet-100",
+      text: 'Contact us',
+      href: '/enterprise',
+      color: 'bg-violet-600 hover:bg-violet-700 hover:ring-violet-100',
     },
-    featureTitle: "Everything in Business, plus:",
+    featureTitle: 'Everything in Business, plus:',
     features: [
-      { text: "Custom usage limits" },
-      { text: "Volume discounts" },
-      { text: "Role-based access controls" },
-      { text: "Custom contract & SLA" },
-      { text: "Whiteglove onboarding" },
-      { text: "Dedicated success manager" },
-      { text: "Priority support" },
-      { text: "Dedicated Slack channel" },
+      { text: 'Custom usage limits' },
+      { text: 'Volume discounts' },
+      { text: 'Role-based access controls' },
+      { text: 'Custom contract & SLA' },
+      { text: 'Whiteglove onboarding' },
+      { text: 'Dedicated success manager' },
+      { text: 'Priority support' },
+      { text: 'Dedicated Slack channel' },
     ],
   },
 ];
 
-export const FREE_PLAN = PLANS.find((plan) => plan.name === "Free")!;
-export const PRO_PLAN = PLANS.find((plan) => plan.name === "Pro")!;
-export const BUSINESS_PLAN = PLANS.find((plan) => plan.name === "Business")!;
+export const FREE_PLAN = PLANS.find((plan) => plan.name === 'Free')!;
+export const PRO_PLAN = PLANS.find((plan) => plan.name === 'Pro')!;
+export const BUSINESS_PLAN = PLANS.find((plan) => plan.name === 'Business')!;
 export const ENTERPRISE_PLAN = PLANS.find(
-  (plan) => plan.name === "Enterprise",
+  (plan) => plan.name === 'Enterprise',
 )!;
 
 export const PUBLIC_PLANS = [
@@ -323,7 +323,7 @@ export const PUBLIC_PLANS = [
 ];
 
 export const SELF_SERVE_PAID_PLANS = PLANS.filter(
-  (p) => p.name !== "Free" && p.name !== "Enterprise",
+  (p) => p.name !== 'Free' && p.name !== 'Enterprise',
 );
 
 export const FREE_WORKSPACES_LIMIT = 2;

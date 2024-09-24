@@ -1,13 +1,13 @@
-import { DubApiError } from "@/lib/api/errors";
-import { withAdmin } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { DubApiError } from '@/lib/api/errors';
+import { withAdmin } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { NextResponse } from 'next/server';
 
 export const GET = withAdmin(async ({ params }) => {
   if (!params.linkId) {
     throw new DubApiError({
-      code: "bad_request",
-      message: "Missing linkId in path params",
+      code: 'bad_request',
+      message: 'Missing linkId in path params',
     });
   }
 
@@ -19,8 +19,8 @@ export const GET = withAdmin(async ({ params }) => {
 
   if (!link) {
     throw new DubApiError({
-      code: "not_found",
-      message: "Link not found",
+      code: 'not_found',
+      message: 'Link not found',
     });
   }
 
@@ -32,7 +32,7 @@ export const GET = withAdmin(async ({ params }) => {
       committedByUser: true,
     },
     orderBy: {
-      timestamp: "desc",
+      timestamp: 'desc',
     },
   });
 

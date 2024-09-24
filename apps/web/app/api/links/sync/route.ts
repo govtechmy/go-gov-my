@@ -1,9 +1,9 @@
-import { exceededLimitError } from "@/lib/api/errors";
-import { propagateBulkLinkChanges } from "@/lib/api/links";
-import { withWorkspace } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { SimpleLinkProps } from "@/lib/types";
-import { NextResponse } from "next/server";
+import { exceededLimitError } from '@/lib/api/errors';
+import { propagateBulkLinkChanges } from '@/lib/api/links';
+import { withWorkspace } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { SimpleLinkProps } from '@/lib/types';
+import { NextResponse } from 'next/server';
 
 // POST /api/links/sync – sync user's publicly created links to their accounts
 export const POST = withWorkspace(async ({ req, session, workspace }) => {
@@ -11,10 +11,10 @@ export const POST = withWorkspace(async ({ req, session, workspace }) => {
   try {
     links = await req.json();
     if (!Array.isArray(links)) {
-      throw new Error("Invalid request body.");
+      throw new Error('Invalid request body.');
     }
   } catch (e) {
-    return new Response("Invalid request body.", { status: 400 });
+    return new Response('Invalid request body.', { status: 400 });
   }
 
   const unclaimedLinks = await Promise.all(
@@ -35,7 +35,7 @@ export const POST = withWorkspace(async ({ req, session, workspace }) => {
   ).then((links) => links.filter((link) => link !== null));
 
   if (unclaimedLinks.length === 0) {
-    return new Response("No links created.", { status: 200 });
+    return new Response('No links created.', { status: 200 });
   }
 
   if (workspace.linksUsage + unclaimedLinks.length > workspace.linksLimit) {
@@ -43,7 +43,7 @@ export const POST = withWorkspace(async ({ req, session, workspace }) => {
       exceededLimitError({
         plan: workspace.plan,
         limit: workspace.linksLimit,
-        type: "links",
+        type: 'links',
       }),
       { status: 403 },
     );

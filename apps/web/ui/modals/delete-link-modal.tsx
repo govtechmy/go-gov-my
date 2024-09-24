@@ -1,18 +1,18 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { LinkProps } from "@/lib/types";
-import { Button, Modal, useMediaQuery } from "@dub/ui";
-import { getApexDomain, linkConstructor } from "@dub/utils";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { LinkProps } from '@/lib/types';
+import { Button, Modal, useMediaQuery } from '@dub/ui';
+import { getApexDomain, linkConstructor } from '@dub/utils';
 import {
   Dispatch,
   SetStateAction,
   useCallback,
   useMemo,
   useState,
-} from "react";
-import { toast } from "sonner";
-import { mutate } from "swr";
-import LinkLogo from "../links/link-logo";
+} from 'react';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
+import LinkLogo from '../links/link-logo';
 
 function DeleteLinkModal({
   showDeleteLinkModal,
@@ -59,15 +59,15 @@ function DeleteLinkModal({
           e.preventDefault();
           setDeleting(true);
           fetch(`/api/links/${props.id}?workspaceId=${id}`, {
-            method: "DELETE",
+            method: 'DELETE',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
           }).then(async (res) => {
             if (res.status === 200) {
               await mutate(
                 (key) =>
-                  typeof key === "string" && key.startsWith("/api/links"),
+                  typeof key === 'string' && key.startsWith('/api/links'),
                 undefined,
                 { revalidate: true },
               );
@@ -84,7 +84,7 @@ function DeleteLinkModal({
       >
         <div>
           <label htmlFor="verification" className="block text-sm text-gray-700">
-            {message?.to_verify}{" "}
+            {message?.to_verify}{' '}
             <span className="font-semibold">{shortlink}</span> {message?.below}
           </label>
           <div className="relative mt-1 rounded-md shadow-sm">

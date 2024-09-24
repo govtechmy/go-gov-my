@@ -1,14 +1,14 @@
-import z from "@/lib/zod";
-import { WorkspaceSchema } from "@/lib/zod/schemas/workspaces";
-import { Project } from "@prisma/client";
-import { describe, expect, test } from "vitest";
-import { IntegrationHarness } from "../utils/integration";
+import z from '@/lib/zod';
+import { WorkspaceSchema } from '@/lib/zod/schemas/workspaces';
+import { Project } from '@prisma/client';
+import { describe, expect, test } from 'vitest';
+import { IntegrationHarness } from '../utils/integration';
 
-describe("GET /workspaces/{idOrSlug}", async () => {
+describe('GET /workspaces/{idOrSlug}', async () => {
   const h = new IntegrationHarness();
   const { workspace, http } = await h.init();
 
-  test("by id", async () => {
+  test('by id', async () => {
     const { status, data: workspaceFetched } = await http.get<Project>({
       path: `/workspaces/${workspace.workspaceId}`,
     });
@@ -27,7 +27,7 @@ describe("GET /workspaces/{idOrSlug}", async () => {
       .parse(workspaceFetched);
   });
 
-  test("by slug", async () => {
+  test('by slug', async () => {
     const { status, data: workspaceFetched } = await http.get<Project>({
       path: `/workspaces/${workspace.slug}`,
     });

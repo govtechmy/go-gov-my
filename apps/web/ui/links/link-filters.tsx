@@ -1,12 +1,12 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useLinks from "@/lib/swr/use-links";
-import useLinksCount from "@/lib/swr/use-links-count";
-import useTags from "@/lib/swr/use-tags";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { TagProps } from "@/lib/types";
-import TagBadge from "@/ui/links/tag-badge";
-import { useAddEditTagModal } from "@/ui/modals/add-edit-tag-modal";
-import { Delete, ThreeDots } from "@/ui/shared/icons";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useLinks from '@/lib/swr/use-links';
+import useLinksCount from '@/lib/swr/use-links-count';
+import useTags from '@/lib/swr/use-tags';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { TagProps } from '@/lib/types';
+import TagBadge from '@/ui/links/tag-badge';
+import { useAddEditTagModal } from '@/ui/modals/add-edit-tag-modal';
+import { Delete, ThreeDots } from '@/ui/shared/icons';
 import {
   Button,
   Copy,
@@ -16,29 +16,29 @@ import {
   Switch,
   Tick,
   useRouterStuff,
-} from "@dub/ui";
-import { SWIPE_REVEAL_ANIMATION_SETTINGS, nFormatter } from "@dub/utils";
-import { AnimatePresence, motion } from "framer-motion";
-import { ChevronRight, Edit3, Search, XCircle } from "lucide-react";
-import { useSession } from "next-auth/react";
+} from '@dub/ui';
+import { SWIPE_REVEAL_ANIMATION_SETTINGS, nFormatter } from '@dub/utils';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ChevronRight, Edit3, Search, XCircle } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import {
   useParams,
   usePathname,
   useRouter,
   useSearchParams,
-} from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { toast } from "sonner";
-import { mutate } from "swr";
-import { useDebouncedCallback } from "use-debounce";
+} from 'next/navigation';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
+import { useDebouncedCallback } from 'use-debounce';
 
 export default function LinkFilters() {
-  const { data: domains } = useLinksCount({ groupBy: "domain" });
+  const { data: domains } = useLinksCount({ groupBy: 'domain' });
   const { messages, locale } = useIntlClientHook();
   const message = messages?.dashboard;
 
   const { tags } = useTags();
-  const { data: tagsCount } = useLinksCount({ groupBy: "tagId" });
+  const { data: tagsCount } = useLinksCount({ groupBy: 'tagId' });
 
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -46,22 +46,22 @@ export default function LinkFilters() {
   const searchInputRef = useRef(); // this is a hack to clear the search input when the clear button is clicked
 
   useEffect(() => {
-    if (searchParams?.has("search")) {
+    if (searchParams?.has('search')) {
       queryParams({
-        set: { showArchived: "true" },
+        set: { showArchived: 'true' },
       });
     }
   }, [pathname, queryParams, searchParams]);
 
   const showClearButton = useMemo(() => {
     return [
-      "search",
-      "domain",
-      "userId",
-      "tagIds",
-      "showArchived",
-      "page",
-      "withTags",
+      'search',
+      'domain',
+      'userId',
+      'tagIds',
+      'showArchived',
+      'page',
+      'withTags',
     ].some((param) => searchParams?.has(param));
   }, [searchParams]);
 
@@ -98,7 +98,7 @@ const ClearButton = ({ searchInputRef }) => {
     <button
       onClick={() => {
         router.replace(`/${slug}`);
-        searchInputRef.current.value = "";
+        searchInputRef.current.value = '';
       }}
       className="group flex items-center justify-center space-x-1 rounded-md border border-gray-400 px-2 py-1 transition-all hover:border-gray-600 active:bg-gray-100"
     >
@@ -120,7 +120,7 @@ export const SearchBox = ({ searchInputRef }) => {
       set: {
         search: value,
       },
-      del: "page",
+      del: 'page',
     });
   }, 500);
   const { isValidating } = useLinks();
@@ -132,9 +132,9 @@ export const SearchBox = ({ searchInputRef }) => {
       // - user is not typing in an input or textarea
       // - there is no existing modal backdrop (i.e. no other modal is open)
       if (
-        e.key === "/" &&
-        target.tagName !== "INPUT" &&
-        target.tagName !== "TEXTAREA"
+        e.key === '/' &&
+        target.tagName !== 'INPUT' &&
+        target.tagName !== 'TEXTAREA'
       ) {
         e.preventDefault();
         searchInputRef.current?.focus();
@@ -144,8 +144,8 @@ export const SearchBox = ({ searchInputRef }) => {
   );
 
   useEffect(() => {
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
   }, [onKeyDown]);
 
   return (
@@ -162,7 +162,7 @@ export const SearchBox = ({ searchInputRef }) => {
         type="text"
         className="peer w-full rounded-md border border-gray-300 px-10 text-black placeholder:text-gray-400 focus:border-black focus:ring-0 sm:text-sm"
         placeholder={message?.search}
-        defaultValue={searchParams?.get("search") || ""}
+        defaultValue={searchParams?.get('search') || ''}
         onChange={(e) => {
           debounced(e.target.value);
         }}
@@ -170,8 +170,8 @@ export const SearchBox = ({ searchInputRef }) => {
       {searchInputRef.current?.value.length > 0 && (
         <button
           onClick={() => {
-            searchInputRef.current.value = "";
-            queryParams({ del: "search" });
+            searchInputRef.current.value = '';
+            queryParams({ del: 'search' });
           }}
           className="pointer-events-auto absolute inset-y-0 right-0 flex items-center pr-4 lg:hidden"
         >
@@ -192,7 +192,7 @@ const TagsFilter = ({
   const searchParams = useSearchParams();
   const { queryParams } = useRouterStuff();
   const [collapsed, setCollapsed] = useState(tags.length === 0 ? true : false);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [showMore, setShowMore] = useState(false);
   const { messages } = useIntlClientHook();
   const message = messages?.dashboard;
@@ -201,7 +201,7 @@ const TagsFilter = ({
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const selectedTagIds =
-    searchParams?.get("tagIds")?.split(",")?.filter(Boolean) ?? [];
+    searchParams?.get('tagIds')?.split(',')?.filter(Boolean) ?? [];
 
   const onCheckboxChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -213,9 +213,9 @@ const TagsFilter = ({
           tagIds: newTags,
         },
         del: [
-          "page",
+          'page',
           // Remove tagId from params if empty
-          ...(newTags.length ? [] : ["tagIds"]),
+          ...(newTags.length ? [] : ['tagIds']),
         ],
       });
     },
@@ -248,7 +248,7 @@ const TagsFilter = ({
           className="flex items-center space-x-2"
         >
           <ChevronRight
-            className={`${collapsed ? "" : "rotate-90"} h-5 w-5 transition-all`}
+            className={`${collapsed ? '' : 'rotate-90'} h-5 w-5 transition-all`}
           />
           <h4 className="font-medium text-gray-900">Tags</h4>
         </button>
@@ -314,7 +314,7 @@ const TagsFilter = ({
                 onClick={() => setShowMore(!showMore)}
                 className="rounded-md border border-gray-300 p-1 text-center text-sm"
               >
-                Show {showMore ? "less" : "more"}
+                Show {showMore ? 'less' : 'more'}
               </button>
             )}
           </motion.div>
@@ -338,19 +338,19 @@ const TagPopover = ({ tag, count }: { tag: TagProps; count: number }) => {
   const handleDelete = async () => {
     setProcessing(true);
     fetch(`/api/tags/${tag.id}?workspaceId=${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
     }).then(async (res) => {
       if (res.ok) {
-        queryParams({ del: "tagIds" });
+        queryParams({ del: 'tagIds' });
         await Promise.all([
           mutate(`/api/tags?workspaceId=${id}`),
           mutate(
-            (key) => typeof key === "string" && key.startsWith("/api/links"),
+            (key) => typeof key === 'string' && key.startsWith('/api/links'),
             undefined,
             { revalidate: true },
           ),
         ]);
-        toast.success("Tag deleted");
+        toast.success('Tag deleted');
       } else {
         const { error } = await res.json();
         toast.error(error.message);
@@ -385,7 +385,7 @@ const TagPopover = ({ tag, count }: { tag: TagProps; count: number }) => {
               onClick={() => {
                 navigator.clipboard.writeText(tag.id);
                 setCopied(true);
-                toast.success("Tag ID copied");
+                toast.success('Tag ID copied');
                 setTimeout(() => setCopied(false), 3000);
               }}
               icon={
@@ -419,17 +419,17 @@ const TagPopover = ({ tag, count }: { tag: TagProps; count: number }) => {
           type="button"
           onClick={() => setOpenPopover(!openPopover)}
           className={`${
-            openPopover ? "bg-gray-200" : "hover:bg-gray-200"
+            openPopover ? 'bg-gray-200' : 'hover:bg-gray-200'
           } -mr-1 flex h-6 w-5 items-center justify-center rounded-md transition-colors`}
         >
           <ThreeDots
             className={`h-4 w-4 text-gray-500 ${
-              openPopover ? "" : "hidden group-hover:block"
+              openPopover ? '' : 'hidden group-hover:block'
             }`}
           />
           <p
             className={`text-gray-500 ${
-              openPopover ? "hidden" : "group-hover:hidden"
+              openPopover ? 'hidden' : 'group-hover:hidden'
             }`}
           >
             {nFormatter(count)}
@@ -444,7 +444,7 @@ const TagPopover = ({ tag, count }: { tag: TagProps; count: number }) => {
 const MyLinksFilter = () => {
   const searchParams = useSearchParams();
   const { queryParams } = useRouterStuff();
-  const userId = searchParams?.get("userId");
+  const userId = searchParams?.get('userId');
   const { data: session } = useSession();
   const { messages } = useIntlClientHook();
   const message = messages?.dashboard;
@@ -462,7 +462,7 @@ const MyLinksFilter = () => {
         fn={() =>
           queryParams(
             userId
-              ? { del: "userId" }
+              ? { del: 'userId' }
               : {
                   set: {
                     userId: session?.user.id,
@@ -479,7 +479,7 @@ const MyLinksFilter = () => {
 const ArchiveFilter = () => {
   const searchParams = useSearchParams();
   const { queryParams } = useRouterStuff();
-  const showArchived = searchParams?.get("showArchived");
+  const showArchived = searchParams?.get('showArchived');
   const { messages } = useIntlClientHook();
   const message = messages?.dashboard;
   return (
@@ -491,10 +491,10 @@ const ArchiveFilter = () => {
         fn={() =>
           queryParams(
             showArchived
-              ? { del: "showArchived" }
+              ? { del: 'showArchived' }
               : {
                   set: {
-                    showArchived: "true",
+                    showArchived: 'true',
                   },
                 },
           )

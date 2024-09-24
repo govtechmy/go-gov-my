@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { Popover, useResizeObserver } from "@dub/ui";
-import { fetcher } from "@dub/utils";
-import { AnimatePresence, motion } from "framer-motion";
-import { XIcon } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { createContext, useEffect, useRef, useState } from "react";
-import { HelpArticle } from ".";
-import { ContactForm } from "./contact-form";
-import { HelpArticles } from "./help-articles";
+import { Popover, useResizeObserver } from '@dub/ui';
+import { fetcher } from '@dub/utils';
+import { AnimatePresence, motion } from 'framer-motion';
+import { XIcon } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { createContext, useEffect, useRef, useState } from 'react';
+import { HelpArticle } from '.';
+import { ContactForm } from './contact-form';
+import { HelpArticles } from './help-articles';
 
 export const HelpContext = createContext<{
   popularHelpArticles: HelpArticle[];
@@ -30,7 +30,7 @@ export function HelpButton({
   const { data: session } = useSession();
 
   useEffect(() => {
-    session && fetcher("/api/support");
+    session && fetcher('/api/support');
   }, [session]);
 
   return (
@@ -50,13 +50,13 @@ export function HelpButton({
         >
           <AnimatePresence>
             <motion.div
-              key={isOpen ? "open" : "closed"}
+              key={isOpen ? 'open' : 'closed'}
               className="absolute inset-0 flex items-center justify-center font-medium text-gray-700 hover:text-gray-700"
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0 }}
             >
-              {isOpen ? <XIcon className="h-4 w-4" strokeWidth={2} /> : "?"}
+              {isOpen ? <XIcon className="h-4 w-4" strokeWidth={2} /> : '?'}
             </motion.div>
           </AnimatePresence>
         </button>
@@ -66,7 +66,7 @@ export function HelpButton({
 }
 
 function HelpSection() {
-  const [screen, setScreen] = useState<"main" | "contact">("main");
+  const [screen, setScreen] = useState<'main' | 'contact'>('main');
 
   const containerRef = useRef<HTMLDivElement>(null);
   const resizeObserverEntry = useResizeObserver(containerRef);
@@ -75,14 +75,14 @@ function HelpSection() {
     <motion.div
       className="w-full overflow-scroll sm:w-[32rem]"
       animate={{
-        height: resizeObserverEntry?.borderBoxSize[0].blockSize ?? "auto",
-        maxHeight: "calc(100vh - 10rem)",
+        height: resizeObserverEntry?.borderBoxSize[0].blockSize ?? 'auto',
+        maxHeight: 'calc(100vh - 10rem)',
       }}
-      transition={{ type: "spring", duration: 0.3 }}
+      transition={{ type: 'spring', duration: 0.3 }}
     >
       <div ref={containerRef}>
-        {screen === "main" && <HelpArticles setScreen={setScreen} />}
-        {screen === "contact" && <ContactForm setScreen={setScreen} />}
+        {screen === 'main' && <HelpArticles setScreen={setScreen} />}
+        {screen === 'contact' && <ContactForm setScreen={setScreen} />}
       </div>
     </motion.div>
   );

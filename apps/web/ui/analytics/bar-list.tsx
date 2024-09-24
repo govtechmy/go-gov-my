@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import useWorkspace from "@/lib/swr/use-workspace";
-import { LinkProps, UserProps } from "@/lib/types";
+import useWorkspace from '@/lib/swr/use-workspace';
+import { LinkProps, UserProps } from '@/lib/types';
 import {
   NumberTooltip,
   Tooltip,
   useIntersectionObserver,
   useMediaQuery,
   useRouterStuff,
-} from "@dub/ui";
-import { LinkifyTooltipContent } from "@dub/ui/src/tooltip";
+} from '@dub/ui';
+import { LinkifyTooltipContent } from '@dub/ui/src/tooltip';
 import {
   cn,
   fetcher,
@@ -17,10 +17,10 @@ import {
   linkConstructor,
   nFormatter,
   truncate,
-} from "@dub/utils";
-import { motion } from "framer-motion";
-import { Search } from "lucide-react";
-import Link from "next/link";
+} from '@dub/utils';
+import { motion } from 'framer-motion';
+import { Search } from 'lucide-react';
+import Link from 'next/link';
 import {
   Dispatch,
   ReactNode,
@@ -29,11 +29,11 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
-import useSWR from "swr";
-import { AnalyticsContext } from ".";
-import LinkLogo from "../links/link-logo";
-import LinkPreviewTooltip from "./link-preview";
+} from 'react';
+import useSWR from 'swr';
+import { AnalyticsContext } from '.';
+import LinkLogo from '../links/link-logo';
+import LinkPreviewTooltip from './link-preview';
 
 export default function BarList({
   tab,
@@ -55,7 +55,7 @@ export default function BarList({
   setShowModal: Dispatch<SetStateAction<boolean>>;
   limit?: number;
 }) {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   // TODO: mock pagination for better perf in React
   // TODO: fix for top links since it's technically link IDs
@@ -153,7 +153,7 @@ export function LineItem({
       user: UserProps;
     }
   >(
-    tab === "link" &&
+    tab === 'link' &&
       isVisible &&
       (admin
         ? `/api/admin/links/${title}`
@@ -169,18 +169,18 @@ export function LineItem({
   // #264 - https://github.com/govtechmy/go-gov-my/issues/264
   // For now, only items in the link tab can be clicked. Other tabs are not
   // clickable since we are not able to filter by country, cities, devices, etc.
-  const clickable = tab === "link";
+  const clickable = tab === 'link';
 
   const lineItem = useMemo(() => {
     const apexDomain =
-      tab === "link"
+      tab === 'link'
         ? data
           ? getApexDomain(data.url)
           : null
         : getApexDomain(title);
     return (
       <div className="z-10 flex items-center space-x-2 px-2">
-        {tab === "link" ? (
+        {tab === 'link' ? (
           data ? (
             <LinkLogo
               apexDomain={apexDomain}
@@ -189,18 +189,18 @@ export function LineItem({
           ) : (
             <div className="h-5 w-5 animate-pulse rounded-full bg-gray-100" />
           )
-        ) : tab === "url" ? (
+        ) : tab === 'url' ? (
           <LinkLogo apexDomain={apexDomain} className="h-5 w-5 sm:h-5 sm:w-5" />
         ) : (
           icon
         )}
         <div
           className={cn(
-            "truncate text-sm text-gray-800",
-            clickable && href && "underline-offset-4 group-hover:underline",
+            'truncate text-sm text-gray-800',
+            clickable && href && 'underline-offset-4 group-hover:underline',
           )}
         >
-          {tab === "link" ? (
+          {tab === 'link' ? (
             data ? (
               truncate(
                 linkConstructor({
@@ -225,7 +225,7 @@ export function LineItem({
     <Link
       ref={itemRef}
       href={
-        tab === "link" && data
+        tab === 'link' && data
           ? (queryParams({
               set: {
                 domain: data.domain,
@@ -237,15 +237,15 @@ export function LineItem({
       }
       scroll={false}
       onClick={() => setShowModal(false)}
-      className={cn(!clickable && "pointer-events-none")}
+      className={cn(!clickable && 'pointer-events-none')}
     >
       <div className="group flex items-center justify-between hover:bg-gray-50">
         <div className="relative z-10 flex h-8 w-full max-w-[calc(100%-2rem)] items-center">
-          {tab === "link" && data ? (
+          {tab === 'link' && data ? (
             <Tooltip content={<LinkPreviewTooltip data={data} />}>
               {lineItem}
             </Tooltip>
-          ) : tab === "url" ? (
+          ) : tab === 'url' ? (
             <Tooltip
               content={<LinkifyTooltipContent>{title}</LinkifyTooltipContent>}
             >
@@ -259,12 +259,12 @@ export function LineItem({
               width: `${(clicks / (maxClicks || 0)) * 100}%`,
             }}
             className={cn(
-              "absolute h-full origin-left rounded-sm",
+              'absolute h-full origin-left rounded-sm',
               barBackground,
             )}
-            transition={{ ease: "easeOut", duration: 0.3 }}
-            initial={{ transform: "scaleX(0)" }}
-            animate={{ transform: "scaleX(1)" }}
+            transition={{ ease: 'easeOut', duration: 0.3 }}
+            initial={{ transform: 'scaleX(0)' }}
+            animate={{ transform: 'scaleX(1)' }}
           />
         </div>
         <NumberTooltip value={clicks}>

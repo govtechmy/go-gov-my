@@ -1,7 +1,7 @@
-import { prisma } from "@/lib/prisma";
-import z from "@/lib/zod";
-import { getLinksCountQuerySchema } from "@/lib/zod/schemas/links";
-import { combineTagIds } from "./utils";
+import { prisma } from '@/lib/prisma';
+import z from '@/lib/zod';
+import { getLinksCountQuerySchema } from '@/lib/zod/schemas/links';
+import { combineTagIds } from './utils';
 
 export async function getLinksCount({
   searchParams,
@@ -41,21 +41,21 @@ export async function getLinksCount({
     }),
     // when filtering by domain, only filter by domain if the filter group is not "Domains"
     ...(domain &&
-      groupBy !== "domain" && {
+      groupBy !== 'domain' && {
         domain,
       }),
   };
 
-  if (groupBy === "tagId") {
+  if (groupBy === 'tagId') {
     return await prisma.linkTag.groupBy({
-      by: ["tagId"],
+      by: ['tagId'],
       where: {
         link: linksWhere,
       },
       _count: true,
       orderBy: {
         _count: {
-          tagId: "desc",
+          tagId: 'desc',
         },
       },
     });
@@ -86,14 +86,14 @@ export async function getLinksCount({
           : {}),
     };
 
-    if (groupBy === "domain") {
+    if (groupBy === 'domain') {
       return await prisma.link.groupBy({
         by: [groupBy],
         where,
         _count: true,
         orderBy: {
           _count: {
-            [groupBy]: "desc",
+            [groupBy]: 'desc',
           },
         },
       });

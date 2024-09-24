@@ -1,15 +1,15 @@
-import { LoadingSpinner, useMediaQuery } from "@dub/ui";
-import { fetcher, nFormatter } from "@dub/utils";
-import { AxisBottom, AxisLeft } from "@visx/axis";
-import { localPoint } from "@visx/event";
-import { GridRows } from "@visx/grid";
-import { scaleBand, scaleLinear } from "@visx/scale";
-import { useTooltip, useTooltipInPortal } from "@visx/tooltip";
-import { motion } from "framer-motion";
-import { useCallback, useContext, useMemo } from "react";
-import useSWR from "swr";
-import { AnalyticsContext } from ".";
-import styles from "./bar-chart.module.css";
+import { LoadingSpinner, useMediaQuery } from '@dub/ui';
+import { fetcher, nFormatter } from '@dub/utils';
+import { AxisBottom, AxisLeft } from '@visx/axis';
+import { localPoint } from '@visx/event';
+import { GridRows } from '@visx/grid';
+import { scaleBand, scaleLinear } from '@visx/scale';
+import { useTooltip, useTooltipInPortal } from '@visx/tooltip';
+import { motion } from 'framer-motion';
+import { useCallback, useContext, useMemo } from 'react';
+import useSWR from 'swr';
+import { AnalyticsContext } from '.';
+import styles from './bar-chart.module.css';
 
 const LEFT_AXIS_WIDTH = 30;
 const CHART_MAX_HEIGHT = 400;
@@ -73,29 +73,29 @@ export default function BarChart() {
   const formatTimestamp = useCallback(
     (e: Date) => {
       switch (interval) {
-        case "1h":
-          return new Date(e).toLocaleTimeString("en-us", {
-            hour: "numeric",
-            minute: "numeric",
+        case '1h':
+          return new Date(e).toLocaleTimeString('en-us', {
+            hour: 'numeric',
+            minute: 'numeric',
           });
-        case "24h":
+        case '24h':
           return new Date(e)
-            .toLocaleDateString("en-us", {
-              month: "short",
-              day: "numeric",
-              hour: "numeric",
+            .toLocaleDateString('en-us', {
+              month: 'short',
+              day: 'numeric',
+              hour: 'numeric',
             })
-            .replace(",", " ");
-        case "90d":
-        case "all":
-          return new Date(e).toLocaleDateString("en-us", {
-            month: "short",
-            year: "numeric",
+            .replace(',', ' ');
+        case '90d':
+        case 'all':
+          return new Date(e).toLocaleDateString('en-us', {
+            month: 'short',
+            year: 'numeric',
           });
         default:
-          return new Date(e).toLocaleDateString("en-us", {
-            month: "short",
-            day: "numeric",
+          return new Date(e).toLocaleDateString('en-us', {
+            month: 'short',
+            day: 'numeric',
           });
       }
     },
@@ -123,7 +123,7 @@ export default function BarChart() {
     <figure
       className={`
         ${
-          data && data.length > 0 ? "" : "items-center justify-center"
+          data && data.length > 0 ? '' : 'items-center justify-center'
         } my-10 flex`}
       style={{ width: CHART_WIDTH, height: CHART_HEIGHT }}
     >
@@ -138,11 +138,11 @@ export default function BarChart() {
               scale={yScale}
               tickFormat={(d) => nFormatter(d as number)}
               tickLabelProps={() => ({
-                fill: "#666666",
-                filter: data ? "none" : "blur(8px)",
+                fill: '#666666',
+                filter: data ? 'none' : 'blur(8px)',
                 fontSize: 14,
-                textAnchor: "start",
-                transition: "all 0.4s ease-in-out",
+                textAnchor: 'start',
+                transition: 'all 0.4s ease-in-out',
               })}
             />
           </svg>
@@ -157,11 +157,11 @@ export default function BarChart() {
               scale={xScale}
               tickFormat={formatTimestamp}
               tickLabelProps={() => ({
-                fill: "#666666",
-                filter: data ? "none" : "blur(8px)",
+                fill: '#666666',
+                filter: data ? 'none' : 'blur(8px)',
                 fontSize: 12,
-                textAnchor: "middle",
-                transition: "all 0.4s ease-in-out",
+                textAnchor: 'middle',
+                transition: 'all 0.4s ease-in-out',
               })}
               numTicks={6}
               top={CHART_HEIGHT - 5}
@@ -180,10 +180,10 @@ export default function BarChart() {
               return (
                 <motion.rect
                   key={`bar-${interval}-${start}`}
-                  transition={{ ease: "easeOut", duration: 0.3 }}
+                  transition={{ ease: 'easeOut', duration: 0.3 }}
                   className="!origin-bottom fill-[#2563eb]"
-                  initial={{ transform: "scaleY(0)" }}
-                  animate={{ transform: "scaleY(1)" }}
+                  initial={{ transform: 'scaleY(0)' }}
+                  animate={{ transform: 'scaleY(1)' }}
                   x={barX}
                   y={barY}
                   width={barWidth}
@@ -208,7 +208,7 @@ export default function BarChart() {
                         start,
                         end: data[idx + 1]?.start ?? new Date(),
                         clicks,
-                        link: "https://google.com",
+                        link: 'https://google.com',
                       },
                       tooltipTop: eventSvgCoords.y - 150,
                       tooltipLeft: left,
@@ -230,16 +230,16 @@ export default function BarChart() {
                     <h3 className="my-1 text-black">
                       <span className="text-2xl font-semibold">
                         {nFormatter(tooltipData.clicks)}
-                      </span>{" "}
-                      click{tooltipData.clicks === 1 ? "" : "s"}
+                      </span>{' '}
+                      click{tooltipData.clicks === 1 ? '' : 's'}
                     </h3>
                     <p className="text-xs text-gray-600">
-                      {formatTimestamp(tooltipData.start)} -{" "}
-                      {interval === "24h"
+                      {formatTimestamp(tooltipData.start)} -{' '}
+                      {interval === '24h'
                         ? new Date(tooltipData.end).toLocaleTimeString(
-                            "en-us",
+                            'en-us',
                             {
-                              hour: "numeric",
+                              hour: 'numeric',
                             },
                           )
                         : formatTimestamp(tooltipData.end)}

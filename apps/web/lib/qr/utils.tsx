@@ -1,4 +1,4 @@
-import qrcodegen from "./codegen";
+import qrcodegen from './codegen';
 import {
   DEFAULT_BGCOLOR,
   DEFAULT_FGCOLOR,
@@ -8,8 +8,8 @@ import {
   DEFAULT_SIZE,
   ERROR_LEVEL_MAP,
   MARGIN_SIZE,
-} from "./constants";
-import { Excavation, ImageSettings, Modules, QRPropsSVG } from "./types";
+} from './constants';
+import { Excavation, ImageSettings, Modules, QRPropsSVG } from './types';
 
 // We could just do this in generatePath, except that we want to support
 // non-Path2D canvas, so we need to keep it an explicit step.
@@ -71,7 +71,7 @@ export function generatePath(modules: Modules, margin = 0): string {
       }
     });
   });
-  return ops.join("");
+  return ops.join('');
 }
 
 export function getImageSettings(

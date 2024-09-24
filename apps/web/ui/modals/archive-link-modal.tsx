@@ -1,8 +1,8 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { LinkProps } from "@/lib/types";
-import { Button, Modal, useToastWithUndo } from "@dub/ui";
-import { getApexDomain, linkConstructor } from "@dub/utils";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { LinkProps } from '@/lib/types';
+import { Button, Modal, useToastWithUndo } from '@dub/ui';
+import { getApexDomain, linkConstructor } from '@dub/utils';
 import {
   Dispatch,
   MouseEvent,
@@ -10,10 +10,10 @@ import {
   useCallback,
   useMemo,
   useState,
-} from "react";
-import { toast } from "sonner";
-import { mutate } from "swr";
-import LinkLogo from "../links/link-logo";
+} from 'react';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
+import LinkLogo from '../links/link-logo';
 
 const sendArchiveRequest = ({
   linkId,
@@ -25,17 +25,17 @@ const sendArchiveRequest = ({
   workspaceId?: string;
 }) => {
   return fetch(`/api/links/${linkId}?workspaceId=${workspaceId}`, {
-    method: "PATCH",
+    method: 'PATCH',
     body: JSON.stringify({ archived: archive }),
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
 };
 
 const revalidateLinks = () => {
   return mutate(
-    (key) => typeof key === "string" && key.startsWith("/api/links"),
+    (key) => typeof key === 'string' && key.startsWith('/api/links'),
     undefined,
     { revalidate: true },
   );
@@ -88,8 +88,8 @@ function ArchiveLinkModal({
     revalidateLinks();
     setShowArchiveLinkModal(false);
     toastWithUndo({
-      id: "link-archive-undo-toast",
-      message: `Successfully ${props.archived ? "unarchived" : "archived"} link!`,
+      id: 'link-archive-undo-toast',
+      message: `Successfully ${props.archived ? 'unarchived' : 'archived'} link!`,
       undo: undoAction,
       duration: 5000,
     });

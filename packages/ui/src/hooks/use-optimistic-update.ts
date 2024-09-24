@@ -1,6 +1,6 @@
-import { fetcher } from "@dub/utils";
-import { toast } from "sonner";
-import useSWR from "swr";
+import { fetcher } from '@dub/utils';
+import { toast } from 'sonner';
+import useSWR from 'swr';
 
 export function useOptimisticUpdate<T>(
   url: string,
@@ -20,9 +20,9 @@ export function useOptimisticUpdate<T>(
           revalidate: true,
         }),
         {
-          loading: toastCopy?.loading || "Updating...",
-          success: toastCopy?.success || "Successfully updated",
-          error: toastCopy?.error || "Failed to update",
+          loading: toastCopy?.loading || 'Updating...',
+          success: toastCopy?.success || 'Successfully updated',
+          error: toastCopy?.error || 'Failed to update',
         },
       );
     },

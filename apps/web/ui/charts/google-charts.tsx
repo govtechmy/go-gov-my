@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import useGoogleCharts from "./useGoogleCharts";
+import { useEffect } from 'react';
+import useGoogleCharts from './useGoogleCharts';
 
 // Declare google as a global variable
 declare global {
@@ -25,12 +25,12 @@ const GeoChart = ({ data }) => {
         window.google.visualization.arrayToDataTable(data);
       const options = {
         enableRegionInteractivity: true,
-        colorAxis: { colors: ["#a8eeff", "#4374e0"] }, // Example color range
-        datalessRegionColor: "#ededed",
-        defaultColor: "#f5f5f5",
+        colorAxis: { colors: ['#a8eeff', '#4374e0'] }, // Example color range
+        datalessRegionColor: '#ededed',
+        defaultColor: '#f5f5f5',
       };
       const chart = new window.google.visualization.GeoChart(
-        document.getElementById("regions_div"),
+        document.getElementById('regions_div'),
       );
       chart.draw(transformedData, options);
     }

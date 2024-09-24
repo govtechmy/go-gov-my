@@ -1,11 +1,11 @@
-import LocaleSwitcher from "../switcher/switcher";
+import LocaleSwitcher from '../switcher/switcher';
 
 export default function HomeNavBar() {
   // { session }: { session: any }
   const session = {
     user: {
-      name: "John Doe",
-      email: "farhan.gunz@gmail.com",
+      name: 'John Doe',
+      email: 'farhan.gunz@gmail.com',
     },
   };
   //   const session = undefined;

@@ -1,14 +1,14 @@
-import { prisma } from "@/lib/prisma";
-import { storage } from "@/lib/storage";
-import { truncate } from "@dub/utils";
-import "dotenv-flow/config";
+import { prisma } from '@/lib/prisma';
+import { storage } from '@/lib/storage';
+import { truncate } from '@dub/utils';
+import 'dotenv-flow/config';
 
 async function main() {
   const imagesToMigrate = await prisma.link.findMany({
     where: {
       proxy: true,
       image: {
-        startsWith: "https://res.cloudinary.com",
+        startsWith: 'https://res.cloudinary.com',
       },
     },
     select: {
@@ -44,7 +44,7 @@ async function main() {
           original: truncate(link.image, 80),
         };
       } catch (e) {
-        if (e.message === "Failed to fetch URL: Not Found") {
+        if (e.message === 'Failed to fetch URL: Not Found') {
           // double check if it's actually 404
           const res = await fetch(link.image!);
           if (res.status === 404) {
@@ -60,14 +60,14 @@ async function main() {
           }
         }
         return {
-          url: "deleted: " + link.id,
+          url: 'deleted: ' + link.id,
           original: truncate(link.image, 80),
         };
       }
     }),
   ).then((res) =>
     res.map((r) => {
-      if (r.status === "fulfilled") {
+      if (r.status === 'fulfilled') {
         return r.value;
       } else {
         return r.reason;

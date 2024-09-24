@@ -1,1 +1,1 @@
-export * from "../../../../../links/info/route";
+export * from '../../../../../links/info/route';

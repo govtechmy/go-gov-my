@@ -1,15 +1,15 @@
-import { getClicks } from "@/lib/analytics/clicks";
-import { prisma } from "@/lib/prisma";
-import { linkConstructor } from "@dub/utils";
-import "dotenv-flow/config";
-import * as fs from "fs";
-import * as Papa from "papaparse";
+import { getClicks } from '@/lib/analytics/clicks';
+import { prisma } from '@/lib/prisma';
+import { linkConstructor } from '@dub/utils';
+import 'dotenv-flow/config';
+import * as fs from 'fs';
+import * as Papa from 'papaparse';
 
 async function main() {
   const topLinks = await getClicks({
-    workspaceId: "xxx",
-    endpoint: "top_links",
-    interval: "30d",
+    workspaceId: 'xxx',
+    endpoint: 'top_links',
+    interval: '30d',
     root: false,
   }).then(async (data) => {
     return await Promise.all(
@@ -38,7 +38,7 @@ async function main() {
     );
   });
 
-  fs.writeFileSync("xxx.csv", Papa.unparse(topLinks));
+  fs.writeFileSync('xxx.csv', Papa.unparse(topLinks));
 }
 
 main();

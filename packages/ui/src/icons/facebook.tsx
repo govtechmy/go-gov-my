@@ -1,6 +1,6 @@
 export default function Facebook({
   className,
-  fill = "#1977f3",
+  fill = '#1977f3',
 }: {
   className?: string;
   fill?: string;

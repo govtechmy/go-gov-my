@@ -1,23 +1,23 @@
-import z from "@/lib/zod";
-import { capitalize } from "@dub/utils";
-import { NextResponse } from "next/server";
-import { ZodError } from "zod";
-import { generateErrorMessage } from "zod-error";
-import { ZodOpenApiResponseObject } from "zod-openapi";
-import { PlanProps } from "../types";
+import z from '@/lib/zod';
+import { capitalize } from '@dub/utils';
+import { NextResponse } from 'next/server';
+import { ZodError } from 'zod';
+import { generateErrorMessage } from 'zod-error';
+import { ZodOpenApiResponseObject } from 'zod-openapi';
+import { PlanProps } from '../types';
 
 export const ErrorCode = z.enum([
-  "bad_request",
-  "not_found",
-  "internal_server_error",
-  "unauthorized",
-  "forbidden",
-  "rate_limit_exceeded",
-  "invite_expired",
-  "invite_pending",
-  "exceeded_limit",
-  "conflict",
-  "unprocessable_entity",
+  'bad_request',
+  'not_found',
+  'internal_server_error',
+  'unauthorized',
+  'forbidden',
+  'rate_limit_exceeded',
+  'invite_expired',
+  'invite_pending',
+  'exceeded_limit',
+  'conflict',
+  'unprocessable_entity',
 ]);
 
 const errorCodeToHttpStatus: Record<z.infer<typeof ErrorCode>, number> = {
@@ -35,32 +35,32 @@ const errorCodeToHttpStatus: Record<z.infer<typeof ErrorCode>, number> = {
 };
 
 const speakeasyErrorOverrides: Record<z.infer<typeof ErrorCode>, string> = {
-  bad_request: "BadRequest",
-  unauthorized: "Unauthorized",
-  forbidden: "Forbidden",
-  exceeded_limit: "ExceededLimit",
-  not_found: "NotFound",
-  conflict: "Conflict",
-  invite_pending: "InvitePending",
-  invite_expired: "InviteExpired",
-  unprocessable_entity: "UnprocessableEntity",
-  rate_limit_exceeded: "RateLimitExceeded",
-  internal_server_error: "InternalServerError",
+  bad_request: 'BadRequest',
+  unauthorized: 'Unauthorized',
+  forbidden: 'Forbidden',
+  exceeded_limit: 'ExceededLimit',
+  not_found: 'NotFound',
+  conflict: 'Conflict',
+  invite_pending: 'InvitePending',
+  invite_expired: 'InviteExpired',
+  unprocessable_entity: 'UnprocessableEntity',
+  rate_limit_exceeded: 'RateLimitExceeded',
+  internal_server_error: 'InternalServerError',
 };
 
 const ErrorSchema = z.object({
   error: z.object({
     code: ErrorCode.openapi({
-      description: "A short code indicating the error code returned.",
-      example: "not_found",
+      description: 'A short code indicating the error code returned.',
+      example: 'not_found',
     }),
     message: z.string().openapi({
-      description: "A human readable error message.",
-      example: "The requested resource was not found.",
+      description: 'A human readable error message.',
+      example: 'The requested resource was not found.',
     }),
     doc_url: z.string().optional().openapi({
-      description: "A URL to more information about the error code reported.",
-      example: "https://go.gov.my/docs/api-reference",
+      description: 'A URL to more information about the error code reported.',
+      example: 'https://go.gov.my/docs/api-reference',
     }),
   }),
 });
@@ -83,33 +83,33 @@ export class DubApiError extends Error {
   }) {
     super(message);
     this.code = code;
-    this.docUrl = docUrl ?? `${docErrorUrl}#${code.replace("_", "-")}`;
+    this.docUrl = docUrl ?? `${docErrorUrl}#${code.replace('_', '-')}`;
   }
 }
 
-const docErrorUrl = "https://go.gov.my/docs/api-reference/errors";
+const docErrorUrl = 'https://go.gov.my/docs/api-reference/errors';
 
 export function fromZodError(error: ZodError): ErrorResponse {
   return {
     error: {
-      code: "unprocessable_entity",
+      code: 'unprocessable_entity',
       message: generateErrorMessage(error.issues, {
         maxErrors: 1,
         delimiter: {
-          component: ": ",
+          component: ': ',
         },
         path: {
           enabled: true,
-          type: "objectNotation",
-          label: "",
+          type: 'objectNotation',
+          label: '',
         },
         code: {
           enabled: true,
-          label: "",
+          label: '',
         },
         message: {
           enabled: true,
-          label: "",
+          label: '',
         },
       }),
       doc_url: `${docErrorUrl}#unprocessable-entity`,
@@ -118,7 +118,7 @@ export function fromZodError(error: ZodError): ErrorResponse {
 }
 
 export function handleApiError(error: any): ErrorResponse & { status: number } {
-  console.error("API error occurred", error, JSON.stringify(error, null, 2));
+  console.error('API error occurred', error, JSON.stringify(error, null, 2));
 
   // Zod errors
   if (error instanceof ZodError) {
@@ -144,9 +144,9 @@ export function handleApiError(error: any): ErrorResponse & { status: number } {
   // Unhandled errors are not user-facing, so we don't expose the actual error
   return {
     error: {
-      code: "internal_server_error",
+      code: 'internal_server_error',
       message:
-        "An internal server error occurred. Please contact our support if the problem persists.",
+        'An internal server error occurred. Please contact our support if the problem persists.',
       doc_url: `${docErrorUrl}#internal-server-error`,
     },
     status: 500,
@@ -168,38 +168,38 @@ export const errorSchemaFactory = (
   return {
     description,
     content: {
-      "application/json": {
+      'application/json': {
         schema: {
-          "x-speakeasy-name-override": speakeasyErrorOverrides[code],
-          type: "object",
+          'x-speakeasy-name-override': speakeasyErrorOverrides[code],
+          type: 'object',
           properties: {
             error: {
-              type: "object",
+              type: 'object',
               properties: {
                 code: {
-                  type: "string",
+                  type: 'string',
                   enum: [code],
                   description:
-                    "A short code indicating the error code returned.",
+                    'A short code indicating the error code returned.',
                   example: code,
                 },
                 message: {
-                  type: "string",
+                  type: 'string',
                   description:
-                    "A human readable explanation of what went wrong.",
-                  example: "The requested resource was not found.",
+                    'A human readable explanation of what went wrong.',
+                  example: 'The requested resource was not found.',
                 },
                 doc_url: {
-                  type: "string",
+                  type: 'string',
                   description:
-                    "A link to our documentation with more details about this error code",
-                  example: `${docErrorUrl}#${code.replace("_", "-")}`,
+                    'A link to our documentation with more details about this error code',
+                  example: `${docErrorUrl}#${code.replace('_', '-')}`,
                 },
               },
-              required: ["code", "message"],
+              required: ['code', 'message'],
             },
           },
-          required: ["error"],
+          required: ['error'],
         },
       },
     },
@@ -213,10 +213,10 @@ export const exceededLimitError = ({
 }: {
   plan: PlanProps;
   limit: number;
-  type: "clicks" | "links" | "AI" | "domains" | "tags" | "users";
+  type: 'clicks' | 'links' | 'AI' | 'domains' | 'tags' | 'users';
 }) => {
   return `You've reached your ${
-    type === "links" || type === "AI" ? "monthly" : ""
+    type === 'links' || type === 'AI' ? 'monthly' : ''
   } limit of ${limit} ${
     limit === 1 ? type.slice(0, -1) : type
   } on the ${capitalize(plan)} plan. Please upgrade to add more ${type}.`;

@@ -1,9 +1,9 @@
-import { AxisLeft } from "@visx/axis";
-import { Group } from "@visx/group";
-import { Line } from "@visx/shape";
-import { getStringWidth } from "@visx/text";
-import { useLayoutEffect, useMemo } from "react";
-import { useChartContext } from "./chart-context";
+import { AxisLeft } from '@visx/axis';
+import { Group } from '@visx/group';
+import { Line } from '@visx/shape';
+import { getStringWidth } from '@visx/text';
+import { useLayoutEffect, useMemo } from 'react';
+import { useChartContext } from './chart-context';
 
 export type YAxisProps = {
   /**
@@ -95,9 +95,9 @@ export default function YAxis({
         tickLength={tickAxisSpacing}
         tickLabelProps={() => ({
           fontSize: 12,
-          fill: "#00000066",
-          textAnchor: "end",
-          verticalAnchor: "middle",
+          fill: '#00000066',
+          textAnchor: 'end',
+          verticalAnchor: 'middle',
         })}
       />
       {showGridLines && (

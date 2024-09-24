@@ -1,10 +1,10 @@
-import { withSession } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { redis } from "@/lib/redis";
-import { storage } from "@/lib/storage";
-import { trim } from "@dub/utils";
-import { NextResponse } from "next/server";
-import { z } from "zod";
+import { withSession } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { redis } from '@/lib/redis';
+import { storage } from '@/lib/storage';
+import { trim } from '@dub/utils';
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
 
 // GET /api/user – get a specific user
 export const GET = withSession(async ({ session }) => {
@@ -15,12 +15,12 @@ export const GET = withSession(async ({ session }) => {
   });
 
   const migratedWorkspace = await redis.hget(
-    "migrated_links_users",
+    'migrated_links_users',
     session.user.id,
   );
 
   if (migratedWorkspace) {
-    await redis.hdel("migrated_links_users", session.user.id);
+    await redis.hdel('migrated_links_users', session.user.id);
   }
 
   return NextResponse.json({
@@ -54,12 +54,12 @@ export const PUT = withSession(async ({ req, session }) => {
     });
     return NextResponse.json(response);
   } catch (error) {
-    if (error.code === "P2002") {
+    if (error.code === 'P2002') {
       return NextResponse.json(
         {
           error: {
-            code: "conflict",
-            message: "Email is already in use.",
+            code: 'conflict',
+            message: 'Email is already in use.',
           },
         },
         { status: 422 },
@@ -74,12 +74,12 @@ export const DELETE = withSession(async ({ session }) => {
   const userIsOwnerOfWorkspaces = await prisma.projectUsers.findMany({
     where: {
       userId: session.user.id,
-      role: "owner",
+      role: 'owner',
     },
   });
   if (userIsOwnerOfWorkspaces.length > 0) {
     return new Response(
-      "You must transfer ownership of your workspaces or delete them before you can delete your account.",
+      'You must transfer ownership of your workspaces or delete them before you can delete your account.',
       { status: 422 },
     );
   } else {

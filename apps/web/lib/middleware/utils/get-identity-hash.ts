@@ -1,6 +1,6 @@
-import { LOCALHOST_IP, hashStringSHA256 } from "@dub/utils";
-import { ipAddress } from "@vercel/edge";
-import { userAgent } from "next/server";
+import { LOCALHOST_IP, hashStringSHA256 } from '@dub/utils';
+import { ipAddress } from '@vercel/edge';
+import { userAgent } from 'next/server';
 
 /**
  * Combine IP + UA to create a unique identifier for the user (for deduplication)

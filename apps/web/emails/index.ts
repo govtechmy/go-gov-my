@@ -1,7 +1,7 @@
-import { SESClient, SendRawEmailCommand } from "@aws-sdk/client-ses";
-import { render } from "@react-email/render";
-import nodemailer from "nodemailer";
-import { JSXElementConstructor, ReactElement } from "react";
+import { SESClient, SendRawEmailCommand } from '@aws-sdk/client-ses';
+import { render } from '@react-email/render';
+import nodemailer from 'nodemailer';
+import { JSXElementConstructor, ReactElement } from 'react';
 
 // Create an instance of SESClient
 const sesClient = new SESClient();
@@ -20,7 +20,7 @@ export const sendEmail = async ({
 }): Promise<void> => {
   const sourceEmail = process.env.SES_EMAIL_SOURCE;
   if (!sourceEmail) {
-    throw new Error("SES_EMAIL_SOURCE is not defined");
+    throw new Error('SES_EMAIL_SOURCE is not defined');
   }
 
   // Create Nodemailer transporter using SES transport
@@ -42,7 +42,7 @@ export const sendEmail = async ({
   // Send email using the transporter
   const response = await transporter.sendMail(params);
 
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === 'development') {
     console.info(`Email sent to ${email} with subject ${subject}`);
   }
 };

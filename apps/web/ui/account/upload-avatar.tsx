@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { Button, FileUpload } from "@dub/ui";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { Button, FileUpload } from '@dub/ui';
+import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 export default function UploadAvatar() {
   const { data: session, update } = useSession();
@@ -28,10 +28,10 @@ export default function UploadAvatar() {
       onSubmit={async (e) => {
         setUploading(true);
         e.preventDefault();
-        fetch("/api/user", {
-          method: "PUT",
+        fetch('/api/user', {
+          method: 'PUT',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({ image }),
         }).then(async (res) => {

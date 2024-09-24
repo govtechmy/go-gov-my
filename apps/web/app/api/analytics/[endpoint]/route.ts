@@ -1,1 +1,1 @@
-export * from "../clicks/route";
+export * from '../clicks/route';

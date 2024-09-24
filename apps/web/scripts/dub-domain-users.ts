@@ -1,18 +1,18 @@
-import { prisma } from "@/lib/prisma";
-import "dotenv-flow/config";
+import { prisma } from '@/lib/prisma';
+import 'dotenv-flow/config';
 
 async function main() {
   const users = await prisma.link.groupBy({
-    by: ["userId"],
+    by: ['userId'],
     where: {
-      domain: "go.gov.my",
+      domain: 'go.gov.my',
     },
     _count: {
       userId: true,
     },
     orderBy: {
       _count: {
-        userId: "desc",
+        userId: 'desc',
       },
     },
     take: 100,

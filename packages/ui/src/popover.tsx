@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import * as PopoverPrimitive from "@radix-ui/react-popover";
-import { Dispatch, ReactNode, SetStateAction } from "react";
-import { Drawer } from "vaul";
-import { useMediaQuery } from "./hooks";
+import * as PopoverPrimitive from '@radix-ui/react-popover';
+import { Dispatch, ReactNode, SetStateAction } from 'react';
+import { Drawer } from 'vaul';
+import { useMediaQuery } from './hooks';
 
 export function Popover({
   children,
   content,
-  align = "center",
+  align = 'center',
   openPopover,
   setOpenPopover,
   mobileOnly,
 }: {
   children: ReactNode;
   content: ReactNode | string;
-  align?: "center" | "start" | "end";
+  align?: 'center' | 'start' | 'end';
   openPopover: boolean;
   setOpenPopover: Dispatch<SetStateAction<boolean>>;
   mobileOnly?: boolean;

@@ -1,18 +1,18 @@
-import { redis } from "@/lib/redis";
+import { redis } from '@/lib/redis';
 import {
   APP_NAME,
   fetchWithTimeout,
   getDomainWithoutWWW,
   isValidUrl,
-} from "@dub/utils";
-import { waitUntil } from "@vercel/functions";
-import he from "he";
-import { parse } from "node-html-parser";
+} from '@dub/utils';
+import { waitUntil } from '@vercel/functions';
+import he from 'he';
+import { parse } from 'node-html-parser';
 
 export const getHtml = async (url: string) => {
   return await fetchWithTimeout(url, {
     headers: {
-      "User-Agent": `${APP_NAME} Bot`,
+      'User-Agent': `${APP_NAME} Bot`,
     },
   })
     .then((r) => r.text())
@@ -21,15 +21,15 @@ export const getHtml = async (url: string) => {
 
 export const getHeadChildNodes = (html) => {
   const ast = parse(html); // parse the html into AST format with node-html-parser
-  const metaTags = ast.querySelectorAll("meta").map(({ attributes }) => {
+  const metaTags = ast.querySelectorAll('meta').map(({ attributes }) => {
     const property = attributes.property || attributes.name || attributes.href;
     return {
       property,
       content: attributes.content,
     };
   });
-  const title = ast.querySelector("title")?.innerText;
-  const linkTags = ast.querySelectorAll("link").map(({ attributes }) => {
+  const title = ast.querySelector('title')?.innerText;
+  const linkTags = ast.querySelectorAll('link').map(({ attributes }) => {
     const { rel, href } = attributes;
     return {
       rel,
@@ -57,7 +57,7 @@ export const getMetaTags = async (url: string) => {
   if (!html) {
     return {
       title: url,
-      description: "No description",
+      description: 'No description',
       image: null,
     };
   }
@@ -81,25 +81,25 @@ export const getMetaTags = async (url: string) => {
     rel && !object[rel] && (object[rel] = href);
   }
 
-  const title = object["og:title"] || object["twitter:title"] || titleTag;
+  const title = object['og:title'] || object['twitter:title'] || titleTag;
 
   const description =
-    object["description"] ||
-    object["og:description"] ||
-    object["twitter:description"];
+    object['description'] ||
+    object['og:description'] ||
+    object['twitter:description'];
 
   const image =
-    object["og:image"] ||
-    object["twitter:image"] ||
-    object["image_src"] ||
-    object["icon"] ||
-    object["shortcut icon"];
+    object['og:image'] ||
+    object['twitter:image'] ||
+    object['image_src'] ||
+    object['icon'] ||
+    object['shortcut icon'];
 
   waitUntil(recordMetatags(url, title && description && image ? false : true));
 
   return {
     title: title || url,
-    description: description || "No description",
+    description: description || 'No description',
     image: getRelativeUrl(url, image),
   };
 };
@@ -109,13 +109,13 @@ export const getMetaTags = async (url: string) => {
  * If there's an error, it will be logged to a separate redis list for debugging
  **/
 async function recordMetatags(url: string, error: boolean) {
-  if (url === "https://github.com/dubinc/dub") {
+  if (url === 'https://github.com/dubinc/dub') {
     // don't log metatag generation for default URL
     return null;
   }
 
   if (error) {
-    return await redis.zincrby("metatags-error-zset", 1, url);
+    return await redis.zincrby('metatags-error-zset', 1, url);
   }
 
   const domain = getDomainWithoutWWW(url);
@@ -125,5 +125,5 @@ async function recordMetatags(url: string, error: boolean) {
     );
   }
 
-  await redis.zincrby("metatags-zset", 1, domain);
+  await redis.zincrby('metatags-zset', 1, domain);
 }

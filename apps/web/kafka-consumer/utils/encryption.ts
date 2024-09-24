@@ -1,4 +1,4 @@
-import { DecryptCommand, EncryptCommand, KMSClient } from "@aws-sdk/client-kms";
+import { DecryptCommand, EncryptCommand, KMSClient } from '@aws-sdk/client-kms';
 
 const kms = new KMSClient();
 
@@ -31,9 +31,9 @@ export async function encryptOutboxSecrets(
     }),
   );
   if (!result.CiphertextBlob) {
-    throw Error("AWS KMS did not return encrypt result");
+    throw Error('AWS KMS did not return encrypt result');
   }
-  return Buffer.from(result.CiphertextBlob).toString("base64");
+  return Buffer.from(result.CiphertextBlob).toString('base64');
 }
 
 async function decryptOutboxSecrets(
@@ -42,13 +42,13 @@ async function decryptOutboxSecrets(
   const result = await kms.send(
     new DecryptCommand({
       KeyId: ENCRYPTION_KEY_ID,
-      CiphertextBlob: Buffer.from(ciphertext, "base64"),
+      CiphertextBlob: Buffer.from(ciphertext, 'base64'),
     }),
   );
   if (!result.Plaintext) {
-    throw Error("AWS KMS did not return decrypt result");
+    throw Error('AWS KMS did not return decrypt result');
   }
-  return JSON.parse(Buffer.from(result.Plaintext).toString("utf8"));
+  return JSON.parse(Buffer.from(result.Plaintext).toString('utf8'));
 }
 
 function interpolateSecrets(

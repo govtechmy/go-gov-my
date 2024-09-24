@@ -1,6 +1,6 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { LinkProps, UserProps } from "@/lib/types";
-import { Avatar, BlurImage, CopyButton } from "@dub/ui";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { LinkProps, UserProps } from '@/lib/types';
+import { Avatar, BlurImage, CopyButton } from '@dub/ui';
 import {
   GOOGLE_FAVICON_URL,
   cn,
@@ -8,8 +8,8 @@ import {
   linkConstructor,
   timeAgo,
   truncate,
-} from "@dub/utils";
-import { Archive, Globe } from "lucide-react";
+} from '@dub/utils';
+import { Archive, Globe } from 'lucide-react';
 
 export default function LinkPreviewTooltip({
   data,
@@ -49,9 +49,9 @@ export default function LinkPreviewTooltip({
           <div className="flex max-w-fit items-center space-x-2">
             <a
               className={cn(
-                "w-full max-w-[140px] truncate text-sm font-semibold text-blue-800 sm:max-w-[300px] sm:text-base md:max-w-[360px] xl:max-w-[500px]",
+                'w-full max-w-[140px] truncate text-sm font-semibold text-blue-800 sm:max-w-[300px] sm:text-base md:max-w-[360px] xl:max-w-[500px]',
                 {
-                  "text-gray-500": archived,
+                  'text-gray-500': archived,
                 },
               )}
               href={linkConstructor({ domain: data.domain, key: data.key })}

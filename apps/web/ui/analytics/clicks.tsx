@@ -1,31 +1,31 @@
-import { VALID_ANALYTICS_FILTERS } from "@/lib/analytics/constants";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useTags from "@/lib/swr/use-tags";
-import { Chart } from "@/ui/shared/icons";
-import { CountingNumbers, NumberTooltip, useRouterStuff } from "@dub/ui";
-import { COUNTRIES, capitalize, linkConstructor, truncate } from "@dub/utils";
-import { X } from "lucide-react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useContext } from "react";
-import { AnalyticsContext } from ".";
-import ClicksChart from "./clicks-chart";
+import { VALID_ANALYTICS_FILTERS } from '@/lib/analytics/constants';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useTags from '@/lib/swr/use-tags';
+import { Chart } from '@/ui/shared/icons';
+import { CountingNumbers, NumberTooltip, useRouterStuff } from '@dub/ui';
+import { COUNTRIES, capitalize, linkConstructor, truncate } from '@dub/utils';
+import { X } from 'lucide-react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { useContext } from 'react';
+import { AnalyticsContext } from '.';
+import ClicksChart from './clicks-chart';
 
 export default function Clicks() {
   const { totalClicks } = useContext(AnalyticsContext);
   const searchParams = useSearchParams();
-  const domain = searchParams.get("domain");
-  const key = searchParams.get("key");
+  const domain = searchParams.get('domain');
+  const key = searchParams.get('key');
   const { queryParams } = useRouterStuff();
   const { messages, locale } = useIntlClientHook();
   const message = messages?.analytics;
 
   // Tag related
-  const tagId = searchParams.get("tagId");
+  const tagId = searchParams.get('tagId');
   const { tags } = useTags();
 
   // Root domain related
-  const root = searchParams.get("root");
+  const root = searchParams.get('root');
 
   return (
     <div className="max-w-4xl overflow-hidden border border-gray-200 bg-white p-5 sm:rounded-lg sm:border-gray-100 sm:p-10 sm:shadow-lg">
@@ -56,7 +56,7 @@ export default function Clicks() {
               <Link
                 href={
                   queryParams({
-                    del: ["domain", "key"],
+                    del: ['domain', 'key'],
                     getNewPath: true,
                   }) as string
                 }
@@ -72,7 +72,7 @@ export default function Clicks() {
               <Link
                 href={
                   queryParams({
-                    del: "domain",
+                    del: 'domain',
                     getNewPath: true,
                   }) as string
                 }
@@ -87,7 +87,7 @@ export default function Clicks() {
             <Link
               href={
                 queryParams({
-                  del: "tagId",
+                  del: 'tagId',
                   getNewPath: true,
                 }) as string
               }
@@ -104,21 +104,21 @@ export default function Clicks() {
             <Link
               href={
                 queryParams({
-                  del: "root",
+                  del: 'root',
                   getNewPath: true,
                 }) as string
               }
               className="flex items-center space-x-1 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1 text-sm text-gray-500 transition-all hover:bg-gray-100"
             >
               <strong className="text-gray-800">
-                {root === "true" ? "Domains" : "Links"}
+                {root === 'true' ? 'Domains' : 'Links'}
               </strong>
               <p>{message?.only}</p>
               <X className="h-4 w-4" />
             </Link>
           )}
           {VALID_ANALYTICS_FILTERS.map((filter) => {
-            if (filter === "tagId" || filter === "qr" || filter === "root")
+            if (filter === 'tagId' || filter === 'qr' || filter === 'root')
               return null;
             const value = searchParams?.get(filter);
             if (!value) return null;
@@ -135,7 +135,7 @@ export default function Clicks() {
               >
                 <p>{capitalize(filter)}</p>
                 <strong className="text-gray-800">
-                  {filter === "country"
+                  {filter === 'country'
                     ? COUNTRIES[value]
                     : truncate(value, 24)}
                 </strong>

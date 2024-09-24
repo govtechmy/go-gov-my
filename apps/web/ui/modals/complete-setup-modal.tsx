@@ -1,11 +1,11 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useLinksCount from "@/lib/swr/use-links-count";
-import useUsers from "@/lib/swr/use-users";
-import { ModalContext } from "@/ui/modals/provider";
-import { CheckCircleFill } from "@/ui/shared/icons";
-import { ExpandingArrow, Logo, Modal } from "@dub/ui";
-import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useLinksCount from '@/lib/swr/use-links-count';
+import useUsers from '@/lib/swr/use-users';
+import { ModalContext } from '@/ui/modals/provider';
+import { CheckCircleFill } from '@/ui/shared/icons';
+import { ExpandingArrow, Logo, Modal } from '@dub/ui';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import {
   Dispatch,
   SetStateAction,
@@ -13,7 +13,7 @@ import {
   useContext,
   useMemo,
   useState,
-} from "react";
+} from 'react';
 
 function CompleteSetupModal({
   showCompleteSetupModal,
@@ -64,7 +64,7 @@ function CompleteSetupModal({
                 <div className="flex items-center space-x-3">
                   <CheckCircleFill
                     className={`h-5 w-5 ${
-                      checked ? "text-green-500" : "text-gray-400"
+                      checked ? 'text-green-500' : 'text-gray-400'
                     }`}
                   />
                   <p className="text-sm">{display}</p>
@@ -80,7 +80,7 @@ function CompleteSetupModal({
                 href={cta}
                 onClick={() => {
                   setShowCompleteSetupModal(false);
-                  display === "Create or import your links" &&
+                  display === 'Create or import your links' &&
                     setShowAddEditLinkModal(true);
                 }}
               >

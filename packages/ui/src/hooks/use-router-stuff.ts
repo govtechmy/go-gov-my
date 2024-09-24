@@ -1,4 +1,4 @@
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 export function useRouterStuff() {
   const pathname = usePathname();
@@ -20,7 +20,7 @@ export function useRouterStuff() {
       opts.ignore.forEach((k) => newParams.delete(k));
     }
     const queryString = newParams.toString();
-    return queryString.length > 0 ? `?${queryString}` : "";
+    return queryString.length > 0 ? `?${queryString}` : '';
   };
 
   const queryParams = ({
@@ -28,7 +28,7 @@ export function useRouterStuff() {
     del,
     replace,
     getNewPath,
-    arrayDelimiter = ",",
+    arrayDelimiter = ',',
   }: {
     set?: Record<string, string | string[]>;
     del?: string | string[];
@@ -51,7 +51,7 @@ export function useRouterStuff() {
     }
     const queryString = newParams.toString();
     const newPath = `${pathname}${
-      queryString.length > 0 ? `?${queryString}` : ""
+      queryString.length > 0 ? `?${queryString}` : ''
     }`;
     if (getNewPath) return newPath;
     if (replace) {

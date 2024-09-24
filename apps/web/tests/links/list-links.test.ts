@@ -1,24 +1,24 @@
-import { Link } from "@prisma/client";
-import { expect, test } from "vitest";
-import { IntegrationHarness } from "../utils/integration";
-import { link } from "../utils/resource";
+import { Link } from '@prisma/client';
+import { expect, test } from 'vitest';
+import { IntegrationHarness } from '../utils/integration';
+import { link } from '../utils/resource';
 
 const { domain, url } = link;
 
-test("GET /links", async (ctx) => {
+test('GET /links', async (ctx) => {
   const h = new IntegrationHarness(ctx);
   const { workspace, http, user } = await h.init();
   const { workspaceId } = workspace;
-  const projectId = workspaceId.replace("ws_", "");
+  const projectId = workspaceId.replace('ws_', '');
 
   const { data: firstLink } = await http.post<Link>({
-    path: "/links",
+    path: '/links',
     query: { workspaceId },
     body: { url, domain },
   });
 
   const { data: links, status } = await http.get<Link[]>({
-    path: "/links",
+    path: '/links',
     query: { workspaceId },
   });
 

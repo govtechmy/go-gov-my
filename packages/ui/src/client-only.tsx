@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { ReactNode, useEffect, useState } from "react";
+import { AnimatePresence, motion } from 'framer-motion';
+import { ReactNode, useEffect, useState } from 'react';
 
 export const ClientOnly = ({
   children,
@@ -16,7 +16,7 @@ export const ClientOnly = ({
     setClientReady(true);
   }, []);
 
-  const Comp = fadeInDuration ? motion.div : "div";
+  const Comp = fadeInDuration ? motion.div : 'div';
 
   return (
     <AnimatePresence>

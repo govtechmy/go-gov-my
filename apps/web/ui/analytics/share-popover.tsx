@@ -1,10 +1,10 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { Copy, IconMenu, Popover, Tick, useOptimisticUpdate } from "@dub/ui";
-import { linkConstructor } from "@dub/utils";
-import { Share2 } from "lucide-react";
-import { useContext, useState } from "react";
-import { toast } from "sonner";
-import { AnalyticsContext } from ".";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { Copy, IconMenu, Popover, Tick, useOptimisticUpdate } from '@dub/ui';
+import { linkConstructor } from '@dub/utils';
+import { Share2 } from 'lucide-react';
+import { useContext, useState } from 'react';
+import { toast } from 'sonner';
+import { AnalyticsContext } from '.';
 
 export default function SharePopover() {
   const [openSharePopover, setopenSharePopoverPopover] = useState(false);
@@ -30,9 +30,9 @@ export default function SharePopover() {
 
   const handleUpdate = async (checked: boolean) => {
     const res = await fetch(`/api/analytics?${queryString}`, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         publicStats: checked,
@@ -95,7 +95,7 @@ export default function SharePopover() {
                     `https://${domain}/stats/${encodeURIComponent(key)}`,
                   );
                   setCopied(true);
-                  toast.success("Copied to clipboard");
+                  toast.success('Copied to clipboard');
                   setTimeout(() => setCopied(false), 3000);
                 }}
               >

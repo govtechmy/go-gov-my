@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const OutboxSchema = z.object({
   id: z.string().min(1),

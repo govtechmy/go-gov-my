@@ -1,6 +1,6 @@
-import { prisma } from "@/lib/prisma";
-import "dotenv-flow/config";
-import * as fs from "fs";
+import { prisma } from '@/lib/prisma';
+import 'dotenv-flow/config';
+import * as fs from 'fs';
 
 const linkCriteria = {
   select: {
@@ -34,10 +34,10 @@ async function main() {
         id: undefined,
         projectId: undefined,
         link_id: obj.id,
-        url: obj.url || "",
-        project_id: obj.projectId || "",
+        url: obj.url || '',
+        project_id: obj.projectId || '',
         deleted: 0,
-      }) + "\n",
+      }) + '\n',
     );
   });
 

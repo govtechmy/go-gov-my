@@ -1,22 +1,22 @@
-import { getLinkViaEdge } from "@/lib/userinfos";
+import { getLinkViaEdge } from '@/lib/userinfos';
 import {
   Background,
   Footer,
   LinkPreview,
   LinkPreviewPlaceholder,
   Nav,
-} from "@dub/ui";
+} from '@dub/ui';
 import {
   GOOGLE_FAVICON_URL,
   constructMetadata,
   getApexDomain,
-} from "@dub/utils";
-import { unescape } from "html-escaper";
-import { notFound } from "next/navigation";
-import { Suspense } from "react";
-import LinkInspectorCard from "./card";
+} from '@dub/utils';
+import { unescape } from 'html-escaper';
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
+import LinkInspectorCard from './card';
 
-export const runtime = "edge";
+export const runtime = 'edge';
 
 export async function generateMetadata({
   params,
@@ -35,8 +35,8 @@ export async function generateMetadata({
   const apexDomain = getApexDomain(data.url);
 
   return constructMetadata({
-    title: unescape(data.title || ""),
-    description: unescape(data.description || ""),
+    title: unescape(data.title || ''),
+    description: unescape(data.description || ''),
     image: data.image,
     icons: `${GOOGLE_FAVICON_URL}${apexDomain}`,
     noIndex: true,

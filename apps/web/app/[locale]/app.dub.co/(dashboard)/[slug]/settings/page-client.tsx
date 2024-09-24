@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useWorkspace from "@/lib/swr/use-workspace";
-import DeleteWorkspace from "@/ui/workspaces/delete-workspace";
-import UploadLogo from "@/ui/workspaces/upload-logo";
-import WorkspaceId from "@/ui/workspaces/workspace-id";
-import { Form } from "@dub/ui";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { mutate } from "swr";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useWorkspace from '@/lib/swr/use-workspace';
+import DeleteWorkspace from '@/ui/workspaces/delete-workspace';
+import UploadLogo from '@/ui/workspaces/upload-logo';
+import WorkspaceId from '@/ui/workspaces/workspace-id';
+import { Form } from '@dub/ui';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
 
 export default function WorkspaceSettingsClient() {
   const router = useRouter();
@@ -22,7 +22,7 @@ export default function WorkspaceSettingsClient() {
         title={message?.workspace_name}
         description={`${message?.workspace_desc} ${process.env.NEXT_PUBLIC_APP_NAME}.`}
         inputAttrs={{
-          name: "name",
+          name: 'name',
           defaultValue: name,
           placeholder: message?.my_workspace,
           maxLength: 32,
@@ -34,15 +34,15 @@ export default function WorkspaceSettingsClient() {
         })}
         handleSubmit={(updateData) =>
           fetch(`/api/workspaces/${id}`, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify(updateData),
           }).then(async (res) => {
             if (res.status === 200) {
               await Promise.all([
-                mutate("/api/workspaces"),
+                mutate('/api/workspaces'),
                 mutate(`/api/workspaces/${id}`),
               ]);
               toast.success(message?.success_update);
@@ -57,10 +57,10 @@ export default function WorkspaceSettingsClient() {
         title={message?.workspace_slug}
         description={`${message?.slug_desc} ${process.env.NEXT_PUBLIC_APP_NAME}.`}
         inputAttrs={{
-          name: "slug",
+          name: 'slug',
           defaultValue: slug,
-          placeholder: "my-workspace",
-          pattern: "^[a-z0-9-]+$",
+          placeholder: 'my-workspace',
+          pattern: '^[a-z0-9-]+$',
           maxLength: 48,
         }}
         helpText={message?.help_text}
@@ -70,15 +70,15 @@ export default function WorkspaceSettingsClient() {
         })}
         handleSubmit={(data) =>
           fetch(`/api/workspaces/${id}`, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
           }).then(async (res) => {
             if (res.status === 200) {
               const { slug: newSlug } = await res.json();
-              await mutate("/api/workspaces");
+              await mutate('/api/workspaces');
               router.push(`/${locale}/${newSlug}/settings`);
               toast.success(message?.success_update_slug);
             } else {

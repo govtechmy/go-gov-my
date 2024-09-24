@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { WorkspaceProps } from "@/lib/types";
-import { BlurImage, NumberTooltip } from "@dub/ui";
-import { DICEBEAR_AVATAR_URL, fetcher, nFormatter } from "@dub/utils";
-import { BarChart2, Link2 } from "lucide-react";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import useSWR from "swr";
-import PlanBadge from "./plan-badge";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { WorkspaceProps } from '@/lib/types';
+import { BlurImage, NumberTooltip } from '@dub/ui';
+import { DICEBEAR_AVATAR_URL, fetcher, nFormatter } from '@dub/utils';
+import { BarChart2, Link2 } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import useSWR from 'swr';
+import PlanBadge from './plan-badge';
 
 export default function WorkspaceCard({
   id,
@@ -29,8 +29,8 @@ export default function WorkspaceCard({
   const workspace_msg = messages?.workspace;
 
   const [workspaceOwnership, setWorkspaceOwnership] = useState<
-    "member" | "owner" | "pemilik" | "ahli"
-  >(locale === "en-GB" ? "member" : "ahli");
+    'member' | 'owner' | 'pemilik' | 'ahli'
+  >(locale === 'en-GB' ? 'member' : 'ahli');
 
   useEffect(() => {
     const fetchOwnership = async () => {
@@ -41,21 +41,21 @@ export default function WorkspaceCard({
             const data = await response.json();
             if (data && data.projectUsers && data.projectUsers.length > 0) {
               const role = data.projectUsers[0].role; // Assuming you want the role of the first entry
-              if (locale === "ms-MY") {
-                role === "owner"
-                  ? setWorkspaceOwnership("pemilik")
-                  : setWorkspaceOwnership("ahli");
+              if (locale === 'ms-MY') {
+                role === 'owner'
+                  ? setWorkspaceOwnership('pemilik')
+                  : setWorkspaceOwnership('ahli');
               } else {
                 setWorkspaceOwnership(role);
               }
             } else {
-              console.error("Role not found in the response");
+              console.error('Role not found in the response');
             }
           } else {
-            console.error("Failed to fetch workspace ownership data");
+            console.error('Failed to fetch workspace ownership data');
           }
         } catch (error) {
-          console.error("Error fetching workspace ownership data:", error);
+          console.error('Error fetching workspace ownership data:', error);
         }
       }
     };
@@ -93,7 +93,7 @@ export default function WorkspaceCard({
             {count || count === 0 ? (
               <NumberTooltip value={count} unit="links">
                 <h2 className="whitespace-nowrap text-sm">
-                  {nFormatter(count)}{" "}
+                  {nFormatter(count)}{' '}
                   {count != 1 ? workspace_msg?.links : workspace_msg?.link}
                 </h2>
               </NumberTooltip>
@@ -105,7 +105,7 @@ export default function WorkspaceCard({
             <BarChart2 className="h-4 w-4" />
             <NumberTooltip value={usage}>
               <h2 className="whitespace-nowrap text-sm">
-                {nFormatter(usage)}{" "}
+                {nFormatter(usage)}{' '}
                 {usage != 1 ? workspace_msg?.clicks : workspace_msg?.click}
               </h2>
             </NumberTooltip>

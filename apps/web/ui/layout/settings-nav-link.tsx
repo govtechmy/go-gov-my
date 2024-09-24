@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { cn } from "@dub/utils";
-import Link from "next/link";
-import { useParams, useSelectedLayoutSegment } from "next/navigation";
-import { ReactNode } from "react";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { cn } from '@dub/utils';
+import Link from 'next/link';
+import { useParams, useSelectedLayoutSegment } from 'next/navigation';
+import { ReactNode } from 'react';
 
 export default function NavLink({
   segment,
@@ -20,7 +20,7 @@ export default function NavLink({
   const { locale } = useIntlClientHook();
 
   const href = `${slug ? `/${locale}/${slug}` : `/${locale}`}/settings${
-    segment ? `/${segment}` : ""
+    segment ? `/${segment}` : ''
   }`;
 
   return (
@@ -28,9 +28,9 @@ export default function NavLink({
       key={href}
       href={href}
       className={cn(
-        "rounded-md p-2.5 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200",
+        'rounded-md p-2.5 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200',
         {
-          "font-semibold text-black": selectedLayoutSegment === segment,
+          'font-semibold text-black': selectedLayoutSegment === segment,
         },
       )}
     >

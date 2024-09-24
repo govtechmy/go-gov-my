@@ -1,4 +1,4 @@
-import { APP_NAME, DUB_LOGO } from "@dub/utils";
+import { APP_NAME, DUB_LOGO } from '@dub/utils';
 import {
   Body,
   Container,
@@ -11,10 +11,10 @@ import {
   Section,
   Tailwind,
   Text,
-} from "@react-email/components";
-import { Fragment } from "react";
-import Footer from "./components/footer";
-import { PREVIEW_PROPS } from "./preview-props";
+} from '@react-email/components';
+import { Fragment } from 'react';
+import Footer from './components/footer';
+import { PREVIEW_PROPS } from './preview-props';
 
 type Props = {
   email: string;

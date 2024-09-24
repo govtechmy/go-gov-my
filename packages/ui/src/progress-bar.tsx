@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { cn } from "@dub/utils";
-import { motion } from "framer-motion";
+import { cn } from '@dub/utils';
+import { motion } from 'framer-motion';
 
 export function ProgressBar({
   value = 0,
@@ -15,18 +15,18 @@ export function ProgressBar({
   return (
     <div
       className={cn(
-        "h-3 w-full overflow-hidden rounded-full bg-gray-200",
+        'h-3 w-full overflow-hidden rounded-full bg-gray-200',
         className,
       )}
     >
       <motion.div
         initial={{ width: 0 }}
         animate={{
-          width: value && max ? (value / max) * 100 + "%" : "0%",
+          width: value && max ? (value / max) * 100 + '%' : '0%',
         }}
-        transition={{ duration: 0.5, type: "spring", delay: 0.2 }}
+        transition={{ duration: 0.5, type: 'spring', delay: 0.2 }}
         className={`${
-          value && max && value > max ? "bg-red-500" : "bg-blue-500"
+          value && max && value > max ? 'bg-red-500' : 'bg-blue-500'
         } h-full`}
       />
     </div>

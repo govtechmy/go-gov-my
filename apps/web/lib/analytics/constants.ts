@@ -1,29 +1,29 @@
-export const intervals = ["7d", "30d", "90d", "ytd", "1y", "all"] as const;
+export const intervals = ['7d', '30d', '90d', 'ytd', '1y', 'all'] as const;
 
 export const INTERVAL_DISPLAYS = [
   {
-    display: "Last 7 days",
-    value: "7d",
+    display: 'Last 7 days',
+    value: '7d',
   },
   {
-    display: "Last 30 days",
-    value: "30d",
+    display: 'Last 30 days',
+    value: '30d',
   },
   {
-    display: "Last 3 months",
-    value: "90d",
+    display: 'Last 3 months',
+    value: '90d',
   },
   {
-    display: "Year to Date",
-    value: "ytd",
+    display: 'Year to Date',
+    value: 'ytd',
   },
   {
-    display: "Last 12 months",
-    value: "1y",
+    display: 'Last 12 months',
+    value: '1y',
   },
   {
-    display: "All Time",
-    value: "all",
+    display: 'All Time',
+    value: 'all',
   },
 ];
 
@@ -31,81 +31,81 @@ export const INTERVAL_DATA: Record<
   string,
   {
     startDate: Date;
-    granularity: "minute" | "hour" | "day" | "month";
+    granularity: 'minute' | 'hour' | 'day' | 'month';
   }
 > = {
-  "1h": {
+  '1h': {
     startDate: new Date(Date.now() - 3600000),
-    granularity: "minute",
+    granularity: 'minute',
   },
-  "24h": {
+  '24h': {
     startDate: new Date(Date.now() - 86400000),
-    granularity: "hour",
+    granularity: 'hour',
   },
-  "7d": {
+  '7d': {
     startDate: new Date(Date.now() - 604800000),
-    granularity: "day",
+    granularity: 'day',
   },
-  "30d": {
+  '30d': {
     startDate: new Date(Date.now() - 2592000000),
-    granularity: "day",
+    granularity: 'day',
   },
-  "90d": {
+  '90d': {
     startDate: new Date(Date.now() - 7776000000),
-    granularity: "day",
+    granularity: 'day',
   },
   ytd: {
     startDate: new Date(new Date().getFullYear(), 0, 1),
-    granularity: "month",
+    granularity: 'month',
   },
-  "1y": {
+  '1y': {
     startDate: new Date(Date.now() - 31556952000),
-    granularity: "month",
+    granularity: 'month',
   },
   all: {
     // Dub.co founding date
-    startDate: new Date("2022-09-22"),
-    granularity: "month",
+    startDate: new Date('2022-09-22'),
+    granularity: 'month',
   },
 };
 
 export const VALID_ANALYTICS_ENDPOINTS = [
-  "count",
-  "timeseries",
-  "country", // backwards compatibility
-  "countries",
-  "city", // backwards compatibility
-  "cities",
-  "device", // backwards compatibility
-  "devices",
-  "browser", // backwards compatibility
-  "browsers",
-  "os",
-  "referer", // backwards compatibility
-  "referers",
-  "top_links",
-  "top_urls",
-  "asn",
+  'count',
+  'timeseries',
+  'country', // backwards compatibility
+  'countries',
+  'city', // backwards compatibility
+  'cities',
+  'device', // backwards compatibility
+  'devices',
+  'browser', // backwards compatibility
+  'browsers',
+  'os',
+  'referer', // backwards compatibility
+  'referers',
+  'top_links',
+  'top_urls',
+  'asn',
 ] as const;
 
 export const DEPRECATED_ANALYTICS_ENDPOINTS = [
-  "country",
-  "city",
-  "device",
-  "browser",
-  "referer",
+  'country',
+  'city',
+  'device',
+  'browser',
+  'referer',
 ];
 
 export const VALID_ANALYTICS_FILTERS = [
-  "country",
-  "city",
-  "url",
-  "alias",
-  "device",
-  "browser",
-  "os",
-  "referer",
-  "tagId",
-  "qr",
-  "root",
+  'country',
+  'city',
+  'url',
+  'alias',
+  'device',
+  'browser',
+  'os',
+  'referer',
+  'tagId',
+  'qr',
+  'root',
 ];

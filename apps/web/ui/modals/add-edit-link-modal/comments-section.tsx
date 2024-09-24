@@ -1,10 +1,10 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { LinkProps } from "@/lib/types";
-import { InfoTooltip, SimpleTooltipContent, Switch } from "@dub/ui";
-import { FADE_IN_ANIMATION_SETTINGS } from "@dub/utils";
-import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import TextareaAutosize from "react-textarea-autosize";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { LinkProps } from '@/lib/types';
+import { InfoTooltip, SimpleTooltipContent, Switch } from '@dub/ui';
+import { FADE_IN_ANIMATION_SETTINGS } from '@dub/utils';
+import { motion } from 'framer-motion';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
 
 export default function CommentsSection({
   props,
@@ -56,7 +56,7 @@ export default function CommentsSection({
             minRows={3}
             className="block w-full rounded-md border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm"
             placeholder={message?.add_comment}
-            value={comments || ""}
+            value={comments || ''}
             onChange={(e) => {
               setData({ ...data, comments: e.target.value });
             }}

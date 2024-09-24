@@ -1,9 +1,9 @@
-import { nonHooki18nFunc } from "@/lib/middleware/utils/useI18n";
-import { getLink } from "@/lib/userinfos";
-import Analytics from "@/ui/analytics";
-import { APP_DOMAIN, constructMetadata, SHORT_DOMAIN } from "@dub/utils";
-import { notFound } from "next/navigation";
-import { Suspense } from "react";
+import { nonHooki18nFunc } from '@/lib/middleware/utils/useI18n';
+import { getLink } from '@/lib/userinfos';
+import Analytics from '@/ui/analytics';
+import { APP_DOMAIN, constructMetadata, SHORT_DOMAIN } from '@dub/utils';
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 export async function generateMetadata({
   params,

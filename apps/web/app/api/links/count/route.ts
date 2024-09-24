@@ -1,7 +1,7 @@
-import { getLinksCount } from "@/lib/api/links";
-import { withWorkspace } from "@/lib/auth";
-import { getLinksCountQuerySchema } from "@/lib/zod/schemas/links";
-import { NextResponse } from "next/server";
+import { getLinksCount } from '@/lib/api/links';
+import { withWorkspace } from '@/lib/auth';
+import { getLinksCountQuerySchema } from '@/lib/zod/schemas/links';
+import { NextResponse } from 'next/server';
 
 // GET /api/links/count – get the number of links for a workspace
 export const GET = withWorkspace(

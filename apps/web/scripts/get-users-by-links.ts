@@ -1,20 +1,20 @@
-import { prisma } from "@/lib/prisma";
-import "dotenv-flow/config";
+import { prisma } from '@/lib/prisma';
+import 'dotenv-flow/config';
 
 async function main() {
   const users = await prisma.link.groupBy({
-    by: ["userId"],
+    by: ['userId'],
     _count: {
       id: true,
     },
     where: {
       domain: {
-        in: ["dub.sh", "chatg.pt", "spti.fi", "amzn.id"],
+        in: ['dub.sh', 'chatg.pt', 'spti.fi', 'amzn.id'],
       },
     },
     orderBy: {
       _count: {
-        id: "desc",
+        id: 'desc',
       },
     },
     take: 100,

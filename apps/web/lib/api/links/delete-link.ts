@@ -1,19 +1,19 @@
-import { processDTOLink } from "@/lib/dto/link.dto";
-import { prisma } from "@/lib/prisma";
-import { redis } from "@/lib/redis";
-import { storage } from "@/lib/storage";
-import { trace } from "@opentelemetry/api";
-import { Prisma } from "@prisma/client";
-import { waitUntil } from "@vercel/functions";
-import { OUTBOX_ACTIONS } from "kafka-consumer/utils/actions";
-import generateIdempotencyKey from "./create-idempotency-key";
+import { processDTOLink } from '@/lib/dto/link.dto';
+import { prisma } from '@/lib/prisma';
+import { redis } from '@/lib/redis';
+import { storage } from '@/lib/storage';
+import { trace } from '@opentelemetry/api';
+import { Prisma } from '@prisma/client';
+import { waitUntil } from '@vercel/functions';
+import { OUTBOX_ACTIONS } from 'kafka-consumer/utils/actions';
+import generateIdempotencyKey from './create-idempotency-key';
 
 const REDIRECT_SERVER_BASE_URL =
-  process.env.REDIRECT_SERVER_URL || "http://localhost:3002";
+  process.env.REDIRECT_SERVER_URL || 'http://localhost:3002';
 
 export async function deleteLink(linkId: string) {
-  const tracer = trace.getTracer("default");
-  const span = tracer.startSpan("recordLinks");
+  const tracer = trace.getTracer('default');
+  const span = tracer.startSpan('recordLinks');
   const link = await prisma.link.delete({
     where: {
       id: linkId,
@@ -51,7 +51,7 @@ export async function deleteLink(linkId: string) {
         prisma.webhookOutbox.create({
           data: {
             action: OUTBOX_ACTIONS.DELETE_LINK,
-            host: REDIRECT_SERVER_BASE_URL + "/links/" + link.id,
+            host: REDIRECT_SERVER_BASE_URL + '/links/' + link.id,
             payload: payload as unknown as Prisma.InputJsonValue,
             headers: headersJSON,
             partitionKey: payload.slug,
@@ -62,7 +62,7 @@ export async function deleteLink(linkId: string) {
     );
 
     // Log results to OpenTelemetry
-    span.addEvent("recordLinks", {
+    span.addEvent('recordLinks', {
       link_id: link.id,
       domain: link.domain,
       key: link.key,

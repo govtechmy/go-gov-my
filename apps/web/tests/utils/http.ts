@@ -21,22 +21,22 @@ export class HttpClient {
   public readonly headers: Record<string, string>;
 
   public constructor(config: HttpClientConfig) {
-    this.baseUrl = config.baseUrl.replace(/\/$/, "");
+    this.baseUrl = config.baseUrl.replace(/\/$/, '');
     this.headers = config.headers ?? {};
   }
 
   private async request<TResponse>(
-    method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
+    method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
     req: Request,
   ): Promise<Response<TResponse>> {
     const headers = {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       ...this.headers,
       ...req.headers,
     };
 
     const params = new URLSearchParams(req.query).toString();
-    const url = `${this.baseUrl}${req.path}${params ? `?${params}` : ""}`;
+    const url = `${this.baseUrl}${req.path}${params ? `?${params}` : ''}`;
 
     const response = await fetch(url, {
       method,
@@ -52,22 +52,22 @@ export class HttpClient {
   }
 
   public async get<TResponse>(req: Request) {
-    return await this.request<TResponse>("GET", req);
+    return await this.request<TResponse>('GET', req);
   }
 
   public async post<TResponse>(req: Request) {
-    return await this.request<TResponse>("POST", req);
+    return await this.request<TResponse>('POST', req);
   }
 
   public async patch<TResponse>(req: Request) {
-    return await this.request<TResponse>("PATCH", req);
+    return await this.request<TResponse>('PATCH', req);
   }
 
   public async put<TResponse>(req: Request) {
-    return await this.request<TResponse>("PUT", req);
+    return await this.request<TResponse>('PUT', req);
   }
 
   public async delete<TResponse>(req: Request) {
-    return await this.request<TResponse>("DELETE", req);
+    return await this.request<TResponse>('DELETE', req);
   }
 }

@@ -1,4 +1,4 @@
-import { punycode } from ".";
+import { punycode } from '.';
 
 export function linkConstructor({
   domain,
@@ -12,7 +12,7 @@ export function linkConstructor({
   searchParams?: Record<string, string>;
 }) {
   if (!domain) {
-    return "";
+    return '';
   }
 
   let url = `https://${punycode(domain)}/${punycode(key)}`;
@@ -25,5 +25,5 @@ export function linkConstructor({
     url += `?${search.toString()}`;
   }
 
-  return pretty ? url.replace(/^https?:\/\//, "") : url;
+  return pretty ? url.replace(/^https?:\/\//, '') : url;
 }

@@ -1,5 +1,5 @@
-import { LinkProps, RedisLinkProps } from "@/lib/types";
-import { Redis } from "ioredis";
+import { LinkProps, RedisLinkProps } from '@/lib/types';
+import { Redis } from 'ioredis';
 
 export const redis = new Redis(process.env.REDIS_URL!, {
   lazyConnect: true,

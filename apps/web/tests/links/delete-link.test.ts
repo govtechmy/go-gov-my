@@ -1,17 +1,17 @@
-import { Link } from "@prisma/client";
-import { expect, test } from "vitest";
-import { IntegrationHarness } from "../utils/integration";
-import { link } from "../utils/resource";
+import { Link } from '@prisma/client';
+import { expect, test } from 'vitest';
+import { IntegrationHarness } from '../utils/integration';
+import { link } from '../utils/resource';
 
 const { domain, url } = link;
 
-test("DELETE /links/{linkId}", async (ctx) => {
+test('DELETE /links/{linkId}', async (ctx) => {
   const h = new IntegrationHarness(ctx);
   const { workspace, http } = await h.init();
   const { workspaceId } = workspace;
 
   const { data: link } = await http.post<Link>({
-    path: "/links",
+    path: '/links',
     query: { workspaceId },
     body: {
       url,

@@ -1,16 +1,16 @@
-import { DubApiError, handleAndReturnErrorResponse } from "@/lib/api/errors";
-import { ratelimit } from "@/lib/redis/ratelimit";
-import { getRandomKey } from "@/lib/userinfos";
-import { domainKeySchema } from "@/lib/zod/schemas/links";
-import { getSearchParams } from "@dub/utils";
-import { ipAddress } from "@vercel/edge";
-import { getToken } from "next-auth/jwt";
-import { NextRequest, NextResponse } from "next/server";
+import { DubApiError, handleAndReturnErrorResponse } from '@/lib/api/errors';
+import { ratelimit } from '@/lib/redis/ratelimit';
+import { getRandomKey } from '@/lib/userinfos';
+import { domainKeySchema } from '@/lib/zod/schemas/links';
+import { getSearchParams } from '@dub/utils';
+import { ipAddress } from '@vercel/edge';
+import { getToken } from 'next-auth/jwt';
+import { NextRequest, NextResponse } from 'next/server';
 
 // Issue #22 "[Fix APIs Not Working] Links API" (https://github.com/govtechmy/go-gov-my/issues/22)
 // - Disable edge runtime since we are self hosting our database
 // export const runtime = "edge";
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
 // GET /api/links/random – get a random available link key for a given domain
 export const GET = async (req: NextRequest) => {
@@ -30,7 +30,7 @@ export const GET = async (req: NextRequest) => {
       const { success } = await ratelimit(`links-random:${ip}`);
       if (!success) {
         throw new DubApiError({
-          code: "rate_limit_exceeded",
+          code: 'rate_limit_exceeded',
           message: "Don't DDoS me pls 🥺",
         });
       }

@@ -1,12 +1,12 @@
-import { nFormatter } from "@dub/utils";
-import { Slot } from "@radix-ui/react-slot";
+import { nFormatter } from '@dub/utils';
+import { Slot } from '@radix-ui/react-slot';
 import React, {
   ElementType,
   ForwardedRef,
   ReactNode,
   useEffect,
   useState,
-} from "react";
+} from 'react';
 
 interface CountingNumbersProps {
   asChild?: boolean;
@@ -23,7 +23,7 @@ const CountingNumbers = React.forwardRef<HTMLSpanElement, CountingNumbersProps>(
       className,
       children,
       duration = 250,
-      as: Component = "span",
+      as: Component = 'span',
       ...props
     },
     ref: ForwardedRef<any>,
@@ -32,7 +32,7 @@ const CountingNumbers = React.forwardRef<HTMLSpanElement, CountingNumbersProps>(
 
     useEffect(() => {
       if (isNaN(Number(children))) {
-        console.warn("CountingNumbers expects a numeric value as children.");
+        console.warn('CountingNumbers expects a numeric value as children.');
         return;
       }
       const target = Number(children);
@@ -64,6 +64,6 @@ const CountingNumbers = React.forwardRef<HTMLSpanElement, CountingNumbersProps>(
   },
 );
 
-CountingNumbers.displayName = "CountingNumbers";
+CountingNumbers.displayName = 'CountingNumbers';
 
 export { CountingNumbers };

@@ -1,20 +1,20 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { LinkProps } from "@/lib/types";
-import { ProBadgeTooltip } from "@/ui/shared/pro-badge-tooltip";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { LinkProps } from '@/lib/types';
+import { ProBadgeTooltip } from '@/ui/shared/pro-badge-tooltip';
 import {
   ExpandingArrow,
   InfoTooltip,
   SimpleTooltipContent,
   Switch,
-} from "@dub/ui";
+} from '@dub/ui';
 import {
   FADE_IN_ANIMATION_SETTINGS,
   formatDateTime,
   getDateTimeLocal,
   parseDateTime,
-} from "@dub/utils";
-import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+} from '@dub/utils';
+import { motion } from 'framer-motion';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 
 export default function ExpirationSection({
   props,
@@ -69,7 +69,7 @@ export default function ExpirationSection({
               ref={inputRef}
               type="text"
               placeholder={message?.expiration_example}
-              defaultValue={expiresAt ? formatDateTime(expiresAt) : ""}
+              defaultValue={expiresAt ? formatDateTime(expiresAt) : ''}
               onBlur={(e) => {
                 if (e.target.value.length > 0) {
                   const parsedDateTime = parseDateTime(e.target.value);
@@ -85,7 +85,7 @@ export default function ExpirationSection({
               type="datetime-local"
               id="expiresAt"
               name="expiresAt"
-              value={expiresAt ? getDateTimeLocal(expiresAt) : ""}
+              value={expiresAt ? getDateTimeLocal(expiresAt) : ''}
               onChange={(e) => {
                 const expiryDate = new Date(e.target.value);
                 setData({ ...data, expiresAt: expiryDate });
@@ -122,7 +122,7 @@ export default function ExpirationSection({
                 id="expiredUrl"
                 tabIndex={0}
                 placeholder="https://yourwebsite.com"
-                value={expiredUrl || ""}
+                value={expiredUrl || ''}
                 autoComplete="off"
                 onChange={(e) => {
                   setData({ ...data, expiredUrl: e.target.value });

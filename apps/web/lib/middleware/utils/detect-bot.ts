@@ -1,9 +1,9 @@
-import { NextRequest } from "next/server";
+import { NextRequest } from 'next/server';
 
 export const detectBot = (req: NextRequest) => {
   const url = req.nextUrl;
-  if (url.searchParams.get("bot")) return true;
-  const ua = req.headers.get("User-Agent");
+  if (url.searchParams.get('bot')) return true;
+  const ua = req.headers.get('User-Agent');
   if (ua) {
     /* Note:
      * - bot is for most bots & crawlers

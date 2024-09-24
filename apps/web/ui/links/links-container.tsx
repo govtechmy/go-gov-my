@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import useLinks from "@/lib/swr/use-links";
-import useLinksCount from "@/lib/swr/use-links-count";
-import { CustomSelect, MaxWidthWrapper } from "@dub/ui";
-import { cn } from "@dub/utils";
-import { Rows2Icon, Rows3Icon } from "lucide-react";
-import { ReactNode, Suspense, useRef, useState } from "react";
-import { useLinkFiltersModal } from "../modals/link-filters-modal";
-import LinkCard from "./link-card";
-import LinkCardPlaceholder from "./link-card-placeholder";
-import LinkFilters, { SearchBox } from "./link-filters";
-import LinkPagination from "./link-pagination";
-import LinkSort from "./link-sort";
-import NoLinksPlaceholder from "./no-links-placeholder";
+import useLinks from '@/lib/swr/use-links';
+import useLinksCount from '@/lib/swr/use-links-count';
+import { CustomSelect, MaxWidthWrapper } from '@dub/ui';
+import { cn } from '@dub/utils';
+import { Rows2Icon, Rows3Icon } from 'lucide-react';
+import { ReactNode, Suspense, useRef, useState } from 'react';
+import { useLinkFiltersModal } from '../modals/link-filters-modal';
+import LinkCard from './link-card';
+import LinkCardPlaceholder from './link-card-placeholder';
+import LinkFilters, { SearchBox } from './link-filters';
+import LinkPagination from './link-pagination';
+import LinkSort from './link-sort';
+import NoLinksPlaceholder from './no-links-placeholder';
 
-type LinkView = "cards" | "compact";
+type LinkView = 'cards' | 'compact';
 
 export default function LinksContainer({
   AddEditLinkButton,
@@ -25,11 +25,11 @@ export default function LinksContainer({
   const { data: count } = useLinksCount();
   const { LinkFiltersButton, LinkFiltersModal } = useLinkFiltersModal();
   const searchInputRef = useRef();
-  const [linkView, setLinkView] = useState<LinkView>("cards");
+  const [linkView, setLinkView] = useState<LinkView>('cards');
 
   const options: { label: string; value: LinkView; full: string }[] = [
-    { label: "Card View", value: "cards", full: "Card View" },
-    { label: "Compact View", value: "compact", full: "Compact View" },
+    { label: 'Card View', value: 'cards', full: 'Card View' },
+    { label: 'Compact View', value: 'compact', full: 'Compact View' },
   ];
 
   const viewIcon: Record<LinkView, ReactNode> = {
@@ -37,7 +37,7 @@ export default function LinksContainer({
     compact: <Rows3Icon className="h-4 w-4" />,
   };
 
-  const compact = linkView === "compact";
+  const compact = linkView === 'compact';
 
   return (
     <>
@@ -69,8 +69,8 @@ export default function LinksContainer({
             </div>
             <ul
               className={cn(
-                "grid min-h-[66.5vh] auto-rows-min gap-3",
-                compact && "gap-0",
+                'grid min-h-[66.5vh] auto-rows-min gap-3',
+                compact && 'gap-0',
               )}
             >
               {links && !isValidating ? (

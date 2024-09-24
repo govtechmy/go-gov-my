@@ -1,9 +1,9 @@
-import { DubApiError } from "@/lib/api/errors";
-import { withWorkspace } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { roles } from "@/lib/types";
-import z from "@/lib/zod";
-import { NextResponse } from "next/server";
+import { DubApiError } from '@/lib/api/errors';
+import { withWorkspace } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { roles } from '@/lib/types';
+import z from '@/lib/zod';
+import { NextResponse } from 'next/server';
 
 const updateRoleSchema = z.object({
   userId: z.string().min(1),
@@ -63,7 +63,7 @@ export const PUT = withWorkspace(
     return NextResponse.json(response);
   },
   {
-    requiredRole: ["owner"],
+    requiredRole: ['owner'],
   },
 );
 
@@ -74,10 +74,10 @@ export const DELETE = withWorkspace(
     const { userId } = removeUserSchema.parse(searchParams);
 
     // Regular workspace members can only remove themselves from the workspace
-    if (userWorkspaceRole === "member" && userId !== session.user.id) {
+    if (userWorkspaceRole === 'member' && userId !== session.user.id) {
       throw new DubApiError({
-        code: "unauthorized",
-        message: "Unauthorized: Login required.",
+        code: 'unauthorized',
+        message: 'Unauthorized: Login required.',
       });
     }
 
@@ -96,26 +96,26 @@ export const DELETE = withWorkspace(
       prisma.projectUsers.count({
         where: {
           projectId: workspace.id,
-          role: "owner",
+          role: 'owner',
         },
       }),
     ]);
     if (!projectUser) {
       throw new DubApiError({
-        code: "not_found",
-        message: "User not found",
+        code: 'not_found',
+        message: 'User not found',
       });
     }
     // If there is only one owner and the user is an owner and the user is trying to remove themselves
     if (
       totalOwners === 1 &&
-      projectUser.role === "owner" &&
+      projectUser.role === 'owner' &&
       userId === session.user.id
     ) {
       throw new DubApiError({
-        code: "bad_request",
+        code: 'bad_request',
         message:
-          "Cannot remove owner from workspace. Please transfer ownership to another user first.",
+          'Cannot remove owner from workspace. Please transfer ownership to another user first.',
       });
     }
     const response = await prisma.projectUsers.delete({
@@ -129,6 +129,6 @@ export const DELETE = withWorkspace(
     return NextResponse.json(response);
   },
   {
-    requiredRole: ["owner", "member"],
+    requiredRole: ['owner', 'member'],
   },
 );

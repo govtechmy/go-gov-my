@@ -1,13 +1,13 @@
-import z from "@/lib/zod";
-import { headers } from "next/headers";
-import { prisma } from "../prisma";
-import { clickAnalyticsQuerySchema } from "../zod/schemas/analytics";
-import { INTERVAL_DATA } from "./constants";
+import z from '@/lib/zod';
+import { headers } from 'next/headers';
+import { prisma } from '../prisma';
+import { clickAnalyticsQuerySchema } from '../zod/schemas/analytics';
+import { INTERVAL_DATA } from './constants';
 import {
   AnalyticFromDBProps,
   AnalyticsEndpoints,
   MetadataProps,
-} from "./types";
+} from './types';
 
 export const getClicks = async (
   props: z.infer<typeof clickAnalyticsQuerySchema> & {
@@ -34,9 +34,9 @@ export const getClicks = async (
   // 4. call is made from dashboard
   if (
     linkId &&
-    endpoint === "count" &&
-    interval === "all" &&
-    headers()?.get("Request-Source") === process.env.NEXT_PUBLIC_APP_DOMAIN
+    endpoint === 'count' &&
+    interval === 'all' &&
+    headers()?.get('Request-Source') === process.env.NEXT_PUBLIC_APP_DOMAIN
   ) {
     let response = await prisma.link.findUnique({
       where: {
@@ -51,7 +51,7 @@ export const getClicks = async (
       return 0;
     }
 
-    return response[0]["clicks"];
+    return response[0]['clicks'];
   }
 
   function sumTwoObj(obj1, obj2) {
@@ -63,13 +63,13 @@ export const getClicks = async (
     }
     for (const key in obj2) {
       if (obj2.hasOwnProperty(key)) {
-        if (typeof obj2[key] === "number") {
+        if (typeof obj2[key] === 'number') {
           if (clone.hasOwnProperty(key)) {
             clone[key] += obj2[key];
           } else {
             clone[key] = obj2[key];
           }
-        } else if (typeof obj2[key] === "object") {
+        } else if (typeof obj2[key] === 'object') {
           clone[key] = sumTwoObj(obj2[key], clone[key]);
         }
       }
@@ -77,7 +77,7 @@ export const getClicks = async (
     return clone;
   }
 
-  let granularity: "minute" | "hour" | "day" | "month" = "day";
+  let granularity: 'minute' | 'hour' | 'day' | 'month' = 'day';
   // const startDate: Date | String = new Date().toISOString().split('T')[0]  // fast way to get YYYY-MM-DD
   // const endDate: Date | String = new Date().toISOString().split('T')[0]
 
@@ -121,7 +121,7 @@ export const getClicks = async (
       ],
     },
     orderBy: {
-      aggregatedDate: "asc",
+      aggregatedDate: 'asc',
     },
     select: {
       linkId: true,
@@ -132,7 +132,7 @@ export const getClicks = async (
 
   // for total clicks, we return just the value;
   // everything else we return an array of values
-  if (endpoint === "count") {
+  if (endpoint === 'count') {
     const totalCount = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata as MetadataProps;
       if (metadata?.total && !isNaN(metadata?.total))
@@ -142,7 +142,7 @@ export const getClicks = async (
     return totalCount;
   }
 
-  if (endpoint === "countries") {
+  if (endpoint === 'countries') {
     const countries = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata as MetadataProps;
       if (metadata?.countryCode)
@@ -156,7 +156,7 @@ export const getClicks = async (
       .sort((a, b) => b.clicks - a.clicks);
   }
 
-  if (endpoint === "cities") {
+  if (endpoint === 'cities') {
     const cities = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata as MetadataProps;
       if (metadata.city) return sumTwoObj(accumulator, metadata?.city);
@@ -164,14 +164,14 @@ export const getClicks = async (
     }, {});
     return Object.keys(cities)
       .map((key) => {
-        const [country, city] = key.split(":");
+        const [country, city] = key.split(':');
         return { country, city, clicks: cities[key] };
       })
       .filter(({ country, city }) => country?.length > 0 && city?.length > 0)
       .sort((a, b) => b.clicks - a.clicks);
   }
 
-  if (endpoint === "top_links") {
+  if (endpoint === 'top_links') {
     if (!workspaceId) {
       throw Error("failed to get top links, missing 'workspaceId'");
     }
@@ -192,12 +192,12 @@ export const getClicks = async (
       .sort((a, b) => b.clicks - a.clicks);
   }
 
-  if (endpoint === "top_urls") {
+  if (endpoint === 'top_urls') {
     const top_urls = analytics.reduce<Record<string, number>>(
       (accumulator, row) => {
         const metadata = row.metadata as MetadataProps;
-        if ("linkUrl" in metadata)
-          return sumTwoObj(accumulator, metadata["linkUrl"]);
+        if ('linkUrl' in metadata)
+          return sumTwoObj(accumulator, metadata['linkUrl']);
         return accumulator;
       },
       {},
@@ -207,7 +207,7 @@ export const getClicks = async (
       .sort((a, b) => b.clicks - a.clicks);
   }
 
-  if (endpoint === "referers") {
+  if (endpoint === 'referers') {
     const referers = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata as MetadataProps;
       if (metadata?.referer) return sumTwoObj(accumulator, metadata?.referer);
@@ -220,7 +220,7 @@ export const getClicks = async (
       .sort((a, b) => b.clicks - a.clicks);
   }
 
-  if (endpoint === "devices") {
+  if (endpoint === 'devices') {
     const devices = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata as MetadataProps;
       if (metadata?.deviceType)
@@ -234,7 +234,7 @@ export const getClicks = async (
       .sort((a, b) => b.clicks - a.clicks);
   }
 
-  if (endpoint === "browsers") {
+  if (endpoint === 'browsers') {
     const browsers = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata as MetadataProps;
       if (metadata?.browser) return sumTwoObj(accumulator, metadata?.browser);
@@ -247,7 +247,7 @@ export const getClicks = async (
       .sort((a, b) => b.clicks - a.clicks);
   }
 
-  if (endpoint === "os") {
+  if (endpoint === 'os') {
     const os = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata as MetadataProps;
       if (metadata?.operatingSystem)
@@ -261,7 +261,7 @@ export const getClicks = async (
       .sort((a, b) => b.clicks - a.clicks);
   }
 
-  if (endpoint === "timeseries") {
+  if (endpoint === 'timeseries') {
     const timeseries = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata as MetadataProps;
       if (row?.aggregatedDate.toString() in accumulator) {
@@ -271,15 +271,15 @@ export const getClicks = async (
       accumulator[row?.aggregatedDate.toString()] = metadata?.total;
       return accumulator;
     }, {});
-    if (JSON.stringify(timeseries) === "{}")
+    if (JSON.stringify(timeseries) === '{}')
       return [{ start: new Date(), clicks: 0 }];
     return Object.keys(timeseries).map((key) => {
       return { start: key, clicks: timeseries[key] };
     });
   }
 
-  if (endpoint === "asn") {
-    console.log("analytics", analytics);
+  if (endpoint === 'asn') {
+    console.log('analytics', analytics);
     const asnData = analytics.flatMap((entry) => {
       const metadata = entry.metadata as {
         asn?: Array<{ asn: string; organization: string; clicks: number }>;

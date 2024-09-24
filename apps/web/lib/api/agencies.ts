@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma";
-import { AgencyProps } from "@/lib/types";
+import { prisma } from '@/lib/prisma';
+import { AgencyProps } from '@/lib/types';
 
 export async function createAgency(data: AgencyProps): Promise<AgencyProps> {
   await prisma.agency.create({

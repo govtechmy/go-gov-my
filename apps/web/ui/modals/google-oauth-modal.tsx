@@ -1,14 +1,14 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { Button, Google, Logo, Modal } from "@dub/ui";
-import Cookies from "js-cookie";
-import { signIn } from "next-auth/react";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { Button, Google, Logo, Modal } from '@dub/ui';
+import Cookies from 'js-cookie';
+import { signIn } from 'next-auth/react';
 import {
   Dispatch,
   SetStateAction,
   useCallback,
   useMemo,
   useState,
-} from "react";
+} from 'react';
 
 function GoogleOauthModal({
   showGoogleOauthModal,
@@ -30,8 +30,8 @@ function GoogleOauthModal({
         <Logo />
         <h3 className="text-lg font-medium">{message?.google}</h3>
         <p className="text-center text-sm text-gray-500">
-          {message?.google_desc_1} {process.env.NEXT_PUBLIC_APP_NAME}{" "}
-          {message?.google_desc_2}{" "}
+          {message?.google_desc_1} {process.env.NEXT_PUBLIC_APP_NAME}{' '}
+          {message?.google_desc_2}{' '}
           <a
             className="underline underline-offset-4 transition-colors hover:text-black"
             href="https://github.com/govtechmy/go-gov-my/releases"
@@ -47,8 +47,8 @@ function GoogleOauthModal({
           text={message?.connect_google}
           onClick={() => {
             setClickedGoogle(true);
-            signIn("google", {
-              callbackUrl: "/settings?google=true",
+            signIn('google', {
+              callbackUrl: '/settings?google=true',
             });
           }}
           loading={clickedGoogle}
@@ -57,7 +57,7 @@ function GoogleOauthModal({
         <button
           onClick={() => {
             setShowGoogleOauthModal(false);
-            Cookies.set("hideGoogleOauthModal", true, { expires: 14 });
+            Cookies.set('hideGoogleOauthModal', true, { expires: 14 });
           }}
           className="text-sm text-gray-400 underline underline-offset-4 transition-colors hover:text-gray-800 active:text-gray-400"
         >

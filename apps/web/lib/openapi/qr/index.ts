@@ -1,9 +1,9 @@
-import { ZodOpenApiPathsObject } from "zod-openapi";
+import { ZodOpenApiPathsObject } from 'zod-openapi';
 
-import { getQRCode } from "./get-qr";
+import { getQRCode } from './get-qr';
 
 export const qrCodePaths: ZodOpenApiPathsObject = {
-  "/qr": {
+  '/qr': {
     get: getQRCode,
   },
 };

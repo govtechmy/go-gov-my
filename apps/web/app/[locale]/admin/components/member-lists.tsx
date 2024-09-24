@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { debounce } from "lodash";
-import { Download, User } from "lucide-react";
-import { useSession } from "next-auth/react";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { CSVLink } from "react-csv";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { debounce } from 'lodash';
+import { Download, User } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { CSVLink } from 'react-csv';
 
 interface User {
   id: string;
@@ -18,26 +18,26 @@ interface User {
   image: string | null;
 }
 
-type RoleType = "staff" | "agency_admin" | "super_admin";
+type RoleType = 'staff' | 'agency_admin' | 'super_admin';
 
 const roleDisplay: Record<RoleType, string> = {
-  staff: "Staff",
-  agency_admin: "Agency Administrator",
-  super_admin: "Super Administrator",
+  staff: 'Staff',
+  agency_admin: 'Agency Administrator',
+  super_admin: 'Super Administrator',
 };
 
 function formatDate(dateString: string): string {
   const date = new Date(dateString);
   return date
-    .toLocaleString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+    .toLocaleString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
       hour12: true,
     })
-    .replace(",", "");
+    .replace(',', '');
 }
 
 const Avatar = ({ src, name }: { src: string | null; name: string }) => {
@@ -64,7 +64,7 @@ export default function MemberLists() {
   const [users, setUsers] = useState<User[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
   const { messages } = useIntlClientHook();
 
@@ -80,7 +80,7 @@ export default function MemberLists() {
       setUsers(data.users);
       setTotalPages(data.totalPages);
     } catch (error) {
-      console.error("Fetching users failed:", error);
+      console.error('Fetching users failed:', error);
     }
   };
 
@@ -96,9 +96,9 @@ export default function MemberLists() {
   const csvData = users.map((user) => ({
     Name: user.name,
     Email: user.email,
-    "Agency Code": user.agencyCode.toUpperCase(),
+    'Agency Code': user.agencyCode.toUpperCase(),
     Role: roleDisplay[user.role as RoleType] || user.role,
-    "Created At": formatDate(user.createdAt),
+    'Created At': formatDate(user.createdAt),
   }));
 
   return (
@@ -169,7 +169,7 @@ export default function MemberLists() {
               >
                 <td className="px-6 py-4">
                   <Avatar
-                    src={(user.image || "").replace(/\s+/g, "-")}
+                    src={(user.image || '').replace(/\s+/g, '-')}
                     name={user.name}
                   />
                 </td>
@@ -195,12 +195,12 @@ export default function MemberLists() {
         aria-label="Table navigation"
       >
         <span className="mb-4 block w-full text-sm font-normal text-gray-500 dark:text-gray-400 md:mb-0 md:inline md:w-auto">
-          {messages?.admin?.user_management?.user_showing}{" "}
+          {messages?.admin?.user_management?.user_showing}{' '}
           <span className="font-semibold text-gray-900 dark:text-white">
             {users.length > 0 ? (page - 1) * 10 + 1 : 0}-
             {Math.min(page * 10, users.length)}
-          </span>{" "}
-          {messages?.admin?.user_management?.user_of}{" "}
+          </span>{' '}
+          {messages?.admin?.user_management?.user_of}{' '}
           <span className="font-semibold text-gray-900 dark:text-white">
             {users.length}
           </span>
@@ -219,11 +219,11 @@ export default function MemberLists() {
             <li key={i}>
               <button
                 onClick={() => setPage(i + 1)}
-                aria-current={page === i + 1 ? "page" : undefined}
+                aria-current={page === i + 1 ? 'page' : undefined}
                 className={`flex h-8 items-center justify-center px-3 leading-tight ${
                   page === i + 1
-                    ? "border border-gray-300 bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
-                    : "border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    ? 'border border-gray-300 bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white'
+                    : 'border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
                 }`}
               >
                 {i + 1}

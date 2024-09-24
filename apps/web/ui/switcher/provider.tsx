@@ -1,5 +1,5 @@
-"use client";
-import { ReactNode, createContext } from "react";
+'use client';
+import { ReactNode, createContext } from 'react';
 
 export const MessagesContext = createContext<any>({});
 

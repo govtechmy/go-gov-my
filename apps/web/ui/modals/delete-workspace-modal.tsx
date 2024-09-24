@@ -1,17 +1,17 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { Button, Logo, Modal, useMediaQuery } from "@dub/ui";
-import { cn } from "@dub/utils";
-import { useParams, useRouter } from "next/navigation";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { Button, Logo, Modal, useMediaQuery } from '@dub/ui';
+import { cn } from '@dub/utils';
+import { useParams, useRouter } from 'next/navigation';
 import {
   Dispatch,
   SetStateAction,
   useCallback,
   useMemo,
   useState,
-} from "react";
-import { toast } from "sonner";
-import { mutate } from "swr";
+} from 'react';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
 
 function DeleteWorkspaceModal({
   showDeleteWorkspaceModal,
@@ -32,13 +32,13 @@ function DeleteWorkspaceModal({
     return new Promise((resolve, reject) => {
       setDeleting(true);
       fetch(`/api/workspaces/${id}`, {
-        method: "DELETE",
+        method: 'DELETE',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       }).then(async (res) => {
         if (res.ok) {
-          await mutate("/api/workspaces");
+          await mutate('/api/workspaces');
           router.push(`/${locale}`);
           resolve(null);
         } else {
@@ -81,8 +81,8 @@ function DeleteWorkspaceModal({
             htmlFor="workspace-slug"
             className="block text-sm font-medium text-gray-700"
           >
-            {message?.enter_workspace_slug}{" "}
-            <span className="font-semibold text-black">{slug}</span>{" "}
+            {message?.enter_workspace_slug}{' '}
+            <span className="font-semibold text-black">{slug}</span>{' '}
             {message?.to_continue}
           </label>
           <div className="relative mt-1 rounded-md shadow-sm">
@@ -95,9 +95,9 @@ function DeleteWorkspaceModal({
               pattern={slug}
               disabled={!isOwner}
               className={cn(
-                "block w-full rounded-md border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm",
+                'block w-full rounded-md border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm',
                 {
-                  "cursor-not-allowed bg-gray-100": !isOwner,
+                  'cursor-not-allowed bg-gray-100': !isOwner,
                 },
               )}
             />
@@ -106,10 +106,10 @@ function DeleteWorkspaceModal({
 
         <div>
           <label htmlFor="verification" className="block text-sm text-gray-700">
-            {message?.to_verify}{" "}
+            {message?.to_verify}{' '}
             <span className="font-semibold text-black">
               {message?.confirm_delete_workspace}
-            </span>{" "}
+            </span>{' '}
             {message?.below}
           </label>
           <div className="relative mt-1 rounded-md shadow-sm">
@@ -122,9 +122,9 @@ function DeleteWorkspaceModal({
               autoComplete="off"
               disabled={!isOwner}
               className={cn(
-                "block w-full rounded-md border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm",
+                'block w-full rounded-md border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm',
                 {
-                  "cursor-not-allowed bg-gray-100": !isOwner,
+                  'cursor-not-allowed bg-gray-100': !isOwner,
                 },
               )}
             />

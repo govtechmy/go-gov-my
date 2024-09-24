@@ -1,9 +1,9 @@
-import { Logo, MaxWidthWrapper } from "@dub/ui";
-import { constructMetadata } from "@dub/utils";
-import Link from "next/link";
-import { ReactNode } from "react";
+import { Logo, MaxWidthWrapper } from '@dub/ui';
+import { constructMetadata } from '@dub/utils';
+import Link from 'next/link';
+import { ReactNode } from 'react';
 
-export const dynamic = "force-static";
+export const dynamic = 'force-static';
 export async function generateMetadata({ params }) {
   const { locale } = params;
   return constructMetadata({

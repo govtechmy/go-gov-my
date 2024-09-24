@@ -1,8 +1,8 @@
-import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
-import { decipherOutboxPayload } from "kafka-consumer/utils/encryption";
-import { OutboxSchema } from "../models/OutboxSchema";
-import { retryWithDelay } from "../utils/retry";
+import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
+import { decipherOutboxPayload } from 'kafka-consumer/utils/encryption';
+import { OutboxSchema } from '../models/OutboxSchema';
+import { retryWithDelay } from '../utils/retry';
 
 export async function runOutboxConsumer(consumer: any, log: any) {
   await consumer.subscribe({
@@ -17,12 +17,12 @@ export async function runOutboxConsumer(consumer: any, log: any) {
 
       const processMessage = async () => {
         const { payload: debeziumPayload } = JSON.parse(
-          message.value.toString("utf8") || "{}",
+          message.value.toString('utf8') || '{}',
         );
 
         if (Object.keys(debeziumPayload).length === 0) return;
 
-        if (debeziumPayload.op === "c") {
+        if (debeziumPayload.op === 'c') {
           const {
             id: outboxId,
             host,
@@ -57,7 +57,7 @@ export async function runOutboxConsumer(consumer: any, log: any) {
             } catch (error) {
               if (
                 error instanceof Prisma.PrismaClientKnownRequestError &&
-                error.code === "P2025"
+                error.code === 'P2025'
               ) {
                 log.warn(
                   `WebhookOutbox with ID ${outboxId} was already processed before`,

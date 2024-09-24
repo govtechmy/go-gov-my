@@ -2,15 +2,15 @@ import {
   DubApiError,
   exceededLimitError,
   handleAndReturnErrorResponse,
-} from "@/lib/api/errors";
-import { prisma } from "@/lib/prisma";
-import { ratelimit } from "@/lib/redis/ratelimit";
-import { PlanProps, WorkspaceProps } from "@/lib/types";
-import { API_DOMAIN, getSearchParams } from "@dub/utils";
-import { Link as LinkProps } from "@prisma/client";
-import { waitUntil } from "@vercel/functions";
-import { hashToken } from "./hash-token";
-import { Session, getSession } from "./utils";
+} from '@/lib/api/errors';
+import { prisma } from '@/lib/prisma';
+import { ratelimit } from '@/lib/redis/ratelimit';
+import { PlanProps, WorkspaceProps } from '@/lib/types';
+import { API_DOMAIN, getSearchParams } from '@dub/utils';
+import { Link as LinkProps } from '@prisma/client';
+import { waitUntil } from '@vercel/functions';
+import { hashToken } from './hash-token';
+import { Session, getSession } from './utils';
 
 interface WithWorkspaceHandler {
   ({
@@ -31,7 +31,7 @@ interface WithWorkspaceHandler {
     workspace: WorkspaceProps;
     domain: string;
     link?: LinkProps;
-    userWorkspaceRole: "owner" | "member";
+    userWorkspaceRole: 'owner' | 'member';
   }): Promise<Response>;
 }
 
@@ -39,22 +39,22 @@ export const withWorkspace = (
   handler: WithWorkspaceHandler,
   {
     requiredPlan = [
-      "free",
-      "pro",
-      "business",
-      "business plus",
-      "business max",
-      "business extra",
-      "enterprise",
+      'free',
+      'pro',
+      'business',
+      'business plus',
+      'business max',
+      'business extra',
+      'enterprise',
     ], // if the action needs a specific plan
-    requiredRole = ["owner", "member"],
+    requiredRole = ['owner', 'member'],
     needNotExceededClicks, // if the action needs the user to not have exceeded their clicks usage
     needNotExceededLinks, // if the action needs the user to not have exceeded their links usage
     skipLinkChecks, // special case for /api/links/exists – skip link checks
   }: {
     requiredPlan?: Array<PlanProps>;
     /** The workspace roles that are required for the user. Does not apply to super admins. */
-    requiredRole?: Array<"owner" | "member">;
+    requiredRole?: Array<'owner' | 'member'>;
     needNotExceededClicks?: boolean;
     needNotExceededLinks?: boolean;
     skipLinkChecks?: boolean;
@@ -70,17 +70,17 @@ export const withWorkspace = (
     let headers = {};
 
     try {
-      const authorizationHeader = req.headers.get("Authorization");
+      const authorizationHeader = req.headers.get('Authorization');
       if (authorizationHeader) {
-        if (!authorizationHeader.includes("Bearer ")) {
+        if (!authorizationHeader.includes('Bearer ')) {
           throw new DubApiError({
-            code: "bad_request",
+            code: 'bad_request',
             message:
               "Misconfigured authorization header. Did you forget to add 'Bearer '? Learn more: https://d.to/auth",
           });
         }
-        console.log(req.headers.get("x-api-key"));
-        apiKey = req.headers.get("x-api-key") || "";
+        console.log(req.headers.get('x-api-key'));
+        apiKey = req.headers.get('x-api-key') || '';
       }
 
       const domain = params?.domain || searchParams.domain;
@@ -104,14 +104,14 @@ export const withWorkspace = (
       // if there's no workspace ID or slug
       if (!idOrSlug) {
         throw new DubApiError({
-          code: "not_found",
+          code: 'not_found',
           message:
-            "Workspace id not found. Did you forget to include a `workspaceId` query parameter? Learn more: https://d.to/id",
+            'Workspace id not found. Did you forget to include a `workspaceId` query parameter? Learn more: https://d.to/id',
         });
       }
 
-      if (idOrSlug.startsWith("ws_")) {
-        workspaceId = idOrSlug.replace("ws_", "");
+      if (idOrSlug.startsWith('ws_')) {
+        workspaceId = idOrSlug.replace('ws_', '');
       } else {
         workspaceSlug = idOrSlug;
       }
@@ -137,27 +137,27 @@ export const withWorkspace = (
         });
         if (!user) {
           throw new DubApiError({
-            code: "unauthorized",
-            message: "Unauthorized: Invalid API key.",
+            code: 'unauthorized',
+            message: 'Unauthorized: Invalid API key.',
           });
         }
 
         const { success, limit, reset, remaining } = await ratelimit(
           apiKey,
           600,
-          "1 m",
+          '1 m',
         );
         headers = {
-          "Retry-After": reset.toString(),
-          "X-RateLimit-Limit": limit.toString(),
-          "X-RateLimit-Remaining": remaining.toString(),
-          "X-RateLimit-Reset": reset.toString(),
+          'Retry-After': reset.toString(),
+          'X-RateLimit-Limit': limit.toString(),
+          'X-RateLimit-Remaining': remaining.toString(),
+          'X-RateLimit-Reset': reset.toString(),
         };
 
         if (!success) {
           throw new DubApiError({
-            code: "rate_limit_exceeded",
-            message: "Too many requests.",
+            code: 'rate_limit_exceeded',
+            message: 'Too many requests.',
           });
         }
         waitUntil(
@@ -173,7 +173,7 @@ export const withWorkspace = (
         session = {
           user: {
             id: user.id,
-            name: user.name || "",
+            name: user.name || '',
             email: user.email,
             role: user.role,
             agencyCode: user.agencyCode,
@@ -183,8 +183,8 @@ export const withWorkspace = (
         session = await getSession();
         if (!session?.user?.id) {
           throw new DubApiError({
-            code: "unauthorized",
-            message: "Unauthorized: Login required.",
+            code: 'unauthorized',
+            message: 'Unauthorized: Login required.',
           });
         }
       }
@@ -210,11 +210,11 @@ export const withWorkspace = (
         linkId
           ? prisma.link.findUnique({
               where: {
-                ...(linkId.startsWith("ext_") && workspaceId
+                ...(linkId.startsWith('ext_') && workspaceId
                   ? {
                       projectId_externalId: {
                         projectId: workspaceId,
-                        externalId: linkId.replace("ext_", ""),
+                        externalId: linkId.replace('ext_', ''),
                       },
                     }
                   : { id: linkId }),
@@ -235,19 +235,19 @@ export const withWorkspace = (
       if (!workspace) {
         // workspace doesn't exist
         throw new DubApiError({
-          code: "not_found",
-          message: "Workspace not found.",
+          code: 'not_found',
+          message: 'Workspace not found.',
         });
       }
 
       // edge case where linkId is an externalId and workspaceId was not provided (they must've used projectSlug instead)
       // in this case, we need to try fetching the link again
-      if (linkId && linkId.startsWith("ext_") && !link && !workspaceId) {
+      if (linkId && linkId.startsWith('ext_') && !link && !workspaceId) {
         link = (await prisma.link.findUnique({
           where: {
             projectId_externalId: {
               projectId: workspace.id,
-              externalId: linkId.replace("ext_", ""),
+              externalId: linkId.replace('ext_', ''),
             },
           },
         })) as LinkProps;
@@ -257,8 +257,8 @@ export const withWorkspace = (
       let userWorkspaceRole = workspace.users.at(0)?.role || null;
 
       // super admins have the same priveleges as workspace owners
-      if (session.user.role === "super_admin") {
-        userWorkspaceRole = "owner";
+      if (session.user.role === 'super_admin') {
+        userWorkspaceRole = 'owner';
       }
 
       // User is not part of the workspace, check if they have pending invitations
@@ -276,8 +276,8 @@ export const withWorkspace = (
         });
         if (!pendingInvites) {
           throw new DubApiError({
-            code: "not_found",
-            message: "Workspace not found.",
+            code: 'not_found',
+            message: 'Workspace not found.',
           });
         } else if (
           pendingInvites &&
@@ -285,13 +285,13 @@ export const withWorkspace = (
           pendingInvites.expires < new Date()
         ) {
           throw new DubApiError({
-            code: "invite_expired",
-            message: "Workspace invite expired.",
+            code: 'invite_expired',
+            message: 'Workspace invite expired.',
           });
         } else {
           throw new DubApiError({
-            code: "invite_pending",
-            message: "Workspace invite pending.",
+            code: 'invite_pending',
+            message: 'Workspace invite pending.',
           });
         }
       }
@@ -299,19 +299,19 @@ export const withWorkspace = (
       // workspace role checks
       if (!requiredRole.includes(userWorkspaceRole)) {
         throw new DubApiError({
-          code: "forbidden",
-          message: "Unauthorized: Insufficient permissions.",
+          code: 'forbidden',
+          message: 'Unauthorized: Insufficient permissions.',
         });
       }
 
       // clicks usage overage checks
       if (needNotExceededClicks && workspace.usage > workspace.usageLimit) {
         throw new DubApiError({
-          code: "forbidden",
+          code: 'forbidden',
           message: exceededLimitError({
             plan: workspace.plan,
             limit: workspace.usageLimit,
-            type: "clicks",
+            type: 'clicks',
           }),
         });
       }
@@ -320,14 +320,14 @@ export const withWorkspace = (
       if (
         needNotExceededLinks &&
         workspace.linksUsage > workspace.linksLimit &&
-        (workspace.plan === "free" || workspace.plan === "pro")
+        (workspace.plan === 'free' || workspace.plan === 'pro')
       ) {
         throw new DubApiError({
-          code: "forbidden",
+          code: 'forbidden',
           message: exceededLimitError({
             plan: workspace.plan,
             limit: workspace.linksLimit,
-            type: "links",
+            type: 'links',
           }),
         });
       }
@@ -335,21 +335,21 @@ export const withWorkspace = (
       // plan checks
       if (!requiredPlan.includes(workspace.plan)) {
         throw new DubApiError({
-          code: "forbidden",
-          message: "Unauthorized: Need higher plan.",
+          code: 'forbidden',
+          message: 'Unauthorized: Need higher plan.',
         });
       }
 
       // analytics API checks
-      const url = new URL(req.url || "", API_DOMAIN);
+      const url = new URL(req.url || '', API_DOMAIN);
       if (
-        workspace.plan === "free" &&
+        workspace.plan === 'free' &&
         apiKey &&
-        url.pathname.includes("/analytics")
+        url.pathname.includes('/analytics')
       ) {
         throw new DubApiError({
-          code: "forbidden",
-          message: "Analytics API is only available on paid plans.",
+          code: 'forbidden',
+          message: 'Analytics API is only available on paid plans.',
         });
       }
 
@@ -358,8 +358,8 @@ export const withWorkspace = (
         // make sure the link is owned by the workspace
         if (!link || link.projectId !== workspace?.id) {
           throw new DubApiError({
-            code: "not_found",
-            message: "Link not found.",
+            code: 'not_found',
+            message: 'Link not found.',
           });
         }
       }

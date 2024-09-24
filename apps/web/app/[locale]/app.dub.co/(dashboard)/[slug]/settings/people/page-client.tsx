@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useUsers from "@/lib/swr/use-users";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { WorkspaceUserProps } from "@/lib/types";
-import { useEditRoleModal } from "@/ui/modals/edit-role-modal";
-import { useInviteCodeModal } from "@/ui/modals/invite-code-modal";
-import { useInviteTeammateModal } from "@/ui/modals/invite-teammate-modal";
-import { useRemoveTeammateModal } from "@/ui/modals/remove-teammate-modal";
-import { Link as LinkIcon, ThreeDots } from "@/ui/shared/icons";
-import { Avatar, Badge, Button, IconMenu, Popover } from "@dub/ui";
-import { cn, timeAgo } from "@dub/utils";
-import { UserMinus } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useUsers from '@/lib/swr/use-users';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { WorkspaceUserProps } from '@/lib/types';
+import { useEditRoleModal } from '@/ui/modals/edit-role-modal';
+import { useInviteCodeModal } from '@/ui/modals/invite-code-modal';
+import { useInviteTeammateModal } from '@/ui/modals/invite-teammate-modal';
+import { useRemoveTeammateModal } from '@/ui/modals/remove-teammate-modal';
+import { Link as LinkIcon, ThreeDots } from '@/ui/shared/icons';
+import { Avatar, Badge, Button, IconMenu, Popover } from '@dub/ui';
+import { cn, timeAgo } from '@dub/utils';
+import { UserMinus } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { useState } from 'react';
 
-const tabs: Array<"Members" | "Invitations"> = ["Members", "Invitations"];
+const tabs: Array<'Members' | 'Invitations'> = ['Members', 'Invitations'];
 
 export default function WorkspacePeopleClient() {
   const { setShowInviteTeammateModal, InviteTeammateModal } =
@@ -25,11 +25,11 @@ export default function WorkspacePeopleClient() {
 
   const { setShowInviteCodeModal, InviteCodeModal } = useInviteCodeModal();
 
-  const [currentTab, setCurrentTab] = useState<"Members" | "Invitations">(
-    "Members",
+  const [currentTab, setCurrentTab] = useState<'Members' | 'Invitations'>(
+    'Members',
   );
 
-  const { users } = useUsers({ invites: currentTab === "Invitations" });
+  const { users } = useUsers({ invites: currentTab === 'Invitations' });
 
   return (
     <>
@@ -60,7 +60,7 @@ export default function WorkspacePeopleClient() {
             <div
               key={tab}
               className={`${
-                tab === currentTab ? "border-black" : "border-transparent"
+                tab === currentTab ? 'border-black' : 'border-transparent'
               } border-b py-1`}
             >
               <button
@@ -110,7 +110,7 @@ const UserCard = ({
   currentTab,
 }: {
   user: WorkspaceUserProps;
-  currentTab: "Members" | "Invitations";
+  currentTab: 'Members' | 'Invitations';
 }) => {
   const [openPopover, setOpenPopover] = useState(false);
 
@@ -121,7 +121,7 @@ const UserCard = ({
 
   const { name, email, createdAt, role: currentRole } = user;
 
-  const [role, setRole] = useState<"owner" | "member">(currentRole);
+  const [role, setRole] = useState<'owner' | 'member'>(currentRole);
 
   const { EditRoleModal, setShowEditRoleModal } = useEditRoleModal({
     user,
@@ -129,13 +129,13 @@ const UserCard = ({
   });
 
   const { RemoveTeammateModal, setShowRemoveTeammateModal } =
-    useRemoveTeammateModal({ user, invite: currentTab === "Invitations" });
+    useRemoveTeammateModal({ user, invite: currentTab === 'Invitations' });
 
   const { data: session } = useSession();
 
   // invites expire after 14 days of being sent
   const expiredInvite =
-    currentTab === "Invitations" &&
+    currentTab === 'Invitations' &&
     createdAt &&
     Date.now() - new Date(createdAt).getTime() > 14 * 24 * 60 * 60 * 1000;
 
@@ -159,21 +159,21 @@ const UserCard = ({
           {expiredInvite && <Badge variant="gray">{message?.expired}</Badge>}
         </div>
         <div className="flex items-center space-x-3">
-          {currentTab === "Members" ? (
+          {currentTab === 'Members' ? (
             session?.user?.email === email ? (
               <p className="text-xs capitalize text-gray-500">{role}</p>
             ) : (
               <select
                 className={cn(
-                  "rounded-md border border-gray-200 text-xs text-gray-500 focus:border-gray-600 focus:ring-gray-600",
+                  'rounded-md border border-gray-200 text-xs text-gray-500 focus:border-gray-600 focus:ring-gray-600',
                   {
-                    "cursor-not-allowed bg-gray-100": !isOwner,
+                    'cursor-not-allowed bg-gray-100': !isOwner,
                   },
                 )}
                 value={role}
                 disabled={!isOwner}
                 onChange={(e) => {
-                  setRole(e.target.value as "owner" | "member");
+                  setRole(e.target.value as 'owner' | 'member');
                   setOpenPopover(false);
                   setShowEditRoleModal(true);
                 }}
@@ -202,7 +202,7 @@ const UserCard = ({
                     text={
                       session?.user?.email === email
                         ? messages?.modal?.leave_workspace
-                        : currentTab === "Members"
+                        : currentTab === 'Members'
                           ? messages?.modal?.remove_teammate
                           : messages?.modal?.revoke_invitation
                     }

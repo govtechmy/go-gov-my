@@ -1,4 +1,4 @@
-import { cn } from "@dub/utils";
+import { cn } from '@dub/utils';
 
 export function Avatar({
   user = {},
@@ -15,7 +15,7 @@ export function Avatar({
     return (
       <div
         className={cn(
-          "h-10 w-10 animate-pulse rounded-full border border-gray-300 bg-gray-100",
+          'h-10 w-10 animate-pulse rounded-full border border-gray-300 bg-gray-100',
           className,
         )}
       />
@@ -30,7 +30,7 @@ export function Avatar({
         user?.image ||
         `https://api.dicebear.com/7.x/micah/svg?seed=${user?.email}`
       }
-      className={cn("h-10 w-10 rounded-full border border-gray-300", className)}
+      className={cn('h-10 w-10 rounded-full border border-gray-300', className)}
       draggable={false}
     />
   );

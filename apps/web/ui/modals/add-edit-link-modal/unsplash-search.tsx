@@ -1,11 +1,11 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { LoadingSpinner, useMediaQuery } from "@dub/ui";
-import { fetcher } from "@dub/utils";
-import { Dispatch, SetStateAction, useState } from "react";
-import { toast } from "sonner";
-import useSWR from "swr";
-import { Basic } from "unsplash-js/dist/methods/photos/types";
-import { useDebounce } from "use-debounce";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { LoadingSpinner, useMediaQuery } from '@dub/ui';
+import { fetcher } from '@dub/utils';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { toast } from 'sonner';
+import useSWR from 'swr';
+import { Basic } from 'unsplash-js/dist/methods/photos/types';
+import { useDebounce } from 'use-debounce';
 
 export default function UnsplashSearch({
   onImageSelected,
@@ -16,11 +16,11 @@ export default function UnsplashSearch({
 }) {
   const { messages, locale } = useIntlClientHook();
   const message = messages?.modal;
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [debouncedQuery] = useDebounce(search, 500);
   const { data } = useSWR<Basic[]>(
     `/api/unsplash/search?query=${
-      debouncedQuery.length > 0 ? debouncedQuery : "beautiful landscape photos"
+      debouncedQuery.length > 0 ? debouncedQuery : 'beautiful landscape photos'
     }`,
     fetcher,
     {
@@ -35,7 +35,7 @@ export default function UnsplashSearch({
     <div
       className="h-[24rem] w-full overflow-auto p-3 md:w-[24rem]"
       // Fixes a Webkit issue where elements outside of the visible area are still interactable
-      style={{ WebkitClipPath: "inset(0 0 0 0)" }}
+      style={{ WebkitClipPath: 'inset(0 0 0 0)' }}
     >
       <div className="relative mt-1 rounded-md shadow-sm">
         <input
@@ -60,10 +60,10 @@ export default function UnsplashSearch({
                 onClick={() => {
                   onImageSelected(photo.urls.regular);
                   setOpenPopover(false);
-                  fetch("/api/unsplash/download", {
-                    method: "POST",
+                  fetch('/api/unsplash/download', {
+                    method: 'POST',
                     headers: {
-                      "Content-Type": "application/json",
+                      'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
                       url: photo.links.download_location,
@@ -74,11 +74,11 @@ export default function UnsplashSearch({
               >
                 <img
                   src={photo.urls.small}
-                  alt={photo.alt_description || "Unsplash image"}
+                  alt={photo.alt_description || 'Unsplash image'}
                   className="absolute h-full w-full object-cover"
                 />
                 <p className="absolute bottom-0 left-0 right-0 line-clamp-1 w-full bg-black bg-opacity-10 p-1 text-xs text-white">
-                  by{" "}
+                  by{' '}
                   <a
                     className="underline underline-offset-2"
                     target="_blank"

@@ -1,19 +1,19 @@
-import { withAdmin } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { DUB_DOMAINS_ARRAY } from "@dub/utils";
-import { NextResponse } from "next/server";
+import { withAdmin } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { DUB_DOMAINS_ARRAY } from '@dub/utils';
+import { NextResponse } from 'next/server';
 
 // GET /api/admin/links
 export const GET = withAdmin(async ({ searchParams }) => {
   const {
     domain,
     search,
-    sort = "createdAt",
+    sort = 'createdAt',
     page,
   } = searchParams as {
     domain?: string;
     search?: string;
-    sort?: "createdAt" | "clicks" | "lastClicked";
+    sort?: 'createdAt' | 'clicks' | 'lastClicked';
     page?: string;
   };
 
@@ -52,7 +52,7 @@ export const GET = withAdmin(async ({ searchParams }) => {
       },
     },
     orderBy: {
-      [sort]: "desc",
+      [sort]: 'desc',
     },
     take: 100,
     ...(page && {

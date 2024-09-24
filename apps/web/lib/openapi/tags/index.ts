@@ -1,10 +1,10 @@
-import { ZodOpenApiPathsObject } from "zod-openapi";
+import { ZodOpenApiPathsObject } from 'zod-openapi';
 
-import { createTag } from "./create-tag";
-import { getTags } from "./get-tags";
+import { createTag } from './create-tag';
+import { getTags } from './get-tags';
 
 export const tagsPaths: ZodOpenApiPathsObject = {
-  "/tags": {
+  '/tags': {
     post: createTag,
     get: getTags,
   },

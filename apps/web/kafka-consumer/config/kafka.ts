@@ -1,8 +1,8 @@
-import { Kafka } from "kafkajs";
+import { Kafka } from 'kafkajs';
 
 export function createKafkaClient(brokerUrl: string) {
   return new Kafka({
-    clientId: "gogov-web-outbox",
+    clientId: 'gogov-web-outbox',
     brokers: [brokerUrl],
   });
 }
