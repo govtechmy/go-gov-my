@@ -41,9 +41,8 @@ WORKDIR /app
 COPY . .
 
 WORKDIR /app/apps/redirect-pages/next-landing-page
-# Specify environment variables from GitHub
+
 ARG LANDING_STATS_JSON_URL
-# ENV LANDING_STATS_JSON_URL=${LANDING_STATS_JSON_URL_DEV}
 
 RUN npm install
 RUN npm run build
