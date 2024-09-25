@@ -2,7 +2,7 @@ import { PrometheusExporter } from '@opentelemetry/exporter-prometheus';
 import { Resource } from '@opentelemetry/resources';
 import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
 import { NodeSDK } from '@opentelemetry/sdk-node';
-import { ConsoleSpanExporter } from '@opentelemetry/sdk-trace-node';
+//import { ConsoleSpanExporter } from '@opentelemetry/sdk-trace-node';
 import { SEMRESATTRS_SERVICE_NAME } from '@opentelemetry/semantic-conventions';
 
 /**
@@ -27,8 +27,8 @@ const sdk = new NodeSDK({
   resource: new Resource({
     [SEMRESATTRS_SERVICE_NAME]: 'otel-logger',
   }),
-  traceExporter: new ConsoleSpanExporter(),
-  // traceExporter: jaegerExporter,
+  //traceExporter: new ConsoleSpanExporter(),
+  traceExporter: jaegerExporter,
   metricReader: metricReader,
 });
 
