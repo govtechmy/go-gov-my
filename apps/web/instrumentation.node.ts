@@ -34,5 +34,5 @@ const sdk = new NodeSDK({
 
 if (process.env.NODE_ENV === 'production') {
   // Disable open telmetry for now so the logs can be read
-  // sdk.start();
+  sdk.start();
 }
