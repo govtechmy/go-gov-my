@@ -8,7 +8,7 @@ import {
   Photo,
   Popover,
   Twitter,
-  Unsplash,
+  // Unsplash,
   useMediaQuery,
   useResizeObserver,
 } from '@dub/ui';
@@ -29,7 +29,7 @@ import {
 import { toast } from 'sonner';
 import { useDebounce } from 'use-debounce';
 import { usePromptModal } from '../prompt-modal';
-import UnsplashSearch from './unsplash-search';
+// import UnsplashSearch from './unsplash-search';
 
 export default function Preview({
   data,
@@ -351,10 +351,10 @@ const ImagePreviewPopoverContent = ({
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
             >
-              <UnsplashSearch
+              {/* <UnsplashSearch
                 onImageSelected={onImageChange}
                 setOpenPopover={setOpenPopover}
-              />
+              /> */}
             </motion.div>
           )}
 
@@ -377,13 +377,13 @@ const ImagePreviewPopoverContent = ({
                 className="h-9 justify-start px-2 font-medium"
                 onClick={() => setShowPromptModal(true)}
               />
-              <Button
+              {/* <Button
                 text="Use image from Unsplash"
                 variant="outline"
                 icon={<Unsplash className="h-4 w-4 p-0.5" />}
                 className="h-9 justify-start px-2 font-medium"
                 onClick={() => setState('unsplash')}
-              />
+              /> */}
             </div>
           )}
         </AnimatePresence>
