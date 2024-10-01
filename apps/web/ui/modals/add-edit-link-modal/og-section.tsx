@@ -5,10 +5,8 @@ import {
   ButtonTooltip,
   FileUpload,
   LoadingCircle,
-  Popover,
   SimpleTooltipContent,
   Switch,
-  Unsplash,
 } from '@dub/ui';
 import { FADE_IN_ANIMATION_SETTINGS, resizeImage } from '@dub/utils';
 import { motion } from 'framer-motion';
@@ -16,7 +14,7 @@ import { Link2 } from 'lucide-react';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { usePromptModal } from '../prompt-modal';
-import UnsplashSearch from './unsplash-search';
+// import UnsplashSearch from './unsplash-search';
 
 export default function OGSection({
   props,
@@ -197,7 +195,7 @@ export default function OGSection({
                 >
                   <Link2 className="h-4 w-4 text-gray-500" />
                 </ButtonTooltip>
-                <Popover
+                {/* <Popover
                   content={
                     <UnsplashSearch
                       onImageSelected={(image) =>
@@ -215,7 +213,7 @@ export default function OGSection({
                   >
                     <Unsplash className="h-3 w-3 text-gray-500" />
                   </button>
-                </Popover>
+                </Popover> */}
               </div>
             </div>
             <div className="mt-1">
