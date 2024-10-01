@@ -6,4 +6,4 @@ COPY prometheus.yml /prometheus/prometheus.yml
 EXPOSE 9090
 EXPOSE 9464
 
-CMD [ "--config.file=/etc/prometheus/prometheus.yml" ]
+CMD [ "--config.file=/etc/prometheus/prometheus.yml", "--log.level=debug"]
