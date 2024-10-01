@@ -52,38 +52,28 @@ import { Resource } from '@opentelemetry/resources';
 import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
+// import { api, NodeSDK, BatchSpanProcessor, SimpleSpanProcessor } from '@opentelemetry/sdk-node';
 
-// Create a tracer provider with resource attributes
 const provider = new NodeTracerProvider({
   resource: new Resource({
     [SemanticResourceAttributes.SERVICE_NAME]: 'gogov-web', // Service name for tracing
   }),
 });
 
-// Set up the OTLP HTTP Trace Exporter
 const otlpExporter = new OTLPTraceExporter({
-  url: 'http://jaeger:4318/v1/traces', // OTLP HTTP endpoint for Jaeger
-  // Optional headers if required, e.g., for authorization:
-  // headers: {
-  //   'Authorization': 'Bearer <token>',
-  // },
+  url:
+    process.env.NODE_ENV == 'development'
+      ? 'http://localhost:4318/v1/traces'
+      : 'http://jaeger:4318/v1/traces',
 });
 
-// Add the OTLP exporter to the tracer provider
 provider.addSpanProcessor(new SimpleSpanProcessor(otlpExporter));
 
-// Register the provider globally to make it available to the application
 provider.register();
 
-// Register instrumentation only if in production (or another environment as needed)
-if (process.env.NODE_ENV === 'production') {
-  registerInstrumentations({
-    instrumentations: [
-      // You can add Node.js auto-instrumentations here, for example:
-      // getNodeAutoInstrumentations()
-    ],
-    tracerProvider: provider, // Use the provider we created
-  });
-}
+registerInstrumentations({
+  instrumentations: [], //getNodeAutoInstrumentations()
+  tracerProvider: provider,
+});
 
 console.log('OpenTelemetry tracing initialized.');

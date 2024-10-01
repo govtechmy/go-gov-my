@@ -3,7 +3,7 @@
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
-    "dev": "concurrently --kill-others -c auto -n nextjs,prisma,email,kafka-consumer \"next dev --turbo --port 8888\" \"prisma generate && prisma studio --browser none\" \"npm:dev:email\" \"npm:start-kafka-consumer\"",
+    "dev": "concurrently --kill-others -c auto -n nextjs,prisma,email,kafka-consumer \"next dev --turbo --port 8888\" \"prisma generate && prisma studio --browser none\" \"npm:dev:email\"",
     "dev:email": "cross-env NEXT_PUBLIC_APP_NAME=GoGovMY NEXT_PUBLIC_APP_SHORT_DOMAIN=go.gov.my NEXT_PUBLIC_APP_DOMAIN=go.gov.my email dev --port 3333",
     "build": "prisma generate & next build",
     "lint": "next lint",
@@ -34,7 +34,6 @@
     "@opentelemetry/instrumentation": "^0.53.0",
     "@opentelemetry/resources": "^1.24.1",
     "@opentelemetry/sdk-metrics": "^1.26.0",
-    "@opentelemetry/sdk-node": "^0.51.1",
     "@opentelemetry/sdk-trace-base": "^1.26.0",
     "@opentelemetry/sdk-trace-node": "^1.24.1",
     "@opentelemetry/semantic-conventions": "^1.24.1",
