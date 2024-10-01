@@ -11,7 +11,7 @@ import {
 const otlpExporter = new OTLPTraceExporter({
   url:
     process.env.NODE_ENV === 'production'
-      ? 'https://jaeger:4318/v1/traces'
+      ? 'http://jaeger:4318/v1/traces'
       : 'http://localhost:4318/v1/traces',
 });
 
