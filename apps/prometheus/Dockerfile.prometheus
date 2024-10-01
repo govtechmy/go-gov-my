@@ -3,5 +3,6 @@ FROM prom/prometheus@sha256:b8e88960a963fc6eb9cc89f4cae8f458d4e006cd9d7cf78b7cff
 COPY prometheus.yml /etc/prometheus/prometheus.yml
 
 EXPOSE 9090
+EXPOSE 9464
 
 CMD [ "--config.file=/etc/prometheus/prometheus.yml" ]
