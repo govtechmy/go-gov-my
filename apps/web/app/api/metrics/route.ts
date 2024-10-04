@@ -3,11 +3,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    return NextResponse.json(await promClient.register.metrics(), {
-      headers: {
-        'Content-Type': promClient.register.contentType,
-      },
-    });
+    return new NextResponse(await promClient.register.metrics());
   } catch (err) {
     return NextResponse.json(
       { error: 'Error collecting metrics' },
