@@ -1,5 +1,6 @@
 import { DubApiError } from '@/lib/api/errors';
 import { withSession } from '@/lib/auth';
+import { logStatusCode } from '@/lib/decorator/logStatusCode';
 import { prisma } from '@/lib/prisma';
 import { checkIfUserExists } from '@/lib/userinfos';
 import {
@@ -16,61 +17,63 @@ const GetWorkspacesSearchParams = z.object({
 });
 
 // GET /api/workspaces - get all projects for the current user
-export const GET = withSession(async ({ session, searchParams }) => {
-  const { search } = await GetWorkspacesSearchParams.parseAsync(searchParams);
-  let whereQuery: Prisma.ProjectWhereInput = {};
+export const GET = logStatusCode(
+  withSession(async ({ session, searchParams }) => {
+    const { search } = await GetWorkspacesSearchParams.parseAsync(searchParams);
+    let whereQuery: Prisma.ProjectWhereInput = {};
 
-  switch (session.user.role) {
-    // Staff can only get workspaces where they are a member
-    case 'staff':
-      whereQuery = {
+    switch (session.user.role) {
+      // Staff can only get workspaces where they are a member
+      case 'staff':
+        whereQuery = {
+          users: {
+            some: { userId: session.user.id },
+          },
+        };
+        break;
+      // Super admins can get all workspaces from their agency
+      case 'super_admin':
+        whereQuery = {
+          agencyCode: session.user.agencyCode,
+        };
+        break;
+      default:
+        throw Error(`Unknown user role '${session.user.role}'`);
+    }
+
+    const projects = await prisma.project.findMany({
+      where: {
+        ...whereQuery,
+        ...(search && {
+          OR: [
+            {
+              name: { contains: search },
+            },
+            {
+              slug: { contains: search },
+            },
+          ],
+        }),
+      },
+      include: {
         users: {
-          some: { userId: session.user.id },
-        },
-      };
-      break;
-    // Super admins can get all workspaces from their agency
-    case 'super_admin':
-      whereQuery = {
-        agencyCode: session.user.agencyCode,
-      };
-      break;
-    default:
-      throw Error(`Unknown user role '${session.user.role}'`);
-  }
-
-  const projects = await prisma.project.findMany({
-    where: {
-      ...whereQuery,
-      ...(search && {
-        OR: [
-          {
-            name: { contains: search },
+          where: {
+            userId: session.user.id,
           },
-          {
-            slug: { contains: search },
+          select: {
+            role: true,
           },
-        ],
-      }),
-    },
-    include: {
-      users: {
-        where: {
-          userId: session.user.id,
-        },
-        select: {
-          role: true,
         },
       },
-    },
-  });
+    });
 
-  return NextResponse.json(
-    projects.map((project) =>
-      WorkspaceSchema.parse({ ...project, id: `ws_${project.id}` }),
-    ),
-  );
-});
+    return NextResponse.json(
+      projects.map((project) =>
+        WorkspaceSchema.parse({ ...project, id: `ws_${project.id}` }),
+      ),
+    );
+  }),
+);
 
 export const POST = withSession(async ({ req, session }) => {
   const { name, slug } = await createWorkspaceSchema.parseAsync(
