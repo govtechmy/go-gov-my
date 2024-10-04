@@ -1,3 +1,4 @@
+import { counterProm } from '@/lib/metrics/statuscode';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
@@ -9,6 +10,8 @@ export function logStatusCode(
 ) {
   return async (req: NextRequest, params: any) => {
     const response = await handler(req, params);
+
+    counterProm.inc();
 
     // Log the status code after the handler completes
     console.log(`Status code: ${response.status}`);
