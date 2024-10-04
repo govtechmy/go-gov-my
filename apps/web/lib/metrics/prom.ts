@@ -27,5 +27,16 @@ export const counter500 = new promClient.Counter({
   help: 'Log status code for 500',
 });
 
+export const httpRequestCount = new promClient.Counter({
+  name: 'total_http_request_count',
+  help: 'Total HTTP Request Count',
+});
+
+export const httpRequestTimeTaken = new promClient.Counter({
+  // in millisecond
+  name: 'http_request_time_taken',
+  help: 'HTTP Request Time Taken',
+});
+
 export const collectDefaultMetrics = promClient.collectDefaultMetrics;
 collectDefaultMetrics();

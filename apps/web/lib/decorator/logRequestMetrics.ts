@@ -4,18 +4,28 @@ import {
   counter400,
   counter401,
   counter500,
+  httpRequestCount,
+  httpRequestTimeTaken,
 } from '@/lib/metrics/prom';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-export function logStatusCode(
+export function logRequestMetrics(
   handler: (
     req: NextRequest,
     params: any,
   ) => Promise<NextResponse> | NextResponse,
 ) {
   return async (req: NextRequest, params: any) => {
+    const start_timestamp = Date.now();
     const response = await handler(req, params);
+    const end_timestamp = Date.now();
+
+    const time_diff = end_timestamp - start_timestamp;
+    console.log('time_diff', time_diff);
+
+    httpRequestCount.inc();
+    httpRequestTimeTaken.inc(time_diff);
 
     console.log(`Status code: ${response.status}`);
     switch (response.status) {
