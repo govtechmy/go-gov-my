@@ -1,4 +1,4 @@
-import { promClient } from '@/lib/metrics/statuscode';
+import { promClient } from '@/lib/metrics/prom';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
