@@ -2,8 +2,12 @@ FROM grafana/grafana@sha256:eff6b95b4d17c5a966ed72bc155685d9bc2e704c455ad7c246df
 
 EXPOSE 3003
 
-# There are the default passwords and username, change if u want
+#default username and password
 ENV GF_SECURITY_ADMIN_USER=admin
-ENV GF_SECURITY_ADMIN_PASSWORD=password
+ENV GF_SECURITY_ADMIN_PASSWORD=admin
+
+# Provision data sources
+COPY ./datasources.yml /etc/grafana/provisioning/datasources/datasources.yml
+
 
 CMD ["grafana-server", "--homepath=/usr/share/grafana", "--config=/etc/grafana/grafana.ini", "cfg:default.paths.logs=/var/log/grafana", "cfg:default.paths.data=/var/lib/grafana", "cfg:default.paths.plugins=/var/lib/grafana/plugins"]
