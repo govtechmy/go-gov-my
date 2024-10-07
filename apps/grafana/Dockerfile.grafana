@@ -9,5 +9,12 @@ ENV GF_SECURITY_ADMIN_PASSWORD=admin
 # Provision data sources
 COPY ./datasources.yml /etc/grafana/provisioning/datasources/datasources.yml
 
+# Provision dashboard
+COPY ./dashboards.yml /etc/grafana/provisioning/dashboards/dashboards.yml
+
+COPY ./dashboards/request_status_code.json /var/lib/grafana/dashboards/request_status_code.json
+COPY ./dashboards/average_request_time.json /var/lib/grafana/dashboards/average_request_time.json
+
+
 
 CMD ["grafana-server", "--homepath=/usr/share/grafana", "--config=/etc/grafana/grafana.ini", "cfg:default.paths.logs=/var/log/grafana", "cfg:default.paths.data=/var/lib/grafana", "cfg:default.paths.plugins=/var/lib/grafana/plugins"]
