@@ -45,6 +45,7 @@ export function logRequestMetrics(
         counter500.inc();
         break;
       default:
+        break;
     }
 
     return response;
