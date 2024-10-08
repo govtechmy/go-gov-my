@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Change to the Next.js landing page directory
+cd ../apps/redirect-pages/next-landing-page
+
 # Build the Next.js landing page
 npm run generate
 
@@ -25,3 +28,6 @@ mkdir -p $PUBLIC_LANDING_FOLDER
 cp -r ./out/_next/static $PUBLIC_LANDING_FOLDER
 
 echo "Landing page built and copied to templates/landing and public/landing folders."
+
+# Change back to the original directory
+cd ..

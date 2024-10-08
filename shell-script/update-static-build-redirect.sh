@@ -1,3 +1,5 @@
+cd ../apps/redirect-pages/next-redirect-page
+
 npm run build
 
 find out -type f \( -name "*.html" -o -name "*.js" -o -name "*.css" -o -name "*.txt" \) -exec sed -i '' -e 's/__goapp_public__/public\/redirect/g' {} +

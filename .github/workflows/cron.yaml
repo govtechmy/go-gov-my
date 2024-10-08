@@ -41,7 +41,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: apps/cron
-          file: apps/cron/Dockerfile.cron
+          file: docker/Dockerfile.cron
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

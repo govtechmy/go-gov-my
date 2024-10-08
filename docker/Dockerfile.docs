@@ -1,0 +1,29 @@
+FROM node:20-alpine
+
+RUN apk update && apk upgrade
+
+WORKDIR /app
+
+# Change this line to copy the entire docs directory
+COPY ./apps/docs .
+
+RUN npm install -g npm@10.8.3
+
+RUN npm install
+
+RUN npm install @mintlify/cli
+
+RUN npm install -g mintlify
+
+# Add a verification step to check if mint.json exists
+RUN if [ ! -f mint.json ]; then echo "mint.json is missing" && exit 1; fi
+
+EXPOSE 3334
+
+CMD [ \
+    "mintlify", \
+    "dev", \
+    "--port", \
+    "3334" \
+    ]
+

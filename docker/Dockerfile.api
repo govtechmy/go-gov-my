@@ -2,11 +2,11 @@ FROM golang:1.21-alpine AS builder
 
 WORKDIR /app
 
-COPY go.mod go.sum ./
+COPY ../apps/redirect-server/go.mod ../apps/redirect-server/go.sum ./
 
 RUN go mod download
 
-COPY . .
+COPY ../apps/redirect-server .
 
 RUN go build -o /api ./cmd/api
 
@@ -16,4 +16,6 @@ COPY --from=builder /api /api
 
 EXPOSE 3002
 
-CMD ["/api"]
+CMD [ \
+    "/api" \
+    ]
