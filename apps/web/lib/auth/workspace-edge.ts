@@ -2,18 +2,18 @@ import {
   DubApiError,
   exceededLimitError,
   handleAndReturnErrorResponse,
-} from "@/lib/api/errors";
-import { ratelimit } from "@/lib/redis/ratelimit";
-import { PlanProps, WorkspaceProps } from "@/lib/types";
-import { API_DOMAIN, getSearchParams } from "@dub/utils";
-import { waitUntil } from "@vercel/functions";
-import { StreamingTextResponse } from "ai";
-import { getToken } from "next-auth/jwt";
-import { NextRequest } from "next/server";
-import { isBetaTester } from "../edge-config";
-import { prisma } from "../prisma";
-import { hashToken } from "./hash-token";
-import type { Session } from "./utils";
+} from '@/lib/api/errors';
+import { ratelimit } from '@/lib/redis/ratelimit';
+import { PlanProps, WorkspaceProps } from '@/lib/types';
+import { API_DOMAIN, getSearchParams } from '@dub/utils';
+import { waitUntil } from '@vercel/functions';
+import { StreamingTextResponse } from 'ai';
+import { getToken } from 'next-auth/jwt';
+import { NextRequest } from 'next/server';
+import { isBetaTester } from '../edge-config';
+import { prisma } from '../prisma';
+import { hashToken } from './hash-token';
+import type { Session } from './utils';
 
 interface WithWorkspaceEdgeHandler {
   ({
@@ -40,15 +40,15 @@ export const withWorkspaceEdge = (
   handler: WithWorkspaceEdgeHandler,
   {
     requiredPlan = [
-      "free",
-      "pro",
-      "business",
-      "business plus",
-      "business max",
-      "business extra",
-      "enterprise",
+      'free',
+      'pro',
+      'business',
+      'business plus',
+      'business max',
+      'business extra',
+      'enterprise',
     ], // if the action needs a specific plan
-    requiredRole = ["owner", "member"],
+    requiredRole = ['owner', 'member'],
     needNotExceededClicks, // if the action needs the user to not have exceeded their clicks usage
     needNotExceededLinks, // if the action needs the user to not have exceeded their links usage
     needNotExceededAI, // if the action needs the user to not have exceeded their AI usage
@@ -56,7 +56,7 @@ export const withWorkspaceEdge = (
     betaFeature, // if the action is a beta feature
   }: {
     requiredPlan?: Array<PlanProps>;
-    requiredRole?: Array<"owner" | "member">;
+    requiredRole?: Array<'owner' | 'member'>;
     needNotExceededClicks?: boolean;
     needNotExceededLinks?: boolean;
     needNotExceededAI?: boolean;
@@ -74,16 +74,16 @@ export const withWorkspaceEdge = (
     let headers = {};
 
     try {
-      const authorizationHeader = req.headers.get("Authorization");
+      const authorizationHeader = req.headers.get('Authorization');
       if (authorizationHeader) {
-        if (!authorizationHeader.includes("Bearer ")) {
+        if (!authorizationHeader.includes('Bearer ')) {
           throw new DubApiError({
-            code: "bad_request",
+            code: 'bad_request',
             message:
               "Misconfigured authorization header. Did you forget to add 'Bearer '? Learn more: https://d.to/auth",
           });
         }
-        apiKey = req.headers.get("x-api-key") || "";
+        apiKey = req.headers.get('x-api-key') || '';
       }
 
       const domain = params?.domain || searchParams.domain;
@@ -107,14 +107,14 @@ export const withWorkspaceEdge = (
       // if there's no workspace ID or slug
       if (!idOrSlug) {
         throw new DubApiError({
-          code: "not_found",
+          code: 'not_found',
           message:
-            "Workspace id not found. Did you forget to include a `workspaceId` query parameter? Learn more: https://d.to/id",
+            'Workspace id not found. Did you forget to include a `workspaceId` query parameter? Learn more: https://d.to/id',
         });
       }
 
-      if (idOrSlug.startsWith("ws_")) {
-        workspaceId = idOrSlug.replace("ws_", "");
+      if (idOrSlug.startsWith('ws_')) {
+        workspaceId = idOrSlug.replace('ws_', '');
       } else {
         workspaceSlug = idOrSlug;
       }
@@ -140,27 +140,27 @@ export const withWorkspaceEdge = (
         });
         if (!token) {
           throw new DubApiError({
-            code: "unauthorized",
-            message: "Unauthorized: Invalid API key.",
+            code: 'unauthorized',
+            message: 'Unauthorized: Invalid API key.',
           });
         }
 
         const { success, limit, reset, remaining } = await ratelimit(
           apiKey,
           600,
-          "1 m",
+          '1 m',
         );
         headers = {
-          "Retry-After": reset.toString(),
-          "X-RateLimit-Limit": limit.toString(),
-          "X-RateLimit-Remaining": remaining.toString(),
-          "X-RateLimit-Reset": reset.toString(),
+          'Retry-After': reset.toString(),
+          'X-RateLimit-Limit': limit.toString(),
+          'X-RateLimit-Remaining': remaining.toString(),
+          'X-RateLimit-Reset': reset.toString(),
         };
 
         if (!success) {
           throw new DubApiError({
-            code: "rate_limit_exceeded",
-            message: "Too many requests.",
+            code: 'rate_limit_exceeded',
+            message: 'Too many requests.',
           });
         }
         waitUntil(
@@ -176,7 +176,7 @@ export const withWorkspaceEdge = (
         session = {
           user: {
             id: token.user.id,
-            name: token.user.name || "",
+            name: token.user.name || '',
             email: token.user.email,
             role: token.user.role,
             agencyCode: token.user.agencyCode,
@@ -190,8 +190,8 @@ export const withWorkspaceEdge = (
 
         if (!session?.user?.id) {
           throw new DubApiError({
-            code: "unauthorized",
-            message: "Unauthorized: Login required.",
+            code: 'unauthorized',
+            message: 'Unauthorized: Login required.',
           });
         }
       }
@@ -216,8 +216,8 @@ export const withWorkspaceEdge = (
       if (!workspace || !workspace.users) {
         // workspace doesn't exist
         throw new DubApiError({
-          code: "not_found",
-          message: "Workspace not found.",
+          code: 'not_found',
+          message: 'Workspace not found.',
         });
       }
 
@@ -226,8 +226,8 @@ export const withWorkspaceEdge = (
         const betaTester = await isBetaTester(workspace.id);
         if (!betaTester) {
           throw new DubApiError({
-            code: "forbidden",
-            message: "Unauthorized: Beta feature.",
+            code: 'forbidden',
+            message: 'Unauthorized: Beta feature.',
           });
         }
       }
@@ -247,8 +247,8 @@ export const withWorkspaceEdge = (
         });
         if (!pendingInvites) {
           throw new DubApiError({
-            code: "not_found",
-            message: "Workspace not found.",
+            code: 'not_found',
+            message: 'Workspace not found.',
           });
         } else if (
           pendingInvites &&
@@ -256,13 +256,13 @@ export const withWorkspaceEdge = (
           pendingInvites.expires < new Date()
         ) {
           throw new DubApiError({
-            code: "invite_expired",
-            message: "Workspace invite expired.",
+            code: 'invite_expired',
+            message: 'Workspace invite expired.',
           });
         } else {
           throw new DubApiError({
-            code: "invite_pending",
-            message: "Workspace invite pending.",
+            code: 'invite_pending',
+            message: 'Workspace invite pending.',
           });
         }
       }
@@ -273,19 +273,19 @@ export const withWorkspaceEdge = (
         !(allowSelf && searchParams.userId === session.user.id)
       ) {
         throw new DubApiError({
-          code: "forbidden",
-          message: "Unauthorized: Insufficient permissions.",
+          code: 'forbidden',
+          message: 'Unauthorized: Insufficient permissions.',
         });
       }
 
       // clicks usage overage checks
       if (needNotExceededClicks && workspace.usage > workspace.usageLimit) {
         throw new DubApiError({
-          code: "forbidden",
+          code: 'forbidden',
           message: exceededLimitError({
             plan: workspace.plan,
             limit: workspace.usageLimit,
-            type: "clicks",
+            type: 'clicks',
           }),
         });
       }
@@ -294,14 +294,14 @@ export const withWorkspaceEdge = (
       if (
         needNotExceededLinks &&
         workspace.linksUsage > workspace.linksLimit &&
-        (workspace.plan === "free" || workspace.plan === "pro")
+        (workspace.plan === 'free' || workspace.plan === 'pro')
       ) {
         throw new DubApiError({
-          code: "forbidden",
+          code: 'forbidden',
           message: exceededLimitError({
             plan: workspace.plan,
             limit: workspace.linksLimit,
-            type: "links",
+            type: 'links',
           }),
         });
       }
@@ -309,11 +309,11 @@ export const withWorkspaceEdge = (
       // AI usage overage checks
       if (needNotExceededAI && workspace.aiUsage > workspace.aiLimit) {
         throw new DubApiError({
-          code: "forbidden",
+          code: 'forbidden',
           message: exceededLimitError({
             plan: workspace.plan,
             limit: workspace.aiLimit,
-            type: "AI",
+            type: 'AI',
           }),
         });
       }
@@ -321,21 +321,21 @@ export const withWorkspaceEdge = (
       // plan checks
       if (!requiredPlan.includes(workspace.plan)) {
         throw new DubApiError({
-          code: "forbidden",
-          message: "Unauthorized: Need higher plan.",
+          code: 'forbidden',
+          message: 'Unauthorized: Need higher plan.',
         });
       }
 
       // analytics API checks
-      const url = new URL(req.url || "", API_DOMAIN);
+      const url = new URL(req.url || '', API_DOMAIN);
       if (
-        workspace.plan === "free" &&
+        workspace.plan === 'free' &&
         apiKey &&
-        url.pathname.includes("/analytics")
+        url.pathname.includes('/analytics')
       ) {
         throw new DubApiError({
-          code: "forbidden",
-          message: "Analytics API is only available on paid plans.",
+          code: 'forbidden',
+          message: 'Analytics API is only available on paid plans.',
         });
       }
 

@@ -1,7 +1,7 @@
-import { useIntlHook } from "@/lib/middleware/utils/useI18n";
-import NavLink from "@/ui/layout/settings-nav-link";
-import { MaxWidthWrapper } from "@dub/ui";
-import { ReactNode } from "react";
+import { useIntlHook } from '@/lib/middleware/utils/useI18n';
+import NavLink from '@/ui/layout/settings-nav-link';
+import { MaxWidthWrapper } from '@dub/ui';
+import { ReactNode } from 'react';
 
 export default function SettingsLayout({
   tabs,

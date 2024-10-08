@@ -1,11 +1,11 @@
-import { getSession } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { LoadingSpinner, Logo } from "@dub/ui";
-import { APP_NAME } from "@dub/utils";
-import { redirect } from "next/navigation";
-import { Suspense } from "react";
+import { getSession } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { LoadingSpinner, Logo } from '@dub/ui';
+import { APP_NAME } from '@dub/utils';
+import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
 
-export const runtime = "nodejs";
+export const runtime = 'nodejs';
 
 const PageCopy = ({ title, message }: { title: string; message: string }) => {
   return (
@@ -49,7 +49,7 @@ async function VerifyInvite({ code }: { code: string }) {
   const session = await getSession();
 
   if (!session) {
-    redirect("/login");
+    redirect('/login');
   }
 
   const workspace = await prisma.project.findUnique({

@@ -1,6 +1,6 @@
-import { withSession } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { withSession } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { NextResponse } from 'next/server';
 
 // POST /api/workspaces/[idOrSlug]/invites/accept – accept a workspace invite
 export const POST = withSession(async ({ session, params }) => {
@@ -23,11 +23,11 @@ export const POST = withSession(async ({ session, params }) => {
     },
   });
   if (!invite) {
-    return new Response("Invalid invite", { status: 404 });
+    return new Response('Invalid invite', { status: 404 });
   }
 
   if (invite && invite.expires && invite.expires < new Date()) {
-    return new Response("Invite expired", { status: 410 });
+    return new Response('Invite expired', { status: 410 });
   }
 
   const workspace = invite.project;
@@ -36,7 +36,7 @@ export const POST = withSession(async ({ session, params }) => {
     prisma.projectUsers.create({
       data: {
         userId: session.user.id,
-        role: "member",
+        role: 'member',
         projectId: workspace.id,
       },
     }),

@@ -1,7 +1,7 @@
-"use client";
-import { MessagesContext } from "@/ui/switcher/provider";
-import { useSession } from "next-auth/react";
-import { useContext, useEffect, useState } from "react";
+'use client';
+import { MessagesContext } from '@/ui/switcher/provider';
+import { useSession } from 'next-auth/react';
+import { useContext, useEffect, useState } from 'react';
 
 export default function AgencyLabel() {
   const { data: session } = useSession();
@@ -14,17 +14,17 @@ export default function AgencyLabel() {
     const fetchAgency = async () => {
       if (session && session.user && session.user.agencyCode) {
         try {
-          const response = await fetch("/api/agency");
+          const response = await fetch('/api/agency');
           if (response.ok) {
             const data = await response.json();
             const name =
-              locale === "ms-MY" ? data.user.names.ms : data.user.names.en;
+              locale === 'ms-MY' ? data.user.names.ms : data.user.names.en;
             setAgencyName(name);
           } else {
-            console.error("Failed to fetch agency data");
+            console.error('Failed to fetch agency data');
           }
         } catch (error) {
-          console.error("Error fetching agency data:", error);
+          console.error('Error fetching agency data:', error);
         }
       }
     };

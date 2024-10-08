@@ -1,5 +1,5 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { LinkProps } from "@/lib/types";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { LinkProps } from '@/lib/types';
 import {
   Facebook,
   FileUpload,
@@ -8,14 +8,14 @@ import {
   Photo,
   Popover,
   Twitter,
-  Unsplash,
+  // Unsplash,
   useMediaQuery,
   useResizeObserver,
-} from "@dub/ui";
-import { Button } from "@dub/ui/src/button";
-import { getDomainWithoutWWW, resizeImage, SHORT_DOMAIN } from "@dub/utils";
-import { AnimatePresence, motion } from "framer-motion";
-import { Edit2, Link2, Upload } from "lucide-react";
+} from '@dub/ui';
+import { Button } from '@dub/ui/src/button';
+import { getDomainWithoutWWW, resizeImage, SHORT_DOMAIN } from '@dub/utils';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Edit2, Link2, Upload } from 'lucide-react';
 import {
   ChangeEvent,
   Dispatch,
@@ -25,11 +25,11 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
-import { toast } from "sonner";
-import { useDebounce } from "use-debounce";
-import { usePromptModal } from "../prompt-modal";
-import UnsplashSearch from "./unsplash-search";
+} from 'react';
+import { toast } from 'sonner';
+import { useDebounce } from 'use-debounce';
+import { usePromptModal } from '../prompt-modal';
+// import UnsplashSearch from './unsplash-search';
 
 export default function Preview({
   data,
@@ -206,12 +206,12 @@ const ImagePreview = ({
   const [resizing, setResizing] = useState(false);
 
   const { setShowPromptModal, PromptModal } = usePromptModal({
-    title: "Use image from URL",
+    title: 'Use image from URL',
     description:
       "Paste an image URL to use for your link's social media cards.",
-    label: "Image URL",
+    label: 'Image URL',
     inputProps: {
-      placeholder: "https://example.com/og.png",
+      placeholder: 'https://example.com/og.png',
     },
     onSubmit: (image) => {
       if (image) onImageChange(image);
@@ -331,34 +331,34 @@ const ImagePreviewPopoverContent = ({
 
   const { isMobile } = useMediaQuery();
 
-  const [state, setState] = useState<"default" | "unsplash">("default");
+  const [state, setState] = useState<'default' | 'unsplash'>('default');
 
   return (
     <motion.div
       className="relative overflow-hidden"
       animate={{
         width: isMobile
-          ? "100%"
-          : resizeObserverEntry?.borderBoxSize[0].inlineSize ?? "auto",
-        height: resizeObserverEntry?.borderBoxSize[0].blockSize ?? "auto",
+          ? '100%'
+          : resizeObserverEntry?.borderBoxSize[0].inlineSize ?? 'auto',
+        height: resizeObserverEntry?.borderBoxSize[0].blockSize ?? 'auto',
       }}
-      transition={{ type: "spring", duration: 0.3, bounce: 0.15 }}
+      transition={{ type: 'spring', duration: 0.3, bounce: 0.15 }}
     >
       <div ref={contentWrapperRef} className="inline-block w-full sm:w-auto">
         <AnimatePresence>
-          {state === "unsplash" && (
+          {state === 'unsplash' && (
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
             >
-              <UnsplashSearch
+              {/* <UnsplashSearch
                 onImageSelected={onImageChange}
                 setOpenPopover={setOpenPopover}
-              />
+              /> */}
             </motion.div>
           )}
 
-          {state === "default" && (
+          {state === 'default' && (
             <div className="grid gap-px p-2">
               <Button
                 text="Upload image"
@@ -377,13 +377,13 @@ const ImagePreviewPopoverContent = ({
                 className="h-9 justify-start px-2 font-medium"
                 onClick={() => setShowPromptModal(true)}
               />
-              <Button
+              {/* <Button
                 text="Use image from Unsplash"
                 variant="outline"
                 icon={<Unsplash className="h-4 w-4 p-0.5" />}
                 className="h-9 justify-start px-2 font-medium"
-                onClick={() => setState("unsplash")}
-              />
+                onClick={() => setState('unsplash')}
+              /> */}
             </div>
           )}
         </AnimatePresence>

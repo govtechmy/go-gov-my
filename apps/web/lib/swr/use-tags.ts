@@ -1,7 +1,7 @@
-import { TagProps } from "@/lib/types";
-import { fetcher } from "@dub/utils";
-import useSWR from "swr";
-import useWorkspace from "./use-workspace";
+import { TagProps } from '@/lib/types';
+import { fetcher } from '@dub/utils';
+import useSWR from 'swr';
+import useWorkspace from './use-workspace';
 
 export default function useTags() {
   const { id } = useWorkspace();

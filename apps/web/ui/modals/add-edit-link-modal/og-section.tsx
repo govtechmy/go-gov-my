@@ -1,22 +1,20 @@
-import useWorkspace from "@/lib/swr/use-workspace";
-import { LinkProps } from "@/lib/types";
-import { ProBadgeTooltip } from "@/ui/shared/pro-badge-tooltip";
+import useWorkspace from '@/lib/swr/use-workspace';
+import { LinkProps } from '@/lib/types';
+import { ProBadgeTooltip } from '@/ui/shared/pro-badge-tooltip';
 import {
   ButtonTooltip,
   FileUpload,
   LoadingCircle,
-  Popover,
   SimpleTooltipContent,
   Switch,
-  Unsplash,
-} from "@dub/ui";
-import { FADE_IN_ANIMATION_SETTINGS, resizeImage } from "@dub/utils";
-import { motion } from "framer-motion";
-import { Link2 } from "lucide-react";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import TextareaAutosize from "react-textarea-autosize";
-import { usePromptModal } from "../prompt-modal";
-import UnsplashSearch from "./unsplash-search";
+} from '@dub/ui';
+import { FADE_IN_ANIMATION_SETTINGS, resizeImage } from '@dub/utils';
+import { motion } from 'framer-motion';
+import { Link2 } from 'lucide-react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
+import { usePromptModal } from '../prompt-modal';
+// import UnsplashSearch from './unsplash-search';
 
 export default function OGSection({
   props,
@@ -32,12 +30,12 @@ export default function OGSection({
   const { id: workspaceId, exceededAI, mutate } = useWorkspace();
 
   const { setShowPromptModal, PromptModal } = usePromptModal({
-    title: "Use image from URL",
+    title: 'Use image from URL',
     description:
       "Paste an image URL to use for your link's social media cards.",
-    label: "Image URL",
+    label: 'Image URL',
     inputProps: {
-      placeholder: "https://example.com/og.png",
+      placeholder: 'https://example.com/og.png',
     },
     onSubmit: (image) => {
       if (image) setData((prev) => ({ ...prev, image }));
@@ -197,7 +195,7 @@ export default function OGSection({
                 >
                   <Link2 className="h-4 w-4 text-gray-500" />
                 </ButtonTooltip>
-                <Popover
+                {/* <Popover
                   content={
                     <UnsplashSearch
                       onImageSelected={(image) =>
@@ -215,7 +213,7 @@ export default function OGSection({
                   >
                     <Unsplash className="h-3 w-3 text-gray-500" />
                   </button>
-                </Popover>
+                </Popover> */}
               </div>
             </div>
             <div className="mt-1">
@@ -280,7 +278,7 @@ export default function OGSection({
                 maxLength={120}
                 className="block w-full rounded-md border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm"
                 placeholder={`${process.env.NEXT_PUBLIC_APP_NAME} - open-source link management infrastructure.`}
-                value={title || ""}
+                value={title || ''}
                 onChange={(e) => {
                   setData({ ...data, title: e.target.value });
                 }}
@@ -325,7 +323,7 @@ export default function OGSection({
                 maxLength={240}
                 className="block w-full rounded-md border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm"
                 placeholder={`${process.env.NEXT_PUBLIC_APP_NAME} is the official link shortener for the Malaysia government.`}
-                value={description || ""}
+                value={description || ''}
                 onChange={(e) => {
                   setData({
                     ...data,

@@ -1,12 +1,12 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
-import { sendEmail } from "emails";
-import LoginLink from "emails/login-link";
-import { type NextAuthOptions } from "next-auth";
-import EmailProvider from "next-auth/providers/email";
-import GoogleProvider from "next-auth/providers/google";
-import { isStored, storage } from "../storage";
-import { IS_PRODUCTION, SESSION_TOKEN_NAME } from "./constants";
+import { PrismaAdapter } from '@next-auth/prisma-adapter';
+import { PrismaClient } from '@prisma/client';
+import { sendEmail } from 'emails';
+import LoginLink from 'emails/login-link';
+import { type NextAuthOptions } from 'next-auth';
+import EmailProvider from 'next-auth/providers/email';
+import GoogleProvider from 'next-auth/providers/google';
+import { isStored, storage } from '../storage';
+import { IS_PRODUCTION, SESSION_TOKEN_NAME } from './constants';
 
 const prisma = new PrismaClient();
 
@@ -33,7 +33,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   adapter: PrismaAdapter(prisma),
-  session: { strategy: "jwt" },
+  session: { strategy: 'jwt' },
   cookies: {
     sessionToken: {
       name: IS_PRODUCTION
@@ -41,8 +41,8 @@ export const authOptions: NextAuthOptions = {
         : SESSION_TOKEN_NAME,
       options: {
         httpOnly: true,
-        sameSite: "lax",
-        path: "/",
+        sameSite: 'lax',
+        path: '/',
         // When working on localhost, the cookie domain must be omitted entirely (https://stackoverflow.com/a/1188145)
         domain: IS_PRODUCTION
           ? `.${process.env.NEXT_PUBLIC_APP_DOMAIN}`
@@ -52,7 +52,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    error: "/login",
+    error: '/login',
   },
   callbacks: {
     signIn: async ({ user, account, profile }) => {
@@ -72,7 +72,7 @@ export const authOptions: NextAuthOptions = {
       //   return false;
       // }
 
-      if (account?.provider === "google") {
+      if (account?.provider === 'google') {
         const userExists = await prisma.user.findUnique({
           where: { email: user.email },
           select: { id: true, name: true, image: true },
@@ -84,7 +84,7 @@ export const authOptions: NextAuthOptions = {
         // update the user with their name and image
         if (userExists && profile) {
           const profilePic =
-            profile[account.provider === "google" ? "picture" : "avatar_url"];
+            profile[account.provider === 'google' ? 'picture' : 'avatar_url'];
           let newAvatar: string | null = null;
           // if the existing user doesn't have an image or the image is not stored in R2
           if (
@@ -115,7 +115,7 @@ export const authOptions: NextAuthOptions = {
       }
 
       // refresh the user's data if they update their name / email
-      if (trigger === "update") {
+      if (trigger === 'update') {
         const refreshedUser = await prisma.user.findUnique({
           where: { id: token.sub },
         });

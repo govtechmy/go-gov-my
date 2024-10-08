@@ -1,17 +1,17 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useTags from "@/lib/swr/use-tags";
-import { InputSelect, useRouterStuff } from "@dub/ui";
-import { Tag } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import { useContext } from "react";
-import { ModalContext } from "../modals/provider";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useTags from '@/lib/swr/use-tags';
+import { InputSelect, useRouterStuff } from '@dub/ui';
+import { Tag } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { useContext } from 'react';
+import { ModalContext } from '../modals/provider';
 
 export default function TagSelector() {
   const { queryParams } = useRouterStuff();
 
   const { tags } = useTags();
   const searchParams = useSearchParams();
-  const selectedTagId = searchParams?.get("tagId");
+  const selectedTagId = searchParams?.get('tagId');
   const { setShowAddEditTagModal } = useContext(ModalContext);
   const { messages } = useIntlClientHook();
   const message = messages?.analytics;
@@ -30,16 +30,16 @@ export default function TagSelector() {
       icon={<Tag className="h-4 w-4 text-black" />}
       selectedItem={{
         id: selectedTagId!,
-        value: tags?.find(({ id }) => id === selectedTagId)?.name || "",
+        value: tags?.find(({ id }) => id === selectedTagId)?.name || '',
         color: tags?.find(({ id }) => id === selectedTagId)?.color,
       }}
       setSelectedItem={(tag) => {
-        if (tag && typeof tag !== "function" && tag.id) {
+        if (tag && typeof tag !== 'function' && tag.id) {
           queryParams({
             set: { tagId: tag.id },
           });
         } else {
-          queryParams({ del: "tagId" });
+          queryParams({ del: 'tagId' });
         }
       }}
       inputAttrs={{

@@ -1,14 +1,14 @@
-import { handleAndReturnErrorResponse } from "@/lib/api/errors";
-import { prisma } from "@/lib/prisma";
-import { storage } from "@/lib/storage";
-import { NextRequest, NextResponse } from "next/server";
+import { handleAndReturnErrorResponse } from '@/lib/api/errors';
+import { prisma } from '@/lib/prisma';
+import { storage } from '@/lib/storage';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   try {
-    const api_key = req.headers.get("API_KEY");
+    const api_key = req.headers.get('API_KEY');
     if (api_key !== process.env.API_KEY) {
       return NextResponse.json({
-        message: "WRONG API KEY",
+        message: 'WRONG API KEY',
       });
     }
 
@@ -28,8 +28,8 @@ export async function GET(req: NextRequest) {
       totalClicks: totalClicks._sum.clicks || 0,
     };
     const buf = Buffer.from(JSON.stringify(obj));
-    const { url } = await storage.upload("public/stats.json", buf);
-    console.log("url", url);
+    const { url } = await storage.upload('public/stats.json', buf);
+    console.log('url', url);
 
     return NextResponse.json({
       url,

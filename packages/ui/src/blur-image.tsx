@@ -1,6 +1,6 @@
-import { cn } from "@dub/utils";
-import Image, { ImageProps } from "next/image";
-import { useEffect, useState } from "react";
+import { cn } from '@dub/utils';
+import Image, { ImageProps } from 'next/image';
+import { useEffect, useState } from 'react';
 
 export function BlurImage(props: ImageProps) {
   const [loading, setLoading] = useState(true);
@@ -20,7 +20,7 @@ export function BlurImage(props: ImageProps) {
       {...props}
       src={src}
       alt={props.alt}
-      className={cn(loading ? "blur-[2px]" : "blur-0", props.className)}
+      className={cn(loading ? 'blur-[2px]' : 'blur-0', props.className)}
       onLoad={handleLoad}
       onError={() => {
         setSrc(`https://avatar.vercel.sh/${encodeURIComponent(props.alt)}`); // if the image fails to load, use the default avatar

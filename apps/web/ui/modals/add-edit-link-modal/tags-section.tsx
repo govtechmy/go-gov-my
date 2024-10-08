@@ -1,20 +1,20 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useTags from "@/lib/swr/use-tags";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { LinkWithTagsProps, TagProps } from "@/lib/types";
-import TagBadge from "@/ui/links/tag-badge";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useTags from '@/lib/swr/use-tags';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { LinkWithTagsProps, TagProps } from '@/lib/types';
+import TagBadge from '@/ui/links/tag-badge';
 import {
   Badge,
   LoadingCircle,
   Magic,
   SimpleTooltipContent,
   Tooltip,
-} from "@dub/ui";
-import { Command, useCommandState } from "cmdk";
-import { Check, ChevronDown, Tag, X } from "lucide-react";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
-import { mutate } from "swr";
+} from '@dub/ui';
+import { Command, useCommandState } from 'cmdk';
+import { Check, ChevronDown, Tag, X } from 'lucide-react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
 
 export default function TagsSection({
   data,
@@ -26,7 +26,7 @@ export default function TagsSection({
   const { tags: availableTags } = useTags();
   const { id: linkId, url, title, description, tags } = data;
 
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
 
   const {
     id: workspaceId,
@@ -94,11 +94,11 @@ export default function TagsSection({
 
   const createTag = async (tag: string) => {
     setCreatingTag(true);
-    setInputValue("");
+    setInputValue('');
     fetch(`/api/tags?workspaceId=${workspaceId}`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ tag }),
     }).then(async (res) => {
@@ -125,8 +125,8 @@ export default function TagsSection({
       }
     };
     if (openCommandList) {
-      document.addEventListener("click", handleClickOutside);
-      return () => document.removeEventListener("click", handleClickOutside);
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
     }
   }, [commandRef, openCommandList]);
 
@@ -142,18 +142,18 @@ export default function TagsSection({
         value={inputValue}
         onValueChange={setInputValue}
         onKeyDown={(e) => {
-          if (e.key === "Escape") {
+          if (e.key === 'Escape') {
             setOpenCommandList(false);
 
             // listen for cases where empty results and enter is pressed
-          } else if (e.key === "Enter" && isEmpty) {
+          } else if (e.key === 'Enter' && isEmpty) {
             setOpenCommandList(false);
             createTag(inputValue);
 
             // remove the last tag if backspaced
           } else if (
-            ["Backspace", "Delete"].includes(e.key) &&
-            inputValue === ""
+            ['Backspace', 'Delete'].includes(e.key) &&
+            inputValue === ''
           ) {
             setData((data) => {
               const popped = [...data.tags];
@@ -207,7 +207,7 @@ export default function TagsSection({
                 type="button"
                 onClick={() => {
                   setData({ ...data, tags: [] });
-                  setInputValue("");
+                  setInputValue('');
                 }}
                 className="absolute inset-y-0 right-0 my-auto text-gray-400 hover:text-gray-500"
               >
@@ -232,7 +232,7 @@ export default function TagsSection({
                   onClick={() => createTag(inputValue)}
                   className="flex w-full cursor-pointer items-center rounded-md bg-gray-100 px-4 py-2 text-sm text-gray-900 hover:text-gray-900 aria-selected:bg-gray-100 aria-selected:text-gray-900"
                 >
-                  Create tag{" "}
+                  Create tag{' '}
                   <span className="ml-1.5 rounded-md bg-gray-200 px-2 py-0.5 text-gray-800">
                     {inputValue}
                   </span>
@@ -253,7 +253,7 @@ export default function TagsSection({
                       ? data.tags.filter(({ id }) => id !== tag.id)
                       : [...data.tags, tag],
                   });
-                  setInputValue("");
+                  setInputValue('');
                 }}
                 className="group flex cursor-pointer items-center justify-between rounded-md px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 hover:text-gray-900 active:bg-gray-200 aria-selected:bg-gray-100 aria-selected:text-gray-900"
               >
@@ -272,7 +272,7 @@ export default function TagsSection({
                 className="group flex cursor-pointer items-center justify-between rounded-md px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 hover:text-gray-900 active:bg-gray-200 aria-selected:bg-gray-100 aria-selected:text-gray-900"
               >
                 <div className="flex items-center">
-                  Create tag{" "}
+                  Create tag{' '}
                   <span className="ml-1.5 rounded-md bg-gray-200 px-2 py-0.5 text-gray-800">
                     {inputValue}
                   </span>

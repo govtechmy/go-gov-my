@@ -1,4 +1,4 @@
-import { get } from "@vercel/edge-config";
+import { get } from '@vercel/edge-config';
 
 export const isReservedKey = async (key: string) => {
   if (!process.env.NEXT_PUBLIC_IS_DUB || !process.env.EDGE_CONFIG) {
@@ -7,7 +7,7 @@ export const isReservedKey = async (key: string) => {
 
   let reservedKeys;
   try {
-    reservedKeys = await get("reserved");
+    reservedKeys = await get('reserved');
   } catch (e) {
     reservedKeys = [];
   }

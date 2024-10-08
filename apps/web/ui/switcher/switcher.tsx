@@ -1,25 +1,25 @@
-"use client";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { CustomSelect } from "@dub/ui";
-import { usePathname, useRouter } from "next/navigation";
-import Globe from "../icons/globe";
+'use client';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { CustomSelect } from '@dub/ui';
+import { usePathname, useRouter } from 'next/navigation';
+import Globe from '../icons/globe';
 
 export default function LocaleSwitcher() {
   // get current route
   const pathname = usePathname();
   const router = useRouter();
   const { locale } = useIntlClientHook();
-  const pathWithoutLocale = "/" + pathname.split("/").splice(2).join("/");
+  const pathWithoutLocale = '/' + pathname.split('/').splice(2).join('/');
   const options = [
     {
-      label: "BM",
-      full: "Bahasa Melayu",
-      value: "ms-MY",
+      label: 'BM',
+      full: 'Bahasa Melayu',
+      value: 'ms-MY',
     },
     {
-      label: "EN",
-      full: "English",
-      value: "en-GB",
+      label: 'EN',
+      full: 'English',
+      value: 'en-GB',
     },
   ];
 

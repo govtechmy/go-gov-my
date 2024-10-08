@@ -1,5 +1,5 @@
-import { PlainClient } from "@team-plain/typescript-sdk";
-import { Session } from "./auth";
+import { PlainClient } from '@team-plain/typescript-sdk';
+import { Session } from './auth';
 
 export const plain = new PlainClient({
   apiKey: process.env.PLAIN_API_KEY as string,

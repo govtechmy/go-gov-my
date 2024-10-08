@@ -1,15 +1,15 @@
-import { DubApiError } from "@/lib/api/errors";
-import { withSession } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { checkIfUserExists } from "@/lib/userinfos";
+import { DubApiError } from '@/lib/api/errors';
+import { withSession } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { checkIfUserExists } from '@/lib/userinfos';
 import {
   WorkspaceSchema,
   createWorkspaceSchema,
-} from "@/lib/zod/schemas/workspaces";
-import { nanoid } from "@dub/utils";
-import { Prisma } from "@prisma/client";
-import { NextResponse } from "next/server";
-import { z } from "zod";
+} from '@/lib/zod/schemas/workspaces';
+import { nanoid } from '@dub/utils';
+import { Prisma } from '@prisma/client';
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
 
 const GetWorkspacesSearchParams = z.object({
   search: z.string().optional(),
@@ -22,7 +22,7 @@ export const GET = withSession(async ({ session, searchParams }) => {
 
   switch (session.user.role) {
     // Staff can only get workspaces where they are a member
-    case "staff":
+    case 'staff':
       whereQuery = {
         users: {
           some: { userId: session.user.id },
@@ -30,7 +30,7 @@ export const GET = withSession(async ({ session, searchParams }) => {
       };
       break;
     // Super admins can get all workspaces from their agency
-    case "super_admin":
+    case 'super_admin':
       whereQuery = {
         agencyCode: session.user.agencyCode,
       };
@@ -81,8 +81,8 @@ export const POST = withSession(async ({ req, session }) => {
 
   if (!userExists) {
     throw new DubApiError({
-      code: "not_found",
-      message: "Session expired. Please log in again.",
+      code: 'not_found',
+      message: 'Session expired. Please log in again.',
     });
   }
 
@@ -93,7 +93,7 @@ export const POST = withSession(async ({ req, session }) => {
       users: {
         some: {
           userId: session.user.id,
-          role: "owner",
+          role: 'owner',
         },
       },
     },
@@ -118,8 +118,8 @@ export const POST = withSession(async ({ req, session }) => {
 
   if (slugExist) {
     throw new DubApiError({
-      code: "conflict",
-      message: "Slug is already in use.",
+      code: 'conflict',
+      message: 'Slug is already in use.',
     });
   }
 
@@ -127,11 +127,11 @@ export const POST = withSession(async ({ req, session }) => {
     data: {
       name,
       slug,
-      plan: "business",
+      plan: 'business',
       users: {
         create: {
           userId: session.user.id,
-          role: "owner",
+          role: 'owner',
         },
       },
       billingCycleStart: new Date().getDate(),

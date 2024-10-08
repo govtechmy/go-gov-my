@@ -1,7 +1,7 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useTags from "@/lib/swr/use-tags";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { TagColorProps, TagProps } from "@/lib/types";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useTags from '@/lib/swr/use-tags';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { TagColorProps, TagProps } from '@/lib/types';
 import {
   Button,
   InfoTooltip,
@@ -13,8 +13,8 @@ import {
   TooltipContent,
   useMediaQuery,
   useRouterStuff,
-} from "@dub/ui";
-import { capitalize, cn } from "@dub/utils";
+} from '@dub/ui';
+import { capitalize, cn } from '@dub/utils';
 import {
   Dispatch,
   FormEvent,
@@ -22,10 +22,10 @@ import {
   useCallback,
   useMemo,
   useState,
-} from "react";
-import { toast } from "sonner";
-import { mutate } from "swr";
-import { COLORS_LIST, randomBadgeColor } from "../links/tag-badge";
+} from 'react';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
+import { COLORS_LIST, randomBadgeColor } from '../links/tag-badge';
 
 function AddEditTagModal({
   showAddEditTagModal,
@@ -45,8 +45,8 @@ function AddEditTagModal({
 
   const [data, setData] = useState<TagProps>(
     props || {
-      id: "",
-      name: "",
+      id: '',
+      name: '',
       color: randomBadgeColor(),
     },
   );
@@ -66,12 +66,12 @@ function AddEditTagModal({
     () =>
       id
         ? {
-            method: "PATCH",
+            method: 'PATCH',
             url: `/api/tags/${id}?workspaceId=${workspaceId}`,
             successMessage: message?.success_update_tag,
           }
         : {
-            method: "POST",
+            method: 'POST',
             url: `/api/tags?workspaceId=${workspaceId}`,
             successMessage: message?.success_add_tag,
           },
@@ -90,7 +90,7 @@ function AddEditTagModal({
             {props ? message?.edit : message?.add} tag
           </h3>
           <p className="text-sm text-gray-500">
-            {message?.use_tag}{" "}
+            {message?.use_tag}{' '}
             <a
               href="https://github.com/govtechmy/go-gov-my/discussions"
               target="_blank"
@@ -110,7 +110,7 @@ function AddEditTagModal({
           fetch(endpoint.url, {
             method: endpoint.method,
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify({
               // Create expects 'tag', edit expects 'name', so provide both
@@ -125,7 +125,7 @@ function AddEditTagModal({
                 props
                   ? mutate(
                       (key) =>
-                        typeof key === "string" && key.startsWith("/api/links"),
+                        typeof key === 'string' && key.startsWith('/api/links'),
                       undefined,
                       { revalidate: true },
                     )
@@ -190,9 +190,9 @@ function AddEditTagModal({
                 <Label
                   htmlFor={colorOption}
                   className={cn(
-                    "cursor-pointer whitespace-nowrap rounded-md px-2 py-0.5 text-sm capitalize ring-current peer-focus-visible:ring-offset-2",
+                    'cursor-pointer whitespace-nowrap rounded-md px-2 py-0.5 text-sm capitalize ring-current peer-focus-visible:ring-offset-2',
                     css,
-                    color === colorOption && "ring-2",
+                    color === colorOption && 'ring-2',
                   )}
                 >
                   {colorOption}
@@ -234,7 +234,7 @@ function AddTagButton({
           exceededTags ? (
             <TooltipContent
               title={`You can only add up to ${tagsLimit} tag${
-                tagsLimit === 1 ? "" : "s"
+                tagsLimit === 1 ? '' : 's'
               } on the ${capitalize(plan)} plan. Upgrade to add more tags`}
               cta="Upgrade"
               onClick={() => {

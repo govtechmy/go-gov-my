@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { ChevronDown } from "lucide-react";
-import { ReactNode, useState } from "react";
-import { IconMenu } from "./icon-menu";
-import CheckCircle from "./icons/check-circle";
-import { Popover } from "./popover";
+import { ChevronDown } from 'lucide-react';
+import { ReactNode, useState } from 'react';
+import { IconMenu } from './icon-menu';
+import CheckCircle from './icons/check-circle';
+import { Popover } from './popover';
 
 type Option = {
   label: string;
@@ -71,7 +71,7 @@ export function CustomSelect({
         <IconMenu text={selectedOption.label} icon={icon} />
         <ChevronDown
           className={`h-5 w-5 text-gray-400 ${
-            showMenu ? "rotate-180 transform" : ""
+            showMenu ? 'rotate-180 transform' : ''
           } transition-all duration-75`}
         />
       </button>

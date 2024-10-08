@@ -1,7 +1,7 @@
-import { prisma } from "@/lib/prisma";
-import "dotenv-flow/config";
-import * as fs from "fs";
-import * as Papa from "papaparse";
+import { prisma } from '@/lib/prisma';
+import 'dotenv-flow/config';
+import * as fs from 'fs';
+import * as Papa from 'papaparse';
 
 async function main() {
   const users = await prisma.user.findMany({
@@ -12,9 +12,9 @@ async function main() {
     },
   });
 
-  console.log(users.length, "users found");
+  console.log(users.length, 'users found');
 
-  fs.writeFileSync("dub-users.csv", Papa.unparse(users));
+  fs.writeFileSync('dub-users.csv', Papa.unparse(users));
 }
 
 main();

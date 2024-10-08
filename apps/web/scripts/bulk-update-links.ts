@@ -1,11 +1,11 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from '@/lib/prisma';
 
-import "dotenv-flow/config";
+import 'dotenv-flow/config';
 
 async function main() {
   const links = await prisma.link.updateMany({
     where: {
-      domain: "xxx",
+      domain: 'xxx',
     },
     data: {
       publicStats: true,

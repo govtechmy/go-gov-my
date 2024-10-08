@@ -1,29 +1,29 @@
-import { Sort } from "@/ui/shared/icons";
-import { MessagesContext } from "@/ui/switcher/provider";
-import { IconMenu, Popover, Tick, useRouterStuff } from "@dub/ui";
-import { ChevronDown, SortDesc } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import { useContext, useMemo, useState } from "react";
+import { Sort } from '@/ui/shared/icons';
+import { MessagesContext } from '@/ui/switcher/provider';
+import { IconMenu, Popover, Tick, useRouterStuff } from '@dub/ui';
+import { ChevronDown, SortDesc } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { useContext, useMemo, useState } from 'react';
 
 export default function LinkSort() {
   const [openPopover, setOpenPopover] = useState(false);
   const searchParams = useSearchParams();
-  const sort = searchParams?.get("sort");
+  const sort = searchParams?.get('sort');
   const { queryParams } = useRouterStuff();
   const messages = useContext(MessagesContext);
 
   const sortOptions = [
     {
       display: messages?.dashboard?.date_added,
-      slug: "createdAt",
+      slug: 'createdAt',
     },
     {
       display: messages?.dashboard?.number_clicks,
-      slug: "clicks",
+      slug: 'clicks',
     },
     {
       display: messages?.dashboard?.last_clicked,
-      slug: "lastClicked",
+      slug: 'lastClicked',
     },
   ];
 
@@ -78,7 +78,7 @@ export default function LinkSort() {
         />
         <ChevronDown
           className={`h-5 w-5 text-gray-400 ${
-            openPopover ? "rotate-180 transform" : ""
+            openPopover ? 'rotate-180 transform' : ''
           } transition-all duration-75`}
         />
       </button>

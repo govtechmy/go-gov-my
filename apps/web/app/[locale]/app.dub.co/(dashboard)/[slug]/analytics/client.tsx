@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import useWorkspace from "@/lib/swr/use-workspace";
-import LayoutLoader from "@/ui/layout/layout-loader";
-import LinkNotFound from "@/ui/links/link-not-found";
-import { SHORT_DOMAIN } from "@dub/utils";
-import { useSearchParams } from "next/navigation";
-import { ReactNode } from "react";
+import useWorkspace from '@/lib/swr/use-workspace';
+import LayoutLoader from '@/ui/layout/layout-loader';
+import LinkNotFound from '@/ui/links/link-not-found';
+import { SHORT_DOMAIN } from '@dub/utils';
+import { useSearchParams } from 'next/navigation';
+import { ReactNode } from 'react';
 
 export default function AnalyticsClient({ children }: { children: ReactNode }) {
   const { exceededClicks, loading } = useWorkspace();
   const searchParams = useSearchParams();
-  const domain = searchParams?.get("domain");
+  const domain = searchParams?.get('domain');
 
   if (loading) {
     return <LayoutLoader />;

@@ -1,8 +1,8 @@
-import { hashToken, withAdmin } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { DUB_DOMAINS_ARRAY } from "@dub/utils";
-import { randomBytes } from "crypto";
-import { NextResponse } from "next/server";
+import { hashToken, withAdmin } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { DUB_DOMAINS_ARRAY } from '@dub/utils';
+import { randomBytes } from 'crypto';
+import { NextResponse } from 'next/server';
 
 // POST /api/admin/impersonate
 export const POST = withAdmin(async ({ req }) => {
@@ -17,7 +17,7 @@ export const POST = withAdmin(async ({ req }) => {
               project: {
                 slug,
               },
-              role: "owner",
+              role: 'owner',
             },
           },
         },
@@ -54,7 +54,7 @@ export const POST = withAdmin(async ({ req }) => {
   });
 
   if (!response?.email) {
-    return new Response("User not found", { status: 404 });
+    return new Response('User not found', { status: 404 });
   }
 
   const data = {
@@ -83,7 +83,7 @@ export const POST = withAdmin(async ({ req }) => {
 });
 
 async function getImpersonateUrl(email: string) {
-  const token = randomBytes(32).toString("hex");
+  const token = randomBytes(32).toString('hex');
 
   await prisma.verificationToken.create({
     data: {

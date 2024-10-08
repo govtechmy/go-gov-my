@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useRouterStuff } from "@dub/ui";
-import { Crown } from "lucide-react";
-import Link from "next/link";
+import { useRouterStuff } from '@dub/ui';
+import { Crown } from 'lucide-react';
+import Link from 'next/link';
 
 export const UpgradeToProToast = ({
   title,
@@ -16,7 +16,7 @@ export const UpgradeToProToast = ({
   return (
     <div className="flex flex-col space-y-3 rounded-lg bg-white p-6 shadow-lg">
       <div className="flex items-center space-x-1.5">
-        <Crown className="h-5 w-5 text-black" />{" "}
+        <Crown className="h-5 w-5 text-black" />{' '}
         <p className="font-semibold">{title}</p>
       </div>
       <p className="text-sm text-gray-600">{message}</p>
@@ -24,7 +24,7 @@ export const UpgradeToProToast = ({
         href={
           queryParams({
             set: {
-              upgrade: "pro",
+              upgrade: 'pro',
             },
             getNewPath: true,
           }) as string

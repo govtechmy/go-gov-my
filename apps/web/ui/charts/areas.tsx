@@ -1,9 +1,9 @@
-import { LinearGradient } from "@visx/gradient";
-import { Group } from "@visx/group";
-import { Area, AreaClosed, Circle } from "@visx/shape";
-import { motion } from "framer-motion";
-import { Fragment, useMemo } from "react";
-import { useChartContext, useChartTooltipContext } from "./chart-context";
+import { LinearGradient } from '@visx/gradient';
+import { Group } from '@visx/group';
+import { Area, AreaClosed, Circle } from '@visx/shape';
+import { motion } from 'framer-motion';
+import { Fragment, useMemo } from 'react';
+import { useChartContext, useChartTooltipContext } from './chart-context';
 
 export default function Areas() {
   const { data, series, margin, xScale, yScale, startDate, endDate } =
@@ -47,8 +47,8 @@ export default function Areas() {
             {({ path }) => {
               return (
                 <motion.path
-                  initial={{ d: path(zeroedData) || "", opacity: 0 }}
-                  animate={{ d: path(data) || "", opacity: 1 }}
+                  initial={{ d: path(zeroedData) || '', opacity: 0 }}
+                  animate={{ d: path(data) || '', opacity: 1 }}
                   fill={`url(#${s.id}-background)`}
                 />
               );
@@ -63,8 +63,8 @@ export default function Areas() {
           >
             {({ path }) => (
               <motion.path
-                initial={{ d: path(zeroedData) || "" }}
-                animate={{ d: path(data) || "" }}
+                initial={{ d: path(zeroedData) || '' }}
+                animate={{ d: path(data) || '' }}
                 className="text-blue-700"
                 stroke="currentColor"
                 strokeOpacity={0.8}

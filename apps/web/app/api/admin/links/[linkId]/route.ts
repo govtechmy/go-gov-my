@@ -1,6 +1,6 @@
-import { withAdmin } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { withAdmin } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { NextResponse } from 'next/server';
 
 // GET /api/admin/links/[linkId] – get a link as an admin
 export const GET = withAdmin(async ({ params }) => {

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { CopyButton } from "@dub/ui";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { CopyButton } from '@dub/ui';
 
 export default function WorkspaceId() {
   const { id } = useWorkspace();

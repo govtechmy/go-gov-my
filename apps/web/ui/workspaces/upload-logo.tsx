@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { Button, FileUpload } from "@dub/ui";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import { mutate } from "swr";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { Button, FileUpload } from '@dub/ui';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
 
 export default function UploadLogo() {
   const { id, logo, isOwner } = useWorkspace();
@@ -26,15 +26,15 @@ export default function UploadLogo() {
         setUploading(true);
         e.preventDefault();
         fetch(`/api/workspaces/${id}/logo`, {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({ image }),
         }).then(async (res) => {
           if (res.status === 200) {
             await Promise.all([
-              mutate("/api/workspaces"),
+              mutate('/api/workspaces'),
               mutate(`/api/workspaces/${id}`),
             ]);
             toast.success(message?.success_updated_logo);

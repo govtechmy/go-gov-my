@@ -1,12 +1,12 @@
-import { prisma } from "@/lib/prisma";
-import { AnalyticsMessageSchema } from "kafka-consumer/models/AnalyticsSchema";
-import type { Consumer, Logger } from "kafkajs";
+import { prisma } from '@/lib/prisma';
+import { AnalyticsMessageSchema } from 'kafka-consumer/models/AnalyticsSchema';
+import type { Consumer, Logger } from 'kafkajs';
 import {
   consumeAnalytics,
   sumTwoObj,
   toIdempotentResource,
-} from "../utils/analytics";
-import { retryWithDelay } from "../utils/retry";
+} from '../utils/analytics';
+import { retryWithDelay } from '../utils/retry';
 
 export async function runAnalyticConsumer(consumer: Consumer, log: Logger) {
   await consumer.subscribe({
@@ -21,7 +21,7 @@ export async function runAnalyticConsumer(consumer: Consumer, log: Logger) {
         if (!message.value) return;
 
         const data = await AnalyticsMessageSchema.parseAsync(
-          JSON.parse(message.value.toString("utf8") || "{}"),
+          JSON.parse(message.value.toString('utf8') || '{}'),
         );
         const { aggregatedDate, from, to } = data;
         const { idempotencyKey, hashedPayload } = toIdempotentResource(data);
@@ -33,7 +33,7 @@ export async function runAnalyticConsumer(consumer: Consumer, log: Logger) {
         if (idempotentResource !== null) {
           if (idempotentResource.hashedPayload !== hashedPayload) {
             throw new Error(
-              "Idempotent resource hashed payload does not match",
+              'Idempotent resource hashed payload does not match',
             );
           }
           // Commit offset and return early if the message is already processed

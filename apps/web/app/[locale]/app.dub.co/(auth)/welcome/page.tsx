@@ -1,10 +1,10 @@
-import { nonHooki18nFunc } from "@/lib/middleware/utils/useI18n";
-import { Background } from "@dub/ui";
-import { constructMetadata } from "@dub/utils";
-import { Suspense } from "react";
-import WelcomePageClient from "./page-client";
+import { nonHooki18nFunc } from '@/lib/middleware/utils/useI18n';
+import { Background } from '@dub/ui';
+import { constructMetadata } from '@dub/utils';
+import { Suspense } from 'react';
+import WelcomePageClient from './page-client';
 
-export const runtime = "nodejs";
+export const runtime = 'nodejs';
 
 export async function generateMetadata({ params }) {
   const { locale } = params;

@@ -1,6 +1,6 @@
-import { useIntlHook } from "@/lib/middleware/utils/useI18n";
-import { MaxWidthWrapper } from "@dub/ui";
-import { FileX2 } from "lucide-react";
+import { useIntlHook } from '@/lib/middleware/utils/useI18n';
+import { MaxWidthWrapper } from '@dub/ui';
+import { FileX2 } from 'lucide-react';
 
 export default function AnalyticsNotFound() {
   const { messages } = useIntlHook();

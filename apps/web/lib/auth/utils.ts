@@ -1,6 +1,6 @@
-import type { UserRole } from "@prisma/client";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "./options";
+import type { UserRole } from '@prisma/client';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from './options';
 
 export interface Session {
   // This must match the User model from Prisma
@@ -18,7 +18,7 @@ export interface Session {
  * Extend next-auth's session type to match our Session type
  * Docs: https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
-declare module "next-auth" {
+declare module 'next-auth' {
   /**
    * Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
    */

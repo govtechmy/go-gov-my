@@ -1,21 +1,21 @@
-import { LinkHistory } from "@/lib/api/links/add-to-history";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { LinkWithTagsProps, TagProps, UserProps } from "@/lib/types";
-import TagBadge from "@/ui/links/tag-badge";
-import { useAddEditLinkModal } from "@/ui/modals/add-edit-link-modal";
-import { useArchiveLinkModal } from "@/ui/modals/archive-link-modal";
-import { useDeleteLinkModal } from "@/ui/modals/delete-link-modal";
-import LinkHistoryModal from "@/ui/modals/link-history-modal";
-import { useLinkQRModal } from "@/ui/modals/link-qr-modal";
+import { LinkHistory } from '@/lib/api/links/add-to-history';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { LinkWithTagsProps, TagProps, UserProps } from '@/lib/types';
+import TagBadge from '@/ui/links/tag-badge';
+import { useAddEditLinkModal } from '@/ui/modals/add-edit-link-modal';
+import { useArchiveLinkModal } from '@/ui/modals/archive-link-modal';
+import { useDeleteLinkModal } from '@/ui/modals/delete-link-modal';
+import LinkHistoryModal from '@/ui/modals/link-history-modal';
+import { useLinkQRModal } from '@/ui/modals/link-qr-modal';
 import {
   BadgeTooltip,
   CopyButton,
   Tooltip,
   useIntersectionObserver,
   useRouterStuff,
-} from "@dub/ui";
-import { LinkifyTooltipContent } from "@dub/ui/src/tooltip";
+} from '@dub/ui';
+import { LinkifyTooltipContent } from '@dub/ui/src/tooltip';
 import {
   cn,
   fetcher,
@@ -24,14 +24,14 @@ import {
   linkConstructor,
   punycode,
   timeAgo,
-} from "@dub/utils";
-import { Archive, MessageCircle, TimerOff } from "lucide-react";
-import { useParams, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { toast } from "sonner";
-import useSWR from "swr";
-import { useTransferLinkModal } from "../modals/transfer-link-modal";
-import LinkLogo from "./link-logo";
+} from '@dub/utils';
+import { Archive, MessageCircle, TimerOff } from 'lucide-react';
+import { useParams, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { toast } from 'sonner';
+import useSWR from 'swr';
+import { useTransferLinkModal } from '../modals/transfer-link-modal';
+import LinkLogo from './link-logo';
 
 export default function TableCard({
   props,
@@ -77,7 +77,7 @@ export default function TableCard({
   const [primaryTags, additionalTags] = useMemo(() => {
     const primaryTagsCount = 1;
     const filteredTagIds =
-      searchParams?.get("tagIds")?.split(",")?.filter(Boolean) ?? [];
+      searchParams?.get('tagIds')?.split(',')?.filter(Boolean) ?? [];
     const sortedTags =
       filteredTagIds.length > 0
         ? [...tags].sort(
@@ -157,7 +157,7 @@ export default function TableCard({
 
   useEffect(() => {
     // if there's an existing modal backdrop and the link is selected, unselect it
-    const existingModalBackdrop = document.getElementById("modal-backdrop");
+    const existingModalBackdrop = document.getElementById('modal-backdrop');
     if (existingModalBackdrop && selected) {
       setSelected(false);
     }
@@ -170,8 +170,8 @@ export default function TableCard({
 
     // Check if the clicked element is an <a> or <button> element
     const isExcludedElement =
-      e.target.tagName.toLowerCase() === "a" ||
-      e.target.tagName.toLowerCase() === "button";
+      e.target.tagName.toLowerCase() === 'a' ||
+      e.target.tagName.toLowerCase() === 'button';
 
     if (isLinkCardClick && !isExcludedElement) {
       setSelected(!selected);
@@ -182,10 +182,10 @@ export default function TableCard({
 
   useEffect(() => {
     if (isVisible) {
-      document.addEventListener("click", handlClickOnLinkCard);
+      document.addEventListener('click', handlClickOnLinkCard);
     }
     return () => {
-      document.removeEventListener("click", handlClickOnLinkCard);
+      document.removeEventListener('click', handlClickOnLinkCard);
     };
   }, [handlClickOnLinkCard]);
 
@@ -194,7 +194,7 @@ export default function TableCard({
   const copyLinkId = () => {
     navigator.clipboard.writeText(id);
     setCopiedLinkId(true);
-    toast.success("Link ID copied!");
+    toast.success('Link ID copied!');
     setTimeout(() => setCopiedLinkId(false), 3000);
   };
 
@@ -207,35 +207,35 @@ export default function TableCard({
     // - there is no existing modal backdrop
     if (
       (selected || openPopover) &&
-      ["e", "d", "q", "a", "t", "i", "x", "h"].includes(key)
+      ['e', 'd', 'q', 'a', 't', 'i', 'x', 'h'].includes(key)
     ) {
       setSelected(false);
       e.preventDefault();
       switch (key) {
-        case "e":
+        case 'e':
           setShowAddEditLinkModal(true);
           break;
-        case "d":
+        case 'd':
           setShowDuplicateLinkModal(true);
           break;
-        case "q":
+        case 'q':
           setShowLinkQRModal(true);
           break;
-        case "a":
+        case 'a':
           setShowArchiveLinkModal(true);
           break;
-        case "t":
+        case 't':
           if (isDubDomain(domain)) {
             setShowTransferLinkModal(true);
           }
           break;
-        case "i":
+        case 'i':
           copyLinkId();
           break;
-        case "x":
+        case 'x':
           setShowDeleteLinkModal(true);
           break;
-        case "h":
+        case 'h':
           setShowHistory(true);
           break;
       }
@@ -244,9 +244,9 @@ export default function TableCard({
   };
 
   useEffect(() => {
-    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener('keydown', onKeyDown);
     return () => {
-      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener('keydown', onKeyDown);
     };
   }, [onKeyDown]);
 
@@ -254,7 +254,7 @@ export default function TableCard({
     <tr
       ref={linkRef}
       className={`${
-        selected ? "border-black" : "border-gray-50"
+        selected ? 'border-black' : 'border-gray-50'
       } border-b bg-transparent dark:border-gray-700`}
     >
       {isVisible && (
@@ -304,9 +304,9 @@ export default function TableCard({
               {
                 <a
                   className={cn(
-                    "max-w-[140px] truncate text-sm font-semibold text-blue-800 sm:max-w-[300px] sm:text-base md:max-w-[360px] xl:max-w-[500px]",
+                    'max-w-[140px] truncate text-sm font-semibold text-blue-800 sm:max-w-[300px] sm:text-base md:max-w-[360px] xl:max-w-[500px]',
                     {
-                      "text-gray-500": archived || expired,
+                      'text-gray-500': archived || expired,
                     },
                   )}
                   href={linkConstructor({
@@ -400,7 +400,7 @@ function TagButton(tag: TagProps) {
   const searchParams = useSearchParams();
 
   const selectedTagIds =
-    searchParams?.get("tagIds")?.split(",")?.filter(Boolean) ?? [];
+    searchParams?.get('tagIds')?.split(',')?.filter(Boolean) ?? [];
 
   return (
     <button
@@ -411,9 +411,9 @@ function TagButton(tag: TagProps) {
 
         queryParams({
           set: {
-            tagIds: newTagIds.join(","),
+            tagIds: newTagIds.join(','),
           },
-          del: [...(newTagIds.length ? [] : ["tagIds"])],
+          del: [...(newTagIds.length ? [] : ['tagIds'])],
         });
       }}
       className="transition-all duration-75 hover:scale-105 active:scale-100"

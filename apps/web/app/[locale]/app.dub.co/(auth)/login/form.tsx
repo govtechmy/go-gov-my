@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { Button, Google, useMediaQuery } from "@dub/ui";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { Button, Google, useMediaQuery } from '@dub/ui';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { signIn } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
-  const next = searchParams?.get("next");
+  const next = searchParams?.get('next');
   const [showEmailOption, setShowEmailOption] = useState(false);
   const [noSuchAccount, setNoSuchAccount] = useState(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [clickedGoogle, setClickedGoogle] = useState(false);
   const [clickedEmail, setClickedEmail] = useState(false);
   const [clickedSSO, setClickedSSO] = useState(false);
@@ -22,7 +22,7 @@ export default function LoginForm() {
   const message = messages?.login;
 
   useEffect(() => {
-    const error = searchParams?.get("error");
+    const error = searchParams?.get('error');
     error && toast.error(error);
   }, [searchParams]);
 
@@ -44,7 +44,7 @@ export default function LoginForm() {
           variant="secondary"
           onClick={() => {
             setClickedGoogle(true);
-            signIn("google", {
+            signIn('google', {
               ...(next && next.length > 0 ? { callbackUrl: next } : {}),
             });
           }}
@@ -58,22 +58,22 @@ export default function LoginForm() {
         onSubmit={async (e) => {
           e.preventDefault();
           setClickedEmail(true);
-          fetch("/api/auth/account-exists", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
+          fetch('/api/auth/account-exists', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email }),
           })
             .then(async (res) => {
               const { exists } = await res.json();
               if (exists) {
-                signIn("email", {
+                signIn('email', {
                   email,
                   redirect: false,
                   ...(next && next.length > 0 ? { callbackUrl: next } : {}),
                 }).then((res) => {
                   setClickedEmail(false);
                   if (res?.ok && !res?.error) {
-                    setEmail("");
+                    setEmail('');
                     toast.success(message?.email_sent);
                   } else {
                     toast.error(message?.email_sent_error);
@@ -117,7 +117,7 @@ export default function LoginForm() {
           text="Continue with Email"
           variant="secondary"
           {...(!showEmailOption && {
-            type: "button",
+            type: 'button',
             onClick: (e) => {
               e.preventDefault();
               setShowEmailOption(true);

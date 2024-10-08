@@ -1,8 +1,8 @@
-import { withWorkspace } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { storage } from "@/lib/storage";
-import z from "@/lib/zod";
-import { NextResponse } from "next/server";
+import { withWorkspace } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { storage } from '@/lib/storage';
+import z from '@/lib/zod';
+import { NextResponse } from 'next/server';
 
 const uploadLogoSchema = z.object({
   image: z.string().url(),
@@ -23,6 +23,6 @@ export const POST = withWorkspace(
     return NextResponse.json(response);
   },
   {
-    requiredRole: ["owner"],
+    requiredRole: ['owner'],
   },
 );

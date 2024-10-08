@@ -1,6 +1,6 @@
-import type { LinkHistory } from "@/lib/api/links/add-to-history";
-import { fetcher } from "@dub/utils";
-import useSWR from "swr";
+import type { LinkHistory } from '@/lib/api/links/add-to-history';
+import { fetcher } from '@dub/utils';
+import useSWR from 'swr';
 
 type Options =
   | {
@@ -16,7 +16,7 @@ type Options =
     };
 
 export default function useLinkHistory(opts: Options) {
-  let apiURL: string = "";
+  let apiURL: string = '';
   if (opts.admin) {
     apiURL = `/api/admin/links/${opts.linkId}/history`;
   } else {

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const integrationTestEnv = z.object({
   E2E_BASE_URL: z.string().url().min(1),
@@ -9,8 +9,8 @@ export const integrationTestEnv = z.object({
   E2E_WORKSPACE_NAME: z.string().min(1),
   CI: z.coerce
     .string()
-    .default("false")
-    .transform((v) => v === "true"),
+    .default('false')
+    .transform((v) => v === 'true'),
 });
 
 export const env = integrationTestEnv.parse(process.env);

@@ -1,14 +1,14 @@
-import { LinkProps } from "@/lib/types";
-import { InfoTooltip, SimpleTooltipContent, Switch } from "@dub/ui";
+import { LinkProps } from '@/lib/types';
+import { InfoTooltip, SimpleTooltipContent, Switch } from '@dub/ui';
 import {
   FADE_IN_ANIMATION_SETTINGS,
   constructURLFromUTMParams,
   getParamsFromURL,
   getUrlWithoutUTMParams,
   paramsMetadata,
-} from "@dub/utils";
-import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+} from '@dub/utils';
+import { motion } from 'framer-motion';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 
 export default function UTMSection({
   props,
@@ -84,10 +84,10 @@ export default function UTMSection({
                 id={key}
                 disabled={!isValidUrl}
                 className={`${
-                  isValidUrl ? "" : "cursor-not-allowed bg-gray-100"
+                  isValidUrl ? '' : 'cursor-not-allowed bg-gray-100'
                 } block w-full rounded-r-md border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm`}
                 placeholder={examples}
-                value={params[key] || ""}
+                value={params[key] || ''}
                 onChange={(e) => {
                   setData({
                     ...data,

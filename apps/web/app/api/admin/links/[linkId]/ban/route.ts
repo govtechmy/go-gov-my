@@ -1,24 +1,24 @@
-import { DubApiError } from "@/lib/api/errors";
-import generateIdempotencyKey from "@/lib/api/links/create-idempotency-key";
-import { withAdmin } from "@/lib/auth";
-import { processDTOLink } from "@/lib/dto/link.dto";
-import { prisma } from "@/lib/prisma";
-import { Prisma } from "@prisma/client";
-import { waitUntil } from "@vercel/functions";
+import { DubApiError } from '@/lib/api/errors';
+import generateIdempotencyKey from '@/lib/api/links/create-idempotency-key';
+import { withAdmin } from '@/lib/auth';
+import { processDTOLink } from '@/lib/dto/link.dto';
+import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
+import { waitUntil } from '@vercel/functions';
 import {
   OUTBOX_ACTIONS,
   REDIRECT_SERVER_BASE_URL,
-} from "kafka-consumer/utils/actions";
-import { NextResponse } from "next/server";
-import { z } from "zod";
+} from 'kafka-consumer/utils/actions';
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
 
 // PUT /api/admin/links/[linkId]/ban – ban or unban a link
 export const PUT = withAdmin(async ({ params, req }) => {
   const { linkId } = params;
   if (!linkId) {
     throw new DubApiError({
-      code: "bad_request",
-      message: "Missing linkId from path params",
+      code: 'bad_request',
+      message: 'Missing linkId from path params',
     });
   }
 

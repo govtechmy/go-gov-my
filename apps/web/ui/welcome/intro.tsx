@@ -1,8 +1,8 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { STAGGER_CHILD_VARIANTS } from "@dub/utils";
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { STAGGER_CHILD_VARIANTS } from '@dub/utils';
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function Intro() {
   const router = useRouter();
@@ -12,7 +12,7 @@ export default function Intro() {
     <motion.div
       className="z-10"
       exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.3, type: "spring" }}
+      transition={{ duration: 0.3, type: 'spring' }}
     >
       <div
         className={`animate-scaleBlur mt-[7vh] grid h-[50vh] w-screen place-items-center object-cover transition-all duration-1000`}

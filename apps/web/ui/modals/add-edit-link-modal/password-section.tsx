@@ -1,10 +1,10 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { Eye, EyeOff } from "@/ui/shared/icons";
-import { ProBadgeTooltip } from "@/ui/shared/pro-badge-tooltip";
-import { SimpleTooltipContent, Switch } from "@dub/ui";
-import { FADE_IN_ANIMATION_SETTINGS } from "@dub/utils";
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { Eye, EyeOff } from '@/ui/shared/icons';
+import { ProBadgeTooltip } from '@/ui/shared/pro-badge-tooltip';
+import { SimpleTooltipContent, Switch } from '@dub/ui';
+import { FADE_IN_ANIMATION_SETTINGS } from '@dub/utils';
+import { motion } from 'framer-motion';
+import { useState } from 'react';
 
 type Props = {
   passwordEnabledAt: Date | null;
@@ -20,7 +20,7 @@ export default function PasswordSection({
 }: Props) {
   const { messages } = useIntlClientHook();
   const message = messages.modal;
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const hasExistingPassword = !!passwordEnabledAt;
   const [enabled, setEnabled] = useState(hasExistingPassword);
@@ -63,7 +63,7 @@ export default function PasswordSection({
           <input
             name="password"
             id="password"
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             className="block w-full rounded-md border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm"
             value={password}
             placeholder={message?.enter_password}
@@ -88,8 +88,8 @@ export default function PasswordSection({
       )}
       {passwordEnabledAt && (
         <div className="mt-3 text-xs italic">
-          Last updated:{" "}
-          {new Date(passwordEnabledAt).toLocaleDateString("en-US")}
+          Last updated:{' '}
+          {new Date(passwordEnabledAt).toLocaleDateString('en-US')}
         </div>
       )}
     </div>

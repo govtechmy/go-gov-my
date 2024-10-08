@@ -1,26 +1,26 @@
-import { Tag } from "@prisma/client";
-import { expect, test } from "vitest";
-import { randomId } from "../utils/helpers";
-import { IntegrationHarness } from "../utils/integration";
+import { Tag } from '@prisma/client';
+import { expect, test } from 'vitest';
+import { randomId } from '../utils/helpers';
+import { IntegrationHarness } from '../utils/integration';
 
-test("GET /tags", async (ctx) => {
+test('GET /tags', async (ctx) => {
   const h = new IntegrationHarness(ctx);
   const { workspace, http } = await h.init();
   const { workspaceId } = workspace;
 
   const newTag = {
     tag: randomId(),
-    color: "red",
+    color: 'red',
   };
 
   const { data: tagCreated } = await http.post<Tag>({
-    path: "/tags",
+    path: '/tags',
     query: { workspaceId },
     body: newTag,
   });
 
   const { status, data: tags } = await http.get<Tag[]>({
-    path: "/tags",
+    path: '/tags',
     query: { workspaceId },
   });
 

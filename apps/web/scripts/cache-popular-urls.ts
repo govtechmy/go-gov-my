@@ -1,12 +1,12 @@
-import { prisma } from "@/lib/prisma";
-import { getApexDomain } from "@dub/utils";
-import "dotenv-flow/config";
-import * as fs from "fs";
+import { prisma } from '@/lib/prisma';
+import { getApexDomain } from '@dub/utils';
+import 'dotenv-flow/config';
+import * as fs from 'fs';
 
 async function main() {
   const links = await prisma.link.findMany({
     where: {
-      domain: "dub.sh",
+      domain: 'dub.sh',
     },
     select: {
       url: true,
@@ -52,7 +52,7 @@ async function main() {
   });
 
   fs.writeFileSync(
-    "popular-domains.json",
+    'popular-domains.json',
     JSON.stringify(popularApexDomains, null, 2),
   );
 }

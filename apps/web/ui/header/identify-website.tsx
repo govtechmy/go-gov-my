@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import React, { useState } from "react";
-import { cn } from "./cn";
-import Collapse from "./layout";
-import MalaysiaFlag from "./malaysia-flag";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import React, { useState } from 'react';
+import { cn } from './cn';
+import Collapse from './layout';
+import MalaysiaFlag from './malaysia-flag';
 
 const IdentifyWebsite: React.FC = () => {
   const { messages, locale } = useIntlClientHook();
@@ -15,10 +15,10 @@ const IdentifyWebsite: React.FC = () => {
     <>
       <div
         className={cn(
-          "z-[99]",
+          'z-[99]',
           open
-            ? "from-washed-100 to-outline-200 bg-gradient-to-b from-[84.74%] to-100%"
-            : "bg-washed-100",
+            ? 'from-washed-100 to-outline-200 bg-gradient-to-b from-[84.74%] to-100%'
+            : 'bg-washed-100',
         )}
         data-nosnippet
       >
@@ -38,7 +38,7 @@ const IdentifyWebsite: React.FC = () => {
                   {message?.masthead_subtitle}
                 </span>
                 <div
-                  className={cn("size-4 transition", open ? "rotate-180" : "")}
+                  className={cn('size-4 transition', open ? 'rotate-180' : '')}
                 >
                   <svg
                     width="20"

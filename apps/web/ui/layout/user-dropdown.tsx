@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { MessagesContext } from "@/ui/switcher/provider";
-import { Avatar, Badge, IconMenu, Popover } from "@dub/ui";
+import { MessagesContext } from '@/ui/switcher/provider';
+import { Avatar, Badge, IconMenu, Popover } from '@dub/ui';
 import {
   AppWindow,
   BookText,
   CircleGauge,
   LogOut,
   Settings,
-} from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useContext, useState } from "react";
+} from 'lucide-react';
+import { signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useContext, useState } from 'react';
 
 export default function UserDropdown() {
   const { data: session } = useSession();
@@ -21,7 +21,7 @@ export default function UserDropdown() {
   const message = messages?.layout;
   const locale = messages?.language;
   const pathname = usePathname();
-  const isAdminPath = pathname.includes("/admin");
+  const isAdminPath = pathname.includes('/admin');
 
   return (
     <div className="relative inline-block pt-1.5">
@@ -47,8 +47,8 @@ export default function UserDropdown() {
                 </div>
               )}
             </Link>
-            {session?.user?.role === "super_admin" ||
-            session?.user?.role === "agency_admin" ? (
+            {session?.user?.role === 'super_admin' ||
+            session?.user?.role === 'agency_admin' ? (
               <Link
                 href={isAdminPath ? `/${locale}` : `/${locale}/admin`}
                 onClick={() => setOpenPopover(false)}
@@ -112,7 +112,7 @@ export default function UserDropdown() {
               className="w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
               onClick={() => {
                 signOut({
-                  callbackUrl: "/login",
+                  callbackUrl: '/login',
                 });
               }}
             >
@@ -148,18 +148,18 @@ export default function UserDropdown() {
 function RoleBadge({
   role,
 }: {
-  role: "staff" | "super_admin" | "agency_admin";
+  role: 'staff' | 'super_admin' | 'agency_admin';
 }) {
   const label = {
-    staff: "Staff",
-    super_admin: "Super Admin",
-    agency_admin: "Agency Admin",
+    staff: 'Staff',
+    super_admin: 'Super Admin',
+    agency_admin: 'Agency Admin',
   } as const;
 
   const variant = {
-    staff: "default",
-    super_admin: "blue",
-    agency_admin: "violet",
+    staff: 'default',
+    super_admin: 'blue',
+    agency_admin: 'violet',
   } as const;
 
   return <Badge variant={variant[role]}>{label[role]}</Badge>;

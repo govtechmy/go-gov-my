@@ -1,7 +1,7 @@
-import { AppMiddleware } from "@/lib/middleware";
-import { parse } from "@/lib/middleware/utils";
-import { NextFetchEvent, NextRequest } from "next/server";
-import AdminMiddleware from "./lib/middleware/admin";
+import { AppMiddleware } from '@/lib/middleware';
+import { parse } from '@/lib/middleware/utils';
+import { NextFetchEvent, NextRequest } from 'next/server';
+import AdminMiddleware from './lib/middleware/admin';
 
 export const config = {
   matcher: [
@@ -14,7 +14,7 @@ export const config = {
      * 5. /_vercel (Vercel internals)
      * 6. Static files (e.g. /favicon.ico, /sitemap.xml, /robots.txt, etc.)
      */
-    "/((?!api/|_next/|_proxy/|_static|_vercel|[\\w-]+\\.\\w+).*)",
+    '/((?!api/|_next/|_proxy/|_static|_vercel|[\\w-]+\\.\\w+).*)',
   ],
 };
 
@@ -22,7 +22,7 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
   const { domain, path, key, pathWithoutLocale } = parse(req);
 
   // for Admin
-  if (pathWithoutLocale.startsWith("/admin")) {
+  if (pathWithoutLocale.startsWith('/admin')) {
     return AdminMiddleware(req);
   }
 

@@ -1,10 +1,10 @@
-import { useIntlHook } from "@/lib/middleware/utils/useI18n";
-import { MessagesProvider } from "@/ui/switcher/provider";
-import CreateWorkspaceButton from "@/ui/workspaces/create-workspace-button";
-import WorkspaceList from "@/ui/workspaces/workspace-list";
-import { WorkspaceListProvider } from "@/ui/workspaces/workspace-list-context";
-import WorkspaceListSearchInput from "@/ui/workspaces/workspace-list-search-input";
-import { MaxWidthWrapper } from "@dub/ui";
+import { useIntlHook } from '@/lib/middleware/utils/useI18n';
+import { MessagesProvider } from '@/ui/switcher/provider';
+import CreateWorkspaceButton from '@/ui/workspaces/create-workspace-button';
+import WorkspaceList from '@/ui/workspaces/workspace-list';
+import { WorkspaceListProvider } from '@/ui/workspaces/workspace-list-context';
+import WorkspaceListSearchInput from '@/ui/workspaces/workspace-list-search-input';
+import { MaxWidthWrapper } from '@dub/ui';
 
 export default function App({ params: { locale } }) {
   const { messages } = useIntlHook(locale);

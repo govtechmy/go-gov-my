@@ -1,16 +1,16 @@
-import { Project } from "@prisma/client";
-import { expect, test } from "vitest";
-import { IntegrationHarness } from "../utils/integration";
+import { Project } from '@prisma/client';
+import { expect, test } from 'vitest';
+import { IntegrationHarness } from '../utils/integration';
 
-test("should not create workspace with slug in use", async (ctx) => {
+test('should not create workspace with slug in use', async (ctx) => {
   const h = new IntegrationHarness(ctx);
   const { workspace, http } = await h.init();
 
   // Create another workspace with the same slug
   const { status, data: error } = await http.post<Project>({
-    path: "/workspaces",
+    path: '/workspaces',
     body: {
-      name: "Dub Workspace",
+      name: 'Dub Workspace',
       slug: workspace.slug,
     },
   });
@@ -18,9 +18,9 @@ test("should not create workspace with slug in use", async (ctx) => {
   expect(status).toEqual(409);
   expect(error).toStrictEqual({
     error: {
-      code: "conflict",
-      message: "Slug is already in use.",
-      doc_url: "https://go.gov.my/docs/api-reference/errors#conflict",
+      code: 'conflict',
+      message: 'Slug is already in use.',
+      doc_url: 'https://go.gov.my/docs/api-reference/errors#conflict',
     },
   });
 });

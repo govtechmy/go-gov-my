@@ -1,24 +1,24 @@
-import { ZodOpenApiPathsObject } from "zod-openapi";
+import { ZodOpenApiPathsObject } from 'zod-openapi';
 
-import { createLink } from "./create-link";
-import { deleteLink } from "./delete-link";
-import { getLinkInfo } from "./get-link-info";
-import { getLinks } from "./get-links";
-import { getLinksCount } from "./get-links-count";
-import { updateLink } from "./update-link";
+import { createLink } from './create-link';
+import { deleteLink } from './delete-link';
+import { getLinkInfo } from './get-link-info';
+import { getLinks } from './get-links';
+import { getLinksCount } from './get-links-count';
+import { updateLink } from './update-link';
 
 export const linksPaths: ZodOpenApiPathsObject = {
-  "/links": {
+  '/links': {
     post: createLink,
     get: getLinks,
   },
-  "/links/count": {
+  '/links/count': {
     get: getLinksCount,
   },
-  "/links/info": {
+  '/links/info': {
     get: getLinkInfo,
   },
-  "/links/{linkId}": {
+  '/links/{linkId}': {
     patch: updateLink,
     delete: deleteLink,
   },

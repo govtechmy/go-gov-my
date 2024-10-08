@@ -1,13 +1,13 @@
-import { anthropic } from "@/lib/anthropic";
-import { DubApiError, handleAndReturnErrorResponse } from "@/lib/api/errors";
-import { ratelimit } from "@/lib/redis/ratelimit";
-import { AnthropicStream, StreamingTextResponse } from "ai";
-import { getToken } from "next-auth/jwt";
-import { NextRequest } from "next/server";
+import { anthropic } from '@/lib/anthropic';
+import { DubApiError, handleAndReturnErrorResponse } from '@/lib/api/errors';
+import { ratelimit } from '@/lib/redis/ratelimit';
+import { AnthropicStream, StreamingTextResponse } from 'ai';
+import { getToken } from 'next-auth/jwt';
+import { NextRequest } from 'next/server';
 
 export async function POST(req: NextRequest) {
   if (!anthropic) {
-    console.error("Anthropic is not configured. Skipping the request.");
+    console.error('Anthropic is not configured. Skipping the request.');
     return new Response(null, { status: 200 });
   }
 
@@ -18,8 +18,8 @@ export async function POST(req: NextRequest) {
     });
     if (!session?.email) {
       throw new DubApiError({
-        code: "unauthorized",
-        message: "You must be logged in to access this resource",
+        code: 'unauthorized',
+        message: 'You must be logged in to access this resource',
       });
     }
 
@@ -27,11 +27,11 @@ export async function POST(req: NextRequest) {
     const { success } = await ratelimit(
       `ai-completion:${session.sub}`,
       3,
-      "1 m",
+      '1 m',
     );
     if (!success) {
       throw new DubApiError({
-        code: "rate_limit_exceeded",
+        code: 'rate_limit_exceeded',
         message: "Don't DDoS me pls 🥺",
       });
     }
@@ -43,13 +43,13 @@ export async function POST(req: NextRequest) {
     const response = await anthropic.messages.create({
       messages: [
         {
-          role: "user",
+          role: 'user',
           content: `Create a short but concise title that summarizes the following support request. Only return the generated title, and nothing else. Don't use quotation marks.
           
           ${prompt}`,
         },
       ],
-      model: "claude-3-sonnet-20240229",
+      model: 'claude-3-sonnet-20240229',
       stream: true,
       max_tokens: 300,
     });

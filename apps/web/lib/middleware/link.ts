@@ -1,4 +1,4 @@
-import { detectBot, getFinalUrl, parse } from "@/lib/middleware/utils";
+import { detectBot, getFinalUrl, parse } from '@/lib/middleware/utils';
 import {
   APP_DOMAIN,
   DUB_DEMO_LINKS,
@@ -6,16 +6,16 @@ import {
   LEGAL_WORKSPACE_ID,
   LOCALHOST_GEO_DATA,
   punyEncode,
-} from "@dub/utils";
-import { trace } from "@opentelemetry/api";
-import type { LinkMiddlewareLinkDataResponse } from "app/api/middleware/link/link-data/route";
+} from '@dub/utils';
+import { trace } from '@opentelemetry/api';
+import type { LinkMiddlewareLinkDataResponse } from 'app/api/middleware/link/link-data/route';
 import {
   NextFetchEvent,
   NextRequest,
   NextResponse,
   userAgent,
-} from "next/server";
-import { isBlacklistedReferrer } from "../edge-config";
+} from 'next/server';
+import { isBlacklistedReferrer } from '../edge-config';
 
 export default async function LinkMiddleware(
   req: NextRequest,
@@ -37,14 +37,14 @@ export default async function LinkMiddleware(
 
   // if it's a demo link, block bad referrers in production
   if (
-    process.env.NODE_ENV !== "development" &&
+    process.env.NODE_ENV !== 'development' &&
     demoLink &&
-    (await isBlacklistedReferrer(req.headers.get("referer")))
+    (await isBlacklistedReferrer(req.headers.get('referer')))
   ) {
     return new Response("Don't DDoS me pls 🥺", { status: 429 });
   }
 
-  const inspectMode = key.endsWith("+");
+  const inspectMode = key.endsWith('+');
   // if inspect mode is enabled, remove the trailing `+` from the key
   if (inspectMode) {
     key = key.slice(0, -1);
@@ -56,9 +56,9 @@ export default async function LinkMiddleware(
     domain: string,
     key: string,
   ): Promise<LinkMiddlewareLinkDataResponse> {
-    const url = new URL("/api/middleware/link/link-data", APP_DOMAIN);
-    url.searchParams.set("domain", domain);
-    url.searchParams.set("key", key);
+    const url = new URL('/api/middleware/link/link-data', APP_DOMAIN);
+    url.searchParams.set('domain', domain);
+    url.searchParams.set('key', key);
     const response = await fetch(url);
     return response.json();
   }
@@ -67,7 +67,7 @@ export default async function LinkMiddleware(
   if (!linkData) {
     // short link not found, redirect to root
     // TODO: log 404s (https://github.com/dubinc/dub/issues/559)
-    return NextResponse.redirect(new URL("/", APP_DOMAIN), {
+    return NextResponse.redirect(new URL('/', APP_DOMAIN), {
       ...DUB_HEADERS,
       status: 302,
     });
@@ -86,7 +86,7 @@ export default async function LinkMiddleware(
 
   // if the link is banned
   if (linkData.projectId === LEGAL_WORKSPACE_ID) {
-    return NextResponse.rewrite(new URL("/banned", req.url), DUB_HEADERS);
+    return NextResponse.rewrite(new URL('/banned', req.url), DUB_HEADERS);
   }
 
   // if the link has expired
@@ -102,18 +102,18 @@ export default async function LinkMiddleware(
   }
 
   const searchParams = req.nextUrl.searchParams;
-  const tracer = trace.getTracer("default");
-  const span = tracer.startSpan("recordClick");
+  const tracer = trace.getTracer('default');
+  const span = tracer.startSpan('recordClick');
   // only track the click when there is no `dub-no-track` header or query param
   if (
     !(
-      req.headers.get("dub-no-track") ||
-      searchParams.get("dub-no-track") === "1"
+      req.headers.get('dub-no-track') ||
+      searchParams.get('dub-no-track') === '1'
     )
   ) {
     try {
       // Log results to OpenTelemetry
-      span.addEvent("recordClick", {
+      span.addEvent('recordClick', {
         id,
         url,
         workspace_id: linkData.projectId?.toString(),
@@ -129,7 +129,7 @@ export default async function LinkMiddleware(
   const isBot = detectBot(req);
 
   const { country } =
-    process.env.VERCEL === "1" && req.geo ? req.geo : LOCALHOST_GEO_DATA;
+    process.env.VERCEL === '1' && req.geo ? req.geo : LOCALHOST_GEO_DATA;
 
   // rewrite to proxy page (/proxy/[domain]/[key]) if it's a bot and proxy is enabled
   if (isBot && proxy) {
@@ -139,21 +139,21 @@ export default async function LinkMiddleware(
     );
 
     // rewrite to mailto page if the link is a mailto link
-  } else if (url.startsWith("mailto:")) {
+  } else if (url.startsWith('mailto:')) {
     return NextResponse.rewrite(
       new URL(`/mailto/${encodeURIComponent(url)}`, req.url),
       DUB_HEADERS,
     );
 
     // redirect to iOS link if it is specified and the user is on an iOS device
-  } else if (ios && userAgent(req).os?.name === "iOS") {
+  } else if (ios && userAgent(req).os?.name === 'iOS') {
     return NextResponse.redirect(getFinalUrl(ios, { req }), {
       ...DUB_HEADERS,
       status: 302,
     });
 
     // redirect to Android link if it is specified and the user is on an Android device
-  } else if (android && userAgent(req).os?.name === "Android") {
+  } else if (android && userAgent(req).os?.name === 'Android') {
     return NextResponse.redirect(getFinalUrl(android, { req }), {
       ...DUB_HEADERS,
       status: 302,

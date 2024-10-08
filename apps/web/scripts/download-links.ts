@@ -1,10 +1,10 @@
-import { prisma } from "@/lib/prisma";
-import { linkConstructor } from "@dub/utils";
-import "dotenv-flow/config";
-import * as fs from "fs";
-import * as Papa from "papaparse";
+import { prisma } from '@/lib/prisma';
+import { linkConstructor } from '@dub/utils';
+import 'dotenv-flow/config';
+import * as fs from 'fs';
+import * as Papa from 'papaparse';
 
-const projectId = "xxx";
+const projectId = 'xxx';
 
 async function main() {
   const links = await prisma.link.findMany({
@@ -17,7 +17,7 @@ async function main() {
       url: true,
     },
     orderBy: {
-      createdAt: "asc",
+      createdAt: 'asc',
     },
     skip: 99999,
   });
@@ -30,7 +30,7 @@ async function main() {
     url,
   }));
 
-  fs.writeFileSync("xxx.csv", Papa.unparse(processedLinks));
+  fs.writeFileSync('xxx.csv', Papa.unparse(processedLinks));
 }
 
 main();

@@ -1,1 +1,1 @@
-export * from "../../../../../links/random/route";
+export * from '../../../../../links/random/route';

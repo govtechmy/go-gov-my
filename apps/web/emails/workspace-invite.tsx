@@ -1,4 +1,4 @@
-import { APP_NAME, DUB_LOGO } from "@dub/utils";
+import { APP_NAME, DUB_LOGO } from '@dub/utils';
 import {
   Body,
   Container,
@@ -11,10 +11,10 @@ import {
   Section,
   Tailwind,
   Text,
-} from "@react-email/components";
-import { Fragment } from "react";
-import Footer from "./components/footer";
-import { PREVIEW_PROPS } from "./preview-props";
+} from '@react-email/components';
+import { Fragment } from 'react';
+import Footer from './components/footer';
+import { PREVIEW_PROPS } from './preview-props';
 
 type Props = {
   email: string;
@@ -25,7 +25,7 @@ type Props = {
 };
 
 WorkspaceInvite.PreviewProps = {
-  email: "ahmad@example.com",
+  email: 'ahmad@example.com',
   url: `http://localhost:8888/api/auth/callback/email?callbackUrl=http%3A%2F%2Fapp.localhost%3A3000%2Flogin&token=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&email=ahmad@example.com`,
   workspaceName: PREVIEW_PROPS.WORKSPACE.NAME,
   workspaceUser: PREVIEW_PROPS.USER.NAME,
@@ -70,12 +70,12 @@ export default function WorkspaceInvite({
                   >
                     {workspaceUserEmail}
                   </Link>
-                  ) has invited you to join the workspace{" "}
+                  ) has invited you to join the workspace{' '}
                   <strong>&apos;{workspaceName}&apos;</strong> on {APP_NAME}!
                 </Text>
               ) : (
                 <Text className="text-sm leading-6 text-black">
-                  You have been invited to join the workspace{" "}
+                  You have been invited to join the workspace{' '}
                   <strong>&apos;{workspaceName}&apos;</strong> on {APP_NAME}!
                 </Text>
               )}

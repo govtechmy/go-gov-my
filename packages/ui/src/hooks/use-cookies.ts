@@ -1,5 +1,5 @@
-import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
+import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
 
 export function useCookies<T>(
   key: string,
@@ -22,11 +22,11 @@ export function useCookies<T>(
     };
 
     // Add listener for storage changes
-    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener('storage', handleStorageChange);
 
     // Cleanup
     return () => {
-      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener('storage', handleStorageChange);
     };
   }, [key]);
 

@@ -1,5 +1,5 @@
-import { encryptOutboxSecrets } from "kafka-consumer/utils/encryption";
-import { LinkProps } from "../types";
+import { encryptOutboxSecrets } from 'kafka-consumer/utils/encryption';
+import { LinkProps } from '../types';
 
 // This should be like the object model
 export interface LinkDTO {
@@ -30,7 +30,7 @@ export async function processDTOLink(
     ios: response.ios,
     android: response.android,
     geo:
-      typeof response.geo === "string"
+      typeof response.geo === 'string'
         ? JSON.parse(response.geo)
         : response.geo,
     imageUrl: response.image,
@@ -46,7 +46,7 @@ export async function processDTOLink(
 
   // If a password is set, store it as a secret
   if (linkDTO.password) {
-    const placeholder = "{{PASSWORD}}";
+    const placeholder = '{{PASSWORD}}';
     secrets[placeholder] = linkDTO.password;
     linkDTO.password = placeholder;
   }

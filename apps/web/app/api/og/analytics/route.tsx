@@ -1,24 +1,24 @@
-import { getClicks } from "@/lib/analytics/clicks";
-import { getLink } from "@/lib/userinfos";
+import { getClicks } from '@/lib/analytics/clicks';
+import { getLink } from '@/lib/userinfos';
 import {
   GOOGLE_FAVICON_URL,
   SHORT_DOMAIN,
   getApexDomain,
   linkConstructor,
   nFormatter,
-} from "@dub/utils";
-import { ImageResponse } from "next/og";
-import { NextRequest } from "next/server";
+} from '@dub/utils';
+import { ImageResponse } from 'next/og';
+import { NextRequest } from 'next/server';
 
-export const runtime = "edge";
+export const runtime = 'edge';
 
 export async function GET(req: NextRequest) {
   const interMedium = await fetch(
-    new URL("@/styles/Inter-Medium.ttf", import.meta.url),
+    new URL('@/styles/Inter-Medium.ttf', import.meta.url),
   ).then((res) => res.arrayBuffer());
 
-  const domain = req.nextUrl.searchParams.get("domain") || SHORT_DOMAIN;
-  const key = req.nextUrl.searchParams.get("key") || "github";
+  const domain = req.nextUrl.searchParams.get('domain') || SHORT_DOMAIN;
+  const key = req.nextUrl.searchParams.get('key') || 'github';
 
   const link = await getLink({ domain, key });
   if (!link?.publicStats) {
@@ -31,8 +31,8 @@ export async function GET(req: NextRequest) {
     // workspaceId can be undefined (for public links that haven't been claimed/synced to a workspace)
     ...(link.projectId && { workspaceId: link.projectId }),
     linkId: link.id,
-    endpoint: "timeseries",
-    interval: "7d",
+    endpoint: 'timeseries',
+    interval: '7d',
   });
 
   const clicks = data.reduce((acc, { clicks }) => acc + clicks, 0);
@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
           <div tw="flex items-center">
             <img
               tw="rounded-full w-10 h-10"
-              src={`${GOOGLE_FAVICON_URL}${getApexDomain(link.url || process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my")}`}
+              src={`${GOOGLE_FAVICON_URL}${getApexDomain(link.url || process.env.NEXT_PUBLIC_APP_DOMAIN || 'go.gov.my')}`}
               alt="favicon"
             />
             <h1 tw="text-4xl font-bold ml-4">
@@ -118,7 +118,7 @@ export async function GET(req: NextRequest) {
       height: 630,
       fonts: [
         {
-          name: "Inter Medium",
+          name: 'Inter Medium',
           data: interMedium,
         },
       ],
@@ -143,14 +143,14 @@ const Chart = ({ data }) => {
   // Extend the points to the bottom to create a closed shape for the fill
   let points = data
     .map((d, index) => `${scaleX(index)},${scaleY(d.clicks)}`)
-    .join(" ");
+    .join(' ');
   // Close the shape by drawing a line to the bottom right corner and bottom left corner
   points += ` ${width},${height} 0,${height}`;
 
   return (
     <svg
       viewBox={`0 0 ${width} ${height}`}
-      style={{ color: "#3B82F6", marginLeft: "-4px", marginTop: "-32px" }}
+      style={{ color: '#3B82F6', marginLeft: '-4px', marginTop: '-32px' }}
     >
       <defs>
         <linearGradient id="customGradient" x1="0" y1="0" x2="0" y2="1">

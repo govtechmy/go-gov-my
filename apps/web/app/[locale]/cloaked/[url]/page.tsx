@@ -2,8 +2,8 @@ import {
   GOOGLE_FAVICON_URL,
   constructMetadata,
   getApexDomain,
-} from "@dub/utils";
-import { getMetaTags } from "app/api/metatags/utils";
+} from '@dub/utils';
+import { getMetaTags } from 'app/api/metatags/utils';
 
 export async function generateMetadata({
   params,

@@ -1,4 +1,4 @@
-import { cn } from "@dub/utils";
+import { cn } from '@dub/utils';
 
 export default function LinkedIn({ className }: { className?: string }) {
   return (
@@ -7,7 +7,7 @@ export default function LinkedIn({ className }: { className?: string }) {
       width="24"
       height="24"
       viewBox="0 0 24 24"
-      className={cn("text-[#0077b5]", className)}
+      className={cn('text-[#0077b5]', className)}
     >
       <path
         fill="currentColor"

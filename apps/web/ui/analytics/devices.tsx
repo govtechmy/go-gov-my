@@ -1,19 +1,19 @@
-import { DeviceTabs } from "@/lib/analytics/types";
-import { formatAnalyticsEndpoint } from "@/lib/analytics/utils";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { LoadingSpinner, Modal, TabSelect, useRouterStuff } from "@dub/ui";
-import { fetcher } from "@dub/utils";
-import { Maximize } from "lucide-react";
-import { useContext, useMemo, useState } from "react";
-import useSWR from "swr";
-import { AnalyticsContext } from ".";
-import BarList from "./bar-list";
-import DeviceIcon from "./device-icon";
+import { DeviceTabs } from '@/lib/analytics/types';
+import { formatAnalyticsEndpoint } from '@/lib/analytics/utils';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { LoadingSpinner, Modal, TabSelect, useRouterStuff } from '@dub/ui';
+import { fetcher } from '@dub/utils';
+import { Maximize } from 'lucide-react';
+import { useContext, useMemo, useState } from 'react';
+import useSWR from 'swr';
+import { AnalyticsContext } from '.';
+import BarList from './bar-list';
+import DeviceIcon from './device-icon';
 
 export default function Devices() {
-  const [tab, setTab] = useState<DeviceTabs>("devices");
+  const [tab, setTab] = useState<DeviceTabs>('devices');
   const singularTabName = useMemo(
-    () => formatAnalyticsEndpoint(tab, "singular"),
+    () => formatAnalyticsEndpoint(tab, 'singular'),
     [tab],
   );
   const { messages, locale } = useIntlClientHook();
@@ -43,7 +43,7 @@ export default function Devices() {
             />
           ),
           title:
-            singularTabName === "device"
+            singularTabName === 'device'
               ? capitalizeFirstLetter(d[singularTabName])
               : d[singularTabName],
           href: queryParams({
@@ -78,7 +78,7 @@ export default function Devices() {
         <div className="mb-3 flex justify-between">
           <h1 className="text-lg font-semibold">{message?.devices}</h1>
           <TabSelect
-            options={["devices", "browsers", "os"]}
+            options={['devices', 'browsers', 'os']}
             translation={message}
             selected={tab}
             // @ts-ignore

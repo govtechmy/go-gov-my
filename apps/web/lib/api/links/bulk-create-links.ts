@@ -1,9 +1,9 @@
-import { prisma } from "@/lib/prisma";
-import { formatRedisLink, redis } from "@/lib/redis";
-import { LinkProps, ProcessedLinkProps, RedisLinkProps } from "@/lib/types";
-import { getParamsFromURL, truncate } from "@dub/utils";
-import { trace } from "@opentelemetry/api";
-import { combineTagIds, transformLink } from "./utils";
+import { prisma } from '@/lib/prisma';
+import { formatRedisLink, redis } from '@/lib/redis';
+import { LinkProps, ProcessedLinkProps, RedisLinkProps } from '@/lib/types';
+import { getParamsFromURL, truncate } from '@dub/utils';
+import { trace } from '@opentelemetry/api';
+import { combineTagIds, transformLink } from './utils';
 
 export async function bulkCreateLinks({
   links,
@@ -88,8 +88,8 @@ export async function propagateBulkLinkChanges(
   links: (LinkProps & { tags: { tagId: string }[] })[],
 ) {
   const pipeline = redis.pipeline();
-  const tracer = trace.getTracer("default");
-  const span = tracer.startSpan("recordLinks");
+  const tracer = trace.getTracer('default');
+  const span = tracer.startSpan('recordLinks');
 
   // split links into domains for better write effeciency in Redis
   const linksByDomain: Record<string, Record<string, RedisLinkProps>> = {};
@@ -128,7 +128,7 @@ export async function propagateBulkLinkChanges(
     ]);
     // Log results to OpenTelemetry
     links.forEach((link) => {
-      span.addEvent("recordLinks", {
+      span.addEvent('recordLinks', {
         link_id: link.id,
         domain: link.domain,
         key: link.key,

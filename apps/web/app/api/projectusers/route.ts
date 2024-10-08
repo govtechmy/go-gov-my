@@ -1,12 +1,12 @@
-import { withSession } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { withSession } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { NextResponse } from 'next/server';
 
 // GET /api/projectusers – get a specific user's project users by workspaceId
 export const GET = withSession(async (req) => {
   const { session, searchParams } = req;
-  const workspaceId = searchParams.workspaceId || "";
-  const cleanedId = workspaceId.replace("ws_", ""); // Remove the "ws_" prefix
+  const workspaceId = searchParams.workspaceId || '';
+  const cleanedId = workspaceId.replace('ws_', ''); // Remove the "ws_" prefix
 
   const projectUsers = await prisma.projectUsers.findMany({
     where: {

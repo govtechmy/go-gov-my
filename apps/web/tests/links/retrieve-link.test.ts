@@ -1,22 +1,22 @@
-import { Link } from "@prisma/client";
-import { expectedLink } from "tests/utils/schema";
-import { afterAll, describe, expect, test } from "vitest";
-import { randomId } from "../utils/helpers";
-import { IntegrationHarness } from "../utils/integration";
-import { link } from "../utils/resource";
+import { Link } from '@prisma/client';
+import { expectedLink } from 'tests/utils/schema';
+import { afterAll, describe, expect, test } from 'vitest';
+import { randomId } from '../utils/helpers';
+import { IntegrationHarness } from '../utils/integration';
+import { link } from '../utils/resource';
 
 const { domain, url } = link;
 
-describe.sequential("GET /links/{linkId}", async () => {
+describe.sequential('GET /links/{linkId}', async () => {
   const h = new IntegrationHarness();
   const { workspace, http, user } = await h.init();
   const { workspaceId } = workspace;
-  const projectId = workspaceId.replace("ws_", "");
+  const projectId = workspaceId.replace('ws_', '');
   const externalId = randomId();
   const key = randomId();
 
   const { data: newLink } = await http.post<Link>({
-    path: "/links",
+    path: '/links',
     query: { workspaceId },
     body: {
       url,
@@ -30,7 +30,7 @@ describe.sequential("GET /links/{linkId}", async () => {
     await h.deleteLink(newLink.id);
   });
 
-  test("by linkId", async () => {
+  test('by linkId', async () => {
     const { status, data: link } = await http.get<Link>({
       path: `/links/${newLink.id}`,
       query: { workspaceId },
@@ -46,7 +46,7 @@ describe.sequential("GET /links/{linkId}", async () => {
     });
   });
 
-  test("by externalId", async () => {
+  test('by externalId', async () => {
     const { status, data: link } = await http.get<Link>({
       path: `/links/ext_${externalId}`,
       query: { workspaceId },
@@ -63,16 +63,16 @@ describe.sequential("GET /links/{linkId}", async () => {
   });
 });
 
-describe.sequential("GET /links/info", async () => {
+describe.sequential('GET /links/info', async () => {
   const h = new IntegrationHarness();
   const { workspace, http, user } = await h.init();
   const { workspaceId } = workspace;
-  const projectId = workspaceId.replace("ws_", "");
+  const projectId = workspaceId.replace('ws_', '');
   const externalId = randomId();
   const key = randomId();
 
   const { data: newLink } = await http.post<Link>({
-    path: "/links",
+    path: '/links',
     query: { workspaceId },
     body: {
       url,
@@ -86,9 +86,9 @@ describe.sequential("GET /links/info", async () => {
     await h.deleteLink(newLink.id);
   });
 
-  test("by domain and key", async () => {
+  test('by domain and key', async () => {
     const { status, data: link } = await http.get<Link>({
-      path: "/links/info",
+      path: '/links/info',
       query: { workspaceId, domain, key },
     });
 
@@ -105,9 +105,9 @@ describe.sequential("GET /links/info", async () => {
     });
   });
 
-  test("by linkId", async () => {
+  test('by linkId', async () => {
     const { status, data: link } = await http.get<Link>({
-      path: "/links/info",
+      path: '/links/info',
       query: { workspaceId, linkId: newLink.id },
     });
 
@@ -121,9 +121,9 @@ describe.sequential("GET /links/info", async () => {
     });
   });
 
-  test("by externalId", async () => {
+  test('by externalId', async () => {
     const { status, data: link } = await http.get<Link>({
-      path: "/links/info",
+      path: '/links/info',
       query: { workspaceId, externalId: `ext_${externalId}` },
     });
 

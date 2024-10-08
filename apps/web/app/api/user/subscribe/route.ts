@@ -1,7 +1,7 @@
-import { withSession } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { log } from "@dub/utils";
-import { NextResponse } from "next/server";
+import { withSession } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { log } from '@dub/utils';
+import { NextResponse } from 'next/server';
 
 // GET /api/user/subscribe – get a specific user
 export const GET = withSession(async ({ session }) => {
@@ -18,7 +18,7 @@ export const GET = withSession(async ({ session }) => {
   });
 
   if (!user) {
-    return new Response("User not found", { status: 404 });
+    return new Response('User not found', { status: 404 });
   }
 
   return NextResponse.json(user);
@@ -43,7 +43,7 @@ export const POST = withSession(async ({ session }) => {
     }),
     log({
       message: `*${session.user.email}* resubscribed to the newsletter. Manual addition required.`,
-      type: "alerts",
+      type: 'alerts',
     }),
   ]);
 

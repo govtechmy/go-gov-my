@@ -1,1 +1,1 @@
-export * from "../../../../../tags/[id]/route";
+export * from '../../../../../tags/[id]/route';

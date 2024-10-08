@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import UpdateSubscription from "@/ui/account/update-subscription";
-import { Logo } from "@dub/ui";
-import { APP_NAME, HOME_DOMAIN } from "@dub/utils";
-import Link from "next/link";
+import UpdateSubscription from '@/ui/account/update-subscription';
+import { Logo } from '@dub/ui';
+import { APP_NAME, HOME_DOMAIN } from '@dub/utils';
+import Link from 'next/link';
 
 export default function UnsubscribeForm() {
   return (

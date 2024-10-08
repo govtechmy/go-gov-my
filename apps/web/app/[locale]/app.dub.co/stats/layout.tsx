@@ -1,5 +1,5 @@
-import { Footer, Nav } from "@dub/ui";
-import Providers from "../(auth)/providers";
+import { Footer, Nav } from '@dub/ui';
+import Providers from '../(auth)/providers';
 
 type Props = {
   children: React.ReactNode;

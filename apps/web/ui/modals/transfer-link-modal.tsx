@@ -1,25 +1,25 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useWorkspace from "@/lib/swr/use-workspace";
-import useWorkspaces from "@/lib/swr/use-workspaces";
-import { LinkProps } from "@/lib/types";
-import { Button, InputSelect, InputSelectItemProps, Modal } from "@dub/ui";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useWorkspace from '@/lib/swr/use-workspace';
+import useWorkspaces from '@/lib/swr/use-workspaces';
+import { LinkProps } from '@/lib/types';
+import { Button, InputSelect, InputSelectItemProps, Modal } from '@dub/ui';
 import {
   APP_NAME,
   DICEBEAR_AVATAR_URL,
   getApexDomain,
   isDubDomain,
   linkConstructor,
-} from "@dub/utils";
+} from '@dub/utils';
 import {
   Dispatch,
   SetStateAction,
   useCallback,
   useMemo,
   useState,
-} from "react";
-import { toast } from "sonner";
-import { mutate } from "swr";
-import LinkLogo from "../links/link-logo";
+} from 'react';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
+import LinkLogo from '../links/link-logo';
 
 function TransferLinkModal({
   showTransferLinkModal,
@@ -51,15 +51,15 @@ function TransferLinkModal({
 
   const transferLink = async (linkId: string, newWorkspaceId: string) => {
     return await fetch(`/api/links/${linkId}/transfer?workspaceId=${id}`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ newWorkspaceId }),
     }).then(async (res) => {
       if (res.ok) {
         mutate(
-          (key) => typeof key === "string" && key.startsWith("/api/links"),
+          (key) => typeof key === 'string' && key.startsWith('/api/links'),
           undefined,
           { revalidate: true },
         );
@@ -112,18 +112,18 @@ function TransferLinkModal({
                       workspace.logo ||
                       `${DICEBEAR_AVATAR_URL}${workspace.name}`,
                     disabled:
-                      workspace.id.replace("ws_", "") === props.projectId,
+                      workspace.id.replace('ws_', '') === props.projectId,
                     label:
-                      workspace.id.replace("ws_", "") === props.projectId
+                      workspace.id.replace('ws_', '') === props.projectId
                         ? message?.current
-                        : "",
+                        : '',
                   }))
                 : []
             }
             selectedItem={selectedWorkspace}
             setSelectedItem={setselectedWorkspace}
             inputAttrs={{
-              placeholder: "Select a workspace",
+              placeholder: 'Select a workspace',
             }}
           />
           <Button

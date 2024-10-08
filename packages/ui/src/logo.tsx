@@ -1,4 +1,4 @@
-import { cn } from "@dub/utils";
+import { cn } from '@dub/utils';
 
 export function Logo({ className }: { className?: string }) {
   return (
@@ -8,7 +8,7 @@ export function Logo({ className }: { className?: string }) {
       viewBox="0 0 29 28"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("h-10 w-10", className)}
+      className={cn('h-10 w-10', className)}
     >
       <rect
         x="0.5"

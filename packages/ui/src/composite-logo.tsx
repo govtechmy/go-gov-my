@@ -1,4 +1,4 @@
-import { cn } from "@dub/utils";
+import { cn } from '@dub/utils';
 
 export function CompositeLogo({ className }: { className?: string }) {
   return (
@@ -8,7 +8,7 @@ export function CompositeLogo({ className }: { className?: string }) {
       viewBox="0 0 177 64"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("h-6 w-auto text-black dark:text-white", className)}
+      className={cn('h-6 w-auto text-black dark:text-white', className)}
     >
       <path
         fillRule="evenodd"

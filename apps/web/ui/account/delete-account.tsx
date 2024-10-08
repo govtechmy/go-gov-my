@@ -1,7 +1,7 @@
-"use client";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { useDeleteAccountModal } from "@/ui/modals/delete-account-modal";
-import { Button } from "@dub/ui";
+'use client';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { useDeleteAccountModal } from '@/ui/modals/delete-account-modal';
+import { Button } from '@dub/ui';
 
 export default function DeleteAccountSection() {
   const { setShowDeleteAccountModal, DeleteAccountModal } =
@@ -15,7 +15,7 @@ export default function DeleteAccountSection() {
       <div className="flex flex-col space-y-3 p-5 sm:p-10">
         <h2 className="text-xl font-medium">{message?.delete_account}</h2>
         <p className="text-sm text-gray-500">
-          {message?.delete_desc_p1} {process.env.NEXT_PUBLIC_APP_NAME}{" "}
+          {message?.delete_desc_p1} {process.env.NEXT_PUBLIC_APP_NAME}{' '}
           {message?.delete_desc_p2}
         </p>
       </div>

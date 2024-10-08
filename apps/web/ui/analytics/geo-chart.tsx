@@ -1,47 +1,47 @@
-import { VALID_ANALYTICS_FILTERS } from "@/lib/analytics/constants";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useTags from "@/lib/swr/use-tags";
-import { Chart } from "@/ui/shared/icons";
-import { CountingNumbers, NumberTooltip, useRouterStuff } from "@dub/ui";
-import { COUNTRIES, capitalize, linkConstructor, truncate } from "@dub/utils";
-import { X } from "lucide-react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useContext } from "react";
-import { AnalyticsContext } from ".";
-import GeoChart from "../charts/google-charts";
+import { VALID_ANALYTICS_FILTERS } from '@/lib/analytics/constants';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useTags from '@/lib/swr/use-tags';
+import { Chart } from '@/ui/shared/icons';
+import { CountingNumbers, NumberTooltip, useRouterStuff } from '@dub/ui';
+import { COUNTRIES, capitalize, linkConstructor, truncate } from '@dub/utils';
+import { X } from 'lucide-react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { useContext } from 'react';
+import { AnalyticsContext } from '.';
+import GeoChart from '../charts/google-charts';
 
 export default function CountryChart() {
   const { totalClicks } = useContext(AnalyticsContext);
   const searchParams = useSearchParams();
-  const domain = searchParams.get("domain");
-  const key = searchParams.get("key");
+  const domain = searchParams.get('domain');
+  const key = searchParams.get('key');
   const { queryParams } = useRouterStuff();
   const { messages, locale } = useIntlClientHook();
   const message = messages?.analytics;
 
   // Tag related
-  const tagId = searchParams.get("tagId");
+  const tagId = searchParams.get('tagId');
   const { tags } = useTags();
 
   // Root domain related
-  const root = searchParams.get("root");
+  const root = searchParams.get('root');
 
   // Transform analytics data for country chart
   const analyticsData = {
     total: 23,
     linkSlug: { RXB1Anr: 23 },
-    linkUrl: { "https://google.com/": 23 },
+    linkUrl: { 'https://google.com/': 23 },
     countryCode: { US: 8, MY: 11, SE: 2, EG: 2 },
     city: {
-      "MY:Petaling Jaya": 2,
-      "US:Columbus": 1,
-      "US:Las Vegas": 1,
-      "SE:Gothenburg": 2,
-      "EG:Cairo": 2,
-      "MY:Puchong Batu Dua Belas": 1,
-      "US:Ashburn": 1,
-      "MY:Kuala Lumpur": 8,
+      'MY:Petaling Jaya': 2,
+      'US:Columbus': 1,
+      'US:Las Vegas': 1,
+      'SE:Gothenburg': 2,
+      'EG:Cairo': 2,
+      'MY:Puchong Batu Dua Belas': 1,
+      'US:Ashburn': 1,
+      'MY:Kuala Lumpur': 8,
     },
     deviceType: { mobile: 9, desktop: 9 },
     browser: {
@@ -49,14 +49,14 @@ export default function CountryChart() {
       Safari: 5,
       Edge: 3,
       Firefox: 2,
-      "Slackbot-LinkExpanding 1.0": 1,
+      'Slackbot-LinkExpanding 1.0': 1,
       WhatsApp: 4,
     },
     operatingSystem: { iOS: 7, Android: 2, Linux: 2, Windows: 4, macOS: 3 },
-    referer: { "http://pautan.org": 4 },
+    referer: { 'http://pautan.org': 4 },
   };
   const transformAnalyticsData = (analyticsData) => {
-    const transformedData = [["Country", "Clicks"]];
+    const transformedData = [['Country', 'Clicks']];
     Object.entries(analyticsData.countryCode).forEach(
       ([countryCode, clicks]) => {
         const countryName =
@@ -99,7 +99,7 @@ export default function CountryChart() {
               <Link
                 href={
                   queryParams({
-                    del: ["domain", "key"],
+                    del: ['domain', 'key'],
                     getNewPath: true,
                   }) as string
                 }
@@ -115,7 +115,7 @@ export default function CountryChart() {
               <Link
                 href={
                   queryParams({
-                    del: "domain",
+                    del: 'domain',
                     getNewPath: true,
                   }) as string
                 }
@@ -130,7 +130,7 @@ export default function CountryChart() {
             <Link
               href={
                 queryParams({
-                  del: "tagId",
+                  del: 'tagId',
                   getNewPath: true,
                 }) as string
               }
@@ -147,21 +147,21 @@ export default function CountryChart() {
             <Link
               href={
                 queryParams({
-                  del: "root",
+                  del: 'root',
                   getNewPath: true,
                 }) as string
               }
               className="flex items-center space-x-1 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1 text-sm text-gray-500 transition-all hover:bg-gray-100"
             >
               <strong className="text-gray-800">
-                {root === "true" ? "Domains" : "Links"}
+                {root === 'true' ? 'Domains' : 'Links'}
               </strong>
               <p>{message?.only}</p>
               <X className="h-4 w-4" />
             </Link>
           )}
           {VALID_ANALYTICS_FILTERS.map((filter) => {
-            if (filter === "tagId" || filter === "qr" || filter === "root")
+            if (filter === 'tagId' || filter === 'qr' || filter === 'root')
               return null;
             const value = searchParams?.get(filter);
             if (!value) return null;
@@ -178,7 +178,7 @@ export default function CountryChart() {
               >
                 <p>{capitalize(filter)}</p>
                 <strong className="text-gray-800">
-                  {filter === "country"
+                  {filter === 'country'
                     ? COUNTRIES[value]
                     : truncate(value, 24)}
                 </strong>

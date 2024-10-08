@@ -1,4 +1,4 @@
-import SettingsPageClient from "./page-client";
+import SettingsPageClient from './page-client';
 
 export default function SettingsPage() {
   return <SettingsPageClient />;

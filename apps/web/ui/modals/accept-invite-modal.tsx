@@ -1,17 +1,17 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { LoadingDots, Logo, Modal } from "@dub/ui";
-import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { LoadingDots, Logo, Modal } from '@dub/ui';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import {
   Dispatch,
   SetStateAction,
   useCallback,
   useMemo,
   useState,
-} from "react";
-import { toast } from "sonner";
-import { mutate } from "swr";
+} from 'react';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
 
 function AcceptInviteModal({
   showAcceptInviteModal,
@@ -38,10 +38,10 @@ function AcceptInviteModal({
             <Logo />
             <h3 className="text-lg font-medium">{message?.invitation}</h3>
             <p className="text-center text-sm text-gray-500">
-              {message?.invited}{" "}
+              {message?.invited}{' '}
               <span className="font-mono text-purple-600">
-                {slug || "......"}
-              </span>{" "}
+                {slug || '......'}
+              </span>{' '}
               {message?.workspace_on} {process.env.NEXT_PUBLIC_APP_NAME}
             </p>
           </div>
@@ -50,22 +50,22 @@ function AcceptInviteModal({
               onClick={() => {
                 setAccepting(true);
                 fetch(`/api/workspaces/${slug}/invites/accept`, {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
                 }).then(async () => {
                   await Promise.all([
-                    mutate("/api/workspaces"),
+                    mutate('/api/workspaces'),
                     mutate(`/api/workspaces/${slug}`),
                   ]);
                   setShowAcceptInviteModal(false);
-                  toast.success("You now are a part of this workspace!");
+                  toast.success('You now are a part of this workspace!');
                 });
               }}
               disabled={accepting}
               className={`${
                 accepting
-                  ? "cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400"
-                  : "border-black bg-black text-white hover:bg-white hover:text-black"
+                  ? 'cursor-not-allowed border-gray-200 bg-gray-100 text-gray-400'
+                  : 'border-black bg-black text-white hover:bg-white hover:text-black'
               } flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none`}
             >
               {accepting ? <LoadingDots /> : <p>{message?.accept_invite}</p>}

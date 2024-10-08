@@ -1,6 +1,6 @@
-import type { ReactElement, ReactNode } from "react";
-import { useEffect, useRef } from "react";
-import { cn } from "./cn";
+import type { ReactElement, ReactNode } from 'react';
+import { useEffect, useRef } from 'react';
+import { cn } from './cn';
 
 export default function Collapse({
   children,
@@ -28,8 +28,8 @@ export default function Collapse({
     }
     if (initialRender.current || !container || !inner) return;
 
-    container.classList.toggle("duration-500", !isOpen);
-    container.classList.toggle("duration-300", isOpen);
+    container.classList.toggle('duration-500', !isOpen);
+    container.classList.toggle('duration-300', isOpen);
 
     if (horizontal) {
       // save initial width to avoid word wrapping when container width will be changed
@@ -42,14 +42,14 @@ export default function Collapse({
     if (isOpen) {
       animationRef.current = window.setTimeout(() => {
         // should be style property in kebab-case, not css class name
-        container.style.removeProperty("height");
+        container.style.removeProperty('height');
       }, 300);
     } else {
       setTimeout(() => {
         if (horizontal) {
-          container.style.width = "0px";
+          container.style.width = '0px';
         } else {
-          container.style.height = "0px";
+          container.style.height = '0px';
         }
       }, 0);
     }
@@ -68,8 +68,8 @@ export default function Collapse({
       <div
         ref={innerRef}
         className={cn(
-          "py-1 transition-opacity duration-500 ease-in-out motion-reduce:transition-none",
-          isOpen ? "opacity-100" : "opacity-0",
+          'py-1 transition-opacity duration-500 ease-in-out motion-reduce:transition-none',
+          isOpen ? 'opacity-100' : 'opacity-0',
           className,
         )}
       >

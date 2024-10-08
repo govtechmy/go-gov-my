@@ -1,9 +1,9 @@
-import { AxisBottom } from "@visx/axis";
-import { Group } from "@visx/group";
-import { Line } from "@visx/shape";
-import { useMemo } from "react";
-import { useChartContext, useChartTooltipContext } from "./chart-context";
-import { getFactors } from "./utils";
+import { AxisBottom } from '@visx/axis';
+import { Group } from '@visx/group';
+import { Line } from '@visx/shape';
+import { useMemo } from 'react';
+import { useChartContext, useChartTooltipContext } from './chart-context';
+import { getFactors } from './utils';
 
 export type XAxisProps = {
   /**
@@ -26,7 +26,7 @@ export default function XAxis({
   maxTicks: maxTicksProp,
   showGridLines = false,
   tickFormat = (date) =>
-    date.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+    date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
 }: XAxisProps) {
   const { data, margin, width, height, xScale, startDate, endDate } =
     useChartContext();
@@ -63,13 +63,13 @@ export default function XAxis({
         stroke="#00000026"
         tickFormat={(date) => tickFormat(date as Date)}
         tickLabelProps={(date, idx, { length }) => ({
-          className: "transition-colors",
+          className: 'transition-colors',
           textAnchor:
-            idx === 0 ? "start" : idx === length - 1 ? "end" : "middle",
+            idx === 0 ? 'start' : idx === length - 1 ? 'end' : 'middle',
           fontSize: 12,
           fill: (tooltipData ? tooltipData.date === date : idx === length - 1)
-            ? "#000"
-            : "#00000066",
+            ? '#000'
+            : '#00000066',
         })}
       />
       {showGridLines && (
@@ -83,7 +83,7 @@ export default function XAxis({
                 y1={height}
                 y2={0}
                 stroke={
-                  date === tooltipData?.date ? "transparent" : "#00000026"
+                  date === tooltipData?.date ? 'transparent' : '#00000026'
                 }
                 strokeWidth={1}
                 strokeDasharray={[startDate, endDate].includes(date) ? 0 : 5}

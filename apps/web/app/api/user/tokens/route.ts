@@ -1,9 +1,9 @@
-import { hashToken, withSession } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { nanoid } from "@dub/utils";
-import { sendEmail } from "emails";
-import APIKeyCreated from "emails/api-key-created";
-import { NextResponse } from "next/server";
+import { hashToken, withSession } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { nanoid } from '@dub/utils';
+import { sendEmail } from 'emails';
+import APIKeyCreated from 'emails/api-key-created';
+import { NextResponse } from 'next/server';
 
 // GET /api/user/tokens – get all tokens for a specific user
 export const GET = withSession(async ({ session }) => {
@@ -20,10 +20,10 @@ export const GET = withSession(async ({ session }) => {
     },
     orderBy: [
       {
-        lastUsed: "desc",
+        lastUsed: 'desc',
       },
       {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
     ],
   });
@@ -34,7 +34,7 @@ export const GET = withSession(async ({ session }) => {
 export const POST = withSession(async ({ req, session }) => {
   const { name } = await req.json();
   const token = nanoid(24);
-  console.log("token", token);
+  console.log('token', token);
   const hashedKey = await hashToken(token);
   // take first 3 and last 4 characters of the key
   const partialKey = token; //`${token.slice(0, 3)}...${token.slice(-4)}`;
@@ -49,7 +49,7 @@ export const POST = withSession(async ({ req, session }) => {
     }),
     await sendEmail({
       email: session.user.email,
-      subject: "New API Key Created",
+      subject: 'New API Key Created',
       react: APIKeyCreated({
         email: session.user.email,
         apiKeyName: name,

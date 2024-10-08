@@ -1,12 +1,12 @@
-import { getClicks } from "@/lib/analytics/clicks";
-import { prisma } from "@/lib/prisma";
-import { linkConstructor } from "@dub/utils";
-import "dotenv-flow/config";
+import { getClicks } from '@/lib/analytics/clicks';
+import { prisma } from '@/lib/prisma';
+import { linkConstructor } from '@dub/utils';
+import 'dotenv-flow/config';
 
 async function main() {
   const workspace = await prisma.project.findUnique({
     where: {
-      slug: "dub",
+      slug: 'dub',
     },
     select: {
       id: true,
@@ -26,13 +26,13 @@ async function main() {
     },
   });
   if (!workspace) {
-    console.log("No workspace found");
+    console.log('No workspace found');
     return;
   }
   const topLinks = await getClicks({
     workspaceId: workspace.id,
-    endpoint: "top_links",
-    interval: "30d",
+    endpoint: 'top_links',
+    interval: '30d',
     root: false,
   }).then(async (data) => {
     const topFive = data.slice(0, 5);

@@ -1,26 +1,26 @@
-import { withSession } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { withSession } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { NextResponse } from 'next/server';
 
 const ITEMS_PER_PAGE = 10;
 
 export const GET = withSession(async ({ session, req }) => {
   const url = new URL(req.url);
-  const page = parseInt(url.searchParams.get("page") || "1", 10);
-  const search = url.searchParams.get("search") || "";
+  const page = parseInt(url.searchParams.get('page') || '1', 10);
+  const search = url.searchParams.get('search') || '';
 
-  if (!["super_admin", "agency_admin"].includes(session.user.role)) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!['super_admin', 'agency_admin'].includes(session.user.role)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   const where = {
-    ...(session.user.role === "agency_admin"
+    ...(session.user.role === 'agency_admin'
       ? { agencyCode: session.user.agencyCode }
       : {}),
     OR: [
-      { name: { contains: search, mode: "insensitive" } },
-      { email: { contains: search, mode: "insensitive" } },
-      { agencyCode: { contains: search, mode: "insensitive" } },
+      { name: { contains: search, mode: 'insensitive' } },
+      { email: { contains: search, mode: 'insensitive' } },
+      { agencyCode: { contains: search, mode: 'insensitive' } },
     ],
   };
 
@@ -33,24 +33,24 @@ export const GET = withSession(async ({ session, req }) => {
           name: condition.name
             ? {
                 contains: condition.name.contains,
-                mode: "insensitive" as const,
+                mode: 'insensitive' as const,
               }
             : undefined,
           email: condition.email
             ? {
                 contains: condition.email.contains,
-                mode: "insensitive" as const,
+                mode: 'insensitive' as const,
               }
             : undefined,
           agencyCode: condition.agencyCode
             ? {
                 contains: condition.agencyCode.contains,
-                mode: "insensitive" as const,
+                mode: 'insensitive' as const,
               }
             : undefined,
         })),
       },
-      orderBy: { name: "asc" },
+      orderBy: { name: 'asc' },
       take: ITEMS_PER_PAGE,
       skip: (page - 1) * ITEMS_PER_PAGE,
     }),
@@ -62,19 +62,19 @@ export const GET = withSession(async ({ session, req }) => {
           name: condition.name
             ? {
                 contains: condition.name.contains,
-                mode: "insensitive" as const,
+                mode: 'insensitive' as const,
               }
             : undefined,
           email: condition.email
             ? {
                 contains: condition.email.contains,
-                mode: "insensitive" as const,
+                mode: 'insensitive' as const,
               }
             : undefined,
           agencyCode: condition.agencyCode
             ? {
                 contains: condition.agencyCode.contains,
-                mode: "insensitive" as const,
+                mode: 'insensitive' as const,
               }
             : undefined,
         })),

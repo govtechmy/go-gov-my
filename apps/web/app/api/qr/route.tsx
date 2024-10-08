@@ -1,14 +1,14 @@
-import { DubApiError, handleAndReturnErrorResponse } from "@/lib/api/errors";
-import { QRCodeSVG } from "@/lib/qr/utils";
-import { ratelimit } from "@/lib/redis/ratelimit";
-import { getQRCodeQuerySchema } from "@/lib/zod/schemas/qr";
-import { getSearchParams } from "@dub/utils";
-import { ipAddress } from "@vercel/edge";
-import { getToken } from "next-auth/jwt";
-import { ImageResponse } from "next/og";
-import { NextRequest } from "next/server";
+import { DubApiError, handleAndReturnErrorResponse } from '@/lib/api/errors';
+import { QRCodeSVG } from '@/lib/qr/utils';
+import { ratelimit } from '@/lib/redis/ratelimit';
+import { getQRCodeQuerySchema } from '@/lib/zod/schemas/qr';
+import { getSearchParams } from '@dub/utils';
+import { ipAddress } from '@vercel/edge';
+import { getToken } from 'next-auth/jwt';
+import { ImageResponse } from 'next/og';
+import { NextRequest } from 'next/server';
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
   try {
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
       const { success } = await ratelimit(`qr:${ip}`);
       if (!success) {
         throw new DubApiError({
-          code: "rate_limit_exceeded",
+          code: 'rate_limit_exceeded',
           message: "Don't DDoS me pls 🥺",
         });
       }

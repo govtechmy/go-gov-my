@@ -1,7 +1,7 @@
-import { useIntlHook } from "@/lib/middleware/utils/useI18n";
-import { constructMetadata } from "@dub/utils";
-import LinkManagement from "./components/link-management";
-import MemberLists from "./components/member-lists";
+import { useIntlHook } from '@/lib/middleware/utils/useI18n';
+import { constructMetadata } from '@dub/utils';
+import LinkManagement from './components/link-management';
+import MemberLists from './components/member-lists';
 
 export async function generateMetadata({ params }) {
   const { locale } = params;

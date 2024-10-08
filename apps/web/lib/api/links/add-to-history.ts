@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma";
-import { LinkProps } from "@/lib/types";
+import { prisma } from '@/lib/prisma';
+import { LinkProps } from '@/lib/types';
 
 export type User = {
   id: string;
@@ -16,24 +16,24 @@ export type User = {
 export type LinkHistory = Pick<
   LinkProps,
   // Only pick these fields to store as history
-  | "android"
-  | "archived"
-  | "description"
-  | "domain"
-  | "expiredUrl"
-  | "expiresAt"
-  | "externalId"
-  | "geo"
-  | "image"
-  | "ios"
-  | "key"
-  | "proxy"
-  | "publicStats"
-  | "title"
-  | "trackConversion"
-  | "url"
+  | 'android'
+  | 'archived'
+  | 'description'
+  | 'domain'
+  | 'expiredUrl'
+  | 'expiresAt'
+  | 'externalId'
+  | 'geo'
+  | 'image'
+  | 'ios'
+  | 'key'
+  | 'proxy'
+  | 'publicStats'
+  | 'title'
+  | 'trackConversion'
+  | 'url'
 > & {
-  type: "create" | "update";
+  type: 'create' | 'update';
   /** The id of the user who created/updated the link */
   comittedByUserId: string;
   committedByUser: User;
@@ -45,24 +45,24 @@ export type LinkHistory = Pick<
 export type LinkHistoryAdd = Pick<
   LinkProps,
   // Only pick these fields to store as history
-  | "android"
-  | "archived"
-  | "description"
-  | "domain"
-  | "expiredUrl"
-  | "expiresAt"
-  | "externalId"
-  | "geo"
-  | "image"
-  | "ios"
-  | "key"
-  | "proxy"
-  | "publicStats"
-  | "title"
-  | "trackConversion"
-  | "url"
+  | 'android'
+  | 'archived'
+  | 'description'
+  | 'domain'
+  | 'expiredUrl'
+  | 'expiresAt'
+  | 'externalId'
+  | 'geo'
+  | 'image'
+  | 'ios'
+  | 'key'
+  | 'proxy'
+  | 'publicStats'
+  | 'title'
+  | 'trackConversion'
+  | 'url'
 > & {
-  type: "create" | "update";
+  type: 'create' | 'update';
   /** The id of the user who created/updated the link */
   comittedByUserId: string;
   /** The id of the link that was created/updated */

@@ -1,13 +1,13 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useLinksCount from "@/lib/swr/use-links-count";
-import { NumberTooltip, useRouterStuff } from "@dub/ui";
-import { PAGINATION_LIMIT, nFormatter } from "@dub/utils";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useLinksCount from '@/lib/swr/use-links-count';
+import { NumberTooltip, useRouterStuff } from '@dub/ui';
+import { PAGINATION_LIMIT, nFormatter } from '@dub/utils';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
 export default function LinkPagination() {
   const searchParams = useSearchParams();
-  const currentPage = parseInt(searchParams?.get("page") || "1");
+  const currentPage = parseInt(searchParams?.get('page') || '1');
   const { queryParams } = useRouterStuff();
   const { messages, locale } = useIntlClientHook();
 
@@ -82,13 +82,13 @@ export default function LinkPagination() {
         )}
       </div>
       <p className="text-sm text-gray-500">
-        {messages?.dashboard?.showing}{" "}
-        {(currentPage - 1) * PAGINATION_LIMIT + 1} -{" "}
-        {Math.min(currentPage * PAGINATION_LIMIT, count)}{" "}
-        {messages?.dashboard?.of}{" "}
+        {messages?.dashboard?.showing}{' '}
+        {(currentPage - 1) * PAGINATION_LIMIT + 1} -{' '}
+        {Math.min(currentPage * PAGINATION_LIMIT, count)}{' '}
+        {messages?.dashboard?.of}{' '}
         <NumberTooltip value={count} unit="links">
           <span>{nFormatter(count)}</span>
-        </NumberTooltip>{" "}
+        </NumberTooltip>{' '}
         {messages?.dashboard?.links}
       </p>
     </div>
@@ -101,13 +101,13 @@ const Divider = () => {
 
 const AnchorLink = ({ value }: { value: number }) => {
   const searchParams = useSearchParams();
-  const currentPage = parseInt(searchParams?.get("page") || "1");
+  const currentPage = parseInt(searchParams?.get('page') || '1');
   const { queryParams } = useRouterStuff();
 
   return (
     <button
       className={`${
-        value === currentPage ? "text-black" : "text-gray-400"
+        value === currentPage ? 'text-black' : 'text-gray-400'
       } flex min-w-[1.5rem] items-center justify-center rounded-md bg-white p-1 font-semibold transition-all hover:bg-gray-100`}
       onClick={() => {
         queryParams({

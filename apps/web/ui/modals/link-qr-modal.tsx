@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { QRCodeSVG, getQRAsCanvas, getQRAsSVGDataUri } from "@/lib/qr";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { QRLinkProps } from "@/lib/types";
-import { Clipboard, Download } from "@/ui/shared/icons";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { QRCodeSVG, getQRAsCanvas, getQRAsSVGDataUri } from '@/lib/qr';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { QRLinkProps } from '@/lib/types';
+import { Clipboard, Download } from '@/ui/shared/icons';
 import {
   IconMenu,
   InfoTooltip,
@@ -15,16 +15,16 @@ import {
   Switch,
   Tooltip,
   useRouterStuff,
-} from "@dub/ui";
+} from '@dub/ui';
 import {
   APP_DOMAIN,
   FADE_IN_ANIMATION_SETTINGS,
   getApexDomain,
   linkConstructor,
-} from "@dub/utils";
-import { motion } from "framer-motion";
-import { Check, ChevronRight, Link2 } from "lucide-react";
-import { useParams } from "next/navigation";
+} from '@dub/utils';
+import { motion } from 'framer-motion';
+import { Check, ChevronRight, Link2 } from 'lucide-react';
+import { useParams } from 'next/navigation';
 import {
   Dispatch,
   SetStateAction,
@@ -32,11 +32,11 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
-import { HexColorInput, HexColorPicker } from "react-colorful";
-import { toast } from "sonner";
-import { useDebouncedCallback } from "use-debounce";
-import LinkLogo from "../links/link-logo";
+} from 'react';
+import { HexColorInput, HexColorPicker } from 'react-colorful';
+import { toast } from 'sonner';
+import { useDebouncedCallback } from 'use-debounce';
+import LinkLogo from '../links/link-logo';
 
 function LinkQRModalHelper({
   showLinkQRModal,
@@ -75,7 +75,7 @@ export function QRCodePicker({
   }
 
   const [showLogo, setShowLogo] = useState(true);
-  const [fgColor, setFgColor] = useState("#000000");
+  const [fgColor, setFgColor] = useState('#000000');
 
   const qrData = useMemo(
     () => ({
@@ -83,13 +83,13 @@ export function QRCodePicker({
         key: props.key,
         domain: props.domain,
         searchParams: {
-          qr: "1",
+          qr: '1',
         },
       }),
-      bgColor: "#ffffff",
+      bgColor: '#ffffff',
       fgColor,
       size: 1024,
-      level: "Q", // QR Code error correction level: https://blog.qrstuff.com/general/qr-code-error-correction
+      level: 'Q', // QR Code error correction level: https://blog.qrstuff.com/general/qr-code-error-correction
       ...(showLogo && {
         imageSettings: {
           src: logo ? logo : `${APP_DOMAIN}/_static/logo.svg`,
@@ -105,10 +105,10 @@ export function QRCodePicker({
   const [copiedImage, setCopiedImage] = useState(false);
   const copyToClipboard = async () => {
     try {
-      const canvas = await getQRAsCanvas(qrData, "image/png", true);
+      const canvas = await getQRAsCanvas(qrData, 'image/png', true);
       (canvas as HTMLCanvasElement).toBlob(async function (blob) {
         // @ts-ignore
-        const item = new ClipboardItem({ "image/png": blob });
+        const item = new ClipboardItem({ 'image/png': blob });
         await navigator.clipboard.write([item]);
         setCopiedImage(true);
         setTimeout(() => setCopiedImage(false), 2000);
@@ -196,7 +196,7 @@ export function QRCodePicker({
                       key: props.key,
                       domain: props.domain,
                       searchParams: {
-                        qr: "1",
+                        qr: '1',
                       },
                     })}`,
                   );
@@ -240,7 +240,7 @@ export function QRCodePicker({
                         },
                       }),
                     }),
-                    "svg",
+                    'svg',
                   );
                 }}
                 className="w-full rounded-md p-2 text-left text-sm font-medium text-gray-500 transition-all duration-75 hover:bg-gray-100"
@@ -250,8 +250,8 @@ export function QRCodePicker({
               <button
                 onClick={async () => {
                   download(
-                    (await getQRAsCanvas(qrData, "image/png")) as string,
-                    "png",
+                    (await getQRAsCanvas(qrData, 'image/png')) as string,
+                    'png',
                   );
                 }}
                 className="w-full rounded-md p-2 text-left text-sm font-medium text-gray-500 transition-all duration-75 hover:bg-gray-100"
@@ -261,8 +261,8 @@ export function QRCodePicker({
               <button
                 onClick={async () => {
                   download(
-                    (await getQRAsCanvas(qrData, "image/jpeg")) as string,
-                    "jpg",
+                    (await getQRAsCanvas(qrData, 'image/jpeg')) as string,
+                    'jpg',
                   );
                 }}
                 className="w-full rounded-md p-2 text-left text-sm font-medium text-gray-500 transition-all duration-75 hover:bg-gray-100"
@@ -312,7 +312,7 @@ function AdvancedSettings({
         >
           <ChevronRight
             className={`h-5 w-5 text-gray-600 ${
-              expanded ? "rotate-90" : ""
+              expanded ? 'rotate-90' : ''
             } transition-all`}
           />
           <p className="text-sm text-gray-600">{message?.advanced_options}</p>
@@ -332,7 +332,7 @@ function AdvancedSettings({
               <p className="text-sm font-medium text-gray-700">
                 {message?.logo}
               </p>
-              {plan !== "free" && (
+              {plan !== 'free' && (
                 <InfoTooltip
                   content={
                     <SimpleTooltipContent
@@ -353,8 +353,8 @@ function AdvancedSettings({
                 thumbTranslate="translate-x-6"
               />
               <p className="text-sm text-gray-600">
-                {message?.show}{" "}
-                {!slug || (!logo && process.env.NEXT_PUBLIC_APP_NAME)}{" "}
+                {message?.show}{' '}
+                {!slug || (!logo && process.env.NEXT_PUBLIC_APP_NAME)}{' '}
                 {message?.logo}
               </p>
             </div>

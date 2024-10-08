@@ -1,8 +1,8 @@
-import LinkLogo from "@/ui/links/link-logo";
-import { CopyButton } from "@dub/ui";
-import { getApexDomain, linkConstructor } from "@dub/utils";
-import Script from "next/script";
-import ReportButton from "./report";
+import LinkLogo from '@/ui/links/link-logo';
+import { CopyButton } from '@dub/ui';
+import { getApexDomain, linkConstructor } from '@dub/utils';
+import Script from 'next/script';
+import ReportButton from './report';
 
 export default function LinkInspectorCard({
   domain,

@@ -1,8 +1,8 @@
-"use server";
+'use server';
 
 export async function submitFeedback(data: FormData) {
-  const email = data.get("email") as string;
-  const feedback = data.get("feedback") as string;
+  const email = data.get('email') as string;
+  const feedback = data.get('feedback') as string;
 
   // Disabled since we do not have a receiving email yet
   // await sendEmail({

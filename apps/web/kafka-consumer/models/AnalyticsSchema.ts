@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 const ClicksRecord = z.record(z.string(), z.number());
 
@@ -11,7 +11,7 @@ const ASNInfo = z.object({
 export const AnalyticsMessageSchema = z.object({
   aggregatedDate: z
     .string()
-    .describe("A short date in the format of YYYY-MM-DD"),
+    .describe('A short date in the format of YYYY-MM-DD'),
   from: z.coerce.date(),
   to: z.coerce.date(),
   linkAnalytics: z.array(

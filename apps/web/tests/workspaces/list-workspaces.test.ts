@@ -1,15 +1,15 @@
-import z from "@/lib/zod";
-import { WorkspaceSchema } from "@/lib/zod/schemas/workspaces";
-import { Project } from "@prisma/client";
-import { expect, test } from "vitest";
-import { IntegrationHarness } from "../utils/integration";
+import z from '@/lib/zod';
+import { WorkspaceSchema } from '@/lib/zod/schemas/workspaces';
+import { Project } from '@prisma/client';
+import { expect, test } from 'vitest';
+import { IntegrationHarness } from '../utils/integration';
 
-test("GET /workspaces", async (ctx) => {
+test('GET /workspaces', async (ctx) => {
   const h = new IntegrationHarness(ctx);
   const { workspace, http } = await h.init();
 
   const { status, data: workspaces } = await http.get<Project[]>({
-    path: "/workspaces",
+    path: '/workspaces',
   });
 
   const workspacesFetched = workspaces.map((w) => {

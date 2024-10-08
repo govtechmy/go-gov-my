@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Modal, useMediaQuery } from "@dub/ui";
+import { Button, ButtonProps, Modal, useMediaQuery } from '@dub/ui';
 import {
   Dispatch,
   HTMLProps,
@@ -6,8 +6,8 @@ import {
   useCallback,
   useMemo,
   useState,
-} from "react";
-import LinkLogo from "../links/link-logo";
+} from 'react';
+import LinkLogo from '../links/link-logo';
 
 type PromptModelProps = {
   title: string;
@@ -36,7 +36,7 @@ function PromptModal({
 } & PromptModelProps) {
   const { isMobile } = useMediaQuery();
 
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const [loading, setLoading] = useState(false);
 
   return (

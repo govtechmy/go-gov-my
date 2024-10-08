@@ -1,9 +1,9 @@
-import { cn } from "@dub/utils";
-import { VariantProps, cva } from "class-variance-authority";
-import { UploadCloud } from "lucide-react";
-import { DragEvent, ReactNode, useState } from "react";
-import { toast } from "sonner";
-import { LoadingCircle } from "./icons";
+import { cn } from '@dub/utils';
+import { VariantProps, cva } from 'class-variance-authority';
+import { UploadCloud } from 'lucide-react';
+import { DragEvent, ReactNode, useState } from 'react';
+import { toast } from 'sonner';
+import { LoadingCircle } from './icons';
 
 const acceptFileTypes: Record<
   string,
@@ -11,22 +11,22 @@ const acceptFileTypes: Record<
 > = {
   any: { types: [] },
   images: {
-    types: ["image/png", "image/jpeg"],
-    errorMessage: "File type not supported (.png or .jpg only)",
+    types: ['image/png', 'image/jpeg'],
+    errorMessage: 'File type not supported (.png or .jpg only)',
   },
 };
 
 const imageUploadVariants = cva(
-  "group relative isolate flex aspect-[1200/630] w-full flex-col items-center justify-center overflow-hidden bg-white transition-all hover:bg-gray-50",
+  'group relative isolate flex aspect-[1200/630] w-full flex-col items-center justify-center overflow-hidden bg-white transition-all hover:bg-gray-50',
   {
     variants: {
       variant: {
-        default: "rounded-md border border-gray-300 shadow-sm",
-        plain: "",
+        default: 'rounded-md border border-gray-300 shadow-sm',
+        plain: '',
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: 'default',
     },
   },
 );
@@ -100,14 +100,14 @@ export function FileUpload({
   variant,
   className,
   iconClassName,
-  accept = "any",
+  accept = 'any',
   imageSrc,
   loading = false,
   clickToUpload = true,
   showHoverOverlay = true,
   content,
   maxFileSizeMB = 0,
-  accessibilityLabel = "File upload",
+  accessibilityLabel = 'File upload',
 }: FileUploadProps) {
   const [dragActive, setDragActive] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -116,7 +116,7 @@ export function FileUpload({
     e: React.ChangeEvent<HTMLInputElement> | DragEvent,
   ) => {
     const file =
-      "dataTransfer" in e
+      'dataTransfer' in e
         ? e.dataTransfer.files && e.dataTransfer.files[0]
         : e.target.files && e.target.files[0];
     if (!file) return;
@@ -132,7 +132,7 @@ export function FileUpload({
 
     if (acceptedTypes.length && !acceptedTypes.includes(file.type)) {
       toast.error(
-        acceptFileTypes[accept].errorMessage ?? "File type not supported",
+        acceptFileTypes[accept].errorMessage ?? 'File type not supported',
       );
       return;
     }
@@ -153,7 +153,7 @@ export function FileUpload({
     <label
       className={cn(
         imageUploadVariants({ variant }),
-        clickToUpload && "cursor-pointer",
+        clickToUpload && 'cursor-pointer',
         className,
       )}
     >
@@ -188,18 +188,18 @@ export function FileUpload({
       />
       <div
         className={cn(
-          "absolute inset-0 z-[3] flex flex-col items-center justify-center rounded-[inherit] bg-white transition-all",
+          'absolute inset-0 z-[3] flex flex-col items-center justify-center rounded-[inherit] bg-white transition-all',
           dragActive &&
-            "cursor-copy border-2 border-black bg-gray-50 opacity-100",
+            'cursor-copy border-2 border-black bg-gray-50 opacity-100',
           imageSrc
-            ? cn("opacity-0", showHoverOverlay && "group-hover:opacity-100")
-            : "group-hover:bg-gray-50",
+            ? cn('opacity-0', showHoverOverlay && 'group-hover:opacity-100')
+            : 'group-hover:bg-gray-50',
         )}
       >
         <UploadCloud
           className={cn(
-            "h-7 w-7 text-gray-500 transition-all duration-75 group-hover:scale-110 group-active:scale-95",
-            dragActive ? "scale-110" : "scale-100",
+            'h-7 w-7 text-gray-500 transition-all duration-75 group-hover:scale-110 group-active:scale-95',
+            dragActive ? 'scale-110' : 'scale-100',
             iconClassName,
           )}
         />
@@ -207,7 +207,7 @@ export function FileUpload({
           <div className="mt-2 text-center text-sm text-gray-500">
             {content ?? (
               <>
-                <p>Drag and drop {clickToUpload && "or click"} to upload.</p>
+                <p>Drag and drop {clickToUpload && 'or click'} to upload.</p>
               </>
             )}
           </div>
@@ -226,7 +226,7 @@ export function FileUpload({
           <input
             key={fileName} // Gets us a fresh input every time a file is uploaded
             type="file"
-            accept={acceptFileTypes[accept].types.join(",")}
+            accept={acceptFileTypes[accept].types.join(',')}
             onChange={onFileChange}
           />
         </div>

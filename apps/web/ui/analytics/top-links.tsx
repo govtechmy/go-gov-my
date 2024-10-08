@@ -1,17 +1,17 @@
-import { TopLinksTabs } from "@/lib/analytics/types";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { LoadingSpinner, Modal, TabSelect, useRouterStuff } from "@dub/ui";
-import { fetcher, linkConstructor, truncate } from "@dub/utils";
-import { Maximize, X } from "lucide-react";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
-import useSWR from "swr";
-import { AnalyticsContext } from ".";
-import BarList from "./bar-list";
+import { TopLinksTabs } from '@/lib/analytics/types';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { LoadingSpinner, Modal, TabSelect, useRouterStuff } from '@dub/ui';
+import { fetcher, linkConstructor, truncate } from '@dub/utils';
+import { Maximize, X } from 'lucide-react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { useContext, useEffect, useState } from 'react';
+import useSWR from 'swr';
+import { AnalyticsContext } from '.';
+import BarList from './bar-list';
 
 export default function TopLinks() {
-  const [tab, setTab] = useState<TopLinksTabs>("link");
+  const [tab, setTab] = useState<TopLinksTabs>('link');
   const { messages, locale } = useIntlClientHook();
   const message = messages?.analytics;
 
@@ -20,9 +20,9 @@ export default function TopLinks() {
 
   useEffect(() => {
     if (domain && key) {
-      setTab("url");
+      setTab('url');
     } else {
-      setTab("link");
+      setTab('link');
     }
   }, [key]);
 
@@ -34,7 +34,7 @@ export default function TopLinks() {
 
   const { queryParams } = useRouterStuff();
   const searchParams = useSearchParams();
-  const root = searchParams.get("root");
+  const root = searchParams.get('root');
   const [showModal, setShowModal] = useState(false);
 
   const barList = (limit?: number) => (
@@ -69,7 +69,7 @@ export default function TopLinks() {
       >
         <div className="border-b border-gray-200 px-6 py-4">
           <h1 className="text-lg font-semibold">
-            {tab === "link" ? "Links" : "URLs"}
+            {tab === 'link' ? 'Links' : 'URLs'}
           </h1>
         </div>
         {barList()}
@@ -77,15 +77,15 @@ export default function TopLinks() {
       <div className="scrollbar-hide relative z-0 h-[400px] border border-gray-200 bg-white px-7 py-5 sm:rounded-lg sm:border-gray-100 sm:shadow-lg">
         <div className="mb-3 flex justify-between">
           <h1 className="text-lg font-semibold capitalize">
-            {tab === "link" ? "Links" : "URLs"}
+            {tab === 'link' ? 'Links' : 'URLs'}
           </h1>
           {domain && key ? (
-            !basePath.startsWith("/stats") && (
+            !basePath.startsWith('/stats') && (
               <Link
                 className="flex items-center space-x-1 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1 text-sm text-gray-500 transition-all hover:bg-gray-100"
                 href={
                   queryParams({
-                    del: ["domain", "key"],
+                    del: ['domain', 'key'],
                     getNewPath: true,
                   }) as string
                 }
@@ -98,16 +98,16 @@ export default function TopLinks() {
             )
           ) : (
             <TabSelect
-              options={["Links"]}
+              options={['Links']}
               selected="Links"
               selectAction={(option) =>
                 queryParams({
-                  ...((root === "false" && option === "Links") ||
-                  (root === "true" && option === "Domains")
-                    ? { del: ["root"] }
+                  ...((root === 'false' && option === 'Links') ||
+                  (root === 'true' && option === 'Domains')
+                    ? { del: ['root'] }
                     : {
                         set: {
-                          root: option === "Links" ? "false" : "true",
+                          root: option === 'Links' ? 'false' : 'true',
                         },
                       }),
                   replace: true,

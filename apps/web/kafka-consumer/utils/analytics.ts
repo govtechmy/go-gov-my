@@ -1,5 +1,5 @@
-import { AnalyticsMessage } from "kafka-consumer/models/AnalyticsSchema";
-import crypto from "node:crypto";
+import { AnalyticsMessage } from 'kafka-consumer/models/AnalyticsSchema';
+import crypto from 'node:crypto';
 
 export function consumeAnalytics(
   link,
@@ -22,11 +22,11 @@ export function sumTwoObj(obj1, obj2) {
   const clone = { ...obj1 };
   for (const key in obj2) {
     if (obj2.hasOwnProperty(key)) {
-      if (key === "asn" && Array.isArray(obj2[key])) {
+      if (key === 'asn' && Array.isArray(obj2[key])) {
         clone[key] = mergeASNArrays(clone[key] || [], obj2[key]);
-      } else if (typeof obj2[key] === "number") {
+      } else if (typeof obj2[key] === 'number') {
         clone[key] = (clone[key] || 0) + obj2[key];
-      } else if (typeof obj2[key] === "object" && !Array.isArray(obj2[key])) {
+      } else if (typeof obj2[key] === 'object' && !Array.isArray(obj2[key])) {
         clone[key] = sumTwoObj(clone[key] || {}, obj2[key]);
       } else {
         clone[key] = obj2[key];
@@ -62,15 +62,15 @@ function getIdempotencyKey(analyticsMessage: AnalyticsMessage): string {
   const combined = date1Str + date2Str;
 
   // Create a hash of the combined string
-  const hash = crypto.createHash("sha256");
+  const hash = crypto.createHash('sha256');
   hash.update(combined);
-  return hash.digest("hex");
+  return hash.digest('hex');
 }
 
 const getIdempotentPayload = (analyticsMessage: AnalyticsMessage) => {
-  const hash = crypto.createHash("sha256");
+  const hash = crypto.createHash('sha256');
   hash.update(JSON.stringify(analyticsMessage));
-  return hash.digest("hex");
+  return hash.digest('hex');
 };
 
 export function toIdempotentResource(analyticsMessage: AnalyticsMessage): {

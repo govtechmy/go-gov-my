@@ -1,9 +1,9 @@
-import { DubApiError, exceededLimitError } from "@/lib/api/errors";
-import { withWorkspace } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { createTagBodySchema } from "@/lib/zod/schemas/tags";
-import { COLORS_LIST, randomBadgeColor } from "@/ui/links/tag-badge";
-import { NextResponse } from "next/server";
+import { DubApiError, exceededLimitError } from '@/lib/api/errors';
+import { withWorkspace } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { createTagBodySchema } from '@/lib/zod/schemas/tags';
+import { COLORS_LIST, randomBadgeColor } from '@/ui/links/tag-badge';
+import { NextResponse } from 'next/server';
 
 // GET /api/tags - get all tags for a workspace
 export const GET = withWorkspace(async ({ workspace, headers }) => {
@@ -17,7 +17,7 @@ export const GET = withWorkspace(async ({ workspace, headers }) => {
       color: true,
     },
     orderBy: {
-      name: "asc",
+      name: 'asc',
     },
   });
   return NextResponse.json(tags, { headers });
@@ -33,11 +33,11 @@ export const POST = withWorkspace(async ({ req, workspace, headers }) => {
 
   if (tagsCount >= workspace.tagsLimit) {
     throw new DubApiError({
-      code: "exceeded_limit",
+      code: 'exceeded_limit',
       message: exceededLimitError({
         plan: workspace.plan,
         limit: workspace.tagsLimit,
-        type: "tags",
+        type: 'tags',
       }),
     });
   }
@@ -53,8 +53,8 @@ export const POST = withWorkspace(async ({ req, workspace, headers }) => {
 
   if (existingTag) {
     throw new DubApiError({
-      code: "conflict",
-      message: "A tag with that name already exists.",
+      code: 'conflict',
+      message: 'A tag with that name already exists.',
     });
   }
 

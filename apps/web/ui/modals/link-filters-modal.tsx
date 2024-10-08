@@ -1,6 +1,6 @@
-import LinkFilters from "@/ui/links/link-filters";
-import { IconMenu, Modal } from "@dub/ui";
-import { ChevronDown, Filter } from "lucide-react";
+import LinkFilters from '@/ui/links/link-filters';
+import { IconMenu, Modal } from '@dub/ui';
+import { ChevronDown, Filter } from 'lucide-react';
 import {
   Dispatch,
   SetStateAction,
@@ -8,7 +8,7 @@ import {
   useCallback,
   useMemo,
   useState,
-} from "react";
+} from 'react';
 
 function LinkFiltersModal({
   showLinkFiltersModal,
@@ -44,7 +44,7 @@ function LinkFiltersButton({
       <IconMenu text="Filters" icon={<Filter className="h-4 w-4 shrink-0" />} />
       <ChevronDown
         className={`h-5 w-5 text-gray-400 ${
-          showLinkFiltersModal ? "rotate-180 transform" : ""
+          showLinkFiltersModal ? 'rotate-180 transform' : ''
         } transition-all duration-75`}
       />
     </button>

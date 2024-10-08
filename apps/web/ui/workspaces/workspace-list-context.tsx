@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import useWorkspaces from "@/lib/swr/use-workspaces";
-import { WorkspaceProps } from "@/lib/types";
-import { createContext, useContext, useEffect, useState } from "react";
-import { useDebouncedCallback } from "use-debounce";
+import useWorkspaces from '@/lib/swr/use-workspaces';
+import { WorkspaceProps } from '@/lib/types';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
 type Context = {
   searchValue: string;
@@ -21,7 +21,7 @@ export const WorkspaceListProvider = ({
 }: {
   children?: React.ReactNode;
 }) => {
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState('');
 
   const [debouncedSearchValue, setDebouncedSearchValue] = useState(searchValue);
   const debounced = useDebouncedCallback(setDebouncedSearchValue, 500);
@@ -52,7 +52,7 @@ export const useWorkspaceListContext = () => {
 
   if (!context) {
     throw Error(
-      "useWorkspaceListContext must be called within a WorkspaceListProvider",
+      'useWorkspaceListContext must be called within a WorkspaceListProvider',
     );
   }
 

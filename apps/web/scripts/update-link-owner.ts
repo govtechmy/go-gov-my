@@ -1,7 +1,7 @@
-import { prisma } from "@/lib/prisma";
-import "dotenv-flow/config";
+import { prisma } from '@/lib/prisma';
+import 'dotenv-flow/config';
 
-const projectSlug = "xxx";
+const projectSlug = 'xxx';
 
 async function main() {
   const owner = await prisma.projectUsers.findMany({
@@ -9,7 +9,7 @@ async function main() {
       project: {
         slug: projectSlug,
       },
-      role: "owner",
+      role: 'owner',
     },
     select: {
       user: {

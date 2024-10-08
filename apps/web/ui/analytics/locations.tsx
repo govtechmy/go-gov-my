@@ -1,18 +1,18 @@
-import { LocationTabs } from "@/lib/analytics/types";
-import { formatAnalyticsEndpoint } from "@/lib/analytics/utils";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { LoadingSpinner, Modal, TabSelect, useRouterStuff } from "@dub/ui";
-import { COUNTRIES, fetcher } from "@dub/utils";
-import { Maximize, Network } from "lucide-react";
-import { useContext, useMemo, useState } from "react";
-import useSWR from "swr";
-import { AnalyticsContext } from ".";
-import BarList from "./bar-list";
+import { LocationTabs } from '@/lib/analytics/types';
+import { formatAnalyticsEndpoint } from '@/lib/analytics/utils';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { LoadingSpinner, Modal, TabSelect, useRouterStuff } from '@dub/ui';
+import { COUNTRIES, fetcher } from '@dub/utils';
+import { Maximize, Network } from 'lucide-react';
+import { useContext, useMemo, useState } from 'react';
+import useSWR from 'swr';
+import { AnalyticsContext } from '.';
+import BarList from './bar-list';
 
 export default function Locations() {
-  const [tab, setTab] = useState<LocationTabs>("countries");
+  const [tab, setTab] = useState<LocationTabs>('countries');
   const singularTabName = useMemo(
-    () => formatAnalyticsEndpoint(tab, "singular"),
+    () => formatAnalyticsEndpoint(tab, 'singular'),
     [tab],
   );
 
@@ -40,7 +40,7 @@ export default function Locations() {
       data={
         data?.map((d) => ({
           icon:
-            tab === "asn" ? (
+            tab === 'asn' ? (
               <Network className="h-4 w-4" />
             ) : (
               <img
@@ -50,9 +50,9 @@ export default function Locations() {
               />
             ),
           title:
-            tab === "countries"
+            tab === 'countries'
               ? COUNTRIES[d.country]
-              : tab === "cities"
+              : tab === 'cities'
                 ? d.city
                 : `${d.asn} - ${d.organization}`,
           href: queryParams({
@@ -87,7 +87,7 @@ export default function Locations() {
         <div className="mb-3 flex justify-between">
           <h1 className="text-lg font-semibold">{message?.locations}</h1>
           <TabSelect
-            options={["countries", "cities", "asn"]}
+            options={['countries', 'cities', 'asn']}
             selected={tab}
             selectAction={(option) => setTab(option as LocationTabs)}
             translation={message}

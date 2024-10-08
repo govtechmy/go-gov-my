@@ -1,6 +1,6 @@
-import { prisma } from "@/lib/prisma";
-import { nanoid } from "@dub/utils";
-import "dotenv-flow/config";
+import { prisma } from '@/lib/prisma';
+import { nanoid } from '@dub/utils';
+import 'dotenv-flow/config';
 
 async function main() {
   const projects = await prisma.project.findMany({

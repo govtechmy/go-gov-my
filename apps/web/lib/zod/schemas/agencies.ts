@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const AgencySchema = z.object({
   code: z.string().min(1),

@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { APP_NAME, cn, fetcher } from "@dub/utils";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import useSWR from "swr";
-import { MaxWidthWrapper } from "./max-width-wrapper";
+import { APP_NAME, cn, fetcher } from '@dub/utils';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import useSWR from 'swr';
+import { MaxWidthWrapper } from './max-width-wrapper';
 
 const navigation = {
   legal: [
-    { name: "Privacy", href: "/privacy" },
-    { name: "Terms", href: "/terms" },
-    { name: "Abuse", href: "/abuse" },
+    { name: 'Privacy', href: '/privacy' },
+    { name: 'Terms', href: '/terms' },
+    { name: 'Abuse', href: '/abuse' },
   ],
 };
 
@@ -73,14 +73,14 @@ function StatusBadge() {
     ongoing_incidents: {
       name: string;
       current_worst_impact:
-        | "degraded_performance"
-        | "partial_outage"
-        | "full_outage";
+        | 'degraded_performance'
+        | 'partial_outage'
+        | 'full_outage';
     }[];
-  }>("https://status.dub.co/api/v1/summary", fetcher);
+  }>('https://status.dub.co/api/v1/summary', fetcher);
 
-  const [color, setColor] = useState("bg-gray-200");
-  const [status, setStatus] = useState("Loading status...");
+  const [color, setColor] = useState('bg-gray-200');
+  const [status, setStatus] = useState('Loading status...');
 
   useEffect(() => {
     if (!data) return;
@@ -88,14 +88,14 @@ function StatusBadge() {
     if (ongoing_incidents.length > 0) {
       const { current_worst_impact, name } = ongoing_incidents[0];
       const color =
-        current_worst_impact === "degraded_performance"
-          ? "bg-yellow-500"
-          : "bg-red-500";
+        current_worst_impact === 'degraded_performance'
+          ? 'bg-yellow-500'
+          : 'bg-red-500';
       setStatus(name);
       setColor(color);
     } else {
-      setStatus("All systems operational");
-      setColor("bg-green-500");
+      setStatus('All systems operational');
+      setColor('bg-green-500');
     }
   }, [data]);
 
@@ -108,14 +108,14 @@ function StatusBadge() {
       <div className="relative h-3 w-3">
         <div
           className={cn(
-            "absolute inset-0 m-auto h-3 w-3 animate-ping items-center justify-center rounded-full group-hover:animate-none",
+            'absolute inset-0 m-auto h-3 w-3 animate-ping items-center justify-center rounded-full group-hover:animate-none',
             color,
-            status === "Loading status..." && "animate-none",
+            status === 'Loading status...' && 'animate-none',
           )}
         />
         <div
           className={cn(
-            "absolute inset-0 z-10 m-auto h-3 w-3 rounded-full",
+            'absolute inset-0 z-10 m-auto h-3 w-3 rounded-full',
             color,
           )}
         />

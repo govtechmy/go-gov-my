@@ -1,13 +1,13 @@
-import { prisma } from "@/lib/prisma";
-import "dotenv-flow/config";
-import * as fs from "fs";
-import * as Papa from "papaparse";
+import { prisma } from '@/lib/prisma';
+import 'dotenv-flow/config';
+import * as fs from 'fs';
+import * as Papa from 'papaparse';
 
 const index = 24000;
 const linkClicks: { domain: string; key: string; clicks: string }[] = [];
 
 async function main() {
-  Papa.parse(fs.createReadStream("sql.csv", "utf-8"), {
+  Papa.parse(fs.createReadStream('sql.csv', 'utf-8'), {
     header: true,
     step: (result: {
       data: { domain: string; key: string; clicks: string };
