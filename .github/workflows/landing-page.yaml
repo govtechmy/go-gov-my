@@ -5,7 +5,7 @@ env:
 on:
   push:
     branches:
-      - feat/328-nginx
+      - staging
     paths-ignore:
       - apps/cron/**
       - apps/docs/**
