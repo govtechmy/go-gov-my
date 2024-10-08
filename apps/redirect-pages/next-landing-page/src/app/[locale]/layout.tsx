@@ -63,8 +63,6 @@ export async function generateMetadata({
 }
 
 export default async function Layout({ children, params: { locale } }: Props) {
-  // Pass 'locale' to a cache to distribute it to all Server Components
-  // https://next-intl-docs.vercel.app/docs/getting-started/app-router/with-i18n-routing#add-unstable_setrequestlocale-to-all-layouts-and-pages
   unstable_setRequestLocale(locale);
 
   const messages = await getMessages();
@@ -97,13 +95,6 @@ export default async function Layout({ children, params: { locale } }: Props) {
                       "components.Footer.links.title.openSource",
                     ),
                     links: [
-                      // {
-                      //   name: extract(
-                      //     messages,
-                      //     "components.Footer.links.name.github",
-                      //   ),
-                      //   href: URL_GITHUB,
-                      // },
                       {
                         name: extract(
                           messages,
