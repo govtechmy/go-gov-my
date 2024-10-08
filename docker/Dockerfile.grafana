@@ -1,6 +1,6 @@
 FROM grafana/grafana@sha256:eff6b95b4d17c5a966ed72bc155685d9bc2e704c455ad7c246df6e786ed3289a
 
-EXPOSE 3003
+EXPOSE 3004
 
 # Use environment variables instead of hardcoded values
 ENV GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
