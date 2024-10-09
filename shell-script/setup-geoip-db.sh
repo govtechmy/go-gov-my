@@ -42,7 +42,7 @@ tar -xzf maxmind-db.tar.gz
 extracted_folder=$(ls -d GeoLite2-City*/ | head -n 1)
 
 # Move the DB file
-mv "./${extracted_folder}GeoLite2-City.mmdb" ../apps/redirect-server
+mv "./${extracted_folder}GeoLite2-City.mmdb" ./apps/redirect-server
 
 
 # Download ASN database
@@ -60,7 +60,7 @@ tar -xzf maxmind-asn-db.tar.gz
 asn_folder=$(ls -d GeoLite2-ASN*/ | head -n 1)
 
 # Move the ASN DB file
-mv "./${asn_folder}GeoLite2-ASN.mmdb" ../apps/redirect-server
+mv "./${asn_folder}GeoLite2-ASN.mmdb" ./apps/redirect-server
 
 
 # Remove the downloaded and extracted folders 
