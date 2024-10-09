@@ -1,9 +1,9 @@
-const dotenv = require("dotenv");
-dotenv.config();
+require('dotenv').config();
+const path = require("path");
 
-// function generateSHA256Checksum(data) {
-//     return _crypto.createHash('sha256').update(data, 'utf8').digest('hex');
-// }
+// Load .env.local if it exists, otherwise fall back to .env
+const envPath = path.resolve(process.cwd(), '.env.local');
+require('dotenv').config({ path: envPath });
 
 async function fetchData() {
   try {

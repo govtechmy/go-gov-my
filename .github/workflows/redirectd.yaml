@@ -8,7 +8,7 @@ env:
 on:
   push:
     branches:
-      - staging
+      - feat/codebase-cleanup
     paths-ignore:
       - apps/web/**
       - apps/docs/**
@@ -41,12 +41,12 @@ jobs:
           tags: |
             type=sha
       - name: Setup Maxmind GeoIP database
-        run: ./setup-geoip-db.sh
+        run: ./shell-script/setup-geoip-db.sh
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
         with:
-          context: apps/redirect-server
-          file: apps/redirect-server/docker/Dockerfile.redirectd
+          context: .
+          file: docker/Dockerfile.redirectd
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

@@ -4,20 +4,29 @@ services:
   ######################
   # Required Container #
   ######################
-  next-landing-page:
-    build:
-      context: ./apps/redirect-pages/next-landing-page
-      dockerfile: Dockerfile.nginx
-    ports:
-      - "8080:80"
-    volumes:
-      - ./apps/redirect-pages/next-landing-page/nginx.conf:/etc/nginx/conf.d/default.conf
-    environment:
-      - NODE_ENV=production
-    #command: sh -c "npm run generate && nginx -g 'daemon off;'"
-    networks:
-      - my-network
 
+  ######################
+  # Port List (sorted) #
+  ######################
+  # zookeeper:                2181
+  # analytics-aggregator:     3003
+  # cron-app:                 3003
+  # grafana-app:              3004
+  # docs-app:                 3334
+  # prometheus-app:           3005
+  # jaeger-app:               3006
+  # filebeat:                 5044
+  # logstash:                 5044
+  # ps-postgres:              5432
+  # redis:                    6379
+  # debezium:                 8083
+  # init-debezium-connector:  8083
+  # broker:                   9092
+  # elasticsearch:            9200
+  # init-elasticsearch:       9200
+  ######################
+
+  ## Database App Port: 5432 ##
   ps-postgres:
     image: postgres:13
     container_name: ps-postgres
@@ -43,6 +52,7 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  ## Cache App Port: 6379 ##
   redis:
     image: redis:7.2
     container_name: redis
@@ -57,6 +67,7 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  ## Link Indexing App Port: 9200 ##
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.13.2
     container_name: elasticsearch
@@ -86,18 +97,7 @@ services:
         hard: -1
     mem_limit: 1g
 
-  init-elasticsearch:
-    image: curlimages/curl:8.8.0
-    container_name: init-elasticsearch
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    volumes:
-      - ./init-elasticsearch.sh:/home/curl_user/init-elasticsearch.sh
-    entrypoint: /home/curl_user/init-elasticsearch.sh
-    networks:
-      - my-network
-
+  ## Filebeat Log Tail Port: 5044 ##
   filebeat:
     image: docker.elastic.co/beats/filebeat:7.13.2
     restart: always
@@ -111,6 +111,7 @@ services:
       init-elasticsearch:
         condition: service_completed_successfully
 
+  ## Go Log Collector Port: 5044 ##
   logstash:
     image: docker.elastic.co/logstash/logstash:7.13.2
     env_file:
@@ -123,6 +124,7 @@ services:
     networks:
       - my-network
 
+  ## Data Propagation Port: 2181 ##
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.1
     hostname: zookeeper
@@ -135,6 +137,7 @@ services:
     networks:
       - my-network
 
+  ## Kafka Broker Port: 9092 ##
   broker:
     image: confluentinc/cp-enterprise-kafka:7.6.1
     hostname: broker
@@ -158,6 +161,7 @@ services:
     networks:
       - my-network
 
+  ## Event Trigger Port: 8083 ##
   debezium:
     image: debezium/connect:2.6
     container_name: debezium
@@ -184,6 +188,7 @@ services:
     networks:
       - my-network
 
+  ## Debezium Connector Init Port: 8083 ##
   init-debezium-connector:
     image: curlimages/curl:8.8.0
     container_name: init-debezium-connector
@@ -191,7 +196,7 @@ services:
       debezium:
         condition: service_healthy
     volumes:
-      - ./init-debezium-connector.sh:/home/curl_user/init-debezium-connector.sh
+      - ./shell-script/init-debezium-connector.sh:/home/curl_user/init-debezium-connector.sh
     env_file:
       - .env
     environment:
@@ -202,21 +207,66 @@ services:
     networks:
       - my-network
 
-  uptime-kuma:
-    image: louislam/uptime-kuma:1
-    restart: always
+  ## Elasticsearch Init Port: 9200 ##
+  init-elasticsearch:
+    image: curlimages/curl:8.8.0
+    container_name: init-elasticsearch
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
     volumes:
-      - uptime-kuma:/app/data
-    ports:
-      - 3001:3001
+      - ./shell-script/init-elasticsearch.sh:/home/curl_user/init-elasticsearch.sh
+    entrypoint: /home/curl_user/init-elasticsearch.sh
     networks:
       - my-network
+
+  ## Grafana Metrics Visualization Port: 3004 ##
+  grafana-app:
+    container_name: grafana-app
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.grafana
+    ports:
+      - 3004:3004
+    volumes:
+      - grafanadata:/var/lib/grafana
+    networks:
+      - my-network
+
+  ## Metrics Reporter Port: 3005 ##
+  prometheus-app:
+    container_name: prometheus-app
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.prometheus
+    ports:
+      - 3005:3005
+    volumes:
+      - prometheusdata:/prometheus
+    networks:
+      - my-network
+  
+  ## Traces Reporter Port: 3006 ##
+  jaeger-app:
+    container_name: jaeger-app
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.jaeger
+    volumes:
+      - jaegerdata:/data
+    ports:
+      - 3006:3006
+    networks:
+      - my-network
+
 
   ##########################
   # Optional Container     #
   # Mainly for Development #
+  # UI Toolkit             #
   ##########################
 
+  ## Kafka UI Tools Port: 9000 ##
   # kafdrop:
   #   image: obsidiandynamics/kafdrop
   #   container_name: kafdrop
@@ -230,6 +280,8 @@ services:
   #   networks:
   #     - my-network
 
+
+  ## Debezium UI Tools Port: 8080 ##
   # debezium-ui:
   #   image: quay.io/debezium/debezium-ui:latest
   #   container_name: debezium-ui
@@ -244,16 +296,36 @@ services:
   #   networks:
   #     - my-network
 
+
+  ## Uptime Kuma Port: 3001 ##
+  # uptime-kuma:
+  #   image: louislam/uptime-kuma:1
+  #   restart: always
+  #   volumes:
+  #     - uptime-kuma:/app/data
+  #   ports:
+  #     - 3001:3001
+  #   networks:
+  #     - my-network
+
+
+  ##########################
+  # Optional Container     #
+  # Mainly for Development #
+  # Optional Application   #
+  ##########################
+
+  ## Go API Port: 3002 ##
   # Comment this out during development
   # go-api:
   #   container_name: go-api
   #   build:
-  #     context: ./apps/redirect-server
+  #     context: .
   #     dockerfile: docker/Dockerfile.api
   #   ports:
   #     - "3002:3002"
   #   env_file:
-  #     - .env
+  #     - ./apps/redirect-server/.env
   #   environment:
   #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
   #   command:
@@ -266,16 +338,17 @@ services:
   #   networks:
   #     - my-network
 
+  ## Redirectd Port: 3000 ##
   # Comment this out during development
   # go-redirectd:
   #   container_name: go-redirectd
   #   build:
-  #     context: ./apps/redirect-server
+  #     context: .
   #     dockerfile: docker/Dockerfile.redirectd
   #   ports:
   #     - "3000:3000"
   #   env_file:
-  #     - .env
+  #    - ./apps/redirect-server/.env
   #   environment:
   #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
   #   command:
@@ -286,13 +359,66 @@ services:
   #   depends_on:
   #     - elasticsearch
 
+  ## Analytics Aggregator Port: 3003 ##
+  analytics-aggregator:
+    container_name: analytics-aggregator
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.analytics-aggregator
+    ports:
+      - "3003:3003"
+    env_file:
+      - ./apps/redirect-server/.env
+    command:
+      - "/analytics-aggregator"
+    volumes:
+      - ./apps/redirect-server:/app
+    depends_on:
+      - broker
+    networks:
+      - my-network
+
+  ## Landing Page stats CRON ##
+  cron-app:
+    container_name: cron-app
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.cron
+    env_file:
+      - ./apps/cron/.env
+    environment:
+      - API_KEY=61c13aa707864277adea80575323b84b
+      - WEB_BASE=https://app.pautan.org
+    # volumes:
+    #   - ./apps/cron:/app
+    networks:
+      - my-network
+
+  ## Docs Port: 3334 ##
+  docs-app:
+    container_name: docs-app
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.docs
+    ports:
+      - "3334:3334"
+    env_file:
+      - .env
+    volumes:
+      - ./apps/docs:/app
+    networks:
+      - my-network
+
 networks:
   my-network:
 
 volumes:
+## Required Volumes ##
   ps-postgres:
-  esdata:
   filebeatdata:
-  status-page:
-  uptime-kuma:
-  node_modules:
+  grafanadata:
+  prometheusdata:
+  jaegerdata:
+  esdata:
+## Optional Volumes ##
+  # uptime-kuma:

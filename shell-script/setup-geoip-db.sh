@@ -7,22 +7,25 @@
 # - MAXMIND_ASN_DB_PERMALINK
 # Get these by signing up for a dev account at https://www.maxmind.com
 
-if [ -z "${MAXMIND_ACCOUNT_ID}" ]; then
-  echo "Error: Environment variable MAXMIND_ACCOUNT_ID is not set."
-  exit 1
+# Source environment variables from the root project directory if .env exists
+if [ -f "../.env" ]; then
+  . "../.env"
 fi
-if [ -z "${MAXMIND_LICENSE_KEY}" ]; then
-  echo "Error: Environment variable MAXMIND_LICENSE_KEY is not set."
-  exit 1
-fi
-if [ -z "${MAXMIND_DB_PERMALINK}" ]; then
-  echo "Error: Environment variable MAXMIND_DB_PERMALINK is not set."
-  exit 1
-fi
-if [ -z "${MAXMIND_ASN_DB_PERMALINK}" ]; then
-  echo "Error: Environment variable MAXMIND_ASN_DB_PERMALINK is not set."
-  exit 1
-fi
+
+# Function to check if a variable is set
+check_var() {
+  if [ -z "${!1}" ]; then
+    echo "Error: Environment variable $1 is not set."
+    exit 1
+  fi
+}
+
+
+# Check required environment variables
+check_var MAXMIND_ACCOUNT_ID
+check_var MAXMIND_LICENSE_KEY
+check_var MAXMIND_DB_PERMALINK
+check_var MAXMIND_ASN_DB_PERMALINK
 
 # Downloads
 curl -L -u "$MAXMIND_ACCOUNT_ID:$MAXMIND_LICENSE_KEY" "$MAXMIND_DB_PERMALINK" -o maxmind-db.tar.gz

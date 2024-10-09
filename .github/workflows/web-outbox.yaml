@@ -4,7 +4,7 @@ env:
 on:
   push:
     branches:
-      - staging
+      - feat/codebase-cleanup
     paths-ignore:
       - apps/redirect-server/**
   workflow_dispatch:
@@ -37,7 +37,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockerfile.outbox
+          file: docker/Dockerfile.outbox
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

@@ -11,7 +11,12 @@ WORKDIR /app
 
 COPY . .
 
-RUN ["pnpm", "turbo", "prune", "web"]
+RUN [ \
+    "pnpm", \
+    "turbo", \
+    "prune", \
+    "web" \
+    ]
 
 WORKDIR /app/out
 
@@ -20,4 +25,8 @@ RUN pnpm install
 WORKDIR /app/out/apps/web
 RUN npx prisma generate
 
-CMD ["npx", "tsx", "./kafka-consumer/index.ts"]
+CMD [ \
+    "npx", \
+    "tsx", \
+    "./kafka-consumer/index.ts" \
+    ]

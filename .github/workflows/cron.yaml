@@ -4,7 +4,7 @@ env:
 on:
   push:
     branches:
-      - staging
+      - feat/codebase-cleanup
     paths-ignore:
       - apps/redirect-server/**
       - apps/redirect-pages/**
@@ -40,8 +40,8 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
         with:
-          context: apps/cron
-          file: apps/cron/Dockerfile.cron
+          context: .
+          file: docker/Dockerfile.cron
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

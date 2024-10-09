@@ -1,6 +1,5 @@
 FROM jaegertracing/all-in-one@sha256:85f1eb56e8ac24e53c031c6bcf7cdf6bff1dc4885b69e54605b932022054b612
 
-# as recommended by https://www.jaegertracing.io/docs/next-release/getting-started/
 EXPOSE 5775/udp
 EXPOSE 6831/udp
 EXPOSE 6832/udp
