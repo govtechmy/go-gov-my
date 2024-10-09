@@ -1,12 +1,10 @@
-import { handleBasicAuth } from "@/middlewares/basic-auth";
 import { handleI18nRouting } from "@/middlewares/i18n";
 import { NextRequest } from "next/server";
 
 // Middlewares will be ignored in static export mode
 export default async function middleware(request: NextRequest) {
   const response = handleI18nRouting(request);
-  const authResponse = handleBasicAuth(request);
-  return authResponse || response;
+  return response;
 }
 
 export const config = {
