@@ -41,7 +41,7 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
         with:
-          context: apps/grafana
+          context: .
           file: docker/Dockerfile.grafana
           push: true
           tags: ${{ steps.meta.outputs.tags }}

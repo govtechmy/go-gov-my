@@ -1,5 +1,6 @@
 # Turbo
 .turbo
+.DS_Store
 
 # Apps - Cron
 /apps/cron/node_modules
