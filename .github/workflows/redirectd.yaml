@@ -8,7 +8,7 @@ env:
 on:
   push:
     branches:
-      - feat/codebase-cleanup
+      - staging
     paths-ignore:
       - apps/web/**
       - apps/docs/**
