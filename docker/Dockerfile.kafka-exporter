@@ -2,6 +2,6 @@ FROM danielqsj/kafka-exporter@sha256:9b67b273d1e54052e7ce77c46ecd1c6619fdee7e2ed
 
 EXPOSE 9308
 
-ENV KAFKA_SERVER=${KAFKA_SERVER}
+ARG KAFKA_SERVER
 
 CMD ["--kafka.server=${KAFKA_SERVER}"]
