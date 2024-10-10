@@ -11,10 +11,7 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 export function logRequestMetrics(
-  handler: (
-    req: NextRequest,
-    params: any,
-  ) => Promise<NextResponse> | NextResponse,
+  handler: (req: Request, params: any) => Promise<Response> | NextResponse,
 ) {
   return async (req: NextRequest, params: any) => {
     const start_timestamp = Date.now();

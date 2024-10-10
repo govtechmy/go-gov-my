@@ -1,5 +1,6 @@
 import { DubApiError } from '@/lib/api/errors';
 import { withSession } from '@/lib/auth';
+import { logRequestMetrics } from '@/lib/decorator/logRequestMetrics';
 import { prisma } from '@/lib/prisma';
 import { checkIfUserExists } from '@/lib/userinfos';
 import {
@@ -16,7 +17,7 @@ const GetWorkspacesSearchParams = z.object({
 });
 
 // GET /api/workspaces - get all projects for the current user
-export const GET = //logRequestMetrics(
+export const GET = logRequestMetrics(
   withSession(async ({ session, searchParams }) => {
     const { search } = await GetWorkspacesSearchParams.parseAsync(searchParams);
     let whereQuery: Prisma.ProjectWhereInput = {};
@@ -71,8 +72,8 @@ export const GET = //logRequestMetrics(
         WorkspaceSchema.parse({ ...project, id: `ws_${project.id}` }),
       ),
     );
-  }); //,
-//);
+  }),
+);
 
 export const POST = withSession(async ({ req, session }) => {
   const { name, slug } = await createWorkspaceSchema.parseAsync(
