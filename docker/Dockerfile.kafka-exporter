@@ -4,4 +4,4 @@ EXPOSE 9308
 
 ARG kafka.server
 
-CMD ["/kafka-exporter", "--kafka.server=${kafka.server}"]
+CMD ["--kafka.server=${kafka.server}"]
