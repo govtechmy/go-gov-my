@@ -9,6 +9,9 @@ on:
       - apps/redirect-server/**
       - apps/redirect-pages/**
       - apps/docs/**
+      - docker/Dockerfile.prometheus
+      - docker/Dockerfile.jaeger
+      - docker/Dockerfile.grafana
   workflow_dispatch:
 permissions:
   id-token: write # This is required for requesting the JWT

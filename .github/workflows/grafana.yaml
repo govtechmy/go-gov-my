@@ -12,6 +12,13 @@ on:
       - apps/web/**
       - packages/**
       - apps/cron
+      - docker/Dockerfile.web
+      - docker/Dockerfile.api
+      - docker/Dockerfile.redirectd
+      - docker/Dockerfile.outbox
+      - docker/Dockerfile.analytics-aggregator
+      - docker/Dockerfile.cron
+      - docker/Dockerfile.docs
   workflow_dispatch:
 permissions:
   id-token: write # This is required for requesting the JWT

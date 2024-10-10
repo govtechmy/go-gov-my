@@ -11,6 +11,7 @@ on:
       - apps/docs/**
       - apps/web/**
       - packages/**
+      - docker/Dockerfile.web
   workflow_dispatch:
 permissions:
   id-token: write # This is required for requesting the JWT

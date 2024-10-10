@@ -7,6 +7,9 @@ on:
       - staging
     paths-ignore:
       - apps/redirect-server/**
+      - docker/Dockerfile.prometheus
+      - docker/Dockerfile.jaeger
+      - docker/Dockerfile.grafana
   workflow_dispatch:
 permissions:
   id-token: write # This is required for requesting the JWT
