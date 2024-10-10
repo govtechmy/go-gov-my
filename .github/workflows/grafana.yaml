@@ -75,3 +75,7 @@ jobs:
                   }
                 ]
               }'
+      - name: List all files
+        run: |
+          echo "Listing files using 'ls':"
+          ls -la
