@@ -7,13 +7,13 @@ ENV GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
 ENV GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
 
 # Provision data sources
-COPY grafana/datasources.yml /etc/grafana/provisioning/datasources/datasources.yml
+COPY grafana/ /etc/grafana/provisioning/datasources/
 
 # Provision dashboard
-COPY grafana/dashboards.yml /etc/grafana/provisioning/dashboards/dashboards.yml
+COPY grafana/ /etc/grafana/provisioning/dashboards/
 
-COPY grafana/dashboards/request_status_code.json /var/lib/grafana/dashboards/request_status_code.json
-COPY grafana/dashboards/average_request_time.json /var/lib/grafana/dashboards/average_request_time.json
+COPY grafana/dashboards/ /var/lib/grafana/dashboards/
+
 
 CMD [ \
     "grafana-server", \
