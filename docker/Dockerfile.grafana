@@ -6,8 +6,6 @@ EXPOSE 3004
 ENV GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
 ENV GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
 
-RUN echo "Listing files in the current directory:" && ls -la
-
 # Provision data sources
 COPY ./docker/grafana/datasources.yml /etc/grafana/provisioning/datasources/datasources.yml
 

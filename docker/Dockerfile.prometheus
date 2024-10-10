@@ -1,7 +1,5 @@
 FROM prom/prometheus@sha256:b8e88960a963fc6eb9cc89f4cae8f458d4e006cd9d7cf78b7cff06d12d79f91a
 
-RUN echo "Listing files in the current directory:" && ls -la
-
 COPY ./docker/prometheus/prometheus.yml /etc/prometheus/prometheus.yml
 COPY ./docker/prometheus/prometheus.yml /prometheus/prometheus.yml
 

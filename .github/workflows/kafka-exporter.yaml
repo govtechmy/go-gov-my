@@ -1,6 +1,6 @@
-name: Deploy gogov-grafana
+name: Deploy gogov-kafka-exporter
 env:
-  IMAGE: gogov-grafana
+  IMAGE: gogov-kafka-exporter
 on:
   push:
     branches:
@@ -9,9 +9,10 @@ on:
       - apps/redirect-server/**
       - apps/redirect-pages/**
       - apps/docs/**
-      - apps/web/**
       - packages/**
-      - apps/cron
+      - apps/cron/**
+      - apps/grafana/**
+      - apps/jaeger/**
   workflow_dispatch:
 permissions:
   id-token: write # This is required for requesting the JWT
@@ -41,15 +42,11 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: docker/Dockerfile.grafana
+          context: docker/
+          file: docker/Dockerfile.kafka-exporter
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            "NEXT_PUBLIC_APP_NAME=Pautan"
-            "NEXT_PUBLIC_APP_DOMAIN=pautan.org"
-            "NEXT_PUBLIC_APP_SHORT_DOMAIN=pautan.org"
       - name: Log out of Amazon ECR
         run: docker logout ${{ steps.login-ecr.outputs.registry }}
       - name: Deploy with Spinnaker
