@@ -48,7 +48,7 @@ RUN [ \
 CMD [ \
     "sh", \
     "-c", \
-    "cd ../apps/web && pnpm start" \
+    "cd apps/web && pnpm start" \
     ]
 
 EXPOSE 8888
