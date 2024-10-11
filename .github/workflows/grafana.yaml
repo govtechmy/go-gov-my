@@ -3,8 +3,6 @@ env:
   IMAGE: gogov-grafana
 on:
   push:
-    branches:
-      - main
     tags:
       - "grafana@STAGING-v*"
       - "grafana@v*"

@@ -3,8 +3,6 @@ env:
   IMAGE: gogov-analytics-aggregator
 on:
   push:
-    branches:
-      - main
     tags:
       - "analytics-aggregator@STAGING-v*"
       - "analytics-aggregator@v*"

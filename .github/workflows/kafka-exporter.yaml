@@ -3,8 +3,6 @@ env:
   IMAGE: gogov-kafka-exporter
 on:
   push:
-    branches:
-      - main
     tags:
       - "kafka-exporter@STAGING-v*"
       - "kafka-exporter@v*"

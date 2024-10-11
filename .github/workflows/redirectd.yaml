@@ -7,8 +7,6 @@ env:
   MAXMIND_ASN_DB_PERMALINK: ${{ vars.MAXMIND_ASN_DB_PERMALINK }}
 on:
   push:
-    branches:
-      - main
     tags:
       - "redirectd@STAGING-v*"
       - "redirectd@v*"

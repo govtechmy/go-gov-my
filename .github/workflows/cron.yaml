@@ -3,8 +3,6 @@ env:
   IMAGE: gogov-cron
 on:
   push:
-    branches:
-      - main
     tags:
       - "cron@STAGING-v*"
       - "cron@v*"

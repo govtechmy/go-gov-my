@@ -3,8 +3,6 @@ env:
   IMAGE: gogov-prometheus
 on:
   push:
-    branches:
-      - main
     tags:
       - "prometheus@STAGING-v*"
       - "prometheus@v*"

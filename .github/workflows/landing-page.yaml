@@ -4,8 +4,6 @@ env:
   LANDING_STATS_JSON_URL: ${{ vars.LANDING_STATS_JSON_URL_DEV }}
 on:
   push:
-    branches:
-      - main
     tags:
       - "landing-page@STAGING-v*"
       - "landing-page@v*"

@@ -3,8 +3,6 @@ env:
   IMAGE: gogov-dashboard
 on:
   push:
-    branches:
-      - main
     tags:
       - "web@STAGING-v*"
       - "web@v*"
