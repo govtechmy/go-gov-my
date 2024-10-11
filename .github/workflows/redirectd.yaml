@@ -58,8 +58,9 @@ jobs:
       - name: Setup Maxmind GeoIP database
         run: |
           ./shell-script/setup-geoip-db.sh
-          mv ./apps/redirect-server/GeoLite2-City.mmdb ./apps/redirect-server/
-          mv ./apps/redirect-server/GeoLite2-ASN.mmdb ./apps/redirect-server/
+          mkdir -p apps/redirect-server
+          mv GeoLite2-City.mmdb apps/redirect-server/ || true
+          mv GeoLite2-ASN.mmdb apps/redirect-server/ || true
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
         with:

@@ -11,8 +11,10 @@ RUN go build -o /redirectd ./cmd/redirectd
 
 FROM alpine:latest
 
-COPY --from=builder /app/GeoLite2-City.mmdb /GeoLite2-City.mmdb
-COPY --from=builder /app/GeoLite2-ASN.mmdb /GeoLite2-ASN.mmdb
+# Copy GeoLite2 databases if they exist
+COPY apps/redirect-server/GeoLite2-City.mmdb /GeoLite2-City.mmdb
+COPY apps/redirect-server/GeoLite2-ASN.mmdb /GeoLite2-ASN.mmdb
+
 COPY --from=builder /redirectd /redirectd
 
 COPY --from=builder /app/templates /templates
