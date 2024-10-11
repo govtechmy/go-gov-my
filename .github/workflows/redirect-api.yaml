@@ -4,7 +4,10 @@ env:
 on:
   push:
     branches:
-      - staging
+      - main
+    tags:
+      - "redirect-api@STAGING-v*"
+      - "redirect-api@v*"
     paths-ignore:
       - apps/web/**
       - apps/docs/**
@@ -15,8 +18,8 @@ on:
       - docker/Dockerfile.grafana
   workflow_dispatch:
 permissions:
-  id-token: write # This is required for requesting the JWT
-  contents: read # This is required for actions/checkout
+  id-token: write
+  contents: read
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -39,6 +42,17 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}
           tags: |
             type=sha
+            type=ref,event=tag
+      - name: Determine environment
+        id: determine-env
+        run: |
+          if [[ ${{ github.ref }} == refs/tags/redirect-api@STAGING-v* ]]; then
+            echo "ENVIRONMENT=staging" >> $GITHUB_OUTPUT
+          elif [[ ${{ github.ref }} == refs/tags/redirect-api@v* ]]; then
+            echo "ENVIRONMENT=production" >> $GITHUB_OUTPUT
+          else
+            echo "ENVIRONMENT=development" >> $GITHUB_OUTPUT
+          fi
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
         with:
@@ -63,5 +77,6 @@ jobs:
                     "name": "${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}",
                     "version": "${{ steps.meta.outputs.version }}"
                   }
-                ]
+                ],
+                "environment": "${{ steps.determine-env.outputs.ENVIRONMENT }}"
               }'

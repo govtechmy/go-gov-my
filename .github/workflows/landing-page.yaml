@@ -5,7 +5,10 @@ env:
 on:
   push:
     branches:
-      - staging
+      - main
+    tags:
+      - "landing-page@STAGING-v*"
+      - "landing-page@v*"
     paths-ignore:
       - apps/cron/**
       - apps/docs/**
@@ -37,16 +40,30 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}
           tags: |
             type=sha
+            type=ref,event=tag
+      - name: Determine environment
+        id: determine-env
+        run: |
+          if [[ ${{ github.ref }} == refs/tags/landing-page@STAGING-v* ]]; then
+            echo "ENVIRONMENT=staging" >> $GITHUB_OUTPUT
+            echo "LANDING_STATS_JSON_URL=${{ vars.LANDING_STATS_JSON_URL_STAGING }}" >> $GITHUB_OUTPUT
+          elif [[ ${{ github.ref }} == refs/tags/landing-page@v* ]]; then
+            echo "ENVIRONMENT=production" >> $GITHUB_OUTPUT
+            echo "LANDING_STATS_JSON_URL=${{ vars.LANDING_STATS_JSON_URL_PROD }}" >> $GITHUB_OUTPUT
+          else
+            echo "ENVIRONMENT=development" >> $GITHUB_OUTPUT
+            echo "LANDING_STATS_JSON_URL=${{ vars.LANDING_STATS_JSON_URL_DEV }}" >> $GITHUB_OUTPUT
+          fi
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockerfile.nginx
+          file: docker/Dockerfile.nginx
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            "LANDING_STATS_JSON_URL=${{ vars.LANDING_STATS_JSON_URL_DEV }}"
+            "LANDING_STATS_JSON_URL=${{ steps.determine-env.outputs.LANDING_STATS_JSON_URL }}"
       - name: Log out of Amazon ECR
         run: docker logout ${{ steps.login-ecr.outputs.registry }}
       - name: Deploy with Spinnaker
@@ -63,5 +80,6 @@ jobs:
                     "name": "${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}",
                     "version": "${{ steps.meta.outputs.version }}"
                   }
-                ]
+                ],
+                "environment": "${{ steps.determine-env.outputs.ENVIRONMENT }}"
               }'

@@ -4,7 +4,10 @@ env:
 on:
   push:
     branches:
-      - staging
+      - main
+    tags:
+      - "prometheus@STAGING-v*"
+      - "prometheus@v*"
     paths-ignore:
       - apps/redirect-server/**
       - apps/redirect-pages/**
@@ -45,6 +48,17 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}
           tags: |
             type=sha
+            type=ref,event=tag
+      - name: Determine environment
+        id: determine-env
+        run: |
+          if [[ ${{ github.ref }} == refs/tags/prometheus@STAGING-v* ]]; then
+            echo "ENVIRONMENT=staging" >> $GITHUB_OUTPUT
+          elif [[ ${{ github.ref }} == refs/tags/prometheus@v* ]]; then
+            echo "ENVIRONMENT=production" >> $GITHUB_OUTPUT
+          else
+            echo "ENVIRONMENT=development" >> $GITHUB_OUTPUT
+          fi
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
         with:
@@ -69,5 +83,6 @@ jobs:
                     "name": "${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}",
                     "version": "${{ steps.meta.outputs.version }}"
                   }
-                ]
+                ],
+                "environment": "${{ steps.determine-env.outputs.ENVIRONMENT }}"
               }'

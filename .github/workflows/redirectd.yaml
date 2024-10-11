@@ -8,7 +8,10 @@ env:
 on:
   push:
     branches:
-      - staging
+      - main
+    tags:
+      - "redirectd@STAGING-v*"
+      - "redirectd@v*"
     paths-ignore:
       - apps/web/**
       - apps/docs/**
@@ -43,6 +46,17 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}
           tags: |
             type=sha
+            type=ref,event=tag
+      - name: Determine environment
+        id: determine-env
+        run: |
+          if [[ ${{ github.ref }} == refs/tags/redirectd@STAGING-v* ]]; then
+            echo "ENVIRONMENT=staging" >> $GITHUB_OUTPUT
+          elif [[ ${{ github.ref }} == refs/tags/redirectd@v* ]]; then
+            echo "ENVIRONMENT=production" >> $GITHUB_OUTPUT
+          else
+            echo "ENVIRONMENT=development" >> $GITHUB_OUTPUT
+          fi
       - name: Setup Maxmind GeoIP database
         run: ./shell-script/setup-geoip-db.sh
       - name: Build and push Docker images
@@ -69,5 +83,6 @@ jobs:
                     "name": "${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}",
                     "version": "${{ steps.meta.outputs.version }}"
                   }
-                ]
+                ],
+                "environment": "${{ steps.determine-env.outputs.ENVIRONMENT }}"
               }'

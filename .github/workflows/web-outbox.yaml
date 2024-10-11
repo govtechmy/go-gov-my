@@ -4,7 +4,10 @@ env:
 on:
   push:
     branches:
-      - staging
+      - main
+    tags:
+      - "web-outbox@STAGING-v*"
+      - "web-outbox@v*"
     paths-ignore:
       - apps/redirect-server/**
       - docker/Dockerfile.prometheus
@@ -36,6 +39,17 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}
           tags: |
             type=sha
+            type=ref,event=tag
+      - name: Determine environment
+        id: determine-env
+        run: |
+          if [[ ${{ github.ref }} == refs/tags/web-outbox@STAGING-v* ]]; then
+            echo "ENVIRONMENT=staging" >> $GITHUB_OUTPUT
+          elif [[ ${{ github.ref }} == refs/tags/web-outbox@v* ]]; then
+            echo "ENVIRONMENT=production" >> $GITHUB_OUTPUT
+          else
+            echo "ENVIRONMENT=development" >> $GITHUB_OUTPUT
+          fi
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
         with:
@@ -60,5 +74,6 @@ jobs:
                     "name": "${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}",
                     "version": "${{ steps.meta.outputs.version }}"
                   }
-                ]
+                ],
+                "environment": "${{ steps.determine-env.outputs.ENVIRONMENT }}"
               }'
