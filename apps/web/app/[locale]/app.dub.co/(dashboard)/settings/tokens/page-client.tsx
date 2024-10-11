@@ -1,28 +1,28 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { useDeleteTokenModal } from "@/ui/modals/delete-token-modal";
-import { useTokenCreatedModal } from "@/ui/modals/token-created-modal";
-import { Form, IconMenu, LoadingSpinner, Popover, TokenAvatar } from "@dub/ui";
-import { fetcher, timeAgo } from "@dub/utils";
-import { Token } from "@prisma/client";
-import { FolderOpen, MoreVertical, Trash } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
-import useSWR from "swr";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { useDeleteTokenModal } from '@/ui/modals/delete-token-modal';
+import { useTokenCreatedModal } from '@/ui/modals/token-created-modal';
+import { Form, IconMenu, LoadingSpinner, Popover, TokenAvatar } from '@dub/ui';
+import { fetcher, timeAgo } from '@dub/utils';
+import { Token } from '@prisma/client';
+import { FolderOpen, MoreVertical, Trash } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import useSWR from 'swr';
 
 export default function TokensPageClient() {
   const {
     data: tokens,
     mutate,
     isLoading,
-  } = useSWR<Token[]>("/api/user/tokens", fetcher);
+  } = useSWR<Token[]>('/api/user/tokens', fetcher);
   const { messages, locale } = useIntlClientHook();
   const message = messages?.tokens;
 
   const [createdToken, setCreatedToken] = useState<string | null>(null);
   const { TokenCreatedModal, setShowTokenCreatedModal } = useTokenCreatedModal({
-    token: createdToken || "",
+    token: createdToken || '',
   });
   return (
     <>
@@ -31,18 +31,18 @@ export default function TokensPageClient() {
         title={message?.create_api_key}
         description={message?.enter_key}
         inputAttrs={{
-          name: "name",
-          defaultValue: "",
-          placeholder: "Jetpack API Key",
+          name: 'name',
+          defaultValue: '',
+          placeholder: 'GoGovMy API Key',
           maxLength: 140,
         }}
-        helpText={`<a href='https://d.to/api' target='_blank'>${message?.learn_more}</a>`}
+        helpText={`<a href='https://github.com/govtechmy/go-gov-my/discussions' target='_blank'>${message?.learn_more}</a>`}
         buttonText="Submit"
         handleSubmit={(data) =>
-          fetch("/api/user/tokens", {
-            method: "POST",
+          fetch('/api/user/tokens', {
+            method: 'POST',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
           }).then(async (res) => {

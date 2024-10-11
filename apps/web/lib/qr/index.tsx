@@ -3,8 +3,8 @@
  * Copyright (c) Paul O'Shannessy
  * SPDX-License-Identifier: ISC
  */
-import { useEffect, useRef, useState } from "react";
-import qrcodegen from "./codegen";
+import { useEffect, useRef, useState } from 'react';
+import qrcodegen from './codegen';
 import {
   DEFAULT_BGCOLOR,
   DEFAULT_FGCOLOR,
@@ -13,16 +13,16 @@ import {
   DEFAULT_SIZE,
   ERROR_LEVEL_MAP,
   MARGIN_SIZE,
-} from "./constants";
-import { QRProps, QRPropsCanvas } from "./types";
+} from './constants';
+import { QRProps, QRPropsCanvas } from './types';
 import {
   SUPPORTS_PATH2D,
   excavateModules,
   generatePath,
   getImageSettings,
-} from "./utils";
-export * from "./types";
-export * from "./utils";
+} from './utils';
+export * from './types';
+export * from './utils';
 
 export function QRCodeCanvas(props: QRPropsCanvas) {
   const {
@@ -51,7 +51,7 @@ export function QRCodeCanvas(props: QRPropsCanvas) {
     if (_canvas.current != null) {
       const canvas = _canvas.current;
 
-      const ctx = canvas.getContext("2d");
+      const ctx = canvas.getContext('2d');
       if (!ctx) {
         return;
       }
@@ -137,7 +137,7 @@ export function QRCodeCanvas(props: QRPropsCanvas) {
         alt="QR code"
         src={imgSrc}
         key={imgSrc}
-        style={{ display: "none" }}
+        style={{ display: 'none' }}
         onLoad={() => {
           setIsImageLoaded(true);
         }}
@@ -184,7 +184,7 @@ export function getQRAsSVGDataUri(props: QRProps) {
     imageSettings,
   );
 
-  let image = "";
+  let image = '';
   if (imageSettings != null && calculatedImageSettings != null) {
     if (calculatedImageSettings.excavation != null)
       cells = excavateModules(cells, calculatedImageSettings.excavation);
@@ -195,7 +195,7 @@ export function getQRAsSVGDataUri(props: QRProps) {
       `x="${calculatedImageSettings.x + margin}"`,
       `y="${calculatedImageSettings.y + margin}"`,
       'preserveAspectRatio="none"></image>',
-    ].join(" ");
+    ].join(' ');
   }
   const fgPath = generatePath(cells, margin);
 
@@ -204,8 +204,8 @@ export function getQRAsSVGDataUri(props: QRProps) {
     `<path fill="${bgColor}" d="M0,0 h${numCells}v${numCells}H0z" shapeRendering="crispEdges"></path>`,
     `<path fill="${fgColor}" d="${fgPath}" shapeRendering="crispEdges"></path>`,
     image,
-    "</svg>",
-  ].join("");
+    '</svg>',
+  ].join('');
 
   return `data:image/svg+xml,${encodeURIComponent(svgData)}`;
 }
@@ -220,7 +220,7 @@ function waitUntilImageLoaded(img: HTMLImageElement, src: string) {
     img.onload = onFinish;
     img.onerror = onFinish;
     img.src = src;
-    img.loading = "eager";
+    img.loading = 'eager';
   });
 }
 
@@ -239,8 +239,8 @@ export async function getQRAsCanvas(
     imageSettings,
   } = props;
 
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
   let cells = qrcodegen.QrCode.encodeText(
     value,
@@ -256,7 +256,7 @@ export async function getQRAsCanvas(
   );
 
   const image = new Image();
-  image.crossOrigin = "anonymous";
+  image.crossOrigin = 'anonymous';
   if (calculatedImageSettings) {
     // @ts-expect-error: imageSettings is not null
     await waitUntilImageLoaded(image, imageSettings.src);

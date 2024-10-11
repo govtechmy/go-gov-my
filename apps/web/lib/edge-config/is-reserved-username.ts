@@ -1,4 +1,4 @@
-import { get } from "@vercel/edge-config";
+import { get } from '@vercel/edge-config';
 
 export const isReservedUsername = async (key: string) => {
   if (!process.env.NEXT_PUBLIC_IS_DUB || !process.env.EDGE_CONFIG) {
@@ -7,7 +7,7 @@ export const isReservedUsername = async (key: string) => {
 
   let reservedUsernames;
   try {
-    reservedUsernames = await get("reservedUsernames");
+    reservedUsernames = await get('reservedUsernames');
   } catch (e) {
     reservedUsernames = [];
   }

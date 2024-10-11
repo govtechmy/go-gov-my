@@ -1,15 +1,20 @@
-import { useIntlHook } from "@/lib/middleware/utils/useI18n";
-import { Background, Footer, Nav } from "@dub/ui";
-import { APP_NAME, constructMetadata } from "@dub/utils";
-import { ShieldBan } from "lucide-react";
+import { nonHooki18nFunc, useIntlHook } from '@/lib/middleware/utils/useI18n';
+import { Background, Footer, Nav } from '@dub/ui';
+import { APP_NAME, constructMetadata } from '@dub/utils';
+import { ShieldBan } from 'lucide-react';
 
-export const runtime = "edge";
+export const runtime = 'edge';
 
-export const metadata = constructMetadata({
-  title: `Banned Link – ${APP_NAME}`,
-  description: "This link has been banned for violating our terms of service.",
-  noIndex: true,
-});
+export async function generateMetadata({ params }) {
+  const { locale } = params;
+  const { messages } = nonHooki18nFunc(locale);
+  return constructMetadata({
+    locale,
+    title: `${messages?.metadata?.banned_link} – ${APP_NAME}`,
+    description: messages?.metadata?.banned_desc,
+    noIndex: true,
+  });
+}
 
 export default async function BannedPage() {
   const { messages } = useIntlHook();

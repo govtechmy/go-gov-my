@@ -1,18 +1,18 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { UserProps } from "@/lib/types";
-import { Avatar, BlurImage, Button, Logo, Modal, useMediaQuery } from "@dub/ui";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { UserProps } from '@/lib/types';
+import { Avatar, BlurImage, Button, Logo, Modal, useMediaQuery } from '@dub/ui';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import {
   Dispatch,
   SetStateAction,
   useCallback,
   useMemo,
   useState,
-} from "react";
-import { toast } from "sonner";
-import { mutate } from "swr";
+} from 'react';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
 
 function RemoveTeammateModal({
   showRemoveTeammateModal,
@@ -98,16 +98,16 @@ function RemoveTeammateModal({
                   : `users?userId=${id}`
               }`,
               {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json" },
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
               },
             ).then(async (res) => {
               if (res.status === 200) {
                 await mutate(
-                  `/api/workspaces/${workspaceId}/${invite ? "invites" : "users"}`,
+                  `/api/workspaces/${workspaceId}/${invite ? 'invites' : 'users'}`,
                 );
                 if (session?.user?.email === email) {
-                  await mutate("/api/workspaces");
+                  await mutate('/api/workspaces');
                   router.push(`/${locale}`);
                 } else {
                   setShowRemoveTeammateModal(false);

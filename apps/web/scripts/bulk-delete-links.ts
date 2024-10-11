@@ -1,12 +1,12 @@
-import { prisma } from "@/lib/prisma";
-import { trace } from "@opentelemetry/api";
-import "dotenv-flow/config";
+import { prisma } from '@/lib/prisma';
+import { trace } from '@opentelemetry/api';
+import 'dotenv-flow/config';
 
-const domain = "song.fyi";
+const domain = 'song.fyi';
 
 async function main() {
-  const tracer = trace.getTracer("default");
-  const span = tracer.startSpan("recordLinks");
+  const tracer = trace.getTracer('default');
+  const span = tracer.startSpan('recordLinks');
 
   const links = await prisma.link.findMany({
     where: {
@@ -38,7 +38,7 @@ async function main() {
 
     // Log results to OpenTelemetry
     links.forEach((link) => {
-      span.addEvent("recordLinks", {
+      span.addEvent('recordLinks', {
         link_id: link.id,
         domain: link.domain,
         key: link.key,

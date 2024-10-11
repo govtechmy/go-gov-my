@@ -1,0 +1,110 @@
+{
+	"metadata": {
+		"site": {
+			"title": "GoGovMY  | Pautan Pendek yang Dipercayai untuk Rakyat Malaysia",
+			"description": "Pautan pendek go.gov.my hanya boleh dicipta oleh pegawai awam, jadi anda boleh yakin ia datang daripada sumber yang boleh dipercayai.",
+			"openGraph": {
+				"images": {
+					"1": {
+						"url": "https://i.imgur.com/KtR5IvP.png",
+						"alt": "Pautan Rasmi yang Dipercayai untuk Rakyat Malaysia"
+					}
+				}
+			}
+		},
+		"secure": {
+			"title": "Pautan Dilindungi | GoGovMY",
+			"description": "Pautan Rasmi yang Dipercayai untuk Rakyat Malaysia"
+		},
+		"notFound": {
+			"title": "Maaf, pautan pendek tidak ditemui | GoGovMY",
+			"description": "Untuk bantuan lebih lanjut, sila hubungi agensi yang menyediakan pautan pendek ini."
+		},
+		"serverError": {
+			"title": "Sesuatu tidak kena | GoGovMY",
+			"description": "Untuk bantuan lebih lanjut, sila hubungi agensi yang menyediakan pautan pendek ini."
+		},
+		"expired": {
+			"title": "Maaf, pautan pendek telah tamat tempoh | GoGovMY",
+			"description": "Untuk bantuan lebih lanjut, sila hubungi agensi yang menyediakan pautan pendek ini."
+		}
+	},
+	"app": {
+		"name": "GoGovMY"
+	},
+	"common": {
+		"seconds": "{count, plural, =0 {0 saat} =1 {1 saat} other {# saat}}",
+		"continue": "Teruskan",
+		"placeholders": {
+			"password": "Masukkan kata laluan"
+		}
+	},
+	"pages": {
+		"common": {
+			"redirect": {
+				"description": "Anda akan dialihkan dalam <duration></duration>."
+			}
+		},
+		"error": {
+			"title": "Sesuatu tidak kena",
+			"description": "Untuk bantuan lebih lanjut, sila hubungi agensi yang menyediakan pautan pendek ini.",
+			"tag": "Ralat 500"
+		},
+		"notFound": {
+			"title": "Maaf, pautan pendek tidak ditemui",
+			"description": "Untuk bantuan lebih lanjut, sila hubungi agensi yang menyediakan pautan pendek ini.",
+			"tag": "Ralat 404"
+		},
+		"expired": {
+			"title": "Maaf, pautan pendek telah tamat tempoh",
+			"description": "Untuk bantuan lebih lanjut, sila hubungi agensi yang menyediakan pautan pendek ini.",
+			"tag": "Tamat Tempoh"
+		},
+		"password": {
+			"title": "Kata laluan diperlukan",
+			"description": "Sila masukkan kata laluan untuk melihat pautan dilindungi."
+		},
+		"index": {
+			"verify": {
+				"title": "Sahkan bar alamat anda",
+				"description": "Berhati-hati dengan phishing, pastikan URL bermula dengan <em></em>"
+			},
+			"links": {
+				"skip": "Saya telah menyemak.<br></br> Langkau ke depan."
+			},
+			"quickLinks": {
+				"governmentOfMalaysia": {
+					"title": "Kerajaan Malaysia",
+					"img": {
+						"alt": "Jata Negara"
+					}
+				},
+				"goGovMy": {
+					"title": "go.gov.my",
+					"img": {
+						"alt": "Logo GoGovMY"
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"Masthead": {
+			"official_gov_website": "Portal Rasmi Kerajaan Malaysia",
+			"how_to_identify": "Kenal pasti begini",
+			"official": "Pautan portal rasmi berakhir dengan .gov.my",
+			"not_govmy": "Sekiranya anda melihat pautan selain ",
+			"close_site": ", segera tutupkan halaman itu walaupun ia menyerupai portal rasmi!",
+			"secure": "Portal yang selamat menggunakan HTTPS",
+			"find_lock": "Periksa ikon loker (",
+			"or": ") atau ",
+			"precaution": " di depan pautan. Sekiranya tiada, jangan kongsikan sebarang maklumat sensitif."
+		},
+		"Header": {},
+		"Footer": {
+			"copyright": "All Rights Reserved",
+			"last_update": "Last Updated",
+			"address": "Aras 13, 14 dan 15, Blok Menara, Menara Usahawan\nNo. 18, Persiaran Perdana, Presint 2\nPusat Pentadbiran Kerajaan Persekutuan\n62000 Putrajaya, Malaysia."
+		}
+	}
+}

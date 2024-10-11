@@ -1,9 +1,9 @@
-import { DubApiError, exceededLimitError } from "@/lib/api/errors";
-import { inviteUser } from "@/lib/api/users";
-import { withWorkspace } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import z from "@/lib/zod";
-import { NextResponse } from "next/server";
+import { DubApiError } from '@/lib/api/errors';
+import { inviteUser } from '@/lib/api/users';
+import { withWorkspace } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import z from '@/lib/zod';
+import { NextResponse } from 'next/server';
 
 const emailInviteSchema = z.object({
   email: z.string().email(),
@@ -52,19 +52,8 @@ export const POST = withWorkspace(
 
     if (alreadyInWorkspace) {
       throw new DubApiError({
-        code: "bad_request",
-        message: "User already exists in this workspace.",
-      });
-    }
-
-    if (workspaceUserCount + workspaceInviteCount >= workspace.usersLimit) {
-      throw new DubApiError({
-        code: "exceeded_limit",
-        message: exceededLimitError({
-          plan: workspace.plan,
-          limit: workspace.usersLimit,
-          type: "users",
-        }),
+        code: 'bad_request',
+        message: 'User already exists in this workspace.',
       });
     }
 
@@ -74,10 +63,10 @@ export const POST = withWorkspace(
       session,
     });
 
-    return NextResponse.json({ message: "Invite sent" });
+    return NextResponse.json({ message: 'Invite sent' });
   },
   {
-    requiredRole: ["owner"],
+    requiredRole: ['owner'],
   },
 );
 
@@ -96,6 +85,6 @@ export const DELETE = withWorkspace(
     return NextResponse.json(response);
   },
   {
-    requiredRole: ["owner"],
+    requiredRole: ['owner'],
   },
 );

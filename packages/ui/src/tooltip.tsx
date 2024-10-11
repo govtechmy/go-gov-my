@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { nFormatter, timeAgo } from "@dub/utils";
-import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import Linkify from "linkify-react";
-import { HelpCircle } from "lucide-react";
-import Link from "next/link";
-import { ReactNode, useState } from "react";
-import { Badge } from "./badge";
-import { ButtonProps } from "./button";
+import { nFormatter, timeAgo } from '@dub/utils';
+import * as TooltipPrimitive from '@radix-ui/react-tooltip';
+import Linkify from 'linkify-react';
+import { HelpCircle } from 'lucide-react';
+import Link from 'next/link';
+import { ReactNode, useState } from 'react';
+import { Badge } from './badge';
+import { ButtonProps } from './button';
 
 export function TooltipProvider({ children }: { children: ReactNode }) {
   return (
@@ -20,10 +20,10 @@ export function TooltipProvider({ children }: { children: ReactNode }) {
 export interface TooltipProps {
   children: ReactNode;
   content: ReactNode | string;
-  side?: "top" | "bottom" | "left" | "right";
+  side?: 'top' | 'bottom' | 'left' | 'right';
 }
 
-export function Tooltip({ children, content, side = "top" }: TooltipProps) {
+export function Tooltip({ children, content, side = 'top' }: TooltipProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -45,7 +45,7 @@ export function Tooltip({ children, content, side = "top" }: TooltipProps) {
           side={side}
           className="animate-slide-up-fade z-[99] items-center overflow-hidden rounded-md border border-gray-200 bg-white shadow-md"
         >
-          {typeof content === "string" ? (
+          {typeof content === 'string' ? (
             <span className="block max-w-xs px-4 py-2 text-center text-sm text-gray-700">
               {content}
             </span>
@@ -107,7 +107,7 @@ export function SimpleTooltipContent({
 }) {
   return (
     <div className="max-w-xs px-4 py-2 text-center text-sm text-gray-700">
-      {title}{" "}
+      {title}{' '}
       <a
         href={href}
         target="_blank"
@@ -127,10 +127,10 @@ export function LinkifyTooltipContent({ children }: { children: ReactNode }) {
       <Linkify
         as="p"
         options={{
-          target: "_blank",
-          rel: "noopener noreferrer nofollow",
+          target: '_blank',
+          rel: 'noopener noreferrer nofollow',
           className:
-            "underline underline-offset-4 text-gray-400 hover:text-gray-700",
+            'underline underline-offset-4 text-gray-400 hover:text-gray-700',
         }}
       >
         {children}
@@ -149,7 +149,7 @@ export function InfoTooltip({ content }: { content: ReactNode | string }) {
 
 export function NumberTooltip({
   value,
-  unit = "total clicks",
+  unit = 'total clicks',
   children,
   lastClicked,
 }: {

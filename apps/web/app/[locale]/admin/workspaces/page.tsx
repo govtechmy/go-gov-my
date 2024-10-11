@@ -1,34 +1,33 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { WorkspaceProps } from "@/lib/types";
-import PlanBadge from "@/ui/workspaces/plan-badge";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { WorkspaceProps } from '@/lib/types';
 import {
   BlurImage,
   LoadingSpinner,
   MaxWidthWrapper,
   NumberTooltip,
-} from "@dub/ui";
-import { DICEBEAR_AVATAR_URL, cn, fetcher, nFormatter } from "@dub/utils";
-import { BarChart2, Link2, Search, XCircle } from "lucide-react";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { useState } from "react";
-import useSWR from "swr";
-import { useDebouncedCallback } from "use-debounce";
+} from '@dub/ui';
+import { DICEBEAR_AVATAR_URL, cn, fetcher, nFormatter } from '@dub/utils';
+import { BarChart2, Link2, Search, XCircle } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { useState } from 'react';
+import useSWR from 'swr';
+import { useDebouncedCallback } from 'use-debounce';
 
 export default function Page() {
   const session = useSession();
   const { messages } = useIntlClientHook();
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState('');
   const [debouncedSearchValue, setDebouncedSearchValue] = useState(searchValue);
 
   const {
     data: workspaces,
     isValidating: isFetchingWorkspaces,
     isLoading,
-  } = useSWR<Omit<WorkspaceProps, "users" | "domains">[]>(
-    session.status === "authenticated" &&
+  } = useSWR<Omit<WorkspaceProps, 'users' | 'domains'>[]>(
+    session.status === 'authenticated' &&
       `/api/admin/workspaces?${new URLSearchParams({ search: debouncedSearchValue })}`,
     fetcher,
   );
@@ -42,7 +41,7 @@ export default function Page() {
     debounced(val);
   };
 
-  const handleClearSearch = () => setSearchValue("");
+  const handleClearSearch = () => setSearchValue('');
 
   return (
     <>
@@ -135,8 +134,8 @@ const SearchInput = (props: {
           props.onClear();
         }}
         className={cn(
-          "pointer-events-auto absolute inset-y-0 right-0 flex items-center pr-4",
-          !props.value.length && "hidden",
+          'pointer-events-auto absolute inset-y-0 right-0 flex items-center pr-4',
+          !props.value.length && 'hidden',
         )}
       >
         <XCircle className="h-4 w-4 text-gray-600" />
@@ -152,7 +151,7 @@ function WorkspaceCard({
   logo,
   usage,
   plan,
-}: Pick<WorkspaceProps, "id" | "name" | "slug" | "logo" | "usage" | "plan">) {
+}: Pick<WorkspaceProps, 'id' | 'name' | 'slug' | 'logo' | 'usage' | 'plan'>) {
   const { messages, locale } = useIntlClientHook();
   const { data: linkCount } = useSWR<number>(
     `/api/admin/links/count?workspaceId=${id}`,
@@ -181,7 +180,7 @@ function WorkspaceCard({
               </h2>
             </div>
           </div>
-          <PlanBadge plan={plan} />
+          {/* <PlanBadge plan={plan} /> */}
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-1 text-gray-500">
@@ -189,7 +188,7 @@ function WorkspaceCard({
             {linkCount ? (
               <NumberTooltip value={linkCount} unit="links">
                 <h2 className="whitespace-nowrap text-sm">
-                  {nFormatter(linkCount)}{" "}
+                  {nFormatter(linkCount)}{' '}
                   {linkCount != 1
                     ? messages.workspace.links
                     : messages.workspace.link}
@@ -203,7 +202,7 @@ function WorkspaceCard({
             <BarChart2 className="h-4 w-4" />
             <NumberTooltip value={usage}>
               <h2 className="whitespace-nowrap text-sm">
-                {nFormatter(usage)}{" "}
+                {nFormatter(usage)}{' '}
                 {usage != 1
                   ? messages.workspace.clicks
                   : messages.workspace.click}

@@ -1,14 +1,14 @@
-import { LinkHistory } from "@/lib/api/links/add-to-history";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { LinkWithTagsProps, TagProps, UserProps } from "@/lib/types";
-import TagBadge from "@/ui/links/tag-badge";
-import { useAddEditLinkModal } from "@/ui/modals/add-edit-link-modal";
-import { useArchiveLinkModal } from "@/ui/modals/archive-link-modal";
-import { useDeleteLinkModal } from "@/ui/modals/delete-link-modal";
-import LinkHistoryModal from "@/ui/modals/link-history-modal";
-import { useLinkQRModal } from "@/ui/modals/link-qr-modal";
-import { Chart, CheckCircleFill, Delete, ThreeDots } from "@/ui/shared/icons";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useLinkHistory from '@/lib/swr/use-link-history';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { LinkWithTagsProps, TagProps, UserProps } from '@/lib/types';
+import TagBadge from '@/ui/links/tag-badge';
+import { useAddEditLinkModal } from '@/ui/modals/add-edit-link-modal';
+import { useArchiveLinkModal } from '@/ui/modals/archive-link-modal';
+import { useDeleteLinkModal } from '@/ui/modals/delete-link-modal';
+import LinkHistoryModal from '@/ui/modals/link-history-modal';
+import { useLinkQRModal } from '@/ui/modals/link-qr-modal';
+import { Chart, CheckCircleFill, Delete, ThreeDots } from '@/ui/shared/icons';
 import {
   Avatar,
   BadgeTooltip,
@@ -21,20 +21,20 @@ import {
   Tooltip,
   useIntersectionObserver,
   useRouterStuff,
-} from "@dub/ui";
-import { LinkifyTooltipContent } from "@dub/ui/src/tooltip";
+} from '@dub/ui';
+import { LinkifyTooltipContent } from '@dub/ui/src/tooltip';
 import {
   cn,
-  fetcher,
   getApexDomain,
   isDubDomain,
   linkConstructor,
   nFormatter,
   punycode,
   timeAgo,
-} from "@dub/utils";
+} from '@dub/utils';
 import {
   Archive,
+  Ban,
   Copy,
   CopyPlus,
   Edit3,
@@ -45,18 +45,21 @@ import {
   MessageCircle,
   QrCode,
   TimerOff,
-} from "lucide-react";
-import Link from "next/link";
-import { useParams, useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { toast } from "sonner";
-import useSWR, { mutate } from "swr";
-import { useTransferLinkModal } from "../modals/transfer-link-modal";
-import LinkLogo from "./link-logo";
+} from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { useParams, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
+import { useTransferLinkModal } from '../modals/transfer-link-modal';
+import LinkLogo from './link-logo';
 
 export default function LinkCard({
+  compact = false,
   props,
 }: {
+  compact?: boolean;
   props: LinkWithTagsProps & {
     user: UserProps;
   };
@@ -66,7 +69,7 @@ export default function LinkCard({
     key,
     domain,
     url,
-    password,
+    passwordEnabledAt,
     expiresAt,
     createdAt,
     lastClicked,
@@ -74,6 +77,8 @@ export default function LinkCard({
     tags,
     comments,
     user,
+    clicks,
+    banned,
   } = props;
 
   const searchParams = useSearchParams();
@@ -85,7 +90,7 @@ export default function LinkCard({
     const primaryTagsCount = 1;
 
     const filteredTagIds =
-      searchParams?.get("tagIds")?.split(",")?.filter(Boolean) ?? [];
+      searchParams?.get('tagIds')?.split(',')?.filter(Boolean) ?? [];
 
     /*
       Sort tags so that the filtered tags are first. The most recently selected
@@ -116,26 +121,6 @@ export default function LinkCard({
   const entry = useIntersectionObserver(linkRef, {});
   const isVisible = !!entry?.isIntersecting;
 
-  // TODO: Fix analytics API
-  // const { data: clicks } = useSWR<number>(
-  //   // only fetch clicks if the link is visible and there's a slug and the usage is not exceeded
-  //   isVisible &&
-  //     workspaceId &&
-  //     !exceededClicks &&
-  //     `/api/analytics/clicks?workspaceId=${workspaceId}&linkId=${id}&interval=all&`,
-  //   (url) =>
-  //     fetcher(url, {
-  //       headers: {
-  //         "Request-Source": process.env.NEXT_PUBLIC_APP_DOMAIN!,
-  //       },
-  //     }),
-  //   {
-  //     fallbackData: props.clicks,
-  //     dedupingInterval: 60000,
-  //   },
-  // );
-  const clicks = 0;
-
   const { setShowLinkQRModal, LinkQRModal } = useLinkQRModal({
     props,
   });
@@ -144,18 +129,13 @@ export default function LinkCard({
   });
   const [showHistory, setShowHistory] = useState(false);
 
-  const { data: history, isLoading: isLoadingHistory } = useSWR<LinkHistory[]>(
-    isVisible && `/api/links/${id}/history?workspaceId=${workspaceId}`,
-    async (input: RequestInfo, init?: RequestInit) => {
-      const history = await fetcher<LinkHistory[]>(input, init);
-      history.forEach((h) => {
-        // Convert the string timestamps to Date instance
-        h.timestamp = new Date(h.timestamp);
-        if (h.expiresAt) h.expiresAt = new Date(h.expiresAt);
-      });
-      return history;
-    },
-  );
+  const isGovtechAdmin = !slug;
+  const { data: history, isLoading: isLoadingHistory } = useLinkHistory({
+    linkId: id,
+    enabled: isVisible,
+    admin: isGovtechAdmin,
+    workspaceId: workspaceId!,
+  });
 
   // Duplicate link Modal
   const {
@@ -193,105 +173,150 @@ export default function LinkCard({
 
   useEffect(() => {
     // if there's an existing modal backdrop and the link is selected, unselect it
-    const existingModalBackdrop = document.getElementById("modal-backdrop");
+    const existingModalBackdrop = document.getElementById('modal-backdrop');
     if (existingModalBackdrop && selected) {
       setSelected(false);
     }
   }, [selected]);
 
-  const handlClickOnLinkCard = (e: any) => {
-    // Check if the clicked element is a linkRef or one of its descendants
-    const isLinkCardClick =
-      linkRef.current && linkRef.current.contains(e.target);
+  const handlClickOnLinkCard = useCallback(
+    (e: any) => {
+      // Check if the clicked element is a linkRef or one of its descendants
+      const isLinkCardClick =
+        linkRef.current && linkRef.current.contains(e.target);
 
-    // Check if the clicked element is an <a> or <button> element
-    const isExcludedElement =
-      e.target.tagName.toLowerCase() === "a" ||
-      e.target.tagName.toLowerCase() === "button";
+      // Check if the clicked element is an <a> or <button> element
+      const isExcludedElement =
+        e.target.tagName.toLowerCase() === 'a' ||
+        e.target.tagName.toLowerCase() === 'button';
 
-    if (isLinkCardClick && !isExcludedElement) {
-      setSelected(!selected);
-    } else {
-      setSelected(false);
-    }
-  };
+      if (isLinkCardClick && !isExcludedElement) {
+        setSelected(!selected);
+      } else {
+        setSelected(false);
+      }
+    },
+    [selected],
+  );
 
   useEffect(() => {
     if (isVisible) {
-      document.addEventListener("click", handlClickOnLinkCard);
+      document.addEventListener('click', handlClickOnLinkCard);
     }
     return () => {
-      document.removeEventListener("click", handlClickOnLinkCard);
+      document.removeEventListener('click', handlClickOnLinkCard);
     };
-  }, [handlClickOnLinkCard]);
+  }, [handlClickOnLinkCard, isVisible]);
 
   const [copiedLinkId, setCopiedLinkId] = useState(false);
 
-  const copyLinkId = () => {
+  const copyLinkId = useCallback(() => {
     navigator.clipboard.writeText(id);
     setCopiedLinkId(true);
-    toast.success("Link ID copied!");
+    toast.success('Link ID copied!');
     setTimeout(() => setCopiedLinkId(false), 3000);
-  };
+  }, [id]);
 
-  const onKeyDown = (e: any) => {
-    const key = e.key.toLowerCase();
-    // only run shortcut logic if:
-    // - usage is not exceeded
-    // - link is selected or the 3 dots menu is open
-    // - the key pressed is one of the shortcuts
-    // - there is no existing modal backdrop
-    if (
-      (selected || openPopover) &&
-      ["e", "d", "q", "a", "t", "i", "x", "h"].includes(key)
-    ) {
-      setSelected(false);
-      e.preventDefault();
-      switch (key) {
-        case "e":
-          setShowAddEditLinkModal(true);
-          break;
-        case "d":
-          setShowDuplicateLinkModal(true);
-          break;
-        case "q":
-          setShowLinkQRModal(true);
-          break;
-        case "a":
-          setShowArchiveLinkModal(true);
-          break;
-        case "t":
-          if (isDubDomain(domain)) {
-            setShowTransferLinkModal(true);
-          }
-          break;
-        case "i":
-          copyLinkId();
-          break;
-        case "x":
-          setShowDeleteLinkModal(true);
-          break;
-        case "h":
-          setShowHistory(true);
-          break;
+  const onKeyDown = useCallback(
+    (e: any) => {
+      const key = e.key.toLowerCase();
+      // only run shortcut logic if:
+      // - usage is not exceeded
+      // - link is selected or the 3 dots menu is open
+      // - the key pressed is one of the shortcuts
+      // - there is no existing modal backdrop
+      if (
+        (selected || openPopover) &&
+        ['e', 'd', 'q', 'a', 't', 'i', 'x', 'h'].includes(key)
+      ) {
+        setSelected(false);
+        e.preventDefault();
+        switch (key) {
+          case 'e':
+            setShowAddEditLinkModal(true);
+            break;
+          case 'd':
+            setShowDuplicateLinkModal(true);
+            break;
+          case 'q':
+            setShowLinkQRModal(true);
+            break;
+          case 'a':
+            setShowArchiveLinkModal(true);
+            break;
+          case 't':
+            if (isDubDomain(domain)) {
+              setShowTransferLinkModal(true);
+            }
+            break;
+          case 'i':
+            copyLinkId();
+            break;
+          case 'x':
+            setShowDeleteLinkModal(true);
+            break;
+          case 'h':
+            setShowHistory(true);
+            break;
+        }
+        setOpenPopover(false);
       }
-      setOpenPopover(false);
-    }
-  };
+    },
+    [
+      copyLinkId,
+      domain,
+      openPopover,
+      selected,
+      setShowAddEditLinkModal,
+      setShowArchiveLinkModal,
+      setShowDeleteLinkModal,
+      setShowDuplicateLinkModal,
+      setShowLinkQRModal,
+      setShowTransferLinkModal,
+    ],
+  );
 
   useEffect(() => {
-    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener('keydown', onKeyDown);
     return () => {
-      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener('keydown', onKeyDown);
     };
   }, [onKeyDown]);
+
+  function onClickBanButton() {
+    toast.promise(
+      (async () => {
+        await fetch(`/api/admin/links/${id}/ban`, {
+          method: 'PUT',
+          body: JSON.stringify({ ban: !banned }),
+        });
+        await mutate(
+          (key) =>
+            typeof key === 'string' && key.startsWith('/api/admin/links'),
+          undefined,
+          { revalidate: true },
+        );
+      })(),
+      {
+        loading: "Updating the link's ban status...",
+        success: "Updated the link's ban status!",
+        error: "Error updating the link's ban status",
+      },
+    );
+    setOpenPopover(false);
+  }
+
+  const { data: session } = useSession();
 
   return (
     <li
       ref={linkRef}
-      className={`${
-        selected ? "border-black" : "border-gray-50"
-      } relative rounded-lg border-2 bg-white p-3 pr-1 shadow transition-all hover:shadow-md sm:p-4`}
+      className={cn(
+        selected ? 'border-black' : 'border-gray-50',
+        compact
+          ? 'relative border-l border-r border-t border-gray-200  bg-white p-2 transition-all first:rounded-t-lg last:rounded-b-lg last:border-b'
+          : 'relative rounded-lg border-2 bg-white p-3 pr-1 shadow transition-all hover:shadow-md sm:p-4',
+      )}
     >
       {isVisible && (
         <>
@@ -320,29 +345,50 @@ export default function LinkCard({
                   : "This link has expired. It will still show up in your dashboard, but users will get an 'Expired Link' page when they click on it."
               }
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-300 px-0 sm:h-10 sm:w-10">
+              <div
+                className={cn(
+                  compact
+                    ? 'flex h-5 w-5 items-center justify-center rounded-full bg-gray-300 px-0 sm:h-6 sm:w-6'
+                    : 'flex h-8 w-8 items-center justify-center rounded-full bg-gray-300 px-0 sm:h-10 sm:w-10',
+                )}
+              >
                 {archived ? (
-                  <Archive className="h-4 w-4 text-gray-500 sm:h-5 sm:w-5" />
+                  <Archive
+                    className={cn(
+                      compact
+                        ? 'h-2 w-2 text-gray-500 sm:h-3 sm:w-3'
+                        : 'h-4 w-4 text-gray-500 sm:h-5 sm:w-5',
+                    )}
+                  />
                 ) : (
-                  <TimerOff className="h-4 w-4 text-gray-500 sm:h-5 sm:w-5" />
+                  <TimerOff
+                    className={cn(
+                      compact
+                        ? 'h-2 w-2 text-gray-500 sm:h-3 sm:w-3'
+                        : 'h-4 w-4 text-gray-500 sm:h-5 sm:w-5',
+                    )}
+                  />
                 )}
               </div>
             </Tooltip>
           ) : (
-            <LinkLogo apexDomain={apexDomain} />
+            <LinkLogo
+              className={cn(compact && 'h-4 w-4 sm:h-6 sm:w-6')}
+              apexDomain={apexDomain}
+            />
           )}
           {/* 
             Here, we're manually setting ml-* values because if we do space-x-* in the parent div, 
             it messes up the tooltip positioning.
           */}
-          <div className="ml-2 sm:ml-4">
+          <div className={cn('ml-2 sm:ml-4', compact && 'flex gap-3')}>
             <div className="flex max-w-fit flex-wrap items-center gap-x-2">
               {
                 <a
                   className={cn(
-                    "max-w-[140px] truncate text-sm font-semibold text-blue-800 sm:max-w-[300px] sm:text-base md:max-w-[360px] xl:max-w-[500px]",
+                    'max-w-[140px] truncate text-sm font-semibold text-blue-800 sm:max-w-[300px] sm:text-base md:max-w-[360px] xl:max-w-[500px]',
                     {
-                      "text-gray-500": archived || expired,
+                      'text-gray-500': archived || expired,
                     },
                   )}
                   href={linkConstructor({
@@ -406,7 +452,7 @@ export default function LinkCard({
                     <Avatar user={user} className="h-10 w-10" />
                     <div className="mt-2 flex items-center space-x-1.5">
                       <p className="text-sm font-semibold text-gray-700">
-                        {user?.name || user?.email || "Anonymous User"}
+                        {user?.name || user?.email || 'Anonymous User'}
                       </p>
                       {!slug && // this is only shown in admin mode (where there's no slug)
                         user?.email && (
@@ -418,11 +464,11 @@ export default function LinkCard({
                         )}
                     </div>
                     <p className="mt-1 text-xs text-gray-500">
-                      {messages?.misc?.created}{" "}
-                      {new Date(createdAt).toLocaleDateString("en-us", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
+                      {messages?.misc?.created}{' '}
+                      {new Date(createdAt).toLocaleDateString('en-us', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
                       })}
                     </p>
                   </div>
@@ -441,13 +487,13 @@ export default function LinkCard({
                 {timeAgo(createdAt)}
               </p>
               <p className="xs:block hidden">•</p>
-              {password && (
+              {passwordEnabledAt && (
                 <Tooltip
                   content={
                     <SimpleTooltipContent
                       title="This link is password-protected."
                       cta="Learn more."
-                      href="https://dub.co/help/article/password-protected-links"
+                      href="https://github.com/govtechmy/go-gov-my/discussions"
                     />
                   }
                 >
@@ -462,6 +508,18 @@ export default function LinkCard({
               >
                 {url}
               </a>
+              <p>•</p>
+              {expiresAt && (
+                <span className="text-xs text-gray-500">
+                  (Expires:{' '}
+                  {new Date(expiresAt).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric',
+                  })}
+                  )
+                </span>
+              )}
             </div>
           </div>
         </div>
@@ -476,7 +534,9 @@ export default function LinkCard({
               <p className="whitespace-nowrap text-sm text-gray-500">
                 {nFormatter(clicks)}
                 <span className="ml-1 hidden sm:inline-block">
-                  {messages?.workspace?.clicks}
+                  {clicks <= 1
+                    ? messages?.workspace?.click
+                    : messages?.workspace?.clicks}
                 </span>
               </p>
             </Link>
@@ -543,7 +603,7 @@ export default function LinkCard({
                       <SimpleTooltipContent
                         title="Since this is a custom domain link, you can only transfer it to another workspace if you transfer the domain as well."
                         cta="Learn more."
-                        href="https://dub.co/help/article/how-to-transfer-domains"
+                        href="https://github.com/govtechmy/go-gov-my/discussions"
                       />
                     ),
                   })}
@@ -584,37 +644,15 @@ export default function LinkCard({
                   shortcut="X"
                   className="h-9 px-2 font-medium"
                 />
-                {!slug && ( // this is only shown in admin mode (where there's no slug)
+                {(session?.user?.role === 'super_admin' ||
+                  session?.user?.role === 'agency_admin') && (
                   <button
-                    onClick={() => {
-                      window.confirm(
-                        "Are you sure you want to ban this link? It will blacklist the domain and prevent any links from that domain from being created.",
-                      ) &&
-                        (setOpenPopover(false),
-                        toast.promise(
-                          fetch(`/api/admin/links/${id}/ban`, {
-                            method: "DELETE",
-                          }).then(async () => {
-                            await mutate(
-                              (key) =>
-                                typeof key === "string" &&
-                                key.startsWith("/api/admin/links"),
-                              undefined,
-                              { revalidate: true },
-                            );
-                          }),
-                          {
-                            loading: "Banning link...",
-                            success: "Link banned!",
-                            error: "Error banning link.",
-                          },
-                        ));
-                    }}
                     className="group flex w-full items-center justify-between rounded-md p-2 text-left text-sm font-medium text-red-600 transition-all duration-75 hover:bg-red-600 hover:text-white"
+                    onClick={() => onClickBanButton()}
                   >
                     <IconMenu
-                      text={message?.ban}
-                      icon={<Delete className="h-4 w-4" />}
+                      text={banned ? message.unban : message.ban}
+                      icon={<Ban className="h-4 w-4" />}
                     />
                     <kbd className="hidden rounded bg-red-100 px-2 py-0.5 text-xs font-light text-red-600 transition-all duration-75 group-hover:bg-red-500 group-hover:text-white sm:inline-block">
                       B
@@ -630,7 +668,7 @@ export default function LinkCard({
             <button
               type="button"
               onClick={() => {
-                setOpenPopover(!openPopover);
+                setOpenPopover((openPopover) => !openPopover);
               }}
               className="rounded-md px-1 py-2 transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
             >
@@ -649,7 +687,7 @@ function TagButton(tag: TagProps) {
   const searchParams = useSearchParams();
 
   const selectedTagIds =
-    searchParams?.get("tagIds")?.split(",")?.filter(Boolean) ?? [];
+    searchParams?.get('tagIds')?.split(',')?.filter(Boolean) ?? [];
 
   return (
     <button
@@ -660,9 +698,9 @@ function TagButton(tag: TagProps) {
 
         queryParams({
           set: {
-            tagIds: newTagIds.join(","),
+            tagIds: newTagIds.join(','),
           },
-          del: [...(newTagIds.length ? [] : ["tagIds"])],
+          del: [...(newTagIds.length ? [] : ['tagIds'])],
         });
       }}
       className="transition-all duration-75 hover:scale-105 active:scale-100"

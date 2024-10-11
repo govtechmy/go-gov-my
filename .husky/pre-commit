@@ -1,2 +1,5 @@
-pnpm run format
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+## Run prettier check before commit code into codebase
 pnpm run prettier-check

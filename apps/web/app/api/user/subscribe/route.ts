@@ -1,8 +1,7 @@
-import { withSession } from "@/lib/auth";
-import { subscribe, unsubscribe } from "@/lib/flodesk";
-import { prisma } from "@/lib/prisma";
-import { log } from "@dub/utils";
-import { NextResponse } from "next/server";
+import { withSession } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { log } from '@dub/utils';
+import { NextResponse } from 'next/server';
 
 // GET /api/user/subscribe – get a specific user
 export const GET = withSession(async ({ session }) => {
@@ -19,7 +18,7 @@ export const GET = withSession(async ({ session }) => {
   });
 
   if (!user) {
-    return new Response("User not found", { status: 404 });
+    return new Response('User not found', { status: 404 });
   }
 
   return NextResponse.json(user);
@@ -42,10 +41,9 @@ export const POST = withSession(async ({ session }) => {
         subscribed: true,
       },
     }),
-    subscribe({ email: session.user.email, name: session.user.name }),
     log({
       message: `*${session.user.email}* resubscribed to the newsletter. Manual addition required.`,
-      type: "alerts",
+      type: 'alerts',
     }),
   ]);
 
@@ -54,7 +52,7 @@ export const POST = withSession(async ({ session }) => {
 
 // DELETE /api/user/subscribe – unsubscribe a specific user
 export const DELETE = withSession(async ({ session }) => {
-  const [user, _] = await Promise.all([
+  const [user] = await Promise.all([
     prisma.user.update({
       where: {
         id: session.user.id,
@@ -69,7 +67,6 @@ export const DELETE = withSession(async ({ session }) => {
         subscribed: true,
       },
     }),
-    unsubscribe(session.user.email),
   ]);
 
   return NextResponse.json(user);

@@ -25,14 +25,12 @@ func (r *LinkRepo) GetLink(ctx context.Context, slug string) (*repository.Link, 
 	res, err := r.esClient.Search().
 		Index(linkIndex).
 		Query(
-			// Query against 'slug.keyword' since term queries don't work well
-			// with the default text type in the 'slug' field.
-			elastic.NewTermQuery("slug.keyword", slug),
+			elastic.NewTermQuery("slug", slug),
 		).
 		Size(1).
 		Do(ctx)
 	if err != nil {
-		return nil, repository.ErrInternalServer
+		return nil, err
 	}
 
 	if len(res.Hits.Hits) == 0 {
@@ -56,10 +54,35 @@ func (r *LinkRepo) SaveLink(ctx context.Context, link *repository.Link) error {
 	return err
 }
 
+func (r *LinkRepo) UpdateLink(ctx context.Context, linkID string, updateData repository.UpdateLinkData) error {
+	_, err := r.esClient.Update().
+		Index(linkIndex).
+		Id(linkID).
+		Doc(updateData).
+		Do(ctx)
+	return err
+}
+
 func (r *LinkRepo) DeleteLink(ctx context.Context, linkId string) error {
 	_, err := r.esClient.Delete().
 		Index(linkIndex).
 		Id(linkId).
+		Do(ctx)
+
+	if elastic.IsNotFound(err) {
+		return nil
+	}
+
+	return err
+}
+
+func (r *LinkRepo) DisableLinkPassword(ctx context.Context, linkID string) error {
+	_, err := r.esClient.Update().
+		Index(linkIndex).
+		Script(
+			elastic.NewScript("ctx._source.remove('password')"),
+		).
+		Id(linkID).
 		Do(ctx)
 	return err
 }

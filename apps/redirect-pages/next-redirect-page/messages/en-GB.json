@@ -1,0 +1,111 @@
+{
+	"metadata": {
+		"site": {
+			"title": "GoGovMY | Trusted Official Links for Malaysians",
+			"description": "go.gov.my short links can only be created by public officers, so you can be sure it's from a trustworthy source.",
+			"openGraph": {
+				"images": {
+					"1": {
+						"url": "https://i.imgur.com/EfRVASR.png",
+						"alt": "Trusted Official Links for Malaysians"
+					}
+				}
+			}
+		},
+		"secure": {
+			"title": "Protected Link | GoGovMY",
+			"description": "Trusted Official Links for Malaysians"
+		},
+		"notFound": {
+			"title": "Sorry, short link not found | GoGovMY",
+			"description": "For more help, please reach out to the agency that provided you with this short link."
+		},
+		"serverError": {
+			"title": "Something went wrong | GoGovMY",
+			"description": "For more help, please reach out to the agency that provided you with this short link."
+		},
+		"expired": {
+			"title": "Sorry, the link has expired",
+			"description": "For more help, please reach out to the agency that provided you with this short link."
+		}
+	},
+	"app": {
+		"name": "GoGovMY"
+	},
+	"common": {
+		"seconds": "{count, plural, =0 {0 seconds} =1 {1 second} other {# seconds}}",
+		"continue": "Continue",
+		"placeholders": {
+			"password": "Enter the password"
+		}
+	},
+	"pages": {
+		"common": {
+			"redirect": {
+				"description": "You'll be redirected in <duration></duration>."
+			}
+		},
+		"error": {
+			"title": "Something went wrong",
+			"description": "For more help, please reach out to the agency that provided you with this short link.",
+			"tag": "500 Error"
+		},
+		"notFound": {
+			"title": "Sorry, short link not found",
+			"description": "For more help, please reach out to the agency that provided you with this short link.",
+			"tag": "404 Error"
+		},
+		"expired": {
+			"title": "Sorry, the link has expired",
+			"description": "For more help, please reach out to the agency that provided you with this short link.",
+			"tag": "Link Expired"
+		},
+		"password": {
+			"title": "Password required",
+			"description": "Please enter the password to view protected link."
+		},
+		"index": {
+			"verify": {
+				"title": "Verify your address bar",
+				"description": "Be cautious of phishing, make sure the URL begins with <em></em>"
+			},
+			"links": {
+				"skip": "I've checked the link.<br></br> Skip ahead."
+			},
+			"quickLinks": {
+				"governmentOfMalaysia": {
+					"title": "Government of Malaysia",
+					"img": {
+						"alt": "Jata Negara"
+					}
+				},
+				"goGovMy": {
+					"title": "go.gov.my",
+					"img": {
+						"alt": "GoGovMY Logo"
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"Masthead": {
+			"official_gov_website": "Official Malaysia Government Website",
+			"how_to_identify": "Here's how you know",
+			"official": "Official government websites end with .gov.my",
+			"not_govmy": "If the link does not end with ",
+			"close_site": ", exit the website immediately even if it looks similar.",
+			"secure": "Secure websites use HTTPS",
+			"find_lock": "Look for a lock (",
+			"or": ") or ",
+			"precaution": " as an added precaution. If not present, do not share any sensitive information."
+		},
+		"Header": {},
+		"Footer": {
+			"copyright": "All Rights Reserved",
+			"last_update": "Last Updated",
+			"address": "Aras 13, 14 dan 15, Blok Menara, Menara Usahawan\nNo. 18, Persiaran Perdana, Presint 2\nPusat Pentadbiran Kerajaan Persekutuan\n62000 Putrajaya, Malaysia.",
+			"links": {}
+		}
+	}
+}

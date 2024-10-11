@@ -1,7 +1,7 @@
-import { INTERVAL_DISPLAYS } from "@/lib/analytics/constants";
-import { validDateRangeForPlan } from "@/lib/analytics/utils";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useWorkspace from "@/lib/swr/use-workspace";
+import { INTERVAL_DISPLAYS } from '@/lib/analytics/constants';
+import { validDateRangeForPlan } from '@/lib/analytics/utils';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useWorkspace from '@/lib/swr/use-workspace';
 import {
   IconMenu,
   Popover,
@@ -9,12 +9,12 @@ import {
   Tooltip,
   TooltipContent,
   useRouterStuff,
-} from "@dub/ui";
-import { APP_DOMAIN, cn, getNextPlan } from "@dub/utils";
-import { Calendar, ChevronDown, Lock } from "lucide-react";
-import Link from "next/link";
-import { useContext, useMemo, useState } from "react";
-import { AnalyticsContext } from ".";
+} from '@dub/ui';
+import { APP_DOMAIN, cn, getNextPlan } from '@dub/utils';
+import { Calendar, ChevronDown, Lock } from 'lucide-react';
+import Link from 'next/link';
+import { useContext, useMemo, useState } from 'react';
+import { AnalyticsContext } from '.';
 
 export default function DateRangePicker() {
   const { queryParams } = useRouterStuff();
@@ -34,7 +34,7 @@ export default function DateRangePicker() {
 
   const { plan } = useWorkspace();
 
-  const isPublicStatsPage = basePath.startsWith("/stats");
+  const isPublicStatsPage = basePath.startsWith('/stats');
 
   return (
     <Popover
@@ -49,8 +49,8 @@ export default function DateRangePicker() {
                 key={value}
                 content={
                   <TooltipContent
-                    title={`${display} stats can only be viewed on a ${value === "all" ? "Business" : getNextPlan(plan).name} plan or higher. Upgrade now to view all-time stats.`}
-                    cta={`Upgrade to ${value === "all" ? "Business" : getNextPlan(plan).name}`}
+                    title={`${display} stats can only be viewed on a ${value === 'all' ? 'Business' : getNextPlan(plan).name} plan or higher. Upgrade now to view all-time stats.`}
+                    cta={`Upgrade to ${value === 'all' ? 'Business' : getNextPlan(plan).name}`}
                     {...(isPublicStatsPage
                       ? {
                           href: APP_DOMAIN,
@@ -61,8 +61,8 @@ export default function DateRangePicker() {
                             queryParams({
                               set: {
                                 upgrade:
-                                  value === "all"
-                                    ? "business"
+                                  value === 'all'
+                                    ? 'business'
                                     : getNextPlan(plan).name.toLowerCase(),
                               },
                             });
@@ -102,9 +102,9 @@ export default function DateRangePicker() {
       <button
         onClick={() => setOpenDatePopover(!openDatePopover)}
         className={cn(
-          "flex w-full items-center justify-between space-x-2 truncate rounded-md border border-gray-200 bg-white px-3 py-2.5 transition-all md:w-48",
+          'flex w-full items-center justify-between space-x-2 truncate rounded-md border border-gray-200 bg-white px-3 py-2.5 transition-all md:w-48',
           {
-            "truncate border-gray-500 ring-4 ring-gray-200": openDatePopover,
+            'truncate border-gray-500 ring-4 ring-gray-200': openDatePopover,
           },
         )}
       >
@@ -114,7 +114,7 @@ export default function DateRangePicker() {
         />
         <ChevronDown
           className={`h-4 w-4 flex-shrink-0 text-gray-400 ${
-            openDatePopover ? "rotate-180 transform" : ""
+            openDatePopover ? 'rotate-180 transform' : ''
           } transition-all duration-75`}
         />
       </button>

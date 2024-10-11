@@ -2,10 +2,7 @@ package es
 
 import (
 	"context"
-	"crypto/md5"
-	"encoding/hex"
 	"encoding/json"
-	"net/http"
 
 	"redirect-server/repository"
 
@@ -22,47 +19,29 @@ func NewIdempotentResourceRepo(esClient *elastic.Client) *IdempotentResourceRepo
 	return &IdempotentResourceRepo{esClient: esClient}
 }
 
-func (r *IdempotentResourceRepo) TryValidateResources(req *http.Request, body []byte) (*repository.IdempotentResource, error) {
-	ctx := req.Context()
-
-	// Check if header exists
-	idempotencyKey := req.Header.Get("X-Idempotency-Key")
-	if idempotencyKey == "" {
-		return nil, repository.ErrIdempotentMissingHeaders
-	}
-
-	// Query from ES if idempotency key exists
+func (r *IdempotentResourceRepo) GetSavedIdempotentResource(ctx context.Context, idempotencyKey string) (*repository.IdempotentResource, error) {
 	res, err := r.esClient.Search().
 		Index(idempotentResourceIndex).
 		Query(
-			elastic.NewMatchQuery("idempotency_key", idempotencyKey),
+			elastic.NewTermQuery("idempotency_key", idempotencyKey),
 		).
 		Size(1).
 		Do(ctx)
-
 	if err != nil {
-		return nil, repository.ErrInternalServer
+		return nil, err
 	}
 
-	var idempotentResource repository.IdempotentResource
-	if len(res.Hits.Hits) > 0 {
-		if err := json.Unmarshal(res.Hits.Hits[0].Source, &idempotentResource); err != nil {
-			return nil, repository.ErrInternalServer
-		}
+	// No saved idempotent resource
+	if len(res.Hits.Hits) == 0 {
+		return nil, nil
 	}
 
-	hash := md5.Sum(body)
-	hashedReqPayload := hex.EncodeToString(hash[:])
-
-	if len(res.Hits.Hits) > 0 {
-		if idempotentResource.HashedRequestPayload == hashedReqPayload {
-			return &idempotentResource, repository.ErrIdempotentDuplicateRequest
-		}
-		// Idempotency key exists but hashed payload doesn't match
-		return &idempotentResource, repository.ErrIdempotentBadRequest
+	var savedIdempotentResource repository.IdempotentResource
+	if err := json.Unmarshal(res.Hits.Hits[0].Source, &savedIdempotentResource); err != nil {
+		return nil, err
 	}
 
-	return &idempotentResource, nil
+	return &savedIdempotentResource, nil
 }
 
 func (r *IdempotentResourceRepo) SaveIdempotentResource(ctx context.Context, req repository.IdempotentResource) error {

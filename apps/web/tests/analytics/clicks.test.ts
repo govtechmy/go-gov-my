@@ -1,16 +1,16 @@
 import {
   DEPRECATED_ANALYTICS_ENDPOINTS,
   VALID_ANALYTICS_ENDPOINTS,
-} from "@/lib/analytics/constants";
-import { formatAnalyticsEndpoint } from "@/lib/analytics/utils";
-import z from "@/lib/zod";
-import { getClickAnalyticsResponse } from "@/lib/zod/schemas/analytics";
-import { describe, expect, test } from "vitest";
-import { env } from "../utils/env";
-import { IntegrationHarness } from "../utils/integration";
-import { filter } from "./utils";
+} from '@/lib/analytics/constants';
+import { formatAnalyticsEndpoint } from '@/lib/analytics/utils';
+import z from '@/lib/zod';
+import { getClickAnalyticsResponse } from '@/lib/zod/schemas/analytics';
+import { describe, expect, test } from 'vitest';
+import { env } from '../utils/env';
+import { IntegrationHarness } from '../utils/integration';
+import { filter } from './utils';
 
-describe.runIf(env.CI).sequential("GET /analytics/clicks", async () => {
+describe.runIf(env.CI).sequential('GET /analytics/clicks', async () => {
   const h = new IntegrationHarness();
   const { workspace, http } = await h.init();
   const { workspaceId } = workspace;
@@ -24,7 +24,7 @@ describe.runIf(env.CI).sequential("GET /analytics/clicks", async () => {
         query: { workspaceId, ...filter },
       });
 
-      if (endpoint === "count") {
+      if (endpoint === 'count') {
         expect(status).toEqual(200);
         expect(data).toEqual(expect.any(Number));
         expect(data).toBeGreaterThanOrEqual(0);
@@ -32,7 +32,7 @@ describe.runIf(env.CI).sequential("GET /analytics/clicks", async () => {
         const parsed = z
           .array(
             getClickAnalyticsResponse[
-              formatAnalyticsEndpoint(endpoint, "plural")
+              formatAnalyticsEndpoint(endpoint, 'plural')
             ].strict(),
           )
           .safeParse(data);
@@ -45,9 +45,9 @@ describe.runIf(env.CI).sequential("GET /analytics/clicks", async () => {
   });
 
   // deprecated, backwards compatiblity
-  test("deprecated: by count", async () => {
+  test('deprecated: by count', async () => {
     const { status, data: clicks } = await http.get<number>({
-      path: "/analytics/clicks",
+      path: '/analytics/clicks',
       query: { workspaceId, ...filter },
     });
 
@@ -67,7 +67,7 @@ describe.runIf(env.CI).sequential("GET /analytics/clicks", async () => {
       const parsed = z
         .array(
           getClickAnalyticsResponse[
-            formatAnalyticsEndpoint(endpoint, "plural")
+            formatAnalyticsEndpoint(endpoint, 'plural')
           ].strict(),
         )
         .safeParse(data);

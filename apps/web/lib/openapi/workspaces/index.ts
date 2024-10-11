@@ -1,15 +1,15 @@
-import { ZodOpenApiPathsObject } from "zod-openapi";
+import { ZodOpenApiPathsObject } from 'zod-openapi';
 
-import { createWorkspace } from "./create-workspace";
-import { getWorkspaceInfo } from "./get-workspace-info";
-import { getWorkspaces } from "./get-workspaces";
+import { createWorkspace } from './create-workspace';
+import { getWorkspaceInfo } from './get-workspace-info';
+import { getWorkspaces } from './get-workspaces';
 
 export const workspacesPaths: ZodOpenApiPathsObject = {
-  "/workspaces": {
+  '/workspaces': {
     get: getWorkspaces,
     post: createWorkspace,
   },
-  "/workspaces/{idOrSlug}": {
+  '/workspaces/{idOrSlug}': {
     get: getWorkspaceInfo,
   },
 };

@@ -1,14 +1,14 @@
-import { DEFAULT_LOCALE } from "@dub/utils";
-import { isSupportedLocale } from "@dub/utils/src/functions/isSupportedLocale";
-import { useParams } from "next/navigation";
-import en from "../../../messages/en.json";
-import ms from "../../../messages/ms.json";
+import { DEFAULT_LOCALE } from '@dub/utils';
+import { isSupportedLocale } from '@dub/utils/src/functions/isSupportedLocale';
+import { useParams } from 'next/navigation';
+import en from '../../../messages/en.json';
+import ms from '../../../messages/ms.json';
 
 export function useIntlClientHook(locale?: string) {
   const params = useParams();
   const dictionaries = {
-    en: en,
-    ms: ms,
+    'en-GB': en,
+    'ms-MY': ms,
   };
   if (locale && isSupportedLocale(locale))
     return { messages: dictionaries[locale], locale };

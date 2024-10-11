@@ -1,1 +1,1 @@
-export * from "./[endpoint]/route";
+export * from './[endpoint]/route';

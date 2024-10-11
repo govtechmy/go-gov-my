@@ -1,9 +1,45 @@
+## Project Root ##
 node_modules
-packages/ui/node_modules
-packages/utils/node_modules
-packages/tailwind-config/node_modules
-apps/web/node_modules
-apps/web/.next/
 .dockerignore
-Dockerfile
+.env
 docker-compose.yml
+
+## Packages - Tailwind Config ##
+packages/tailwind-config/node_modules
+
+## Packages - UI ##
+packages/ui/node_modules
+packages/ui/.turbo
+
+## Packages - Utils ##
+packages/utils/.turbo
+packages/utils/node_modules
+
+## Apps - Web ##
+apps/web/.next
+apps/web/.turbo
+apps/web/node_modules
+apps/web/.env
+
+## Apps - Redirect-Server ##
+apps/redirect-server/logs
+apps/redirect-server/.env
+
+## Apps - Redirect-Page ##
+apps/redirect-page/next-redirect-page/.next
+apps/redirect-page/next-redirect-page/node_modules
+
+## Apps - Landing-Page ##
+apps/redirect-page/next-landing-page/.next
+apps/redirect-page/next-landing-page/node_modules
+apps/redirect-page/next-landing-page/.env
+
+## Apps - Docs ##
+apps/docs/node_modules
+
+## Apps - Cron ##
+apps/cron/node_modules
+
+## TBD
+Dockerfile
+Dockerfile.outbox

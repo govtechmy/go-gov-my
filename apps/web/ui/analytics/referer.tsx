@@ -1,11 +1,11 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { BlurImage, LoadingSpinner, Modal, useRouterStuff } from "@dub/ui";
-import { GOOGLE_FAVICON_URL, fetcher } from "@dub/utils";
-import { Link2, Maximize } from "lucide-react";
-import { useContext, useState } from "react";
-import useSWR from "swr";
-import { AnalyticsContext } from ".";
-import BarList from "./bar-list";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { BlurImage, LoadingSpinner, Modal, useRouterStuff } from '@dub/ui';
+import { GOOGLE_FAVICON_URL, fetcher } from '@dub/utils';
+import { Link2, Maximize } from 'lucide-react';
+import { useContext, useState } from 'react';
+import useSWR from 'swr';
+import { AnalyticsContext } from '.';
+import BarList from './bar-list';
 
 export default function Referer() {
   const { baseApiPath, queryString } = useContext(AnalyticsContext);
@@ -27,7 +27,7 @@ export default function Referer() {
       data={
         data?.map((d) => ({
           icon:
-            d.referer === "(direct)" ? (
+            d.referer === '(direct)' ? (
               <Link2 className="h-4 w-4" />
             ) : (
               <BlurImage

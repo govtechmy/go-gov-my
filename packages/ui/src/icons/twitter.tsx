@@ -1,4 +1,4 @@
-import { cn } from "@dub/utils";
+import { cn } from '@dub/utils';
 
 export default function Twitter({ className }: { className?: string }) {
   return (
@@ -8,7 +8,7 @@ export default function Twitter({ className }: { className?: string }) {
       viewBox="0 0 300 300"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
-      className={cn("p-px", className)}
+      className={cn('p-px', className)}
     >
       <path
         stroke="currentColor"

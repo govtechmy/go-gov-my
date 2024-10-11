@@ -1,20 +1,28 @@
 package repository
 
 import (
+	"fmt"
 	"net"
 	"net/http"
+	"redirect-server/utils"
+	"strconv"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/mileusna/useragent"
 	"github.com/oschwald/geoip2-golang"
 	"go.uber.org/zap/zapcore"
 )
 
 type RedirectMetadata struct {
+	ID              string    `json:"id"`
 	LinkID          string    `json:"linkId"`
 	LinkSlug        string    `json:"linkSlug"`
 	LinkURL         string    `json:"linkUrl"`
 	CountryCode     string    `json:"countryCode,omitempty"`
+	City            string    `json:"city,omitempty"`
+	ASN             string    `json:"asn,omitempty"`
+	ASNOrganization string    `json:"asnOrganization,omitempty"`
 	Latitude        float32   `json:"latitude,omitempty"`
 	Longitude       float32   `json:"longitude,omitempty"`
 	DeviceType      string    `json:"deviceType,omitempty"`
@@ -25,8 +33,9 @@ type RedirectMetadata struct {
 	Timestamp       time.Time `json:"timestamp"`
 }
 
-func NewRedirectMetadata(req http.Request, ipDB *geoip2.Reader, link Link) RedirectMetadata {
+func NewRedirectMetadata(req http.Request, ipDB *geoip2.Reader, asnDB *geoip2.Reader, link Link) RedirectMetadata {
 	redirectMetadata := RedirectMetadata{
+		ID:       uuid.NewString(),
 		LinkID:   link.ID,
 		LinkSlug: link.Slug,
 		Referer:  req.Header.Get("Referer"),
@@ -56,15 +65,28 @@ func NewRedirectMetadata(req http.Request, ipDB *geoip2.Reader, link Link) Redir
 	}
 
 	// Parse IP
-	ip := net.ParseIP(req.RemoteAddr)
+	ip := net.ParseIP(utils.GetClientIP(&req))
 	if ip != nil && ipDB != nil {
 		redirectMetadata.IPAddress = ip.String()
 		city, err := ipDB.City(ip)
 		if err == nil && city != nil {
 			redirectMetadata.Longitude = float32(city.Location.Longitude)
 			redirectMetadata.Latitude = float32(city.Location.Longitude)
-			redirectMetadata.CountryCode = city.Country.IsoCode
+			countryCode := city.Country.IsoCode
+			redirectMetadata.CountryCode = countryCode
+			cityName := city.City.Names["en"]
+			if cityName != "" {
+				// City has value with format "<country-code>:<city-name>" e.g. "MY:Kuala Lumpur"
+				redirectMetadata.City = fmt.Sprintf("%s:%s", countryCode, cityName)
+			}
 		}
+	}
+
+	// Get ASN Informations
+	asn, err := asnDB.ASN(ip)
+	if err == nil {
+		redirectMetadata.ASN = strconv.FormatUint(uint64(asn.AutonomousSystemNumber), 10)
+		redirectMetadata.ASNOrganization = asn.AutonomousSystemOrganization
 	}
 
 	// Determine link URL (default, geo-specific, ios or android)
@@ -86,11 +108,21 @@ func NewRedirectMetadata(req http.Request, ipDB *geoip2.Reader, link Link) Redir
 
 // For zap.Logger to log
 func (redirectMetadata RedirectMetadata) MarshalLogObject(enc zapcore.ObjectEncoder) error {
+	enc.AddString("id", redirectMetadata.ID)
 	enc.AddString("linkId", redirectMetadata.LinkID)
 	enc.AddString("linkSlug", redirectMetadata.LinkSlug)
 	enc.AddString("linkUrl", redirectMetadata.LinkURL)
 	if redirectMetadata.CountryCode != "" {
 		enc.AddString("countryCode", redirectMetadata.CountryCode)
+	}
+	if redirectMetadata.City != "" {
+		enc.AddString("city", redirectMetadata.City)
+	}
+	if redirectMetadata.ASN != "" {
+		enc.AddString("asn", redirectMetadata.ASN)
+	}
+	if redirectMetadata.ASNOrganization != "" {
+		enc.AddString("asnOrganization", redirectMetadata.ASNOrganization)
 	}
 	if redirectMetadata.Latitude != 0 {
 		enc.AddFloat32("latitude", redirectMetadata.Latitude)

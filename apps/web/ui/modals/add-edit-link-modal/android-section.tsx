@@ -1,9 +1,9 @@
-import { LinkProps } from "@/lib/types";
-import { ProBadgeTooltip } from "@/ui/shared/pro-badge-tooltip";
-import { SimpleTooltipContent, Switch } from "@dub/ui";
-import { FADE_IN_ANIMATION_SETTINGS } from "@dub/utils";
-import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { LinkProps } from '@/lib/types';
+import { ProBadgeTooltip } from '@/ui/shared/pro-badge-tooltip';
+import { SimpleTooltipContent, Switch } from '@dub/ui';
+import { FADE_IN_ANIMATION_SETTINGS } from '@dub/utils';
+import { motion } from 'framer-motion';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 export default function AndroidSection({
   props,
@@ -41,7 +41,7 @@ export default function AndroidSection({
               <SimpleTooltipContent
                 title="Redirect your Android users to a different link."
                 cta="Learn more about device targeting."
-                href="https://dub.co/help/article/device-targeting"
+                href="hhttps://github.com/govtechmy/go-gov-my/discussions"
               />
             }
           />
@@ -57,7 +57,7 @@ export default function AndroidSection({
             name="android-url"
             id="android-url"
             placeholder="https://play.google.com/store/apps/details?id=com.disney.disneyplus"
-            value={android || ""}
+            value={android || ''}
             onChange={(e) => {
               setData({ ...data, android: e.target.value });
             }}

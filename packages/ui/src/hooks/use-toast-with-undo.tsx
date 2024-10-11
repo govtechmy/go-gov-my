@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { toast } from "sonner";
-import Success from "../icons/success";
+import { useEffect } from 'react';
+import { toast } from 'sonner';
+import Success from '../icons/success';
 
 function ToastWithUndo({
   id,
@@ -17,14 +17,14 @@ function ToastWithUndo({
   };
 
   const handleKeyboardEvent = (event: KeyboardEvent) => {
-    if (event.key === "z" && (event.ctrlKey || event.metaKey)) {
+    if (event.key === 'z' && (event.ctrlKey || event.metaKey)) {
       undoAndDismiss();
     }
   };
 
   useEffect(() => {
-    document.addEventListener("keydown", handleKeyboardEvent);
-    return () => document.removeEventListener("keydown", handleKeyboardEvent);
+    document.addEventListener('keydown', handleKeyboardEvent);
+    return () => document.removeEventListener('keydown', handleKeyboardEvent);
   }, []);
 
   return (

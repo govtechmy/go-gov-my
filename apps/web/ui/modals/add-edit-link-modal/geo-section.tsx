@@ -1,10 +1,10 @@
-import { LinkProps } from "@/lib/types";
-import { ProBadgeTooltip } from "@/ui/shared/pro-badge-tooltip";
-import { SimpleTooltipContent, Switch } from "@dub/ui";
-import { COUNTRIES, FADE_IN_ANIMATION_SETTINGS } from "@dub/utils";
-import { motion } from "framer-motion";
-import { Trash } from "lucide-react";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { LinkProps } from '@/lib/types';
+import { ProBadgeTooltip } from '@/ui/shared/pro-badge-tooltip';
+import { SimpleTooltipContent, Switch } from '@dub/ui';
+import { COUNTRIES, FADE_IN_ANIMATION_SETTINGS } from '@dub/utils';
+import { motion } from 'framer-motion';
+import { Trash } from 'lucide-react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 export default function GeoSection({
   props,
@@ -24,7 +24,7 @@ export default function GeoSection({
       setData({
         ...data,
         geo: props?.geo || {
-          "": "",
+          '': '',
         },
       });
     } else {
@@ -36,7 +36,7 @@ export default function GeoSection({
   const addGeoSelector = () => {
     setData((prev) => ({
       ...prev,
-      geo: { ...((prev.geo as object) || {}), "": "" }, // Add an empty entry
+      geo: { ...((prev.geo as object) || {}), '': '' }, // Add an empty entry
     }));
   };
 
@@ -50,7 +50,7 @@ export default function GeoSection({
               <SimpleTooltipContent
                 title="Redirect your users to different links based on their location."
                 cta="Learn more about geo targeting."
-                href="https://dub.co/help/article/geo-targeting"
+                href="https://github.com/govtechmy/go-gov-my/discussions"
               />
             }
           />

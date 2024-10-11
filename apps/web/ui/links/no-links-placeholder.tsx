@@ -1,4 +1,4 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 
 export default function NoLinksPlaceholder({
   AddEditLinkButton,

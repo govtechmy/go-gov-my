@@ -1,22 +1,16 @@
-"use client";
-/* 
-  This Analytics component lives in 2 different places:
-  1. Workspace analytics page, e.g. app.dub.co/dub/analytics
-  2. Public stats page, e.g. dub.co/stats/github, stey.me/stats/weathergpt
-*/
-
-import { VALID_ANALYTICS_FILTERS } from "@/lib/analytics/constants";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { fetcher } from "@dub/utils";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
-import { createContext, useMemo } from "react";
-import useSWR from "swr";
-import Clicks from "./clicks";
-import Devices from "./devices";
-import Locations from "./locations";
-import Referer from "./referer";
-import Toggle from "./toggle";
-import TopLinks from "./top-links";
+'use client';
+import { VALID_ANALYTICS_FILTERS } from '@/lib/analytics/constants';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { fetcher } from '@dub/utils';
+import { useParams, usePathname, useSearchParams } from 'next/navigation';
+import { createContext, useMemo } from 'react';
+import useSWR from 'swr';
+import Clicks from './clicks';
+import Devices from './devices';
+import Locations from './locations';
+import Referer from './referer';
+import Toggle from './toggle';
+import TopLinks from './top-links';
 
 export const AnalyticsContext = createContext<{
   basePath: string;
@@ -30,11 +24,11 @@ export const AnalyticsContext = createContext<{
   totalClicks?: number;
   admin?: boolean;
 }>({
-  basePath: "",
-  baseApiPath: "",
-  domain: "",
-  queryString: "",
-  interval: "",
+  basePath: '',
+  baseApiPath: '',
+  domain: '',
+  queryString: '',
+  interval: '',
   admin: false,
 });
 
@@ -55,12 +49,12 @@ export default function Analytics({
     key?: string;
   };
   // key can be a path param (public stats pages) or a query param (stats pages in app)
-  key = searchParams?.get("key") || key;
+  key = searchParams?.get('key') || key;
 
-  const domainSlug = searchParams?.get("domain");
-  const interval = searchParams?.get("interval") || "24h";
+  const domainSlug = searchParams?.get('domain');
+  const interval = searchParams?.get('interval') || '7d';
 
-  const tagId = searchParams?.get("tagId") ?? undefined;
+  const tagId = searchParams?.get('tagId') ?? undefined;
 
   const { basePath, domain, baseApiPath } = useMemo(() => {
     // Workspace analytics page, e.g. app.dub.co/dub/analytics?domain=dub.sh&key=github
@@ -80,7 +74,7 @@ export default function Analytics({
       // Public stats page, e.g. dub.co/stats/github, stey.me/stats/weathergpt
       return {
         basePath: `/stats/${key}`,
-        baseApiPath: "/api/analytics/edge/clicks",
+        baseApiPath: '/api/analytics/edge/clicks',
         domain: staticDomain,
       };
     }
@@ -111,7 +105,7 @@ export default function Analytics({
     fetcher,
   );
 
-  const isPublicStatsPage = basePath.startsWith("/stats");
+  const isPublicStatsPage = basePath.startsWith('/stats');
 
   return (
     <AnalyticsContext.Provider
@@ -130,8 +124,9 @@ export default function Analytics({
     >
       <div className="bg-gray-50 py-10">
         <Toggle />
-        <div className="mx-auto grid max-w-4xl gap-5">
+        <div className="mx-auto grid max-w-4xl gap-5 px-2">
           <Clicks />
+          {/* <CountryChart /> */}
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <Locations />
             {!isPublicStatsPage && <TopLinks />}

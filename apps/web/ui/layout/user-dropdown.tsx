@@ -1,12 +1,18 @@
-"use client";
+'use client';
 
-import { MessagesContext } from "@/ui/switcher/provider";
-import { Avatar, Badge, IconMenu, Popover } from "@dub/ui";
-import Cookies from "js-cookie";
-import { Edit3, HelpCircle, LogOut, Settings } from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
-import Link from "next/link";
-import { useContext, useEffect, useState } from "react";
+import { MessagesContext } from '@/ui/switcher/provider';
+import { Avatar, Badge, IconMenu, Popover } from '@dub/ui';
+import {
+  AppWindow,
+  BookText,
+  CircleGauge,
+  LogOut,
+  Settings,
+} from 'lucide-react';
+import { signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useContext, useState } from 'react';
 
 export default function UserDropdown() {
   const { data: session } = useSession();
@@ -14,14 +20,8 @@ export default function UserDropdown() {
   const messages = useContext(MessagesContext);
   const message = messages?.layout;
   const locale = messages?.language;
-
-  const [unreadChangelogs, setUnreadChangelogs] = useState(0);
-  useEffect(() => {
-    const lastReadChangelog = Cookies.get("lastReadChangelog");
-    if (!lastReadChangelog) {
-      setUnreadChangelogs(2);
-    }
-  }, []);
+  const pathname = usePathname();
+  const isAdminPath = pathname.includes('/admin');
 
   return (
     <div className="relative inline-block pt-1.5">
@@ -43,22 +43,31 @@ export default function UserDropdown() {
               </p>
               {session && (
                 <div className="mt-1 flex gap-1">
-                  <AgencyBadge agencyCode={session.user.agencyCode} />
                   <RoleBadge role={session.user.role} />
                 </div>
               )}
             </Link>
-            <Link
-              href="https://dub.co/help"
-              onClick={() => setOpenPopover(false)}
-              target="_blank"
-              className="w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
-            >
-              <IconMenu
-                text={message?.help_centre}
-                icon={<HelpCircle className="h-4 w-4" />}
-              />
-            </Link>
+            {session?.user?.role === 'super_admin' ||
+            session?.user?.role === 'agency_admin' ? (
+              <Link
+                href={isAdminPath ? `/${locale}` : `/${locale}/admin`}
+                onClick={() => setOpenPopover(false)}
+                className="block w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
+              >
+                <IconMenu
+                  text={!isAdminPath ? message?.admin : message?.user}
+                  icon={
+                    isAdminPath ? (
+                      <AppWindow className="h-4 w-4" />
+                    ) : (
+                      <CircleGauge className="h-4 w-4" />
+                    )
+                  }
+                />
+              </Link>
+            ) : (
+              <></>
+            )}
             <Link
               href={`/${locale}/settings`}
               onClick={() => setOpenPopover(false)}
@@ -70,28 +79,40 @@ export default function UserDropdown() {
               />
             </Link>
             <Link
-              href="https://dub.co/changelog"
+              href={`https://docs.${process.env.NEXT_PUBLIC_APP_SHORT_DOMAIN}`}
               target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => {
-                Cookies.set("lastReadChangelog", new Date().toISOString());
-                setOpenPopover(false);
-              }}
-              className="flex w-full justify-between rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
+              className="block w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
+            >
+              <IconMenu
+                text={message?.documentation}
+                icon={<BookText className="h-4 w-4" />}
+              />
+            </Link>
+            {/* <Link
+              href={`https://github.com/govtechmy/go-gov-my/discussions`}
+              target="_blank"
+              className="block w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
+            >
+              <IconMenu
+                text={message?.help_centre}
+                icon={<BadgeHelp className="h-4 w-4" />}
+              />
+            </Link> */}
+            {/* <Link
+              href={`https://github.com/govtechmy/go-gov-my/releases`}
+              target="_blank"
+              className="block w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
             >
               <IconMenu
                 text={message?.changelog}
-                icon={<Edit3 className="h-4 w-4" />}
+                icon={<Replace className="h-4 w-4" />}
               />
-              {unreadChangelogs > 0 && (
-                <Badge variant="blue">{unreadChangelogs}</Badge>
-              )}
-            </Link>
+            </Link> */}
             <button
               className="w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
               onClick={() => {
                 signOut({
-                  callbackUrl: "/login",
+                  callbackUrl: '/login',
                 });
               }}
             >
@@ -118,29 +139,28 @@ export default function UserDropdown() {
           ) : (
             <div className="h-9 w-9 animate-pulse rounded-full border border-gray-300 bg-gray-100 sm:h-10 sm:w-10" />
           )}
-          {unreadChangelogs > 0 && (
-            <div className="absolute -bottom-0.5 -right-0.5 h-4 w-4 rounded-full border-2 border-white bg-blue-500" />
-          )}
         </button>
       </Popover>
     </div>
   );
 }
 
-function RoleBadge({ role }: { role: "staff" | "super_admin" }) {
+function RoleBadge({
+  role,
+}: {
+  role: 'staff' | 'super_admin' | 'agency_admin';
+}) {
   const label = {
-    staff: "Staff",
-    super_admin: "Super Admin",
+    staff: 'Staff',
+    super_admin: 'Super Admin',
+    agency_admin: 'Agency Admin',
   } as const;
 
   const variant = {
-    staff: "default",
-    super_admin: "violet",
+    staff: 'default',
+    super_admin: 'blue',
+    agency_admin: 'violet',
   } as const;
 
   return <Badge variant={variant[role]}>{label[role]}</Badge>;
-}
-
-function AgencyBadge({ agencyCode }: { agencyCode: string }) {
-  return <Badge variant="black">{agencyCode}</Badge>;
 }

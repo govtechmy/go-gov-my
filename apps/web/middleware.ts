@@ -1,13 +1,7 @@
-import { ApiMiddleware, AppMiddleware, LinkMiddleware } from "@/lib/middleware";
-import { parse } from "@/lib/middleware/utils";
-import {
-  API_HOSTNAMES,
-  APP_HOSTNAMES,
-  DEFAULT_REDIRECTS,
-  SHORT_DOMAIN,
-} from "@dub/utils";
-import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
-import AdminMiddleware from "./lib/middleware/admin";
+import { AppMiddleware } from '@/lib/middleware';
+import { parse } from '@/lib/middleware/utils';
+import { NextFetchEvent, NextRequest } from 'next/server';
+import AdminMiddleware from './lib/middleware/admin';
 
 export const config = {
   matcher: [
@@ -20,7 +14,7 @@ export const config = {
      * 5. /_vercel (Vercel internals)
      * 6. Static files (e.g. /favicon.ico, /sitemap.xml, /robots.txt, etc.)
      */
-    "/((?!api/|_next/|_proxy/|_static|_vercel|[\\w-]+\\.\\w+).*)",
+    '/((?!api/|_next/|_proxy/|_static|_vercel|[\\w-]+\\.\\w+).*)',
   ],
 };
 
@@ -28,34 +22,34 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
   const { domain, path, key, pathWithoutLocale } = parse(req);
 
   // for Admin
-  if (pathWithoutLocale.startsWith("/admin")) {
+  if (pathWithoutLocale.startsWith('/admin')) {
     return AdminMiddleware(req);
   }
 
   // for App
-  if (APP_HOSTNAMES.has(domain)) {
-    return AppMiddleware(req);
-  }
+  return AppMiddleware(req);
+
+  // Disable the other middlewares below, we don't use them
 
   // for API
-  if (API_HOSTNAMES.has(domain)) {
-    return ApiMiddleware(req);
-  }
+  // if (API_HOSTNAMES.has(domain)) {
+  //   return ApiMiddleware(req);
+  // }
 
   // for public stats pages (e.g. d.to/stats/try)
-  if (path.startsWith("/stats/")) {
-    return NextResponse.rewrite(new URL(`/${domain}${path}`, req.url));
-  }
+  // if (path.startsWith("/stats/")) {
+  //   return NextResponse.rewrite(new URL(`/${domain}${path}`, req.url));
+  // }
 
   // default redirects for SHORT_DOMAIN
-  if (domain === SHORT_DOMAIN && DEFAULT_REDIRECTS[key]) {
-    return NextResponse.redirect(DEFAULT_REDIRECTS[key]);
-  }
+  // if (domain === SHORT_DOMAIN && DEFAULT_REDIRECTS[key]) {
+  //   return NextResponse.redirect(DEFAULT_REDIRECTS[key]);
+  // }
 
   // key must be defined for link redirects
-  if (key.length === 0) {
-    throw Error("Failed to redirect, missing link key");
-  }
+  // if (key.length === 0) {
+  //   throw Error("Failed to redirect, missing link key");
+  // }
 
-  return LinkMiddleware(req, ev);
+  // return LinkMiddleware(req, ev);
 }

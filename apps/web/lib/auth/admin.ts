@@ -1,6 +1,6 @@
-import { getSearchParams } from "@dub/utils";
-import { isInternalAdmin } from "./is-internal-admin";
-import { getSession } from "./utils";
+import { getSearchParams } from '@dub/utils';
+import { isInternalAdmin } from './is-internal-admin';
+import { getSession } from './utils';
 
 // Internal use only (for admin portal)
 interface WithAdminHandler {
@@ -23,12 +23,12 @@ export const withAdmin =
   ) => {
     const session = await getSession();
     if (!session?.user) {
-      return new Response("Unauthorized: Login required.", { status: 401 });
+      return new Response('Unauthorized: Login required.', { status: 401 });
     }
 
     let isAdmin = !!isInternalAdmin(session);
     if (!isAdmin) {
-      return new Response("Unauthorized: Not an admin.", { status: 401 });
+      return new Response('Unauthorized: Not an admin.', { status: 401 });
     }
 
     const searchParams = getSearchParams(req.url);

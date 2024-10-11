@@ -1,4 +1,4 @@
-import qrcodegen from "./codegen";
+import qrcodegen from './codegen';
 
 export const ERROR_LEVEL_MAP: { [index: string]: qrcodegen.QrCode.Ecc } = {
   L: qrcodegen.QrCode.Ecc.LOW,
@@ -8,14 +8,14 @@ export const ERROR_LEVEL_MAP: { [index: string]: qrcodegen.QrCode.Ecc } = {
 };
 
 export const DEFAULT_SIZE = 128;
-export const DEFAULT_LEVEL = "L";
-export const DEFAULT_BGCOLOR = "#FFFFFF";
-export const DEFAULT_FGCOLOR = "#000000";
+export const DEFAULT_LEVEL = 'L';
+export const DEFAULT_BGCOLOR = '#FFFFFF';
+export const DEFAULT_FGCOLOR = '#000000';
 export const DEFAULT_INCLUDEMARGIN = false;
 
 export const MARGIN_SIZE = 4;
 
-export const QR_LEVELS = ["L", "M", "Q", "H"] as const;
+export const QR_LEVELS = ['L', 'M', 'Q', 'H'] as const;
 
 // This is *very* rough estimate of max amount of QRCode allowed to be covered.
 // It is "wrong" in a lot of ways (area is a terrible way to estimate, it

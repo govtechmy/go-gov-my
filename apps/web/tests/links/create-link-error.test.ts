@@ -1,44 +1,44 @@
-import { Link } from "@prisma/client";
-import { expect, test } from "vitest";
-import { IntegrationHarness } from "../utils/integration";
-import { link } from "../utils/resource";
+import { Link } from '@prisma/client';
+import { expect, test } from 'vitest';
+import { IntegrationHarness } from '../utils/integration';
+import { link } from '../utils/resource';
 
 const { domain, url } = link;
 
 const cases = [
   {
-    name: "create link with invalid destination url",
+    name: 'create link with invalid destination url',
     body: {
       domain,
-      url: "invalid",
+      url: 'invalid',
     },
     expected: {
       status: 422,
       data: {
         error: {
-          code: "unprocessable_entity",
-          message: "custom: url: Invalid URL",
+          code: 'unprocessable_entity',
+          message: 'custom: url: Invalid URL',
           doc_url:
-            "https://dub.co/docs/api-reference/errors#unprocessable-entity",
+            'https://go.gov.my/docs/api-reference/errors#unprocessable-entity',
         },
       },
     },
   },
   {
-    name: "create link with invalid tag id",
+    name: 'create link with invalid tag id',
     body: {
       domain,
       url,
-      tagIds: ["invalid"],
+      tagIds: ['invalid'],
     },
     expected: {
       status: 422,
       data: {
         error: {
-          code: "unprocessable_entity",
-          message: "Invalid tagIds detected: invalid",
+          code: 'unprocessable_entity',
+          message: 'Invalid tagIds detected: invalid',
           doc_url:
-            "https://dub.co/docs/api-reference/errors#unprocessable-entity",
+            'https://go.gov.my/docs/api-reference/errors#unprocessable-entity',
         },
       },
     },
@@ -52,7 +52,7 @@ cases.forEach(({ name, body, expected }) => {
     const { workspaceId } = workspace;
 
     const response = await http.post<Link>({
-      path: "/links",
+      path: '/links',
       query: { workspaceId },
       body,
     });

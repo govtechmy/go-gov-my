@@ -1,5 +1,5 @@
-import { PlainClient } from "@team-plain/typescript-sdk";
-import { Session } from "./auth";
+import { PlainClient } from '@team-plain/typescript-sdk';
+import { Session } from './auth';
 
 export const plain = new PlainClient({
   apiKey: process.env.PLAIN_API_KEY as string,
@@ -11,7 +11,7 @@ export const upsertPlainCustomer = async (session: Session) => {
       externalId: session.user.id,
     },
     onCreate: {
-      fullName: session.user.name,
+      fullName: session.user.name || session.user.email,
       shortName: session.user.name,
       email: {
         email: session.user.email,

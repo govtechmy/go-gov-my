@@ -1,19 +1,9 @@
-import { PlanProps } from "@/lib/types";
-import { Badge } from "@dub/ui";
+import { OwnershipProps } from '@/lib/types';
+import { Badge } from '@dub/ui';
 
-export default function PlanBadge({ plan }: { plan: PlanProps }) {
+export default function PlanBadge({ plan }: { plan: OwnershipProps }) {
   return (
-    <Badge
-      variant={
-        plan === "enterprise"
-          ? "violet"
-          : plan.startsWith("business")
-            ? "sky"
-            : plan === "pro"
-              ? "blue"
-              : "black"
-      }
-    >
+    <Badge variant={plan === 'owner' || plan === 'pemilik' ? 'violet' : 'blue'}>
       {plan}
     </Badge>
   );

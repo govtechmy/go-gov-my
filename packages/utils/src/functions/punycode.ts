@@ -1,7 +1,7 @@
-import punycodeHelper from "punycode/";
+import punycodeHelper from 'punycode/';
 
 export function punycode(str?: string | null) {
-  if (typeof str !== "string") return "";
+  if (typeof str !== 'string') return '';
   try {
     return punycodeHelper.toUnicode(str);
   } catch (e) {
@@ -10,6 +10,6 @@ export function punycode(str?: string | null) {
 }
 
 export function punyEncode(str?: string | null) {
-  if (typeof str !== "string") return "";
+  if (typeof str !== 'string') return '';
   return punycodeHelper.toASCII(str);
 }

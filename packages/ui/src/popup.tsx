@@ -1,7 +1,7 @@
-import { AnimatePresence } from "framer-motion";
-import Cookies from "js-cookie";
-import { ReactNode, createContext, useState } from "react";
-import { ClientOnly } from "./client-only";
+import { AnimatePresence } from 'framer-motion';
+import Cookies from 'js-cookie';
+import { ReactNode, createContext, useState } from 'react';
+import { ClientOnly } from './client-only';
 
 export const PopupContext = createContext<{
   hidePopup: () => void;
@@ -16,10 +16,10 @@ export function Popup({
   children: ReactNode;
   hiddenCookieId: string;
 }) {
-  const [hidden, setHidden] = useState(Cookies.get(hiddenCookieId) === "1");
+  const [hidden, setHidden] = useState(Cookies.get(hiddenCookieId) === '1');
   const hidePopup = () => {
     setHidden(true);
-    Cookies.set(hiddenCookieId, "1");
+    Cookies.set(hiddenCookieId, '1');
   };
 
   return (

@@ -1,9 +1,9 @@
-import { LinkProps } from "@/lib/types";
-import { ProBadgeTooltip } from "@/ui/shared/pro-badge-tooltip";
-import { SimpleTooltipContent, Switch } from "@dub/ui";
-import { FADE_IN_ANIMATION_SETTINGS } from "@dub/utils";
-import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { LinkProps } from '@/lib/types';
+import { ProBadgeTooltip } from '@/ui/shared/pro-badge-tooltip';
+import { SimpleTooltipContent, Switch } from '@dub/ui';
+import { FADE_IN_ANIMATION_SETTINGS } from '@dub/utils';
+import { motion } from 'framer-motion';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 export default function IOSSection({
   props,
@@ -39,7 +39,7 @@ export default function IOSSection({
               <SimpleTooltipContent
                 title="Redirect your iOS users to a different link."
                 cta="Learn more about device targeting."
-                href="https://dub.co/help/article/device-targeting"
+                href="https://github.com/govtechmy/go-gov-my/discussions"
               />
             }
           />
@@ -55,7 +55,7 @@ export default function IOSSection({
             name="ios-url"
             id="ios-url"
             placeholder="https://apps.apple.com/app/1611158928"
-            value={ios || ""}
+            value={ios || ''}
             onChange={(e) => {
               setData({ ...data, ios: e.target.value });
             }}

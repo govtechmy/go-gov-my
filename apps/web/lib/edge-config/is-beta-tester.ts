@@ -1,7 +1,7 @@
-import { get } from "@vercel/edge-config";
+import { get } from '@vercel/edge-config';
 
 export const isBetaTester = async (workspaceId: string) => {
-  workspaceId = workspaceId.startsWith("ws_")
+  workspaceId = workspaceId.startsWith('ws_')
     ? workspaceId
     : `ws_${workspaceId}`;
 
@@ -11,7 +11,7 @@ export const isBetaTester = async (workspaceId: string) => {
 
   let betaTesters;
   try {
-    betaTesters = await get("betaFeatures");
+    betaTesters = await get('betaFeatures');
   } catch (e) {
     betaTesters = [];
   }

@@ -1,9 +1,9 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { LoadingSpinner, Tooltip, TooltipContent } from "@dub/ui";
-import { Download } from "lucide-react";
-import { useContext, useState } from "react";
-import { toast } from "sonner";
-import { AnalyticsContext } from ".";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { LoadingSpinner, Tooltip, TooltipContent } from '@dub/ui';
+import { Download } from 'lucide-react';
+import { useContext, useState } from 'react';
+import { toast } from 'sonner';
+import { AnalyticsContext } from '.';
 
 export default function ExportButton() {
   const [loading, setLoading] = useState(false);
@@ -16,9 +16,9 @@ export default function ExportButton() {
     setLoading(true);
     try {
       const response = await fetch(`/api/analytics/export?${queryString}`, {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
 
@@ -29,9 +29,9 @@ export default function ExportButton() {
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
+      const a = document.createElement('a');
       a.href = url;
-      a.download = `Dub Analytics Export - ${new Date().toISOString()}.zip`;
+      a.download = `${process.env.NEXT_PUBLIC_APP_DOMAIN} Export - ${new Date().toISOString()}.zip`;
       a.click();
     } catch (error) {
       throw new Error(error);
@@ -46,7 +46,7 @@ export default function ExportButton() {
         <TooltipContent
           title={message?.no_data_download}
           cta={message?.learn_more}
-          href="https://dub.co/help/article/how-to-export-analytics"
+          href="https://github.com/govtechmy/go-gov-my/discussions"
         />
       }
     >

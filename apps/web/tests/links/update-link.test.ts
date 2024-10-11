@@ -1,20 +1,22 @@
-import { Link } from "@prisma/client";
-import { afterAll, describe, expect, test } from "vitest";
-import { randomId } from "../utils/helpers";
-import { IntegrationHarness } from "../utils/integration";
-import { link } from "../utils/resource";
-import { expectedLink } from "../utils/schema";
+import { updateLinkBodySchema } from '@/lib/zod/schemas/links';
+import { Link } from '@prisma/client';
+import { afterAll, describe, expect, test } from 'vitest';
+import { z } from 'zod';
+import { randomId } from '../utils/helpers';
+import { IntegrationHarness } from '../utils/integration';
+import { link } from '../utils/resource';
+import { expectedLink } from '../utils/schema';
 
 const { domain, url } = link;
 
-describe.sequential("PATCH /links/{linkId}", async () => {
+describe.sequential('PATCH /links/{linkId}', async () => {
   const h = new IntegrationHarness();
   const { workspace, http, user } = await h.init();
   const { workspaceId } = workspace;
   const externalId = randomId();
 
   const { data: link } = await http.post<Link>({
-    path: "/links",
+    path: '/links',
     query: { workspaceId },
     body: {
       url,
@@ -23,19 +25,18 @@ describe.sequential("PATCH /links/{linkId}", async () => {
     },
   });
 
-  const toUpdate: Partial<Link> = {
+  const toUpdate: Partial<z.infer<typeof updateLinkBodySchema>> = {
     key: randomId(),
-    url: "https://github.com/dubinc/dub",
-    title: "Dub Inc",
-    description: "Open-source link management infrastructure.",
+    url: 'https://github.com/dubinc/dub',
+    title: 'Dub Inc',
+    description: 'Open-source link management infrastructure.',
     publicStats: true,
-    comments: "This is a comment.",
-    expiresAt: new Date("2030-04-16T17:00:00.000Z"),
-    expiredUrl: "https://github.com/expired",
-    password: "link-password",
-    ios: "https://apps.apple.com/app/1611158928",
+    comments: 'This is a comment.',
+    expiresAt: '2030-04-16T17:00:00.000Z',
+    expiredUrl: 'https://github.com/expired',
+    ios: 'https://apps.apple.com/app/1611158928',
     android:
-      "https://play.google.com/store/apps/details?id=com.disney.disneyplus",
+      'https://play.google.com/store/apps/details?id=com.disney.disneyplus',
     geo: {
       AF: `${url}/AF`,
     },
@@ -45,7 +46,7 @@ describe.sequential("PATCH /links/{linkId}", async () => {
     await h.deleteLink(link.id);
   });
 
-  test("update link using linkId", async () => {
+  test('update link using linkId', async () => {
     const { data: updatedLink } = await http.patch<Link>({
       path: `/links/${link.id}`,
       query: { workspaceId },
@@ -59,8 +60,8 @@ describe.sequential("PATCH /links/{linkId}", async () => {
       workspaceId,
       externalId,
       userId: user.id,
-      expiresAt: "2030-04-16T17:00:00.000Z",
-      projectId: workspaceId.replace("ws_", ""),
+      expiresAt: '2030-04-16T17:00:00.000Z',
+      projectId: workspaceId.replace('ws_', ''),
       shortLink: `https://${domain}/${toUpdate.key}`,
       qrCode: `https://api.dub.co/qr?url=https://${domain}/${toUpdate.key}?qr=1`,
       tags: [],
@@ -79,8 +80,8 @@ describe.sequential("PATCH /links/{linkId}", async () => {
       workspaceId,
       externalId,
       userId: user.id,
-      expiresAt: "2030-04-16T17:00:00.000Z",
-      projectId: workspaceId.replace("ws_", ""),
+      expiresAt: '2030-04-16T17:00:00.000Z',
+      projectId: workspaceId.replace('ws_', ''),
       shortLink: `https://${domain}/${toUpdate.key}`,
       qrCode: `https://api.dub.co/qr?url=https://${domain}/${toUpdate.key}?qr=1`,
       tags: [],
@@ -88,7 +89,7 @@ describe.sequential("PATCH /links/{linkId}", async () => {
   });
 
   // Archive the link
-  test("archive link", async () => {
+  test('archive link', async () => {
     const { status, data: updatedLink } = await http.patch<Link>({
       path: `/links/${link.id}`,
       query: { workspaceId },
@@ -106,8 +107,8 @@ describe.sequential("PATCH /links/{linkId}", async () => {
       externalId,
       archived: true,
       userId: user.id,
-      expiresAt: "2030-04-16T17:00:00.000Z",
-      projectId: workspaceId.replace("ws_", ""),
+      expiresAt: '2030-04-16T17:00:00.000Z',
+      projectId: workspaceId.replace('ws_', ''),
       shortLink: `https://${domain}/${toUpdate.key}`,
       qrCode: `https://api.dub.co/qr?url=https://${domain}/${toUpdate.key}?qr=1`,
       tags: [],
@@ -123,7 +124,7 @@ describe.sequential("PATCH /links/{linkId}", async () => {
   });
 
   // Unarchive the link
-  test("unarchive link", async () => {
+  test('unarchive link', async () => {
     const { status, data: updatedLink } = await http.patch<Link>({
       path: `/links/${link.id}`,
       query: { workspaceId },
@@ -141,8 +142,8 @@ describe.sequential("PATCH /links/{linkId}", async () => {
       externalId,
       archived: false,
       userId: user.id,
-      expiresAt: "2030-04-16T17:00:00.000Z",
-      projectId: workspaceId.replace("ws_", ""),
+      expiresAt: '2030-04-16T17:00:00.000Z',
+      projectId: workspaceId.replace('ws_', ''),
       shortLink: `https://${domain}/${toUpdate.key}`,
       qrCode: `https://api.dub.co/qr?url=https://${domain}/${toUpdate.key}?qr=1`,
       tags: [],
@@ -158,12 +159,12 @@ describe.sequential("PATCH /links/{linkId}", async () => {
   });
 
   // Update the link using externalId
-  test("update link using externalId", async () => {
+  test('update link using externalId', async () => {
     const { status, data: updatedLink } = await http.patch<Link>({
       path: `/links/ext_${externalId}`,
       query: { workspaceId },
       body: {
-        url: "https://github.com/dubinc",
+        url: 'https://github.com/dubinc',
       },
     });
 
@@ -176,9 +177,9 @@ describe.sequential("PATCH /links/{linkId}", async () => {
       externalId,
       archived: false,
       userId: user.id,
-      url: "https://github.com/dubinc",
-      expiresAt: "2030-04-16T17:00:00.000Z",
-      projectId: workspaceId.replace("ws_", ""),
+      url: 'https://github.com/dubinc',
+      expiresAt: '2030-04-16T17:00:00.000Z',
+      projectId: workspaceId.replace('ws_', ''),
       shortLink: `https://${domain}/${toUpdate.key}`,
       qrCode: `https://api.dub.co/qr?url=https://${domain}/${toUpdate.key}?qr=1`,
       tags: [],
@@ -190,12 +191,12 @@ describe.sequential("PATCH /links/{linkId}", async () => {
       query: { workspaceId },
     });
 
-    expect(linkUpdated.url).toEqual("https://github.com/dubinc");
+    expect(linkUpdated.url).toEqual('https://github.com/dubinc');
   });
 });
 
 describe.sequential(
-  "PUT /links/{linkId} (backwards compatibility)",
+  'PUT /links/{linkId} (backwards compatibility)',
   async () => {
     const h = new IntegrationHarness();
     const { workspace, http, user } = await h.init();
@@ -203,7 +204,7 @@ describe.sequential(
     const externalId = randomId();
 
     const { data: link } = await http.post<Link>({
-      path: "/links",
+      path: '/links',
       query: { workspaceId },
       body: {
         url,
@@ -212,19 +213,18 @@ describe.sequential(
       },
     });
 
-    const toUpdate: Partial<Link> = {
+    const toUpdate: Partial<z.infer<typeof updateLinkBodySchema>> = {
       key: randomId(),
-      url: "https://github.com/dubinc/dub",
-      title: "Dub Inc",
-      description: "Open-source link management infrastructure.",
+      url: 'https://github.com/dubinc/dub',
+      title: 'Dub Inc',
+      description: 'Open-source link management infrastructure.',
       publicStats: true,
-      comments: "This is a comment.",
-      expiresAt: new Date("2030-04-16T17:00:00.000Z"),
-      expiredUrl: "https://github.com/expired",
-      password: "link-password",
-      ios: "https://apps.apple.com/app/1611158928",
+      comments: 'This is a comment.',
+      expiresAt: '2030-04-16T17:00:00.000Z',
+      expiredUrl: 'https://github.com/expired',
+      ios: 'https://apps.apple.com/app/1611158928',
       android:
-        "https://play.google.com/store/apps/details?id=com.disney.disneyplus",
+        'https://play.google.com/store/apps/details?id=com.disney.disneyplus',
       geo: {
         AF: `${url}/AF`,
       },
@@ -234,7 +234,7 @@ describe.sequential(
       await h.deleteLink(link.id);
     });
 
-    test("update link using PUT", async () => {
+    test('update link using PUT', async () => {
       const { data: updatedLink } = await http.put<Link>({
         path: `/links/${link.id}`,
         query: { workspaceId },
@@ -248,8 +248,8 @@ describe.sequential(
         workspaceId,
         externalId,
         userId: user.id,
-        expiresAt: "2030-04-16T17:00:00.000Z",
-        projectId: workspaceId.replace("ws_", ""),
+        expiresAt: '2030-04-16T17:00:00.000Z',
+        projectId: workspaceId.replace('ws_', ''),
         shortLink: `https://${domain}/${toUpdate.key}`,
         qrCode: `https://api.dub.co/qr?url=https://${domain}/${toUpdate.key}?qr=1`,
         tags: [],
@@ -268,8 +268,8 @@ describe.sequential(
         workspaceId,
         externalId,
         userId: user.id,
-        expiresAt: "2030-04-16T17:00:00.000Z",
-        projectId: workspaceId.replace("ws_", ""),
+        expiresAt: '2030-04-16T17:00:00.000Z',
+        projectId: workspaceId.replace('ws_', ''),
         shortLink: `https://${domain}/${toUpdate.key}`,
         qrCode: `https://api.dub.co/qr?url=https://${domain}/${toUpdate.key}?qr=1`,
         tags: [],

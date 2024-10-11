@@ -1,24 +1,21 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { LinkWithTagsProps } from "@/lib/types";
-import LinkLogo from "@/ui/links/link-logo";
-import { AlertCircleFill, Lock, Random, X } from "@/ui/shared/icons";
-import { UpgradeToProToast } from "@/ui/shared/upgrade-to-pro-toast";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { LinkWithTagsProps } from '@/lib/types';
+import LinkLogo from '@/ui/links/link-logo';
+import { AlertCircleFill, Lock, X } from '@/ui/shared/icons';
+import { UpgradeToProToast } from '@/ui/shared/upgrade-to-pro-toast';
 import {
   Button,
-  ButtonTooltip,
   LinkedIn,
-  LoadingCircle,
-  Magic,
   Modal,
   Tooltip,
   TooltipContent,
   Twitter,
   useMediaQuery,
   useRouterStuff,
-} from "@dub/ui";
+} from '@dub/ui';
 import {
   DEFAULT_LINK_PROPS,
   SHORT_DOMAIN,
@@ -31,15 +28,14 @@ import {
   nanoid,
   punycode,
   truncate,
-} from "@dub/utils";
-import { useCompletion } from "ai/react";
-import { TriangleAlert } from "lucide-react";
+} from '@dub/utils';
+import { TriangleAlert } from 'lucide-react';
 import {
   useParams,
   usePathname,
   useRouter,
   useSearchParams,
-} from "next/navigation";
+} from 'next/navigation';
 import {
   Dispatch,
   SetStateAction,
@@ -49,20 +45,25 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
-import { toast } from "sonner";
-import { mutate } from "swr";
-import { useDebounce, useDebouncedCallback } from "use-debounce";
-import AndroidSection from "./android-section";
-import CommentsSection from "./comments-section";
-import ExpirationSection from "./expiration-section";
-import GeoSection from "./geo-section";
-import IOSSection from "./ios-section";
-import OGSection from "./og-section";
-import PasswordSection from "./password-section";
-import Preview from "./preview";
-import TagsSection from "./tags-section";
-import UTMSection from "./utm-section";
+} from 'react';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
+import useSWRMutation from 'swr/mutation';
+import { useDebounce, useDebouncedCallback } from 'use-debounce';
+import AndroidSection from './android-section';
+import CommentsSection from './comments-section';
+import ExpirationSection from './expiration-section';
+import GeoSection from './geo-section';
+import IOSSection from './ios-section';
+import OGSection from './og-section';
+import PasswordSection from './password-section';
+import Preview from './preview';
+import TagsSection from './tags-section';
+import UTMSection from './utm-section';
+
+export type FormValues = LinkWithTagsProps & {
+  password?: string;
+};
 
 function AddEditLinkModal({
   showAddEditLinkModal,
@@ -95,7 +96,7 @@ function AddEditLinkModal({
   const [generatingRandomKey, setGeneratingRandomKey] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const [data, setData] = useState<LinkWithTagsProps>(
+  const [data, setData] = useState<FormValues>(
     props || duplicateProps || DEFAULT_LINK_PROPS,
   );
 
@@ -109,7 +110,8 @@ function AddEditLinkModal({
     }
   }, [props, duplicateProps]);
 
-  const { domain, key, url, password, proxy } = data;
+  const { domain, key, url, proxy, passwordEnabledAt } = data;
+  const passwordEnabled = !!passwordEnabledAt;
 
   const generateRandomKey = useDebouncedCallback(async () => {
     if (generatingRandomKey) return;
@@ -149,51 +151,51 @@ function AddEditLinkModal({
     props ? [props.key] : [],
   );
 
-  const {
-    completion,
-    isLoading: generatingAIKey,
-    complete,
-  } = useCompletion({
-    api: `/api/ai/completion?workspaceId=${workspaceId}`,
-    onError: (error) => {
-      if (error.message.includes("Upgrade to Pro")) {
-        toast.custom(() => (
-          <UpgradeToProToast
-            title="You've exceeded your AI usage limit"
-            message={error.message}
-          />
-        ));
-      } else {
-        toast.error(error.message);
-      }
-    },
-    onFinish: (_, completion) => {
-      setGeneratedKeys((prev) => [...prev, completion]);
-      mutateWorkspace();
-      runKeyChecks(completion);
-    },
-  });
+  // const {
+  //   completion,
+  //   isLoading: generatingAIKey,
+  //   complete,
+  // } = useCompletion({
+  //   api: `/api/ai/completion?workspaceId=${workspaceId}`,
+  //   onError: (error) => {
+  //     if (error.message.includes("Upgrade to Pro")) {
+  //       toast.custom(() => (
+  //         <UpgradeToProToast
+  //           title="You've exceeded your AI usage limit"
+  //           message={error.message}
+  //         />
+  //       ));
+  //     } else {
+  //       toast.error(error.message);
+  //     }
+  //   },
+  //   onFinish: (_, completion) => {
+  //     setGeneratedKeys((prev) => [...prev, completion]);
+  //     mutateWorkspace();
+  //     runKeyChecks(completion);
+  //   },
+  // });
 
-  const generateAIKey = useCallback(async () => {
-    setKeyError(null);
-    complete(
-      `For the following URL, suggest a relevant short link slug that is at most ${Math.max(25 - domain.length, 12)} characters long. 
-              
-        - URL: ${data.url}
-        - Meta title: ${data.title}
-        - Meta description: ${data.description}. 
+  // const generateAIKey = useCallback(async () => {
+  //   setKeyError(null);
+  //   complete(
+  //     `For the following URL, suggest a relevant short link slug that is at most ${Math.max(25 - domain.length, 12)} characters long.
 
-      Only respond with the short link slug and nothing else. Don't use quotation marks or special characters (dash and slash are allowed).
-      
-      Make sure your answer does not exist in this list of generated slugs: ${generatedKeys.join(", ")}`,
-    );
-  }, [data.url, data.title, data.description, generatedKeys]);
+  //       - URL: ${data.url}
+  //       - Meta title: ${data.title}
+  //       - Meta description: ${data.description}.
 
-  useEffect(() => {
-    if (completion) {
-      setData((prev) => ({ ...prev, key: completion }));
-    }
-  }, [completion]);
+  //     Only respond with the short link slug and nothing else. Don't use quotation marks or special characters (dash and slash are allowed).
+
+  //     Make sure your answer does not exist in this list of generated slugs: ${generatedKeys.join(", ")}`,
+  //   );
+  // }, [data.url, data.title, data.description, generatedKeys]);
+
+  // useEffect(() => {
+  //   if (completion) {
+  //     setData((prev) => ({ ...prev, key: completion }));
+  //   }
+  // }, [completion]);
 
   const [generatingMetatags, setGeneratingMetatags] = useState(
     props ? true : false,
@@ -201,14 +203,14 @@ function AddEditLinkModal({
   const [debouncedUrl] = useDebounce(getUrlWithoutUTMParams(url), 500);
   useEffect(() => {
     // if there's a password, no need to generate metatags
-    if (password) {
+    if (passwordEnabled) {
       setGeneratingMetatags(false);
       setData((prev) => ({
         ...prev,
-        title: "Password Required",
+        title: 'Password Required',
         description:
-          "This link is password protected. Please enter the password to view it.",
-        image: "/_static/password-protected.png",
+          'This link is password protected. Please enter the password to view it.',
+        image: '/_static/password-protected.png',
       }));
       return;
     }
@@ -248,17 +250,17 @@ function AddEditLinkModal({
     } else {
       setGeneratingMetatags(false);
     }
-  }, [debouncedUrl, password, showAddEditLinkModal, proxy]);
+  }, [debouncedUrl, passwordEnabled, showAddEditLinkModal, proxy]);
 
   const endpoint = useMemo(() => {
     if (props?.key) {
       return {
-        method: "PATCH",
+        method: 'PATCH',
         url: `/api/links/${props.id}?workspaceId=${workspaceId}`,
       };
     } else {
       return {
-        method: "POST",
+        method: 'POST',
         url: `/api/links?workspaceId=${workspaceId}`,
       };
     }
@@ -275,6 +277,11 @@ function AddEditLinkModal({
   }, []);
 
   const saveDisabled = useMemo(() => {
+    // Enable save if a password is typed in
+    if (data.password) {
+      return false;
+    }
+
     /* 
       Disable save if:
       - modal is not open
@@ -293,11 +300,11 @@ function AddEditLinkModal({
         Object.entries(props).every(([key, value]) => {
           // If the key is "title" or "description" and proxy is not enabled, return true (skip the check)
           if (
-            (key === "title" || key === "description" || key === "image") &&
+            (key === 'title' || key === 'description' || key === 'image') &&
             !proxy
           ) {
             return true;
-          } else if (key === "geo") {
+          } else if (key === 'geo') {
             const equalGeo = deepEqual(props.geo as object, data.geo as object);
             return equalGeo;
           }
@@ -315,10 +322,10 @@ function AddEditLinkModal({
 
   const [lockKey, setLockKey] = useState(true);
 
-  const welcomeFlow = pathname === "/welcome";
+  const welcomeFlow = pathname === '/welcome';
   const keyRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    if (key?.endsWith("-copy")) {
+    if (key?.endsWith('-copy')) {
       keyRef.current?.select();
     }
   }, []);
@@ -338,6 +345,33 @@ function AddEditLinkModal({
 
   const randomLinkedInNonce = useMemo(() => nanoid(8), []);
 
+  const revalidateLinks = async () => {
+    await mutate(
+      (key) => typeof key === 'string' && key.startsWith('/api/links'),
+      undefined,
+      { revalidate: true },
+    );
+  };
+
+  const disablePassword = useSWRMutation(
+    `/api/links/${data.id}/password?workspaceId=${workspaceId}`,
+    async (url: string) => {
+      const response = await fetch(url, { method: 'DELETE' });
+      if (!response.ok) {
+        throw Error(`fetch failed, status: ${response.status} `);
+      }
+    },
+    {
+      onError: () => {
+        toast('Failed to disable password. Try again.');
+      },
+      onSuccess: async () => {
+        toast('Successfully disabled password.');
+        await revalidateLinks();
+      },
+    },
+  );
+
   return (
     <Modal
       showModal={showAddEditLinkModal}
@@ -347,9 +381,9 @@ function AddEditLinkModal({
       onClose={() => {
         if (welcomeFlow) {
           router.back();
-        } else if (searchParams.has("newLink")) {
+        } else if (searchParams.has('newLink')) {
           queryParams({
-            del: ["newLink"],
+            del: ['newLink'],
           });
         }
       }}
@@ -359,9 +393,9 @@ function AddEditLinkModal({
           <button
             onClick={() => {
               setShowAddEditLinkModal(false);
-              if (searchParams.has("newLink")) {
+              if (searchParams.has('newLink')) {
                 queryParams({
-                  del: ["newLink"],
+                  del: ['newLink'],
                 });
               }
             }}
@@ -397,19 +431,14 @@ function AddEditLinkModal({
               fetch(endpoint.url, {
                 method: endpoint.method,
                 headers: {
-                  "Content-Type": "application/json",
+                  'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(bodyData),
               }).then(async (res) => {
                 if (res.status === 200) {
-                  await mutate(
-                    (key) =>
-                      typeof key === "string" && key.startsWith("/api/links"),
-                    undefined,
-                    { revalidate: true },
-                  );
+                  await revalidateLinks();
                   // for welcome page, redirect to links page after adding a link
-                  if (pathname === "/welcome") {
+                  if (pathname === '/welcome') {
                     router.push(`/${locale}/links`);
                     setShowAddEditLinkModal(false);
                   }
@@ -418,22 +447,22 @@ function AddEditLinkModal({
                   if (!props) {
                     try {
                       await navigator.clipboard.writeText(data.shortLink);
-                      toast.success("Copied shortlink to clipboard!");
+                      toast.success('Copied shortlink to clipboard!');
                     } catch (e) {
                       console.error(
-                        "Failed to automatically copy shortlink to clipboard.",
+                        'Failed to automatically copy shortlink to clipboard.',
                         e,
                       );
-                      toast.success("Successfully created link!");
+                      toast.success('Successfully created link!');
                     }
                   } else {
-                    toast.success("Successfully updated shortlink!");
+                    toast.success('Successfully updated shortlink!');
                   }
                   setShowAddEditLinkModal(false);
                 } else {
                   const { error } = await res.json();
                   if (error) {
-                    if (error.message.includes("Upgrade to Pro")) {
+                    if (error.message.includes('Upgrade to Pro')) {
                       toast.custom(() => (
                         <UpgradeToProToast
                           title="You've discovered a Pro feature!"
@@ -445,9 +474,9 @@ function AddEditLinkModal({
                     }
                     const message = error.message.toLowerCase();
 
-                    if (message.includes("key") || message.includes("domain")) {
+                    if (message.includes('key') || message.includes('domain')) {
                       setKeyError(error.message);
-                    } else if (message.includes("url")) {
+                    } else if (message.includes('url')) {
                       setUrlError(error.message);
                     }
                   }
@@ -482,7 +511,7 @@ function AddEditLinkModal({
                     name="url"
                     id={`url-${randomIdx}`}
                     required
-                    placeholder="https://dub.co/help/article/what-is-dub"
+                    placeholder="https://github.com/govtechmy/go-gov-my/discussions"
                     value={url}
                     autoFocus={!key && !isMobile}
                     autoComplete="off"
@@ -492,8 +521,8 @@ function AddEditLinkModal({
                     }}
                     className={`${
                       urlError
-                        ? "border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500"
-                        : "border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:ring-gray-500"
+                        ? 'border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500'
+                        : 'border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:ring-gray-500'
                     } block w-full rounded-md focus:outline-none sm:text-sm`}
                     aria-invalid="true"
                   />
@@ -521,44 +550,45 @@ function AddEditLinkModal({
                       type="button"
                       onClick={() => {
                         window.confirm(
-                          "Editing an existing short link could potentially break existing links. Are you sure you want to continue?",
+                          'Editing an existing short link could potentially break existing links. Are you sure you want to continue?',
                         ) && setLockKey(false);
                       }}
                     >
                       <Lock className="h-3 w-3" />
                     </button>
                   ) : (
-                    <div className="flex items-center">
-                      <ButtonTooltip
-                        tooltipContent="Generate a random key"
-                        onClick={generateRandomKey}
-                        disabled={generatingRandomKey || generatingAIKey}
-                        className="flex h-6 w-6 items-center justify-center rounded-md text-gray-500 transition-colors duration-75 hover:bg-gray-100 active:bg-gray-200 disabled:cursor-not-allowed"
-                      >
-                        {generatingRandomKey ? (
-                          <LoadingCircle />
-                        ) : (
-                          <Random className="h-3 w-3" />
-                        )}
-                      </ButtonTooltip>
-                      <ButtonTooltip
-                        tooltipContent="Generate a key using AI"
-                        onClick={generateAIKey}
-                        disabled={
-                          generatingRandomKey ||
-                          generatingAIKey ||
-                          (aiLimit && aiUsage && aiUsage >= aiLimit) ||
-                          !url
-                        }
-                        className="flex h-6 w-6 items-center justify-center rounded-md text-gray-500 transition-colors duration-75 hover:bg-gray-100 active:bg-gray-200 disabled:cursor-not-allowed"
-                      >
-                        {generatingAIKey ? (
-                          <LoadingCircle />
-                        ) : (
-                          <Magic className="h-4 w-4" />
-                        )}
-                      </ButtonTooltip>
-                    </div>
+                    // <div className="flex items-center">
+                    //   <ButtonTooltip
+                    //     tooltipContent="Generate a random key"
+                    //     onClick={generateRandomKey}
+                    //     disabled={generatingRandomKey || generatingAIKey}
+                    //     className="flex h-6 w-6 items-center justify-center rounded-md text-gray-500 transition-colors duration-75 hover:bg-gray-100 active:bg-gray-200 disabled:cursor-not-allowed"
+                    //   >
+                    //     {generatingRandomKey ? (
+                    //       <LoadingCircle />
+                    //     ) : (
+                    //       <Random className="h-3 w-3" />
+                    //     )}
+                    //   </ButtonTooltip>
+                    //   <ButtonTooltip
+                    //     tooltipContent="Generate a key using AI"
+                    //     onClick={generateAIKey}
+                    //     disabled={
+                    //       generatingRandomKey ||
+                    //       generatingAIKey ||
+                    //       (aiLimit && aiUsage && aiUsage >= aiLimit) ||
+                    //       !url
+                    //     }
+                    //     className="flex h-6 w-6 items-center justify-center rounded-md text-gray-500 transition-colors duration-75 hover:bg-gray-100 active:bg-gray-200 disabled:cursor-not-allowed"
+                    //   >
+                    //     {generatingAIKey ? (
+                    //       <LoadingCircle />
+                    //     ) : (
+                    //       <Magic className="h-4 w-4" />
+                    //     )}
+                    //   </ButtonTooltip>
+                    // </div>
+                    <></>
                   )}
                 </div>
                 <div className="relative mt-1 flex rounded-md shadow-sm">
@@ -580,13 +610,13 @@ function AddEditLinkModal({
                     disabled={props && lockKey}
                     autoComplete="off"
                     className={cn(
-                      "block w-full rounded-r-md border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm",
+                      'block w-full rounded-r-md border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm',
                       {
-                        "border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500":
+                        'border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500':
                           keyError,
-                        "border-amber-300 pr-10 text-amber-900 placeholder-amber-300 focus:border-amber-500 focus:ring-amber-500":
+                        'border-amber-300 pr-10 text-amber-900 placeholder-amber-300 focus:border-amber-500 focus:ring-amber-500':
                           shortLink.length > 25,
-                        "cursor-not-allowed border border-gray-300 bg-gray-100 text-gray-500":
+                        'cursor-not-allowed border border-gray-300 bg-gray-100 text-gray-500':
                           props && lockKey,
                       },
                     )}
@@ -594,10 +624,10 @@ function AddEditLinkModal({
                     value={punycode(key)}
                     onChange={(e) => {
                       setKeyError(null);
-                      e.currentTarget.setCustomValidity("");
+                      e.currentTarget.setCustomValidity('');
                       setData({
                         ...data,
-                        key: e.target.value.replace(" ", "-"),
+                        key: e.target.value.replace(' ', '-'),
                       });
                     }}
                     aria-invalid="true"
@@ -617,7 +647,7 @@ function AddEditLinkModal({
                                 <LinkedIn className="h-4 w-4" />
                                 <p className="cursor-pointer text-sm font-semibold text-[#4783cf] hover:underline">
                                   {linkConstructor({
-                                    domain: "lnkd.in",
+                                    domain: 'lnkd.in',
                                     key: randomLinkedInNonce,
                                     pretty: true,
                                   })}
@@ -650,16 +680,16 @@ function AddEditLinkModal({
                   )}
                 </div>
                 {keyError &&
-                  (keyError.includes("Upgrade to Pro") ? (
+                  (keyError.includes('Upgrade to Pro') ? (
                     <p className="mt-2 text-sm text-red-600" id="key-error">
-                      {keyError.split("Upgrade to Pro")[0]}
+                      {keyError.split('Upgrade to Pro')[0]}
                       <span
                         className="cursor-pointer underline"
-                        onClick={() => queryParams({ set: { upgrade: "pro" } })}
+                        onClick={() => queryParams({ set: { upgrade: 'pro' } })}
                       >
                         Upgrade to Pro
                       </span>
-                      {keyError.split("Upgrade to Pro")[1]}
+                      {keyError.split('Upgrade to Pro')[1]}
                     </p>
                   ) : (
                     <p className="mt-2 text-sm text-red-600" id="key-error">
@@ -692,7 +722,32 @@ function AddEditLinkModal({
                 {...{ props, data, setData }}
                 generatingMetatags={generatingMetatags}
               />
-              <PasswordSection {...{ props, data, setData }} />
+              <PasswordSection
+                passwordEnabledAt={data.passwordEnabledAt}
+                onPasswordChange={(password) => {
+                  // If it's an empty string, use undefined as the value.
+                  // We don't want to let users set an empty string as the password.
+                  if (password === '') {
+                    setData((prev) => ({ ...prev, password: undefined }));
+                    return;
+                  }
+                  setData((prev) => ({ ...prev, password }));
+                }}
+                onPasswordDisable={() => {
+                  if (passwordEnabled) {
+                    const confirmDisable = window.confirm(
+                      'Are you sure you want to disable password protection?',
+                    );
+                    if (confirmDisable) {
+                      setData((prev) => ({ ...prev, password: undefined }));
+                      disablePassword.trigger();
+                    }
+                    return confirmDisable;
+                  }
+                  setData((prev) => ({ ...prev, password: undefined }));
+                  return true;
+                }}
+              />
               <ExpirationSection {...{ props, data, setData }} />
               <IOSSection {...{ props, data, setData }} />
               <AndroidSection {...{ props, data, setData }} />
@@ -701,7 +756,7 @@ function AddEditLinkModal({
 
             <div
               className={`${
-                atBottom ? "" : "md:shadow-[0_-20px_30px_-10px_rgba(0,0,0,0.1)]"
+                atBottom ? '' : 'md:shadow-[0_-20px_30px_-10px_rgba(0,0,0,0.1)]'
               } z-10 bg-gray-50 px-4 py-8 transition-all md:sticky  md:bottom-0 md:px-16`}
             >
               {homepageDemo ? (
@@ -743,7 +798,7 @@ function AddEditLinkButton({
 
   const onKeyDown = useCallback((e: KeyboardEvent) => {
     const target = e.target as HTMLElement;
-    const existingModalBackdrop = document.getElementById("modal-backdrop");
+    const existingModalBackdrop = document.getElementById('modal-backdrop');
     // only open modal with keyboard shortcut if:
     // - c is pressed
     // - user is not pressing cmd/ctrl + c
@@ -751,11 +806,11 @@ function AddEditLinkButton({
     // - there is no existing modal backdrop (i.e. no other modal is open)
     // - workspace has not exceeded links limit
     if (
-      e.key.toLowerCase() === "c" &&
+      e.key.toLowerCase() === 'c' &&
       !e.metaKey &&
       !e.ctrlKey &&
-      target.tagName !== "INPUT" &&
-      target.tagName !== "TEXTAREA" &&
+      target.tagName !== 'INPUT' &&
+      target.tagName !== 'TEXTAREA' &&
       !existingModalBackdrop &&
       !exceededLinks
     ) {
@@ -766,9 +821,9 @@ function AddEditLinkButton({
 
   // listen to paste event, and if it's a URL, open the modal and input the URL
   const handlePaste = (e: ClipboardEvent) => {
-    const pastedContent = e.clipboardData?.getData("text");
+    const pastedContent = e.clipboardData?.getData('text');
     const target = e.target as HTMLElement;
-    const existingModalBackdrop = document.getElementById("modal-backdrop");
+    const existingModalBackdrop = document.getElementById('modal-backdrop');
 
     // make sure:
     // - pasted content is a valid URL
@@ -778,8 +833,8 @@ function AddEditLinkButton({
     if (
       pastedContent &&
       isValidUrl(pastedContent) &&
-      target.tagName !== "INPUT" &&
-      target.tagName !== "TEXTAREA" &&
+      target.tagName !== 'INPUT' &&
+      target.tagName !== 'TEXTAREA' &&
       !existingModalBackdrop &&
       !exceededLinks
     ) {
@@ -788,11 +843,11 @@ function AddEditLinkButton({
   };
 
   useEffect(() => {
-    document.addEventListener("keydown", onKeyDown);
-    document.addEventListener("paste", handlePaste);
+    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('paste', handlePaste);
     return () => {
-      document.removeEventListener("keydown", onKeyDown),
-        document.removeEventListener("paste", handlePaste);
+      document.removeEventListener('keydown', onKeyDown),
+        document.removeEventListener('paste', handlePaste);
     };
   }, [onKeyDown]);
 

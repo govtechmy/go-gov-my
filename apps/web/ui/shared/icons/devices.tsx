@@ -41,7 +41,7 @@ export function Chrome({ className }: { className: string }) {
       <path
         fill="#1a73e8"
         d="M50 69.8a19.8 19.8 90 1 0 0-39.6 19.8 19.8 90 0 0 0 39.6z"
-      />{" "}
+      />{' '}
     </svg>
   );
 }

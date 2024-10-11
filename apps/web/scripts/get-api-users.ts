@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma";
-import "dotenv-flow/config";
+import { prisma } from '@/lib/prisma';
+import 'dotenv-flow/config';
 
 async function main() {
   const users = await prisma.user.findMany({
@@ -9,7 +9,7 @@ async function main() {
       },
     },
   });
-  console.log(users.map((user) => user.email).join(", "));
+  console.log(users.map((user) => user.email).join(', '));
 }
 
 main();

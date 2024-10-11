@@ -1,28 +1,68 @@
-import { prisma } from "@/lib/prisma";
-import { LinkProps } from "@/lib/types";
+import { prisma } from '@/lib/prisma';
+import { LinkProps } from '@/lib/types';
+
+export type User = {
+  id: string;
+  name: string | null;
+  email: string;
+  emailVerified: Date | null;
+  image: string | null;
+  agencyCode: string;
+  role: string;
+  createdAt: Date;
+  subscribed: boolean;
+};
 
 export type LinkHistory = Pick<
   LinkProps,
   // Only pick these fields to store as history
-  | "android"
-  | "archived"
-  | "description"
-  | "domain"
-  | "expiredUrl"
-  | "expiresAt"
-  | "externalId"
-  | "geo"
-  | "image"
-  | "ios"
-  | "key"
-  | "password"
-  | "proxy"
-  | "publicStats"
-  | "title"
-  | "trackConversion"
-  | "url"
+  | 'android'
+  | 'archived'
+  | 'description'
+  | 'domain'
+  | 'expiredUrl'
+  | 'expiresAt'
+  | 'externalId'
+  | 'geo'
+  | 'image'
+  | 'ios'
+  | 'key'
+  | 'proxy'
+  | 'publicStats'
+  | 'title'
+  | 'trackConversion'
+  | 'url'
 > & {
-  type: "create" | "update";
+  type: 'create' | 'update';
+  /** The id of the user who created/updated the link */
+  comittedByUserId: string;
+  committedByUser: User;
+  /** The id of the link that was created/updated */
+  linkId: string;
+  timestamp: Date;
+};
+
+export type LinkHistoryAdd = Pick<
+  LinkProps,
+  // Only pick these fields to store as history
+  | 'android'
+  | 'archived'
+  | 'description'
+  | 'domain'
+  | 'expiredUrl'
+  | 'expiresAt'
+  | 'externalId'
+  | 'geo'
+  | 'image'
+  | 'ios'
+  | 'key'
+  | 'proxy'
+  | 'publicStats'
+  | 'title'
+  | 'trackConversion'
+  | 'url'
+> & {
+  type: 'create' | 'update';
   /** The id of the user who created/updated the link */
   comittedByUserId: string;
   /** The id of the link that was created/updated */
@@ -30,7 +70,7 @@ export type LinkHistory = Pick<
   timestamp: Date;
 };
 
-export async function addToHistory(entry: LinkHistory): Promise<void> {
+export async function addToHistory(entry: LinkHistoryAdd): Promise<void> {
   await prisma.linkHistory.create({
     data: {
       type: entry.type,
@@ -52,7 +92,6 @@ export async function addToHistory(entry: LinkHistory): Promise<void> {
       geo: entry.geo || undefined,
       image: entry.image,
       ios: entry.ios,
-      password: entry.password,
       title: entry.title,
     },
   });

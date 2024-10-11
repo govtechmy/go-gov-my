@@ -1,5 +1,5 @@
-import { RateLimiterRedis, RateLimiterRes } from "rate-limiter-flexible";
-import { redis } from ".";
+import { RateLimiterRedis, RateLimiterRes } from 'rate-limiter-flexible';
+import { redis } from '.';
 
 type Duration =
   | `${number} ms`
@@ -23,13 +23,13 @@ type RateLimitResult = {
 export const ratelimit = async (
   key: string,
   requests: number = 10,
-  duration: Duration = "10 s",
+  duration: Duration = '10 s',
 ): Promise<RateLimitResult> => {
   const ratelimiter = new RateLimiterRedis({
     storeClient: redis,
     points: requests,
     duration: durationToSeconds(duration),
-    keyPrefix: process.env.NEXT_PUBLIC_APP_NAME?.concat("-"),
+    keyPrefix: process.env.NEXT_PUBLIC_APP_NAME?.concat('-'),
   });
 
   try {
@@ -44,7 +44,7 @@ export const ratelimit = async (
 };
 
 function durationToSeconds(duration: Duration): number {
-  const [numStr, unit] = duration.split(" ");
+  const [numStr, unit] = duration.split(' ');
   const num = Number.parseInt(numStr);
 
   if (!unit) {
@@ -52,15 +52,15 @@ function durationToSeconds(duration: Duration): number {
   }
 
   switch (unit) {
-    case "ms":
+    case 'ms':
       return num / 1000;
-    case "s":
+    case 's':
       return num;
-    case "m":
+    case 'm':
       return num * 60;
-    case "h":
+    case 'h':
       return num * 60 * 60;
-    case "d":
+    case 'd':
       return num * 60 * 60 * 24;
     default:
       throw Error(`failed to parse duration, invalid unit "${unit}"`);

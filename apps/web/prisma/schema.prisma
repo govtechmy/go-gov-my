@@ -12,6 +12,10 @@ datasource db {
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["postgresqlExtensions"]
+
+  // Use engine type "binary" for esbuild to bundle prisma correctly when
+  // building the outbox kafka consumer
+  engineType = "binary"
 }
 
 model Agency {
@@ -30,6 +34,7 @@ model User {
   image         String?
   agencyCode    String    @default("govtech")
   role          UserRole  @default(staff)
+  linkHistory LinkHistory[] // Relation to LinkHistory
 
   agency Agency @relation(fields: [agencyCode], references: [code])
 
@@ -46,6 +51,7 @@ model User {
 
 enum UserRole {
   staff
+  agency_admin
   super_admin
 }
 
@@ -104,12 +110,11 @@ model Token {
 }
 
 model Project {
-  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name        String
-  slug        String    @unique
-  logo        String?
-  agencyCode  String    @default("govtech")
-
+  id         String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name       String
+  slug       String  @unique
+  logo       String?
+  agencyCode String  @default("govtech")
 
   plan              String @default("business")
   billingCycleStart Int // day of the month when the billing cycle starts
@@ -120,7 +125,6 @@ model Project {
   linksUsage        Int    @default(0)
   linksLimit        Int    @default(25)
   tagsLimit         Int    @default(5)
-  usersLimit        Int    @default(1)
 
   users      ProjectUsers[]
   invites    ProjectInvite[]
@@ -190,15 +194,16 @@ model SentEmail {
 }
 
 model Link {
-  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  domain     String // domain of the link (e.g. dub.sh) – also stored on Redis
-  key        String // key of the link (e.g. /github) – also stored on Redis
-  url        String // @db.LongText // target url (e.g. https://github.com/dubinc/dub) – also stored on Redis
-  archived   Boolean   @default(false) // whether the link is archived or not
-  expiresAt  DateTime? // when the link expires – stored on Redis via ttl
-  expiredUrl String? // @db.LongText // URL to redirect the user to when the link is expired
-  password   String? // password to access the link
-  externalId String?
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  domain            String // domain of the link (e.g. dub.sh) – also stored on Redis
+  key               String // key of the link (e.g. /github) – also stored on Redis
+  url               String // @db.LongText // target url (e.g. https://github.com/dubinc/dub) – also stored on Redis
+  archived          Boolean   @default(false) // whether the link is archived or not
+  expiresAt         DateTime? // when the link expires – stored on Redis via ttl
+  expiredUrl        String? // @db.LongText // URL to redirect the user to when the link is expired
+  passwordEnabledAt DateTime?
+  externalId        String?
+  banned            Boolean   @default(false)
 
   trackConversion Boolean @default(false) // whether to track conversions or not
 
@@ -224,8 +229,8 @@ model Link {
   userId String? @db.Uuid
 
   // Project that the link belongs to
-  project       Project @relation(fields: [projectId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  projectId     String  @db.Uuid
+  project   Project @relation(fields: [projectId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  projectId String  @db.Uuid
 
   publicStats Boolean   @default(false) // whether to show public stats or not
   clicks      Int       @default(0) // number of clicks
@@ -251,7 +256,6 @@ model Link {
   @@index(domain)
   @@index(trackConversion)
   @@index(proxy)
-  @@index(password)
   @@index(createdAt(sort: Desc))
   @@index(clicks(sort: Desc))
   @@index(lastClicked)
@@ -259,19 +263,21 @@ model Link {
 }
 
 model WebhookOutbox {
-  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  host         String
-  payload      Json
-  createdAt    DateTime @default(now()) @db.Timestamptz
-  action       String
-  headers      Json
-  partitionKey String
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  host             String
+  payload          Json
+  createdAt        DateTime @default(now()) @db.Timestamptz
+  action           String
+  headers          Json
+  partitionKey     String
+  encryptedSecrets String?
 }
 
 model LinkHistory {
   id                String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   type              LinkHistoryType
   committedByUserId String?         @db.Uuid // The user who created/updated the link
+  committedByUser   User?           @relation(fields: [committedByUserId], references: [id])
   linkId            String          @db.Uuid
   link              Link            @relation(fields: [linkId], references: [id], onDelete: Cascade)
   timestamp         DateTime        @db.Timestamptz
@@ -283,7 +289,6 @@ model LinkHistory {
   archived   Boolean
   expiresAt  DateTime?
   expiredUrl String?
-  password   String?
   externalId String?
 
   trackConversion Boolean
@@ -335,12 +340,18 @@ model LinkTag {
 }
 
 model Analytics {
-  id                    String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  linkId                String
-  from                  DateTime
-  to                    DateTime
-  aggregatedDate        DateTime   @db.Date
-  metadata              Json       @db.Json
-  createdAt             DateTime   @default(now()) @db.Timestamptz
-  updatedAt             DateTime   @updatedAt
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  linkId         String
+  from           DateTime
+  to             DateTime
+  aggregatedDate DateTime @db.Date
+  metadata       Json     @db.Json
+  createdAt      DateTime @default(now()) @db.Timestamptz
+  updatedAt      DateTime @updatedAt
+}
+
+model IdempotentResource {
+  idempotencyKey String   @id
+  hashedPayload  String
+  createdAt      DateTime @default(now()) @db.Timestamptz
 }

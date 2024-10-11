@@ -8,9 +8,8 @@ const REDIRECT_SEGMENTS = [
 ];
 
 /** @type {import('next').NextConfig} */
-module.exports = {
+const nextConfig = {
   reactStrictMode: false,
-  output: "standalone",
   experimental: {
     serverComponentsExternalPackages: [
       "@react-email/components",
@@ -69,6 +68,28 @@ module.exports = {
       {
         hostname: "media.cleanshot.cloud", // only for staging purposes
       },
+      {
+        hostname: "gogov-web-dev.s3.ap-southeast-1.amazonaws.com",
+      },
+      {
+        hostname: "app.pautan.org",
+      },
+      {
+        hostname: "app.go.gov.my",
+      },
+      {
+        hostname: "pautan.org",
+      },
+      {
+        hostname: "go.gov.my",
+      },
+    ],
+    domains: [
+      "gogov-web-dev.s3.ap-southeast-1.amazonaws.com",
+      "app.pautan.org",
+      "app.go.gov.my",
+      "pautan.org",
+      "go.gov.my",
     ],
   },
   async headers() {
@@ -99,10 +120,10 @@ module.exports = {
         has: [
           {
             type: "host",
-            value: "app.dub.sh",
+            value: "app.go.gov.my",
           },
         ],
-        destination: "https://app.dub.co",
+        destination: "https://app.go.gov.my",
         permanent: true,
         statusCode: 301,
       },
@@ -111,10 +132,10 @@ module.exports = {
         has: [
           {
             type: "host",
-            value: "app.dub.sh",
+            value: "app.go.gov.my",
           },
         ],
-        destination: "https://app.dub.co/:path*",
+        destination: "https://app.go.gov.my/:path*",
         permanent: true,
         statusCode: 301,
       },
@@ -125,10 +146,10 @@ module.exports = {
             has: [
               {
                 type: "host",
-                value: "dub.sh",
+                value: "pautan.org",
               },
             ],
-            destination: `https://dub.co/${segment}`,
+            destination: `https://go.gov.my/${segment}`,
             permanent: true,
             statusCode: 301,
           },
@@ -140,7 +161,7 @@ module.exports = {
                 value: "dub.sh",
               },
             ],
-            destination: `https://dub.co/${segment}/:path*`,
+            destination: `https://go.gov.my/${segment}/:path*`,
             permanent: true,
             statusCode: 301,
           }
@@ -154,7 +175,7 @@ module.exports = {
             value: "dub.sh",
           },
         ],
-        destination: "https://dub.co/tools/metatags",
+        destination: "https://go.gov.my/tools/metatags",
         permanent: true,
         statusCode: 301,
       },
@@ -163,7 +184,7 @@ module.exports = {
         has: [
           {
             type: "host",
-            value: "dub.co",
+            value: "go.gov.my",
           },
         ],
         destination: "/tools/metatags",
@@ -175,10 +196,10 @@ module.exports = {
         has: [
           {
             type: "host",
-            value: "staging.dub.sh",
+            value: "pautan.org",
           },
         ],
-        destination: "https://dub.co",
+        destination: "https://pautan.org",
         permanent: true,
         statusCode: 301,
       },
@@ -187,10 +208,10 @@ module.exports = {
         has: [
           {
             type: "host",
-            value: "preview.dub.sh",
+            value: "preview.pautan.org",
           },
         ],
-        destination: "https://preview.dub.co",
+        destination: "https://preview.pautan.org",
         permanent: true,
         statusCode: 301,
       },
@@ -199,13 +220,15 @@ module.exports = {
         has: [
           {
             type: "host",
-            value: "admin.dub.sh",
+            value: "go.gov.my",
           },
         ],
-        destination: "https://admin.dub.co",
+        destination: "https://go.gov.my/en/admin",
         permanent: true,
         statusCode: 301,
       },
     ];
   },
 };
+
+module.exports = nextConfig;

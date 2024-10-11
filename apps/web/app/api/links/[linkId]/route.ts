@@ -1,24 +1,24 @@
-import { DubApiError, ErrorCodes } from "@/lib/api/errors";
+import { DubApiError, ErrorCodes } from '@/lib/api/errors';
 import {
   deleteLink,
   processLink,
   transformLink,
   updateLink,
-} from "@/lib/api/links";
-import { parseRequestBody } from "@/lib/api/utils";
-import { withWorkspace } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { NewLinkProps } from "@/lib/types";
-import { updateLinkBodySchema } from "@/lib/zod/schemas/links";
-import { deepEqual } from "@dub/utils";
-import { NextResponse } from "next/server";
+} from '@/lib/api/links';
+import { parseRequestBody } from '@/lib/api/utils';
+import { withWorkspace } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { NewLinkProps } from '@/lib/types';
+import { updateLinkBodySchema } from '@/lib/zod/schemas/links';
+import { deepEqual } from '@dub/utils';
+import { NextResponse } from 'next/server';
 
 // GET /api/links/[linkId] – get a link
 export const GET = withWorkspace(async ({ headers, link }) => {
   if (!link) {
     throw new DubApiError({
-      code: "not_found",
-      message: "Link not found.",
+      code: 'not_found',
+      message: 'Link not found.',
     });
   }
 
@@ -52,8 +52,8 @@ export const PATCH = withWorkspace(
   async ({ req, headers, workspace, link, session }) => {
     if (!link) {
       throw new DubApiError({
-        code: "not_found",
-        message: "Link not found.",
+        code: 'not_found',
+        message: 'Link not found.',
       });
     }
 
@@ -67,7 +67,7 @@ export const PATCH = withWorkspace(
         link.expiresAt instanceof Date
           ? link.expiresAt.toISOString()
           : link.expiresAt,
-      geo: link.geo as NewLinkProps["geo"],
+      geo: link.geo as NewLinkProps['geo'],
       ...body,
     };
 
@@ -78,9 +78,9 @@ export const PATCH = withWorkspace(
 
     if (updatedLink.projectId !== link?.projectId) {
       throw new DubApiError({
-        code: "forbidden",
+        code: 'forbidden',
         message:
-          "Transferring links to another workspace is only allowed via the /links/[linkId]/transfer endpoint.",
+          'Transferring links to another workspace is only allowed via the /links/[linkId]/transfer endpoint.',
       });
     }
 
@@ -116,15 +116,15 @@ export const PATCH = withWorkspace(
         headers,
       });
     } catch (error) {
-      if (error.code === "P2002") {
+      if (error.code === 'P2002') {
         throw new DubApiError({
-          code: "conflict",
-          message: "A link with this externalId already exists.",
+          code: 'conflict',
+          message: 'A link with this externalId already exists.',
         });
       }
 
       throw new DubApiError({
-        code: "unprocessable_entity",
+        code: 'unprocessable_entity',
         message: error.message,
       });
     }

@@ -1,20 +1,20 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { LinkProps } from "@/lib/types";
-import { ProBadgeTooltip } from "@/ui/shared/pro-badge-tooltip";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { LinkProps } from '@/lib/types';
+import { ProBadgeTooltip } from '@/ui/shared/pro-badge-tooltip';
 import {
   ExpandingArrow,
   InfoTooltip,
   SimpleTooltipContent,
   Switch,
-} from "@dub/ui";
+} from '@dub/ui';
 import {
   FADE_IN_ANIMATION_SETTINGS,
   formatDateTime,
   getDateTimeLocal,
   parseDateTime,
-} from "@dub/utils";
-import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+} from '@dub/utils';
+import { motion } from 'framer-motion';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 
 export default function ExpirationSection({
   props,
@@ -55,7 +55,7 @@ export default function ExpirationSection({
               <SimpleTooltipContent
                 title={message?.set_expiration}
                 cta={message?.learn_more}
-                href="https://dub.co/help/article/link-expiration"
+                href="https://github.com/govtechmy/go-gov-my/discussions"
               />
             }
           />
@@ -69,7 +69,7 @@ export default function ExpirationSection({
               ref={inputRef}
               type="text"
               placeholder={message?.expiration_example}
-              defaultValue={expiresAt ? formatDateTime(expiresAt) : ""}
+              defaultValue={expiresAt ? formatDateTime(expiresAt) : ''}
               onBlur={(e) => {
                 if (e.target.value.length > 0) {
                   const parsedDateTime = parseDateTime(e.target.value);
@@ -85,7 +85,7 @@ export default function ExpirationSection({
               type="datetime-local"
               id="expiresAt"
               name="expiresAt"
-              value={expiresAt ? getDateTimeLocal(expiresAt) : ""}
+              value={expiresAt ? getDateTimeLocal(expiresAt) : ''}
               onChange={(e) => {
                 const expiryDate = new Date(e.target.value);
                 setData({ ...data, expiresAt: expiryDate });
@@ -110,7 +110,7 @@ export default function ExpirationSection({
                     <SimpleTooltipContent
                       title="Redirect users to a specific URL when the link has expired."
                       cta="Learn more."
-                      href="https://dub.co/help/article/link-expiration#setting-a-custom-expiration-url"
+                      href="https://github.com/govtechmy/go-gov-my/discussions"
                     />
                   }
                 />
@@ -122,7 +122,7 @@ export default function ExpirationSection({
                 id="expiredUrl"
                 tabIndex={0}
                 placeholder="https://yourwebsite.com"
-                value={expiredUrl || ""}
+                value={expiredUrl || ''}
                 autoComplete="off"
                 onChange={(e) => {
                   setData({ ...data, expiredUrl: e.target.value });
@@ -132,7 +132,7 @@ export default function ExpirationSection({
               />
             </div>
             <a
-              href="https://dub.co/help/article/link-expiration#setting-a-default-expiration-url-for-all-links-under-a-domain"
+              href="https://github.com/govtechmy/go-gov-my/discussions"
               target="_blank"
               className="group mt-3 flex items-center text-sm text-gray-500 hover:text-gray-700"
             >

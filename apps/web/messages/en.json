@@ -1,6 +1,6 @@
 {
   "masthead": {
-    "masthead_title": "An official Malaysian Government Website",
+    "masthead_title": "Official Malaysia Government Website",
     "masthead_subtitle": "Here's how you know",
     "masthead_official_site_title": "Official government websites end with",
     "masthead_official_site_desc_1": "If the link does not end with ",
@@ -11,7 +11,7 @@
     "masthead_ssl_or": ") or",
     "masthead_ssl_desc_2": "as an added precaution. Share sensitive information only on official, secure websites."
   },
-  "language": "en",
+  "language": "en-GB",
   "login": {
     "login_msg_1": "Sign in to",
     "login_msg_2": "Start creating short links with superpowers",
@@ -34,12 +34,13 @@
     "last_clicked": "Last Clicked",
     "analytics": "Analytics",
     "settings": "Settings",
+    "documentation": "Documentation",
     "filter_links": "Filter Links",
     "filter_tags": "Filter Tags",
     "add": "Add",
     "search": "Search",
     "show_my_links_only": "Show my links only",
-    "include_archive_links": "Include Archive Links",
+    "include_archive_links": "Include archived Links",
     "no_tags_yet": "No Tags Yet",
     "no_tags_match_search": "No tags match your search.",
     "showing": "Showing",
@@ -54,7 +55,8 @@
     "slug_desc": "This is your workspace's unique slug on ",
     "help_text": "Only lowercase letters, numbers, and dashes. Max 48 characters.",
     "only_owners_slug": "Only workspace owners can change the workspace slug.",
-    "success_update_slug": "Successfully updated workspace slug!"
+    "success_update_slug": "Successfully updated workspace slug!",
+    "success_create_workspace": "Successfully created a new workspace!"
   },
   "layout": {
     "changelog": "Changelog",
@@ -62,6 +64,9 @@
     "help_centre": "Help Centre",
     "logout": "Log out",
     "settings": "Settings",
+    "admin": "Admin Portal",
+    "user": "Back to Dashboard",
+    "documentation": "Documentation",
     "onboarding": "Onboarding Checklist"
   },
   "workspace": {
@@ -105,7 +110,7 @@
     "select_tags": "Select Tags",
     "destination": "Destination URL",
     "invalid_url": "Invalid URL",
-    "press_enter": "press <strong>Enter</strong> ↵ to submit",
+    "press_enter": "press Enter ↵ to submit",
     "too_long": "Short links longer than 25 characters will show up differently on some platforms.",
     "not_found": "Link Not Found",
     "bummer": "Bummer! The link you are looking for does not exist. You either typed  in the wrong URL or don't have access to this link.",
@@ -166,7 +171,7 @@
   "tokens": {
     "create_api_key": "Create New API Key",
     "enter_key": "Enter a unique name for your API key to differentiate it from other keys.",
-    "learn_more": "Learn more about Dub's API.",
+    "learn_more": "Learn more about GoGovMY API.",
     "success": "Successfully created a new token!",
     "error": "Something went wrong.",
     "your_api_keys": "Your API Keys",
@@ -192,7 +197,7 @@
   },
   "expired": {
     "expired_link": "Expired Link",
-    "expired_desc": "This link has expired. Please contact the owner of this link to get a  new one.",
+    "expired_desc": "This link has expired. Please contact the owner of this link to get a new one.",
     "create": "Create Your Free Branded Link"
   },
   "password": {
@@ -205,6 +210,7 @@
     "domain": "Domain",
     "link": "Link",
     "only": "Only",
+    "asn": "ASN",
     "total_clicks": "Total Clicks",
     "devices": "Devices",
     "no_data": "No data available",
@@ -223,7 +229,7 @@
     "share_stat": "Share stats for",
     "public_stat": "Public Stats Page",
     "share_link": "Share Link",
-    "stat_desc": "Making stats public will allow anyone with the link to see the  stats for this short link.",
+    "stat_desc": "This analytics can only be shared among workspace team members.",
     "no_tag": "No tags found in this workspace",
     "add_tag": "Add a tag",
     "filter_tags": "Filter tags",
@@ -355,24 +361,41 @@
     "complete": "Complete the following steps and start sharing your branded short links."
   },
   "admin": {
-    "impersonate_user": "Impersonate User",
-    "get_login_user": "Get a login link for a user.",
-    "impersonate_workspace": "Impersonate Workspace",
-    "get_login_workspace": "Get a login link for the owner of a workspace.",
-    "refresh_domain": "Refresh Domain",
-    "vercel": "Remove and re-add domain from Vercel",
-    "plan": "Plan",
-    "domains": "Domains",
-    "links": "Links",
-    "clicks": "Clicks",
-    "ban_confirm_1": "This will ban the user",
-    "ban_confirm_2": "and delete all their workspaces and links. Are you sure?",
-    "banned": "User has been banned",
-    "confirm_ban": "Confirm Ban"
+    "user_management": {
+      "user_management_title": "User Management",
+      "user_management_description": "Administrative actions to manage lists of users based on Roles.",
+      "user_search": "Search...",
+      "user_full_name": "Full Name",
+      "user_email": "Email Address",
+      "user_agency": "Agency",
+      "user_role": "Role",
+      "user_created": "Create At",
+      "user_showing": "Showing",
+      "user_of": "of",
+      "user_previous": "Previous",
+      "user_next": "Next"
+    },
+    "workspace_management": {
+      "workspace_management_title": "Workspace Management",
+      "workspace_management_description": "Administrative actions to manage lists of workspaces.",
+      "workspace_search": "Search...",
+      "workspace_short_link": "Short Link",
+      "workspace_redirect_url": "Redirect URL",
+      "workspace_workspace": "Workspace",
+      "workspace_owner": "Owner",
+      "workspace_banned": "Banned",
+      "workspace_created": "Create At",
+      "workspace_actions": "Actions",
+      "workspace_members": "Members",
+      "workspace_showing": "Showing",
+      "workspace_of": "of",
+      "workspace_previous": "Previous",
+      "workspace_next": "Next"
+    }
   },
   "welcome": {
     "welcome_to": "Welcome to ",
-    "welcome_desc": "gives you marketing superpowers  with short links that stand out.",
+    "welcome_desc": "is the official link shortener for the Malaysia government.",
     "get_started": "Get Started"
   },
   "INTERVAL_DISPLAYS": {
@@ -396,6 +419,7 @@
     "delete": "Delete",
     "unarchive": "Unarchive",
     "ban": "Ban",
+    "unban": "Unban",
     "more_options": "More Options"
   },
   "people": {
@@ -417,5 +441,16 @@
     "invite_link": "Invite Link",
     "invite_link_desc": "Allow other people to join your workspace through the link below.",
     "reset": "Reset invite link"
+  },
+  "metadata": {
+    "default_title": "GoGovMY - Link shortener for the Malaysia government.",
+    "default_description": " is the official link shortener for the Malaysia government.",
+    "sign_in_to": "Sign in to ",
+    "welcome_to": "Welcome to ",
+    "banned_link": "Banned Link",
+    "banned_desc": "This link has been banned for violating our terms of service.",
+    "expired_link": "Expired Link ",
+    "expired_desc": "This link has expired. Please contact the owner of this link to get a new one.",
+    "analytics": "Analytics for "
   }
 }

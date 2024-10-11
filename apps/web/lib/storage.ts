@@ -1,57 +1,52 @@
-import { fetchWithTimeout } from "@dub/utils";
-import { AwsClient } from "aws4fetch";
+import {
+  DeleteObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
+import { fetchWithTimeout } from '@dub/utils';
 
-interface imageOptions {
+interface ImageOptions {
   contentType?: string;
   width?: number;
   height?: number;
 }
 
 class StorageClient {
-  private client: AwsClient;
+  private client: S3Client;
+  private bucket: string;
 
   constructor() {
-    this.client = new AwsClient({
-      accessKeyId: process.env.STORAGE_ACCESS_KEY_ID || "",
-      secretAccessKey: process.env.STORAGE_SECRET_ACCESS_KEY || "",
-      service: "s3",
-      region: process.env.AWS_REGION,
-    });
+    this.client = new S3Client();
+    this.bucket = process.env.STORAGE_BUCKET_NAME!;
   }
 
-  async upload(key: string, body: Blob | Buffer | string, opts?: imageOptions) {
-    let uploadBody;
-    if (typeof body === "string") {
+  async upload(key: string, body: Blob | Buffer | string, opts?: ImageOptions) {
+    let uploadBody: Buffer;
+
+    if (typeof body === 'string') {
       if (this.isBase64(body)) {
-        uploadBody = this.base64ToArrayBuffer(body, opts);
+        uploadBody = this.base64ToBuffer(body);
       } else if (this.isUrl(body)) {
-        uploadBody = await this.urlToBlob(body, opts);
+        uploadBody = await this.urlToBuffer(body, opts);
       } else {
-        throw new Error("Invalid input: Not a base64 string or a valid URL");
+        throw new Error('Invalid input: Not a base64 string or a valid URL');
       }
+    } else if (body instanceof Blob) {
+      uploadBody = Buffer.from(await body.arrayBuffer());
     } else {
       uploadBody = body;
     }
 
-    const headers = {
-      "Content-Length": uploadBody.size.toString(),
-    };
-    if (opts?.contentType) headers["Content-Type"] = opts.contentType;
-
     try {
-      const res = await this.client.fetch(
-        `${process.env.STORAGE_ENDPOINT}/${key}`,
-        {
-          method: "PUT",
-          headers,
-          body: uploadBody,
-        },
+      await this.client.send(
+        new PutObjectCommand({
+          Bucket: this.bucket,
+          Key: key,
+          Body: Buffer.from(uploadBody),
+          ContentType: opts?.contentType,
+          ContentLength: uploadBody.byteLength,
+        }),
       );
-
-      if (!res.ok) {
-        throw new Error(`Request failed, response status code: ${res.status}`);
-      }
-
       return {
         url: `${process.env.STORAGE_BASE_URL}/${key}`,
       };
@@ -61,31 +56,22 @@ class StorageClient {
   }
 
   async delete(key: string) {
-    const res = await this.client.fetch(
-      `${process.env.STORAGE_ENDPOINT}/${key}`,
-      {
-        method: "DELETE",
-      },
+    await this.client.send(
+      new DeleteObjectCommand({
+        Bucket: this.bucket,
+        Key: key,
+      }),
     );
-
-    return { success: res.ok };
   }
 
-  private base64ToArrayBuffer(base64: string, opts?: imageOptions) {
-    const base64Data = base64.replace(/^data:.+;base64,/, "");
+  private base64ToBuffer(base64: string): Buffer {
+    const base64Data = base64.replace(/^data:.+;base64,/, '');
     const paddedBase64Data = base64Data.padEnd(
       base64Data.length + ((4 - (base64Data.length % 4)) % 4),
-      "=",
+      '=',
     );
 
-    const binaryString = atob(paddedBase64Data);
-    const byteArray = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-      byteArray[i] = binaryString.charCodeAt(i);
-    }
-    const blobProps = {};
-    if (opts?.contentType) blobProps["type"] = opts.contentType;
-    return new Blob([byteArray], blobProps);
+    return Buffer.from(paddedBase64Data, 'base64');
   }
 
   private isBase64(str: string): boolean {
@@ -102,15 +88,15 @@ class StorageClient {
     }
   }
 
-  private async urlToBlob(url: string, opts?: imageOptions): Promise<Blob> {
+  private async urlToBuffer(url: string, opts?: ImageOptions): Promise<Buffer> {
     let response: Response;
     if (opts?.height || opts?.width) {
       try {
-        const proxyUrl = new URL("https://wsrv.nl");
-        proxyUrl.searchParams.set("url", url);
-        if (opts.width) proxyUrl.searchParams.set("w", opts.width.toString());
-        if (opts.height) proxyUrl.searchParams.set("h", opts.height.toString());
-        proxyUrl.searchParams.set("fit", "cover");
+        const proxyUrl = new URL('https://wsrv.nl');
+        proxyUrl.searchParams.set('url', url);
+        if (opts.width) proxyUrl.searchParams.set('w', opts.width.toString());
+        if (opts.height) proxyUrl.searchParams.set('h', opts.height.toString());
+        proxyUrl.searchParams.set('fit', 'cover');
         response = await fetchWithTimeout(proxyUrl.toString());
       } catch (error) {
         response = await fetch(url);
@@ -122,15 +108,12 @@ class StorageClient {
       throw new Error(`Failed to fetch URL: ${response.statusText}`);
     }
     const blob = await response.blob();
-    if (opts?.contentType) {
-      return new Blob([blob], { type: opts.contentType });
-    }
-    return blob;
+    return Buffer.from(await blob.arrayBuffer());
   }
 }
 
 export const storage = new StorageClient();
 
 export const isStored = (url: string) => {
-  return url.startsWith(process.env.STORAGE_BASE_URL || "");
+  return url.startsWith(process.env.STORAGE_BASE_URL || '');
 };

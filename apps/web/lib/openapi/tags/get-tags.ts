@@ -1,28 +1,28 @@
-import { openApiErrorResponses } from "@/lib/openapi/responses";
-import z from "@/lib/zod";
-import { TagSchema } from "@/lib/zod/schemas/tags";
-import { ZodOpenApiOperationObject } from "zod-openapi";
-import { workspaceParamsSchema } from "../request";
+import { openApiErrorResponses } from '@/lib/openapi/responses';
+import z from '@/lib/zod';
+import { TagSchema } from '@/lib/zod/schemas/tags';
+import { ZodOpenApiOperationObject } from 'zod-openapi';
+import { workspaceParamsSchema } from '../request';
 
 export const getTags: ZodOpenApiOperationObject = {
-  operationId: "getTags",
-  "x-speakeasy-name-override": "list",
-  summary: "Retrieve a list of tags",
-  description: "Retrieve a list of tags for the authenticated workspace.",
+  operationId: 'getTags',
+  'x-speakeasy-name-override': 'list',
+  summary: 'Retrieve a list of tags',
+  description: 'Retrieve a list of tags for the authenticated workspace.',
   requestParams: {
     query: workspaceParamsSchema,
   },
   responses: {
-    "200": {
-      description: "A list of tags",
+    '200': {
+      description: 'A list of tags',
       content: {
-        "application/json": {
+        'application/json': {
           schema: z.array(TagSchema),
         },
       },
     },
     ...openApiErrorResponses,
   },
-  tags: ["Tags"],
+  tags: ['Tags'],
   security: [{ token: [] }],
 };

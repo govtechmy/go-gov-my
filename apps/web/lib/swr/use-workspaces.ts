@@ -1,11 +1,11 @@
-import { WorkspaceProps } from "@/lib/types";
-import { fetcher } from "@dub/utils";
-import useSWR from "swr";
+import { WorkspaceProps } from '@/lib/types';
+import { fetcher } from '@dub/utils';
+import useSWR from 'swr';
 
 export default function useWorkspaces(options?: { search?: string }) {
   const searchParams = new URLSearchParams();
   if (options?.search) {
-    searchParams.set("search", options.search);
+    searchParams.set('search', options.search);
   }
 
   const {

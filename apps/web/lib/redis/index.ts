@@ -1,11 +1,9 @@
-import { LinkProps, RedisLinkProps } from "@/lib/types";
-import { Redis } from "ioredis";
+import { LinkProps, RedisLinkProps } from '@/lib/types';
+import { Redis } from 'ioredis';
 
-if (!process.env.REDIS_URL) {
-  throw Error("environment variable 'REDIS_URL' is required");
-}
-
-export const redis = new Redis(process.env.REDIS_URL);
+export const redis = new Redis(process.env.REDIS_URL!, {
+  lazyConnect: true,
+});
 
 export async function formatRedisLink(
   link: LinkProps,
@@ -14,7 +12,6 @@ export async function formatRedisLink(
     id,
     domain,
     url,
-    password,
     proxy,
     expiresAt,
     expiredUrl,
@@ -23,12 +20,10 @@ export async function formatRedisLink(
     geo,
     projectId,
   } = link;
-  const hasPassword = password && password.length > 0 ? true : false;
 
   return {
     id,
     url,
-    ...(hasPassword && { password: true }),
     ...(proxy && { proxy: true }),
     ...(expiresAt && { expiresAt: new Date(expiresAt) }),
     ...(expiredUrl && { expiredUrl }),

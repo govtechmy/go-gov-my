@@ -6,12 +6,12 @@ export default function LoadingDots() {
           key={i}
           style={{
             animationDelay: `${0.2 * i}s`,
-            backgroundColor: "black",
-            width: "5px",
-            height: "5px",
-            borderRadius: "50%",
-            display: "inline-block",
-            margin: "0 1px",
+            backgroundColor: 'black',
+            width: '5px',
+            height: '5px',
+            borderRadius: '50%',
+            display: 'inline-block',
+            margin: '0 1px',
           }}
           className="animate-blink"
         />

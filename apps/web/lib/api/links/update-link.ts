@@ -1,19 +1,19 @@
-import { processDTOLink } from "@/lib/dto/link.dto";
-import { prisma } from "@/lib/prisma";
-import { formatRedisLink, redis } from "@/lib/redis";
-import { isStored, storage } from "@/lib/storage";
-import { LinkProps, ProcessedLinkProps } from "@/lib/types";
-import { SHORT_DOMAIN, getParamsFromURL, truncate } from "@dub/utils";
-import { trace } from "@opentelemetry/api";
-import { Prisma } from "@prisma/client";
-import { waitUntil } from "@vercel/functions";
-import { OUTBOX_ACTIONS } from "kafka-consumer/actions";
-import { addToHistory } from "./add-to-history";
-import generateIdempotencyKey from "./create-idempotency-key";
-import { combineTagIds, transformLink } from "./utils";
+import { processDTOLink } from '@/lib/dto/link.dto';
+import { prisma } from '@/lib/prisma';
+import { formatRedisLink, redis } from '@/lib/redis';
+import { isStored, storage } from '@/lib/storage';
+import { LinkProps, ProcessedLinkProps } from '@/lib/types';
+import { SHORT_DOMAIN, getParamsFromURL, truncate } from '@dub/utils';
+import { trace } from '@opentelemetry/api';
+import { Prisma } from '@prisma/client';
+import { waitUntil } from '@vercel/functions';
+import { OUTBOX_ACTIONS } from 'kafka-consumer/utils/actions';
+import { addToHistory } from './add-to-history';
+import generateIdempotencyKey from './create-idempotency-key';
+import { combineTagIds, transformLink } from './utils';
 
 const REDIRECT_SERVER_BASE_URL =
-  process.env.REDIRECT_SERVER_URL || "http://localhost:3002";
+  process.env.REDIRECT_SERVER_URL || 'http://localhost:3002';
 
 export async function updateLink({
   oldDomain = SHORT_DOMAIN,
@@ -24,7 +24,7 @@ export async function updateLink({
   oldDomain?: string;
   oldKey: string;
   updatedLink: ProcessedLinkProps &
-    Pick<LinkProps, "id" | "clicks" | "lastClicked" | "updatedAt">;
+    Pick<LinkProps, 'id' | 'clicks' | 'lastClicked' | 'updatedAt'>;
   /** To store user id who created/update the link in history */
   sessionUserId: string;
 }) {
@@ -42,8 +42,8 @@ export async function updateLink({
   } = updatedLink;
   const changedKey = key.toLowerCase() !== oldKey.toLowerCase();
   const changedDomain = domain !== oldDomain;
-  const tracer = trace.getTracer("default");
-  const span = tracer.startSpan("recordLinks");
+  const tracer = trace.getTracer('default');
+  const span = tracer.startSpan('recordLinks');
 
   const { utm_source, utm_medium, utm_campaign, utm_term, utm_content } =
     getParamsFromURL(url);
@@ -57,6 +57,7 @@ export async function updateLink({
     tagId,
     tagIds,
     tagNames,
+    password,
     ...rest
   } = updatedLink;
 
@@ -82,6 +83,7 @@ export async function updateLink({
       utm_content,
       expiresAt: expiresAt ? new Date(expiresAt) : null,
       geo: geo || Prisma.JsonNull,
+      passwordEnabledAt: password ? new Date() : undefined,
 
       // Associate tags by tagNames
       ...(tagNames &&
@@ -127,10 +129,13 @@ export async function updateLink({
   });
 
   // Transform into DTOs
-  const linkDTO = await processDTOLink(response);
+  const { payload, encryptedSecrets } = await processDTOLink({
+    ...response,
+    password,
+  });
 
   // For simplicity and centralized, lets create the idempotency key at this level
-  const headersJSON = generateIdempotencyKey(linkDTO.id, response.updatedAt);
+  const headersJSON = generateIdempotencyKey(payload.id, response.updatedAt);
 
   try {
     waitUntil(
@@ -155,16 +160,16 @@ export async function updateLink({
         prisma.webhookOutbox.create({
           data: {
             action: OUTBOX_ACTIONS.UPDATE_LINK,
-            // host: process.env.NEXT_PUBLIC_APP_DOMAIN || "go.gov.my",
-            host: REDIRECT_SERVER_BASE_URL + "/links",
-            payload: linkDTO as unknown as Prisma.InputJsonValue,
+            host: `${REDIRECT_SERVER_BASE_URL}/links/${payload.id}`,
+            payload: payload as unknown as Prisma.InputJsonValue,
             headers: headersJSON,
-            partitionKey: linkDTO.slug,
+            partitionKey: payload.slug,
+            encryptedSecrets,
           },
         }),
         addToHistory({
           ...response,
-          type: "update",
+          type: 'update',
           linkId: response.id,
           comittedByUserId: sessionUserId,
           timestamp: response.updatedAt,
@@ -173,7 +178,7 @@ export async function updateLink({
     );
 
     // Log results to OpenTelemetry
-    span.addEvent("recordLinks", {
+    span.addEvent('recordLinks', {
       link_id: response.id,
       domain: response.domain,
       key: response.key,

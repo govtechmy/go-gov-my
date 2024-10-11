@@ -1,10 +1,10 @@
 export const DEFAULT_LINK_PROPS: any = {
-  key: "",
-  url: "",
-  domain: "",
+  key: '',
+  url: '',
+  domain: '',
   archived: false,
   expiresAt: null,
-  password: null,
+  passwordEnabledAt: null,
 
   title: null,
   description: null,
@@ -14,17 +14,17 @@ export const DEFAULT_LINK_PROPS: any = {
   android: null,
 
   clicks: 0,
-  userId: "",
+  userId: '',
 
   proxy: false,
   tags: [],
 };
 
 export const GOOGLE_FAVICON_URL =
-  "https://www.google.com/s2/favicons?sz=64&domain_url=";
+  'https://www.google.com/s2/favicons?sz=64&domain_url=';
 
 export const DICEBEAR_AVATAR_URL =
-  "https://api.dicebear.com/7.x/initials/svg?backgroundType=gradientLinear&fontFamily=Helvetica&fontSize=40&seed=";
+  'https://api.dicebear.com/7.x/initials/svg?backgroundType=gradientLinear&fontFamily=Helvetica&fontSize=40&seed=';
 
 export const PAGINATION_LIMIT = 100;
 

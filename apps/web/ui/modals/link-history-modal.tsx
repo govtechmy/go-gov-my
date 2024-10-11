@@ -1,7 +1,7 @@
-import type { LinkHistory } from "@/lib/api/links/add-to-history";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { LoadingSpinner, Modal } from "@dub/ui";
-import { X } from "lucide-react";
+import type { LinkHistory } from '@/lib/api/links/add-to-history';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { LoadingSpinner, Modal } from '@dub/ui';
+import { X } from 'lucide-react';
 
 export default function LinkHistoryModal({
   history,
@@ -52,7 +52,7 @@ function LinkHistoryTimeline({ history }: { history: LinkHistory[] }) {
   return (
     <div>
       {history.map((h, i, arr) => {
-        if (h.type === "create") {
+        if (h.type === 'create') {
           return (
             <div className="flex gap-4 " key={i}>
               {arr.length > 1 && (
@@ -63,11 +63,12 @@ function LinkHistoryTimeline({ history }: { history: LinkHistory[] }) {
               )}
               <div className="my-2 flex-1 rounded-lg border p-4">
                 <h3 className="mb-4">
-                  {messages.link.history.created_on} {formatDate(h.timestamp)}
+                  {messages.link.history.created_on} {formatDate(h.timestamp)}{' '}
+                  by <strong>{h.committedByUser.name}</strong>
                 </h3>
                 <ul className="ml-4 list-disc">
                   <li>
-                    {`https://${h.domain}/${h.key}`}{" "}
+                    {`https://${h.domain}/${h.key}`}{' '}
                     {messages.link.history.was_created}
                   </li>
                 </ul>
@@ -87,7 +88,8 @@ function LinkHistoryTimeline({ history }: { history: LinkHistory[] }) {
             <VerticalTimeline isFirst={i === 0} isLast={i === arr.length - 1} />
             <div className="my-2 flex-1 rounded-lg border p-4">
               <h3 className="mb-4">
-                {messages.link.history.changes_on} {formatDate(h.timestamp)}
+                {messages.link.history.changes_on} {formatDate(h.timestamp)} by{' '}
+                <strong>{h.committedByUser.name}</strong>
               </h3>
               <ul className="ml-4 list-disc">
                 <UpdateMessages prev={prevHistory} curr={h} />
@@ -140,23 +142,22 @@ function UpdateMessages({
   const changes: React.ReactNode[] = [];
 
   const keysToInclude: (keyof LinkHistory)[] = [
-    "android",
-    "archived",
-    "description",
-    "domain",
-    "expiredUrl",
-    "expiresAt",
-    "externalId",
-    "geo",
-    "image",
-    "ios",
-    "key",
-    "password",
-    "proxy",
-    "publicStats",
-    "title",
-    "trackConversion",
-    "url",
+    'android',
+    'archived',
+    'description',
+    'domain',
+    'expiredUrl',
+    'expiresAt',
+    'externalId',
+    'geo',
+    'image',
+    'ios',
+    'key',
+    'proxy',
+    'publicStats',
+    'title',
+    'trackConversion',
+    'url',
   ];
 
   function formatKey(key: keyof LinkHistory): string {
@@ -178,10 +179,10 @@ function UpdateMessages({
     if (currVal instanceof Date) currVal = formatDate(currVal);
     if (prevVal instanceof Date) prevVal = formatDate(prevVal);
 
-    if (key === "archived") {
+    if (key === 'archived') {
       changes.push(
         <li>
-          Link was{" "}
+          Link was{' '}
           <strong>
             {currVal
               ? messages.link.history.archived
@@ -192,10 +193,10 @@ function UpdateMessages({
       continue;
     }
 
-    if (typeof prevVal === "boolean" && typeof currVal === "boolean") {
+    if (typeof prevVal === 'boolean' && typeof currVal === 'boolean') {
       changes.push(
         <li>
-          <strong>{formatKey(key)}</strong> {messages.link.history.was}{" "}
+          <strong>{formatKey(key)}</strong> {messages.link.history.was}{' '}
           <strong>
             {currVal
               ? messages.link.history.enabled
@@ -209,8 +210,14 @@ function UpdateMessages({
     if (!prevVal && currVal) {
       changes.push(
         <li>
-          <strong>{formatKey(key)}</strong> {messages.link.history.was_set_to}{" "}
-          <strong>{currVal.toString()}</strong>
+          <strong>{formatKey(key)}</strong> {messages.link.history.was_set_to}{' '}
+          <strong>
+            {key === 'geo'
+              ? Object.entries(currVal)
+                  .map(([k, v]) => `${k} : ${v}`)
+                  .join(', ')
+              : currVal?.toString()}
+          </strong>
         </li>,
       );
       continue;
@@ -219,7 +226,7 @@ function UpdateMessages({
     if (prevVal && !currVal) {
       changes.push(
         <li>
-          <strong>{formatKey(key)}</strong> {messages.link.history.was}{" "}
+          <strong>{formatKey(key)}</strong> {messages.link.history.was}{' '}
           <strong>removed</strong>
         </li>,
       );
@@ -229,10 +236,25 @@ function UpdateMessages({
     if (typeof prevVal === typeof currVal) {
       changes.push(
         <li>
-          <strong>{formatKey(key)}</strong>{" "}
-          {messages.link.history.was_changed_from}{" "}
-          <strong>{prevVal?.toString()}</strong> {messages.link.history.to}{" "}
-          <strong>{currVal?.toString()}</strong>
+          <strong>{formatKey(key)}</strong>{' '}
+          {key === 'geo' && typeof prevVal === 'object' && prevVal !== null
+            ? messages.link.history.was_set_to + ' '
+            : messages.link.history.was_changed_from + ' '}
+          <strong>
+            {key === 'geo' && typeof prevVal === 'object' && prevVal !== null
+              ? ' '
+              : prevVal?.toString()}
+          </strong>{' '}
+          {key === 'geo' && typeof prevVal === 'object' && prevVal !== null
+            ? ''
+            : messages.link.history.to + ' '}
+          <strong>
+            {key === 'geo' && typeof currVal === 'object' && currVal !== null
+              ? Object.entries(currVal)
+                  .map(([k, v]) => `${k} : ${v}`)
+                  .join(', ')
+              : currVal?.toString()}
+          </strong>
         </li>,
       );
       continue;

@@ -1,11 +1,11 @@
-import { getSession } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { LoadingSpinner, Logo } from "@dub/ui";
-import { APP_NAME } from "@dub/utils";
-import { redirect } from "next/navigation";
-import { Suspense } from "react";
+import { getSession } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { LoadingSpinner, Logo } from '@dub/ui';
+import { APP_NAME } from '@dub/utils';
+import { redirect } from 'next/navigation';
+import { Suspense } from 'react';
 
-export const runtime = "nodejs";
+export const runtime = 'nodejs';
 
 const PageCopy = ({ title, message }: { title: string; message: string }) => {
   return (
@@ -49,7 +49,7 @@ async function VerifyInvite({ code }: { code: string }) {
   const session = await getSession();
 
   if (!session) {
-    redirect("/login");
+    redirect('/login');
   }
 
   const workspace = await prisma.project.findUnique({
@@ -59,18 +59,12 @@ async function VerifyInvite({ code }: { code: string }) {
     select: {
       id: true,
       slug: true,
-      usersLimit: true,
       users: {
         where: {
           userId: session.user.id,
         },
         select: {
           role: true,
-        },
-      },
-      _count: {
-        select: {
-          users: true,
         },
       },
     },
@@ -90,15 +84,6 @@ async function VerifyInvite({ code }: { code: string }) {
   // check if user is already in the workspace
   if (workspace.users.length > 0) {
     redirect(`/${workspace.slug}`);
-  }
-
-  if (workspace._count.users >= workspace.usersLimit) {
-    return (
-      <PageCopy
-        title="User Limit Reached"
-        message="The workspace you are trying to join is currently full. Please contact the workspace owner for more information."
-      />
-    );
   }
 
   await prisma.projectUsers.create({

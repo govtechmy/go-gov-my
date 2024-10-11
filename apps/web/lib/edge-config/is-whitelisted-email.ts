@@ -1,4 +1,4 @@
-import { get } from "@vercel/edge-config";
+import { get } from '@vercel/edge-config';
 
 export const isWhitelistedEmail = async (email: string) => {
   if (!process.env.NEXT_PUBLIC_IS_DUB || !process.env.EDGE_CONFIG) {
@@ -7,7 +7,7 @@ export const isWhitelistedEmail = async (email: string) => {
 
   let whitelistedEmails;
   try {
-    whitelistedEmails = await get("whitelistedEmails");
+    whitelistedEmails = await get('whitelistedEmails');
   } catch (e) {
     whitelistedEmails = [];
   }

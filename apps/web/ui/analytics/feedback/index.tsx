@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { Button } from "@dub/ui";
-import { AnimatePresence, motion } from "framer-motion";
-import { CheckCircle } from "lucide-react";
-import { useState } from "react";
-import { useFormStatus } from "react-dom";
-import { submitFeedback } from "./action";
+import { Button } from '@dub/ui';
+import { AnimatePresence, motion } from 'framer-motion';
+import { CheckCircle } from 'lucide-react';
+import { useState } from 'react';
+import { useFormStatus } from 'react-dom';
+import { submitFeedback } from './action';
 
 export default function Feedback() {
   const [submitted, setSubmitted] = useState(false);

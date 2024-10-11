@@ -1,13 +1,13 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { LoadingSpinner } from "@dub/ui";
-import { fetcher, nFormatter } from "@dub/utils";
-import { useCallback, useContext, useMemo } from "react";
-import useSWR from "swr";
-import { AnalyticsContext } from ".";
-import Areas from "../charts/areas";
-import TimeSeriesChart from "../charts/time-series-chart";
-import XAxis from "../charts/x-axis";
-import YAxis from "../charts/y-axis";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { LoadingSpinner } from '@dub/ui';
+import { fetcher, nFormatter } from '@dub/utils';
+import { useCallback, useContext, useMemo } from 'react';
+import useSWR from 'swr';
+import { AnalyticsContext } from '.';
+import Areas from '../charts/areas';
+import TimeSeriesChart from '../charts/time-series-chart';
+import XAxis from '../charts/x-axis';
+import YAxis from '../charts/y-axis';
 
 export default function ClicksChart() {
   const { baseApiPath, queryString, interval } = useContext(AnalyticsContext);
@@ -31,24 +31,23 @@ export default function ClicksChart() {
   const formatDate = useCallback(
     (date: Date) => {
       switch (interval) {
-        case "1h":
-        case "24h":
-          return date.toLocaleTimeString("en-US", {
-            hour: "numeric",
-            minute: "numeric",
+        case '1h':
+        case '24h':
+          return date.toLocaleTimeString('en-GB', {
+            hour: 'numeric',
+            minute: 'numeric',
           });
-        case "ytd":
-        case "1y":
-        case "all":
-          return date.toLocaleDateString("en-US", {
-            month: "short",
-            year: "numeric",
+        case '1y':
+        case 'all':
+          return date.toLocaleDateString('en-GB', {
+            month: 'short',
+            day: 'numeric',
+            year: '2-digit',
           });
         default:
-          return date.toLocaleDateString("en-US", {
-            weekday: "short",
-            month: "short",
-            day: "numeric",
+          return date.toLocaleDateString('en-GB', {
+            month: 'short',
+            day: 'numeric',
           });
       }
     },
@@ -61,13 +60,13 @@ export default function ClicksChart() {
         <TimeSeriesChart
           key={queryString}
           data={chartData}
-          series={[{ id: "clicks", valueAccessor: (d) => d.values.clicks }]}
+          series={[{ id: 'clicks', valueAccessor: (d) => d.values.clicks }]}
           tooltipContent={(d) => (
             <>
               <p className="text-gray-700">
                 <strong className="text-gray-800">
                   {nFormatter(d.values.clicks, { full: true })}
-                </strong>{" "}
+                </strong>{' '}
                 {messages?.workspace.click}
               </p>
               <p className="text-sm text-gray-500">{formatDate(d.date)}</p>

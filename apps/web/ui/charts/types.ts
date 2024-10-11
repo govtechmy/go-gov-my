@@ -1,8 +1,8 @@
-import { ScaleTypeToD3Scale } from "@visx/scale";
-import { TooltipWithBounds } from "@visx/tooltip";
-import { UseTooltipParams } from "@visx/tooltip/lib/hooks/useTooltip";
-import { TooltipInPortalProps } from "@visx/tooltip/lib/hooks/useTooltipInPortal";
-import { Dispatch, FC, ReactElement, SetStateAction } from "react";
+import { ScaleTypeToD3Scale } from '@visx/scale';
+import { TooltipWithBounds } from '@visx/tooltip';
+import { UseTooltipParams } from '@visx/tooltip/lib/hooks/useTooltip';
+import { TooltipInPortalProps } from '@visx/tooltip/lib/hooks/useTooltipInPortal';
+import { Dispatch, FC, ReactElement, SetStateAction } from 'react';
 
 export type Datum = Record<string, any>;
 
@@ -60,8 +60,8 @@ export type ChartContext<T extends Datum = any> = Required<ChartProps<T>> & {
   height: number;
   startDate: Date;
   endDate: Date;
-  xScale: ScaleTypeToD3Scale<number>["utc"];
-  yScale: ScaleTypeToD3Scale<number>["linear"];
+  xScale: ScaleTypeToD3Scale<number>['utc'];
+  yScale: ScaleTypeToD3Scale<number>['linear'];
   minY: number;
   maxY: number;
   leftAxisMargin?: number;

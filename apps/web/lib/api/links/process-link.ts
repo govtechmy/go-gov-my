@@ -1,8 +1,8 @@
-import { isBlacklistedDomain, updateConfig } from "@/lib/edge-config";
-import { getPangeaDomainIntel } from "@/lib/pangea";
-import { prisma } from "@/lib/prisma";
-import { NewLinkProps, ProcessedLinkProps, WorkspaceProps } from "@/lib/types";
-import { checkIfUserExists, getRandomKey } from "@/lib/userinfos";
+import { isBlacklistedDomain, updateConfig } from '@/lib/edge-config';
+import { getPangeaDomainIntel } from '@/lib/pangea';
+import { prisma } from '@/lib/prisma';
+import { NewLinkProps, ProcessedLinkProps, WorkspaceProps } from '@/lib/types';
+import { checkIfUserExists, getRandomKey } from '@/lib/userinfos';
 import {
   SHORT_DOMAIN,
   getApexDomain,
@@ -11,8 +11,8 @@ import {
   isValidUrl,
   log,
   parseDateTime,
-} from "@dub/utils";
-import { combineTagIds, keyChecks, processKey } from "./utils";
+} from '@dub/utils';
+import { combineTagIds, keyChecks, processKey } from './utils';
 
 export async function processLink<T extends Record<string, any>>({
   payload,
@@ -50,16 +50,16 @@ export async function processLink<T extends Record<string, any>>({
   if (!url) {
     return {
       link: payload,
-      error: "Missing destination url.",
-      code: "bad_request",
+      error: 'Missing destination url.',
+      code: 'bad_request',
     };
   }
   url = getUrlFromString(url);
   if (!isValidUrl(url)) {
     return {
       link: payload,
-      error: "Invalid destination url.",
-      code: "unprocessable_entity",
+      error: 'Invalid destination url.',
+      code: 'unprocessable_entity',
     };
   }
 
@@ -72,8 +72,8 @@ export async function processLink<T extends Record<string, any>>({
     if (!userExists) {
       return {
         link: payload,
-        error: "Session expired. Please log in again.",
-        code: "not_found",
+        error: 'Session expired. Please log in again.',
+        code: 'not_found',
       };
     }
   }
@@ -82,23 +82,23 @@ export async function processLink<T extends Record<string, any>>({
   if (isMaliciousLink) {
     return {
       link: payload,
-      error: "Malicious URL detected",
-      code: "unprocessable_entity",
+      error: 'Malicious URL detected',
+      code: 'unprocessable_entity',
     };
   }
 
   if (!key) {
     key = await getRandomKey({
       domain,
-      prefix: payload["prefix"],
+      prefix: payload['prefix'],
     });
   } else if (!skipKeyChecks) {
     const processedKey = processKey(key);
     if (processedKey === null) {
       return {
         link: payload,
-        error: "Invalid key.",
-        code: "unprocessable_entity",
+        error: 'Invalid key.',
+        code: 'unprocessable_entity',
       };
     }
     key = processedKey;
@@ -116,15 +116,15 @@ export async function processLink<T extends Record<string, any>>({
     if (image) {
       return {
         link: payload,
-        error: "You cannot set custom social cards with bulk link creation.",
-        code: "unprocessable_entity",
+        error: 'You cannot set custom social cards with bulk link creation.',
+        code: 'unprocessable_entity',
       };
     }
     if (rewrite) {
       return {
         link: payload,
-        error: "You cannot use link cloaking with bulk link creation.",
-        code: "unprocessable_entity",
+        error: 'You cannot use link cloaking with bulk link creation.',
+        code: 'unprocessable_entity',
       };
     }
 
@@ -144,21 +144,21 @@ export async function processLink<T extends Record<string, any>>({
         return {
           link: payload,
           error:
-            "Invalid tagIds detected: " +
+            'Invalid tagIds detected: ' +
             tagIds
               .filter(
                 (tagId) => tags.find(({ id }) => tagId === id) === undefined,
               )
-              .join(", "),
-          code: "unprocessable_entity",
+              .join(', '),
+          code: 'unprocessable_entity',
         };
       }
     } catch (e) {
-      if (e?.code === "P2023") {
+      if (e?.code === 'P2023') {
         return {
           link: payload,
-          error: "Invalid tagIds detected: invalid",
-          code: "unprocessable_entity",
+          error: 'Invalid tagIds detected: invalid',
+          code: 'unprocessable_entity',
         };
       }
       return {
@@ -182,26 +182,27 @@ export async function processLink<T extends Record<string, any>>({
       return {
         link: payload,
         error:
-          "Invalid tagNames detected: " +
+          'Invalid tagNames detected: ' +
           tagNames
             .filter(
               (tagName) =>
                 tags.find(({ name }) => tagName === name) === undefined,
             )
-            .join(", "),
-        code: "unprocessable_entity",
+            .join(', '),
+        code: 'unprocessable_entity',
       };
     }
   }
 
+  /// Farhan 20240912: We don't need this anymore since we are connecting to GovTech AWS SSO
   // custom social media image checks (see if R2 is configured)
-  if (proxy && !process.env.STORAGE_SECRET_ACCESS_KEY) {
-    return {
-      link: payload,
-      error: "Missing storage access key.",
-      code: "bad_request",
-    };
-  }
+  // if (proxy && !process.env.STORAGE_SECRET_ACCESS_KEY) {
+  //   return {
+  //     link: payload,
+  //     error: "Missing storage access key.",
+  //     code: "bad_request",
+  //   };
+  // }
 
   // expire date checks
   if (expiresAt) {
@@ -209,8 +210,8 @@ export async function processLink<T extends Record<string, any>>({
     if (!datetime) {
       return {
         link: payload,
-        error: "Invalid expiration date.",
-        code: "unprocessable_entity",
+        error: 'Invalid expiration date.',
+        code: 'unprocessable_entity',
       };
     }
     expiresAt = datetime;
@@ -219,17 +220,17 @@ export async function processLink<T extends Record<string, any>>({
       if (!isValidUrl(expiredUrl)) {
         return {
           link: payload,
-          error: "Invalid expired URL.",
-          code: "unprocessable_entity",
+          error: 'Invalid expired URL.',
+          code: 'unprocessable_entity',
         };
       }
     }
   }
 
   // remove polyfill attributes from payload
-  delete payload["shortLink"];
-  delete payload["qrCode"];
-  delete payload["prefix"];
+  delete payload['shortLink'];
+  delete payload['qrCode'];
+  delete payload['prefix'];
 
   return {
     link: {
@@ -261,7 +262,7 @@ async function maliciousLinkCheck(url: string) {
   const domainBlacklisted = await isBlacklistedDomain({ domain, apexDomain });
   if (domainBlacklisted === true) {
     return true;
-  } else if (domainBlacklisted === "whitelisted") {
+  } else if (domainBlacklisted === 'whitelisted') {
     return false;
   }
 
@@ -271,23 +272,23 @@ async function maliciousLinkCheck(url: string) {
       const response = await getPangeaDomainIntel(domain);
 
       const verdict = response.result.data[apexDomain].verdict;
-      console.log("Pangea verdict for domain", apexDomain, verdict);
+      console.log('Pangea verdict for domain', apexDomain, verdict);
 
-      if (verdict === "benign") {
+      if (verdict === 'benign') {
         await updateConfig({
-          key: "whitelistedDomains",
+          key: 'whitelistedDomains',
           value: domain,
         });
         return false;
-      } else if (verdict === "malicious" || verdict === "suspicious") {
+      } else if (verdict === 'malicious' || verdict === 'suspicious') {
         await Promise.all([
           updateConfig({
-            key: "domains",
+            key: 'domains',
             value: domain,
           }),
           log({
             message: `Suspicious link detected via Pangea → ${url}`,
-            type: "links",
+            type: 'links',
             mention: true,
           }),
         ]);
@@ -295,7 +296,7 @@ async function maliciousLinkCheck(url: string) {
         return true;
       }
     } catch (e) {
-      console.error("Error checking domain with Pangea", e);
+      console.error('Error checking domain with Pangea', e);
     }
   }
 

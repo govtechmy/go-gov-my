@@ -1,7 +1,7 @@
-import { WorkspaceUserProps } from "@/lib/types";
-import { fetcher } from "@dub/utils";
-import useSWR from "swr";
-import useWorkspace from "./use-workspace";
+import { WorkspaceUserProps } from '@/lib/types';
+import { fetcher } from '@dub/utils';
+import useSWR from 'swr';
+import useWorkspace from './use-workspace';
 
 export default function useUsers({ invites }: { invites?: boolean } = {}) {
   const { id } = useWorkspace();

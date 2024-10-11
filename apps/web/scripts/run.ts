@@ -1,15 +1,15 @@
 // runner.ts
-import { exec } from "child_process";
+import { exec } from 'child_process';
 
 const command: string = process.argv[2];
 
 if (!command) {
-  console.error("Please provide a command name.");
+  console.error('Please provide a command name.');
   process.exit(1);
 }
 
 const scriptPath = `./scripts/${command}.${
-  command === "send-emails" ? "tsx" : "ts"
+  command === 'send-emails' ? 'tsx' : 'ts'
 }`;
 
 exec(

@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { cn } from "@dub/utils";
-import * as Popover from "@radix-ui/react-popover";
-import { BoxSelect, Home, LayoutGrid, Type } from "lucide-react";
-import { useParams } from "next/navigation";
-import { MouseEvent, useCallback, useContext, useState } from "react";
-import { toast } from "sonner";
-import { Button, ButtonProps } from "./button";
-import { Logo } from "./logo";
-import { NavContext } from "./nav";
-import { Wordmark } from "./wordmark";
+import { cn } from '@dub/utils';
+import * as Popover from '@radix-ui/react-popover';
+import { BoxSelect, Home, LayoutGrid, Type } from 'lucide-react';
+import { useParams } from 'next/navigation';
+import { MouseEvent, useCallback, useContext, useState } from 'react';
+import { toast } from 'sonner';
+import { Button, ButtonProps } from './button';
+import { Logo } from './logo';
+import { NavContext } from './nav';
+import { Wordmark } from './wordmark';
 
 // Copied from apps/web/public/_static/logo.svg
 const logoSvg = `
@@ -36,10 +36,10 @@ const wordmarkSvg = `
 async function copy(text: string) {
   try {
     await navigator.clipboard.writeText(text);
-    toast.success("Copied to clipboard!");
+    toast.success('Copied to clipboard!');
   } catch (e) {
-    console.error("Failed to copy to clipboard.", e);
-    toast.error("Failed to copy to clipboard.");
+    console.error('Failed to copy to clipboard.', e);
+    toast.error('Failed to copy to clipboard.');
   }
 }
 
@@ -48,15 +48,15 @@ async function copy(text: string) {
  * for use in the top site nav
  */
 export function NavLogo({
-  variant = "full",
+  variant = 'full',
   isInApp,
   className,
 }: {
-  variant?: "full" | "symbol";
+  variant?: 'full' | 'symbol';
   isInApp?: boolean;
   className?: string;
 }) {
-  const { domain = "dub.co" } = useParams() as { domain: string };
+  const { domain = 'dub.co' } = useParams() as { domain: string };
 
   const { theme } = useContext(NavContext);
 
@@ -71,12 +71,12 @@ export function NavLogo({
     <Popover.Root open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
       <Popover.Anchor asChild>
         <div onContextMenu={handleContextMenu} className="max-w-fit">
-          {variant === "full" ? (
+          {variant === 'full' ? (
             <Wordmark className={className} />
           ) : (
             <Logo
               className={cn(
-                "h-8 w-8 transition-all duration-75 active:scale-95",
+                'h-8 w-8 transition-all duration-75 active:scale-95',
                 className,
               )}
             />
@@ -88,8 +88,8 @@ export function NavLogo({
           sideOffset={14}
           align="start"
           className={cn(
-            "z-50 -mt-1.5 -translate-x-10",
-            theme === "dark" && "dark",
+            'z-50 -mt-1.5 -translate-x-10',
+            theme === 'dark' && 'dark',
           )}
           onClick={(e) => {
             e.stopPropagation();
@@ -112,22 +112,37 @@ export function NavLogo({
             <ContextMenuButton
               text="Brand Guidelines"
               variant="outline"
-              onClick={() => window.open("https://dub.co/brand", "_blank")}
+              onClick={() =>
+                window.open(
+                  `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}/brand`,
+                  '_blank',
+                )
+              }
               icon={<BoxSelect strokeWidth={2} className="h-4 w-4" />}
             />
             {/* If it's in the app or it's a domain placeholder page (not dub.co homepage), show the home button */}
-            {isInApp || domain != "dub.co" ? (
+            {isInApp || domain != 'dub.co' ? (
               <ContextMenuButton
                 text="Home Page"
                 variant="outline"
-                onClick={() => window.open("https://dub.co", "_blank")}
+                onClick={() =>
+                  window.open(
+                    `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}`,
+                    '_blank',
+                  )
+                }
                 icon={<Home strokeWidth={2} className="h-4 w-4" />}
               />
             ) : (
               <ContextMenuButton
                 text="Dashboard"
                 variant="outline"
-                onClick={() => window.open("https://app.dub.co", "_blank")}
+                onClick={() =>
+                  window.open(
+                    `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}`,
+                    '_blank',
+                  )
+                }
                 icon={<LayoutGrid strokeWidth={2} className="h-4 w-4" />}
               />
             )}
@@ -142,7 +157,7 @@ function ContextMenuButton({ className, ...rest }: ButtonProps) {
   return (
     <Button
       className={cn(
-        "h-9 justify-start px-3 font-medium hover:text-gray-700 dark:text-white/70 dark:hover:bg-white/[0.15] dark:hover:text-white",
+        'h-9 justify-start px-3 font-medium hover:text-gray-700 dark:text-white/70 dark:hover:bg-white/[0.15] dark:hover:text-white',
         className,
       )}
       {...rest}

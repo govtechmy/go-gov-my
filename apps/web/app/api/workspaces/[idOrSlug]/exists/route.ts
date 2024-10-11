@@ -1,8 +1,8 @@
-import { withSession } from "@/lib/auth";
-import { isReservedKey } from "@/lib/edge-config";
-import { prisma } from "@/lib/prisma";
-import { DEFAULT_REDIRECTS } from "@dub/utils";
-import { NextResponse } from "next/server";
+import { withSession } from '@/lib/auth';
+import { isReservedKey } from '@/lib/edge-config';
+import { prisma } from '@/lib/prisma';
+import { DEFAULT_REDIRECTS } from '@dub/utils';
+import { NextResponse } from 'next/server';
 
 // GET /api/workspaces/[idOrSlug]/exists – check if a project exists
 export const GET = withSession(async ({ params }) => {

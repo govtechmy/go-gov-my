@@ -1,19 +1,19 @@
-import { useRouterStuff } from "@dub/ui";
-import { fetcher } from "@dub/utils";
-import { useSession } from "next-auth/react";
-import useSWR from "swr";
-import useWorkspace from "./use-workspace";
+import { useRouterStuff } from '@dub/ui';
+import { fetcher } from '@dub/utils';
+import { useSession } from 'next-auth/react';
+import useSWR from 'swr';
+import useWorkspace from './use-workspace';
 
 export default function useLinksCount({
   groupBy,
 }: {
-  groupBy?: "domain" | "tagId";
+  groupBy?: 'domain' | 'tagId';
 } = {}) {
   const { id } = useWorkspace();
   const { getQueryString } = useRouterStuff();
   const { data: session } = useSession();
 
-  const admin = session?.user.role === "super_admin";
+  const admin = session?.user.role === 'super_admin';
 
   const { data, error } = useSWR<any>(
     id
@@ -23,7 +23,7 @@ export default function useLinksCount({
             ...(groupBy && { groupBy }),
           },
           {
-            ignore: ["import", "upgrade", "newLink"],
+            ignore: ['import', 'upgrade', 'newLink'],
           },
         )}`
       : admin

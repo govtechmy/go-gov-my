@@ -1,18 +1,18 @@
-import { LocationTabs } from "@/lib/analytics/types";
-import { formatAnalyticsEndpoint } from "@/lib/analytics/utils";
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { LoadingSpinner, Modal, TabSelect, useRouterStuff } from "@dub/ui";
-import { COUNTRIES, fetcher } from "@dub/utils";
-import { Maximize } from "lucide-react";
-import { useContext, useMemo, useState } from "react";
-import useSWR from "swr";
-import { AnalyticsContext } from ".";
-import BarList from "./bar-list";
+import { LocationTabs } from '@/lib/analytics/types';
+import { formatAnalyticsEndpoint } from '@/lib/analytics/utils';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { LoadingSpinner, Modal, TabSelect, useRouterStuff } from '@dub/ui';
+import { COUNTRIES, fetcher } from '@dub/utils';
+import { Maximize, Network } from 'lucide-react';
+import { useContext, useMemo, useState } from 'react';
+import useSWR from 'swr';
+import { AnalyticsContext } from '.';
+import BarList from './bar-list';
 
 export default function Locations() {
-  const [tab, setTab] = useState<LocationTabs>("countries");
+  const [tab, setTab] = useState<LocationTabs>('countries');
   const singularTabName = useMemo(
-    () => formatAnalyticsEndpoint(tab, "singular"),
+    () => formatAnalyticsEndpoint(tab, 'singular'),
     [tab],
   );
 
@@ -21,10 +21,15 @@ export default function Locations() {
 
   const { baseApiPath, queryString } = useContext(AnalyticsContext);
 
-  const { data } = useSWR<{ country: string; city: string; clicks: number }[]>(
-    `${baseApiPath}/${tab}?${queryString}`,
-    fetcher,
-  );
+  const { data } = useSWR<
+    {
+      country: string;
+      city: string;
+      asn: string;
+      organization: string;
+      clicks: number;
+    }[]
+  >(`${baseApiPath}/${tab}?${queryString}`, fetcher);
 
   const { queryParams } = useRouterStuff();
   const [showModal, setShowModal] = useState(false);
@@ -34,14 +39,22 @@ export default function Locations() {
       tab={singularTabName}
       data={
         data?.map((d) => ({
-          icon: (
-            <img
-              alt={d.country}
-              src={`https://flag.vercel.app/m/${d.country}.svg`}
-              className="h-3 w-5"
-            />
-          ),
-          title: tab === "countries" ? COUNTRIES[d.country] : d.city,
+          icon:
+            tab === 'asn' ? (
+              <Network className="h-4 w-4" />
+            ) : (
+              <img
+                alt={d.country}
+                src={`https://flag.vercel.app/m/${d.country}.svg`}
+                className="h-3 w-5"
+              />
+            ),
+          title:
+            tab === 'countries'
+              ? COUNTRIES[d.country]
+              : tab === 'cities'
+                ? d.city
+                : `${d.asn} - ${d.organization}`,
           href: queryParams({
             set: {
               [singularTabName]: d[singularTabName],
@@ -70,14 +83,13 @@ export default function Locations() {
         </div>
         {barList()}
       </Modal>
-      <div className="scrollbar-hide relative z-0 h-[400px] border border-gray-200 bg-white px-7 py-5  sm:rounded-lg sm:border-gray-100 sm:shadow-lg">
+      <div className="scrollbar-hide relative z-0 h-[400px] border border-gray-200 bg-white px-7 py-5 sm:rounded-lg sm:border-gray-100 sm:shadow-lg">
         <div className="mb-3 flex justify-between">
           <h1 className="text-lg font-semibold">{message?.locations}</h1>
           <TabSelect
-            options={["countries", "cities"]}
+            options={['countries', 'cities', 'asn']}
             selected={tab}
-            // @ts-ignore
-            selectAction={setTab}
+            selectAction={(option) => setTab(option as LocationTabs)}
             translation={message}
           />
         </div>

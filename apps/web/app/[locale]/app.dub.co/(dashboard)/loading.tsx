@@ -1,1 +1,1 @@
-export { default } from "@/ui/layout/layout-loader";
+export { default } from '@/ui/layout/layout-loader';

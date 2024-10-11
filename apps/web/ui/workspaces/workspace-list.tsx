@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import NoWorkspacesPlaceholder from "@/ui/workspaces/no-workspaces-placeholder";
-import WorkspaceCard from "@/ui/workspaces/workspace-card";
-import WorkspaceCardPlaceholder from "./workspace-card-placeholder";
-import { useWorkspaceListContext } from "./workspace-list-context";
+import NoWorkspacesPlaceholder from '@/ui/workspaces/no-workspaces-placeholder';
+import WorkspaceCard from '@/ui/workspaces/workspace-card';
+import WorkspaceCardPlaceholder from './workspace-card-placeholder';
+import { useWorkspaceListContext } from './workspace-list-context';
 
 export default function WorkspaceList() {
   const { workspaces, loading } = useWorkspaceListContext();

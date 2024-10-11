@@ -1,17 +1,17 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { CheckCircleFill } from "@/ui/shared/icons";
-import { Button, FileUpload, LoadingSpinner, useEnterSubmit } from "@dub/ui";
-import { useCompletion } from "ai/react";
-import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft, Paperclip, Trash2 } from "lucide-react";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import TextareaAutosize from "react-textarea-autosize";
-import { toast } from "sonner";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { CheckCircleFill } from '@/ui/shared/icons';
+import { Button, FileUpload, LoadingSpinner, useEnterSubmit } from '@dub/ui';
+import { useCompletion } from 'ai/react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ChevronLeft, Paperclip, Trash2 } from 'lucide-react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
+import { toast } from 'sonner';
 
 export function ContactForm({
   setScreen,
 }: {
-  setScreen: Dispatch<SetStateAction<"main" | "contact">>;
+  setScreen: Dispatch<SetStateAction<'main' | 'contact'>>;
 }) {
   const [data, setData] = useState<{
     title: string | null;
@@ -19,7 +19,7 @@ export function ContactForm({
     attachmentIds: string[];
   }>({
     title: null,
-    message: "",
+    message: '',
     attachmentIds: [],
   });
   const { messages, locale } = useIntlClientHook();
@@ -41,17 +41,17 @@ export function ContactForm({
       uploadFormUrl,
       uploadFormData,
     } = await fetch(`/api/support/upload?name=${file.name}&size=${file.size}`, {
-      method: "GET",
+      method: 'GET',
     }).then((res) => res.json());
 
     const form = new FormData();
     uploadFormData.forEach(({ key, value }) => {
       form.append(key, value);
     });
-    form.append("file", file);
+    form.append('file', file);
 
     fetch(uploadFormUrl, {
-      method: "POST",
+      method: 'POST',
       body: form,
     })
       .then((res) => {
@@ -60,7 +60,7 @@ export function ContactForm({
         }
       })
       .catch((err) => {
-        console.error("Error uploading file:", err.message ? err.message : err);
+        console.error('Error uploading file:', err.message ? err.message : err);
       });
 
     setUploads((prev) =>
@@ -77,8 +77,8 @@ export function ContactForm({
   };
 
   const formRef = useRef<HTMLFormElement>(null);
-  const [formStatus, setFormStatus] = useState<"idle" | "loading" | "success">(
-    "idle",
+  const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success'>(
+    'idle',
   );
 
   const { handleKeyDown } = useEnterSubmit(formRef);
@@ -101,7 +101,7 @@ export function ContactForm({
       <button
         type="button"
         className="-ml-2 flex items-center space-x-1 px-2 py-1"
-        onClick={() => setScreen("main")}
+        onClick={() => setScreen('main')}
       >
         <ChevronLeft className="h-5 w-5" />
         <h3 className="text-lg font-semibold text-gray-700">
@@ -110,7 +110,7 @@ export function ContactForm({
       </button>
 
       <AnimatePresence>
-        {formStatus === "success" ? (
+        {formStatus === 'success' ? (
           <motion.div
             className="flex h-[280px] flex-col items-center justify-center space-y-3 text-center"
             initial={{ opacity: 0, y: 10 }}
@@ -127,23 +127,23 @@ export function ContactForm({
             className="mt-5 grid gap-2"
             onSubmit={async (e) => {
               e.preventDefault();
-              setFormStatus("loading");
-              const res = await fetch("/api/support", {
-                method: "POST",
+              setFormStatus('loading');
+              const res = await fetch('/api/support', {
+                method: 'POST',
                 body: JSON.stringify(data),
               }).then((res) => res.json());
               if (res.error) {
                 toast.error(res.error);
-                setFormStatus("idle");
+                setFormStatus('idle');
               } else {
-                setData({ title: null, message: "", attachmentIds: [] });
-                setFormStatus("success");
+                setData({ title: null, message: '', attachmentIds: [] });
+                setFormStatus('success');
               }
             }}
             initial={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
           >
-            {typeof data.title === "string" && (
+            {typeof data.title === 'string' && (
               <label>
                 <span className="text-sm font-medium text-gray-700">
                   {message?.issue}
@@ -185,8 +185,8 @@ export function ContactForm({
                 onKeyDown={handleKeyDown}
                 className={`${
                   false
-                    ? "border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500"
-                    : "border-gray-300 text-gray-900 placeholder-gray-300 focus:border-gray-500 focus:ring-gray-500"
+                    ? 'border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500'
+                    : 'border-gray-300 text-gray-900 placeholder-gray-300 focus:border-gray-500 focus:ring-gray-500'
                 } mt-1 block w-full resize-none rounded-md focus:outline-none sm:text-sm`}
               />
             </label>
@@ -239,7 +239,7 @@ export function ContactForm({
               <Button
                 className="h-9"
                 disabled={!data.message}
-                loading={formStatus === "loading"}
+                loading={formStatus === 'loading'}
                 text="Send message"
               />
             </div>

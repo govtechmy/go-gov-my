@@ -1,18 +1,18 @@
-import { formatRedisLink, redis } from "@/lib/redis";
-import { RedisLinkProps } from "@/lib/types";
-import { getLinkViaEdge } from "@/lib/userinfos";
-import { waitUntil } from "@vercel/functions";
-import { NextRequest } from "next/server";
+import { formatRedisLink, redis } from '@/lib/redis';
+import { RedisLinkProps } from '@/lib/types';
+import { getLinkViaEdge } from '@/lib/userinfos';
+import { waitUntil } from '@vercel/functions';
+import { NextRequest } from 'next/server';
 
 export type LinkMiddlewareLinkDataResponse = RedisLinkProps | null;
 
 export async function GET(req: NextRequest) {
-  const domain = req.nextUrl.searchParams.get("domain");
+  const domain = req.nextUrl.searchParams.get('domain');
   if (!domain) {
     throw Error("search param value 'domain' is required");
   }
 
-  const key = req.nextUrl.searchParams.get("key");
+  const key = req.nextUrl.searchParams.get('key');
   if (!key) {
     throw Error("search param value 'key' is required");
   }

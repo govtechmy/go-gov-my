@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { LoadingSpinner } from "@dub/ui";
-import { cn } from "@dub/utils";
-import { Search, XCircle } from "lucide-react";
-import { useWorkspaceListContext } from "./workspace-list-context";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { LoadingSpinner } from '@dub/ui';
+import { cn } from '@dub/utils';
+import { Search, XCircle } from 'lucide-react';
+import { useWorkspaceListContext } from './workspace-list-context';
 
 export default function WorkspaceListSearchInput() {
   const { searchValue, setSearchValue, validating } = useWorkspaceListContext();
@@ -13,7 +13,7 @@ export default function WorkspaceListSearchInput() {
     <SearchInput
       value={searchValue}
       onChange={setSearchValue}
-      onClear={() => setSearchValue("")}
+      onClear={() => setSearchValue('')}
       isLoading={validating}
     />
   );
@@ -50,8 +50,8 @@ export const SearchInput = (props: {
           props.onClear();
         }}
         className={cn(
-          "pointer-events-auto absolute inset-y-0 right-0 flex items-center pr-4",
-          !props.value.length && "hidden",
+          'pointer-events-auto absolute inset-y-0 right-0 flex items-center pr-4',
+          !props.value.length && 'hidden',
         )}
       >
         <XCircle className="h-4 w-4 text-gray-600" />

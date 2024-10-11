@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { QRCodeSVG, getQRAsCanvas, getQRAsSVGDataUri } from "@/lib/qr";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { QRLinkProps } from "@/lib/types";
-import { Clipboard, Download } from "@/ui/shared/icons";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { QRCodeSVG, getQRAsCanvas, getQRAsSVGDataUri } from '@/lib/qr';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { QRLinkProps } from '@/lib/types';
+import { Clipboard, Download } from '@/ui/shared/icons';
 import {
   IconMenu,
   InfoTooltip,
@@ -14,19 +14,17 @@ import {
   SimpleTooltipContent,
   Switch,
   Tooltip,
-  TooltipContent,
   useRouterStuff,
-} from "@dub/ui";
+} from '@dub/ui';
 import {
   APP_DOMAIN,
-  APP_HOSTNAMES,
   FADE_IN_ANIMATION_SETTINGS,
   getApexDomain,
   linkConstructor,
-} from "@dub/utils";
-import { motion } from "framer-motion";
-import { Check, ChevronRight, Link2 } from "lucide-react";
-import { useParams } from "next/navigation";
+} from '@dub/utils';
+import { motion } from 'framer-motion';
+import { Check, ChevronRight, Link2 } from 'lucide-react';
+import { useParams } from 'next/navigation';
 import {
   Dispatch,
   SetStateAction,
@@ -34,11 +32,11 @@ import {
   useMemo,
   useRef,
   useState,
-} from "react";
-import { HexColorInput, HexColorPicker } from "react-colorful";
-import { toast } from "sonner";
-import { useDebouncedCallback } from "use-debounce";
-import LinkLogo from "../links/link-logo";
+} from 'react';
+import { HexColorInput, HexColorPicker } from 'react-colorful';
+import { toast } from 'sonner';
+import { useDebouncedCallback } from 'use-debounce';
+import LinkLogo from '../links/link-logo';
 
 function LinkQRModalHelper({
   showLinkQRModal,
@@ -64,7 +62,7 @@ export function QRCodePicker({
   setShowLinkQRModal: Dispatch<SetStateAction<boolean>>;
 }) {
   const anchorRef = useRef<HTMLAnchorElement>(null);
-  const { logo, plan } = useWorkspace();
+  const { logo } = useWorkspace();
   const apexDomain = props.url ? getApexDomain(props.url) : null;
   const { messages, locale } = useIntlClientHook();
   const message = messages?.modal;
@@ -77,7 +75,7 @@ export function QRCodePicker({
   }
 
   const [showLogo, setShowLogo] = useState(true);
-  const [fgColor, setFgColor] = useState("#000000");
+  const [fgColor, setFgColor] = useState('#000000');
 
   const qrData = useMemo(
     () => ({
@@ -85,17 +83,16 @@ export function QRCodePicker({
         key: props.key,
         domain: props.domain,
         searchParams: {
-          qr: "1",
+          qr: '1',
         },
       }),
-      bgColor: "#ffffff",
+      bgColor: '#ffffff',
       fgColor,
       size: 1024,
-      level: "Q", // QR Code error correction level: https://blog.qrstuff.com/general/qr-code-error-correction
+      level: 'Q', // QR Code error correction level: https://blog.qrstuff.com/general/qr-code-error-correction
       ...(showLogo && {
         imageSettings: {
-          src:
-            logo && plan !== "free" ? logo : `${APP_DOMAIN}/_static/logo.svg`,
+          src: logo ? logo : `${APP_DOMAIN}/_static/logo.svg`,
           height: 256,
           width: 256,
           excavate: true,
@@ -108,10 +105,10 @@ export function QRCodePicker({
   const [copiedImage, setCopiedImage] = useState(false);
   const copyToClipboard = async () => {
     try {
-      const canvas = await getQRAsCanvas(qrData, "image/png", true);
+      const canvas = await getQRAsCanvas(qrData, 'image/png', true);
       (canvas as HTMLCanvasElement).toBlob(async function (blob) {
         // @ts-ignore
-        const item = new ClipboardItem({ "image/png": blob });
+        const item = new ClipboardItem({ 'image/png': blob });
         await navigator.clipboard.write([item]);
         setCopiedImage(true);
         setTimeout(() => setCopiedImage(false), 2000);
@@ -195,11 +192,11 @@ export function QRCodePicker({
               <button
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    `https://api.dub.co/qr?url=${linkConstructor({
+                    `${APP_DOMAIN}/api/qr?url=${linkConstructor({
                       key: props.key,
                       domain: props.domain,
                       searchParams: {
-                        qr: "1",
+                        qr: '1',
                       },
                     })}`,
                   );
@@ -239,14 +236,11 @@ export function QRCodePicker({
                       ...(qrData.imageSettings && {
                         imageSettings: {
                           ...qrData.imageSettings,
-                          src:
-                            logo && plan !== "free"
-                              ? logo
-                              : `${APP_DOMAIN}/_static/logo.svg`,
+                          src: logo ? logo : `${APP_DOMAIN}/_static/logo.svg`,
                         },
                       }),
                     }),
-                    "svg",
+                    'svg',
                   );
                 }}
                 className="w-full rounded-md p-2 text-left text-sm font-medium text-gray-500 transition-all duration-75 hover:bg-gray-100"
@@ -256,8 +250,8 @@ export function QRCodePicker({
               <button
                 onClick={async () => {
                   download(
-                    (await getQRAsCanvas(qrData, "image/png")) as string,
-                    "png",
+                    (await getQRAsCanvas(qrData, 'image/png')) as string,
+                    'png',
                   );
                 }}
                 className="w-full rounded-md p-2 text-left text-sm font-medium text-gray-500 transition-all duration-75 hover:bg-gray-100"
@@ -267,8 +261,8 @@ export function QRCodePicker({
               <button
                 onClick={async () => {
                   download(
-                    (await getQRAsCanvas(qrData, "image/jpeg")) as string,
-                    "jpg",
+                    (await getQRAsCanvas(qrData, 'image/jpeg')) as string,
+                    'jpg',
                   );
                 }}
                 className="w-full rounded-md p-2 text-left text-sm font-medium text-gray-500 transition-all duration-75 hover:bg-gray-100"
@@ -318,7 +312,7 @@ function AdvancedSettings({
         >
           <ChevronRight
             className={`h-5 w-5 text-gray-600 ${
-              expanded ? "rotate-90" : ""
+              expanded ? 'rotate-90' : ''
             } transition-all`}
           />
           <p className="text-sm text-gray-600">{message?.advanced_options}</p>
@@ -338,70 +332,32 @@ function AdvancedSettings({
               <p className="text-sm font-medium text-gray-700">
                 {message?.logo}
               </p>
-              {plan !== "free" && (
+              {plan !== 'free' && (
                 <InfoTooltip
                   content={
                     <SimpleTooltipContent
                       title=""
                       cta={message?.update_qr}
-                      href="https://dub.co/help/article/custom-qr-codes"
+                      href="https://github.com/govtechmy/go-gov-my/discussions"
                     />
                   }
                 />
               )}
             </label>
-            {plan !== "free" ? (
-              <div className="mt-1 flex items-center space-x-2">
-                <Switch
-                  fn={setShowLogo}
-                  checked={showLogo}
-                  trackDimensions="h-6 w-12"
-                  thumbDimensions="w-5 h-5"
-                  thumbTranslate="translate-x-6"
-                />
-                <p className="text-sm text-gray-600">
-                  {message?.show}{" "}
-                  {!slug || (!logo && process.env.NEXT_PUBLIC_APP_NAME)}{" "}
-                  {message?.logo}
-                </p>
-              </div>
-            ) : (
-              <Tooltip
-                content={
-                  <TooltipContent
-                    title="You need to be on the Pro plan and above to customize your QR Code logo."
-                    cta="Upgrade to Pro"
-                    {...(APP_HOSTNAMES.has(window.location.hostname)
-                      ? {
-                          onClick: () => {
-                            setShowLinkQRModal(false);
-                            queryParams({
-                              set: {
-                                upgrade: "pro",
-                              },
-                            });
-                          },
-                        }
-                      : { href: "https://dub.co/pricing" })}
-                  />
-                }
-              >
-                <div className="pointer-events-none mt-1 flex cursor-not-allowed items-center space-x-2 sm:pointer-events-auto">
-                  <Switch
-                    fn={setShowLogo}
-                    checked={showLogo}
-                    trackDimensions="h-6 w-12"
-                    thumbDimensions="w-5 h-5"
-                    thumbTranslate="translate-x-6"
-                    disabled={true}
-                  />
-                  <p className="text-sm text-gray-600">
-                    {message?.show} {process.env.NEXT_PUBLIC_APP_NAME}{" "}
-                    {message?.logo}
-                  </p>
-                </div>
-              </Tooltip>
-            )}
+            <div className="mt-1 flex items-center space-x-2">
+              <Switch
+                fn={setShowLogo}
+                checked={showLogo}
+                trackDimensions="h-6 w-12"
+                thumbDimensions="w-5 h-5"
+                thumbTranslate="translate-x-6"
+              />
+              <p className="text-sm text-gray-600">
+                {message?.show}{' '}
+                {!slug || (!logo && process.env.NEXT_PUBLIC_APP_NAME)}{' '}
+                {message?.logo}
+              </p>
+            </div>
           </div>
           <div>
             <label

@@ -1,17 +1,16 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useWorkspaces from "@/lib/swr/use-workspaces";
-import { PlanProps, WorkspaceProps } from "@/lib/types";
-import { ModalContext } from "@/ui/modals/provider";
-import PlanBadge from "@/ui/workspaces/plan-badge";
-import { BlurImage, Popover, Tick } from "@dub/ui";
-import { DICEBEAR_AVATAR_URL } from "@dub/utils";
-import { ChevronsUpDown, PlusCircle } from "lucide-react";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useWorkspaces from '@/lib/swr/use-workspaces';
+import { PlanProps, WorkspaceProps } from '@/lib/types';
+import { ModalContext } from '@/ui/modals/provider';
+import { BlurImage, Popover, Tick } from '@dub/ui';
+import { DICEBEAR_AVATAR_URL } from '@dub/utils';
+import { ChevronsUpDown, PlusCircle } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { useParams, usePathname } from 'next/navigation';
+import { useCallback, useContext, useMemo, useState } from 'react';
 
 export default function WorkspaceSwitcher() {
   const { workspaces } = useWorkspaces();
@@ -38,11 +37,11 @@ export default function WorkspaceSwitcher() {
     } else {
       return {
         name: session?.user?.name || session?.user?.email,
-        slug: "/",
+        slug: '/',
         image:
           session?.user?.image ||
           `https://api.dicebear.com/7.x/micah/svg?seed=${session?.user?.email}`,
-        plan: "free",
+        plan: 'free',
       };
     }
   }, [slug, workspaces, session]) as {
@@ -55,7 +54,7 @@ export default function WorkspaceSwitcher() {
 
   const [openPopover, setOpenPopover] = useState(false);
 
-  if (!workspaces || status === "loading") {
+  if (!workspaces || status === 'loading') {
     return <WorkspaceSwitcherPlaceholder />;
   }
 
@@ -83,17 +82,17 @@ export default function WorkspaceSwitcher() {
               width={20}
               height={20}
               alt={selected.id || selected.name}
-              className="h-8 w-8 flex-none overflow-hidden rounded-full"
+              className="h-8 w-8 flex-none overflow-hidden rounded-full object-cover"
             />
             <div
               className={`${
-                key ? "hidden" : "flex"
+                key ? 'hidden' : 'flex'
               } items-center space-x-3 sm:flex`}
             >
               <span className="inline-block max-w-[100px] truncate text-sm font-medium sm:max-w-[200px]">
                 {selected.name}
               </span>
-              {selected.slug !== "/" && <PlanBadge plan={selected.plan} />}
+              {/* {selected.slug !== "/" && <PlanBadge plan={selected.plan} />} */}
             </div>
           </div>
           <ChevronsUpDown
@@ -127,12 +126,12 @@ function WorkspaceList({
 
   const href = useCallback(
     (slug: string) => {
-      if (domain || key || selected.slug === "/") {
+      if (domain || key || selected.slug === '/') {
         // if we're on a link page, navigate back to the workspace root
         return `/${locale}/${slug}`;
       } else {
         // else, we keep the path but remove all query params
-        return pathname?.replace(selected.slug, slug).split("?")[0] || "/";
+        return pathname?.replace(selected.slug, slug).split('?')[0] || '/';
       }
     },
     [domain, key, pathname, selected.slug],
@@ -148,7 +147,7 @@ function WorkspaceList({
           <Link
             key={slug}
             className={`relative flex w-full items-center space-x-2 rounded-md px-2 py-1.5 hover:bg-gray-100 active:bg-gray-200 ${
-              selected.slug === slug ? "font-medium" : ""
+              selected.slug === slug ? 'font-medium' : ''
             } transition-all duration-75`}
             href={href(slug)}
             shallow={false}
@@ -159,11 +158,11 @@ function WorkspaceList({
               width={20}
               height={20}
               alt={id}
-              className="h-7 w-7 shrink-0 overflow-hidden rounded-full"
+              className="h-7 w-7 shrink-0 overflow-hidden rounded-full object-cover"
             />
             <span
               className={`block truncate text-sm sm:max-w-[140px] ${
-                selected.slug === slug ? "font-medium" : "font-normal"
+                selected.slug === slug ? 'font-medium' : 'font-normal'
               }`}
             >
               {name}

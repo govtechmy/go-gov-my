@@ -23,7 +23,7 @@
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "mailto:support@tech.gov.my"
+      "url": "https://github.com/govtechmy/go-gov-my/issues"
     }
   ],
   "topbarCtaButton": {
@@ -41,7 +41,7 @@
     {
       "name": "Help Center",
       "icon": "question",
-      "url": "https://go.gov.my/help"
+      "url": "https://github.com/govtechmy/go-gov-my/discussions"
     },
     {
       "name": "GitHub",

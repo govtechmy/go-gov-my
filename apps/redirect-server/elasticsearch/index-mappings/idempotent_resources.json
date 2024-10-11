@@ -1,0 +1,13 @@
+{
+  "mappings": {
+    "dynamic": false,
+    "properties": {
+      "idempotency_key": {
+        "type": "keyword"
+      },
+      "hashed_request_payload": {
+        "type": "keyword"
+      }
+    }
+  }
+}

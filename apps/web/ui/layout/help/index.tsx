@@ -1,5 +1,5 @@
-import { Suspense } from "react";
-import { HelpButton } from "./portal";
+import { Suspense } from 'react';
+import { HelpButton } from './portal';
 
 export interface HelpArticle {
   title: string;
@@ -20,7 +20,7 @@ export default function HelpPortal() {
 
 async function HelpPortalRSC() {
   const { popularHelpArticles, allHelpArticles } = await fetch(
-    "https://dub.co/api/content",
+    'https://go.gov.my/api/content',
   ).then((res) => res.json());
 
   return (

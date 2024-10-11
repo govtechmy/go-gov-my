@@ -1,13 +1,13 @@
-import { DubApiError, ErrorCodes } from "@/lib/api/errors";
-import { createLink, getLinksForWorkspace, processLink } from "@/lib/api/links";
-import { parseRequestBody } from "@/lib/api/utils";
-import { withWorkspace } from "@/lib/auth";
+import { DubApiError, ErrorCodes } from '@/lib/api/errors';
+import { createLink, getLinksForWorkspace, processLink } from '@/lib/api/links';
+import { parseRequestBody } from '@/lib/api/utils';
+import { withWorkspace } from '@/lib/auth';
 import {
   createLinkBodySchema,
   getLinksQuerySchemaExtended,
-} from "@/lib/zod/schemas/links";
-import { getSearchParamsWithArray } from "@dub/utils";
-import { NextResponse } from "next/server";
+} from '@/lib/zod/schemas/links';
+import { getSearchParamsWithArray } from '@dub/utils';
+import { NextResponse } from 'next/server';
 
 // GET /api/links – get all links for a workspace
 export const GET = withWorkspace(async ({ req, headers, workspace }) => {
@@ -70,15 +70,15 @@ export const POST = withWorkspace(
       });
       return NextResponse.json(response, { headers });
     } catch (error) {
-      if (error.code === "P2002") {
+      if (error.code === 'P2002') {
         throw new DubApiError({
-          code: "conflict",
-          message: "A link with this externalId already exists.",
+          code: 'conflict',
+          message: 'A link with this externalId already exists.',
         });
       }
 
       throw new DubApiError({
-        code: "unprocessable_entity",
+        code: 'unprocessable_entity',
         message: error.message,
       });
     }

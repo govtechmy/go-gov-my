@@ -1,8 +1,6 @@
-import { exceededLimitError } from "@/lib/api/errors";
-import { withSession } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { PlanProps } from "@/lib/types";
-import { NextResponse } from "next/server";
+import { withSession } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { NextResponse } from 'next/server';
 
 // POST /api/workspaces/[idOrSlug]/invites/accept – accept a workspace invite
 export const POST = withSession(async ({ session, params }) => {
@@ -20,44 +18,25 @@ export const POST = withSession(async ({ session, params }) => {
         select: {
           id: true,
           plan: true,
-          usersLimit: true,
-          _count: {
-            select: {
-              users: true,
-            },
-          },
         },
       },
     },
   });
   if (!invite) {
-    return new Response("Invalid invite", { status: 404 });
+    return new Response('Invalid invite', { status: 404 });
   }
 
   if (invite && invite.expires && invite.expires < new Date()) {
-    return new Response("Invite expired", { status: 410 });
+    return new Response('Invite expired', { status: 410 });
   }
 
   const workspace = invite.project;
-
-  if (workspace._count.users >= workspace.usersLimit) {
-    return new Response(
-      exceededLimitError({
-        plan: workspace.plan as PlanProps,
-        limit: workspace.usersLimit,
-        type: "users",
-      }),
-      {
-        status: 403,
-      },
-    );
-  }
 
   const response = await Promise.all([
     prisma.projectUsers.create({
       data: {
         userId: session.user.id,
-        role: "member",
+        role: 'member',
         projectId: workspace.id,
       },
     }),

@@ -1,6 +1,6 @@
-import { SHORT_DOMAIN } from "@dub/utils";
-import { Link, Project, Tag } from "@prisma/client";
-import { expect } from "vitest";
+import { SHORT_DOMAIN } from '@dub/utils';
+import { Link, Project, Tag } from '@prisma/client';
+import { expect } from 'vitest';
 
 export const expectedLink: Partial<Link> & { tagId: string | null } = {
   id: expect.any(String),
@@ -8,8 +8,9 @@ export const expectedLink: Partial<Link> & { tagId: string | null } = {
   domain: SHORT_DOMAIN,
   trackConversion: false,
   archived: false,
+  banned: false,
   expiresAt: null,
-  password: null,
+  passwordEnabledAt: null,
   proxy: false,
   title: null,
   description: null,
@@ -49,7 +50,6 @@ export const expectedWorkspace: Partial<Project> = {
   linksUsage: expect.any(Number),
   linksLimit: expect.any(Number),
   tagsLimit: expect.any(Number),
-  usersLimit: expect.any(Number),
   plan: expect.any(String),
   billingCycleStart: expect.any(Number),
   inviteCode: expect.any(String),

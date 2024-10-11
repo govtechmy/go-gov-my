@@ -18,12 +18,12 @@ export const resizeImage = (
       img.onload = () => {
         const targetWidth = opts.width;
         const targetHeight = opts.height;
-        const canvas = document.createElement("canvas");
+        const canvas = document.createElement('canvas');
         canvas.width = targetWidth;
         canvas.height = targetHeight;
 
-        const ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
-        ctx.imageSmoothingQuality = "high"; // Set image smoothing quality to high
+        const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+        ctx.imageSmoothingQuality = 'high'; // Set image smoothing quality to high
 
         // Calculating the aspect ratio
         const sourceWidth = img.width;
@@ -63,13 +63,13 @@ export const resizeImage = (
         );
 
         // Convert the canvas to a base64 string
-        const base64Image = canvas.toDataURL("image/jpeg", opts.quality);
+        const base64Image = canvas.toDataURL('image/jpeg', opts.quality);
         resolve(base64Image);
       };
       img.onerror = (error) =>
-        reject(new Error("Image loading error: " + error));
+        reject(new Error('Image loading error: ' + error));
     };
-    reader.onerror = (error) => reject(new Error("FileReader error: " + error));
+    reader.onerror = (error) => reject(new Error('FileReader error: ' + error));
     reader.readAsDataURL(file);
   });
 };

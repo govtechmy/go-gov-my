@@ -1,10 +1,10 @@
-import { DubApiError, handleAndReturnErrorResponse } from "@/lib/api/errors";
-import { prisma } from "@/lib/prisma";
-import { ratelimit } from "@/lib/redis/ratelimit";
-import { getSearchParams } from "@dub/utils";
-import { waitUntil } from "@vercel/functions";
-import { hashToken } from "./hash-token";
-import { Session, getSession } from "./utils";
+import { DubApiError, handleAndReturnErrorResponse } from '@/lib/api/errors';
+import { prisma } from '@/lib/prisma';
+import { ratelimit } from '@/lib/redis/ratelimit';
+import { getSearchParams } from '@dub/utils';
+import { waitUntil } from '@vercel/functions';
+import { hashToken } from './hash-token';
+import { Session, getSession } from './utils';
 
 interface WithSessionHandler {
   ({
@@ -30,16 +30,16 @@ export const withSession =
       let session: Session | undefined;
       let headers = {};
 
-      const authorizationHeader = req.headers.get("Authorization");
+      const authorizationHeader = req.headers.get('Authorization');
       if (authorizationHeader) {
-        if (!authorizationHeader.includes("Bearer ")) {
+        if (!authorizationHeader.includes('Bearer ')) {
           throw new DubApiError({
-            code: "bad_request",
+            code: 'bad_request',
             message:
               "Misconfigured authorization header. Did you forget to add 'Bearer '? Learn more: https://d.to/auth",
           });
         }
-        const apiKey = req.headers.get("x-api-key") || "";
+        const apiKey = req.headers.get('x-api-key') || '';
 
         const hashedKey = await hashToken(apiKey);
 
@@ -61,26 +61,26 @@ export const withSession =
         });
         if (!user) {
           throw new DubApiError({
-            code: "unauthorized",
-            message: "Unauthorized: Invalid API key.",
+            code: 'unauthorized',
+            message: 'Unauthorized: Invalid API key.',
           });
         }
 
         const { success, limit, reset, remaining } = await ratelimit(
           apiKey,
           600,
-          "1 m",
+          '1 m',
         );
 
         headers = {
-          "Retry-After": reset.toString(),
-          "X-RateLimit-Limit": limit.toString(),
-          "X-RateLimit-Remaining": remaining.toString(),
-          "X-RateLimit-Reset": reset.toString(),
+          'Retry-After': reset.toString(),
+          'X-RateLimit-Limit': limit.toString(),
+          'X-RateLimit-Remaining': remaining.toString(),
+          'X-RateLimit-Reset': reset.toString(),
         };
 
         if (!success) {
-          return new Response("Too many requests.", {
+          return new Response('Too many requests.', {
             status: 429,
             headers,
           });
@@ -98,7 +98,7 @@ export const withSession =
         session = {
           user: {
             id: user.id,
-            name: user.name || "",
+            name: user.name || '',
             email: user.email,
             role: user.role,
             agencyCode: user.agencyCode,
@@ -108,8 +108,8 @@ export const withSession =
         session = await getSession();
         if (!session?.user.id) {
           throw new DubApiError({
-            code: "unauthorized",
-            message: "Unauthorized: Login required.",
+            code: 'unauthorized',
+            message: 'Unauthorized: Login required.',
           });
         }
       }

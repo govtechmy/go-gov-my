@@ -1,9 +1,9 @@
 // apps/web/components/LandingPage.js
 
-import IdentifyWebsite from "../header/identify-website";
-import AboutSection from "./AboutSection";
-import HomeNavBar from "./HomeNavBar";
-import Jumbotron from "./Jumbotron";
+import IdentifyWebsite from '../header/identify-website';
+import AboutSection from './AboutSection';
+import HomeNavBar from './HomeNavBar';
+import Jumbotron from './Jumbotron';
 
 export default function LandingPage() {
   // { session }: { session: any }
@@ -303,7 +303,7 @@ export default function LandingPage() {
           <hr className="my-6 border-gray-200 dark:border-gray-700 sm:mx-auto lg:my-8" />
           <div className="sm:flex sm:items-center sm:justify-between">
             <span className="text-sm text-gray-500 dark:text-gray-400 sm:text-center">
-              © 2023{" "}
+              © 2023{' '}
               <a href="https://flowbite.com/" className="hover:underline">
                 Flowbite™
               </a>

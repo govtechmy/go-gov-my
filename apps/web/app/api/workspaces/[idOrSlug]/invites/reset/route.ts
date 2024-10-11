@@ -1,7 +1,7 @@
-import { withWorkspace } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { nanoid } from "@dub/utils";
-import { NextResponse } from "next/server";
+import { withWorkspace } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { nanoid } from '@dub/utils';
+import { NextResponse } from 'next/server';
 
 export const POST = withWorkspace(
   async ({ workspace }) => {
@@ -17,6 +17,6 @@ export const POST = withWorkspace(
     return NextResponse.json(response);
   },
   {
-    requiredRole: ["owner"],
+    requiredRole: ['owner'],
   },
 );

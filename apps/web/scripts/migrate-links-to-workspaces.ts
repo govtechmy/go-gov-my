@@ -1,12 +1,12 @@
-import { prisma } from "@/lib/prisma";
-import "dotenv-flow/config";
+import { prisma } from '@/lib/prisma';
+import 'dotenv-flow/config';
 
-const DUB_PROJECT_ID = "cl7pj5kq4006835rbjlt2ofka";
-const DUB_USER_ID = "cl7p1s07k000687rbuhpwqkqa";
+const DUB_PROJECT_ID = 'cl7pj5kq4006835rbjlt2ofka';
+const DUB_USER_ID = 'cl7p1s07k000687rbuhpwqkqa';
 
 async function main() {
   const users = await prisma.link.groupBy({
-    by: ["userId"],
+    by: ['userId'],
     _count: {
       id: true,
     },
@@ -27,7 +27,7 @@ async function main() {
     },
     orderBy: {
       _count: {
-        id: "desc",
+        id: 'desc',
       },
     },
     take: 500,

@@ -1,21 +1,21 @@
-import { JsonValue } from "@prisma/client/runtime/library";
-import { intervals } from "./constants";
+import { JsonValue } from '@prisma/client/runtime/library';
+import { intervals } from './constants';
 
 export type IntervalProps = (typeof intervals)[number];
 export type AnalyticsEndpoints =
-  | "count"
-  | "timeseries"
-  | "countries"
-  | "cities"
-  | "devices"
-  | "browsers"
-  | "os"
-  | "referers"
-  | "top_links"
-  | "top_urls";
-export type LocationTabs = "countries" | "cities";
-export type TopLinksTabs = "link" | "url";
-export type DeviceTabs = "devices" | "browsers" | "os";
+  | 'count'
+  | 'timeseries'
+  | 'countries'
+  | 'cities'
+  | 'devices'
+  | 'browsers'
+  | 'os'
+  | 'referers'
+  | 'top_links'
+  | 'top_urls';
+export type LocationTabs = 'countries' | 'cities' | 'asn';
+export type TopLinksTabs = 'link' | 'url';
+export type DeviceTabs = 'devices' | 'browsers' | 'os';
 
 export type ObjectProps = {
   [key: string]: number | ObjectProps;

@@ -1,19 +1,59 @@
-import { Resource } from "@opentelemetry/resources";
-import { NodeSDK } from "@opentelemetry/sdk-node";
-import { ConsoleSpanExporter } from "@opentelemetry/sdk-trace-node";
-import { SEMRESATTRS_SERVICE_NAME } from "@opentelemetry/semantic-conventions";
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
+import { Resource } from '@opentelemetry/resources';
+import { NodeSDK } from '@opentelemetry/sdk-node';
+import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-node';
+import {
+  SEMRESATTRS_SERVICE_INSTANCE_ID,
+  SEMRESATTRS_SERVICE_NAME,
+  SEMRESATTRS_SERVICE_NAMESPACE,
+} from '@opentelemetry/semantic-conventions';
 
-/**
- * This file contains the code for open telemetry stack tracing
- */
-
-const sdk = new NodeSDK({
-  resource: new Resource({
-    [SEMRESATTRS_SERVICE_NAME]: "otel-logger",
-  }),
-  traceExporter: new ConsoleSpanExporter(),
+const otlpExporter = new OTLPTraceExporter({
+  url:
+    process.env.NODE_ENV === 'production'
+      ? 'http://jaeger:4318/v1/traces'
+      : 'http://localhost:4318/v1/traces',
 });
 
-if (process.env.NODE_ENV !== "development") {
-  sdk.start();
-}
+const sdk = new NodeSDK({
+  // resource: new Resource({
+  //   [SemanticResourceAttributes.SERVICE_NAME]: 'gogov-web4',
+  // }),
+  resource: new Resource({
+    [SEMRESATTRS_SERVICE_NAME]: 'gogov-web',
+    [SEMRESATTRS_SERVICE_NAMESPACE]: 'gogov',
+    [SEMRESATTRS_SERVICE_INSTANCE_ID]: 'gogov-web',
+  }),
+  spanProcessor: new SimpleSpanProcessor(otlpExporter),
+});
+sdk.start();
+
+// import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
+// import { registerInstrumentations } from '@opentelemetry/instrumentation';
+// import { Resource } from '@opentelemetry/resources';
+// import { SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
+// import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
+// import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
+
+// const provider = new NodeTracerProvider({
+//   resource: new Resource({
+//     [SemanticResourceAttributes.SERVICE_NAME]: 'gogov-web',
+//   }),
+// });
+
+// const otlpExporter = new OTLPTraceExporter({
+//   url: process.env.NODE_ENV === "production" ? 'https://jaeger:4318/v1/traces' : 'http://localhost:4138/v1/traces'
+// });
+
+// provider.addSpanProcessor(new SimpleSpanProcessor(otlpExporter));
+
+// provider.register();
+
+// registerInstrumentations({
+//   instrumentations: [
+//     // getNodeAutoInstrumentations()
+//   ],
+//   tracerProvider: provider,
+// });
+
+// console.log('OpenTelemetry tracing initialized.');

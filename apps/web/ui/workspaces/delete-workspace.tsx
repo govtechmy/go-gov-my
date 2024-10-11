@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import useWorkspace from "@/lib/swr/use-workspace";
-import { useDeleteWorkspaceModal } from "@/ui/modals/delete-workspace-modal";
-import { Button } from "@dub/ui";
-import { cn } from "@dub/utils";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { useDeleteWorkspaceModal } from '@/ui/modals/delete-workspace-modal';
+import { Button } from '@dub/ui';
+import { cn } from '@dub/utils';
 
 export default function DeleteWorkspace() {
   const { setShowDeleteWorkspaceModal, DeleteWorkspaceModal } =
@@ -15,8 +15,8 @@ export default function DeleteWorkspace() {
   const { isOwner } = useWorkspace();
   return (
     <div
-      className={cn("rounded-lg border border-red-600 bg-white", {
-        "border-gray-200": !isOwner,
+      className={cn('rounded-lg border border-red-600 bg-white', {
+        'border-gray-200': !isOwner,
       })}
     >
       <DeleteWorkspaceModal />
@@ -25,8 +25,8 @@ export default function DeleteWorkspace() {
         <p className="text-sm text-gray-500">{message?.delete_desc}</p>
       </div>
       <div
-        className={cn("border-b border-red-600", {
-          "border-gray-200": !isOwner,
+        className={cn('border-b border-red-600', {
+          'border-gray-200': !isOwner,
         })}
       />
 

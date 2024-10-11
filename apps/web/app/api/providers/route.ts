@@ -1,17 +1,17 @@
-import { handleAndReturnErrorResponse } from "@/lib/api/errors";
-import { ratelimit } from "@/lib/redis/ratelimit";
-import { getUrlQuerySchema } from "@/lib/zod/schemas/links";
-import { APP_NAME, fetchWithTimeout } from "@dub/utils";
-import { ipAddress } from "@vercel/edge";
-import { getToken } from "next-auth/jwt";
-import { NextRequest, NextResponse } from "next/server";
+import { handleAndReturnErrorResponse } from '@/lib/api/errors';
+import { ratelimit } from '@/lib/redis/ratelimit';
+import { getUrlQuerySchema } from '@/lib/zod/schemas/links';
+import { APP_NAME, fetchWithTimeout } from '@dub/utils';
+import { ipAddress } from '@vercel/edge';
+import { getToken } from 'next-auth/jwt';
+import { NextRequest, NextResponse } from 'next/server';
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
   try {
     const { url } = getUrlQuerySchema.parse({
-      url: req.nextUrl.searchParams.get("url"),
+      url: req.nextUrl.searchParams.get('url'),
     });
 
     // Rate limit if user is not logged in
@@ -42,47 +42,47 @@ export async function GET(req: NextRequest) {
       dns.Answer.length > 0 &&
       dns.Answer.some(
         (a: { data: string }) =>
-          a.data === "cname.bitly.com" ||
-          a.data === "67.199.248.12" ||
-          a.data === "67.199.248.13",
+          a.data === 'cname.bitly.com' ||
+          a.data === '67.199.248.12' ||
+          a.data === '67.199.248.13',
       )
     ) {
       return NextResponse.json({
-        provider: "bitly",
+        provider: 'bitly',
       });
     }
 
-    urlObject.pathname = "/xyz";
+    urlObject.pathname = '/xyz';
 
     const headers = await fetchWithTimeout(urlObject.toString(), {
-      redirect: "manual",
+      redirect: 'manual',
     })
       .then((r) => ({
-        engine: r.headers.get("engine"),
-        poweredBy: r.headers.get("x-powered-by"),
+        engine: r.headers.get('engine'),
+        poweredBy: r.headers.get('x-powered-by'),
       }))
       .catch(() => null);
 
     if (headers) {
-      if (headers.engine?.includes("Rebrandly")) {
+      if (headers.engine?.includes('Rebrandly')) {
         return NextResponse.json({
-          provider: "rebrandly",
+          provider: 'rebrandly',
         });
       }
-      if (headers.poweredBy?.includes("Short.io")) {
+      if (headers.poweredBy?.includes('Short.io')) {
         return NextResponse.json({
-          provider: "short",
+          provider: 'short',
         });
       }
       if (headers.poweredBy?.includes(APP_NAME)) {
         return NextResponse.json({
-          provider: "dub",
+          provider: 'dub',
         });
       }
     }
 
     return NextResponse.json({
-      provider: "unknown",
+      provider: 'unknown',
     });
   } catch (error) {
     return handleAndReturnErrorResponse(error);

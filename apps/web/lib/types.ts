@@ -1,8 +1,8 @@
-import z from "@/lib/zod";
-import { metaTagsSchema } from "@/lib/zod/schemas/metatags";
-import { Link } from "@prisma/client";
-import { AgencySchema } from "./zod/schemas/agencies";
-import { createLinkBodySchema } from "./zod/schemas/links";
+import z from '@/lib/zod';
+import { metaTagsSchema } from '@/lib/zod/schemas/metatags';
+import { Link } from '@prisma/client';
+import { AgencySchema } from './zod/schemas/agencies';
+import { createLinkBodySchema } from './zod/schemas/links';
 
 export type LinkProps = Link;
 
@@ -61,6 +61,8 @@ export type TagColorProps = (typeof tagColors)[number];
 
 export type PlanProps = (typeof plans)[number];
 
+export type OwnershipProps = (typeof ownership)[number];
+
 export type RoleProps = (typeof roles)[number];
 
 export interface WorkspaceProps {
@@ -75,7 +77,6 @@ export interface WorkspaceProps {
   linksUsage: number;
   linksLimit: number;
   tagsLimit: number;
-  usersLimit: number;
   plan: PlanProps;
   billingCycleStart: number;
   createdAt: Date;
@@ -100,30 +101,32 @@ export interface WorkspaceUserProps extends UserProps {
 
 export type NewLinkProps = z.infer<typeof createLinkBodySchema>;
 
-type ProcessedLinkOverrides = "domain" | "key" | "url" | "projectId";
+type ProcessedLinkOverrides = 'domain' | 'key' | 'url' | 'projectId';
 export type ProcessedLinkProps = Omit<NewLinkProps, ProcessedLinkOverrides> &
-  Pick<LinkProps, ProcessedLinkOverrides> & { userId?: LinkProps["userId"] };
+  Pick<LinkProps, ProcessedLinkOverrides> & { userId?: LinkProps['userId'] };
 
 export const plans = [
-  "free",
-  "pro",
-  "business",
-  "business plus",
-  "business extra",
-  "business max",
-  "enterprise",
+  'free',
+  'pro',
+  'business',
+  'business plus',
+  'business extra',
+  'business max',
+  'enterprise',
 ] as const;
 
-export const roles = ["owner", "member"] as const;
+export const ownership = ['owner', 'member', 'ahli', 'pemilik'] as const;
+
+export const roles = ['owner', 'member'] as const;
 
 export const tagColors = [
-  "red",
-  "yellow",
-  "green",
-  "blue",
-  "purple",
-  "pink",
-  "brown",
+  'red',
+  'yellow',
+  'green',
+  'blue',
+  'purple',
+  'pink',
+  'brown',
 ] as const;
 
 export type MetaTag = z.infer<typeof metaTagsSchema>;

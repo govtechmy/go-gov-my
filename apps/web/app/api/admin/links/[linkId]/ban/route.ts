@@ -1,17 +1,26 @@
-import { withAdmin } from "@/lib/auth";
-import { updateConfig } from "@/lib/edge-config";
-import { prisma } from "@/lib/prisma";
-import { formatRedisLink, redis } from "@/lib/redis";
+import { DubApiError } from '@/lib/api/errors';
+import generateIdempotencyKey from '@/lib/api/links/create-idempotency-key';
+import { withAdmin } from '@/lib/auth';
+import { processDTOLink } from '@/lib/dto/link.dto';
+import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
+import { waitUntil } from '@vercel/functions';
 import {
-  LEGAL_USER_ID,
-  LEGAL_WORKSPACE_ID,
-  getDomainWithoutWWW,
-} from "@dub/utils";
-import { NextResponse } from "next/server";
+  OUTBOX_ACTIONS,
+  REDIRECT_SERVER_BASE_URL,
+} from 'kafka-consumer/utils/actions';
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
 
-// DELETE /api/admin/links/[linkId]/ban – ban a link
-export const DELETE = withAdmin(async ({ params }) => {
-  const { linkId } = params as { linkId: string };
+// PUT /api/admin/links/[linkId]/ban – ban or unban a link
+export const PUT = withAdmin(async ({ params, req }) => {
+  const { linkId } = params;
+  if (!linkId) {
+    throw new DubApiError({
+      code: 'bad_request',
+      message: 'Missing linkId from path params',
+    });
+  }
 
   const link = await prisma.link.findUnique({
     where: {
@@ -23,30 +32,41 @@ export const DELETE = withAdmin(async ({ params }) => {
     return NextResponse.next();
   }
 
-  const domain = getDomainWithoutWWW(link.url);
+  const { ban } = await z
+    .object({
+      ban: z.boolean(),
+    })
+    .parseAsync(await req.json());
 
-  const response = await Promise.all([
-    prisma.link.update({
-      where: {
-        id: linkId,
-      },
-      data: {
-        userId: LEGAL_USER_ID,
-        projectId: LEGAL_WORKSPACE_ID,
-      },
-    }),
-    redis.hset(link.domain.toLowerCase(), {
-      [link.key.toLowerCase()]: JSON.stringify({
-        ...(await formatRedisLink(link)),
-        projectId: LEGAL_WORKSPACE_ID,
-      }),
-    }),
-    domain &&
-      updateConfig({
-        key: "domains",
-        value: domain,
-      }),
-  ]);
+  const response = await prisma.link.update({
+    where: {
+      id: linkId,
+    },
+    data: {
+      banned: ban,
+    },
+  });
+
+  waitUntil(
+    (async () => {
+      const { payload, encryptedSecrets } = await processDTOLink(response);
+      const headersJSON = generateIdempotencyKey(
+        payload.id,
+        response.updatedAt,
+      );
+
+      await prisma.webhookOutbox.create({
+        data: {
+          action: OUTBOX_ACTIONS.UPDATE_LINK,
+          host: `${REDIRECT_SERVER_BASE_URL}/links/${payload.id}`,
+          payload: payload as unknown as Prisma.InputJsonValue,
+          headers: headersJSON,
+          partitionKey: payload.slug,
+          encryptedSecrets: encryptedSecrets,
+        },
+      });
+    })(),
+  );
 
   return NextResponse.json(response);
 });

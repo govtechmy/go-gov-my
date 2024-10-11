@@ -1,10 +1,10 @@
-import { nanoid, punyEncode } from "@dub/utils";
-import { prisma } from "lib/prisma";
-import { WorkspaceProps } from "./types";
+import { nanoid, punyEncode } from '@dub/utils';
+import { prisma } from 'lib/prisma';
+import { WorkspaceProps } from './types';
 
 export const getWorkspaceViaEdge = async (workspaceId: string) => {
   const workspace = await prisma.project.findUnique({
-    where: { id: workspaceId.replace("ws_", "") },
+    where: { id: workspaceId.replace('ws_', '') },
     include: {
       users: true, // Include users relation
     },
@@ -30,6 +30,14 @@ export const checkIfUserExists = async (userId: string) => {
   });
 
   return Boolean(user);
+};
+
+export const getUserInfos = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  return user;
 };
 
 export const getLinkViaEdge = async (domain: string, key: string) => {
@@ -70,7 +78,7 @@ export async function getRandomKey({
   /* recursively get random key till it gets one that's available */
   let key = nanoid();
   if (prefix) {
-    key = `${prefix.replace(/^\/|\/$/g, "")}/${key}`;
+    key = `${prefix.replace(/^\/|\/$/g, '')}/${key}`;
   }
   const link = await prisma.link.findFirst({
     where: {

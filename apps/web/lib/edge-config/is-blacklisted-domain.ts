@@ -1,4 +1,4 @@
-import { getAll } from "@vercel/edge-config";
+import { getAll } from '@vercel/edge-config';
 
 export const isBlacklistedDomain = async ({
   domain,
@@ -6,7 +6,7 @@ export const isBlacklistedDomain = async ({
 }: {
   domain: string;
   apexDomain: string;
-}): Promise<boolean | "whitelisted"> => {
+}): Promise<boolean | 'whitelisted'> => {
   if (!process.env.NEXT_PUBLIC_IS_DUB || !process.env.EDGE_CONFIG) {
     return false;
   }
@@ -20,12 +20,12 @@ export const isBlacklistedDomain = async ({
       domains: blacklistedDomains,
       terms: blacklistedTerms,
       whitelistedDomains,
-    } = await getAll(["domains", "terms", "whitelistedDomains"]);
+    } = await getAll(['domains', 'terms', 'whitelistedDomains']);
 
     const blacklistedTermsRegex = new RegExp(
       blacklistedTerms
-        .map((term: string) => term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
-        .join("|"),
+        .map((term: string) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
+        .join('|'),
     );
 
     const isBlacklisted =
@@ -36,7 +36,7 @@ export const isBlacklistedDomain = async ({
     }
 
     if (whitelistedDomains.includes(apexDomain)) {
-      return "whitelisted";
+      return 'whitelisted';
     }
 
     return false;

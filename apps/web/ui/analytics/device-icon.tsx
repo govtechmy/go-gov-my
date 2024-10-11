@@ -1,6 +1,6 @@
-import { DeviceTabs } from "@/lib/analytics/types";
-import { Apple, Chrome, Safari } from "@/ui/shared/icons/devices";
-import { BlurImage } from "@dub/ui";
+import { DeviceTabs } from '@/lib/analytics/types';
+import { Apple, Chrome, Safari } from '@/ui/shared/icons/devices';
+import { BlurImage } from '@dub/ui';
 
 export default function DeviceIcon({
   display,
@@ -11,11 +11,11 @@ export default function DeviceIcon({
   tab: DeviceTabs;
   className: string;
 }) {
-  if (tab === "devices") {
+  if (tab === 'devices') {
     return (
       <BlurImage
         src={
-          display === "Desktop"
+          display === 'desktop'
             ? `https://faisalman.github.io/ua-parser-js/images/types/default.png`
             : `https://faisalman.github.io/ua-parser-js/images/types/${display.toLowerCase()}.png`
         }
@@ -26,10 +26,10 @@ export default function DeviceIcon({
         className={className}
       />
     );
-  } else if (tab === "browsers") {
-    if (display === "Chrome") {
+  } else if (tab === 'browsers') {
+    if (display === 'Chrome') {
       return <Chrome className={className} />;
-    } else if (display === "Safari" || display === "Mobile Safari") {
+    } else if (display === 'Safari' || display === 'Mobile Safari') {
       return <Safari className={className} />;
     } else {
       return (
@@ -42,8 +42,8 @@ export default function DeviceIcon({
         />
       );
     }
-  } else if (tab === "os") {
-    if (display === "Mac OS") {
+  } else if (tab === 'os') {
+    if (display === 'macOS') {
       return (
         <BlurImage
           src="/_static/icons/macos.png"
@@ -53,7 +53,7 @@ export default function DeviceIcon({
           className="h-4 w-4"
         />
       );
-    } else if (display === "iOS") {
+    } else if (display === 'iOS') {
       return <Apple className="-ml-1 h-5 w-5" />;
     } else {
       return (

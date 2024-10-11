@@ -1,7 +1,7 @@
-import { withSession } from "@/lib/auth";
-import { plain, upsertPlainCustomer } from "@/lib/plain";
-import z from "@/lib/zod";
-import { NextResponse } from "next/server";
+import { withSession } from '@/lib/auth';
+import { plain, upsertPlainCustomer } from '@/lib/plain';
+import z from '@/lib/zod';
+import { NextResponse } from 'next/server';
 
 export const GET = withSession(async ({ session }) => {
   const res = await upsertPlainCustomer(session);

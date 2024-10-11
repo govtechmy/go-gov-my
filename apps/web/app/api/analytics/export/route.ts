@@ -1,16 +1,16 @@
-import { getClicks } from "@/lib/analytics/clicks";
+import { getClicks } from '@/lib/analytics/clicks';
 import {
   DEPRECATED_ANALYTICS_ENDPOINTS,
   VALID_ANALYTICS_ENDPOINTS,
-} from "@/lib/analytics/constants";
-import { AnalyticsEndpoints } from "@/lib/analytics/types";
-import { DubApiError } from "@/lib/api/errors";
-import { withWorkspace } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { clickAnalyticsQuerySchema } from "@/lib/zod/schemas/analytics";
-import { linkConstructor } from "@dub/utils";
-import { json2csv } from "json-2-csv";
-import JSZip from "jszip";
+} from '@/lib/analytics/constants';
+import { AnalyticsEndpoints } from '@/lib/analytics/types';
+import { DubApiError } from '@/lib/api/errors';
+import { withWorkspace } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { clickAnalyticsQuerySchema } from '@/lib/zod/schemas/analytics';
+import { linkConstructor } from '@dub/utils';
+import { json2csv } from 'json-2-csv';
+import JSZip from 'jszip';
 
 // converts data to CSV
 const convertToCSV = (data: object[]) => {
@@ -32,12 +32,12 @@ export const GET = withWorkspace(
 
     // return 403 if project is on the free plan and interval is 90d or all
     if (
-      workspace?.plan === "free" &&
-      (interval === "all" || interval === "90d")
+      workspace?.plan === 'free' &&
+      (interval === 'all' || interval === '90d')
     ) {
       throw new DubApiError({
-        code: "forbidden",
-        message: "Require higher plan",
+        code: 'forbidden',
+        message: 'Require higher plan',
       });
     }
 
@@ -47,14 +47,14 @@ export const GET = withWorkspace(
 
     await Promise.all(
       VALID_ANALYTICS_ENDPOINTS.map(async (endpoint) => {
-        if (endpoint === "top_links") {
+        if (endpoint === 'top_links') {
           // no need to fetch top links data if linkId is defined
           // since this is just a single link
           if (linkId) return;
 
           const data = await getClicks({
             workspaceId: workspace.id,
-            endpoint: "top_links",
+            endpoint: 'top_links',
             ...parsedParams,
           });
 
@@ -99,9 +99,9 @@ export const GET = withWorkspace(
           zip.file(`${endpoint}.csv`, csvData);
         } else {
           // we're not fetching top URLs data if linkId is not defined
-          if (endpoint === "top_urls" && !linkId) return;
+          if (endpoint === 'top_urls' && !linkId) return;
           // skip clicks count
-          if (endpoint === "count") return;
+          if (endpoint === 'count') return;
           // skip deprecated endpoints
           if (DEPRECATED_ANALYTICS_ENDPOINTS.includes(endpoint)) return;
 
@@ -119,12 +119,12 @@ export const GET = withWorkspace(
       }),
     );
 
-    const zipData = await zip.generateAsync({ type: "nodebuffer" });
+    const zipData = await zip.generateAsync({ type: 'nodebuffer' });
 
     return new Response(zipData, {
       headers: {
-        "Content-Type": "application/zip",
-        "Content-Disposition": "attachment; filename=analytics_export.zip",
+        'Content-Type': 'application/zip',
+        'Content-Disposition': 'attachment; filename="analytics_export.zip"',
       },
     });
   },

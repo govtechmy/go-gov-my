@@ -1,6 +1,6 @@
-export type Locale = "en" | "ms";
+export type Locale = 'en-GB' | 'ms-MY';
 
 /** Supported locales */
-export const LOCALES = ["en", "ms"];
+export const LOCALES = ['en-GB', 'ms-MY'];
 
-export const DEFAULT_LOCALE: Locale = "en";
+export const DEFAULT_LOCALE: Locale = 'en-GB';

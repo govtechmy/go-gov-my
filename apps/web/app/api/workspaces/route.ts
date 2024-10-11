@@ -1,76 +1,79 @@
-import { DubApiError } from "@/lib/api/errors";
-import { withSession } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { checkIfUserExists } from "@/lib/userinfos";
+import { DubApiError } from '@/lib/api/errors';
+import { withSession } from '@/lib/auth';
+import { logRequestMetrics } from '@/lib/decorator/logRequestMetrics';
+import { prisma } from '@/lib/prisma';
+import { checkIfUserExists } from '@/lib/userinfos';
 import {
   WorkspaceSchema,
   createWorkspaceSchema,
-} from "@/lib/zod/schemas/workspaces";
-import { nanoid } from "@dub/utils";
-import { Prisma } from "@prisma/client";
-import { NextResponse } from "next/server";
-import { z } from "zod";
+} from '@/lib/zod/schemas/workspaces';
+import { nanoid } from '@dub/utils';
+import { Prisma } from '@prisma/client';
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
 
 const GetWorkspacesSearchParams = z.object({
   search: z.string().optional(),
 });
 
 // GET /api/workspaces - get all projects for the current user
-export const GET = withSession(async ({ session, searchParams }) => {
-  const { search } = await GetWorkspacesSearchParams.parseAsync(searchParams);
-  let whereQuery: Prisma.ProjectWhereInput = {};
+export const GET = logRequestMetrics(
+  withSession(async ({ session, searchParams }) => {
+    const { search } = await GetWorkspacesSearchParams.parseAsync(searchParams);
+    let whereQuery: Prisma.ProjectWhereInput = {};
 
-  switch (session.user.role) {
-    // Staff can only get workspaces where they are a member
-    case "staff":
-      whereQuery = {
+    switch (session.user.role) {
+      // Staff can only get workspaces where they are a member
+      case 'staff':
+        whereQuery = {
+          users: {
+            some: { userId: session.user.id },
+          },
+        };
+        break;
+      // Super admins can get all workspaces from their agency
+      case 'super_admin':
+        whereQuery = {
+          agencyCode: session.user.agencyCode,
+        };
+        break;
+      default:
+        throw Error(`Unknown user role '${session.user.role}'`);
+    }
+
+    const projects = await prisma.project.findMany({
+      where: {
+        ...whereQuery,
+        ...(search && {
+          OR: [
+            {
+              name: { contains: search },
+            },
+            {
+              slug: { contains: search },
+            },
+          ],
+        }),
+      },
+      include: {
         users: {
-          some: { userId: session.user.id },
-        },
-      };
-      break;
-    // Super admins can get all workspaces from their agency
-    case "super_admin":
-      whereQuery = {
-        agencyCode: session.user.agencyCode,
-      };
-      break;
-    default:
-      throw Error(`Unknown user role '${session.user.role}'`);
-  }
-
-  const projects = await prisma.project.findMany({
-    where: {
-      ...whereQuery,
-      ...(search && {
-        OR: [
-          {
-            name: { contains: search },
+          where: {
+            userId: session.user.id,
           },
-          {
-            slug: { contains: search },
+          select: {
+            role: true,
           },
-        ],
-      }),
-    },
-    include: {
-      users: {
-        where: {
-          userId: session.user.id,
-        },
-        select: {
-          role: true,
         },
       },
-    },
-  });
+    });
 
-  return NextResponse.json(
-    projects.map((project) =>
-      WorkspaceSchema.parse({ ...project, id: `ws_${project.id}` }),
-    ),
-  );
-});
+    return NextResponse.json(
+      projects.map((project) =>
+        WorkspaceSchema.parse({ ...project, id: `ws_${project.id}` }),
+      ),
+    );
+  }),
+);
 
 export const POST = withSession(async ({ req, session }) => {
   const { name, slug } = await createWorkspaceSchema.parseAsync(
@@ -81,8 +84,8 @@ export const POST = withSession(async ({ req, session }) => {
 
   if (!userExists) {
     throw new DubApiError({
-      code: "not_found",
-      message: "Session expired. Please log in again.",
+      code: 'not_found',
+      message: 'Session expired. Please log in again.',
     });
   }
 
@@ -93,7 +96,7 @@ export const POST = withSession(async ({ req, session }) => {
       users: {
         some: {
           userId: session.user.id,
-          role: "owner",
+          role: 'owner',
         },
       },
     },
@@ -118,8 +121,8 @@ export const POST = withSession(async ({ req, session }) => {
 
   if (slugExist) {
     throw new DubApiError({
-      code: "conflict",
-      message: "Slug is already in use.",
+      code: 'conflict',
+      message: 'Slug is already in use.',
     });
   }
 
@@ -127,11 +130,11 @@ export const POST = withSession(async ({ req, session }) => {
     data: {
       name,
       slug,
-      plan: "business",
+      plan: 'business',
       users: {
         create: {
           userId: session.user.id,
-          role: "owner",
+          role: 'owner',
         },
       },
       billingCycleStart: new Date().getDate(),

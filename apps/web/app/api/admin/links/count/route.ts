@@ -1,12 +1,12 @@
-import { withAdmin } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
-import { DUB_DOMAINS_ARRAY } from "@dub/utils";
-import { NextResponse } from "next/server";
+import { withAdmin } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+import { DUB_DOMAINS_ARRAY } from '@dub/utils';
+import { NextResponse } from 'next/server';
 
 // GET /api/admin/links/count
 export const GET = withAdmin(async ({ searchParams }) => {
   let { groupBy, search, domain, tagId } = searchParams as {
-    groupBy?: "domain" | "tagId";
+    groupBy?: 'domain' | 'tagId';
     search?: string;
     domain?: string;
     tagId?: string;
@@ -14,11 +14,11 @@ export const GET = withAdmin(async ({ searchParams }) => {
 
   let response;
 
-  const tagIds = tagId ? tagId.split(",") : [];
+  const tagIds = tagId ? tagId.split(',') : [];
 
   const linksWhere = {
     // when filtering by domain, only filter by domain if the filter group is not "Domains"
-    ...(domain && groupBy !== "domain"
+    ...(domain && groupBy !== 'domain'
       ? {
           domain,
         }
@@ -39,16 +39,16 @@ export const GET = withAdmin(async ({ searchParams }) => {
     }),
   };
 
-  if (groupBy === "tagId") {
+  if (groupBy === 'tagId') {
     response = await prisma.linkTag.groupBy({
-      by: ["tagId"],
+      by: ['tagId'],
       where: {
         link: linksWhere,
       },
       _count: true,
       orderBy: {
         _count: {
-          tagId: "desc",
+          tagId: 'desc',
         },
       },
     });
@@ -66,14 +66,14 @@ export const GET = withAdmin(async ({ searchParams }) => {
       }),
     };
 
-    if (groupBy === "domain") {
+    if (groupBy === 'domain') {
       response = await prisma.link.groupBy({
         by: [groupBy],
         where,
         _count: true,
         orderBy: {
           _count: {
-            [groupBy]: "desc",
+            [groupBy]: 'desc',
           },
         },
       });

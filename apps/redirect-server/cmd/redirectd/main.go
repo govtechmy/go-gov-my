@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"html/template"
@@ -10,9 +11,11 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"path/filepath"
 	redirectserver "redirect-server"
 	"redirect-server/repository"
 	"redirect-server/repository/es"
+	"redirect-server/utils"
 	"strings"
 	"syscall"
 	"time"
@@ -22,6 +25,8 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type WaitPageProps struct {
@@ -32,11 +37,50 @@ type WaitPageProps struct {
 }
 
 type AuthPageProps struct {
-	Slug          string
-	WrongPassword bool
+	Slug string
+}
+
+type AuthPostProps struct {
+	Password string `json:"password"`
+	Slug     string `json:"slug"`
+}
+
+type PostReturnProps struct {
+	Status  bool
+	Message string
+	URL     string
 }
 
 func main() {
+
+	logFilePath := os.Getenv("LOG_FILE_PATH")
+	if logFilePath == "" {
+		log.Fatalf("LOG_FILE_PATH environment variable is not set")
+	}
+
+	// Ensure the directory exists
+	logDir := filepath.Dir(logFilePath)
+	if err := os.MkdirAll(logDir, 0755); err != nil {
+		log.Fatalf("failed to create log directory: %v", err)
+	}
+
+	// Initialize log file for successful link visits
+	logFile, err := os.OpenFile(logFilePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		log.Fatalf("failed to open log file: %v", err)
+	}
+	defer logFile.Close()
+
+	// Configure file logger for successful link visits
+	w := zapcore.AddSync(logFile)
+	core := zapcore.NewCore(
+		zapcore.NewJSONEncoder(zap.NewProductionEncoderConfig()),
+		w,
+		zap.InfoLevel,
+	)
+	fileLogger := zap.New(core)
+	defer fileLogger.Sync()
+
 	loggerConfig := zap.NewProductionConfig()
 	loggerConfig.OutputPaths = []string{"stdout"}
 	logger := zap.Must(loggerConfig.Build())
@@ -54,13 +98,17 @@ func main() {
 	var httpPort int
 	var telemetryURL string
 	var geolite2DBPath string
+	var geolite2ASNPath string
+	var baseURL string
 	{
-		flag.StringVar(&elasticURL, "elastic-url", "http://localhost:9200", "Elasticsearch URL")
-		flag.StringVar(&elasticUser, "elastic-user", "elastic", "Elasticsearch username")
+		flag.StringVar(&elasticURL, "elastic-url", os.Getenv("ELASTIC_URL"), "Elasticsearch URL e.g. http://localhost:9200")
+		flag.StringVar(&elasticUser, "elastic-user", os.Getenv("ELASTIC_USER"), "Elasticsearch username")
 		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
 		flag.IntVar(&httpPort, "http-port", 3000, "HTTP server port")
-		flag.StringVar(&telemetryURL, "telemetry-url", "localhost:4318", "OpenTelemetry HTTP endpoint URL")
+		flag.StringVar(&telemetryURL, "telemetry-url", os.Getenv("TELEMETRY_URL"), "OpenTelemetry HTTP endpoint URL e.g. localhost:4318")
 		flag.StringVar(&geolite2DBPath, "geolite2-path", "./GeoLite2-City.mmdb", "Path to GeoLite2 .mmdb file")
+		flag.StringVar(&geolite2ASNPath, "geolite2-asn-path", "./GeoLite2-ASN.mmdb", "Path to GeoLite2 ASN .mmdb file")
+		flag.StringVar(&baseURL, "base-url", os.Getenv("NEXTJS_BASE_URL"), "Base URL for the frontend")
 	}
 
 	flag.Parse()
@@ -85,19 +133,45 @@ func main() {
 
 	linkRepo := es.NewLinkRepo(esClient)
 
-	t, err := template.ParseGlob("templates/*.html")
+	landingT, err := template.ParseFiles("templates/landing/en-GB.html")
 	if err != nil {
-		logger.Fatal("cannot load html templates", zap.Error(err))
+		logger.Fatal("cannot load landing page template", zap.Error(err))
+	}
+
+	// add other languages (i.e. ms-MY) if necessary
+	redirectT, err := template.ParseFiles(
+		"templates/redirect/en-GB.html",
+		"templates/redirect/en-GB/secure.html",
+		"templates/redirect/en-GB/not-found.html",
+		"templates/redirect/en-GB/error.html",
+		"templates/redirect/en-GB/expiry.html",
+	)
+
+	if err != nil {
+		logger.Fatal("cannot load html (redirect) templates", zap.Error(err))
 	}
 
 	fs := http.FileServer(http.Dir("public"))
 	http.Handle("/public/", http.StripPrefix("/public/", fs))
 
+	// Cities Informations
 	ipDB, err := geoip2.Open(geolite2DBPath)
 	if err != nil {
 		logger.Fatal("cannot load geolite2 database", zap.Error(err))
 	}
 	defer ipDB.Close()
+
+	// ASN Informations
+	asnDB, err := geoip2.Open(geolite2ASNPath)
+	if err != nil {
+		logger.Fatal("cannot load geolite2 ASN database", zap.Error(err))
+	}
+	defer asnDB.Close()
+
+	logger.Info("geolite2 database loaded",
+		zap.Any("city_metadata", ipDB.Metadata()),
+		zap.Any("asn_metadata", asnDB.Metadata()),
+	)
 
 	// todo: logger handler
 	// todo: metrics handler
@@ -108,50 +182,64 @@ func main() {
 	http.Handle("/", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 		slug := strings.TrimPrefix(r.URL.Path, "/")
-		user_input_password := r.URL.Query().Get("password")
+
+		// If no slug is provided, show the landing page
+		if slug == "" {
+			if err := landingT.Execute(w, nil); err != nil {
+				logger.Error("failed to execute landing page template", zap.Error(err))
+				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			}
+			return
+		}
 
 		link, err := linkRepo.GetLink(ctx, slug)
 		if err == repository.ErrLinkNotFound {
 			logger.Info("link not found",
 				zap.String("slug", slug),
-				zap.String("ip", r.RemoteAddr),
+				zap.String("ip", utils.GetClientIP(r)),
 				zap.String("user-agent", r.UserAgent()),
 				zap.String("code", "link_not_found")) // Filebeat will run to collect link not found errors over this code
-				w.WriteHeader(http.StatusNotFound)
-				if err := t.ExecuteTemplate(w, "notfound.html", nil); err != nil {
-					logger.Error("failed to execute template", zap.Error(err))
-				}
+			w.WriteHeader(http.StatusNotFound)
+			if err := redirectT.ExecuteTemplate(w, "not-found.html", nil); err != nil {
+				logger.Error("failed to execute template", zap.Error(err))
+			}
 			return
 		}
 		if err != nil {
 			logger.Error("error fetching link",
 				zap.String("slug", slug),
-				zap.String("ip", r.RemoteAddr),
+				zap.String("ip", utils.GetClientIP(r)),
 				zap.String("user-agent", r.UserAgent()),
 				zap.Error(err))
-				w.WriteHeader(http.StatusInternalServerError)
-				if err := t.ExecuteTemplate(w, "server_error.html", nil); err != nil {
-					logger.Error("failed to execute template", zap.Error(err))
-				}
-			return
-		}
-
-		// LINK IS PASSWORD PROTECTED BUT USER DID NOT PROVIDE PASSWORD, REDIRECT TO AUTH PAGE
-		if link.Password != "" && user_input_password == "" {
-			if err := t.ExecuteTemplate(w, "auth.html", AuthPageProps{
-				Slug:          slug,
-				WrongPassword: false,
-			}); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			if err := redirectT.ExecuteTemplate(w, "error.html", nil); err != nil {
 				logger.Error("failed to execute template", zap.Error(err))
 			}
 			return
 		}
 
-		// LINK IS PASSWORD PROTECTED AND USER PROVIDED WRONG PASSWORD
-		if link.Password != "" && user_input_password != link.Password && user_input_password != "" {
-			if err := t.ExecuteTemplate(w, "auth.html", AuthPageProps{
-				Slug:          slug,
-				WrongPassword: true,
+		// Check if the link has expired
+		if link.ExpiresAt != nil && time.Now().After(*link.ExpiresAt) {
+			w.WriteHeader(http.StatusGone)
+			if err := redirectT.ExecuteTemplate(w, "expiry.html", nil); err != nil {
+				logger.Error("failed to execute template", zap.Error(err))
+			}
+			return
+		}
+
+		// If a link is banned, respond with the not found page
+		if link.Banned {
+			w.WriteHeader(http.StatusNotFound)
+			if err := redirectT.ExecuteTemplate(w, "not-found.html", nil); err != nil {
+				logger.Error("failed to execute template", zap.Error(err))
+			}
+			return
+		}
+
+		// LINK IS PASSWORD PROTECTED , REDIRECT TO AUTH PAGE
+		if link.Password != "" {
+			if err := redirectT.ExecuteTemplate(w, "secure.html", AuthPageProps{
+				Slug: slug,
 			}); err != nil {
 				logger.Error("failed to execute template", zap.Error(err))
 			}
@@ -159,12 +247,23 @@ func main() {
 		}
 
 		// Log redirect metadata for analytics
-		redirectMetadata := repository.NewRedirectMetadata(*r, ipDB, *link)
+		redirectMetadata := repository.NewRedirectMetadata(*r, ipDB, asnDB, *link)
+		fileLogger.Info("redirect analytics",
+			zap.String("linkSlug", link.Slug),
+			zap.String("linkId", link.ID),
+			zap.String("userAgent", r.UserAgent()),
+			zap.String("ip", utils.GetClientIP(r)),
+			zap.String("asn", redirectMetadata.ASN),
+			zap.String("asnOrganization", redirectMetadata.ASNOrganization),
+			zap.Object("redirectMetadata", redirectMetadata),
+		)
 		logger.Info("redirect analytics",
 			zap.String("linkSlug", link.Slug),
 			zap.String("linkId", link.ID),
 			zap.String("userAgent", r.UserAgent()),
-			zap.String("ip", r.RemoteAddr),
+			zap.String("ip", utils.GetClientIP(r)),
+			zap.String("asn", redirectMetadata.ASN),
+			zap.String("asnOrganization", redirectMetadata.ASNOrganization),
 			zap.Object("redirectMetadata", redirectMetadata),
 		)
 
@@ -172,7 +271,7 @@ func main() {
 		// Redirect URL could be a geo-specific/ios/android link.
 		redirectURL := redirectMetadata.LinkURL
 
-		if err := t.ExecuteTemplate(w, "wait.html", WaitPageProps{
+		if err := redirectT.ExecuteTemplate(w, "en-GB.html", WaitPageProps{
 			URL:         redirectURL,
 			Title:       link.Title,
 			Description: link.Description,
@@ -181,6 +280,108 @@ func main() {
 			logger.Error("failed to execute template", zap.Error(err))
 		}
 	}), "handleLinkVisit"))
+
+	http.Handle("/auth", otelhttp.NewHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		if r.Method == "POST" {
+			decoder := json.NewDecoder(r.Body)
+			var prop AuthPostProps
+			err := decoder.Decode(&prop)
+			user_input_password := prop.Password
+			slug := prop.Slug
+			if err != nil {
+				logger.Error("Unable to find post parameter in /auth")
+				var returnStruct PostReturnProps
+				returnStruct.Status = false
+				returnStruct.Message = "Unable to find POST parameters"
+				w.Header().Add("Content-Type", "application/json")
+				w.WriteHeader(http.StatusInternalServerError)
+				json.NewEncoder(w).Encode(returnStruct)
+				return
+			}
+
+			link, err := linkRepo.GetLink(ctx, slug)
+			if err == repository.ErrLinkNotFound {
+				logger.Info("link not found",
+					zap.String("slug", slug),
+					zap.String("ip", utils.GetClientIP(r)),
+					zap.String("user-agent", r.UserAgent()),
+					zap.String("code", "link_not_found")) // Filebeat will run to collect link not found errors over this code
+				var returnStruct PostReturnProps
+				returnStruct.Status = false
+				returnStruct.Message = "Unable to find link"
+				w.Header().Add("Content-Type", "application/json")
+				w.WriteHeader(http.StatusInternalServerError)
+				json.NewEncoder(w).Encode(returnStruct)
+				return
+			}
+			if err != nil {
+				logger.Error("error fetching link",
+					zap.String("slug", slug),
+					zap.String("ip", utils.GetClientIP(r)),
+					zap.String("user-agent", r.UserAgent()),
+					zap.Error(err))
+				var returnStruct PostReturnProps
+				returnStruct.Status = false
+				returnStruct.Message = "Unable to fetch link"
+				w.Header().Add("Content-Type", "application/json")
+				w.WriteHeader(http.StatusInternalServerError)
+				json.NewEncoder(w).Encode(returnStruct)
+				return
+			}
+
+			err = bcrypt.CompareHashAndPassword([]byte(link.Password), []byte(user_input_password))
+			if err != nil { // USER PROVIDE WRONG PASSWORD
+				var returnStruct PostReturnProps
+				returnStruct.Status = false
+				returnStruct.Message = "Wrong Password"
+				w.Header().Add("Content-Type", "application/json")
+				w.WriteHeader(http.StatusUnauthorized)
+				json.NewEncoder(w).Encode(returnStruct)
+				return
+			}
+
+			// LINK IS PASSWORD PROTECTED AND USER PROVIDED CORRECT PASSWORD
+			// Log redirect metadata for analytics
+			redirectMetadata := repository.NewRedirectMetadata(*r, ipDB, asnDB, *link)
+			fileLogger.Info("redirect analytics",
+				zap.String("linkSlug", link.Slug),
+				zap.String("linkId", link.ID),
+				zap.String("userAgent", r.UserAgent()),
+				zap.String("ip", utils.GetClientIP(r)),
+				zap.Object("redirectMetadata", redirectMetadata),
+			)
+			logger.Info("redirect analytics",
+				zap.String("linkSlug", link.Slug),
+				zap.String("linkId", link.ID),
+				zap.String("userAgent", r.UserAgent()),
+				zap.String("ip", utils.GetClientIP(r)),
+				zap.Object("redirectMetadata", redirectMetadata),
+			)
+
+			// Do not use link.URL, use redirectMetadata.LinkURL instead.
+			// Redirect URL could be a geo-specific/ios/android link.
+			redirectURL := redirectMetadata.LinkURL
+			var returnStruct PostReturnProps
+			returnStruct.Status = true
+			returnStruct.Message = "Password Authenticated"
+			returnStruct.URL = redirectURL
+			w.Header().Add("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			json.NewEncoder(w).Encode(returnStruct)
+			return
+
+		}
+		// METHOD NOT ALLOWED
+		var returnStruct PostReturnProps
+		returnStruct.Status = false
+		returnStruct.Message = "Method not allowed"
+		w.Header().Add("Content-Type", "application/json")
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		json.NewEncoder(w).Encode(returnStruct)
+		// return
+
+	}), "handleAuthPassword"))
 
 	srv := &http.Server{
 		Addr:    fmt.Sprintf("0.0.0.0:%d", httpPort),

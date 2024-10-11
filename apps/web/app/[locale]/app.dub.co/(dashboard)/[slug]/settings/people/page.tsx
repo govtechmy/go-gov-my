@@ -1,4 +1,4 @@
-import WorkspacePeopleClient from "./page-client";
+import WorkspacePeopleClient from './page-client';
 
 export default function WorkspacePeople() {
   return <WorkspacePeopleClient />;

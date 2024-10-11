@@ -1,5 +1,5 @@
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import { AlertCircleFill } from "@/ui/shared/icons";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { AlertCircleFill } from '@/ui/shared/icons';
 import {
   Button,
   InfoTooltip,
@@ -7,10 +7,10 @@ import {
   Modal,
   useMediaQuery,
   useRouterStuff,
-} from "@dub/ui";
-import { generateDomainFromName } from "@dub/utils";
-import slugify from "@sindresorhus/slugify";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+} from '@dub/ui';
+import { generateDomainFromName } from '@dub/utils';
+import slugify from '@sindresorhus/slugify';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   Dispatch,
   FormEvent,
@@ -19,10 +19,10 @@ import {
   useEffect,
   useMemo,
   useState,
-} from "react";
-import { toast } from "sonner";
-import { mutate } from "swr";
-import { useDebounce } from "use-debounce";
+} from 'react';
+import { toast } from 'sonner';
+import { mutate } from 'swr';
+import { useDebounce } from 'use-debounce';
 
 function AddWorkspaceModalHelper({
   showAddWorkspaceModal,
@@ -39,8 +39,8 @@ function AddWorkspaceModalHelper({
     name: string;
     slug: string;
   }>({
-    name: "",
-    slug: "",
+    name: '',
+    slug: '',
   });
   const { name, slug } = data;
 
@@ -70,7 +70,8 @@ function AddWorkspaceModalHelper({
     }));
   }, [name]);
 
-  const welcomeFlow = pathname === "/welcome";
+  const welcomeFlow =
+    pathname === '/welcome' || pathname === `/${locale}/welcome`;
 
   const searchParams = useSearchParams();
   const { queryParams } = useRouterStuff();
@@ -85,9 +86,9 @@ function AddWorkspaceModalHelper({
       onClose={() => {
         if (welcomeFlow) {
           router.back();
-        } else if (searchParams.has("newWorkspace")) {
+        } else if (searchParams.has('newWorkspace')) {
           queryParams({
-            del: ["newWorkspace"],
+            del: ['newWorkspace'],
           });
         }
       }}
@@ -98,7 +99,7 @@ function AddWorkspaceModalHelper({
           {messages?.workspace?.create_title}
         </h3>
         <a
-          href="https://dub.co/help/article/what-is-a-workspace"
+          href="https://github.com/govtechmy/go-gov-my/discussions"
           target="_blank"
           className="-translate-y-2 text-center text-xs text-gray-500 underline underline-offset-4 hover:text-gray-800"
         >
@@ -110,32 +111,28 @@ function AddWorkspaceModalHelper({
         onSubmit={async (e: FormEvent<HTMLFormElement>) => {
           e.preventDefault();
           setSaving(true);
-          fetch("/api/workspaces", {
-            method: "POST",
+          fetch('/api/workspaces', {
+            method: 'POST',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
           }).then(async (res) => {
             if (res.status === 200) {
               // track workspace creation event
-              await mutate("/api/workspaces");
-              if (welcomeFlow) {
-                router.push(`/${locale}/welcome?type=upgrade&slug=${slug}`);
-              } else {
-                router.push(`/${locale}/${slug}`);
-                toast.success(messages?.tokens?.success);
-                setShowAddWorkspaceModal(false);
-              }
+              await mutate('/api/workspaces');
+              router.push(`/${locale}/${slug}`);
+              toast.success(messages.dashboard.success_create_workspace);
+              setShowAddWorkspaceModal(false);
             } else {
               const { error } = await res.json();
               const message = error.message;
 
-              if (message.toLowerCase().includes("slug")) {
+              if (message.toLowerCase().includes('slug')) {
                 setSlugError(message);
               }
 
-              if (message.toLowerCase().includes("domain")) {
+              if (message.toLowerCase().includes('domain')) {
                 setDomainError(message);
               }
 
@@ -196,8 +193,8 @@ function AddWorkspaceModalHelper({
               pattern="[a-zA-Z0-9\-]+"
               className={`${
                 slugError
-                  ? "border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500"
-                  : "border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:ring-gray-500"
+                  ? 'border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500'
+                  : 'border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:ring-gray-500'
               } block w-full rounded-r-md focus:outline-none sm:text-sm`}
               placeholder="acme"
               value={slug}

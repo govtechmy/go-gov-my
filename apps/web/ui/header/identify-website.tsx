@@ -1,61 +1,44 @@
-"use client";
+'use client';
 
-import { useIntlClientHook } from "@/lib/middleware/utils/useI18nClient";
-import React, { useState } from "react";
-import { cn } from "./cn";
-import Collapse from "./layout";
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import React, { useState } from 'react';
+import { cn } from './cn';
+import Collapse from './layout';
+import MalaysiaFlag from './malaysia-flag';
 
 const IdentifyWebsite: React.FC = () => {
   const { messages, locale } = useIntlClientHook();
+  const message = messages?.masthead;
   const [open, setOpen] = useState(false);
 
   return (
     <>
       <div
         className={cn(
-          "z-[99]",
+          'z-[99]',
           open
-            ? "from-washed-100 to-outline-200 bg-gradient-to-b from-[84.74%] to-100%"
-            : "bg-washed-100",
+            ? 'from-washed-100 to-outline-200 bg-gradient-to-b from-[84.74%] to-100%'
+            : 'bg-washed-100',
         )}
+        data-nosnippet
       >
         <div className="container">
           <button className="w-full" onClick={() => setOpen(!open)}>
-            <div className="text-brand-700 flex flex-wrap items-center gap-1.5 py-2.5 text-sm/4 max-sm:justify-between sm:py-1">
+            <div className="text-brand-700 ml-2 flex flex-wrap items-center gap-1.5 py-4 text-sm/4 max-sm:justify-between sm:py-1">
               <div className="flex items-center gap-1.5">
-                <div className="size-4 sm:size-5 text-blue-600">
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M10 2L11.5131 3.37049L13.4711 2.79225L14.2397 4.68355L16.2547 5.01208L16.1266 7.04959L17.7994 8.21983L16.8 10L17.7994 11.7802L16.1266 12.9504L16.2547 14.9879L14.2397 15.3165L13.4711 17.2078L11.5131 16.6295L10 18L8.48686 16.6295L6.52893 17.2078L5.76027 15.3165L3.74535 14.9879L3.87341 12.9504L2.20058 11.7802L3.2 10L2.20058 8.21983L3.87341 7.04959L3.74535 5.01208L5.76027 4.68355L6.52893 2.79225L8.48686 3.37049L10 2Z"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M7.75 10.75L9 12.25L12.25 7.75"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                <div className="size-4 sm:size-5">
+                  <MalaysiaFlag />
                 </div>
                 <span className="text-black-700">
-                  An official Malaysian Government Website
+                  {message?.masthead_title}
                 </span>
               </div>
               <div className="max-sm:bg-outline-200 flex items-center gap-0.5 max-sm:rounded-md max-sm:px-1">
                 <span className="hidden tracking-[-0.01em] text-blue-600 sm:block">
-                  Here&apos;s how you know
+                  {message?.masthead_subtitle}
                 </span>
                 <div
-                  className={cn("size-4 transition", open ? "rotate-180" : "")}
+                  className={cn('size-4 transition', open ? 'rotate-180' : '')}
                 >
                   <svg
                     width="20"
@@ -79,7 +62,7 @@ const IdentifyWebsite: React.FC = () => {
           <Collapse isOpen={open}>
             <div className="gap-4.5 pt-4.5 grid grid-cols-1 px-2 pb-6 sm:grid-cols-2 sm:gap-6 sm:pb-8 sm:pt-6">
               <span className="text-brand-700 static pb-5 text-sm text-blue-600 sm:hidden">
-                Here&apos;s how you know
+                {message?.masthead_subtitle}
               </span>
               <div className="flex gap-3">
                 <div className="text-dim-500 shrink-0">
@@ -115,13 +98,17 @@ const IdentifyWebsite: React.FC = () => {
                 </div>
                 <div className="space-y-1.5">
                   <p className="font-medium max-sm:text-sm">
-                    Official government websites end with
-                    <span className="text-bold strong">.gov.my</span>
+                    {message?.masthead_official_site_title}
+                    <span className="text-bold strong">
+                      {message?.masthead_official_site_desc_domain}
+                    </span>
                   </p>
                   <p className="text-black-700 text-balance max-w-prose text-sm">
-                    If the link does not end with
-                    <span className="font-semibold">.gov.my</span>, exit the
-                    website immediately even if it looks similar.
+                    {message?.masthead_official_site_desc_1}
+                    <span className="font-semibold">
+                      {message?.masthead_official_site_desc_domain}
+                    </span>
+                    {message?.masthead_official_site_desc_2}
                   </p>
                 </div>
               </div>
@@ -145,12 +132,12 @@ const IdentifyWebsite: React.FC = () => {
                 </div>
                 <div className="space-y-1.5">
                   <p className="font-medium max-sm:text-sm">
-                    Secure websites use
-                    <span className="text-bold text-green-600">HTTPS</span>
+                    {message?.masthead_ssl_title}
+                    <span className="text-bold text-green-600"> HTTPS</span>
                   </p>
                   <div className="text-black-700 text-balance max-w-prose text-sm">
-                    If the link does not end with
-                    <div className="size-3.5 -ml-[3px] mb-0.5 mr-px inline text-green-600">
+                    {message?.masthead_ssl_desc_1}&nbsp;&nbsp;&nbsp;
+                    <span className="size-3.5 -ml-[3px] mb-0.5 mr-px inline-block text-green-600">
                       <svg
                         width="12"
                         height="14"
@@ -170,11 +157,10 @@ const IdentifyWebsite: React.FC = () => {
                           strokeLinejoin="round"
                         />
                       </svg>
-                    </div>
-                    ) or
-                    <span className="font-semibold">https://</span>
-                    as an added precaution. Share sensitive information only on
-                    official, secure websites.
+                    </span>
+                    &nbsp; {message?.masthead_ssl_or}
+                    <span className="font-semibold"> https:// </span>
+                    {message?.masthead_ssl_desc_2}
                   </div>
                 </div>
               </div>

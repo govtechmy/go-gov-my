@@ -1,13 +1,13 @@
-import * as chrono from "chrono-node";
+import * as chrono from 'chrono-node';
 
 export const getDateTimeLocal = (timestamp?: Date): string => {
   const d = timestamp ? new Date(timestamp) : new Date();
-  if (d.toString() === "Invalid Date") return "";
+  if (d.toString() === 'Invalid Date') return '';
   return new Date(d.getTime() - d.getTimezoneOffset() * 60000)
     .toISOString()
-    .split(":")
+    .split(':')
     .slice(0, 2)
-    .join(":");
+    .join(':');
 };
 
 // Function to parse a date string into a Date object
@@ -17,23 +17,23 @@ export const parseDateTime = (str: Date | string) => {
 };
 
 export const formatDate = (datetime: Date | string) => {
-  if (datetime.toString() === "Invalid Date") return "";
-  return new Date(datetime).toLocaleDateString("en-US", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    timeZone: "UTC",
+  if (datetime.toString() === 'Invalid Date') return '';
+  return new Date(datetime).toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
   });
 };
 
 export const formatDateTime = (datetime: Date | string) => {
-  if (datetime.toString() === "Invalid Date") return "";
-  return new Date(datetime).toLocaleTimeString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "numeric",
-    minute: "numeric",
+  if (datetime.toString() === 'Invalid Date') return '';
+  return new Date(datetime).toLocaleTimeString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
     hour12: true,
   });
 };
