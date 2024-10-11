@@ -56,7 +56,10 @@ jobs:
             echo "ENVIRONMENT=development" >> $GITHUB_OUTPUT
           fi
       - name: Setup Maxmind GeoIP database
-        run: ./shell-script/setup-geoip-db.sh
+        run: |
+          ./shell-script/setup-geoip-db.sh
+          mv ./apps/redirect-server/GeoLite2-City.mmdb ./apps/redirect-server/
+          mv ./apps/redirect-server/GeoLite2-ASN.mmdb ./apps/redirect-server/
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
         with:

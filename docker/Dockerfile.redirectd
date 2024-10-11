@@ -2,30 +2,22 @@ FROM golang:1.21-alpine AS builder
 
 WORKDIR /app
 
-COPY ../apps/redirect-server/go.mod ../apps/redirect-server/go.sum ./
-
+COPY apps/redirect-server/go.mod apps/redirect-server/go.sum ./
 RUN go mod download
 
-COPY ../apps/redirect-server .
+COPY apps/redirect-server .
 
 RUN go build -o /redirectd ./cmd/redirectd
 
 FROM alpine:latest
 
-COPY --from=builder /app/apps/redirect-server/GeoLite2-City.mmdb /GeoLite2-City.mmdb
-COPY --from=builder /app/apps/redirect-server/GeoLite2-ASN.mmdb /GeoLite2-ASN.mmdb
+COPY --from=builder /app/GeoLite2-City.mmdb /GeoLite2-City.mmdb
+COPY --from=builder /app/GeoLite2-ASN.mmdb /GeoLite2-ASN.mmdb
 COPY --from=builder /redirectd /redirectd
 
-# We need this templates assets !! Might change later if we serve static pages from NextJS
-# COPY templates /templates
-# Copy templates directory
 COPY --from=builder /app/templates /templates
+COPY --from=builder /app/public /public
 
-# We need this public assets !! Might change later if we serve static pages from NextJS
-COPY ../apps/redirect-server/public /public
-
-# Expose port 3000 to the outside world
 EXPOSE 3000
 
-# Command to run the executable
 CMD ["/redirectd"]
