@@ -44,10 +44,10 @@ jobs:
         run: |
           if [[ ${{ github.ref }} == refs/tags/landing-page@STAGING-v* ]]; then
             echo "ENVIRONMENT=staging" >> $GITHUB_OUTPUT
-            echo "LANDING_STATS_JSON_URL=${{ vars.LANDING_STATS_JSON_URL_STAGING }}" >> $GITHUB_OUTPUT
+            echo "LANDING_STATS_JSON_URL=${{ vars.LANDING_STATS_JSON_URL_DEV }}" >> $GITHUB_OUTPUT
           elif [[ ${{ github.ref }} == refs/tags/landing-page@v* ]]; then
             echo "ENVIRONMENT=production" >> $GITHUB_OUTPUT
-            echo "LANDING_STATS_JSON_URL=${{ vars.LANDING_STATS_JSON_URL_PROD }}" >> $GITHUB_OUTPUT
+            echo "LANDING_STATS_JSON_URL=${{ vars.LANDING_STATS_JSON_URL_DEV }}" >> $GITHUB_OUTPUT
           else
             echo "ENVIRONMENT=development" >> $GITHUB_OUTPUT
             echo "LANDING_STATS_JSON_URL=${{ vars.LANDING_STATS_JSON_URL_DEV }}" >> $GITHUB_OUTPUT
