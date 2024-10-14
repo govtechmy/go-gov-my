@@ -15,7 +15,6 @@ import { cn } from "@/lib/utils";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import { VariantProps } from "class-variance-authority";
 import { useTranslations } from "next-intl";
-import { useTheme } from "next-themes";
 import { ReactNode, Suspense, useState } from "react";
 import ButtonB from "./ButtonB";
 
@@ -25,10 +24,10 @@ type NavItem = {
   target?: string;
   sheetOnly?: boolean;
   variant: VariantProps<typeof buttonVariants>["variant"];
+  signInKey: string;
 };
 
-export function Header({ locale }: { locale: string }) {
-  const { theme, setTheme } = useTheme();
+export function Header(props: { signInKey: string }) {
   const t = useTranslations();
   const pathname = usePathname();
   const isActive = (href: string) => pathname.startsWith(href) && href !== "/";
@@ -106,27 +105,11 @@ export function Header({ locale }: { locale: string }) {
 
         <div className="flex shrink-0 items-center gap-2">
           <Suspense>
-            {/* <button
-              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-            >
-              {theme === "dark" ? (
-                <Sun className="h-5 w-5" />
-              ) : (
-                <Moon className="h-5 w-5" />
-              )}
-            </button> */}
-            <Locale locale={locale} />
+            <Locale />
           </Suspense>
-          {/* <Button
-            variant="tertiary"
-            size="icon"
-            className={cn("block lg:hidden", showMenu && "bg-washed-100")}
-            onClick={() => setMenu(!showMenu)}
-          >
-            {showMenu ? <CrossX /> : <HamburgerMenu />}
-          </Button> */}
           <ButtonB variant="primary" size="small" href={URL_APP_LOGIN}>
-            <span>{t("components.Header.buttons.signIn")}</span>
+            {/* <span>{t("components.Header.buttons.signIn")}</span> */}
+            {props.signInKey}
           </ButtonB>
         </div>
       </div>

@@ -6,6 +6,7 @@ type Props = {
   className?: string;
   children: React.ReactNode;
   size: "parent" | "medium";
+  target?: "_blank" | "_self";
 };
 
 const variants = cva(cn("text-brand-600", "font-medium", "underline"), {

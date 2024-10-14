@@ -1,40 +1,46 @@
 import { Dropdown, type Item as StatDropdownItem } from "@/components/Dropdown";
 import { cn } from "@/lib/utils";
-import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function StatDropdown(props: { className?: string }) {
-  const t = useTranslations();
-  const items = [
-    {
-      id: "daily",
-      label: t("pages.Home.Stats.dropdown.items.daily.label"),
-    },
-    {
-      id: "weekly",
-      label: t("pages.Home.Stats.dropdown.items.weekly.label"),
-    },
-    {
-      id: "monthly",
-      label: t("pages.Home.Stats.dropdown.items.monthly.label"),
-    },
-    // {
-    //   id: "yearly",
-    //   label: t("pages.Home.Stats.dropdown.items.yearly.label"),
-    // },
+type Props = {
+  className?: string;
+  dropdownItems: {
+    daily: string;
+    weekly: string;
+    monthly: string;
+    yearly: string;
+  };
+  selectedItem: string;
+  onSelectionChange: (item: StatDropdownItem) => void;
+};
+
+export default function StatDropdown(props: Props) {
+  const items: StatDropdownItem[] = [
+    { id: "daily", label: props.dropdownItems.daily },
+    { id: "weekly", label: props.dropdownItems.weekly },
+    { id: "monthly", label: props.dropdownItems.monthly },
+    { id: "yearly", label: props.dropdownItems.yearly }
   ];
 
-  const [item, setItem] = useState<StatDropdownItem | null>(
-    (items.length > 0 && items[0]) || null,
-  );
+  const [selectedItem, setSelectedItem] = useState(items.find(item => item.id === props.selectedItem) || items[0]);
+
+  useEffect(() => {
+    const newSelectedItem = items.find(item => item.id === props.selectedItem) || items[0];
+    setSelectedItem(newSelectedItem);
+  }, [props.selectedItem, props.dropdownItems]);
+
+  const handleSelection = (item: StatDropdownItem) => {
+    setSelectedItem(item);
+    props.onSelectionChange(item);
+  };
 
   return (
     <Dropdown
       className={cn(props.className)}
       items={items}
-      onSelection={setItem}
+      onSelection={handleSelection}
     >
-      {item?.label}
+      {selectedItem.label}
     </Dropdown>
   );
 }

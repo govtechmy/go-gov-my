@@ -15,9 +15,9 @@ export default function IconRoundMagnifier({ ...props }) {
       <path
         d="M21.25 21.25L17.5 17.5M6.75 13C6.75 9.54822 9.54822 6.75 13 6.75C16.4518 6.75 19.25 9.54822 19.25 13C19.25 16.4518 16.4518 19.25 13 19.25C9.54822 19.25 6.75 16.4518 6.75 13Z"
         stroke="white"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <defs>
         <linearGradient

@@ -14,9 +14,9 @@ export default function IconArrowRight(props: Props) {
     >
       <path
         d="M9.75 0.75L15.25 6L9.75 11.25M15 6H0.75"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

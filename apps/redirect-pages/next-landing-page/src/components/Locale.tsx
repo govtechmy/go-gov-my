@@ -16,18 +16,18 @@ import { SelectIcon } from "@radix-ui/react-select";
 import { useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 
-export default function Locale({ locale }: { locale: string }) {
+export default function Locale() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const locale = searchParams.get("locale") || "en-GB";
   const [isPending, startTransition] = useTransition();
-
-  const onValueChange = (locale: string) => {
+  const onValueChange = (newLocale: string) => {
+    const current = new URLSearchParams(searchParams);
+    current.set("locale", newLocale);
+    const search = current.toString();
     startTransition(() => {
-      router.replace(`${pathname}${searchParams ? `?${searchParams}` : ""}`, {
-        locale,
-        scroll: false,
-      });
+      router.replace(`${pathname}?${search}`, { scroll: false });
     });
   };
 
@@ -47,7 +47,7 @@ export default function Locale({ locale }: { locale: string }) {
       <SelectTrigger asChild>
         <Button variant="secondary">
           <Globe />
-          <SelectValue>{name[locale].short}</SelectValue>
+          <SelectValue>{name[locale]?.short || locale}</SelectValue>
           <SelectIcon>
             <ChevronDown />
           </SelectIcon>
@@ -60,7 +60,7 @@ export default function Locale({ locale }: { locale: string }) {
             value={l}
             className={l === locale ? "font-medium" : ""}
           >
-            {name[l].full}
+            {name[l]?.full || l}
           </SelectItem>
         ))}
       </SelectContent>

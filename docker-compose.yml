@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   ######################
   # Required Container #
@@ -408,6 +406,15 @@ services:
       - ./apps/docs:/app
     networks:
       - my-network
+  
+  next-landing-page:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.nginx
+    ports:
+      - "3000:3000"
+    environment:
+      - LANDING_STATS_JSON_URL=https://gogov-web-staging.s3.ap-southeast-1.amazonaws.com/public/stats.json
 
 networks:
   my-network:

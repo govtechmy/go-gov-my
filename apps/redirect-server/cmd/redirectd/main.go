@@ -133,10 +133,10 @@ func main() {
 
 	linkRepo := es.NewLinkRepo(esClient)
 
-	landingT, err := template.ParseFiles("templates/landing/en-GB.html")
-	if err != nil {
-		logger.Fatal("cannot load landing page template", zap.Error(err))
-	}
+	// landingT, err := template.ParseFiles("templates/landing/en-GB.html")
+	// if err != nil {
+	// 	logger.Fatal("cannot load landing page template", zap.Error(err))
+	// }
 
 	// add other languages (i.e. ms-MY) if necessary
 	redirectT, err := template.ParseFiles(
@@ -184,13 +184,13 @@ func main() {
 		slug := strings.TrimPrefix(r.URL.Path, "/")
 
 		// If no slug is provided, show the landing page
-		if slug == "" {
-			if err := landingT.Execute(w, nil); err != nil {
-				logger.Error("failed to execute landing page template", zap.Error(err))
-				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			}
-			return
-		}
+		// if slug == "" {
+		// 	if err := landingT.Execute(w, nil); err != nil {
+		// 		logger.Error("failed to execute landing page template", zap.Error(err))
+		// 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		// 	}
+		// 	return
+		// }
 
 		link, err := linkRepo.GetLink(ctx, slug)
 		if err == repository.ErrLinkNotFound {

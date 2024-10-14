@@ -1,3 +1,4 @@
 export type MetadataProps = {
-  params: { locale: string };
+  params: { locale?: string };
+  // searchParams: { locale?: string };
 };
