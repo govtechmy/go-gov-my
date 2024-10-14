@@ -14,9 +14,9 @@ export default function IconCursor(props: Props) {
     >
       <path
         d="M9.49995 8.99995L7.89995 13.2L3.69995 3.19995L13.7 7.39995L9.49995 8.99995ZM9.49995 8.99995L12.9 12.4"
-        stroke-width="1.2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

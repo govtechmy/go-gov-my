@@ -75,7 +75,7 @@
 <rect x="370.5" y="84.5" width="71" height="22" rx="4.5" fill="#E8E9ED" fill-opacity="0.5" stroke="#DDDDDD"/>
 <rect x="407.5" y="29.5" width="76" height="19" rx="9.5" fill="#743EE4" stroke="#DDDDDD"/>
 <line y1="117.5" x2="1512" y2="117.5" stroke="#DDDDDD"/>
-<line x1="191" y1="116.5" x2="267" y2="116.5" stroke="#DDDDDD" stroke-width="3"/>
+<line x1="191" y1="116.5" x2="267" y2="116.5" stroke="#DDDDDD" strokeWidth="3"/>
 <path d="M220.126 48.2958H220.626V47.7958V26.1198C224.772 28.9023 227.5 33.6329 227.5 39C227.5 47.5604 220.56 54.5 212 54.5C203.44 54.5 196.5 47.5604 196.5 39C196.5 30.4396 203.44 23.5 212 23.5C213.362 23.5 214.682 23.6755 215.94 24.0049V32.0277C214.736 31.3996 213.367 31.0445 211.916 31.0445C207.106 31.0445 203.207 34.9438 203.207 39.7539C203.207 44.564 207.106 48.4634 211.916 48.4634C213.367 48.4634 214.736 48.1082 215.94 47.4801V47.7958V48.2958H216.44H220.126Z" fill="black" stroke="#DDDDDD"/>
 <defs>
 <filter id="filter0_b_2322_265" x="-10" y="252" width="1532" height="593" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">

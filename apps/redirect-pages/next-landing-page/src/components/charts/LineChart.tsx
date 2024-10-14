@@ -86,7 +86,7 @@ export default function LineChart(props: Props) {
       .attr("font-size", AXIS_LABEL_FONT_SIZE)
       .attr("height", AXIS_LABEL_LINE_HEIGHT)
       .attr("transform", `translate(0, ${h})`)
-      .attr("stroke-width", 0.25)
+      .attr("strokeWidth", 0.25)
       .attr("text-anchor", "middle")
       .attr("class", cn("x-axis", labelVariants()));
 
@@ -108,7 +108,7 @@ export default function LineChart(props: Props) {
       .attr("font-size", AXIS_LABEL_FONT_SIZE)
       .attr("height", AXIS_LABEL_LINE_HEIGHT)
       .attr("transform", "translate(0, 0)")
-      .attr("stroke-width", 0.25)
+      .attr("strokeWidth", 0.25)
       .attr("stroke-dasharray", "8,4")
       .attr("class", cn("y-axis", labelVariants()));
 
@@ -171,7 +171,7 @@ export default function LineChart(props: Props) {
       .append("path")
       .datum(data)
       .attr("fill", "none")
-      .attr("stroke-width", 2)
+      .attr("strokeWidth", 2)
       .attr("stroke", "rgb(var(--brand-600))")
       // @ts-ignore
       .attr("d", line);
@@ -211,7 +211,7 @@ export default function LineChart(props: Props) {
       .attr("fill", "white")
       .attr("radius", "4")
       .attr("stroke", "rgb(var(--outline-400))")
-      .attr("stroke-width", 1)
+      .attr("strokeWidth", 1)
       .attr("rx", 6)
       .attr("ry", 6)
       .attr("class", "tooltip-background");

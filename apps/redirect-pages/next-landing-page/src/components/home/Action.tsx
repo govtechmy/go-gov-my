@@ -12,11 +12,10 @@ type Props = {
   title: string;
   description: ReactNode;
   className?: string;
+  buttonText: string;
 };
 
 export default function Action(props: Props) {
-  const t = useTranslations();
-
   return (
     <Section
       className={cn(
@@ -55,7 +54,7 @@ export default function Action(props: Props) {
           target="_blank"
           iconEnd={<IconLink />}
         >
-          <span>{t("pages.Home.Action.buttons.createLink")}</span>
+          {props.buttonText}
         </ButtonB>
       </div>
     </Section>

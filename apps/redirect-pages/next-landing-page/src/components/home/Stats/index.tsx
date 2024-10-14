@@ -14,6 +14,7 @@ import StatDropdown from "./StatDropdown";
 import StatGroup from "./StatGroup";
 import StatNumber from "./StatNumber";
 import StatTag from "./StatTag";
+import { Item as StatDropdownItem } from "@/components/Dropdown";
 
 type Props = {
   total: {
@@ -21,7 +22,23 @@ type Props = {
     links: number;
     clicks: number;
   };
+  title: string;
+  segments: {
+    publicOfficers: string;
+    linksCreated: string;
+    clicksServed: string;
+  };
+  counters: {
+    daily: string;
+    total: string;
+  };
   className?: string;
+  dropdown: {
+    daily: string;
+    weekly: string;
+    monthly: string;
+    yearly: string;
+  };
 };
 
 const SEGMENT_PUBLIC_OFFICERS = 0;
@@ -30,15 +47,15 @@ const SEGMENT_CLICKS_SERVED = 2;
 
 const segments = [
   {
-    key: "pages.Home.Stats.segments.publicOfficers",
+    key: "publicOfficers" as keyof Props['segments'],
     value: SEGMENT_PUBLIC_OFFICERS,
   },
   {
-    key: "pages.Home.Stats.segments.linksCreated",
+    key: "linksCreated" as keyof Props['segments'],
     value: SEGMENT_LINKS_CREATED,
   },
   {
-    key: "pages.Home.Stats.segments.clicksServed",
+    key: "clicksServed" as keyof Props['segments'],
     value: SEGMENT_CLICKS_SERVED,
   },
 ];
@@ -46,6 +63,7 @@ const segments = [
 export default function Stats(props: Props) {
   const t = useTranslations();
   const [currentSegment, setCurrentSegment] = useState(SEGMENT_PUBLIC_OFFICERS);
+  const [selectedDropdownItem, setSelectedDropdownItem] = useState<string>("daily");
 
   const data = {
     publicOfficers: props.total.users,
@@ -86,7 +104,7 @@ export default function Stats(props: Props) {
       </div>
       <div className="col-span-full mt-[1.125rem] flex flex-col items-center">
         <Heading level={2} className="text-center">
-          {t("pages.Home.Stats.title")}
+          {props.title}
         </Heading>
       </div>
       <div
@@ -108,7 +126,7 @@ export default function Stats(props: Props) {
           <StatGroup className={cn("col-start-1 col-end-2")}>
             <StatTag
               icon={<IconPeople />}
-              text={t("pages.Home.Stats.segments.publicOfficers")}
+              text={props.segments?.publicOfficers || ''}
             />
             <StatNumber
               size="large"
@@ -119,7 +137,7 @@ export default function Stats(props: Props) {
           <StatGroup className={cn("col-start-2 col-end-3 row-start-1")}>
             <StatTag
               icon={<IconLink />}
-              text={t("pages.Home.Stats.segments.linksCreated")}
+              text={props.segments?.linksCreated || ''}
             />
             <StatNumber
               size="large"
@@ -135,7 +153,7 @@ export default function Stats(props: Props) {
           >
             <StatTag
               icon={<IconCursor />}
-              text={t("pages.Home.Stats.segments.clicksServed")}
+              text={props.segments?.clicksServed || ''}
             />
             <StatNumber
               size="large"
@@ -156,11 +174,16 @@ export default function Stats(props: Props) {
                   selected={currentSegment === segment.value}
                   onClick={() => setCurrentSegment(segment.value)}
                 >
-                  {t(segment.key)}
+                  {props.segments[segment.key]}
                 </SegmentButton>
               ))}
             </div>
-            <StatDropdown className="ml-auto" />
+            <StatDropdown 
+              className="ml-auto" 
+              dropdownItems={props.dropdown} 
+              selectedItem={selectedDropdownItem}
+              onSelectionChange={(item: StatDropdownItem) => setSelectedDropdownItem(item.id)}
+            />
           </div>
           <div
             className={cn(
@@ -177,7 +200,7 @@ export default function Stats(props: Props) {
                 )}
                 key={i}
               >
-                <StatLabel className="text-sm" text={counter.name}></StatLabel>
+                <StatLabel className="text-sm" text={counter.name === 'daily' ? props.counters.daily : props.counters.total}></StatLabel>
                 <StatNumber
                   size="small"
                   prefix={counter.prefix}
@@ -201,28 +224,7 @@ export default function Stats(props: Props) {
               { date: new Date("2024-01-07T00:00:00Z"), value: 90112 },
               { date: new Date("2023-01-08T00:00:00Z"), value: 123456 },
               { date: new Date("2024-01-09T00:00:00Z"), value: 90112 },
-              { date: new Date("2024-01-10T00:00:00Z"), value: 11444 },
-              // { date: new Date("2024-01-11T00:00:00Z"), value: 123555 },
-              // { date: new Date("2024-01-12T00:00:00Z"), value: 16777 },
-              // { date: new Date("2023-01-13T00:00:00Z"), value: 12345 },
-              // { date: new Date("2024-01-14T00:00:00Z"), value: 90112 },
-              // { date: new Date("2024-01-15T00:00:00Z"), value: 11444 },
-              // { date: new Date("2024-01-16T00:00:00Z"), value: 123555 },
-              // { date: new Date("2024-01-17T00:00:00Z"), value: 16777 },
-              // { date: new Date("2023-01-18T00:00:00Z"), value: 12345 },
-              // { date: new Date("2024-01-19T00:00:00Z"), value: 90112 },
-              // { date: new Date("2023-01-20T00:00:00Z"), value: 12345 },
-              // { date: new Date("2024-01-21T00:00:00Z"), value: 90112 },
-              // { date: new Date("2024-01-22T00:00:00Z"), value: 11444 },
-              // { date: new Date("2024-01-23T00:00:00Z"), value: 123555 },
-              // { date: new Date("2024-01-24T00:00:00Z"), value: 16777 },
-              // { date: new Date("2023-01-25T00:00:00Z"), value: 12345 },
-              // { date: new Date("2024-01-26T00:00:00Z"), value: 90112 },
-              // { date: new Date("2024-01-27T00:00:00Z"), value: 11444 },
-              // { date: new Date("2024-01-28T00:00:00Z"), value: 123555 },
-              // { date: new Date("2024-01-29T00:00:00Z"), value: 16777 },
-              // { date: new Date("2023-01-30T00:00:00Z"), value: 12345 },
-              // { date: new Date("2024-01-31T00:00:00Z"), value: 90112 },
+              { date: new Date("2024-01-10T00:00:00Z"), value: 11444 }
             ]}
           ></LineChart>
         </div>
