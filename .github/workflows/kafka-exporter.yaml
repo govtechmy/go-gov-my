@@ -40,7 +40,6 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}
           tags: |
             type=sha
-            type=ref,event=tag
       - name: Determine environment
         id: determine-env
         run: |
