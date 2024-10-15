@@ -1,86 +1,41 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 type Props = {
   items: string[];
   onCycle?: (item: string) => void;
   className?: string;
+  interval?: number;
 };
 
-const animation = {
-  name: "cycle",
-  duration: {
-    seconds: 0.75,
-  },
-  delay: {
-    seconds: 0.3,
-  },
-  keyframe: {
-    percentage: {
-      textChange: 0.25,
-    },
-  },
-};
-
-// Calculate the animation timing (to trigger update) based on the percentage provided
-function getTiming(percentage: number) {
-  return (
-    percentage * animation.duration.seconds * 1000 +
-    animation.delay.seconds * 1000
-  );
-}
+const DEFAULT_INTERVAL = 3000; // 3 seconds
 
 export default function Cycle(props: Props) {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [currentAnimation, setCurrentAnimation] = useState<string | null>("");
 
-  function restart() {
-    setCurrentAnimation("");
+  const next = useCallback(() => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % props.items.length);
+  }, [props.items.length]);
 
-    // Set a buffer time to avoid flickering (adjust to your preference)
-    setTimeout(start, 500);
-  }
+  useEffect(() => {
+    const intervalId = setInterval(next, props.interval || DEFAULT_INTERVAL);
+    return () => clearInterval(intervalId);
+  }, [next, props.interval]);
 
-  function next() {
-    const index = (currentIndex + 1) % props.items.length;
-
-    setCurrentIndex(index);
-
-    // Notify parent component
-    props.onCycle?.(props.items[index]);
-  }
-
-  function start() {
-    if (props.items.length === 0) {
-      return;
-    }
-
-    setCurrentAnimation("animate-cycle");
-
-    // Set timeout to trigger next change
-    setTimeout(next, getTiming(animation.keyframe.percentage.textChange));
-  }
-
-  useEffect(start, [props.items]);
+  useEffect(() => {
+    props.onCycle?.(props.items[currentIndex]);
+  }, [currentIndex, props.items, props.onCycle]);
 
   return (
     <span
-      style={{
-        // Override duration set in tailwind config
-        animationDuration: `${animation.duration.seconds}s`,
-        animationDelay: `${animation.delay.seconds}s`,
-        animationTimingFunction: "ease-in-out",
-      }}
       className={cn(
-        "inline-flex justify-center",
-        currentAnimation,
-        props.className,
+        "inline-flex justify-center transition-opacity duration-300",
+        props.className
       )}
-      onAnimationEnd={restart}
     >
-      {props.items.length > 0 && props.items[currentIndex]}
+      {props.items[currentIndex]}
     </span>
   );
 }
