@@ -14,6 +14,7 @@ COPY ./docker/grafana/dashboards.yml /etc/grafana/provisioning/dashboards/dashbo
 
 COPY ./docker/grafana/dashboards/request_status_code.json /var/lib/grafana/dashboards/request_status_code.json
 COPY ./docker/grafana/dashboards/average_request_time.json /var/lib/grafana/dashboards/average_request_time.json
+COPY ./docker/grafana/dashboards/kafka_offset.json /var/lib/grafana/dashboards/kafka_offset.json
 
 RUN echo "Listing files in the current directory:" && ls -la
 
