@@ -28,7 +28,7 @@ export function logRequestMetrics(
     switch (response.status) {
       case 200:
         counter200.inc();
-        console.log(counter200.get());
+        console.log(await counter200.get());
         break;
       case 201:
         counter201.inc();
