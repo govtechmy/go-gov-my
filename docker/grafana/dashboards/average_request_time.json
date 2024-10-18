@@ -109,7 +109,7 @@
                     },
                     "disableTextWrap": false,
                     "editorMode": "code",
-                    "expr": "rate(total_http_time_taken[5m]) / rate(total_http_request_count[5m])",
+                    "expr": "http_request_time_taken / total_http_request_count",
                     "fullMetaSearch": false,
                     "includeNullMetadata": true,
                     "instant": false,
@@ -134,7 +134,7 @@
     },
     "timepicker": {},
     "timezone": "browser",
-    "title": "average request time [5m]",
+    "title": "average request time",
     "uid": "fe04mnm3gb30ga",
     "version": 1,
     "weekStart": ""
