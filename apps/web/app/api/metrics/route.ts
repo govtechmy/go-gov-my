@@ -6,7 +6,8 @@ export async function GET() {
     console.log('1111', await counter200.get());
     const headers = new Headers({
       'Content-Type': register.contentType,
-      'Cache-Control': 'no-store',
+      'Cache-Control':
+        'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0', // Disable caching
     });
     return new NextResponse(await register.metrics(), { headers });
   } catch (err) {
