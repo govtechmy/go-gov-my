@@ -1,4 +1,5 @@
 import { withWorkspace } from '@/lib/auth';
+import { logRequestMetrics } from '@/lib/decorator/logRequestMetrics';
 import { prisma } from '@/lib/prisma';
 import { getLink } from '@/lib/userinfos';
 import z from '@/lib/zod';
@@ -10,19 +11,23 @@ const updatePublicStatsSchema = z.object({
 });
 
 // GET /api/analytics – get the publicStats setting for a link
-export const GET = withWorkspace(async ({ searchParams }) => {
-  const { domain, key } = domainKeySchema.parse(searchParams);
-  const response = await getLink({ domain, key });
-  return NextResponse.json(response);
-});
+export const GET = logRequestMetrics(
+  withWorkspace(async ({ searchParams }) => {
+    const { domain, key } = domainKeySchema.parse(searchParams);
+    const response = await getLink({ domain, key });
+    return NextResponse.json(response);
+  }),
+);
 
 // PUT /api/analytics – update the publicStats setting for a link
-export const PUT = withWorkspace(async ({ req, searchParams }) => {
-  const { domain, key } = domainKeySchema.parse(searchParams);
-  const { publicStats } = updatePublicStatsSchema.parse(await req.json());
-  const response = await prisma.link.update({
-    where: { domain_key: { domain, key } },
-    data: { publicStats },
-  });
-  return NextResponse.json(response);
-});
+export const PUT = logRequestMetrics(
+  withWorkspace(async ({ req, searchParams }) => {
+    const { domain, key } = domainKeySchema.parse(searchParams);
+    const { publicStats } = updatePublicStatsSchema.parse(await req.json());
+    const response = await prisma.link.update({
+      where: { domain_key: { domain, key } },
+      data: { publicStats },
+    });
+    return NextResponse.json(response);
+  }),
+);
