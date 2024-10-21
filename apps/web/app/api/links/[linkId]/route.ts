@@ -7,6 +7,7 @@ import {
 } from '@/lib/api/links';
 import { parseRequestBody } from '@/lib/api/utils';
 import { withWorkspace } from '@/lib/auth';
+import { logRequestMetrics } from '@/lib/decorator/logRequestMetrics';
 import { prisma } from '@/lib/prisma';
 import { NewLinkProps } from '@/lib/types';
 import { updateLinkBodySchema } from '@/lib/zod/schemas/links';
@@ -14,42 +15,44 @@ import { deepEqual } from '@dub/utils';
 import { NextResponse } from 'next/server';
 
 // GET /api/links/[linkId] – get a link
-export const GET = withWorkspace(async ({ headers, link }) => {
-  if (!link) {
-    throw new DubApiError({
-      code: 'not_found',
-      message: 'Link not found.',
-    });
-  }
+export const GET = logRequestMetrics(
+  withWorkspace(async ({ headers, link }) => {
+    if (!link) {
+      throw new DubApiError({
+        code: 'not_found',
+        message: 'Link not found.',
+      });
+    }
 
-  const tags = await prisma.tag.findMany({
-    where: {
-      links: {
-        some: {
-          linkId: link.id,
+    const tags = await prisma.tag.findMany({
+      where: {
+        links: {
+          some: {
+            linkId: link.id,
+          },
         },
       },
-    },
-    select: {
-      id: true,
-      name: true,
-      color: true,
-    },
-  });
+      select: {
+        id: true,
+        name: true,
+        color: true,
+      },
+    });
 
-  const response = transformLink({
-    ...link,
-    tags: tags.map((tag) => {
-      return { tag };
-    }),
-  });
+    const response = transformLink({
+      ...link,
+      tags: tags.map((tag) => {
+        return { tag };
+      }),
+    });
 
-  return NextResponse.json(response, { headers });
-});
+    return NextResponse.json(response, { headers });
+  }),
+);
 
 // PATCH /api/links/[linkId] – update a link
-export const PATCH = withWorkspace(
-  async ({ req, headers, workspace, link, session }) => {
+export const PATCH = logRequestMetrics(
+  withWorkspace(async ({ req, headers, workspace, link, session }) => {
     if (!link) {
       throw new DubApiError({
         code: 'not_found',
@@ -128,21 +131,23 @@ export const PATCH = withWorkspace(
         message: error.message,
       });
     }
-  },
+  }),
 );
 
 // backwards compatibility
 export const PUT = PATCH;
 
 // DELETE /api/links/[linkId] – delete a link
-export const DELETE = withWorkspace(async ({ headers, link }) => {
-  console.log({ link });
-  await deleteLink(link!.id);
+export const DELETE = logRequestMetrics(
+  withWorkspace(async ({ headers, link }) => {
+    console.log({ link });
+    await deleteLink(link!.id);
 
-  return NextResponse.json(
-    { id: link!.id },
-    {
-      headers,
-    },
-  );
-});
+    return NextResponse.json(
+      { id: link!.id },
+      {
+        headers,
+      },
+    );
+  }),
+);

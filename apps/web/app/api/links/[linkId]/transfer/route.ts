@@ -1,6 +1,7 @@
 import { getClicks } from '@/lib/analytics/clicks';
 import { DubApiError } from '@/lib/api/errors';
 import { withWorkspace } from '@/lib/auth';
+import { logRequestMetrics } from '@/lib/decorator/logRequestMetrics';
 import { prisma } from '@/lib/prisma';
 import { formatRedisLink, redis } from '@/lib/redis';
 import z from '@/lib/zod';
@@ -17,8 +18,8 @@ const transferLinkBodySchema = z.object({
 });
 
 // POST /api/links/[linkId]/transfer – transfer a link to another workspace
-export const POST = withWorkspace(
-  async ({ req, headers, session, params, workspace }) => {
+export const POST = logRequestMetrics(
+  withWorkspace(async ({ req, headers, session, params, workspace }) => {
     const { newWorkspaceId } = transferLinkBodySchema.parse(await req.json());
     const tracer = trace.getTracer('default');
     const span = tracer.startSpan('recordLinks');
@@ -149,5 +150,5 @@ export const POST = withWorkspace(
     } finally {
       span.end();
     }
-  },
+  }),
 );
