@@ -5,7 +5,7 @@ import Cycle from "@/components/animation/Cycle";
 import { measureTextWidth } from "@/lib/dom";
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 type Props = {
   prefix?: string;
@@ -15,6 +15,7 @@ type Props = {
   padding?: "small";
   borderRadius?: "small";
   className?: string;
+  interval?: number;
 };
 
 type Item = string;
@@ -23,44 +24,23 @@ const variants = cva("w-fit");
 
 export default function AnimatedRoundedText(props: Props) {
   const ref = useRef<HTMLSpanElement | null>(null);
-  const [widthPx, setWidthPx] = useState(0);
-  const [heightPx, setHeightPx] = useState(0);
-  const [cycleItems, setCycleItems] = useState<Item[]>([]);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const prefix = props.prefix || "";
 
-  function setDimension(item: string) {
-    const measurement = measureTextWidth(
-      prefix + item,
-      ref.current as HTMLElement,
-    );
-
-    if (!measurement) {
-      return;
+  const setDimension = useCallback((item: string) => {
+    if (ref.current) {
+      const measurement = measureTextWidth(prefix + item, ref.current);
+      if (measurement) {
+        setDimensions({ width: measurement.width, height: measurement.height });
+      }
     }
-
-    setWidthPx(measurement.width);
-    setHeightPx(measurement.height);
-  }
-
-  function onCycle(item: Item) {
-    setDimension(item);
-  }
-
-  function startCycle(items: Item[]) {
-    setCycleItems(items);
-  }
+  }, [prefix]);
 
   useEffect(() => {
-    if (cycleItems.length === 0) {
-      return;
+    if (props.items.length > 0) {
+      setDimension(props.items[0]);
     }
-
-    onCycle(cycleItems[0]);
-  }, [cycleItems]);
-
-  useEffect(() => {
-    startCycle(props.items);
-  }, [props.items]);
+  }, [props.items, setDimension]);
 
   return (
     <RoundedText
@@ -72,20 +52,20 @@ export default function AnimatedRoundedText(props: Props) {
     >
       <span
         ref={ref}
-        className={cn(
-          "inline-flex", // Use inline element for transition
-          "transition-all",
-          props.className,
-        )}
+        className={cn("inline-flex transition-all", props.className)}
         style={{
-          width: `${widthPx}px`,
-          height: `${heightPx}px`,
+          width: `${dimensions.width}px`,
+          height: `${dimensions.height}px`,
         }}
       >
-        {cycleItems.length > 0 && widthPx > 0 && (
+        {props.items.length > 0 && (
           <>
-            {props.prefix}
-            <Cycle items={cycleItems} onCycle={onCycle} />
+            {prefix}
+            <Cycle 
+              items={props.items} 
+              onCycle={setDimension} 
+              interval={props.interval}
+            />
           </>
         )}
       </span>

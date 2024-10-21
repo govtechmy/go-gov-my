@@ -22,6 +22,25 @@ type StatsJson = {
   linkCount: number;
   totalClicks: number;
 };
+const SEGMENTS = [
+  "mygcc",
+  "moh",
+  "miti",
+  "digital",
+  "moe",
+  "mohr",
+  "motac",
+  "epf",
+  "mof",
+  "mcmc",
+];
+
+const ACTION_BASE_PATH = "pages.Home.Action";
+const PREVIEW_BASE_PATH = "pages.Home.Preview";
+const HERO_BASE_PATH = "pages.Home.Hero";
+const STATS_BASE_PATH = "pages.Home.Stats";
+const MASTHEAD_BASE_PATH = "components.Masthead";
+const HEADER_BASE_PATH = "components.Header";
 
 async function getStats() {
   const url = process.env.LANDING_STATS_JSON_URL;
@@ -90,7 +109,9 @@ export default async function Home({ searchParams }: Props) {
               padding="small"
               borderRadius="small"
               className="text-center"
-              items={SEGMENTS.map((segment) => `@${segment}`)}
+              items={SEGMENTS}
+              prefix="@"
+              interval={2000} // Add an interval prop (adjust as needed)
             />
           ),
         })}
@@ -136,6 +157,7 @@ export default async function Home({ searchParams }: Props) {
               prefix="go.gov.my/"
               variant="primary"
               items={SEGMENTS}
+              interval={2000} // Add an interval prop (adjust as needed)
             />
           ),
         })}
@@ -186,24 +208,7 @@ function Main(props: { children: ReactNode }) {
   );
 }
 
-const SEGMENTS = [
-  "mygcc",
-  "moh",
-  "miti",
-  "digital",
-  "dsd",
-  "mohr",
-  "motac",
-  "epf",
-  "mof",
-  "mcmc",
-];
-const ACTION_BASE_PATH = "pages.Home.Action";
-const PREVIEW_BASE_PATH = "pages.Home.Preview";
-const HERO_BASE_PATH = "pages.Home.Hero";
-const STATS_BASE_PATH = "pages.Home.Stats";
-const MASTHEAD_BASE_PATH = "components.Masthead";
-const HEADER_BASE_PATH = "components.Header";
+
 
 const header = {
   signInKey: keypath(HEADER_BASE_PATH, "buttons.signIn"),
