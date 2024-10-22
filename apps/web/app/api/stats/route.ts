@@ -86,8 +86,6 @@ export async function GET(req: NextRequest) {
     const content = await response.json();
 
     const parsed = schema.parse(content);
-    // console.log('Parsed data:', parsed);
-    // console.log("parsed", parsed)
 
     const clicksMetadataSorted = sortByDateAsc(parsed.clicksMetadata);
     const linksMetadata = sortByDateAsc(parsed.clicksMetadata);
@@ -112,13 +110,15 @@ export async function GET(req: NextRequest) {
     };
 
     const buf = Buffer.from(JSON.stringify(obj));
-    const { url } = await storage.upload('public/stats2.json', buf);
-    console.log('url', url);
+    const { url } = await storage.upload('public/stats2.json', buf, {
+      contentType: 'application/json',
+    });
 
     return NextResponse.json({
       url,
     });
   } catch (error) {
+    console.log('error', error);
     return handleAndReturnErrorResponse(error);
   }
 }
