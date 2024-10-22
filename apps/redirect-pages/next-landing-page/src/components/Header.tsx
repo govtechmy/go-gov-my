@@ -17,6 +17,7 @@ import { VariantProps } from "class-variance-authority";
 import { useTranslations } from "next-intl";
 import { ReactNode, Suspense, useState } from "react";
 import ButtonB from "./ButtonB";
+import { ThemeToggle } from "./ThemeToggle";
 
 type NavItem = {
   href: string;
@@ -105,10 +106,10 @@ export function Header(props: { signInKey: string }) {
 
         <div className="flex shrink-0 items-center gap-2">
           <Suspense>
+            <ThemeToggle />
             <Locale />
           </Suspense>
           <ButtonB variant="primary" size="small" href={URL_APP_LOGIN}>
-            {/* <span>{t("components.Header.buttons.signIn")}</span> */}
             {props.signInKey}
           </ButtonB>
         </div>

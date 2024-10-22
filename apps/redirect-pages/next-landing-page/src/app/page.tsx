@@ -12,6 +12,7 @@ import { URL_APP_LOGIN, URL_FIGMA, URL_GITHUB } from "@/constants/urls";
 import Masthead from "@/components/Masthead";
 import { Header } from "@/components/Header";
 import Footer from "@/components/Footer";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 type Props = {
   searchParams: { locale?: string };
