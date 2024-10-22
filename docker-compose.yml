@@ -410,7 +410,7 @@ services:
   next-landing-page:
     build:
       context: .
-      dockerfile: docker/Dockerfile.nginx
+      dockerfile: docker/Dockerfile.landing
     ports:
       - "3000:3000"
     environment:
