@@ -156,7 +156,7 @@ ELASTIC_URL=http://localhost:9200
 ELASTIC_USER=elastic
 ELASTIC_PASSWORD=
 HTTP_PORT=3000
-TELEMETRY_URL=localhost:4318
+TELEMETRY_URL=jaeger:4318
 ```
 
 ## Working Directories
