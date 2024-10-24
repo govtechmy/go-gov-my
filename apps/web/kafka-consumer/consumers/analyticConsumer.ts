@@ -92,11 +92,18 @@ export async function runAnalyticConsumer(consumer: Consumer, log: Logger) {
                 });
               }
 
-              // Increment the link's clicks column
-              await tx.link.update({
-                where: { id: analytics.linkId },
-                data: { clicks: { increment: analytics.total } },
-              });
+              // Increment the link's clicks column with error handling
+              try {
+                await tx.link.update({
+                  where: { id: analytics.linkId },
+                  data: { clicks: { increment: analytics.total } },
+                });
+              } catch (error) {
+                console.error(
+                  `Failed to update clicks for linkId: ${analytics.linkId}`,
+                  error,
+                );
+              }
             },
           );
 
