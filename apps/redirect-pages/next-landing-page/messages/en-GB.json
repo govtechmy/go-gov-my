@@ -62,7 +62,7 @@
 				}
 			},
 			"Stats": {
-				"title": "Our performance so far",
+				"title": "Usage of GoGovMy",
 				"segments": {
 					"publicOfficers": "Public Officers",
 					"linksCreated": "Links Created",

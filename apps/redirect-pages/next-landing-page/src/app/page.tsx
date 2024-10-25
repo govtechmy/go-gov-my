@@ -13,6 +13,7 @@ import Masthead from "@/components/Masthead";
 import { Header } from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import StatsNew from "@/components/home/StatsNew";
 
 type Props = {
   searchParams: { locale?: string };
@@ -126,6 +127,27 @@ export default async function Home({ searchParams }: Props) {
           animation: item.animation,
         }))}
       />
+      <StatsNew total={{
+          users: stats.userCount,
+          links: stats.linkCount,
+          clicks: stats.totalClicks,
+        }}
+        title={t(statsTranslations.titleKey)}
+        segments={{
+          publicOfficers: t(statsTranslations.segments.publicOfficers),
+          linksCreated: t(statsTranslations.segments.linksCreated),
+          clicksServed: t(statsTranslations.segments.clicksServed),
+        }}
+        counters={{
+          daily: t(statsTranslations.counters.daily),
+          total: t(statsTranslations.counters.total),
+        }}
+        dropdown={{
+          daily: t(statsTranslations.dropdown.items.daily.label),
+          weekly: t(statsTranslations.dropdown.items.weekly.label),
+          monthly: t(statsTranslations.dropdown.items.monthly.label),
+          yearly: t(statsTranslations.dropdown.items.yearly.label),
+        }} />
       <Stats
         total={{
           users: stats.userCount,
