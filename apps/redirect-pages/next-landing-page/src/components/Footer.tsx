@@ -1,5 +1,7 @@
+import { Icon } from "@/icons/social-media";
 import { cn } from "@/lib/utils";
 import { useFormatter, useTranslations } from "next-intl";
+import Link from "next/link";
 
 type Props = {
   ministry: string;
@@ -13,6 +15,25 @@ type Props = {
   }[];
 };
 
+export const social_media = [
+  {
+    icon: <Icon.Facebook />,
+    name: "Facebook",
+    href: "https://www.facebook.com/KementerianDigitalMalaysia/",
+  },
+  { icon: <Icon.X />, name: "X", href: "https://x.com/KemDigitalMsia" },
+  {
+    icon: <Icon.Instagram />,
+    name: "Instagram",
+    href: "https://www.instagram.com/kementeriandigitalmalaysia/",
+  },
+  {
+    icon: <Icon.Tiktok />,
+    name: "Tiktok",
+    href: "https://www.tiktok.com/@kementeriandigital",
+  },
+];
+
 export default function Footer(props: Props) {
   const format = useFormatter();
   const t = useTranslations("components.Footer");
@@ -22,9 +43,9 @@ export default function Footer(props: Props) {
   };
 
   return (
-    <div className="border-t bg-background-50 py-8 lg:py-16">
-      <div className="divide-y-outline-200 container divide-y max-sm:px-0">
-        <div className="flex flex-col gap-6 pb-8 max-sm:px-4.5 lg:flex-row lg:justify-between">
+    <div className="border-t border-outline-200 bg-background-50 py-8 lg:py-16 print:hidden">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-0">
+        <div className="flex flex-col gap-6 pb-8 lg:flex-row lg:justify-between">
           <div className="flex flex-col gap-4 lg:gap-4.5">
             <div className="flex items-center gap-x-2.5">
               <img
@@ -35,7 +56,7 @@ export default function Footer(props: Props) {
                 alt="Jata Negara"
               />
               <div>
-                <h6 className="whitespace-nowrap font-semibold">
+                <h6 className="whitespace-nowrap font-poppins font-semibold">
                   {props.ministry}
                 </h6>
               </div>
@@ -46,7 +67,18 @@ export default function Footer(props: Props) {
                 __html: props.descriptionWithNewlines.replaceAll("\n", "<br/>"),
               }}
             ></p>
+            <div className="space-y-2 lg:space-y-3">
+              <p className="text-sm font-semibold">{t("follow_us")}</p>
+              <div className="flex gap-3">
+                {social_media.map(({ icon, href }) => (
+                  <a key={href} href={href} target="_blank" rel="noopenner noreferrer">
+                    {icon}
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
+          {/* Right menu */}
           <div className="flex flex-col gap-6 text-sm lg:flex-row">
             {props.links.map((item, index) => (
               <div className="space-y-2" key={index}>
@@ -68,11 +100,25 @@ export default function Footer(props: Props) {
             ))}
           </div>
         </div>
-        <div className="flex flex-col justify-between gap-6 pt-8 text-sm text-dim-500 max-sm:px-4.5 lg:flex-row">
+        
+        <div className="flex flex-col justify-between gap-6 pt-8 text-sm text-dim-500 lg:flex-row">
           <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
             <p>
               {t("copyright")} © {new Date().getFullYear()}
             </p>
+             <span className="hidden h-3 w-px bg-outline-300 lg:block"></span>
+              <div className="flex flex-wrap gap-x-3 gap-y-2 text-black-700">
+              {["penafian", "dasar-privasi"].map((link) => (
+                <Link
+                  key={link}
+                  className="underline-font text-sm text-black-700 hover:text-foreground hover:underline"
+                  // href={`/${link}`}
+                  href='#'
+                >
+                  {t(`${link}`)}
+                </Link>
+              ))}
+            </div>
           </div>
           {process.env.LAST_UPDATED && (
             <span>
@@ -80,7 +126,7 @@ export default function Footer(props: Props) {
                 ": " +
                 format.dateTime(new Date(process.env.LAST_UPDATED), {
                   year: "numeric",
-                  month: "short",
+                  month: "long",
                   day: "numeric",
                   hour12: true,
                   hour: "2-digit",

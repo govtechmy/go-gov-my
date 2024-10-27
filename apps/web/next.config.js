@@ -1,10 +1,10 @@
 const REDIRECT_SEGMENTS = [
-  "pricing",
-  "blog",
-  "help",
-  "changelog",
-  "tools",
-  "_static",
+  'pricing',
+  'blog',
+  'help',
+  'changelog',
+  'tools',
+  '_static',
 ];
 
 /** @type {import('next').NextConfig} */
@@ -12,9 +12,9 @@ const nextConfig = {
   reactStrictMode: false,
   experimental: {
     serverComponentsExternalPackages: [
-      "@react-email/components",
-      "@react-email/render",
-      "@react-email/tailwind",
+      '@react-email/components',
+      '@react-email/render',
+      '@react-email/tailwind',
     ],
     instrumentationHook: true,
   },
@@ -39,75 +39,75 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: "assets.dub.co", // for Dub's static assets
+        hostname: 'assets.dub.co', // for Dub's static assets
       },
       {
-        hostname: "dubassets.com", // for Dub's user generated images
+        hostname: 'dubassets.com', // for Dub's user generated images
       },
       {
-        hostname: "www.google.com",
+        hostname: 'www.google.com',
       },
       {
-        hostname: "avatar.vercel.sh",
+        hostname: 'avatar.vercel.sh',
       },
       {
-        hostname: "faisalman.github.io",
+        hostname: 'faisalman.github.io',
       },
       {
-        hostname: "api.dicebear.com",
+        hostname: 'api.dicebear.com',
       },
       {
-        hostname: "pbs.twimg.com",
+        hostname: 'pbs.twimg.com',
       },
       {
-        hostname: "lh3.googleusercontent.com",
+        hostname: 'lh3.googleusercontent.com',
       },
       {
-        hostname: "avatars.githubusercontent.com",
+        hostname: 'avatars.githubusercontent.com',
       },
       {
-        hostname: "media.cleanshot.cloud", // only for staging purposes
+        hostname: 'media.cleanshot.cloud', // only for staging purposes
       },
       {
-        hostname: "gogov-web-dev.s3.ap-southeast-1.amazonaws.com",
+        hostname: 'gogov-web-dev.s3.ap-southeast-1.amazonaws.com',
       },
       {
-        hostname: "app.pautan.org",
+        hostname: 'app.pautan.org',
       },
       {
-        hostname: "app.go.gov.my",
+        hostname: 'app.go.gov.my',
       },
       {
-        hostname: "pautan.org",
+        hostname: 'pautan.org',
       },
       {
-        hostname: "go.gov.my",
+        hostname: 'go.gov.my',
       },
     ],
     domains: [
-      "gogov-web-dev.s3.ap-southeast-1.amazonaws.com",
-      "app.pautan.org",
-      "app.go.gov.my",
-      "pautan.org",
-      "go.gov.my",
+      'gogov-web-dev.s3.ap-southeast-1.amazonaws.com',
+      'app.pautan.org',
+      'app.go.gov.my',
+      'pautan.org',
+      'go.gov.my',
     ],
   },
   async headers() {
     return [
       {
-        source: "/:path*",
+        source: '/:path*',
         headers: [
           {
-            key: "Referrer-Policy",
-            value: "no-referrer-when-downgrade",
+            key: 'Referrer-Policy',
+            value: 'no-referrer-when-downgrade',
           },
           {
-            key: "X-DNS-Prefetch-Control",
-            value: "on",
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
           },
           {
-            key: "X-Frame-Options",
-            value: "DENY",
+            key: 'X-Frame-Options',
+            value: 'DENY',
           },
         ],
       },
@@ -116,26 +116,26 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: "/",
+        source: '/',
         has: [
           {
-            type: "host",
-            value: "app.go.gov.my",
+            type: 'host',
+            value: 'app.go.gov.my',
           },
         ],
-        destination: "https://app.go.gov.my",
+        destination: 'https://app.go.gov.my',
         permanent: true,
         statusCode: 301,
       },
       {
-        source: "/:path*",
+        source: '/:path*',
         has: [
           {
-            type: "host",
-            value: "app.go.gov.my",
+            type: 'host',
+            value: 'app.go.gov.my',
           },
         ],
-        destination: "https://app.go.gov.my/:path*",
+        destination: 'https://app.go.gov.my/:path*',
         permanent: true,
         statusCode: 301,
       },
@@ -145,8 +145,8 @@ const nextConfig = {
             source: `/${segment}`,
             has: [
               {
-                type: "host",
-                value: "pautan.org",
+                type: 'host',
+                value: 'pautan.org',
               },
             ],
             destination: `https://go.gov.my/${segment}`,
@@ -157,8 +157,8 @@ const nextConfig = {
             source: `/${segment}/:path*`,
             has: [
               {
-                type: "host",
-                value: "dub.sh",
+                type: 'host',
+                value: 'dub.sh',
               },
             ],
             destination: `https://go.gov.my/${segment}/:path*`,
@@ -168,62 +168,62 @@ const nextConfig = {
         ),
       ),
       {
-        source: "/metatags",
+        source: '/metatags',
         has: [
           {
-            type: "host",
-            value: "dub.sh",
+            type: 'host',
+            value: 'dub.sh',
           },
         ],
-        destination: "https://go.gov.my/tools/metatags",
+        destination: 'https://go.gov.my/tools/metatags',
         permanent: true,
         statusCode: 301,
       },
       {
-        source: "/metatags",
+        source: '/metatags',
         has: [
           {
-            type: "host",
-            value: "go.gov.my",
+            type: 'host',
+            value: 'go.gov.my',
           },
         ],
-        destination: "/tools/metatags",
+        destination: '/tools/metatags',
         permanent: true,
         statusCode: 301,
       },
       {
-        source: "/",
+        source: '/',
         has: [
           {
-            type: "host",
-            value: "pautan.org",
+            type: 'host',
+            value: 'pautan.org',
           },
         ],
-        destination: "https://pautan.org",
+        destination: 'https://pautan.org',
         permanent: true,
         statusCode: 301,
       },
       {
-        source: "/",
+        source: '/',
         has: [
           {
-            type: "host",
-            value: "preview.pautan.org",
+            type: 'host',
+            value: 'preview.pautan.org',
           },
         ],
-        destination: "https://preview.pautan.org",
+        destination: 'https://preview.pautan.org',
         permanent: true,
         statusCode: 301,
       },
       {
-        source: "/",
+        source: '/',
         has: [
           {
-            type: "host",
-            value: "go.gov.my",
+            type: 'host',
+            value: 'go.gov.my',
           },
         ],
-        destination: "https://go.gov.my/en/admin",
+        destination: 'https://go.gov.my/en/admin',
         permanent: true,
         statusCode: 301,
       },

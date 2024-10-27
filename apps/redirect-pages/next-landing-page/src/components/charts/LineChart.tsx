@@ -6,13 +6,17 @@ import * as d3 from "d3";
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
+// Update the Props and DataPoint types
 type Props = {
   data: DataPoint[];
   animationDurationMs?: number;
   className?: string;
 };
 
-type DataPoint = { date: Date; value: number };
+type DataPoint = {
+  date: Date;
+  value: number;
+};
 
 const TOOLTIP_HEIGHT = 50;
 const TOOLTIP_WIDTH = 90;
@@ -70,8 +74,13 @@ export default function LineChart(props: Props) {
       .axisBottom(xScale)
       .tickSize(0)
       .tickPadding(10)
-      // @ts-ignore
-      .tickFormat((d, i) => formatResponsiveDate(d, w));
+      .tickFormat((d) => {
+        const date = d as unknown as Date;
+        return date.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric'
+        });
+      });
 
     // @ts-ignore
     const yAxis = d3
@@ -90,16 +99,11 @@ export default function LineChart(props: Props) {
       .attr("text-anchor", "middle")
       .attr("class", cn("x-axis", labelVariants()));
 
-    // Set the text-anchor of the first tick
+    // Adjust x-axis labels to prevent overlap
     xAxisGroup
-      .selectAll(".tick")
-      .filter((d, i) => i === 0)
-      .attr("text-anchor", "start");
-
-    xAxisGroup
-      .selectAll(".tick")
-      .filter((d, i) => i === data.length - 1)
-      .attr("text-anchor", "end");
+      .selectAll(".tick text")
+      .attr("transform", "translate(-10,0)") // Adjust horizontal spacing
+      .style("text-anchor", "end");
 
     svg
       .append("g")
@@ -228,46 +232,44 @@ export default function LineChart(props: Props) {
       .on("mousemove", function onMouseMove(event) {
         const [mouseX] = d3.pointer(event);
 
-        // Find the closest data point to the mouse position
-        const closestX = xScale.domain().reduce((prev, curr) =>
-          // @ts-ignore
-          Math.abs(xScale(curr) - mouseX) < Math.abs(xScale(prev) - mouseX)
-            ? curr
-            : prev,
-        );
+        // Find the closest x value in the domain
+        const xDate = xScale.domain().reduce((prev, curr) => {
+          const prevDiff = Math.abs(xScale(prev)! - mouseX);
+          const currDiff = Math.abs(xScale(curr)! - mouseX);
+          return currDiff < prevDiff ? curr : prev;
+        });
 
-        // Move vertical line to the closest data point
-        verticalLine
-          // @ts-ignore
-          .attr("x1", xScale(closestX))
-          // @ts-ignore
-          .attr("x2", xScale(closestX))
-          .style("display", "inline");
+        // Find the corresponding data point
+        const point = data.find(d => d.date.getTime() === (xDate as unknown as Date).getTime());
 
-        // @ts-ignore
-        const closestPoint = data.find((d) => d.date === closestX);
+        if (point) {
+          // Move vertical line
+          verticalLine
+            .attr("x1", xScale(point.date as unknown as string)!)
+            .attr("x2", xScale(point.date as unknown as string)!)
+            .style("display", "inline");
 
-        if (closestPoint) {
-          tooltip.style("display", "inline").attr("transform", (d, i) => {
+          // Update tooltip
+          tooltip.style("display", "inline").attr("transform", () => {
             const x =
-              // @ts-ignore
-              xScale(closestPoint.date) >= w - TOOLTIP_WIDTH
-                ? // @ts-ignore
-                  xScale(closestPoint.date) - 10 - TOOLTIP_WIDTH
-                : // @ts-ignore
-                  xScale(closestPoint.date) + 10;
+              xScale(point.date as unknown as string)! >= w - TOOLTIP_WIDTH
+                ? xScale(point.date as unknown as string)! - 10 - TOOLTIP_WIDTH
+                : xScale(point.date as unknown as string)! + 10;
 
             const y =
-              yScale(closestPoint.value) - TOOLTIP_HEIGHT < 0
-                ? yScale(closestPoint.value) + 40
-                : yScale(closestPoint.value) - 40;
+              yScale(point.value) - TOOLTIP_HEIGHT < 0
+                ? yScale(point.value) + 40
+                : yScale(point.value) - 40;
 
             return `translate(${x}, ${y})`;
           });
 
           const lines = [
             {
-              text: formatDate(closestPoint.date),
+              text: new Date(point.date).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric'
+              }),
               styles: {
                 fontSize: 12,
                 height: 18,
@@ -276,7 +278,7 @@ export default function LineChart(props: Props) {
               },
             },
             {
-              text: getStylizedNumber(closestPoint.value),
+              text: getStylizedNumber(point.value),
               styles: {
                 fontSize: 16,
                 height: 24,
@@ -286,27 +288,19 @@ export default function LineChart(props: Props) {
             },
           ];
 
-          // Compute a series of dy values
-          const padding = 16;
-          const dy = [
-            padding,
-            ...lines.map((line) => line.styles.height),
-            padding,
-          ];
-
+          // Update tooltip text
           tooltipText
             .selectAll("tspan")
             .data(lines.map((line) => line.text))
-            .enter()
-            .append("tspan")
+            .join("tspan")
             .attr("x", 8)
-            .attr("dy", (d, i) => dy[i])
+            .attr("dy", (d, i) => i === 0 ? 16 : 24)
             .attr("stroke", (d, i) => lines[i].styles.strokeColor)
             .attr("font-weight", (d, i) => lines[i].styles.weight)
             .attr("font-size", (d, i) => lines[i].styles.fontSize)
-            .classed("bg-red-500", true)
             .text((d) => d);
         } else {
+          verticalLine.style("display", "none");
           tooltip.style("display", "none");
         }
       })
@@ -348,6 +342,7 @@ export default function LineChart(props: Props) {
         style={{
           // Offseting long labels
           paddingLeft: `${paddingLeft}px`,
+          boxShadow: 'none',
         }}
         className={cn("min-h-[15.625rem] min-w-[18.75rem]", props.className)}
       ></svg>

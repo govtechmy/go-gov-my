@@ -1,5 +1,5 @@
 require('dotenv').config();
-const path = require("path");
+const path = require('path');
 
 // Load .env.local if it exists, otherwise fall back to .env
 const envPath = path.resolve(process.cwd(), '.env.local');
@@ -21,7 +21,7 @@ async function fetchData() {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error('Error fetching data:', error);
     return null;
   }
 }
@@ -29,7 +29,7 @@ async function fetchData() {
 async function main() {
   try {
     const resp = await fetchData();
-    console.log("resp", resp);
+    console.log('resp', resp);
   } catch (error) {
     console.log(error);
   }
