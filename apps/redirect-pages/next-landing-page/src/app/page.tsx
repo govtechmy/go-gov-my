@@ -55,24 +55,32 @@ const MASTHEAD_BASE_PATH = "components.Masthead";
 const HEADER_BASE_PATH = "components.Header";
 
 async function getStats() {
-  const url = process.env.LANDING_STATS_JSON_URL;
-
-  if (!url) {
-    throw new Error("LANDING_STATS_JSON_URL is not set");
-  }
-
-  // const response = await fetch(url);
-  const response = await fetch(url, {
-    next: {
-      revalidate: 0 // Disable caching
-    },
-    cache: 'no-store', // Prevent caching
-    headers: {
-      'Cache-Control': 'no-cache'
+  try {
+    const url = process.env.LANDING_STATS_JSON_URL;
+    if (!url) {
+      throw new Error("LANDING_STATS_JSON_URL is not set");
     }
-  });
 
-  return (await response.json()) as StatsJson;
+    const response = await fetch(url, {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch stats: ${response.statusText}`);
+    }
+
+    return (await response.json()) as StatsJson;
+  } catch (error) {
+    console.error('Error fetching stats:', error);
+    return {
+      clicksMetadata: [],
+      linksMetadata: [],
+      officersMetadata: []
+    };
+  }
 }
 
 export async function generateStaticParams() {
@@ -356,4 +364,3 @@ const masthead = {
   orKey: keypath(MASTHEAD_BASE_PATH, "or"),
   precautionKey: keypath(MASTHEAD_BASE_PATH, "precaution"),
 };
-
