@@ -130,7 +130,7 @@
 		"Footer": {
 			"copyright": "All Rights Reserved",
 			"last_update": "Last Updated",
-			"address": "Aras 13, 14 dan 15, Blok Menara, Menara Usahawan\nNo. 18, Persiaran Perdana, Presint 2\nPusat Pentadbiran Kerajaan Persekutuan\n62000 Putrajaya, Malaysia.",
+			"address": "Aras 13, 14 dan 15, Blok Menara,\nMenara Usahawan\nNo. 18, Persiaran Perdana, Presint 2\nPusat Pentadbiran Kerajaan Persekutuan\n62000 Putrajaya, Malaysia.",
 			"links": {
 				"title": {
 					"openSource": "Open Source"
@@ -139,7 +139,10 @@
 					"github": "GitHub Repo",
 					"figma": "Figma"
 				}
-			}
+			},
+			"penafian": "Disclaimer",
+			"dasar-privasi": "Privacy Policy",
+			"follow_us": "Follow Us"
 		},
 		"SearchBox": {
 			"placeholder": "Search by keywords"
