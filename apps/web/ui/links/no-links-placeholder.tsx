@@ -13,11 +13,12 @@ export default function NoLinksPlaceholder({
         {message?.no_link}
       </h2>
       <img
-        src="/_static/illustrations/cat-shot.svg"
+        // src="/_static/illustrations/cat-shot.svg"
+        src="/_static/illustrations/empty-box.png"
         alt="No links yet"
-        width={400}
-        height={400}
-        className="pointer-events-none -my-8"
+        width={200}
+        height={200}
+        className="pointer-events-none my-8"
       />
       <div>
         <AddEditLinkButton />

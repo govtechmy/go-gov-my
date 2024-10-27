@@ -23,10 +23,15 @@ type Props = {
   searchParams: { locale?: string };
 };
 
+type MetadataItem = {
+  date: string;
+  total: number;
+};
+
 type StatsJson = {
-  userCount: number;
-  linkCount: number;
-  totalClicks: number;
+  clicksMetadata: MetadataItem[];
+  linksMetadata: MetadataItem[];
+  officersMetadata: MetadataItem[];
 };
 
 const SEGMENTS = [
@@ -73,6 +78,21 @@ export default async function Home({ searchParams }: Props) {
   const t = await getTranslations({ locale });
   const stats = await getStats();
   const messages = await getMessages({ locale });
+
+  // Get the latest total values for each metric
+  const getLatestTotal = (metadata: MetadataItem[]) => {
+    if (metadata.length === 0) return 0;
+    
+    return metadata.reduce((latest, current) => {
+      const latestDate = new Date(latest.date);
+      const currentDate = new Date(current.date);
+      return currentDate > latestDate ? current : latest;
+    }).total;
+  };
+  const latestClicks = getLatestTotal(stats.clicksMetadata);
+  const latestLinks = getLatestTotal(stats.linksMetadata);
+  const latestOfficers = getLatestTotal(stats.officersMetadata);
+
 
   return (
     <>
@@ -136,9 +156,9 @@ export default async function Home({ searchParams }: Props) {
           />
           <StatsNew
             total={{
-              users: stats.userCount,
-              links: stats.linkCount,
-              clicks: stats.totalClicks,
+              users: latestOfficers,
+              links: latestLinks,
+              clicks: latestClicks,
             }}
             title={t(statsTranslations.titleKey)}
             segments={{
@@ -159,9 +179,9 @@ export default async function Home({ searchParams }: Props) {
           />
           <Stats
             total={{
-              users: stats.userCount,
-              links: stats.linkCount,
-              clicks: stats.totalClicks,
+              users: latestOfficers,
+              links: latestLinks,
+              clicks: latestClicks,
             }}
             title={t(statsTranslations.titleKey)}
             segments={{
