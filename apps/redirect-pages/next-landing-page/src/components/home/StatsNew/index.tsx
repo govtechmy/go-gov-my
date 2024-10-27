@@ -2,91 +2,59 @@
 
 import Heading from "@/components/Heading";
 import Section from "@/components/Section";
-import SegmentButton from "@/components/SegmentButton";
-import LineChart from "@/components/charts/LineChart";
-import IconCursor from "@/icons/cursor";
-import IconLink from "@/icons/link";
-import IconPeople from "@/icons/people";
 import { cn } from "@/lib/utils";
-import { useTranslations } from "next-intl";
 import { useState } from "react";
-import StatDropdown from "@/components/home/Stats/StatDropdown";
-import StatGroup from "@/components/home/Stats/StatGroup";
-import StatNumber from "@/components/home/Stats/StatNumber";
-import StatTag from "@/components/home/Stats/StatTag";
-import { Item as StatDropdownItem } from "@/components/Dropdown";
 import SmoothLineChart from "@/components/charts/SmoothLineChart";
+import LineChart from "@/components/charts/LineChart";
+import DateRangeSlider from "./DateRangeSlider";
 
-type Props = {
-  total: {
-    users: number;
-    links: number;
-    clicks: number;
-  };
-  title: string;
-  segments: {
-    publicOfficers: string;
-    linksCreated: string;
-    clicksServed: string;
-  };
-  counters: {
-    daily: string;
-    total: string;
-  };
-  className?: string;
-  dropdown: {
-    daily: string;
-    weekly: string;
-    monthly: string;
-    yearly: string;
-  };
+type MetadataItem = {
+  date: string;
+  total: number;
 };
 
-const SEGMENT_PUBLIC_OFFICERS = 0;
-const SEGMENT_LINKS_CREATED = 1;
-const SEGMENT_CLICKS_SERVED = 2;
+type Props = {
+  clicksMetadata: MetadataItem[];
+  linksMetadata: MetadataItem[];
+  officersMetadata: MetadataItem[];
+  title: string;
+};
 
-const segments = [
-  {
-    key: "publicOfficers" as keyof Props['segments'],
-    value: SEGMENT_PUBLIC_OFFICERS,
-  },
-  {
-    key: "linksCreated" as keyof Props['segments'],
-    value: SEGMENT_LINKS_CREATED,
-  },
-  {
-    key: "clicksServed" as keyof Props['segments'],
-    value: SEGMENT_CLICKS_SERVED,
-  },
-];
+const getMonthYearString = (date: Date) => {
+  return date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+};
 
-export default function Stats(props: Props) {
-  const t = useTranslations();
-  const [currentSegment, setCurrentSegment] = useState(SEGMENT_PUBLIC_OFFICERS);
-  const [selectedDropdownItem, setSelectedDropdownItem] = useState<string>("daily");
+export default function StatsNew(props: Props) {
+  // Calculate earliest and latest dates from all metadata
+  const allDates = [
+    ...props.clicksMetadata.map(item => new Date(item.date)),
+    ...props.linksMetadata.map(item => new Date(item.date)),
+    ...props.officersMetadata.map(item => new Date(item.date))
+  ];
+
+  const earliestDate = new Date(Math.min(...allDates.map(date => date.getTime())));
+  const latestDate = new Date(Math.max(...allDates.map(date => date.getTime())));
+
   const [selectedView, setSelectedView] = useState<'Daily' | 'Cumulative'>('Daily');
-  const currentDate = new Date();
+  const [dateRange, setDateRange] = useState<[Date, Date]>([earliestDate, latestDate]);
 
-  const data = {
-    publicOfficers: props.total.users,
-    linksCreated: props.total.links,
-    clicksServed: props.total.clicks,
+  const getLatestTotal = (metadata: MetadataItem[]) => {
+    if (metadata.length === 0) return 0;
+    return metadata.reduce((latest, current) => 
+      new Date(current.date) > new Date(latest.date) ? current : latest
+    ).total;
   };
 
-  const [counters, setCounters] = useState([
-    {
-      name: t("pages.Home.Stats.counters.daily"),
-      count: 2784,
-      prefix: "+",
-    },
-    {
-      name: t("pages.Home.Stats.counters.total"),
-      count: 126265,
-    },
-  ]);
+  const getLatestDaily = (metadata: MetadataItem[]) => {
+    if (metadata.length < 2) return 0;
+    const sortedMetadata = metadata.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    return sortedMetadata[0].total - sortedMetadata[1].total;
+  };
 
-  // Function to format date without date-fns
+  const formatNumber = (num: number) => {
+    return num.toLocaleString();
+  };
+
   const formatDate = (date: Date) => {
     const options: Intl.DateTimeFormatOptions = {
       day: 'numeric',
@@ -97,6 +65,10 @@ export default function Stats(props: Props) {
       hour12: false
     };
     return date.toLocaleString('en-US', options).replace(',', '');
+  };
+
+  const handleRangeChange = (start: Date, end: Date) => {
+    setDateRange([start, end]);
   };
 
   return (
@@ -131,7 +103,7 @@ export default function Stats(props: Props) {
           </button>
         </div>
         <div className="text-sm text-gray-500">
-          Data as of {formatDate(currentDate)}
+          Data as of {formatDate(new Date())}
         </div>
       </div>
 
@@ -142,56 +114,64 @@ export default function Stats(props: Props) {
         "lg:grid-cols-3"
       )}>
         {[
-          { title: "Clicks Served", daily: "+733", total: "313,352" },
-          { title: "Links Created", daily: "+231", total: "78,828" },
-          { title: "Public Officers", daily: "+11", total: "313,352" }
+          { title: "Clicks Served", metadata: props.clicksMetadata },
+          { title: "Links Created", metadata: props.linksMetadata },
+          { title: "Public Officers", metadata: props.officersMetadata }
         ].map((item, index) => (
-          <div key={index} className="bg-white p-4 rounded-lg shadow">
+          <div key={index} className="bg-white p-4 rounded-lg">
             <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
             <div className="flex justify-between mb-4">
               <div>
                 <p className="text-sm text-gray-500">Daily</p>
-                <p className="text-2xl font-bold">{item.daily}</p>
+                <p className="text-2xl font-bold">+{formatNumber(getLatestDaily(item.metadata))}</p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Total</p>
-                <p className="text-2xl font-bold">{item.total}</p>
+                <p className="text-2xl font-bold">{formatNumber(getLatestTotal(item.metadata))}</p>
               </div>
             </div>
             <div className={cn(
-                "mt-[2rem]",
-                "max-sm:h-[15.625rem]",
-                "md:h-[23.4375rem]", // Increase height for tablet
-                "lg:h-[31.25rem]",  // Return to original height for desktop
-                "w-full"    // Ensure full width
+              "mt-4",
+              "w-full",
+              "max-sm:h-[15.625rem]",
+              "md:h-[15.4375rem]",
+              "lg:h-[15.25rem]",
+              "bg-white",
+              // "rounded-lg",
+              // "overflow-hidden"
             )}>
-              <SmoothLineChart
-                // className="w-full h-full"
-                data={[
-                  { date: new Date("2023-12-01T00:00:00Z"), value: 12345 },
-                  { date: new Date("2024-01-02T00:00:00Z"), value: 90112 },
-                  { date: new Date("2024-01-03T00:00:00Z"), value: 11444 },
-                  { date: new Date("2024-01-04T00:00:00Z"), value: 123555 },
-                  { date: new Date("2024-01-05T00:00:00Z"), value: 16777 },
-                  { date: new Date("2023-01-06T00:00:00Z"), value: 12345 },
-                  { date: new Date("2024-01-07T00:00:00Z"), value: 90112 },
-                  { date: new Date("2023-01-08T00:00:00Z"), value: 123456 },
-                  { date: new Date("2024-01-09T00:00:00Z"), value: 90112 },
-                  { date: new Date("2024-01-10T00:00:00Z"), value: 11444 }
-                ]}
+              <LineChart
+                className="w-full h-full"
+                data={item.metadata
+                  .filter(entry => {
+                    const date = new Date(entry.date);
+                    return date >= dateRange[0] && date <= dateRange[1];
+                  })
+                  .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+                  .map((entry, index, array) => {
+                    const dailyValue = index > 0 
+                      ? Math.max(0, entry.total - array[index - 1].total)
+                      : entry.total;
+                    
+                    return {
+                      date: new Date(entry.date),
+                      value: selectedView === 'Daily' ? dailyValue : entry.total
+                    };
+                  })
+                }
+                animationDurationMs={1000}
               />
             </div>
           </div>
         ))}
       </div>
-
-      <div className="mt-4 flex items-center justify-between">
-        <div className="text-sm">2020</div>
-        <div className="flex-1 mx-4 h-1 bg-gray-300 rounded-full">
-          <div className="w-1/2 h-full bg-blue-500 rounded-full"></div>
-        </div>
-        <div className="text-sm">2023</div>
-      </div>
+     {/* <div className="pt-8">
+       <DateRangeSlider
+        startDate={earliestDate}
+        endDate={latestDate}
+        onRangeChange={handleRangeChange}
+      />
+     </div> */}
     </Section>
   );
 }

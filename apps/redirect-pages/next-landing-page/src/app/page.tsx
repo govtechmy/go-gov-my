@@ -61,7 +61,16 @@ async function getStats() {
     throw new Error("LANDING_STATS_JSON_URL is not set");
   }
 
-  const response = await fetch(url);
+  // const response = await fetch(url);
+  const response = await fetch(url, {
+    next: {
+      revalidate: 0 // Disable caching
+    },
+    cache: 'no-store', // Prevent caching
+    headers: {
+      'Cache-Control': 'no-cache'
+    }
+  });
 
   return (await response.json()) as StatsJson;
 }
@@ -89,10 +98,12 @@ export default async function Home({ searchParams }: Props) {
       return currentDate > latestDate ? current : latest;
     }).total;
   };
+
   const latestClicks = getLatestTotal(stats.clicksMetadata);
   const latestLinks = getLatestTotal(stats.linksMetadata);
   const latestOfficers = getLatestTotal(stats.officersMetadata);
 
+  console.log(stats);
 
   return (
     <>
@@ -155,6 +166,12 @@ export default async function Home({ searchParams }: Props) {
             }))}
           />
           <StatsNew
+            clicksMetadata={stats.clicksMetadata}
+            linksMetadata={stats.linksMetadata}
+            officersMetadata={stats.officersMetadata}
+            title={t(statsTranslations.titleKey)}
+          />
+          {/* <Stats
             total={{
               users: latestOfficers,
               links: latestLinks,
@@ -176,30 +193,7 @@ export default async function Home({ searchParams }: Props) {
               monthly: t(statsTranslations.dropdown.items.monthly.label),
               yearly: t(statsTranslations.dropdown.items.yearly.label),
             }}
-          />
-          <Stats
-            total={{
-              users: latestOfficers,
-              links: latestLinks,
-              clicks: latestClicks,
-            }}
-            title={t(statsTranslations.titleKey)}
-            segments={{
-              publicOfficers: t(statsTranslations.segments.publicOfficers),
-              linksCreated: t(statsTranslations.segments.linksCreated),
-              clicksServed: t(statsTranslations.segments.clicksServed),
-            }}
-            counters={{
-              daily: t(statsTranslations.counters.daily),
-              total: t(statsTranslations.counters.total),
-            }}
-            dropdown={{
-              daily: t(statsTranslations.dropdown.items.daily.label),
-              weekly: t(statsTranslations.dropdown.items.weekly.label),
-              monthly: t(statsTranslations.dropdown.items.monthly.label),
-              yearly: t(statsTranslations.dropdown.items.yearly.label),
-            }}
-          />
+          /> */}
           <Action
             title={t(action.titleKey)}
             buttonText={t(action.buttonKey)}
@@ -364,3 +358,4 @@ const masthead = {
   orKey: keypath(MASTHEAD_BASE_PATH, "or"),
   precautionKey: keypath(MASTHEAD_BASE_PATH, "precaution"),
 };
+
