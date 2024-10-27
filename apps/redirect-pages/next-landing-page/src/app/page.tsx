@@ -68,8 +68,8 @@ export default async function Home({ searchParams }: Props) {
   const messages = await getMessages({ locale });
 
   return (
-    <Main>
-      <Masthead
+    <>
+          <Masthead
                 officialGovWebsiteKey={t(masthead.officialGovWebsiteKey)}
                 howToIdentifyKey={t(masthead.howToIdentifyKey)}
                 officialKey={t(masthead.officialKey)}
@@ -83,6 +83,8 @@ export default async function Home({ searchParams }: Props) {
       <Header
         signInKey={t(header.signInKey)}
       />
+        <Main>
+
       <Hero 
         titleKey={t(hero.titleKey)}
         descriptionKey={t.rich(hero.descriptionKey, {
@@ -217,6 +219,7 @@ export default async function Home({ searchParams }: Props) {
                 ]}
               />
     </Main>
+    </>
   );
 }
 
