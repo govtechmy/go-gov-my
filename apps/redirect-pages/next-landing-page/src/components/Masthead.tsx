@@ -62,7 +62,7 @@ export default function Masthead(props: Props) {
             </span>
 
             <div className="flex gap-3">
-              <GovMY className="size-[1.5rem] shrink-0 text-dim-500 dark:text-red-500" />
+              <GovMY className="size-[1.5rem] shrink-0 text-dim-500" />
               <div className="space-y-1.5">
                 <p className="font-medium max-sm:text-sm">{props.officialKey}</p>
                 <p className="max-w-prose text-balance text-sm text-black-700">
