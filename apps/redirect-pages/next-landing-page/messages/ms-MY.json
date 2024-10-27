@@ -62,7 +62,7 @@
 				}
 			},
 			"Stats": {
-				"title": "Hasil kami sejauh ini",
+				"title": "Penggunaan GoGovMy",
 				"segments": {
 					"publicOfficers": "Pegawai Awam",
 					"linksCreated": "Pautan Dibuat",
@@ -130,7 +130,7 @@
 		"Footer": {
 			"copyright": "All Rights Reserved",
 			"last_update": "Last Updated",
-			"address": "Aras 13, 14 dan 15, Blok Menara, Menara Usahawan\nNo. 18, Persiaran Perdana, Presint 2\nPusat Pentadbiran Kerajaan Persekutuan\n62000 Putrajaya, Malaysia.",
+			"address": "Aras 13, 14 dan 15, Blok Menara,\nMenara Usahawan\nNo. 18, Persiaran Perdana, Presint 2\nPusat Pentadbiran Kerajaan Persekutuan\n62000 Putrajaya, Malaysia.",
 			"links": {
 				"title": {
 					"openSource": "Sumber terbuka"
@@ -139,7 +139,10 @@
 					"github": "Repo GitHub",
 					"figma": "Figma"
 				}
-			}
+			},
+			"penafian": "Penafian",
+			"dasar-privasi": "Dasar Privasi",
+			"follow_us": "Ikuti Kami"
 		}
 	},
 	"SearchBox": {
