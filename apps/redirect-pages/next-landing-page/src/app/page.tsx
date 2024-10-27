@@ -4,7 +4,11 @@ import Hero from "@/components/home/Hero";
 import Preview from "@/components/home/Preview";
 import Stats from "@/components/home/Stats";
 import { extract, getLocaleFromURL, keypath } from "@/lib/i18n";
-import { getMessages, getTranslations, unstable_setRequestLocale } from "next-intl/server";
+import {
+  getMessages,
+  getTranslations,
+  unstable_setRequestLocale,
+} from "next-intl/server";
 import React, { ReactNode } from "react";
 import RoundedText from "@/components/RoundedText";
 import BrandLink from "@/components/BrandLink";
@@ -24,6 +28,7 @@ type StatsJson = {
   linkCount: number;
   totalClicks: number;
 };
+
 const SEGMENTS = [
   "mygcc",
   "moh",
@@ -56,12 +61,14 @@ async function getStats() {
   return (await response.json()) as StatsJson;
 }
 
- export async function generateStaticParams() {
-   return [{ locale: "en-GB" }, { locale: "ms-MY" }];
- }
+export async function generateStaticParams() {
+  return [{ locale: "en-GB" }, { locale: "ms-MY" }];
+}
 
 export default async function Home({ searchParams }: Props) {
-  const locale = getLocaleFromURL(new URL(`http://example.com?${new URLSearchParams(searchParams)}`));
+  const locale = getLocaleFromURL(
+    new URL(`http://example.com?${new URLSearchParams(searchParams)}`),
+  );
   unstable_setRequestLocale(locale);
   const t = await getTranslations({ locale });
   const stats = await getStats();
@@ -70,155 +77,147 @@ export default async function Home({ searchParams }: Props) {
   return (
     <>
       <Masthead
-                officialGovWebsiteKey={t(masthead.officialGovWebsiteKey)}
-                howToIdentifyKey={t(masthead.howToIdentifyKey)}
-                officialKey={t(masthead.officialKey)}
-                notGovmyKey={t(masthead.notGovmyKey)}
-                closeSiteKey={t(masthead.closeSiteKey)}
-                secureKey={t(masthead.secureKey)}
-                findLockKey={t(masthead.findLockKey)}
-                orKey={t(masthead.orKey)}
-                precautionKey={t(masthead.precautionKey)}
-              />
-      <Header
-        signInKey={t(header.signInKey)}
+        officialGovWebsiteKey={t(masthead.officialGovWebsiteKey)}
+        howToIdentifyKey={t(masthead.howToIdentifyKey)}
+        officialKey={t(masthead.officialKey)}
+        notGovmyKey={t(masthead.notGovmyKey)}
+        closeSiteKey={t(masthead.closeSiteKey)}
+        secureKey={t(masthead.secureKey)}
+        findLockKey={t(masthead.findLockKey)}
+        orKey={t(masthead.orKey)}
+        precautionKey={t(masthead.precautionKey)}
       />
-      <Main>
-      <Hero 
-        titleKey={t(hero.titleKey)}
-        descriptionKey={t.rich(hero.descriptionKey, {
-          em: (chunks) => (
-            <RoundedText variant="primary" weight="medium">
-              {chunks}
-            </RoundedText>
-          ),
-        })}
-        signInKey={t.rich(hero.signInKey, {
-          a: (chunks) => (
-            <BrandLink href={URL_APP_LOGIN} target="_blank" size="parent">
-              {chunks}
-            </BrandLink>
-          ),
-        })}
-        buttonKey={t(hero.buttonKey)}
-      />
-      <Preview
-        className="py-[3rem] md:py-[5.25rem]"
-        title={t(preview.titleKey)}
-        description={t.rich(preview.descriptionKey, {
-          em: (chunks) => (
-            <AnimatedRoundedText
-              variant="outlined"
-              padding="small"
-              borderRadius="small"
-              className="text-center"
-              items={SEGMENTS}
-              prefix="@"
-              interval={2000} // Add an interval prop (adjust as needed)
-            />
-          ),
-        })}
-        items={preview.items.map((item) => ({
-          tag: t(item.tagKey),
-          title: t(item.titleKey),
-          img: {
-            ...item.img,
-            alt: t(item.img.altKey),
+      <Header signInKey={t(header.signInKey)} />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-0">
+        <Main>
+          <Hero
+            titleKey={t(hero.titleKey)}
+            descriptionKey={t.rich(hero.descriptionKey, {
+              em: (chunks) => (
+                <RoundedText variant="primary" weight="medium">
+                  {chunks}
+                </RoundedText>
+              ),
+            })}
+            signInKey={t.rich(hero.signInKey, {
+              a: (chunks) => (
+                <BrandLink href={URL_APP_LOGIN} target="_blank" size="parent">
+                  {chunks}
+                </BrandLink>
+              ),
+            })}
+            buttonKey={t(hero.buttonKey)}
+          />
+          <Preview
+            className="py-[3rem] md:py-[5.25rem]"
+            title={t(preview.titleKey)}
+            description={t.rich(preview.descriptionKey, {
+              em: (chunks) => (
+                <AnimatedRoundedText
+                  variant="outlined"
+                  padding="small"
+                  borderRadius="small"
+                  className="text-center"
+                  items={SEGMENTS}
+                  prefix="@"
+                  interval={2000}
+                />
+              ),
+            })}
+            items={preview.items.map((item) => ({
+              tag: t(item.tagKey),
+              title: t(item.titleKey),
+              img: {
+                ...item.img,
+                alt: t(item.img.altKey),
+              },
+              animation: item.animation,
+            }))}
+          />
+          <StatsNew
+            total={{
+              users: stats.userCount,
+              links: stats.linkCount,
+              clicks: stats.totalClicks,
+            }}
+            title={t(statsTranslations.titleKey)}
+            segments={{
+              publicOfficers: t(statsTranslations.segments.publicOfficers),
+              linksCreated: t(statsTranslations.segments.linksCreated),
+              clicksServed: t(statsTranslations.segments.clicksServed),
+            }}
+            counters={{
+              daily: t(statsTranslations.counters.daily),
+              total: t(statsTranslations.counters.total),
+            }}
+            dropdown={{
+              daily: t(statsTranslations.dropdown.items.daily.label),
+              weekly: t(statsTranslations.dropdown.items.weekly.label),
+              monthly: t(statsTranslations.dropdown.items.monthly.label),
+              yearly: t(statsTranslations.dropdown.items.yearly.label),
+            }}
+          />
+          <Stats
+            total={{
+              users: stats.userCount,
+              links: stats.linkCount,
+              clicks: stats.totalClicks,
+            }}
+            title={t(statsTranslations.titleKey)}
+            segments={{
+              publicOfficers: t(statsTranslations.segments.publicOfficers),
+              linksCreated: t(statsTranslations.segments.linksCreated),
+              clicksServed: t(statsTranslations.segments.clicksServed),
+            }}
+            counters={{
+              daily: t(statsTranslations.counters.daily),
+              total: t(statsTranslations.counters.total),
+            }}
+            dropdown={{
+              daily: t(statsTranslations.dropdown.items.daily.label),
+              weekly: t(statsTranslations.dropdown.items.weekly.label),
+              monthly: t(statsTranslations.dropdown.items.monthly.label),
+              yearly: t(statsTranslations.dropdown.items.yearly.label),
+            }}
+          />
+          <Action
+            title={t(action.titleKey)}
+            buttonText={t(action.buttonKey)}
+            description={t.rich(action.descriptionKey, {
+              em: (chunks) => (
+                <AnimatedRoundedText
+                  prefix="go.gov.my/"
+                  variant="primary"
+                  items={SEGMENTS}
+                  interval={2000}
+                />
+              ),
+            })}
+          />
+        </Main>
+      </div>
+      <Footer
+        ministry={extract(messages, "common.names.kd")}
+        descriptionWithNewlines={extract(
+          messages,
+          "components.Footer.address",
+        )}
+        links={[
+          {
+            title: extract(messages, "components.Footer.links.title.openSource"),
+            links: [
+              {
+                name: extract(messages, "components.Footer.links.name.figma"),
+                href: URL_FIGMA,
+              },
+              {
+                name: extract(messages, "components.Footer.links.name.github"),
+                href: URL_GITHUB,
+              },
+            ],
           },
-          animation: item.animation,
-        }))}
+        ]}
       />
-      <StatsNew total={{
-          users: stats.userCount,
-          links: stats.linkCount,
-          clicks: stats.totalClicks,
-        }}
-        title={t(statsTranslations.titleKey)}
-        segments={{
-          publicOfficers: t(statsTranslations.segments.publicOfficers),
-          linksCreated: t(statsTranslations.segments.linksCreated),
-          clicksServed: t(statsTranslations.segments.clicksServed),
-        }}
-        counters={{
-          daily: t(statsTranslations.counters.daily),
-          total: t(statsTranslations.counters.total),
-        }}
-        dropdown={{
-          daily: t(statsTranslations.dropdown.items.daily.label),
-          weekly: t(statsTranslations.dropdown.items.weekly.label),
-          monthly: t(statsTranslations.dropdown.items.monthly.label),
-          yearly: t(statsTranslations.dropdown.items.yearly.label),
-        }} />
-      <Stats
-        total={{
-          users: stats.userCount,
-          links: stats.linkCount,
-          clicks: stats.totalClicks,
-        }}
-        title={t(statsTranslations.titleKey)}
-        segments={{
-          publicOfficers: t(statsTranslations.segments.publicOfficers),
-          linksCreated: t(statsTranslations.segments.linksCreated),
-          clicksServed: t(statsTranslations.segments.clicksServed),
-        }}
-        counters={{
-          daily: t(statsTranslations.counters.daily),
-          total: t(statsTranslations.counters.total),
-        }}
-        dropdown={{
-          daily: t(statsTranslations.dropdown.items.daily.label),
-          weekly: t(statsTranslations.dropdown.items.weekly.label),
-          monthly: t(statsTranslations.dropdown.items.monthly.label),
-          yearly: t(statsTranslations.dropdown.items.yearly.label),
-        }}
-      />
-      <Action
-        title={t(action.titleKey)}
-        buttonText={t(action.buttonKey)}
-        description={t.rich(action.descriptionKey, {
-          em: (chunks) => (
-            <AnimatedRoundedText
-              prefix="go.gov.my/"
-              variant="primary"
-              items={SEGMENTS}
-              interval={2000} // Add an interval prop (adjust as needed)
-            />
-          ),
-        })}
-      />
-
-    </Main>
-          <Footer
-                ministry={extract(messages, "common.names.kd")}
-                descriptionWithNewlines={extract(
-                  messages,
-                  "components.Footer.address",
-                )}
-                links={[
-                  {
-                    title: extract(
-                      messages,
-                      "components.Footer.links.title.openSource",
-                    ),
-                    links: [
-                      {
-                        name: extract(
-                          messages,
-                          "components.Footer.links.name.figma",
-                        ),
-                        href: URL_FIGMA,
-                      },
-                      {
-                        name: extract(
-                          messages,
-                          "components.Footer.links.name.github",
-                        ),
-                        href: URL_GITHUB,
-                      }  
-                    ],
-                  },
-                ]}
-              />
     </>
   );
 }
@@ -227,18 +226,15 @@ function Main(props: { children: ReactNode }) {
   return (
     <main className="flex w-full flex-col divide-y divide-washed-100 lg:py-0">
       {React.Children.map(props.children, (child) => (
-        // Wrap each child in <article> to consistently display full-width dividers
         <article>{child}</article>
       ))}
     </main>
   );
 }
 
-
-
 const header = {
   signInKey: keypath(HEADER_BASE_PATH, "buttons.signIn"),
-}
+};
 
 const preview = {
   titleKey: keypath(PREVIEW_BASE_PATH, "title"),
@@ -252,7 +248,6 @@ const preview = {
         webp: "/preview/content1/image.webp",
         altKey: keypath(PREVIEW_BASE_PATH, "content.1.title"),
       },
-
       animation: {
         src: "/rive/animation.riv",
         stateMachines: "customized",

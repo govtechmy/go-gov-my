@@ -44,8 +44,8 @@ export default function Footer(props: Props) {
 
   return (
     <div className="border-t border-outline-200 bg-background-50 py-8 lg:py-16 print:hidden">
-      <div className="container divide-y divide-outline-200 max-sm:px-0">
-        <div className="flex flex-col gap-6 pb-8 max-sm:px-4.5 lg:flex-row lg:justify-between">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-0">
+        <div className="flex flex-col gap-6 pb-8 lg:flex-row lg:justify-between">
           <div className="flex flex-col gap-4 lg:gap-4.5">
             <div className="flex items-center gap-x-2.5">
               <img
@@ -101,7 +101,7 @@ export default function Footer(props: Props) {
           </div>
         </div>
         
-        <div className="flex flex-col justify-between gap-6 pt-8 text-sm text-dim-500 max-sm:px-4.5 lg:flex-row">
+        <div className="flex flex-col justify-between gap-6 pt-8 text-sm text-dim-500 lg:flex-row">
           <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
             <p>
               {t("copyright")} © {new Date().getFullYear()}
