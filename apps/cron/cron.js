@@ -9,9 +9,10 @@ async function fetchData() {
   try {
     console.log(`calling ..${process.env.WEB_BASE}/api/stats`);
     const response = await fetch(`${process.env.WEB_BASE}/api/stats`, {
+      method: "GET",
       headers: {
-        method: 'GET',
-        API_KEY: process.env.API_KEY,
+        'Content-Type': 'application/json',
+        'API_KEY': process.env.API_KEY,
       },
     });
     if (!response.ok) {

@@ -15,10 +15,14 @@ export async function runOutboxConsumer(consumer: any, log: any) {
     eachMessage: async ({ topic, partition, message }) => {
       if (!message.value) return;
 
+      console.log('message received');
+
       const processMessage = async () => {
         const { payload: debeziumPayload } = JSON.parse(
           message.value.toString('utf8') || '{}',
         );
+
+        console.log('payload extracted', debeziumPayload);
 
         if (Object.keys(debeziumPayload).length === 0) return;
 
@@ -43,12 +47,15 @@ export async function runOutboxConsumer(consumer: any, log: any) {
           }
 
           log.info(`Sending request to redirect server: ${action} ${host}`);
+          console.log(`Sending request to redirect server: ${action} ${host}`);
 
           const response = await fetch(host, {
             method: action,
             headers: JSON.parse(headers),
             body: finalPayload,
           });
+
+          console.log('response.ok', response.ok);
 
           if (response.ok) {
             try {
