@@ -15,6 +15,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { usePromptModal } from '../prompt-modal';
 // import UnsplashSearch from './unsplash-search';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 
 export default function OGSection({
   props,
@@ -28,6 +29,7 @@ export default function OGSection({
   generatingMetatags: boolean;
 }) {
   const { id: workspaceId, exceededAI, mutate } = useWorkspace();
+  const { messages, locale } = useIntlClientHook();
 
   const { setShowPromptModal, PromptModal } = usePromptModal({
     title: 'Use image from URL',
@@ -161,7 +163,7 @@ export default function OGSection({
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-between space-x-2">
           <h2 className="text-sm font-medium text-gray-900">
-            Custom Social Media Cards
+            {messages?.link?.custom_socmed_cards}
           </h2>
           <ProBadgeTooltip
             content={

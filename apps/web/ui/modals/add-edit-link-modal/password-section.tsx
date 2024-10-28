@@ -30,7 +30,7 @@ export default function PasswordSection({
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-between space-x-2">
           <h2 className="text-sm font-medium text-gray-900">
-            Password Protection
+            {messages?.link?.password_protection}
           </h2>
           <ProBadgeTooltip
             content={
