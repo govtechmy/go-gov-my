@@ -1,3 +1,4 @@
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { LinkProps } from '@/lib/types';
 import { InfoTooltip, SimpleTooltipContent, Switch } from '@dub/ui';
 import {
@@ -19,6 +20,7 @@ export default function UTMSection({
   data: LinkProps;
   setData: Dispatch<SetStateAction<LinkProps>>;
 }) {
+  const { messages } = useIntlClientHook();
   const { url } = data;
   const isValidUrl = useMemo(() => {
     try {
@@ -58,7 +60,9 @@ export default function UTMSection({
     <div className="relative border-b border-gray-200 pb-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-between space-x-2">
-          <h2 className="text-sm font-medium text-gray-900">UTM Builder</h2>
+          <h2 className="text-sm font-medium text-gray-900">
+            {messages?.link?.utm_builder}
+          </h2>
           <InfoTooltip
             content={
               <SimpleTooltipContent

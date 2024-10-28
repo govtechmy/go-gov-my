@@ -1,3 +1,4 @@
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { LinkProps } from '@/lib/types';
 import { ProBadgeTooltip } from '@/ui/shared/pro-badge-tooltip';
 import { SimpleTooltipContent, Switch } from '@dub/ui';
@@ -15,6 +16,7 @@ export default function GeoSection({
   data: LinkProps;
   setData: Dispatch<SetStateAction<LinkProps>>;
 }) {
+  const { messages, locale } = useIntlClientHook();
   const { geo } = data;
   const [enabled, setEnabled] = useState(!!geo);
 
@@ -44,7 +46,9 @@ export default function GeoSection({
     <div className="relative border-b border-gray-200 pb-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-between space-x-2">
-          <h2 className="text-sm font-medium text-gray-900">Geo Targeting</h2>
+          <h2 className="text-sm font-medium text-gray-900">
+            {messages?.link?.geo_targeting}
+          </h2>
           <ProBadgeTooltip
             content={
               <SimpleTooltipContent

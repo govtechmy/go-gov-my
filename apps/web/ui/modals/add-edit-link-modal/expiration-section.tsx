@@ -49,7 +49,9 @@ export default function ExpirationSection({
     <div className="relative border-b border-gray-200 pb-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-between space-x-2">
-          <h2 className="text-sm font-medium text-gray-900">Link Expiration</h2>
+          <h2 className="text-sm font-medium text-gray-900">
+            {messages?.link?.link_expiration}
+          </h2>
           <ProBadgeTooltip
             content={
               <SimpleTooltipContent

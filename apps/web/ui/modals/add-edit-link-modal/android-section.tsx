@@ -1,3 +1,4 @@
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { LinkProps } from '@/lib/types';
 import { ProBadgeTooltip } from '@/ui/shared/pro-badge-tooltip';
 import { SimpleTooltipContent, Switch } from '@dub/ui';
@@ -14,6 +15,7 @@ export default function AndroidSection({
   data: LinkProps;
   setData: Dispatch<SetStateAction<LinkProps>>;
 }) {
+  const { messages, locale } = useIntlClientHook();
   const { android } = data;
   const [enabled, setEnabled] = useState(!!android);
   useEffect(() => {
@@ -34,7 +36,7 @@ export default function AndroidSection({
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-between space-x-2">
           <h2 className="text-sm font-medium text-gray-900">
-            Android Targeting
+            {messages?.link?.android_targeting}
           </h2>
           <ProBadgeTooltip
             content={

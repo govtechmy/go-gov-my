@@ -1,3 +1,4 @@
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { BlurImage, ExpandingArrow, useScroll } from '@dub/ui';
 import {
   APP_NAME,
@@ -14,6 +15,7 @@ import ExportButton from './export-button';
 
 export default function Toggle() {
   const { basePath, domain, key, url, admin } = useContext(AnalyticsContext);
+  const { messages } = useIntlClientHook();
 
   const scrolled = useScroll(80);
 
@@ -70,7 +72,9 @@ export default function Toggle() {
               <ExpandingArrow className="h-5 w-5" />
             </a>
           ) : (
-            <h2 className="truncate text-2xl text-gray-600">Analytics</h2>
+            <h2 className="truncate text-2xl text-gray-600">
+              {messages?.dashboard?.analytics}
+            </h2>
           )}
           <div
             className={cn('flex items-center gap-2', {
