@@ -70,7 +70,8 @@
 				},
 				"counters": {
 					"daily": "Daily",
-					"total": "Total"
+					"total": "Total",
+					"dataAsOf": "Data as of"
 				},
 				"dropdown": {
 					"items": {
@@ -140,8 +141,8 @@
 					"figma": "Figma"
 				}
 			},
-			"penafian": "Disclaimer",
-			"dasar-privasi": "Privacy Policy",
+			"disclaimer": "Disclaimer",
+			"privacy_policy": "Privacy Policy",
 			"follow_us": "Follow Us"
 		},
 		"SearchBox": {

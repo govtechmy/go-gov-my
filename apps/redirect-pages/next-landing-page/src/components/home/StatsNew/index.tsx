@@ -18,6 +18,13 @@ type Props = {
   linksMetadata: MetadataItem[];
   officersMetadata: MetadataItem[];
   title: string;
+  counterDailyKey: string;
+  counterTotalKey: string;
+  dataAsOfKey: string;
+  locale: string;
+  publicOfficersKey: string;
+  linksCreatedKey: string;
+  clicksServedKey: string;
 };
 
 const getMonthYearString = (date: Date) => {
@@ -88,12 +95,10 @@ export default function StatsNew(props: Props) {
       minute: '2-digit',
       hour12: false
     };
-    return date.toLocaleString('en-US', options).replace(',', '');
+    return date.toLocaleString(props.locale, options).replace(',', '');
   };
 
-  // Add debug logging for date range changes
   const handleRangeChange = (start: Date, end: Date) => {
-    console.log('Range changed:', { start, end });
     setDateRange([start, end]);
   };
 
@@ -121,7 +126,7 @@ export default function StatsNew(props: Props) {
               setSelectedView('Daily');
             }}
           >
-            Daily
+            {props.counterDailyKey}
           </button>
           <button 
             className={cn("px-3 py-1 rounded-full ml-2", selectedView === 'Cumulative' ? "bg-gray-200" : "bg-transparent")}
@@ -129,11 +134,11 @@ export default function StatsNew(props: Props) {
               setSelectedView('Cumulative');
             }}
           >
-            Cumulative
+            {props.counterTotalKey}
           </button>
         </div>
         <div className="text-sm text-gray-500 hidden md:block">
-          Data as of {formatDate(new Date())}
+          {props.dataAsOfKey} {formatDate(new Date())}
         </div>
       </div>
 
@@ -144,9 +149,9 @@ export default function StatsNew(props: Props) {
         "lg:grid-cols-3"
       )}>
         {[
-          { title: "Clicks Served", metadata: props.clicksMetadata },
-          { title: "Links Created", metadata: props.linksMetadata },
-          { title: "Public Officers", metadata: props.officersMetadata }
+          { title: props.clicksServedKey, metadata: props.clicksMetadata },
+          { title: props.linksCreatedKey, metadata: props.linksMetadata },
+          { title: props.publicOfficersKey, metadata: props.officersMetadata }
         ].map((item, index) => {
           const chartData = item.metadata
             .filter(entry => {
@@ -164,15 +169,16 @@ export default function StatsNew(props: Props) {
           return (
             <div key={index} className="bg-white p-4 rounded-lg">
               <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+               
               <div className="flex justify-between mb-4">
                 <div>
-                  <p className="text-sm text-gray-500">Daily</p>
+                  <p className="text-sm text-gray-500">{props.counterDailyKey}</p>
                   <p className="text-2xl font-bold">
                     +{formatNumber(getLatestDaily(item.metadata))}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">Total</p>
+                  <p className="text-sm text-gray-500">{props.counterTotalKey}</p>
                   <p className="text-2xl font-bold">
                     {formatNumber(getLatestTotal(item.metadata))}
                   </p>
@@ -184,9 +190,7 @@ export default function StatsNew(props: Props) {
                 "max-sm:h-[15.625rem]",
                 "md:h-[15.4375rem]",
                 "lg:h-[15.25rem]",
-                "bg-white",
-                // "rounded-lg",
-                // "overflow-hidden"
+                "bg-white"
               )}>
                 <LineChart
                   key={`${item.title}-${selectedView}-${dateRange[0].getTime()}-${dateRange[1].getTime()}`}
@@ -208,6 +212,7 @@ export default function StatsNew(props: Props) {
           initialStart={dateRange[0]}
           initialEnd={dateRange[1]}
           onChange={handleRangeChange}
+          locale={props.locale}
         />
       </div>
     </Section>

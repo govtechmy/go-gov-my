@@ -5,7 +5,11 @@ import Link from "next/link";
 
 type Props = {
   ministry: string;
+  copyrightKey: string;
+  lastUpdateKey: string;
   descriptionWithNewlines: string;
+  disclaimerKey: string;
+  privacyPolicyKey: string;
   links: {
     title?: string;
     links: {
@@ -104,25 +108,25 @@ export default function Footer(props: Props) {
         <div className="flex flex-col justify-between gap-6 pt-8 text-sm text-dim-500 lg:flex-row">
           <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
             <p>
-              {t("copyright")} © {new Date().getFullYear()}
+              {props.copyrightKey} © {new Date().getFullYear()}
             </p>
              <span className="hidden h-3 w-px bg-outline-300 lg:block"></span>
               <div className="flex flex-wrap gap-x-3 gap-y-2 text-black-700">
-              {["penafian", "dasar-privasi"].map((link) => (
+              {["disclaimer", "privacy_policy"].map((link) => (
                 <Link
                   key={link}
                   className="underline-font text-sm text-black-700 hover:text-foreground hover:underline"
                   // href={`/${link}`}
                   href='#'
                 >
-                  {t(`${link}`)}
+                  {link === "disclaimer" ? props.disclaimerKey : props.privacyPolicyKey}
                 </Link>
               ))}
             </div>
           </div>
           {process.env.LAST_UPDATED && (
             <span>
-              {t("last_update") +
+              {props.lastUpdateKey +
                 ": " +
                 format.dateTime(new Date(process.env.LAST_UPDATED), {
                   year: "numeric",

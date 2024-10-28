@@ -6,6 +6,7 @@ type Props = {
   initialStart: Date;
   initialEnd: Date;
   onChange: (start: Date, end: Date) => void;
+  locale: string;
 };
 
 export default function DateRangeSlider({ 
@@ -13,6 +14,7 @@ export default function DateRangeSlider({
   endDate, 
   initialStart,
   initialEnd,
+  locale,
   onChange 
 }: Props) {
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -57,13 +59,13 @@ export default function DateRangeSlider({
     }
   };
 
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    }).replace(',', '');
-  };
+   const formatDate = (date: Date) => {
+     return date.toLocaleDateString(locale, {
+       month: 'short',
+       day: 'numeric',
+       year: 'numeric'
+     }).replace(',', '');
+   };
 
   return (
     <div className="w-full px-4 py-6">

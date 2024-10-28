@@ -53,7 +53,7 @@ const HERO_BASE_PATH = "pages.Home.Hero";
 const STATS_BASE_PATH = "pages.Home.Stats";
 const MASTHEAD_BASE_PATH = "components.Masthead";
 const HEADER_BASE_PATH = "components.Header";
-
+const FOOTER_BASE_PATH = "components.Footer";
 async function getStats() {
   try {
     const url = process.env.LANDING_STATS_JSON_URL;
@@ -176,30 +176,14 @@ export default async function Home({ searchParams }: Props) {
             linksMetadata={stats.linksMetadata}
             officersMetadata={stats.officersMetadata}
             title={t(statsTranslations.titleKey)}
+            counterDailyKey={t(statsTranslations.counters.daily)}
+            counterTotalKey={t(statsTranslations.counters.total)}
+            dataAsOfKey={t(statsTranslations.counters.dataAsOf)}
+            locale={locale}
+            publicOfficersKey={t(statsTranslations.segments.publicOfficers)}
+            linksCreatedKey={t(statsTranslations.segments.linksCreated)}
+            clicksServedKey={t(statsTranslations.segments.clicksServed)}
           />
-          {/* <Stats
-            total={{
-              users: latestOfficers,
-              links: latestLinks,
-              clicks: latestClicks,
-            }}
-            title={t(statsTranslations.titleKey)}
-            segments={{
-              publicOfficers: t(statsTranslations.segments.publicOfficers),
-              linksCreated: t(statsTranslations.segments.linksCreated),
-              clicksServed: t(statsTranslations.segments.clicksServed),
-            }}
-            counters={{
-              daily: t(statsTranslations.counters.daily),
-              total: t(statsTranslations.counters.total),
-            }}
-            dropdown={{
-              daily: t(statsTranslations.dropdown.items.daily.label),
-              weekly: t(statsTranslations.dropdown.items.weekly.label),
-              monthly: t(statsTranslations.dropdown.items.monthly.label),
-              yearly: t(statsTranslations.dropdown.items.yearly.label),
-            }}
-          /> */}
           <Action
             title={t(action.titleKey)}
             buttonText={t(action.buttonKey)}
@@ -218,6 +202,10 @@ export default async function Home({ searchParams }: Props) {
       </div>
       <Footer
         ministry={extract(messages, "common.names.kd")}
+        copyrightKey={t(footer.copyrightKey)}
+        lastUpdateKey={t(footer.lastUpdateKey)}
+        disclaimerKey={t(footer.disclaimerKey)}
+        privacyPolicyKey={t(footer.privacyPolicyKey)}
         descriptionWithNewlines={extract(
           messages,
           "components.Footer.address",
@@ -325,6 +313,13 @@ const action = {
   buttonKey: keypath(ACTION_BASE_PATH, "buttons.createLink"),
 };
 
+const footer = {
+  copyrightKey: keypath(FOOTER_BASE_PATH, "copyright"),
+  lastUpdateKey: keypath(FOOTER_BASE_PATH, "last_update"),
+  disclaimerKey: keypath(FOOTER_BASE_PATH, "disclaimer"),
+  privacyPolicyKey: keypath(FOOTER_BASE_PATH, "privacy_policy"),
+};
+
 const hero = {
   titleKey: keypath(HERO_BASE_PATH, "title"),
   descriptionKey: keypath(HERO_BASE_PATH, "description"),
@@ -342,6 +337,7 @@ const statsTranslations = {
   counters: {
     daily: keypath(STATS_BASE_PATH, "counters.daily"),
     total: keypath(STATS_BASE_PATH, "counters.total"),
+    dataAsOf: keypath(STATS_BASE_PATH, "counters.dataAsOf"),
   },
   dropdown: {
     items: {

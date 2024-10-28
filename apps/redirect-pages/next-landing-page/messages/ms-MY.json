@@ -70,7 +70,8 @@
 				},
 				"counters": {
 					"daily": "Harian",
-					"total": "Jumlah"
+					"total": "Terkumpul",
+					"dataAsOf": "Data setakat"
 				},
 				"dropdown": {
 					"items": {
@@ -128,8 +129,8 @@
 			}
 		},
 		"Footer": {
-			"copyright": "All Rights Reserved",
-			"last_update": "Last Updated",
+			"copyright": "Hak Cipta Terpelihara",
+			"last_update": "Kemaskini Terakhir",
 			"address": "Aras 13, 14 dan 15, Blok Menara,\nMenara Usahawan\nNo. 18, Persiaran Perdana, Presint 2\nPusat Pentadbiran Kerajaan Persekutuan\n62000 Putrajaya, Malaysia.",
 			"links": {
 				"title": {
@@ -140,8 +141,8 @@
 					"figma": "Figma"
 				}
 			},
-			"penafian": "Penafian",
-			"dasar-privasi": "Dasar Privasi",
+			"disclaimer": "Penafian",
+			"privacy_policy": "Dasar Privasi",
 			"follow_us": "Ikuti Kami"
 		}
 	},
