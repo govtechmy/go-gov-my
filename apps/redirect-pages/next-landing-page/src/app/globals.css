@@ -2,6 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .range-slider {
+    @apply appearance-none bg-transparent;
+  }
+
+  .range-slider::-webkit-slider-thumb {
+    @apply appearance-none w-4 h-4 rounded-full cursor-pointer;
+    @apply bg-brand-600 hover:bg-brand-700 hover:scale-110 transition-all;
+    @apply border-2 border-background-50;
+  }
+
+  .range-slider::-moz-range-thumb {
+    @apply w-4 h-4 rounded-full cursor-pointer;
+    @apply bg-brand-600 hover:bg-brand-700 hover:scale-110 transition-all;
+    @apply border-2 border-background-50;
+  }
+
+  /* Make track transparent */
+  .range-slider::-webkit-slider-runnable-track {
+    @apply appearance-none bg-transparent;
+  }
+
+  .range-slider::-moz-range-track {
+    @apply bg-transparent;
+  }
+}
+
 @layer base {
   :root {
     --black-900: 24 24 27;

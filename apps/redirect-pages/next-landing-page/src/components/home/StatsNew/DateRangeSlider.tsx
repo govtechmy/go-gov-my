@@ -1,115 +1,123 @@
-import { useEffect, useRef, useState } from 'react';
-import * as d3 from 'd3';
-import { cn } from '@/lib/utils';
+import { useState, useRef } from 'react';
 
 type Props = {
   startDate: Date;
   endDate: Date;
-  onRangeChange: (start: Date, end: Date) => void;
+  initialStart: Date;
+  initialEnd: Date;
+  onChange: (start: Date, end: Date) => void;
 };
 
-export default function DateRangeSlider({ startDate, endDate, onRangeChange }: Props) {
-  const sliderRef = useRef<SVGSVGElement>(null);
-  const [selectedRange, setSelectedRange] = useState<[Date, Date]>([startDate, endDate]);
+export default function DateRangeSlider({ 
+  startDate, 
+  endDate, 
+  initialStart,
+  initialEnd,
+  onChange 
+}: Props) {
+  const sliderRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!sliderRef.current) return;
+  const getPercentage = (date: Date) => {
+    const total = endDate.getTime() - startDate.getTime();
+    return ((date.getTime() - startDate.getTime()) / total) * 100;
+  };
 
-    const margin = { left: 10, right: 10 };
-    const width = sliderRef.current.clientWidth - margin.left - margin.right;
-    const height = 48;
+  const [start, setStart] = useState<number>(() => getPercentage(initialStart));
+  const [end, setEnd] = useState<number>(() => getPercentage(initialEnd));
+  const [activeThumb, setActiveThumb] = useState<'start' | 'end' | null>(null);
+  const [showStartPopover, setShowStartPopover] = useState(false);
+  const [showEndPopover, setShowEndPopover] = useState(false);
 
-    const svg = d3.select(sliderRef.current);
-    svg.selectAll("*").remove();
+  const percentToDate = (percent: number): Date => {
+    const totalTime = endDate.getTime() - startDate.getTime();
+    const time = startDate.getTime() + (totalTime * percent / 100);
+    return new Date(time);
+  };
 
-    const xScale = d3.scaleTime()
-      .domain([startDate, endDate])
-      .range([0, width]);
+  const handleMouseDown = (thumb: 'start' | 'end') => {
+    setActiveThumb(thumb);
+  };
 
-    // Create the slider track
-    const track = svg.append("g")
-      .attr("transform", `translate(${margin.left}, ${height/2})`);
+  const handleMouseUp = () => {
+    setActiveThumb(null);
+  };
 
-    // Add the background track
-    track.append("line")
-      .attr("x1", 0)
-      .attr("x2", width)
-      .attr("stroke", "rgb(229 231 235)") // gray-200
-      .attr("stroke-width", 4)
-      .attr("stroke-linecap", "round");
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!sliderRef.current || !activeThumb) return;
+    const rect = sliderRef.current.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const percent = (offsetX / rect.width) * 100;
 
-    // Add the selected range track
-    const selectedTrack = track.append("line")
-      .attr("stroke", "rgb(59 130 246)") // blue-500
-      .attr("stroke-width", 4)
-      .attr("stroke-linecap", "round");
-
-    // Add handles
-    const handles = track.selectAll(".handle")
-      .data([selectedRange[0], selectedRange[1]])
-      .enter()
-      .append("circle")
-      .attr("class", "handle")
-      .attr("r", 8)
-      .attr("fill", "white")
-      .attr("stroke", "rgb(59 130 246)")
-      .attr("stroke-width", 2)
-      .attr("cursor", "pointer");
-
-    // Add date labels
-    const dateFormat = d3.timeFormat("%d %b %Y");
-    const labels = track.selectAll(".label")
-      .data([selectedRange[0], selectedRange[1]])
-      .enter()
-      .append("text")
-      .attr("class", "label")
-      .attr("y", -20)
-      .attr("text-anchor", "middle")
-      .attr("fill", "rgb(107 114 128)") // gray-500
-      .attr("font-size", "12px");
-
-    function updateHandles() {
-      handles.attr("cx", (d: Date) => xScale(d));
-      selectedTrack
-        .attr("x1", xScale(selectedRange[0]))
-        .attr("x2", xScale(selectedRange[1]));
-      labels
-        .attr("x", (d: Date) => xScale(d))
-        .text((d: Date) => dateFormat(d));
+    if (activeThumb === 'start' && percent < end) {
+      setStart(percent);
+      onChange(percentToDate(percent), percentToDate(end));
+    } else if (activeThumb === 'end' && percent > start) {
+      setEnd(percent);
+      onChange(percentToDate(start), percentToDate(percent));
     }
+  };
 
-    const drag = d3.drag<SVGCircleElement, Date>()
-      .on("drag", function(event, d) {
-        const index = selectedRange[0] === d ? 0 : 1;
-        const newDate = xScale.invert(event.x);
-        
-        // Ensure handles don't cross and stay within bounds
-        if (index === 0) {
-          if (newDate < startDate) return;
-          if (newDate >= selectedRange[1]) return;
-          selectedRange[0] = newDate;
-        } else {
-          if (newDate > endDate) return;
-          if (newDate <= selectedRange[0]) return;
-          selectedRange[1] = newDate;
-        }
-        
-        setSelectedRange([...selectedRange]);
-        onRangeChange(selectedRange[0], selectedRange[1]);
-        updateHandles();
-      });
-
-    handles.call(drag);
-    updateHandles();
-  }, [startDate, endDate, selectedRange]);
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    }).replace(',', '');
+  };
 
   return (
-    <div className="mt-8">
-      <svg
+    <div className="w-full px-4 py-6">
+      <div 
+        className="relative h-2 bg-gray-200 rounded-lg"
         ref={sliderRef}
-        className={cn("w-full")}
-        height={48}
-      />
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+      >
+        <div 
+          className="absolute h-2 bg-gray-400 hover:bg-blue-600 rounded-lg"
+          style={{
+            left: `${start}%`,
+            width: `${end - start}%`
+          }}
+        />
+        <div 
+          className="absolute w-4 h-4 -mt-1 bg-brand-600 rounded-full cursor-pointer transform -translate-x-1/2"
+          style={{ left: `${start}%` }}
+          onMouseDown={() => handleMouseDown('start')}
+          onMouseEnter={() => setShowStartPopover(true)}
+          onMouseLeave={() => setShowStartPopover(false)}
+        >
+          {showStartPopover && (
+            <div
+              className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-10 whitespace-nowrap px-3 py-2 text-sm text-white bg-gray-900 rounded-lg shadow-sm"
+            >
+              <span className="text-gray-100">{formatDate(percentToDate(start))}</span>
+              <div className="absolute w-2 h-2 bg-gray-900 rotate-45 -bottom-1 left-1/2 transform -translate-x-1/2"></div>
+            </div>
+          )}
+        </div>
+        <div 
+          className="absolute w-4 h-4 -mt-1 bg-brand-600 rounded-full cursor-pointer transform -translate-x-1/2"
+          style={{ left: `${end}%` }}
+          onMouseDown={() => handleMouseDown('end')}
+          onMouseEnter={() => setShowEndPopover(true)}
+          onMouseLeave={() => setShowEndPopover(false)}
+        >
+          {showEndPopover && (
+            <div
+              className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-10 whitespace-nowrap px-3 py-2 text-sm text-white bg-gray-900 rounded-lg shadow-sm"
+            >
+              <span className="text-gray-100">{formatDate(percentToDate(end))}</span>
+              <div className="absolute w-2 h-2 bg-gray-900 rotate-45 -bottom-1 left-1/2 transform -translate-x-1/2"></div>
+            </div>
+          )}
+        </div>
+      </div>
+      
+      <div className="flex justify-between mt-8 text-sm text-gray-600">
+        <span>{formatDate(percentToDate(start))}</span>
+        <span>{formatDate(percentToDate(end))}</span>
+      </div>
     </div>
   );
 }

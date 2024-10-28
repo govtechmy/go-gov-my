@@ -3,7 +3,7 @@
 import Heading from "@/components/Heading";
 import Section from "@/components/Section";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import SmoothLineChart from "@/components/charts/SmoothLineChart";
 import LineChart from "@/components/charts/LineChart";
 import DateRangeSlider from "./DateRangeSlider";
@@ -25,30 +25,54 @@ const getMonthYearString = (date: Date) => {
 };
 
 export default function StatsNew(props: Props) {
-  // Calculate earliest and latest dates from all metadata
-  const allDates = [
-    ...props.clicksMetadata.map(item => new Date(item.date)),
-    ...props.linksMetadata.map(item => new Date(item.date)),
-    ...props.officersMetadata.map(item => new Date(item.date))
-  ];
-
-  const earliestDate = new Date(Math.min(...allDates.map(date => date.getTime())));
-  const latestDate = new Date(Math.max(...allDates.map(date => date.getTime())));
-
   const [selectedView, setSelectedView] = useState<'Daily' | 'Cumulative'>('Daily');
+  
+  // Get the date range from the data
+  const earliestDate = useMemo(() => 
+    new Date(Math.min(
+      ...props.clicksMetadata.map(d => new Date(d.date).getTime()),
+      ...props.linksMetadata.map(d => new Date(d.date).getTime()),
+      ...props.officersMetadata.map(d => new Date(d.date).getTime())
+    )), [props.clicksMetadata, props.linksMetadata, props.officersMetadata]);
+
+  const latestDate = useMemo(() => 
+    new Date(Math.max(
+      ...props.clicksMetadata.map(d => new Date(d.date).getTime()),
+      ...props.linksMetadata.map(d => new Date(d.date).getTime()),
+      ...props.officersMetadata.map(d => new Date(d.date).getTime())
+    )), [props.clicksMetadata, props.linksMetadata, props.officersMetadata]);
+
+  // Initialize dateRange with full range
   const [dateRange, setDateRange] = useState<[Date, Date]>([earliestDate, latestDate]);
 
+  // Update dateRange when props change
+  useEffect(() => {
+    setDateRange([earliestDate, latestDate]);
+  }, [earliestDate, latestDate]);
+
+  // Updated functions to respect date range
   const getLatestTotal = (metadata: MetadataItem[]) => {
-    if (metadata.length === 0) return 0;
-    return metadata.reduce((latest, current) => 
+    const filteredMetadata = metadata.filter(entry => {
+      const date = new Date(entry.date);
+      return date >= dateRange[0] && date <= dateRange[1];
+    });
+    
+    if (filteredMetadata.length === 0) return 0;
+    return filteredMetadata.reduce((latest, current) => 
       new Date(current.date) > new Date(latest.date) ? current : latest
     ).total;
   };
 
   const getLatestDaily = (metadata: MetadataItem[]) => {
-    if (metadata.length < 2) return 0;
-    const sortedMetadata = metadata.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    return sortedMetadata[0].total - sortedMetadata[1].total;
+    const filteredMetadata = metadata
+      .filter(entry => {
+        const date = new Date(entry.date);
+        return date >= dateRange[0] && date <= dateRange[1];
+      })
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    
+    if (filteredMetadata.length < 2) return 0;
+    return filteredMetadata[0].total - filteredMetadata[1].total;
   };
 
   const formatNumber = (num: number) => {
@@ -67,7 +91,9 @@ export default function StatsNew(props: Props) {
     return date.toLocaleString('en-US', options).replace(',', '');
   };
 
+  // Add debug logging for date range changes
   const handleRangeChange = (start: Date, end: Date) => {
+    console.log('Range changed:', { start, end });
     setDateRange([start, end]);
   };
 
@@ -91,18 +117,22 @@ export default function StatsNew(props: Props) {
         <div>
           <button 
             className={cn("px-3 py-1 rounded-full", selectedView === 'Daily' ? "bg-gray-200" : "bg-transparent")}
-            onClick={() => setSelectedView('Daily')}
+            onClick={() => {
+              setSelectedView('Daily');
+            }}
           >
             Daily
           </button>
           <button 
             className={cn("px-3 py-1 rounded-full ml-2", selectedView === 'Cumulative' ? "bg-gray-200" : "bg-transparent")}
-            onClick={() => setSelectedView('Cumulative')}
+            onClick={() => {
+              setSelectedView('Cumulative');
+            }}
           >
             Cumulative
           </button>
         </div>
-        <div className="text-sm text-gray-500">
+        <div className="text-sm text-gray-500 hidden md:block">
           Data as of {formatDate(new Date())}
         </div>
       </div>
@@ -117,61 +147,69 @@ export default function StatsNew(props: Props) {
           { title: "Clicks Served", metadata: props.clicksMetadata },
           { title: "Links Created", metadata: props.linksMetadata },
           { title: "Public Officers", metadata: props.officersMetadata }
-        ].map((item, index) => (
-          <div key={index} className="bg-white p-4 rounded-lg">
-            <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
-            <div className="flex justify-between mb-4">
-              <div>
-                <p className="text-sm text-gray-500">Daily</p>
-                <p className="text-2xl font-bold">+{formatNumber(getLatestDaily(item.metadata))}</p>
+        ].map((item, index) => {
+          const chartData = item.metadata
+            .filter(entry => {
+              const date = new Date(entry.date);
+              return date >= dateRange[0] && date <= dateRange[1];
+            })
+            .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+            .map((entry, index, array) => ({
+              date: new Date(entry.date),
+              value: selectedView === 'Daily'
+                ? (index === 0 ? entry.total : entry.total - array[index - 1].total)
+                : entry.total
+            }));
+
+          return (
+            <div key={index} className="bg-white p-4 rounded-lg">
+              <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
+              <div className="flex justify-between mb-4">
+                <div>
+                  <p className="text-sm text-gray-500">Daily</p>
+                  <p className="text-2xl font-bold">
+                    +{formatNumber(getLatestDaily(item.metadata))}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Total</p>
+                  <p className="text-2xl font-bold">
+                    {formatNumber(getLatestTotal(item.metadata))}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-gray-500">Total</p>
-                <p className="text-2xl font-bold">{formatNumber(getLatestTotal(item.metadata))}</p>
+              <div className={cn(
+                "mt-4",
+                "w-full",
+                "max-sm:h-[15.625rem]",
+                "md:h-[15.4375rem]",
+                "lg:h-[15.25rem]",
+                "bg-white",
+                // "rounded-lg",
+                // "overflow-hidden"
+              )}>
+                <LineChart
+                  key={`${item.title}-${selectedView}-${dateRange[0].getTime()}-${dateRange[1].getTime()}`}
+                  className="w-full h-full"
+                  data={chartData}
+                  animationDurationMs={1000}
+                />
               </div>
             </div>
-            <div className={cn(
-              "mt-4",
-              "w-full",
-              "max-sm:h-[15.625rem]",
-              "md:h-[15.4375rem]",
-              "lg:h-[15.25rem]",
-              "bg-white",
-              // "rounded-lg",
-              // "overflow-hidden"
-            )}>
-              <LineChart
-                className="w-full h-full"
-                data={item.metadata
-                  .filter(entry => {
-                    const date = new Date(entry.date);
-                    return date >= dateRange[0] && date <= dateRange[1];
-                  })
-                  .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-                  .map((entry, index, array) => {
-                    const dailyValue = index > 0 
-                      ? Math.max(0, entry.total - array[index - 1].total)
-                      : entry.total;
-                    
-                    return {
-                      date: new Date(entry.date),
-                      value: selectedView === 'Daily' ? dailyValue : entry.total
-                    };
-                  })
-                }
-                animationDurationMs={1000}
-              />
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
-     {/* <div className="pt-8">
-       <DateRangeSlider
-        startDate={earliestDate}
-        endDate={latestDate}
-        onRangeChange={handleRangeChange}
-      />
-     </div> */}
+
+      <div className="pt-8">
+        <DateRangeSlider
+          key={`range-${earliestDate.toISOString()}-${latestDate.toISOString()}`}
+          startDate={earliestDate}
+          endDate={latestDate}
+          initialStart={dateRange[0]}
+          initialEnd={dateRange[1]}
+          onChange={handleRangeChange}
+        />
+      </div>
     </Section>
   );
 }
