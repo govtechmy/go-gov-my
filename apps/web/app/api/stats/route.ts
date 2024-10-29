@@ -4,7 +4,7 @@ import { storage } from '@/lib/storage';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
-type metaDataType = { date: string; total: string | number };
+type metaDataType = { date: string; total: number };
 
 function sortByDateAsc(metadata: metaDataType[]): metaDataType[] {
   return metadata.sort((a, b) => {
@@ -51,7 +51,7 @@ const metadataItemSchema = z.object({
   date: z.string().refine((val) => !isNaN(Date.parse(val)), {
     message: 'Invalid date format',
   }), // Validate ISO date string
-  total: z.string().transform(Number),
+  total: z.number(), // Change from string to number
 });
 
 const schema = z.object({
@@ -92,15 +92,15 @@ export async function GET(req: NextRequest) {
     const officersMetadata = sortByDateAsc(parsed.clicksMetadata);
     fillData(clicksMetadataSorted, {
       date: new Date().toISOString(),
-      total: (totalClicks._sum.clicks || 0).toString(),
+      total: totalClicks._sum.clicks || 0,
     });
     fillData(linksMetadata, {
       date: new Date().toISOString(),
-      total: (linkCount || 0).toString(),
+      total: linkCount || 0,
     });
     fillData(officersMetadata, {
       date: new Date().toISOString(),
-      total: (userCount || 0).toString(),
+      total: userCount || 0,
     });
 
     const obj = {
