@@ -92,15 +92,15 @@ export async function GET(req: NextRequest) {
     const officersMetadata = sortByDateAsc(parsed.clicksMetadata);
     fillData(clicksMetadataSorted, {
       date: new Date().toISOString(),
-      total: totalClicks._sum.clicks || 0,
+      total: (totalClicks._sum.clicks || 0).toString(),
     });
     fillData(linksMetadata, {
       date: new Date().toISOString(),
-      total: linkCount || 0,
+      total: (linkCount || 0).toString(),
     });
     fillData(officersMetadata, {
       date: new Date().toISOString(),
-      total: userCount || 0,
+      total: (userCount || 0).toString(),
     });
 
     const obj = {
