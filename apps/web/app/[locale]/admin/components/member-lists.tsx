@@ -49,6 +49,7 @@ const Avatar = ({ src, name }: { src: string | null; name: string }) => {
         width={40}
         height={40}
         className="rounded-full"
+        unoptimized={true}
       />
     );
   }
