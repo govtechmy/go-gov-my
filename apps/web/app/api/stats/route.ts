@@ -88,8 +88,8 @@ export async function GET(req: NextRequest) {
     const parsed = schema.parse(content);
 
     const clicksMetadataSorted = sortByDateAsc(parsed.clicksMetadata);
-    const linksMetadata = sortByDateAsc(parsed.clicksMetadata);
-    const officersMetadata = sortByDateAsc(parsed.clicksMetadata);
+    const linksMetadata = sortByDateAsc(parsed.linksMetadata);
+    const officersMetadata = sortByDateAsc(parsed.officersMetadata);
     fillData(clicksMetadataSorted, {
       date: new Date().toISOString(),
       total: totalClicks._sum.clicks || 0,
