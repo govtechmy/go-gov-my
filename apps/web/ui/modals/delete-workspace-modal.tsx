@@ -1,7 +1,7 @@
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import useWorkspace from '@/lib/swr/use-workspace';
 import { Button, Logo, Modal, useMediaQuery } from '@dub/ui';
-import { cn } from '@dub/utils';
+import { cn, fetcher } from '@dub/utils';
 import { useParams, useRouter } from 'next/navigation';
 import {
   Dispatch,
@@ -38,7 +38,7 @@ function DeleteWorkspaceModal({
         },
       }).then(async (res) => {
         if (res.ok) {
-          await mutate('/api/workspaces');
+          mutate('/api/workspaces?', fetcher('/api/workspaces'));
           router.push(`/${locale}`);
           resolve(null);
         } else {

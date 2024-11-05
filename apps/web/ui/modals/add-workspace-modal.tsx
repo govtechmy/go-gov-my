@@ -8,7 +8,7 @@ import {
   useMediaQuery,
   useRouterStuff,
 } from '@dub/ui';
-import { generateDomainFromName } from '@dub/utils';
+import { fetcher, generateDomainFromName } from '@dub/utils';
 import slugify from '@sindresorhus/slugify';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
@@ -120,7 +120,7 @@ function AddWorkspaceModalHelper({
           }).then(async (res) => {
             if (res.status === 200) {
               // track workspace creation event
-              await mutate('/api/workspaces');
+              mutate('/api/workspaces?', fetcher('/api/workspaces'));
               router.push(`/${locale}/${slug}`);
               toast.success(messages.dashboard.success_create_workspace);
               setShowAddWorkspaceModal(false);

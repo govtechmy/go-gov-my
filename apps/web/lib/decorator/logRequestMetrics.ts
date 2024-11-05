@@ -19,12 +19,10 @@ export function logRequestMetrics(
     const end_timestamp = Date.now();
 
     const time_diff = end_timestamp - start_timestamp;
-    console.log('time_diff', time_diff);
 
     httpRequestCount.inc();
     httpRequestTimeTaken.inc(time_diff);
 
-    console.log(`Status code: ${response.status}`);
     switch (response.status) {
       case 200:
         counter200.inc();
