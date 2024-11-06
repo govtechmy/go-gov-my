@@ -25,7 +25,7 @@ export default function App({ params: { locale } }) {
           </MaxWidthWrapper>
         </div>
         <MaxWidthWrapper>
-          <div className="my-10 grid grid-cols-1 gap-5 pb-20 lg:grid-cols-2 xl:grid-cols-3">
+          <div className="my-10 grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3">
             <WorkspaceList />
           </div>
         </MaxWidthWrapper>
