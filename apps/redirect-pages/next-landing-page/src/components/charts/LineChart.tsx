@@ -69,17 +69,31 @@ export default function LineChart(props: Props) {
       .domain([0, d3.max(data, (d) => d.value)])
       .range([h, 0]);
 
-    // Custom date format
+    // Custom date format with spaced ticks
     const xAxis = d3
       .axisBottom(xScale)
-      .tickSize(0)
-      .tickPadding(10)
+      .tickSize(10)
+      .tickPadding(15)
+      // @ts-ignore
+      .tickValues((() => {
+        const domain = xScale.domain() as unknown as Date[];
+        const step = Math.ceil(domain.length / 6);
+        const filteredDomain = domain.filter((_, i) => i % step === 0);
+        return Array.from(new Set([...filteredDomain, domain[domain.length - 1]]));
+      })())
       .tickFormat((d) => {
         const date = d as unknown as Date;
-        return date.toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric'
-        });
+        const day = date.getDate();
+        const month = date.toLocaleString('en-US', { month: 'short' });
+        
+        // Check if this is the last date in the domain
+        const domain = xScale.domain() as unknown as Date[];
+        const isLastDate = date.getTime() === domain[domain.length - 1].getTime();
+        
+        // If it's the last date and there's a date right before it that shows the month
+        const prevDate = domain[domain.indexOf(date) - 1];
+
+        return `${month} ${day}`;
       });
 
     // @ts-ignore
@@ -96,14 +110,7 @@ export default function LineChart(props: Props) {
       .attr("height", AXIS_LABEL_LINE_HEIGHT)
       .attr("transform", `translate(0, ${h})`)
       .attr("strokeWidth", 0.25)
-      .attr("text-anchor", "middle")
       .attr("class", cn("x-axis", labelVariants()));
-
-    // Adjust x-axis labels to prevent overlap
-    xAxisGroup
-      .selectAll(".tick text")
-      .attr("transform", "translate(-10,0)") // Adjust horizontal spacing
-      .style("text-anchor", "end");
 
     svg
       .append("g")
