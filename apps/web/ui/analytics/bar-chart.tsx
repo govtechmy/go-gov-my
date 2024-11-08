@@ -121,10 +121,9 @@ export default function BarChart() {
   let tooltipTimeout: number | undefined;
   return (
     <figure
-      className={`
-        ${
-          data && data.length > 0 ? '' : 'items-center justify-center'
-        } my-10 flex`}
+      className={` ${
+        data && data.length > 0 ? '' : 'items-center justify-center'
+      } my-10 flex`}
       style={{ width: CHART_WIDTH, height: CHART_HEIGHT }}
     >
       {data && data.length > 0 ? (

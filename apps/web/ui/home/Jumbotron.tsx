@@ -1,7 +1,7 @@
 export default function Jumbotron() {
   return (
     <>
-      <section className="border-x-2 border-gray-100 bg-white dark:bg-gray-900 lg:mx-24">
+      <section className="border-x-2 border-gray-100 bg-white lg:mx-24 dark:bg-gray-900">
         <div className="mx-auto px-4 py-8 lg:py-16">
           <div className="mx-12 grid gap-8 md:grid-cols-2">
             <div className="">
@@ -40,7 +40,7 @@ export default function Jumbotron() {
                 </a>
               </p>
             </div>
-            <div className="rounded-xs h-96 border border-gray-200 bg-gray-50 p-8 dark:border-gray-700 dark:bg-gray-800 md:p-12">
+            <div className="rounded-xs h-96 border border-gray-200 bg-gray-50 p-8 md:p-12 dark:border-gray-700 dark:bg-gray-800">
               Placeholder
             </div>
           </div>

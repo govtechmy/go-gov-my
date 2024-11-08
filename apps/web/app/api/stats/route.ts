@@ -6,45 +6,73 @@ import { z } from 'zod';
 
 type metaDataType = { date: string; total: number };
 
+function normalizeDate(date: string): string {
+  return new Date(date).toISOString().split('T')[0];
+}
+
 function sortByDateAsc(metadata: metaDataType[]): metaDataType[] {
-  return metadata.sort((a, b) => {
-    return new Date(a.date).getTime() - new Date(b.date).getTime();
-  });
-}
+  const uniqueData = new Map<string, number>();
 
-function fillData(metaData: metaDataType[], newData: metaDataType) {
-  const lastDateBeforeNew = metaData[metaData.length - 1].date;
-  const daysDifference: number = getDaysDifference(
-    lastDateBeforeNew,
-    newData.date,
-  );
-  if (daysDifference > 1) {
-    for (let i = 1; i < daysDifference; i++) {
-      const tempData = JSON.parse(JSON.stringify(newData)); // deep clone
-      tempData.date = addDay(lastDateBeforeNew, i);
-      metaData.push(tempData);
+  metadata.forEach((item) => {
+    const normalizedDate = normalizeDate(item.date);
+    if (uniqueData.has(normalizedDate)) {
+      uniqueData.set(
+        normalizedDate,
+        Math.max(uniqueData.get(normalizedDate)!, item.total),
+      );
+    } else {
+      uniqueData.set(normalizedDate, item.total);
     }
-  }
+  });
 
-  metaData.push(newData); // modify in place
-}
-
-function addDay(dateString: string, days: number): string {
-  const date = new Date(dateString);
-  date.setDate(date.getDate() + days);
-  return date.toISOString();
+  return Array.from(uniqueData.entries())
+    .map(([date, total]) => ({ date, total }))
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 }
 
 function getDaysDifference(dateString1: string, dateString2: string): number {
-  const date1 = new Date(dateString1);
-  const date2 = new Date(dateString2);
+  const date1 = new Date(normalizeDate(dateString1));
+  const date2 = new Date(normalizeDate(dateString2));
 
-  const timeDifference = Math.abs(date2.getTime() - date1.getTime());
-
+  const timeDifference = date2.getTime() - date1.getTime();
   const millisecondsInDay = 1000 * 60 * 60 * 24;
-  const daysDifference = timeDifference / millisecondsInDay;
 
-  return Math.floor(daysDifference);
+  return Math.floor(timeDifference / millisecondsInDay);
+}
+
+function addDays(dateString: string, days: number): string {
+  const date = new Date(normalizeDate(dateString));
+  date.setDate(date.getDate() + days);
+  return normalizeDate(date.toISOString());
+}
+
+function fillData(metaData: metaDataType[], newData: metaDataType) {
+  if (metaData.length === 0) {
+    metaData.push({
+      date: normalizeDate(newData.date),
+      total: newData.total,
+    });
+    return;
+  }
+
+  const lastEntry = metaData[metaData.length - 1];
+  const normalizedNewDate = normalizeDate(newData.date);
+  const daysDifference = getDaysDifference(lastEntry.date, normalizedNewDate);
+
+  if (daysDifference > 0) {
+    for (let i = 1; i < daysDifference; i++) {
+      const interpolatedDate = addDays(lastEntry.date, i);
+      metaData.push({
+        date: interpolatedDate,
+        total: lastEntry.total,
+      });
+    }
+
+    metaData.push({
+      date: normalizedNewDate,
+      total: newData.total,
+    });
+  }
 }
 
 const metadataItemSchema = z.object({
@@ -88,25 +116,25 @@ export async function GET(req: NextRequest) {
     const parsed = schema.parse(content);
 
     const clicksMetadataSorted = sortByDateAsc(parsed.clicksMetadata);
-    const linksMetadata = sortByDateAsc(parsed.linksMetadata);
-    const officersMetadata = sortByDateAsc(parsed.officersMetadata);
+    const linksMetadataSorted = sortByDateAsc(parsed.linksMetadata);
+    const officersMetadataSorted = sortByDateAsc(parsed.officersMetadata);
     fillData(clicksMetadataSorted, {
       date: new Date().toISOString(),
       total: totalClicks._sum.clicks || 0,
     });
-    fillData(linksMetadata, {
+    fillData(linksMetadataSorted, {
       date: new Date().toISOString(),
       total: linkCount || 0,
     });
-    fillData(officersMetadata, {
+    fillData(officersMetadataSorted, {
       date: new Date().toISOString(),
       total: userCount || 0,
     });
 
     const obj = {
       clicksMetadata: clicksMetadataSorted,
-      linksMetadata: linksMetadata,
-      officersMetadata: officersMetadata,
+      linksMetadata: linksMetadataSorted,
+      officersMetadata: officersMetadataSorted,
     };
 
     const buf = Buffer.from(JSON.stringify(obj));

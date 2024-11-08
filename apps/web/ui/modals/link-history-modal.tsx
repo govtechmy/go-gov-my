@@ -20,7 +20,7 @@ export default function LinkHistoryModal({
 
   return (
     <Modal showModal={show} setShowModal={setShow} className="max-w-screen-md">
-      <div className="scrollbar-hide  max-h-[95vh] overflow-auto">
+      <div className="scrollbar-hide max-h-[95vh] overflow-auto">
         <h2 className="border-gray sticky top-0 z-20 mb-2 h-14 border-b bg-white p-5 text-lg font-medium">
           {messages.messages.link.history.history_for} {link}
         </h2>
@@ -54,7 +54,7 @@ function LinkHistoryTimeline({ history }: { history: LinkHistory[] }) {
       {history.map((h, i, arr) => {
         if (h.type === 'create') {
           return (
-            <div className="flex gap-4 " key={i}>
+            <div className="flex gap-4" key={i}>
               {arr.length > 1 && (
                 <VerticalTimeline
                   isFirst={i === 0}

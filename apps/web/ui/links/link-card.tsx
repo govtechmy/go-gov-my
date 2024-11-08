@@ -314,7 +314,7 @@ export default function LinkCard({
       className={cn(
         selected ? 'border-black' : 'border-gray-50',
         compact
-          ? 'relative border-l border-r border-t border-gray-200  bg-white p-2 transition-all first:rounded-t-lg last:rounded-b-lg last:border-b'
+          ? 'relative border-l border-r border-t border-gray-200 bg-white p-2 transition-all first:rounded-t-lg last:rounded-b-lg last:border-b'
           : 'relative rounded-lg border-2 bg-white p-3 pr-1 shadow transition-all hover:shadow-md sm:p-4',
       )}
     >

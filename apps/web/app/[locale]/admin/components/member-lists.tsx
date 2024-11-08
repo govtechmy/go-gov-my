@@ -195,7 +195,7 @@ export default function MemberLists() {
         className="flex-column flex flex-wrap items-center justify-between pt-4 md:flex-row"
         aria-label="Table navigation"
       >
-        <span className="mb-4 block w-full text-sm font-normal text-gray-500 dark:text-gray-400 md:mb-0 md:inline md:w-auto">
+        <span className="mb-4 block w-full text-sm font-normal text-gray-500 md:mb-0 md:inline md:w-auto dark:text-gray-400">
           {messages?.admin?.user_management?.user_showing}{' '}
           <span className="font-semibold text-gray-900 dark:text-white">
             {users.length > 0 ? (page - 1) * 10 + 1 : 0}-
