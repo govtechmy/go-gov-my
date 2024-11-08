@@ -6,7 +6,10 @@ import { cn } from "@/lib/utils";
 import { useState, useEffect, useMemo } from "react";
 import SmoothLineChart from "@/components/charts/SmoothLineChart";
 import LineChart from "@/components/charts/LineChart";
-import DateRangeSlider from "./DateRangeSlider";
+import RangeSlider from "./RangeSlider";
+import { SliderProvider } from "./Slider";
+import Timeseries from "./Timeseries";
+import { ChartData } from "chart.js";
 
 type MetadataItem = {
   date: string;
@@ -102,6 +105,51 @@ export default function StatsNew(props: Props) {
     setDateRange([start, end]);
   };
 
+  // Add this helper function to transform data for Timeseries
+  const prepareChartData = (metadata: MetadataItem[], title: string) => {
+    const filteredData = metadata
+      .filter(entry => {
+        const date = new Date(entry.date);
+        return date >= dateRange[0] && date <= dateRange[1];
+      })
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+    return {
+      labels: filteredData.map(entry => entry.date),
+      datasets: [{
+        label: title,
+        data: filteredData.map((entry, index, array) => 
+          selectedView === 'Daily'
+            ? (index === 0 ? entry.total : entry.total - array[index - 1].total)
+            : entry.total
+        ),
+        fill: true,
+        // Gradient
+        backgroundColor: (context: any) => {
+          const chart = context.chart;
+          const { ctx, chartArea } = chart;
+          if (!chartArea) return null;
+          
+          const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+          gradient.addColorStop(0, 'rgba(37, 99, 235, 0.4)');
+          gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+          return gradient;
+        },
+
+        // Solid Color
+        // backgroundColor: 'rgba(37, 99, 235, 0.2)',
+        borderColor: 'rgb(37, 99, 235)',
+        borderWidth: 2,
+        tension: 0.4,
+        pointRadius: 0,
+        pointHoverRadius: 6,
+        pointHoverBackgroundColor: 'rgb(37, 99, 235)',
+        pointHoverBorderColor: 'white',
+        pointHoverBorderWidth: 2,
+      }]
+    };
+  };
+
   return (
     <Section className={cn("col-span-full", "px-4 md:px-6 lg:px-8", "overflow-hidden")}>
       <div className="relative w-full">
@@ -154,18 +202,7 @@ export default function StatsNew(props: Props) {
             { title: props.linksCreatedKey, metadata: props.linksMetadata },
             { title: props.publicOfficersKey, metadata: props.officersMetadata }
           ].map((item, index) => {
-            const chartData = item.metadata
-              .filter(entry => {
-                const date = new Date(entry.date);
-                return date >= dateRange[0] && date <= dateRange[1];
-              })
-              .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-              .map((entry, index, array) => ({
-                date: new Date(entry.date),
-                value: selectedView === 'Daily'
-                  ? (index === 0 ? entry.total : entry.total - array[index - 1].total)
-                  : entry.total
-              }));
+            const chartData = prepareChartData(item.metadata, item.title);
 
             return (
               <div key={index} className="bg-white p-4 rounded-lg">
@@ -185,28 +222,48 @@ export default function StatsNew(props: Props) {
                     </p>
                   </div>
                 </div>
-                <div className={cn(
-                  "mt-4",
-                  "w-full",
-                  "max-sm:h-[15.625rem]",
-                  "md:h-[15.4375rem]",
-                  "lg:h-[15.25rem]",
-                  "bg-white"
-                )}>
-                  <LineChart
-                    key={`${item.title}-${selectedView}-${dateRange[0].getTime()}-${dateRange[1].getTime()}`}
-                    className="w-full h-full"
-                    data={chartData}
-                    animationDurationMs={1000}
-                  />
-                </div>
+
+                <SliderProvider>
+                  {() => (
+                    <div className={cn(
+                      "mt-4",
+                      "w-full",
+                      "max-sm:h-[15.625rem]",
+                      "md:h-[15.4375rem]",
+                      "lg:h-[15.25rem]",
+                      "bg-white"
+                    )}>
+                      <Timeseries
+                        title={item.title}
+                        key={`${item.title}-${selectedView}-${dateRange[0].getTime()}-${dateRange[1].getTime()}`}
+                        className="w-full h-full"
+                        // @ts-ignore
+                        data={chartData as ChartData<"line", number[], string>}
+                        enableGridX={false}
+                        enableGridY={true}
+                        enableAnimation={true}
+                        tooltipCallback={(tooltipItem) => {
+                          const date = new Date(tooltipItem.label);
+                          return `${date.toLocaleString(props.locale, {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            hour12: false
+                          })}: ${formatNumber(tooltipItem.parsed.y)}`;
+                        }}
+                      />
+                    </div>
+                  )}
+                </SliderProvider>
               </div>
             );
           })}
         </div>
 
         <div className="pt-8 relative w-full overflow-hidden">
-          <DateRangeSlider
+          <RangeSlider
             key={`range-${earliestDate.toISOString()}-${latestDate.toISOString()}`}
             startDate={earliestDate}
             endDate={latestDate}

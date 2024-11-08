@@ -7,6 +7,15 @@
     @apply appearance-none bg-transparent;
   }
 
+    .PopoverContent {
+      background-color: black !important;
+      color: white !important;
+    }
+  
+    .PopoverArrow {
+      fill: black !important;
+    }
+
   .range-slider::-webkit-slider-thumb {
     @apply appearance-none w-4 h-4 rounded-full cursor-pointer;
     @apply bg-brand-600 hover:bg-brand-700 hover:scale-110 transition-all;
@@ -26,6 +35,15 @@
 
   .range-slider::-moz-range-track {
     @apply bg-transparent;
+  }
+
+  .PopoverContent {
+    background-color: black !important;
+    color: white !important;
+  }
+  
+  .PopoverArrow {
+    fill: black !important;
   }
 }
 
