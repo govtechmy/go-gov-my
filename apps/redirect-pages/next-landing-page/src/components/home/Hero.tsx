@@ -12,6 +12,9 @@ import Lock from "@/icons/solid-lock";
 import Shield from "@/icons/shield";
 import { cn } from "@/lib/utils";
 import Rive from "@rive-app/react-canvas";
+import CheckLinkDialog from "@/components/CheckLinkDialog";
+import { useState } from "react";
+import { Button } from "../Button";
 
 type Props = {
   id?: string;
@@ -24,6 +27,8 @@ type Props = {
 };
 
 export default function Hero(props: Props) {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
   return (
     // Disable left/right padding on the container
     <BorderedSection
@@ -72,16 +77,17 @@ export default function Hero(props: Props) {
           >
             <span>{props.buttonKey}</span>
           </ButtonB>
-          <div className="w-[0.5rem]"></div>
-          <ButtonB
-            className="border border-washed-300"
-            variant="tertiary"
-            size="large"
-            href={URL_APP_MAIN}
-            target="_blank"
-          >
-            <span>{props.checkLinkKey}</span>
-          </ButtonB>
+          <div className="w-[0.5rem] flex flex-row items-center"></div>
+          <CheckLinkDialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <Button
+              className="border border-washed-300 rounded-lg shadow-sm hover:shadow-md bg-neutral-50"
+              variant="tertiary"
+              size="lg"
+              onClick={() => setDialogOpen(true)}
+            >
+              <span className="text-lg text-gray-700 font-normal">{props.checkLinkKey}</span>
+            </Button>
+          </CheckLinkDialog>
         </div>
         <Paragraph className="mt-[1.125rem] text-center lg:text-start">
           {props.signInKey}
