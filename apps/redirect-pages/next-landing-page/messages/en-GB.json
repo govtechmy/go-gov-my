@@ -29,7 +29,8 @@
 				"description": "<em>go.gov.my</em> short links can only be created by public officers, so you can be sure it's from a trustworthy source.",
 				"signIn": "Are you a public officer? <a>Sign in</a>",
 				"buttons": {
-					"createLink": "Create Link"
+					"createLink": "Create Link",
+					"checkLink": "Check Link"
 				}
 			},
 			"Preview": {

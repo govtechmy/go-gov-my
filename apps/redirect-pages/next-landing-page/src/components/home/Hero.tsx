@@ -8,6 +8,8 @@ import Paragraph from "@/components/Paragraph";
 import RoundedText from "@/components/RoundedText";
 import { URL_APP_LOGIN, URL_APP_MAIN } from "@/constants/urls";
 import IconLink from "@/icons/link";
+import Lock from "@/icons/solid-lock";
+import Shield from "@/icons/shield";
 import { cn } from "@/lib/utils";
 import Rive from "@rive-app/react-canvas";
 
@@ -18,6 +20,7 @@ type Props = {
   descriptionKey: React.ReactNode;
   signInKey: React.ReactNode;
   buttonKey: string;
+  checkLinkKey: string;
 };
 
 export default function Hero(props: Props) {
@@ -68,6 +71,16 @@ export default function Hero(props: Props) {
             iconEnd={<IconLink />}
           >
             <span>{props.buttonKey}</span>
+          </ButtonB>
+          <div className="w-[0.5rem]"></div>
+          <ButtonB
+            className="border border-washed-300"
+            variant="tertiary"
+            size="large"
+            href={URL_APP_MAIN}
+            target="_blank"
+          >
+            <span>{props.checkLinkKey}</span>
           </ButtonB>
         </div>
         <Paragraph className="mt-[1.125rem] text-center lg:text-start">

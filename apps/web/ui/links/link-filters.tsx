@@ -207,7 +207,7 @@ const TagsFilter = ({
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const newTags = e.target.checked
         ? [...selectedTagIds, e.target.id]
-        : (selectedTagIds.filter((tagId) => tagId !== e.target.id) ?? []);
+        : selectedTagIds.filter((tagId) => tagId !== e.target.id) ?? [];
       queryParams({
         set: {
           tagIds: newTags,

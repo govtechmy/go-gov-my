@@ -339,7 +339,7 @@ const ImagePreviewPopoverContent = ({
       animate={{
         width: isMobile
           ? '100%'
-          : (resizeObserverEntry?.borderBoxSize[0].inlineSize ?? 'auto'),
+          : resizeObserverEntry?.borderBoxSize[0].inlineSize ?? 'auto',
         height: resizeObserverEntry?.borderBoxSize[0].blockSize ?? 'auto',
       }}
       transition={{ type: 'spring', duration: 0.3, bounce: 0.15 }}

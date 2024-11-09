@@ -20,12 +20,12 @@ export default function LandingPage() {
 
       <section className="bg-white dark:bg-gray-900">
         <div className="mx-auto max-w-screen-xl px-4 py-8 text-center lg:py-16">
-          <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+          <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
             Our Performance so far
           </h1>
           <div className="mx-auto max-w-screen-xl px-4 py-8 lg:py-16">
             <div className="my-5 grid gap-8 md:grid-cols-3">
-              <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 md:p-12 dark:border-gray-700 dark:bg-gray-800">
+              <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 dark:border-gray-700 dark:bg-gray-800 md:p-12">
                 <a
                   href="#"
                   className="mb-2 inline-flex items-center rounded-md bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-gray-700 dark:text-green-400"
@@ -71,7 +71,7 @@ export default function LandingPage() {
                   </svg>
                 </a>
               </div>
-              <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 md:p-12 dark:border-gray-700 dark:bg-gray-800">
+              <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 dark:border-gray-700 dark:bg-gray-800 md:p-12">
                 <a
                   href="#"
                   className="mb-2 inline-flex items-center rounded-md bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-gray-700 dark:text-green-400"
@@ -117,7 +117,7 @@ export default function LandingPage() {
                   </svg>
                 </a>
               </div>
-              <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 md:p-12 dark:border-gray-700 dark:bg-gray-800">
+              <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 dark:border-gray-700 dark:bg-gray-800 md:p-12">
                 <a
                   href="#"
                   className="mb-2 inline-flex items-center rounded-md bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:bg-gray-700 dark:text-purple-400"
@@ -171,7 +171,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="my-5 grid gap-8 md:grid-cols-1">
-              <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 md:p-12 dark:border-gray-700 dark:bg-gray-800">
+              <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 dark:border-gray-700 dark:bg-gray-800 md:p-12">
                 <a
                   href="#"
                   className="mb-2 inline-flex items-center rounded-md bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-gray-700 dark:text-green-400"
@@ -300,9 +300,9 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-          <hr className="my-6 border-gray-200 sm:mx-auto lg:my-8 dark:border-gray-700" />
+          <hr className="my-6 border-gray-200 dark:border-gray-700 sm:mx-auto lg:my-8" />
           <div className="sm:flex sm:items-center sm:justify-between">
-            <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
+            <span className="text-sm text-gray-500 dark:text-gray-400 sm:text-center">
               © 2023{' '}
               <a href="https://flowbite.com/" className="hover:underline">
                 Flowbite™

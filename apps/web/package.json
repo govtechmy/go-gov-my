@@ -12,7 +12,9 @@
     "test": "vitest -no-file-parallelism",
     "generate-openapi": "tsx ./scripts/generate-openapi.ts",
     "start-kafka-consumer": "tsx --env-file=.env ./kafka-consumer/index.ts",
-    "build-outbox": "tsx esbuild-outbox.config.ts"
+    "build-outbox": "tsx esbuild-outbox.config.ts",
+    "seed": "tsx ./prisma/seed.ts",
+    "migrations": "prisma migrate deploy && prisma generate"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.20.4",

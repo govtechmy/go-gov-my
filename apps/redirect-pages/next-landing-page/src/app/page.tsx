@@ -144,6 +144,7 @@ export default async function Home({ searchParams }: Props) {
               ),
             })}
             buttonKey={t(hero.buttonKey)}
+            checkLinkKey={t(hero.checkLinkKey)}
           />
           <Preview
             className="py-[3rem] md:py-[5.25rem]"
@@ -325,6 +326,7 @@ const hero = {
   descriptionKey: keypath(HERO_BASE_PATH, "description"),
   signInKey: keypath(HERO_BASE_PATH, "signIn"),
   buttonKey: keypath(HERO_BASE_PATH, "buttons.createLink"),
+  checkLinkKey: keypath(HERO_BASE_PATH, "buttons.checkLink"),
 };
 
 const statsTranslations = {

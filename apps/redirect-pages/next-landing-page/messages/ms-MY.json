@@ -29,7 +29,8 @@
 				"description": "Pautan pendek <em>go.gov.my</em> hanya boleh dicipta oleh pegawai awam, jadi anda boleh yakin ia datang daripada sumber yang boleh dipercayai.",
 				"signIn": "Adakah anda pegawai awam? <a>Log masuk</a>",
 				"buttons": {
-					"createLink": "Cipta Pautan"
+					"createLink": "Cipta Pautan",
+					"checkLink": "Sahkan Pautan"
 				}
 			},
 			"Preview": {
