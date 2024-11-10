@@ -1,20 +1,17 @@
 "use client";
 
 import BorderedSection from "@/components/BorderedSection";
-import BrandLink from "@/components/BrandLink";
 import ButtonB from "@/components/ButtonB";
 import Heading from "@/components/Heading";
 import Paragraph from "@/components/Paragraph";
-import RoundedText from "@/components/RoundedText";
-import { URL_APP_LOGIN, URL_APP_MAIN } from "@/constants/urls";
+import { URL_APP_MAIN } from "@/constants/urls";
 import IconLink from "@/icons/link";
-import Lock from "@/icons/solid-lock";
-import Shield from "@/icons/shield";
 import { cn } from "@/lib/utils";
 import Rive from "@rive-app/react-canvas";
 import CheckLinkDialog from "@/components/CheckLinkDialog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../Button";
+import { sign, verify } from 'jsonwebtoken';
 
 type Props = {
   id?: string;
@@ -77,15 +74,15 @@ export default function Hero(props: Props) {
           >
             <span>{props.buttonKey}</span>
           </ButtonB>
-          <div className="w-[0.5rem] flex flex-row items-center"></div>
+          <div className="w-[0.5rem] mt-[2.25rem] flex flex-row items-center"></div>
           <CheckLinkDialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <Button
               className="border border-washed-300 rounded-lg shadow-sm hover:shadow-md bg-neutral-50"
               variant="tertiary"
-              size="lg"
+              size="large"
               onClick={() => setDialogOpen(true)}
             >
-              <span className="text-lg text-gray-700 font-normal">{props.checkLinkKey}</span>
+              <span className="text-gray-700 font-medium text-base">{props.checkLinkKey}</span>
             </Button>
           </CheckLinkDialog>
         </div>

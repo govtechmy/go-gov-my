@@ -111,6 +111,8 @@ export default async function Home({ searchParams }: Props) {
   const latestLinks = getLatestTotal(stats.linksMetadata);
   const latestOfficers = getLatestTotal(stats.officersMetadata);
 
+
+
   return (
     <>
       <Masthead

@@ -31,6 +31,38 @@ export default function CheckLinkDialog({ children, open, onOpenChange }: Props)
   const showDialog = searchParams.get("dialog") === "true";
   const [isLoading, setIsLoading] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
+  const [token, setToken] = useState<string>('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+   useEffect(() => {
+    const fetchToken = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch('/api/token', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.text();
+          throw new Error(`Failed to fetch token: ${errorData}`);
+        }
+        
+        const data = await response.json();
+        setToken(data.token || '');
+      } catch (error) {
+        console.error('Error fetching token:', error);
+        setError(error instanceof Error ? error.message : String(error));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchToken();
+  }, []);
 
   useEffect(() => {
     if (showDialog && onOpenChange) {
@@ -65,12 +97,12 @@ export default function CheckLinkDialog({ children, open, onOpenChange }: Props)
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       <Dialog.Trigger asChild>{children}</Dialog.Trigger>
       <Dialog.Portal>
+
         <Dialog.Overlay className="fixed inset-0 z-50 bg-gray-950/30" />
         <Dialog.Content className="fixed left-[50%] top-[50%] z-50 w-[calc(100%-2rem)] max-w-[31.25rem] -translate-x-1/2 -translate-y-1/2 rounded-xl bg-neutral-50 p-6 shadow-lg duration-200 font-inter data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]">
           {!isVerified ? (
             <>
               <div className="flex items-center gap-3">
-                {/* <IconRoundMagnifier /> */}
                 <IconLinkFill className="w-8 h-8 stroke-blue-500 fill-blue-500" />
                 <Dialog.Title className="text-xl font-semibold leading-6 font-inter">
                   GoGov Link Checker
@@ -91,13 +123,16 @@ export default function CheckLinkDialog({ children, open, onOpenChange }: Props)
                 />
               </div>
               <Dialog.Description className="mt-4 text-md text-gray-500">
+                {loading && <p>Loading token...</p>}
+                {error && <p>Error: {error}</p>}
+                {token && <p>Token: {token}</p>}
                 Check link to verify its authenticity and stay safe from scams.
               </Dialog.Description>
 
               <div className="mt-6 flex gap-3">
                 <Dialog.Close asChild>
                   <button 
-                    className="flex-1 rounded-lg px-6 py-3 text-base xl:text-xl font-regular shadow-sm hover:shadow-md text-gray-700 hover:bg-gray-50 border border-washed-300"
+                    className="flex-1 rounded-lg px-6 py-3 text-base xl:text-lg font-regular shadow-sm hover:shadow-md text-gray-700 hover:bg-gray-50 border border-washed-300"
                     disabled={isLoading}
                   >
                     Cancel
@@ -107,7 +142,7 @@ export default function CheckLinkDialog({ children, open, onOpenChange }: Props)
                   onClick={handleCheckLink}
                   disabled={isLoading}
                   className={cn(
-                    "flex-1 shadow-sm hover:shadow-md rounded-lg px-6 py-3 text-base xl:text-xl font-regular text-neutral-50",
+                    "flex-1 shadow-sm hover:shadow-md rounded-lg px-6 py-3 text-base xl:text-lg font-regular text-neutral-50",
                     isLoading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
                   )}
                 >
@@ -156,7 +191,7 @@ export default function CheckLinkDialog({ children, open, onOpenChange }: Props)
               <div className="p-3 bg-gray-50 rounded-3xl border border-gray-200 mb-6">
                 <div className="flex items-center gap-2 text-blue-600">
                   <IconLinkFill className="w-6 h-6 stroke-blue-500 fill-blue-500" />
-                  <span><a href="https://go.gov.my/verifiedlinks" target="_blank" className="text-blue-600">https://go.gov.my/verifiedlinks</a></span>
+                  <span><a href="https://go.gov.my/verifiedlinks" target="_blank" className="text-blue-600 hover:underline">https://go.gov.my/verifiedlinks</a></span>
                 </div>
               </div>
               
@@ -164,7 +199,7 @@ export default function CheckLinkDialog({ children, open, onOpenChange }: Props)
               <div className="p-3 bg-yellow-50 rounded-3xl border border-yellow-400 mb-6">
                 <div className="flex items-center gap-2 text-yellow-700">
                   <IconLinkFill className="w-6 h-6 stroke-yellow-700 fill-yellow-700" />
-                  <span><a href="https://go.gov.my/verifiedlinks" target="_blank" className="text-yellow-700">https://go.gov.my/verifiedlinks</a></span>
+                  <span><a href="https://go.gov.my/verifiedlinks" target="_blank" className="text-yellow-700 hover:underline">https://go.gov.my/verifiedlinks</a></span>
                 </div>
               </div>
 
@@ -172,7 +207,7 @@ export default function CheckLinkDialog({ children, open, onOpenChange }: Props)
               <div className="p-3 bg-red-50 rounded-3xl border border-red-400 mb-6">
                 <div className="flex items-center gap-2 text-red-700">
                   <IconLinkFill className="w-6 h-6 stroke-red-700 fill-red-700" />
-                  <span><a href="https://go.gov.my/verifiedlinks" target="_blank" className="text-red-700">https://go.gov.my/verifiedlinks</a></span>
+                  <span><a href="https://go.gov.my/verifiedlinks" target="_blank" className="text-red-700 hover:underline">https://go.gov.my/verifiedlinks</a></span>
                 </div>
               </div>
 
@@ -228,14 +263,14 @@ export default function CheckLinkDialog({ children, open, onOpenChange }: Props)
                 <Dialog.Close asChild>
                   <button 
                     // onClick={() => setIsVerified(false)}
-                    className="flex-1 rounded-lg px-6 py-3 text-xl font-regular shadow-sm hover:shadow-md text-gray-700 hover:bg-gray-50 border border-washed-300"
+                    className="flex-1 rounded-lg px-6 py-3 text-base font-regular shadow-sm hover:shadow-md text-gray-700 hover:bg-gray-50 border border-washed-300"
                   >
                     Done
                   </button>
                 </Dialog.Close>
                     <button 
                     // onClick={() => setIsVerified(false)}
-                    className="flex items-center gap-2 rounded-lg px-6 py-3 text-xl font-regular shadow-sm hover:shadow-md text-red-700 hover:bg-red-50 border border-red-300"
+                    className="flex items-center gap-2 rounded-lg px-6 py-3 text-base font-regular shadow-sm hover:shadow-md text-red-700 hover:bg-red-50 border border-red-300"
                   >
                     <AlertTriangle className="w-6 h-6" />
                     Report
@@ -243,7 +278,7 @@ export default function CheckLinkDialog({ children, open, onOpenChange }: Props)
                 <a 
                   href="https://go.gov.my/verifiedlinks"
                   target="_blank"
-                  className="flex-1 text-center text-neutral-50 rounded-lg px-6 py-3 text-xl font-regular shadow-sm hover:shadow-md hover:bg-blue-700 bg-blue-600 border border-washed-300"
+                  className="flex-1 text-center text-neutral-50 rounded-lg px-6 py-3 text-base font-regular shadow-sm hover:shadow-md hover:bg-blue-700 bg-blue-600 border border-washed-300"
                 >
                   Visit Link
                 </a>

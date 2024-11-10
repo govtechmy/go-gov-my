@@ -5,6 +5,8 @@ const nextConfig = {
   output: 'standalone', //process.env.BUILD_MODE === "ssg" ? "export" : undefined,
   env: {
     LAST_UPDATED: new Date().toISOString(),
+    API_SECRET_KEY: process.env.API_SECRET_KEY,
+    ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
   },
 };
 
