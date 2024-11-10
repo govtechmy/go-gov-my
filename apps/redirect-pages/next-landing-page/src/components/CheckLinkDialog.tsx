@@ -50,6 +50,7 @@ export default function CheckLinkDialog({
   notFoundDialog,
   reportDialog
 }: Props) {
+  const APP_DOMAIN = process.env.NEXT_PUBLIC_APP_DOMAIN;
   const searchParams = useSearchParams();
   const router = useRouter();
   const showDialog = searchParams.get("dialog") === "true";
@@ -258,7 +259,7 @@ export default function CheckLinkDialog({
                   type="text" 
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
-                  placeholder={`${process.env.NEXT_PUBLIC_APP_DOMAIN}/example`}
+                  placeholder={`${APP_DOMAIN ? APP_DOMAIN : 'https://go.gov.my'}/example`}
                   className={cn(
                     "w-full rounded-lg border shadow-sm border-washed-300 px-4 py-3 text-base focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500",
                     isLoading && "bg-gray-100 cursor-not-allowed"
