@@ -103,7 +103,7 @@ const IdentifyWebsite: React.FC = () => {
                       {message?.masthead_official_site_desc_domain}
                     </span>
                   </p>
-                  <p className="text-black-700 max-w-prose text-balance text-sm">
+                  <p className="text-black-700 text-balance max-w-prose text-sm">
                     {message?.masthead_official_site_desc_1}
                     <span className="font-semibold">
                       {message?.masthead_official_site_desc_domain}
@@ -135,9 +135,9 @@ const IdentifyWebsite: React.FC = () => {
                     {message?.masthead_ssl_title}
                     <span className="text-bold text-green-600"> HTTPS</span>
                   </p>
-                  <div className="text-black-700 max-w-prose text-balance text-sm">
+                  <div className="text-black-700 text-balance max-w-prose text-sm">
                     {message?.masthead_ssl_desc_1}&nbsp;&nbsp;&nbsp;
-                    <span className="-ml-[3px] mb-0.5 mr-px inline-block size-3.5 text-green-600">
+                    <span className="size-3.5 -ml-[3px] mb-0.5 mr-px inline-block text-green-600">
                       <svg
                         width="12"
                         height="14"

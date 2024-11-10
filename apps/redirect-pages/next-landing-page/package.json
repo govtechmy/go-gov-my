@@ -12,7 +12,7 @@
     "update-static-build": "bash update-static-build.sh"
   },
   "dependencies": {
-    "@radix-ui/react-dialog": "^1.1.1",
+    "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-dropdown-menu": "^2.1.1",
     "@radix-ui/react-navigation-menu": "^1.2.0",
     "@radix-ui/react-popover": "^1.1.2",
@@ -26,6 +26,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "d3": "^7.9.0",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.418.0",
     "luxon": "^3.5.0",
     "next": "^14.2.15",
@@ -40,6 +41,7 @@
   },
   "devDependencies": {
     "@types/d3": "^7.4.3",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

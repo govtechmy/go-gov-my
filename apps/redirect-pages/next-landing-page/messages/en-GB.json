@@ -29,7 +29,8 @@
 				"description": "<em>go.gov.my</em> short links can only be created by public officers, so you can be sure it's from a trustworthy source.",
 				"signIn": "Are you a public officer? <a>Sign in</a>",
 				"buttons": {
-					"createLink": "Create Link"
+					"createLink": "Create Link",
+					"checkLink": "Check Link"
 				}
 			},
 			"Preview": {
@@ -147,6 +148,37 @@
 		},
 		"SearchBox": {
 			"placeholder": "Search by keywords"
+		},
+		"CheckLinkDialog": {
+			"MainDialog": {
+				"LinkCheckerTitle": "Link Checker",
+				"LinkCheckerDescription": "Check link to verify its authenticity and stay safe from scams.",
+				"CancelBtn": "Cancel",
+				"CheckLinkBtn": "Check Link"
+			},
+			"SuccessDialog": {
+				"SuccessTitle": "Link Verified and Active!",
+				"SuccessDescription": "This link is safe and currently active. You can proceed with confidence.",
+				"DoneBtn": "Close",
+				"VisitLinkBtn": "Visit Link"
+			},
+			"ExpiredDialog": {
+				"ExpiredTitle": "Link Exists but Expired!",
+				"ExpiredDescription": "This link has expired and is no longer active. For your safety, please avoid using it.",
+				"DoneBtn": "Close"
+			},
+			"NotFoundDialog": {
+				"NotFoundTitle": "Link Not Found!",
+				"NotFoundDescription": "We couldn't locate this link in our records. Please double-check or avoid using it.",
+				"DoneBtn": "Close",
+				"ReportBtn": "Report",
+				"FailedMsg": "Report failed, please try again"
+			},
+			"ReportDialog": {
+				"ReportTitle": "Report Submitted Successfully",
+				"ReportDescription": "Thank you for helping us keep our platform safe.",
+				"DoneBtn": "Close"
+			}
 		}
 	}
 }

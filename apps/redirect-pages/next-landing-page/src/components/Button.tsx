@@ -19,6 +19,11 @@ const buttonVariants = cva(
           "hover:bg-washed-100 focus:ring focus:ring-outline-400/20 focus:ring-offset-0",
         "tertiary-colour":
           "text-foreground hover:bg-brand-50 focus:ring focus:ring-brand-600/20 focus:ring-offset-0",
+        tertiaryColor: cn(
+          "focus:ring-brand-600/40",
+          "hover:bg-brand-50 focus:bg-white-force_white",
+          "text-brand-600 data-[disabled=true]:text-brand-text_only-disabled",
+        ),
       },
       size: {
         default: "",
@@ -26,6 +31,10 @@ const buttonVariants = cva(
         md: "px-3 py-2",
         lg: "px-3 py-2.5",
         icon: "p-2.5",
+        large: cn(
+          "px-[0.875rem] py-[0.625rem]",
+          "text-[1rem] leading-[1.5rem]",
+        ),
       },
     },
     defaultVariants: {
