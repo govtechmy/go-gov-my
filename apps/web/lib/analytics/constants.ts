@@ -1,4 +1,5 @@
 export const intervals = [
+  'custom',
   '24h',
   '7d',
   '30d',
@@ -37,15 +38,23 @@ export const INTERVAL_DISPLAYS = [
     display: 'All Time',
     value: 'all',
   },
+  {
+    display: 'Custom',
+    value: 'custom',
+  },
 ];
 
 export const INTERVAL_DATA: Record<
   string,
   {
     startDate: Date;
-    granularity: 'minute' | 'hour' | 'day' | 'month';
+    granularity: 'minute' | 'hour' | 'day' | 'month' | 'custom';
   }
 > = {
+  custom: {
+    startDate: new Date(Date.now() - 3600000),
+    granularity: 'custom',
+  },
   '1h': {
     startDate: new Date(Date.now() - 3600000),
     granularity: 'minute',

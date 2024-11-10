@@ -81,7 +81,11 @@ export default function DateRangePicker() {
                 key={value}
                 href={
                   queryParams({
-                    set: { interval: value },
+                    set: {
+                      interval: value,
+                      start: value == 'custom' ? new Date().toISOString() : '',
+                      end: value == 'custom' ? new Date().toISOString() : '',
+                    },
                     getNewPath: true,
                   }) as string
                 }

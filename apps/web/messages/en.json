@@ -409,6 +409,7 @@
   "INTERVAL_DISPLAYS": {
     "Last hour": "Last hour",
     "Last 24 hours": "Last 24 hours",
+    "Custom": "Custom",
     "Today": "Today",
     "Last 7 days": "Last 7 days",
     "Last 30 days": "Last 30 days",
