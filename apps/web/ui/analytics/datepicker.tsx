@@ -1,12 +1,14 @@
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import { AnalyticsContext } from '.';
 
 export default function Datepicker() {
   const router = useRouter();
   const { interval } = useContext(AnalyticsContext);
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [startDate, setStartDate] = useState<Date | null>(new Date());
+  const [endDate, setEndDate] = useState<Date | null>(new Date());
 
   useEffect(() => {
     if (router) {
@@ -35,39 +37,22 @@ export default function Datepicker() {
     }
   }, [startDate, endDate]);
 
-  const handleStartDateChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const dateValue = e.target.value ? new Date(e.target.value) : null;
-    setStartDate(dateValue);
-  };
-
-  const handleEndDateChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const dateValue = e.target.value ? new Date(e.target.value) : null;
-    setEndDate(dateValue);
-  };
-
-  function formatDateToYYYYMMDD(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const day = String(date.getDate()).padStart(2, '0');
-
-    return `${year}-${month}-${day}`;
-  }
-
   return (
     <div className="">
       {interval == 'custom' && (
-        <div>
-          <input
-            type="date"
-            className="mx-1 rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onChange={handleStartDateChange}
-            max={formatDateToYYYYMMDD(new Date())}
+        <div className="flex-rows flex">
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => setStartDate(date)}
+            maxDate={new Date()}
+            className="mx-1 rounded-md border border-gray-300 px-2 py-1 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <input
-            type="date"
-            className="mx-1 rounded-md border border-gray-300 px-4 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            onChange={handleEndDateChange}
-            max={formatDateToYYYYMMDD(new Date())}
+          -
+          <DatePicker
+            selected={endDate}
+            onChange={(date) => setEndDate(date)}
+            maxDate={new Date()}
+            className="mx-1 rounded-md border border-gray-300 px-2 py-1 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
       )}
