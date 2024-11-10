@@ -2,30 +2,54 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { cn } from "@/lib/utils";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AlertTriangle, X } from "lucide-react";
-import IconRoundMagnifier from "@/icons/round-magnifier";
-import { Inter, Poppins } from 'next/font/google'
+import { AlertCircle, AlertTriangle, X } from "lucide-react";
 import IconLinkFill from "@/icons/link-fill";
-
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-poppins',
-})
-
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-inter',
-})
 
 type Props = {
   children: React.ReactNode;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  mainDialog: {
+    title: string;
+    description: string;
+    cancelBtn: string;
+    checkLinkBtn: string;
+  };
+  successDialog: {
+    title: string;
+    description: string;
+    doneBtn: string;
+    visitLinkBtn: string;
+  };
+  expiredDialog: {
+    title: string;
+    description: string;
+    doneBtn: string;
+  };
+  notFoundDialog: {
+    title: string;
+    description: string;
+    doneBtn: string;
+    reportBtn: string;
+    failedMsg: string;
+  };
+  reportDialog: {
+    title: string;
+    description: string;
+    doneBtn: string;
+  };
 };
 
-export default function CheckLinkDialog({ children, open, onOpenChange }: Props) {
+export default function CheckLinkDialog({ 
+  children, 
+  open, 
+  onOpenChange,
+  mainDialog,
+  successDialog,
+  expiredDialog,
+  notFoundDialog,
+  reportDialog
+}: Props) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const showDialog = searchParams.get("dialog") === "true";
@@ -34,6 +58,23 @@ export default function CheckLinkDialog({ children, open, onOpenChange }: Props)
   const [token, setToken] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [url, setUrl] = useState('');
+  const [linkData, setLinkData] = useState<{
+    isValid: boolean;
+    isExpired: boolean;
+    agency?: {
+      code: string;
+      names: {
+        ms: string;
+        en: string;
+      };
+      logo: string | null;
+    } | null;
+    validUntil: string | null;
+    redirectUrl: string | null;
+  } | null>(null);
+  const [isReportSuccess, setIsReportSuccess] = useState(false);
+  const [reportError, setReportError] = useState<string | null>(null);
 
    useEffect(() => {
     const fetchToken = async () => {
@@ -80,70 +121,175 @@ export default function CheckLinkDialog({ children, open, onOpenChange }: Props)
       params.set("dialog", "true");
     } else {
       params.delete("dialog");
+      setUrl('');
+      setIsVerified(false);
+      setError(null);
+      setReportError(null);
     }
     router.replace(`?${params.toString()}`);
   };
 
-  const handleCheckLink = () => {
+  const handleCheckLink = async () => {
     setIsLoading(true);
-    // Simulate API call with setTimeout
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      if (!url) {
+        throw new Error('Please enter a URL');
+      }
+
+      const tokenResponse = await fetch('/api/token', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!tokenResponse.ok) {
+        throw new Error('Failed to get token');
+      }
+
+      const { token } = await tokenResponse.json();
+
+      const checkLinkResponse = await fetch('/api/check-link', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          url,
+          token
+        })
+      });
+
+      if (!checkLinkResponse.ok) {
+        throw new Error('Failed to check link');
+      }
+
+      const linkData = await checkLinkResponse.json();
+      
+      setLinkData(linkData);
       setIsVerified(true);
-    }, 1000);
+
+    } catch (error) {
+      console.error('Error checking link:', error);
+      setError(error instanceof Error ? error.message : 'Failed to check link');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleReport = async () => {
+    setIsLoading(true);
+    setReportError(null);
+    try {
+      const response = await fetch('/api/report-link', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          url,
+          token
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to report link');
+      }
+
+      const data = await response.json();
+      if (data.status) {
+        setIsReportSuccess(true);
+      } else {
+        throw new Error('Report submission failed');
+      }
+    } catch (error) {
+      setReportError('Report failed, please try again');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       <Dialog.Trigger asChild>{children}</Dialog.Trigger>
       <Dialog.Portal>
-
         <Dialog.Overlay className="fixed inset-0 z-50 bg-gray-950/30" />
         <Dialog.Content className="fixed left-[50%] top-[50%] z-50 w-[calc(100%-2rem)] max-w-[31.25rem] -translate-x-1/2 -translate-y-1/2 rounded-xl bg-neutral-50 p-6 shadow-lg duration-200 font-inter data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]">
-          {!isVerified ? (
+          {isReportSuccess ? (
+            <>
+              <div className="flex mb-4 justify-center">
+                <div className="w-12 h-12 rounded-full border-4 border-green-700 flex items-center justify-center">
+                  <svg className="w-6 h-6 text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+              </div>
+              <Dialog.Title className="text-xl font-semibold font-inter mb-2 text-center">
+                {reportDialog.title}
+              </Dialog.Title>
+              <Dialog.Description className="font-inter text-gray-700 mb-4 text-center">
+                {reportDialog.description}
+              </Dialog.Description>
+              <div className="flex justify-center">
+                <Dialog.Close asChild>
+                  <button 
+                    onClick={() => {
+                      setIsVerified(false);
+                      setIsReportSuccess(false);
+                    }}
+                    className="flex-1 max-w-[200px] rounded-lg px-6 py-3 text-base font-regular shadow-sm hover:shadow-md text-neutral-50 bg-blue-600 hover:bg-blue-700"
+                  >
+                    {reportDialog.doneBtn}
+                  </button>
+                </Dialog.Close>
+              </div>
+            </>
+          ) : !isVerified ? (
             <>
               <div className="flex items-center gap-3">
                 <IconLinkFill className="w-8 h-8 stroke-blue-500 fill-blue-500" />
                 <Dialog.Title className="text-xl font-semibold leading-6 font-inter">
-                  GoGov Link Checker
+                  GoGovMY {mainDialog.title}
                 </Dialog.Title>
               </div>
-              
-
               
               <div className="mt-6">
                 <input 
                   type="text" 
-                  placeholder="https://go.gov/example"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder={`${process.env.NEXT_PUBLIC_APP_DOMAIN}/example`}
                   className={cn(
                     "w-full rounded-lg border shadow-sm border-washed-300 px-4 py-3 text-base focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500",
                     isLoading && "bg-gray-100 cursor-not-allowed"
                   )}
                   disabled={isLoading}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && url.trim()) {
+                      handleCheckLink();
+                    }
+                  }}
                 />
               </div>
               <Dialog.Description className="mt-4 text-md text-gray-500">
-                {loading && <p>Loading token...</p>}
-                {error && <p>Error: {error}</p>}
-                {token && <p>Token: {token}</p>}
-                Check link to verify its authenticity and stay safe from scams.
+                {mainDialog.description}
               </Dialog.Description>
 
               <div className="mt-6 flex gap-3">
                 <Dialog.Close asChild>
                   <button 
-                    className="flex-1 rounded-lg px-6 py-3 text-base xl:text-lg font-regular shadow-sm hover:shadow-md text-gray-700 hover:bg-gray-50 border border-washed-300"
+                    className="flex-1 rounded-lg px-6 py-3 text-base xl:text-base font-regular shadow-sm hover:shadow-md text-gray-700 hover:bg-gray-50 border border-washed-300"
                     disabled={isLoading}
                   >
-                    Cancel
+                    {mainDialog.cancelBtn}
                   </button>
                 </Dialog.Close>
                 <button 
                   onClick={handleCheckLink}
-                  disabled={isLoading}
+                  disabled={isLoading || !url.trim()}
                   className={cn(
-                    "flex-1 shadow-sm hover:shadow-md rounded-lg px-6 py-3 text-base xl:text-lg font-regular text-neutral-50",
-                    isLoading ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+                    "flex-1 shadow-sm hover:shadow-md rounded-lg px-6 py-3 text-base xl:text-base font-regular text-neutral-50",
+                    isLoading || !url.trim() ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
                   )}
                 >
                   {isLoading ? (
@@ -166,123 +312,145 @@ export default function CheckLinkDialog({ children, open, onOpenChange }: Props)
                       </svg>
                       Checking...
                     </span>
-                  ) : (
-                    "Check Link"
-                  )}
+                  ) : mainDialog.checkLinkBtn}
                 </button>
               </div>
             </>
           ) : (
             <>
               <div className="flex mb-4">
-                <div className="w-12 h-12 rounded-full border-4 border-green-700 flex items-center justify-center">
-                  <svg className="w-6 h-6 text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
+                {linkData?.isValid && !linkData.isExpired ? (
+                  <div className="w-12 h-12 rounded-full border-4 border-green-700 flex items-center justify-center">
+                    <svg className="w-6 h-6 text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                ) : linkData?.isValid && linkData.isExpired ? (
+                  <AlertCircle className="w-10 h-10 text-yellow-700" />
+                ) : (
+                   <AlertTriangle className="w-10 h-10 text-red-700" />
+                )}
               </div>
+
               <Dialog.Title className="text-xl font-semibold font-inter mb-2 text-left">
-                Link Verified and Active!
+                {!linkData?.isValid ? notFoundDialog.title :
+                 linkData?.isExpired ? expiredDialog.title :
+                 successDialog.title}
               </Dialog.Title>
-              <Dialog.Description className="font-inter text-gray-500 mb-4">
-                This link is safe and currently active. You can proceed with confidence.
+
+              <Dialog.Description className="font-inter text-gray-700 mb-4">
+                {!linkData?.isValid ? notFoundDialog.description :
+                 linkData?.isExpired ? expiredDialog.description :
+                 successDialog.description}
               </Dialog.Description>
-              <span className="text-sm text-red-600 my-2">If without Logo</span>
-              <div className="p-3 bg-gray-50 rounded-3xl border border-gray-200 mb-6">
-                <div className="flex items-center gap-2 text-blue-600">
-                  <IconLinkFill className="w-6 h-6 stroke-blue-500 fill-blue-500" />
-                  <span><a href="https://go.gov.my/verifiedlinks" target="_blank" className="text-blue-600 hover:underline">https://go.gov.my/verifiedlinks</a></span>
-                </div>
-              </div>
-              
-              <span className="text-sm text-red-600 my-2">If Link expire without Logo</span>
-              <div className="p-3 bg-yellow-50 rounded-3xl border border-yellow-400 mb-6">
-                <div className="flex items-center gap-2 text-yellow-700">
-                  <IconLinkFill className="w-6 h-6 stroke-yellow-700 fill-yellow-700" />
-                  <span><a href="https://go.gov.my/verifiedlinks" target="_blank" className="text-yellow-700 hover:underline">https://go.gov.my/verifiedlinks</a></span>
-                </div>
-              </div>
 
-              <span className="text-sm text-red-600 my-2">If Link not exist</span>
-              <div className="p-3 bg-red-50 rounded-3xl border border-red-400 mb-6">
-                <div className="flex items-center gap-2 text-red-700">
-                  <IconLinkFill className="w-6 h-6 stroke-red-700 fill-red-700" />
-                  <span><a href="https://go.gov.my/verifiedlinks" target="_blank" className="text-red-700 hover:underline">https://go.gov.my/verifiedlinks</a></span>
+              {linkData?.isValid && !linkData.isExpired && !linkData.agency?.logo && (
+                <div className="p-3 bg-gray-50 rounded-3xl border border-gray-200 mb-6">
+                  <div className="flex items-center gap-2 text-blue-600">
+                    <IconLinkFill className="w-6 h-6 stroke-blue-500 fill-blue-500" />
+                    <span><a href={linkData.redirectUrl || "#"} target="_blank" className="text-blue-600 hover:underline">{url}</a></span>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              <span className="text-sm text-red-600 my-2">If with Logo</span>
-              <div className="p-3 bg-white rounded-full border border-gray-200 mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-md overflow-hidden">
-                    <img 
-                      src="https://upload.wikimedia.org/wikipedia/commons/9/94/Jata_MalaysiaV2.svg" 
-                      alt="Ministry Logo" 
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-sm text-gray-600">Ministry of Digital</span>
-                    
-                    <a 
-                      href="https://go.gov.my/verifiedlinks" 
-                      target="_blank" 
-                      className="text-blue-600 text-sm hover:underline "
-                    >
-                      https://go.gov.my/verifiedlinks
-                    </a>
+              {linkData?.isValid && !linkData.isExpired && linkData.agency?.logo && (
+                <div className="p-3 bg-white rounded-full border border-gray-200 mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-md overflow-hidden">
+                      <img src={linkData.agency.logo} alt="Agency Logo" className="w-full h-full object-contain" />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm text-gray-600">{linkData.agency.names.en}</span>
+                      <a href={linkData.redirectUrl || "#"} target="_blank" className="text-blue-600 text-sm hover:underline">{url}</a>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
-                 <span className="text-sm text-red-600 my-2">If link expire with Logo</span>
-                            <div className="p-3 bg-yellow-50 rounded-full border border-yellow-400 mb-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-md overflow-hidden">
-                    <img 
-                      src="https://upload.wikimedia.org/wikipedia/commons/9/94/Jata_MalaysiaV2.svg" 
-                      alt="Ministry Logo" 
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-sm text-yellow-700">Ministry of Digital</span>
-                    
-                    <a 
-                      href="https://go.gov.my/verifiedlinks" 
-                      target="_blank" 
-                      className="text-yellow-700 text-sm hover:underline "
-                    >
-                      https://go.gov.my/verifiedlinks
-                    </a>
+              {!linkData?.isValid && (
+                <div className="p-3 bg-red-50 rounded-3xl border border-red-400 mb-6">
+                  <div className="flex items-center gap-2 text-red-700">
+                    <IconLinkFill className="w-6 h-6 stroke-red-700 fill-red-700" />
+                    <span>{url}</span>
                   </div>
                 </div>
-              </div>
-          
+              )}
+
+              {linkData?.isValid && linkData.isExpired && !linkData.agency?.logo && (
+                <div className="p-3 bg-yellow-50 rounded-3xl border border-yellow-400 mb-6">
+                  <div className="flex items-center gap-2 text-yellow-700">
+                    <IconLinkFill className="w-6 h-6 stroke-yellow-700 fill-yellow-700" />
+                    <span>{url}</span>
+                  </div>
+                </div>
+              )}
+
+              {linkData?.isValid && linkData.isExpired && linkData.agency?.logo && (
+                <div className="p-3 bg-yellow-50 rounded-full border border-yellow-400 mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-md overflow-hidden">
+                      <img src={linkData.agency.logo} alt="Agency Logo" className="w-full h-full object-contain" />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-sm text-yellow-700">{linkData.agency.names.en}</span>
+                      <span className="text-yellow-700 text-sm">{url}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className="flex gap-3">
-                <Dialog.Close asChild>
-                  <button 
-                    // onClick={() => setIsVerified(false)}
-                    className="flex-1 rounded-lg px-6 py-3 text-base font-regular shadow-sm hover:shadow-md text-gray-700 hover:bg-gray-50 border border-washed-300"
-                  >
-                    Done
-                  </button>
-                </Dialog.Close>
+                {!linkData?.isValid ? (
+                  <>
                     <button 
-                    // onClick={() => setIsVerified(false)}
-                    className="flex items-center gap-2 rounded-lg px-6 py-3 text-base font-regular shadow-sm hover:shadow-md text-red-700 hover:bg-red-50 border border-red-300"
-                  >
-                    <AlertTriangle className="w-6 h-6" />
-                    Report
-                  </button>
-                <a 
-                  href="https://go.gov.my/verifiedlinks"
-                  target="_blank"
-                  className="flex-1 text-center text-neutral-50 rounded-lg px-6 py-3 text-base font-regular shadow-sm hover:shadow-md hover:bg-blue-700 bg-blue-600 border border-washed-300"
-                >
-                  Visit Link
-                </a>
+                      onClick={handleReport}
+                      disabled={isLoading}
+                      className="flex-1 flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-base font-regular shadow-sm hover:shadow-md text-red-700 hover:bg-red-50 border border-red-300"
+                    >
+                      <AlertTriangle className="w-6 h-6" />
+                      {notFoundDialog.reportBtn}
+                    </button>
+                    <Dialog.Close asChild>
+                      <button 
+                        onClick={() => setIsVerified(false)}
+                        className="flex-1 rounded-lg px-6 py-3 text-base font-regular shadow-sm hover:shadow-md text-neutral-50 bg-blue-600 hover:bg-blue-700"
+                      >
+                        {notFoundDialog.doneBtn}
+                      </button>
+                    </Dialog.Close>
+                  </>
+                ) : linkData.isExpired ? (
+                  <Dialog.Close asChild>
+                    <button 
+                      onClick={() => setIsVerified(false)}
+                      className="flex-1 rounded-lg px-6 py-3 text-base font-regular shadow-sm hover:shadow-md text-neutral-50 bg-blue-600 hover:bg-blue-700"
+                    >
+                      {expiredDialog.doneBtn}
+                    </button>
+                  </Dialog.Close>
+                ) : (
+                  <>
+                    <Dialog.Close asChild>
+                      <button 
+                        onClick={() => setIsVerified(false)}
+                        className="flex-1 rounded-lg px-6 py-3 text-base font-regular shadow-sm hover:shadow-md text-gray-700 hover:bg-gray-50 border border-washed-300"
+                      >
+                        {successDialog.doneBtn}
+                      </button>
+                    </Dialog.Close>
+                    <a 
+                      href={linkData.redirectUrl || `${process.env.NEXT_PUBLIC_APP_DOMAIN}`}
+                      target="_blank"
+                      className="flex-1 text-center text-neutral-50 rounded-lg px-6 py-3 text-base font-regular shadow-sm hover:shadow-md hover:bg-blue-700 bg-blue-600"
+                    >
+                      {successDialog.visitLinkBtn}
+                    </a>
+                  </>
+                )}
               </div>
+              {reportError && (
+                <p className="text-red-600 text-sm mt-3 text-center">{notFoundDialog.failedMsg}</p>
+              )}
             </>
           )}
           

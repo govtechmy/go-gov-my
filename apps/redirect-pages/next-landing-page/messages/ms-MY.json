@@ -145,9 +145,40 @@
 			"disclaimer": "Penafian",
 			"privacy_policy": "Dasar Privasi",
 			"follow_us": "Ikuti Kami"
+		},
+		"SearchBox": {
+			"placeholder": "Cari dengan kata kunci"
+		},
+		"CheckLinkDialog": {
+			"MainDialog": {
+				"LinkCheckerTitle": "Sahkan Pautan",
+				"LinkCheckerDescription": "Sahkan pautan untuk memastikan pautan tersebut selamat dan sah.",
+				"CancelBtn": "Batal",
+				"CheckLinkBtn": "Sahkan Pautan"
+			},
+			"SuccessDialog": {
+				"SuccessTitle": "Pautan Sah dan Aktif!",
+				"SuccessDescription": "Pautan ini selamat dan aktif. Anda boleh kunjungi pautan tersebut.",
+				"DoneBtn": "Selesai",
+				"VisitLinkBtn": "Kunjungi Pautan"
+			},
+			"ExpiredDialog": {
+				"ExpiredTitle": "Pautan Sah Tetapi Telah Tamat Tempoh!",
+				"ExpiredDescription": "Pautan ini telah tamat tempoh dan tidak lagi aktif. Demi keselamatan anda, jangan gunakan pautan ini.",
+				"DoneBtn": "Selesai"
+			},
+			"NotFoundDialog": {
+				"NotFoundTitle": "Pautan Tidak Sah dan Tidak Ditemui!",
+				"NotFoundDescription": "Kami tidak dapat menemukan pautan ini di dalam sistem kami. Silakan periksa kembali atau elakkan menggunakan pautan ini.",
+				"DoneBtn": "Selesai",
+				"ReportBtn": "Laporkan",
+				"FailedMsg": "Ralat! Sila cuba lagi."
+			},
+			"ReportDialog": {
+				"ReportTitle": "Berjaya membuat laporan!",
+				"ReportDescription": "Terima kasih kerana membantu kami meningkatkan keselamatan platform ini.",
+				"DoneBtn": "Selesai"
+			}
 		}
-	},
-	"SearchBox": {
-		"placeholder": "Cari dengan kata kunci"
 	}
 }

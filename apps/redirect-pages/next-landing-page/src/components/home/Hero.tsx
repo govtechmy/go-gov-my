@@ -21,6 +21,37 @@ type Props = {
   signInKey: React.ReactNode;
   buttonKey: string;
   checkLinkKey: string;
+  checkLinkDialog: {
+    mainDialog: {
+      title: string;
+      description: string;
+      cancelBtn: string;
+      checkLinkBtn: string;
+    };
+    successDialog: {
+      title: string;
+      description: string;
+      doneBtn: string;
+      visitLinkBtn: string;
+    };
+    expiredDialog: {
+      title: string;
+      description: string;
+      doneBtn: string;
+    };
+    notFoundDialog: {
+      title: string;
+      description: string;
+      doneBtn: string;
+      reportBtn: string;
+      failedMsg: string;
+    };
+    reportDialog: {
+      title: string;
+      description: string;
+      doneBtn: string;
+    };
+  };
 };
 
 export default function Hero(props: Props) {
@@ -75,7 +106,15 @@ export default function Hero(props: Props) {
             <span>{props.buttonKey}</span>
           </ButtonB>
           <div className="w-[0.5rem] mt-[2.25rem] flex flex-row items-center"></div>
-          <CheckLinkDialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <CheckLinkDialog 
+            open={dialogOpen} 
+            onOpenChange={setDialogOpen}
+            mainDialog={props.checkLinkDialog.mainDialog}
+            successDialog={props.checkLinkDialog.successDialog}
+            expiredDialog={props.checkLinkDialog.expiredDialog}
+            notFoundDialog={props.checkLinkDialog.notFoundDialog}
+            reportDialog={props.checkLinkDialog.reportDialog}
+          >
             <Button
               className="border border-washed-300 rounded-lg shadow-sm hover:shadow-md bg-neutral-50"
               variant="tertiary"

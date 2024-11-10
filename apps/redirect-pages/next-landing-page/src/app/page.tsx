@@ -147,6 +147,37 @@ export default async function Home({ searchParams }: Props) {
             })}
             buttonKey={t(hero.buttonKey)}
             checkLinkKey={t(hero.checkLinkKey)}
+            checkLinkDialog={{
+              mainDialog: {
+                title: t(checkLinkDialog.mainDialog.titleKey),
+                description: t(checkLinkDialog.mainDialog.descriptionKey),
+                cancelBtn: t(checkLinkDialog.mainDialog.cancelBtnKey),
+                checkLinkBtn: t(checkLinkDialog.mainDialog.checkLinkBtnKey),
+              },
+              successDialog: {
+                title: t(checkLinkDialog.successDialog.titleKey),
+                description: t(checkLinkDialog.successDialog.descriptionKey),
+                doneBtn: t(checkLinkDialog.successDialog.doneBtnKey),
+                visitLinkBtn: t(checkLinkDialog.successDialog.visitLinkBtnKey),
+              },
+              expiredDialog: {
+                title: t(checkLinkDialog.expiredDialog.titleKey),
+                description: t(checkLinkDialog.expiredDialog.descriptionKey),
+                doneBtn: t(checkLinkDialog.expiredDialog.doneBtnKey),
+              },
+              notFoundDialog: {
+                title: t(checkLinkDialog.notFoundDialog.titleKey),
+                description: t(checkLinkDialog.notFoundDialog.descriptionKey),
+                doneBtn: t(checkLinkDialog.notFoundDialog.doneBtnKey),
+                reportBtn: t(checkLinkDialog.notFoundDialog.reportBtnKey),
+                failedMsg: t(checkLinkDialog.notFoundDialog.failedMsgKey),
+              },
+              reportDialog: {
+                title: t(checkLinkDialog.reportDialog.titleKey),
+                description: t(checkLinkDialog.reportDialog.descriptionKey),
+                doneBtn: t(checkLinkDialog.reportDialog.doneBtnKey),
+              },
+            }}
           />
           <Preview
             className="py-[3rem] md:py-[5.25rem]"
@@ -363,4 +394,36 @@ const masthead = {
   findLockKey: keypath(MASTHEAD_BASE_PATH, "find_lock"),
   orKey: keypath(MASTHEAD_BASE_PATH, "or"),
   precautionKey: keypath(MASTHEAD_BASE_PATH, "precaution"),
+};
+
+const checkLinkDialog = {
+  mainDialog: {
+    titleKey: keypath("components.CheckLinkDialog.MainDialog.LinkCheckerTitle"),
+    descriptionKey: keypath("components.CheckLinkDialog.MainDialog.LinkCheckerDescription"),
+    cancelBtnKey: keypath("components.CheckLinkDialog.MainDialog.CancelBtn"),
+    checkLinkBtnKey: keypath("components.CheckLinkDialog.MainDialog.CheckLinkBtn"),
+  },
+  successDialog: {
+    titleKey: keypath("components.CheckLinkDialog.SuccessDialog.SuccessTitle"),
+    descriptionKey: keypath("components.CheckLinkDialog.SuccessDialog.SuccessDescription"),
+    doneBtnKey: keypath("components.CheckLinkDialog.SuccessDialog.DoneBtn"),
+    visitLinkBtnKey: keypath("components.CheckLinkDialog.SuccessDialog.VisitLinkBtn"),
+  },
+  expiredDialog: {
+    titleKey: keypath("components.CheckLinkDialog.ExpiredDialog.ExpiredTitle"),
+    descriptionKey: keypath("components.CheckLinkDialog.ExpiredDialog.ExpiredDescription"),
+    doneBtnKey: keypath("components.CheckLinkDialog.ExpiredDialog.DoneBtn"),
+  },
+  notFoundDialog: {
+    titleKey: keypath("components.CheckLinkDialog.NotFoundDialog.NotFoundTitle"),
+    descriptionKey: keypath("components.CheckLinkDialog.NotFoundDialog.NotFoundDescription"),
+    doneBtnKey: keypath("components.CheckLinkDialog.NotFoundDialog.DoneBtn"),
+    reportBtnKey: keypath("components.CheckLinkDialog.NotFoundDialog.ReportBtn"),
+    failedMsgKey: keypath("components.CheckLinkDialog.NotFoundDialog.FailedMsg"),
+  },
+  reportDialog: {
+    titleKey: keypath("components.CheckLinkDialog.ReportDialog.ReportTitle"),
+    descriptionKey: keypath("components.CheckLinkDialog.ReportDialog.ReportDescription"),
+    doneBtnKey: keypath("components.CheckLinkDialog.ReportDialog.DoneBtn"),
+  },
 };

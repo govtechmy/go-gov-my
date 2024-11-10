@@ -1,7 +1,7 @@
 import { processKey } from '@/lib/api/links/utils';
 import { verifyRequestToken } from '@/lib/auth/requestToken';
 import { prisma } from '@/lib/prisma';
-import { SHORT_DOMAIN, getDomainWithoutWWW } from '@dub/utils';
+import { getDomainWithoutWWW } from '@dub/utils';
 import { NextRequest, NextResponse } from 'next/server';
 
 type LinkCheckerResponse = {
@@ -25,7 +25,7 @@ type LinkCheckerRequest = {
 
 async function isDomainValid(domain: string): Promise<boolean> {
   const cleanDomain = getDomainWithoutWWW(domain);
-  return cleanDomain === SHORT_DOMAIN;
+  return cleanDomain === process.env.NEXT_PUBLIC_APP_SHORT_DOMAIN;
 }
 
 async function isLinkExists(domain: string, rawKey: string) {

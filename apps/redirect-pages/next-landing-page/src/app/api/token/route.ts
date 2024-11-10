@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { sign, verify } from 'jsonwebtoken';
+import { sign } from 'jsonwebtoken';
 
 export type TokenResponse = {
   token: string;
@@ -7,11 +7,12 @@ export type TokenResponse = {
 
 function generateSecurityHash(timestamp: number): string {
   const secretKey = process.env.API_SECRET_KEY || '';
-  return sign({ timestamp }, secretKey, { expiresIn: '30s' });
+  return sign({ timestamp }, secretKey, { expiresIn: '60s' });
 }
 
 export async function GET(request: NextRequest): Promise<NextResponse<TokenResponse>> {
   try {
+
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     if (!baseUrl) {
       throw new Error('API base URL is not configured');
@@ -32,10 +33,11 @@ export async function GET(request: NextRequest): Promise<NextResponse<TokenRespo
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response}`);
+      throw new Error(`HTTP error! Error: ${response}`);
     }
 
     const data = await response.json();
+
     return NextResponse.json(data, { 
       status: 200,
       headers: {
@@ -44,10 +46,15 @@ export async function GET(request: NextRequest): Promise<NextResponse<TokenRespo
     });
 
   } catch (error) {
-    console.error('Token API Error:', error);
+    console.error('Generate Token API Error:', error);
     return NextResponse.json(
-      { token: '', error: `Failed to generate token: ${error}` },
-      { status: 500 }
+      { 
+        token: '', 
+        error: `Failed to generate token: ${error}` 
+      },
+      { 
+        status: 500 
+      }
     );
   }
 }
