@@ -14,6 +14,7 @@ type LinkCheckerResponse = {
   } | null;
   validUntil: string | null;
   redirectUrl: string | null;
+  shortUrl: string | null;
 };
 
 type LinkCheckerRequest = {
@@ -58,7 +59,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       throw new Error('Link checker request failed');
     }
 
-    const { isValid, isExpired, agency, validUntil, redirectUrl } = await linkCheckerResponse.json();
+    const { isValid, isExpired, agency, validUntil, redirectUrl, shortUrl } = await linkCheckerResponse.json();
 
     const data: LinkCheckerResponse = {
       isValid,
@@ -66,6 +67,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       agency,
       validUntil,
       redirectUrl,
+      shortUrl,
     };
 
     return NextResponse.json(data, { 
