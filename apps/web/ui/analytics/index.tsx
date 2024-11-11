@@ -23,6 +23,8 @@ export const AnalyticsContext = createContext<{
   tagId?: string;
   totalClicks?: number;
   admin?: boolean;
+  start: string;
+  end: string;
 }>({
   basePath: '',
   baseApiPath: '',
@@ -30,6 +32,8 @@ export const AnalyticsContext = createContext<{
   queryString: '',
   interval: '',
   admin: false,
+  start: '',
+  end: '',
 });
 
 export default function Analytics({
@@ -53,6 +57,9 @@ export default function Analytics({
 
   const domainSlug = searchParams?.get('domain');
   const interval = searchParams?.get('interval') || '7d';
+
+  const start = searchParams?.get('start') || '';
+  const end = searchParams?.get('end') || '';
 
   const tagId = searchParams?.get('tagId') ?? undefined;
 
@@ -95,6 +102,8 @@ export default function Analytics({
       ...(domain && { domain }),
       ...(key && { key }),
       ...(interval && { interval }),
+      ...(start && { start }),
+      ...(end && { end }),
       ...(tagId && { tagId }),
       ...availableFilterParams,
     }).toString();
@@ -117,6 +126,8 @@ export default function Analytics({
         tagId, // id of a single tag
         totalClicks, // total clicks for the link
         admin, // whether the user is an admin
+        start, // start date if interval is custom
+        end, // end date if interval is custom
       }}
     >
       <div className="bg-gray-50 py-10">

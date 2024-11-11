@@ -112,16 +112,71 @@ async function processMessage(
             });
           }
 
-          // Increment the link's clicks column with error handling
-          try {
-            await tx.link.update({
-              where: { id: analytics.linkId },
-              data: { clicks: { increment: analytics.total } },
-            });
-          } catch (error) {
-            console.error(`Failed to update clicks for linkId: ${analytics.linkId}`, error);
-          }
-        });
+
+            if (row.length > 0) {
+              const metaDataFromDb = row[0]?.metadata || {};
+
+              // Sum metadata
+              const combineMetaData = sumTwoObj(
+                metaDataFromDb,
+                consumeAnalytics(analytics, new Date(aggregatedDate), from, to)
+                  .metadata,
+              );
+
+              // Update records
+              await tx.analytics.update({
+                where: { id: row[0].id },
+                data: { metadata: combineMetaData, from, to },
+              });
+            } else {
+              // 3. If not exists, create a new record (meaning new day)
+              await tx.analytics.create({
+                data: consumeAnalytics(
+                  analytics,
+                  new Date(aggregatedDate),
+                  from,
+                  to,
+                ),
+              });
+            }
+
+            // Increment the link's clicks column with error handling
+            try {
+              await tx.link.update({
+                where: { id: analytics.linkId },
+                data: { clicks: { increment: analytics.total } },
+              });
+            } catch (error) {
+              console.error(
+                `Failed to update clicks for linkId: ${analytics.linkId}`,
+                error,
+              );
+            }
+
+            // Increment the project's usage column with error handling
+            try {
+              const projectId = await tx.link.findUnique({
+                where: { id: analytics.linkId },
+                select: { projectId: true },
+              });
+              if (projectId?.projectId) {
+                await tx.project.update({
+                  where: { id: projectId?.projectId },
+                  data: { usage: { increment: analytics.total } },
+                });
+              } else {
+                console.warn(
+                  `No projectId found for linkId: ${analytics.linkId}`,
+                );
+              }
+            } catch (error) {
+              console.error(
+                `Failed to update clicks for linkId: ${analytics.linkId}`,
+                error,
+              );
+            }
+          },
+        );
 
         await Promise.all(linkAnalyticsPromises);
 

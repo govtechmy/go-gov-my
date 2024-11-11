@@ -11,6 +11,7 @@ import {
 import { useContext } from 'react';
 import { AnalyticsContext } from '.';
 import DateRangePicker from './date-range-picker';
+import Datepicker from './datepicker';
 import ExportButton from './export-button';
 
 export default function Toggle() {
@@ -82,6 +83,7 @@ export default function Toggle() {
               })}
             >
               <DateRangePicker />
+              <Datepicker />
               {!isPublicStatsPage && <ExportButton />}
             </div>
           </div>

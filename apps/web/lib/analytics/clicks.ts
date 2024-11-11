@@ -63,12 +63,15 @@ export const getClicks = async (
     return clone;
   }
 
-  let granularity: 'minute' | 'hour' | 'day' | 'month' = 'day';
+  let granularity: 'minute' | 'hour' | 'day' | 'month' | 'custom' = 'day';
   // const startDate: Date | String = new Date().toISOString().split('T')[0]  // fast way to get YYYY-MM-DD
   // const endDate: Date | String = new Date().toISOString().split('T')[0]
 
-  start = INTERVAL_DATA[interval].startDate;
-  end = new Date(Date.now());
+  if (start === undefined || start === null) start = new Date(Date.now());
+  if (end === undefined || end === null) end = new Date(Date.now());
+
+  start = interval === 'custom' ? start : INTERVAL_DATA[interval].startDate;
+  end = interval === 'custom' ? end : new Date(Date.now());
   granularity = INTERVAL_DATA[interval].granularity;
 
   // swap start and end if start is greater than end
