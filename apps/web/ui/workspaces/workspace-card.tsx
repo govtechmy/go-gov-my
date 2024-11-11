@@ -3,12 +3,11 @@
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { WorkspaceProps } from '@/lib/types';
 import { BlurImage, NumberTooltip } from '@dub/ui';
-import { DICEBEAR_AVATAR_URL, fetcher, nFormatter } from '@dub/utils';
+import { DICEBEAR_AVATAR_URL, nFormatter } from '@dub/utils';
 import { BarChart2, Link2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import useSWR from 'swr';
 import PlanBadge from './plan-badge';
 
 export default function WorkspaceCard({
@@ -17,16 +16,19 @@ export default function WorkspaceCard({
   slug,
   logo,
   usage,
+  linksUsage,
   plan,
 }: WorkspaceProps) {
-  const { data: count } = useSWR<number>(
-    `/api/links/count?workspaceId=${id}`,
-    fetcher,
-  );
+  // const { data: count } = useSWR<number>(
+  //   `/api/links/count?workspaceId=${id}`,
+  //   fetcher,
+  // );
 
   const { messages, locale } = useIntlClientHook();
   const { data: session } = useSession();
   const workspace_msg = messages?.workspace;
+
+  console.log('usage111', usage, linksUsage);
 
   const [workspaceOwnership, setWorkspaceOwnership] = useState<
     'member' | 'owner' | 'pemilik' | 'ahli'
@@ -90,11 +92,11 @@ export default function WorkspaceCard({
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-1 text-gray-500">
             <Link2 className="h-4 w-4" />
-            {count || count === 0 ? (
-              <NumberTooltip value={count} unit="links">
+            {linksUsage || linksUsage === 0 ? (
+              <NumberTooltip value={linksUsage} unit="links">
                 <h2 className="whitespace-nowrap text-sm">
-                  {nFormatter(count)}{' '}
-                  {count != 1 ? workspace_msg?.links : workspace_msg?.link}
+                  {nFormatter(linksUsage)}{' '}
+                  {linksUsage != 1 ? workspace_msg?.links : workspace_msg?.link}
                 </h2>
               </NumberTooltip>
             ) : (
