@@ -11,6 +11,7 @@ export default function Datepicker() {
   const [endDate, setEndDate] = useState<Date | null>(new Date());
 
   useEffect(() => {
+    //  set state based on url param
     if (router) {
       const params = new URLSearchParams(window.location.search);
       const start = params.get('start');
@@ -29,7 +30,22 @@ export default function Datepicker() {
   }, [router]);
 
   useEffect(() => {
-    if (startDate && endDate && endDate > startDate) {
+    if (startDate && endDate && endDate >= startDate) {
+      startDate.setHours(0, 0, 0);
+      const isToday =
+        new Date().toDateString() === new Date(endDate).toDateString();
+      // if the endDate is today, we set the time to current time, else set it to midnight
+      if (isToday) {
+        const now = new Date();
+        endDate.setHours(
+          now.getHours(),
+          now.getMinutes(),
+          now.getSeconds(),
+          now.getMilliseconds(),
+        );
+      } else {
+        endDate.setHours(23, 59, 59, 999);
+      }
       const params = new URLSearchParams(window.location.search);
       params.set('start', startDate.toString());
       params.set('end', endDate.toString());

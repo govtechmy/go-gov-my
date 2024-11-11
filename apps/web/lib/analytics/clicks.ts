@@ -88,7 +88,6 @@ export const getClicks = async (
   end = interval === 'custom' ? end : new Date(Date.now());
   granularity = INTERVAL_DATA[interval].granularity;
 
-  console.log('bbbb', start, end);
   // swap start and end if start is greater than end
   if (start > end) {
     [start, end] = [end, start];

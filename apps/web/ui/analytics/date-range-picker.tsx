@@ -83,8 +83,8 @@ export default function DateRangePicker() {
                   queryParams({
                     set: {
                       interval: value,
-                      start: value == 'custom' ? new Date().toISOString() : '',
-                      end: value == 'custom' ? new Date().toISOString() : '',
+                      start: '',
+                      end: '',
                     },
                     getNewPath: true,
                   }) as string

@@ -52,7 +52,7 @@ export const INTERVAL_DATA: Record<
   }
 > = {
   custom: {
-    startDate: new Date(Date.now() - 3600000),
+    startDate: new Date(Date.now() - 3600000), // default start date for custom
     granularity: 'custom',
   },
   '1h': {
