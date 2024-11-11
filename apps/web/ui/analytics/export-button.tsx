@@ -1,5 +1,5 @@
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
-import { LoadingSpinner, Tooltip, TooltipContent } from '@dub/ui';
+import { Button, LoadingSpinner, Tooltip, TooltipContent } from '@dub/ui';
 import { Download } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { toast } from 'sonner';
@@ -50,17 +50,19 @@ export default function ExportButton() {
         />
       }
     >
-      <button
+      <Button
+        icon={<Download className="h-4 w-4" />}
+        variant="secondary"
+        shortcut="E"
         disabled={true}
-        className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md border border-gray-200 bg-white transition-all disabled:cursor-not-allowed disabled:text-gray-400 disabled:hover:bg-white disabled:active:bg-white"
-      >
-        <Download className="h-4 w-4" />
-      </button>
+        className="cursor-not-allowed "
+      />
     </Tooltip>
   ) : (
-    <button
+    <Button
       disabled={loading}
-      className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md border border-gray-200 bg-white transition-all focus:border-gray-500 focus:ring-4 focus:ring-gray-200 disabled:cursor-progress disabled:text-gray-400 disabled:hover:bg-white disabled:active:bg-white"
+      variant="secondary"
+      shortcut="E"
       onClick={() => {
         toast.promise(exportData(), {
           loading: message?.export_loading,
@@ -70,6 +72,6 @@ export default function ExportButton() {
       }}
     >
       {loading ? <LoadingSpinner className="h-4 w-4" /> : <Download className="h-4 w-4" />}
-    </button>
+    </Button>
   );
 }

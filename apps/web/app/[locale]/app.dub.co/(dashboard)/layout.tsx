@@ -30,8 +30,8 @@ export default function Layout({
   return (
     <Providers>
       <MessagesProvider messages={messages}>
-        <div className="min-h-screen w-full bg-gray-50 pb-20">
-          <div className="relative">
+        <div className="min-h-screen w-full bg-gray-50">
+          <div className="sticky top-0 z-30 bg-white">
             <Header />
             <div className="w-full bg-white shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)]">
               <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl">
@@ -50,16 +50,9 @@ export default function Layout({
                   </div>
                 </div>
               </MaxWidthWrapper>
-              <div className="border-t border-gray-200 shadow-[0_1px_2px_0_rgba(0,0,0,0.05)]">
-                <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl">
-                  <Suspense fallback={<div className="h-12 w-full" />}>
-                    <NavTabs />
-                  </Suspense>
-                </MaxWidthWrapper>
-              </div>
             </div>
-            {children}
           </div>
+          <div className="pb-20">{children}</div>
         </div>
       </MessagesProvider>
     </Providers>

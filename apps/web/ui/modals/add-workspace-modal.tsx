@@ -70,6 +70,56 @@ function AddWorkspaceModalHelper({
   const [useDefaultDomain] = useState<boolean>(true);
   const { isMobile } = useMediaQuery();
 
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSaving(true);
+    fetch('/api/workspaces', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    }).then(async (res) => {
+      if (res.status === 200) {
+        // track workspace creation event
+        mutate('/api/workspaces?', fetcher('/api/workspaces'));
+        router.push(`/${locale}/${slug}`);
+        toast.success(messages.dashboard.success_create_workspace);
+        setShowAddWorkspaceModal(false);
+      } else {
+        const { error } = await res.json();
+        const message = error.message;
+
+        if (message.toLowerCase().includes('slug')) {
+          setSlugError(message);
+        }
+
+        if (message.toLowerCase().includes('domain')) {
+          setDomainError(message);
+        }
+
+        toast.error(error.message);
+      }
+      setSaving(false);
+    });
+  };
+
+  const onKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && !e.shiftKey && !slugError && !domainError && !saving) {
+        e.preventDefault();
+        const form = document.querySelector('form');
+        if (form) form.requestSubmit();
+      }
+    },
+    [slugError, domainError, saving]
+  );
+
+  useEffect(() => {
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [onKeyDown]);
+
   return (
     <Modal
       showModal={showAddWorkspaceModal}
@@ -98,39 +148,7 @@ function AddWorkspaceModalHelper({
       </div>
 
       <form
-        onSubmit={async (e: FormEvent<HTMLFormElement>) => {
-          e.preventDefault();
-          setSaving(true);
-          fetch('/api/workspaces', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-          }).then(async (res) => {
-            if (res.status === 200) {
-              // track workspace creation event
-              mutate('/api/workspaces?', fetcher('/api/workspaces'));
-              router.push(`/${locale}/${slug}`);
-              toast.success(messages.dashboard.success_create_workspace);
-              setShowAddWorkspaceModal(false);
-            } else {
-              const { error } = await res.json();
-              const message = error.message;
-
-              if (message.toLowerCase().includes('slug')) {
-                setSlugError(message);
-              }
-
-              if (message.toLowerCase().includes('domain')) {
-                setDomainError(message);
-              }
-
-              toast.error(error.message);
-            }
-            setSaving(false);
-          });
-        }}
+        onSubmit={handleSubmit}
         className="flex flex-col space-y-6 bg-gray-50 px-4 py-8 text-left sm:px-16"
       >
         <div>
@@ -208,6 +226,8 @@ function AddWorkspaceModalHelper({
         <Button
           disabled={slugError || domainError ? true : false}
           loading={saving}
+          variant="success"
+          shortcut="Enter ↳"
           text={messages?.workspace?.create_workspace}
         />
       </form>

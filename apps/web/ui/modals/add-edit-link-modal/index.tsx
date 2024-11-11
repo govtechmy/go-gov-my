@@ -808,6 +808,7 @@ function AddEditLinkButton({
     <Button
       text={message?.create_link}
       shortcut="C"
+      variant="success"
       disabledTooltip={
         exceededLinks ? (
           <TooltipContent

@@ -1,14 +1,21 @@
 'use client';
 
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
-import { WorkspaceProps } from '@/lib/types';
+import { LinkProps, WorkspaceProps } from '@/lib/types';
 import { BlurImage, NumberTooltip } from '@dub/ui';
-import { DICEBEAR_AVATAR_URL, nFormatter } from '@dub/utils';
+import { DICEBEAR_AVATAR_URL, fetcher, nFormatter } from '@dub/utils';
 import { BarChart2, Link2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import PlanBadge from './plan-badge';
+import useSWR from 'swr';
+
+type linkTypes = {
+  domain: string;
+  key: string;
+  clicks: number;
+};
 
 export default function WorkspaceCard({
   id,
@@ -19,16 +26,11 @@ export default function WorkspaceCard({
   linksUsage,
   plan,
 }: WorkspaceProps) {
-  // const { data: count } = useSWR<number>(
-  //   `/api/links/count?workspaceId=${id}`,
-  //   fetcher,
-  // );
+  const { data: links } = useSWR<linkTypes[]>(`/api/workspaces/lists?workspaceId=${id}`, fetcher);
 
   const { messages, locale } = useIntlClientHook();
   const { data: session } = useSession();
   const workspace_msg = messages?.workspace;
-
-  console.log('usage111', usage, linksUsage);
 
   const [workspaceOwnership, setWorkspaceOwnership] = useState<
     'member' | 'owner' | 'pemilik' | 'ahli'
@@ -101,9 +103,18 @@ export default function WorkspaceCard({
           </div>
           <div className="flex items-center space-x-1 text-gray-500">
             <BarChart2 className="h-4 w-4" />
-            <NumberTooltip value={usage}>
+            <NumberTooltip
+              value={links ? links.reduce((acc, curr) => acc + curr.clicks, 0) : usage}
+            >
               <h2 className="whitespace-nowrap text-sm">
-                {nFormatter(usage)} {usage != 1 ? workspace_msg?.clicks : workspace_msg?.click}
+                {nFormatter(links ? links.reduce((acc, curr) => acc + curr.clicks, 0) : usage)}{' '}
+                {links
+                  ? links.reduce((acc, curr) => acc + curr.clicks, 0) != 1
+                    ? workspace_msg?.clicks
+                    : workspace_msg?.click
+                  : usage != 1
+                    ? workspace_msg?.clicks
+                    : workspace_msg?.click}
               </h2>
             </NumberTooltip>
           </div>

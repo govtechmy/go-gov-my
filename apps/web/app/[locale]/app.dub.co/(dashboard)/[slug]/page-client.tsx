@@ -2,6 +2,7 @@
 
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import useLinks from '@/lib/swr/use-links';
+import NavTabs from '@/ui/layout/nav-tabs';
 import LinksContainer from '@/ui/links/links-container';
 import { useAddEditLinkModal } from '@/ui/modals/add-edit-link-modal';
 import { MaxWidthWrapper } from '@dub/ui';
@@ -9,6 +10,7 @@ import { Button } from '@dub/ui/src/button';
 import { saveAs } from 'file-saver';
 import { json2csv } from 'json-2-csv';
 import { Download } from 'lucide-react';
+import { useCallback, useEffect } from 'react';
 
 export default function WorkspaceLinksClient() {
   const { AddEditLinkModal, AddEditLinkButton } = useAddEditLinkModal();
@@ -97,29 +99,61 @@ export default function WorkspaceLinksClient() {
     }
   };
 
+  const onKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      const existingModalBackdrop = document.getElementById('modal-backdrop');
+
+      if (
+        e.key.toLowerCase() === 'e' &&
+        !e.metaKey &&
+        !e.ctrlKey &&
+        target.tagName !== 'INPUT' &&
+        target.tagName !== 'TEXTAREA' &&
+        !existingModalBackdrop &&
+        !isValidating
+      ) {
+        e.preventDefault();
+        exportToCSV();
+      }
+    },
+    [isValidating]
+  );
+
+  useEffect(() => {
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [onKeyDown]);
+
   return (
     <>
       <AddEditLinkModal />
-      <div className="flex flex-col border-b border-gray-200 bg-white py-4 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)]">
+      <div className="flex flex-col border-b border-gray-200 bg-white py-6">
         <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl">
-          <div className="flex items-center justify-between mx-0">
-            <h1 className="text-2xl text-gray-600">{messages?.dashboard?.Links}</h1>
+          <div className="flex items-center justify-between mx-6">
+            <h1 className="truncate text-2xl text-gray-600 font-inter font-medium hidden xs:block mr-auto">
+              {messages?.dashboard?.Links}
+            </h1>
             <div className="flex gap-2">
-              <div>
+              <div className="whitespace-nowrap">
                 <AddEditLinkButton />
               </div>
-              <div>
-                <Button
-                  icon={<Download className="h-4 w-4" />}
-                  className="mb-2 me-2 inline-flex items-center rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-center text-sm font-medium text-black hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-500"
-                  onClick={exportToCSV}
-                />
-              </div>
+              <Button
+                icon={<Download className="h-4 w-4" />}
+                variant="secondary"
+                shortcut="E"
+                onClick={exportToCSV}
+              />
             </div>
           </div>
         </MaxWidthWrapper>
+        <div className="w-full flex justify-center">
+          <NavTabs />
+        </div>
       </div>
-      <LinksContainer AddEditLinkButton={AddEditLinkButton} />
+      <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl">
+        <LinksContainer AddEditLinkButton={AddEditLinkButton} />
+      </MaxWidthWrapper>
     </>
   );
 }

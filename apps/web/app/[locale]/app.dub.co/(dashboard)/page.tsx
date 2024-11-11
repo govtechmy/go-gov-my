@@ -13,8 +13,8 @@ export default function App({ params: { locale } }) {
       <WorkspaceListProvider>
         <div className="flex flex-col border-b border-gray-200 bg-white py-6">
           <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl">
-            <div className="flex items-center justify-between mx-6">
-              <h1 className="truncate text-2xl text-gray-600">
+            <div className="flex items-center justify-end mx-6">
+              <h1 className="truncate text-2xl text-gray-600 hidden xs:block mr-auto">
                 {messages?.dashboard?.workspace_title}
               </h1>
               <CreateWorkspaceButton />
@@ -29,7 +29,6 @@ export default function App({ params: { locale } }) {
             </MaxWidthWrapper>
           </div>
         </div>
-
         <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl">
           <div className="my-10 grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 mx-6">
             <WorkspaceList />

@@ -24,7 +24,7 @@ export default function Toggle() {
 
   return (
     <div
-      className={cn('sticky top-[6.85rem] z-10 mb-5 bg-gray-50 py-3 md:py-3', {
+      className={cn('top-[6.85rem] z-10 mb-5 bg-gray-50 py-3 md:py-3', {
         'top-14': isPublicStatsPage,
         'top-0': admin,
         'shadow-md': scrolled,
@@ -32,7 +32,7 @@ export default function Toggle() {
     >
       <div
         className={cn(
-          'mx-auto flex w-full max-w-4xl flex-col gap-2 space-y-3 px-2.5 md:space-y-0 lg:px-0',
+          'mx-auto flex w-full max-w-7xl flex-col gap-2 space-y-3 px-2.5 md:space-y-0 lg:px-2',
           {
             'md:h-10': key,
           }
@@ -68,7 +68,8 @@ export default function Toggle() {
               <ExpandingArrow className="h-5 w-5" />
             </a>
           ) : (
-            <h2 className="truncate text-2xl text-gray-600">{messages?.dashboard?.analytics}</h2>
+            <div className="truncate text-2xl text-gray-600"></div>
+            // <h2 className="truncate text-2xl text-gray-600">{messages?.dashboard?.analytics}</h2>
           )}
           <div
             className={cn('flex items-center gap-2', {
@@ -79,12 +80,16 @@ export default function Toggle() {
             <div
               className={cn('flex w-full items-center gap-2', {
                 'min-[550px]:w-auto': !key,
-                'justify-end': key,
+                'justify-end md:w-auto': key,
               })}
             >
               <DateRangePicker />
               <Datepicker />
-              {!isPublicStatsPage && <ExportButton />}
+              {!isPublicStatsPage && (
+                <div className="w-auto">
+                  <ExportButton />
+                </div>
+              )}
             </div>
           </div>
         </div>

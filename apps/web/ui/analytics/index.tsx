@@ -130,9 +130,9 @@ export default function Analytics({
         end, // end date if interval is custom
       }}
     >
-      <div className="bg-gray-50 py-10">
+      <div className="bg-gray-50">
         <Toggle />
-        <div className="mx-auto grid max-w-4xl gap-5 px-2">
+        <div className="mx-auto grid max-w-7xl gap-5 px-2">
           <Clicks />
           {/* <CountryChart /> */}
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">

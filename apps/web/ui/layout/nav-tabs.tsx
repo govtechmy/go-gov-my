@@ -27,8 +27,8 @@ export default function NavTabs() {
   return (
     <div className="scrollbar-hide mb-[-3px] flex h-12 items-center justify-start space-x-2 overflow-x-auto">
       {tabs.map(({ name, href }) => (
-        <Link key={href} href={href} className="relative">
-          <div className="m-1 rounded-md px-3 py-2 transition-all duration-75 hover:bg-gray-100 active:bg-gray-200">
+        <Link key={href} href={href} className="relative ">
+          <div className=" m-1 rounded-md px-3 py-2 transition-all duration-75 hover:bg-gray-100 active:bg-gray-200">
             <p className="text-sm text-gray-600 hover:text-black">{name}</p>
           </div>
           {(pathname === href || (href.endsWith('/settings') && pathname?.startsWith(href))) && (
@@ -39,7 +39,7 @@ export default function NavTabs() {
               }}
               className="absolute bottom-0 w-full px-1.5"
             >
-              <div className="h-0.5 bg-black" />
+              <div className="h-0.5  bg-blue-500" />
             </motion.div>
           )}
         </Link>
