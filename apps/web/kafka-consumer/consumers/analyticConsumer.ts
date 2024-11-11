@@ -137,6 +137,29 @@ async function processMessage(
                 error,
               );
             }
+
+            // Increment the project's usage column with error handling
+            try {
+              const projectId = await tx.link.findUnique({
+                where: { id: analytics.linkId },
+                select: { projectId: true },
+              });
+              if (projectId?.projectId) {
+                await tx.project.update({
+                  where: { id: projectId?.projectId },
+                  data: { usage: { increment: analytics.total } },
+                });
+              } else {
+                console.warn(
+                  `No projectId found for linkId: ${analytics.linkId}`,
+                );
+              }
+            } catch (error) {
+              console.error(
+                `Failed to update clicks for linkId: ${analytics.linkId}`,
+                error,
+              );
+            }
           },
         );
 
