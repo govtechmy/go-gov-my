@@ -73,6 +73,7 @@ export default function CheckLinkDialog({
     } | null;
     validUntil: string | null;
     redirectUrl: string | null;
+    shortUrl: string | null;
   } | null>(null);
   const [isReportSuccess, setIsReportSuccess] = useState(false);
   const [reportError, setReportError] = useState<string | null>(null);
@@ -349,7 +350,7 @@ export default function CheckLinkDialog({
                 <div className="p-3 bg-gray-50 rounded-3xl border border-gray-200 mb-6">
                   <div className="flex items-center gap-2 text-blue-600">
                     <IconLinkFill className="w-6 h-6 stroke-blue-500 fill-blue-500" />
-                    <span><a href={linkData.redirectUrl || "#"} target="_blank" className="text-blue-600 hover:underline">{url}</a></span>
+                    <span><a href={linkData.shortUrl || "#"} target="_blank" className="text-blue-600 hover:underline">{url}</a></span>
                   </div>
                 </div>
               )}
@@ -362,7 +363,7 @@ export default function CheckLinkDialog({
                     </div>
                     <div className="flex flex-col">
                       <span className="text-sm text-gray-600">{linkData.agency.names.en}</span>
-                      <a href={linkData.redirectUrl || "#"} target="_blank" className="text-blue-600 text-sm hover:underline">{url}</a>
+                      <a href={linkData.shortUrl || "#"} target="_blank" className="text-blue-600 text-sm hover:underline">{url}</a>
                     </div>
                   </div>
                 </div>
@@ -408,8 +409,32 @@ export default function CheckLinkDialog({
                       disabled={isLoading}
                       className="flex-1 flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-base font-regular shadow-sm hover:shadow-md text-red-700 hover:bg-red-50 border border-red-300"
                     >
-                      <AlertTriangle className="w-6 h-6" />
-                      {notFoundDialog.reportBtn}
+                      {isLoading ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                            <circle 
+                              className="opacity-25" 
+                              cx="12" 
+                              cy="12" 
+                              r="10" 
+                              stroke="currentColor" 
+                              strokeWidth="4"
+                              fill="none"
+                            />
+                            <path 
+                              className="opacity-75" 
+                              fill="currentColor" 
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            />
+                          </svg>
+                          Reporting...
+                        </span>
+                      ) : (
+                        <>
+                          <AlertTriangle className="w-6 h-6" />
+                          {notFoundDialog.reportBtn}
+                        </>
+                      )}
                     </button>
                     <Dialog.Close asChild>
                       <button 
@@ -440,7 +465,7 @@ export default function CheckLinkDialog({
                       </button>
                     </Dialog.Close>
                     <a 
-                      href={linkData.redirectUrl || `${process.env.NEXT_PUBLIC_APP_DOMAIN}`}
+                      href={linkData.shortUrl || `${process.env.NEXT_PUBLIC_APP_DOMAIN}`}
                       target="_blank"
                       className="flex-1 text-center text-neutral-50 rounded-lg px-6 py-3 text-base font-regular shadow-sm hover:shadow-md hover:bg-blue-700 bg-blue-600"
                     >

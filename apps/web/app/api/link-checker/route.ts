@@ -17,6 +17,7 @@ type LinkCheckerResponse = {
   } | null;
   validUntil: string | null;
   redirectUrl: string | null;
+  shortUrl: string | null;
 };
 
 type LinkCheckerRequest = {
@@ -92,7 +93,13 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-      const urlObj = new URL(url);
+      // Add protocol if it doesn't exist
+      const urlWithProtocol =
+        url.startsWith('http://') || url.startsWith('https://')
+          ? url
+          : `https://${url}`;
+
+      const urlObj = new URL(urlWithProtocol);
       const domain = urlObj.hostname;
       // Get the pathname and remove query parameters
       const pathWithoutQuery = urlObj.pathname.split('?')[0];
@@ -107,6 +114,7 @@ export async function POST(req: NextRequest) {
             agency: null,
             validUntil: null,
             redirectUrl: null,
+            shortUrl: null,
           } as LinkCheckerResponse,
           { status: 200 },
         );
@@ -122,6 +130,7 @@ export async function POST(req: NextRequest) {
             agency: null,
             validUntil: null,
             redirectUrl: null,
+            shortUrl: null,
           } as LinkCheckerResponse,
           { status: 200 },
         );
@@ -135,6 +144,7 @@ export async function POST(req: NextRequest) {
             agency: null,
             validUntil: null,
             redirectUrl: null,
+            shortUrl: null,
           } as LinkCheckerResponse,
           { status: 200 },
         );
@@ -159,6 +169,10 @@ export async function POST(req: NextRequest) {
           ? new Date(link!.expiresAt).toISOString()
           : null,
         redirectUrl: isExpired ? link!.expiredUrl || null : link!.url,
+        shortUrl:
+          url.startsWith('http://') || url.startsWith('https://')
+            ? url
+            : `https://${url}`,
       };
 
       return NextResponse.json(response, { status: 200 });
@@ -170,6 +184,7 @@ export async function POST(req: NextRequest) {
           agency: null,
           validUntil: null,
           redirectUrl: null,
+          shortUrl: null,
         } as LinkCheckerResponse,
         { status: 200 },
       );
