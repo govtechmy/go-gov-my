@@ -40,7 +40,7 @@ export const clickAnalyticsQuerySchema = z.object({
   interval: z
     .enum(intervals)
     .optional()
-    .default('7d')
+    .default('24h')
     .describe(
       'The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.',
     ),

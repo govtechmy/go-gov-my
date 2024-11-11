@@ -56,7 +56,7 @@ export default function Analytics({
   key = searchParams?.get('key') || key;
 
   const domainSlug = searchParams?.get('domain');
-  const interval = searchParams?.get('interval') || '7d';
+  const interval = searchParams?.get('interval') || '24h';
 
   const start = searchParams?.get('start') || '';
   const end = searchParams?.get('end') || '';
