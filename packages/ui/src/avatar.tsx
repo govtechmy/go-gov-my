@@ -16,7 +16,7 @@ export function Avatar({
       <div
         className={cn(
           'h-10 w-10 animate-pulse rounded-full border border-gray-300 bg-gray-100',
-          className,
+          className
         )}
       />
     );
@@ -26,10 +26,7 @@ export function Avatar({
     <img
       alt={`Avatar for ${user?.name || user?.email}`}
       referrerPolicy="no-referrer"
-      src={
-        user?.image ||
-        `https://api.dicebear.com/7.x/micah/svg?seed=${user?.email}`
-      }
+      src={user?.image || `https://api.dicebear.com/7.x/micah/svg?seed=${user?.email}`}
       className={cn('h-10 w-10 rounded-full border border-gray-300', className)}
       draggable={false}
     />

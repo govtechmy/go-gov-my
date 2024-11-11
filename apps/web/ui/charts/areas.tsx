@@ -6,8 +6,7 @@ import { Fragment, useMemo } from 'react';
 import { useChartContext, useChartTooltipContext } from './chart-context';
 
 export default function Areas() {
-  const { data, series, margin, xScale, yScale, startDate, endDate } =
-    useChartContext();
+  const { data, series, margin, xScale, yScale, startDate, endDate } = useChartContext();
   const { tooltipData } = useChartTooltipContext();
 
   // Data with all values set to zero to animate from
@@ -56,11 +55,7 @@ export default function Areas() {
           </AreaClosed>
 
           {/* Line */}
-          <Area
-            data={data}
-            x={(d) => xScale(d.date)}
-            y={(d) => yScale(s.valueAccessor(d) ?? 0)}
-          >
+          <Area data={data} x={(d) => xScale(d.date)} y={(d) => yScale(s.valueAccessor(d) ?? 0)}>
             {({ path }) => (
               <motion.path
                 initial={{ d: path(zeroedData) || '' }}

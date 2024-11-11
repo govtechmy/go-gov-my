@@ -7,8 +7,7 @@ export async function GET() {
   try {
     const headers = new Headers({
       'Content-Type': register.contentType,
-      'Cache-Control':
-        'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
+      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
       'x-nextjs-cache': 'MISS',
     });
     return new NextResponse(await register.metrics(), { headers });
@@ -17,7 +16,7 @@ export async function GET() {
       { error: 'Error collecting metrics' },
       {
         status: 500,
-      },
+      }
     );
   }
 }

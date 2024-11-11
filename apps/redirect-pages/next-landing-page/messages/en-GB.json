@@ -159,25 +159,25 @@
 			"SuccessDialog": {
 				"SuccessTitle": "Link Verified and Active!",
 				"SuccessDescription": "This link is safe and currently active. You can proceed with confidence.",
-				"DoneBtn": "Close",
+				"DoneBtn": "Done",
 				"VisitLinkBtn": "Visit Link"
 			},
 			"ExpiredDialog": {
 				"ExpiredTitle": "Link Exists but Expired!",
 				"ExpiredDescription": "This link has expired and is no longer active. For your safety, please avoid using it.",
-				"DoneBtn": "Close"
+				"DoneBtn": "Done"
 			},
 			"NotFoundDialog": {
 				"NotFoundTitle": "Link Not Found!",
 				"NotFoundDescription": "We couldn't locate this link in our records. Please double-check or avoid using it.",
-				"DoneBtn": "Close",
+				"DoneBtn": "Done",
 				"ReportBtn": "Report",
 				"FailedMsg": "Report failed, please try again"
 			},
 			"ReportDialog": {
 				"ReportTitle": "Report Submitted Successfully",
 				"ReportDescription": "Thank you for helping us keep our platform safe.",
-				"DoneBtn": "Close"
+				"DoneBtn": "Done"
 			}
 		}
 	}

@@ -66,7 +66,7 @@ export default function Masthead(props: Props) {
               <div className="space-y-1.5">
                 <p className="font-medium max-sm:text-sm">{props.officialKey}</p>
                 <p className="max-w-prose text-balance text-sm text-black-700">
-                  {props.notGovmyKey}
+                  {props.notGovmyKey} 
                   <span className="font-semibold">.gov.my</span>
                   {props.closeSiteKey}
                 </p>

@@ -9,11 +9,7 @@ export async function generateMetadata({ params }) {
   return constructMetadata({ locale });
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={cn(satoshi.variable, inter.variable)}>
       <body>

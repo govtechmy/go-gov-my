@@ -21,12 +21,7 @@ import { SWIPE_REVEAL_ANIMATION_SETTINGS, nFormatter } from '@dub/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronRight, Edit3, Search, XCircle } from 'lucide-react';
 import { useSession } from 'next-auth/react';
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from 'next/navigation';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { mutate } from 'swr';
@@ -54,15 +49,9 @@ export default function LinkFilters() {
   }, [pathname, queryParams, searchParams]);
 
   const showClearButton = useMemo(() => {
-    return [
-      'search',
-      'domain',
-      'userId',
-      'tagIds',
-      'showArchived',
-      'page',
-      'withTags',
-    ].some((param) => searchParams?.has(param));
+    return ['search', 'domain', 'userId', 'tagIds', 'showArchived', 'page', 'withTags'].some(
+      (param) => searchParams?.has(param)
+    );
   }, [searchParams]);
 
   return domains ? (
@@ -103,9 +92,7 @@ const ClearButton = ({ searchInputRef }) => {
       className="group flex items-center justify-center space-x-1 rounded-md border border-gray-400 px-2 py-1 transition-all hover:border-gray-600 active:bg-gray-100"
     >
       <XCircle className="h-4 w-4 text-gray-500 transition-all group-hover:text-black" />
-      <p className="text-sm text-gray-500 transition-all group-hover:text-black">
-        Clear
-      </p>
+      <p className="text-sm text-gray-500 transition-all group-hover:text-black">Clear</p>
     </button>
   );
 };
@@ -131,16 +118,12 @@ export const SearchBox = ({ searchInputRef }) => {
       // only focus on filter input when:
       // - user is not typing in an input or textarea
       // - there is no existing modal backdrop (i.e. no other modal is open)
-      if (
-        e.key === '/' &&
-        target.tagName !== 'INPUT' &&
-        target.tagName !== 'TEXTAREA'
-      ) {
+      if (e.key === '/' && target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA') {
         e.preventDefault();
         searchInputRef.current?.focus();
       }
     },
-    [searchInputRef],
+    [searchInputRef]
   );
 
   useEffect(() => {
@@ -200,8 +183,7 @@ const TagsFilter = ({
   const { AddEditTagModal, AddTagButton } = useAddEditTagModal();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const selectedTagIds =
-    searchParams?.get('tagIds')?.split(',')?.filter(Boolean) ?? [];
+  const selectedTagIds = searchParams?.get('tagIds')?.split(',')?.filter(Boolean) ?? [];
 
   const onCheckboxChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -219,7 +201,7 @@ const TagsFilter = ({
         ],
       });
     },
-    [queryParams, selectedTagIds],
+    [queryParams, selectedTagIds]
   );
 
   const options = useMemo(() => {
@@ -231,9 +213,7 @@ const TagsFilter = ({
       .sort((a, b) => b.count - a.count);
     // filter options based on search
     return search.length > 0
-      ? initialOptions.filter(({ name }) =>
-          name.toLowerCase().includes(search.toLowerCase()),
-        )
+      ? initialOptions.filter(({ name }) => name.toLowerCase().includes(search.toLowerCase()))
       : initialOptions;
   }, [tagsCount, tags, search]);
 
@@ -247,23 +227,16 @@ const TagsFilter = ({
           }}
           className="flex items-center space-x-2"
         >
-          <ChevronRight
-            className={`${collapsed ? '' : 'rotate-90'} h-5 w-5 transition-all`}
-          />
+          <ChevronRight className={`${collapsed ? '' : 'rotate-90'} h-5 w-5 transition-all`} />
           <h4 className="font-medium text-gray-900">Tags</h4>
         </button>
         <AddTagButton />
       </div>
       <AnimatePresence initial={false}>
         {!collapsed && (
-          <motion.div
-            className="mt-4 grid gap-2"
-            {...SWIPE_REVEAL_ANIMATION_SETTINGS}
-          >
+          <motion.div className="mt-4 grid gap-2" {...SWIPE_REVEAL_ANIMATION_SETTINGS}>
             {tags?.length === 0 ? ( // if the workspace has no tags
-              <p className="text-center text-sm text-gray-500">
-                {message?.no_tags_yet}
-              </p>
+              <p className="text-center text-sm text-gray-500">{message?.no_tags_yet}</p>
             ) : (
               <>
                 <div className="relative mb-1">
@@ -285,30 +258,28 @@ const TagsFilter = ({
                 )}
               </>
             )}
-            {options
-              .slice(0, showMore ? options.length : 4)
-              .map(({ id, name, color, count }) => (
-                <div
-                  key={id}
-                  className="group relative flex cursor-pointer items-center space-x-3 rounded-md bg-gray-50 transition-all hover:bg-gray-100"
+            {options.slice(0, showMore ? options.length : 4).map(({ id, name, color, count }) => (
+              <div
+                key={id}
+                className="group relative flex cursor-pointer items-center space-x-3 rounded-md bg-gray-50 transition-all hover:bg-gray-100"
+              >
+                <input
+                  id={id}
+                  name={id}
+                  checked={selectedTagIds.includes(id)}
+                  onChange={onCheckboxChange}
+                  type="checkbox"
+                  className="ml-3 h-4 w-4 cursor-pointer rounded-full border-gray-300 text-black focus:outline-none focus:ring-0"
+                />
+                <label
+                  htmlFor={id}
+                  className="flex w-full cursor-pointer justify-between px-3 py-1.5 pl-0 text-sm font-medium text-gray-700"
                 >
-                  <input
-                    id={id}
-                    name={id}
-                    checked={selectedTagIds.includes(id)}
-                    onChange={onCheckboxChange}
-                    type="checkbox"
-                    className="ml-3 h-4 w-4 cursor-pointer rounded-full border-gray-300 text-black focus:outline-none focus:ring-0"
-                  />
-                  <label
-                    htmlFor={id}
-                    className="flex w-full cursor-pointer justify-between px-3 py-1.5 pl-0 text-sm font-medium text-gray-700"
-                  >
-                    <TagBadge name={name} color={color} />
-                    <TagPopover tag={{ id, name, color }} count={count} />
-                  </label>
-                </div>
-              ))}
+                  <TagBadge name={name} color={color} />
+                  <TagPopover tag={{ id, name, color }} count={count} />
+                </label>
+              </div>
+            ))}
             {options.length > 4 && (
               <button
                 onClick={() => setShowMore(!showMore)}
@@ -344,11 +315,9 @@ const TagPopover = ({ tag, count }: { tag: TagProps; count: number }) => {
         queryParams({ del: 'tagIds' });
         await Promise.all([
           mutate(`/api/tags?workspaceId=${id}`),
-          mutate(
-            (key) => typeof key === 'string' && key.startsWith('/api/links'),
-            undefined,
-            { revalidate: true },
-          ),
+          mutate((key) => typeof key === 'string' && key.startsWith('/api/links'), undefined, {
+            revalidate: true,
+          }),
         ]);
         toast.success('Tag deleted');
       } else {
@@ -388,13 +357,7 @@ const TagPopover = ({ tag, count }: { tag: TagProps; count: number }) => {
                 toast.success('Tag ID copied');
                 setTimeout(() => setCopied(false), 3000);
               }}
-              icon={
-                copied ? (
-                  <Tick className="h-4 w-4" />
-                ) : (
-                  <Copy className="h-4 w-4" />
-                )
-              }
+              icon={copied ? <Tick className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               className="h-9 w-full justify-start px-2 font-medium"
             />
             <Button
@@ -403,7 +366,7 @@ const TagPopover = ({ tag, count }: { tag: TagProps; count: number }) => {
               variant="danger-outline"
               onClick={() => {
                 confirm(
-                  "Are you sure you want to delete this tag? All tagged links will be untagged, but they won't be deleted.",
+                  "Are you sure you want to delete this tag? All tagged links will be untagged, but they won't be deleted."
                 ) && handleDelete();
               }}
               icon={<Delete className="h-4 w-4" />}
@@ -423,15 +386,9 @@ const TagPopover = ({ tag, count }: { tag: TagProps; count: number }) => {
           } -mr-1 flex h-6 w-5 items-center justify-center rounded-md transition-colors`}
         >
           <ThreeDots
-            className={`h-4 w-4 text-gray-500 ${
-              openPopover ? '' : 'hidden group-hover:block'
-            }`}
+            className={`h-4 w-4 text-gray-500 ${openPopover ? '' : 'hidden group-hover:block'}`}
           />
-          <p
-            className={`text-gray-500 ${
-              openPopover ? 'hidden' : 'group-hover:hidden'
-            }`}
-          >
+          <p className={`text-gray-500 ${openPopover ? 'hidden' : 'group-hover:hidden'}`}>
             {nFormatter(count)}
           </p>
         </button>
@@ -455,9 +412,7 @@ const MyLinksFilter = () => {
 
   return (
     <div className="flex items-center justify-between py-6">
-      <label className="text-sm font-medium text-gray-600">
-        {message?.show_my_links_only}
-      </label>
+      <label className="text-sm font-medium text-gray-600">{message?.show_my_links_only}</label>
       <Switch
         fn={() =>
           queryParams(
@@ -467,7 +422,7 @@ const MyLinksFilter = () => {
                   set: {
                     userId: session?.user.id,
                   },
-                },
+                }
           )
         }
         checked={userId ? true : false}
@@ -484,9 +439,7 @@ const ArchiveFilter = () => {
   const message = messages?.dashboard;
   return (
     <div className="flex items-center justify-between py-6">
-      <label className="text-sm font-medium text-gray-600">
-        {message?.include_archive_links}
-      </label>
+      <label className="text-sm font-medium text-gray-600">{message?.include_archive_links}</label>
       <Switch
         fn={() =>
           queryParams(
@@ -496,7 +449,7 @@ const ArchiveFilter = () => {
                   set: {
                     showArchived: 'true',
                   },
-                },
+                }
           )
         }
         checked={showArchived ? true : false}

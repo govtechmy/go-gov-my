@@ -13,9 +13,9 @@ import { NextRequest } from 'next/server';
 export const runtime = 'edge';
 
 export async function GET(req: NextRequest) {
-  const interMedium = await fetch(
-    new URL('@/styles/Inter-Medium.ttf', import.meta.url),
-  ).then((res) => res.arrayBuffer());
+  const interMedium = await fetch(new URL('@/styles/Inter-Medium.ttf', import.meta.url)).then(
+    (res) => res.arrayBuffer()
+  );
 
   const domain = req.nextUrl.searchParams.get('domain') || SHORT_DOMAIN;
   const key = req.nextUrl.searchParams.get('key') || 'github';
@@ -47,9 +47,7 @@ export async function GET(req: NextRequest) {
               src={`${GOOGLE_FAVICON_URL}${getApexDomain(link.url || process.env.NEXT_PUBLIC_APP_DOMAIN || 'go.gov.my')}`}
               alt="favicon"
             />
-            <h1 tw="text-4xl font-bold ml-4">
-              {linkConstructor({ domain, key, pretty: true })}
-            </h1>
+            <h1 tw="text-4xl font-bold ml-4">{linkConstructor({ domain, key, pretty: true })}</h1>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
@@ -104,9 +102,7 @@ export async function GET(req: NextRequest) {
                 <path d="M6 20v-4" />
               </svg>
             </div>
-            <p tw="text-lg font-medium uppercase -mt-4 text-gray-600">
-              Total Clicks
-            </p>
+            <p tw="text-lg font-medium uppercase -mt-4 text-gray-600">Total Clicks</p>
           </div>
 
           <Chart data={data} />
@@ -122,7 +118,7 @@ export async function GET(req: NextRequest) {
           data: interMedium,
         },
       ],
-    },
+    }
   );
 }
 
@@ -141,9 +137,7 @@ const Chart = ({ data }) => {
   const scaleY = (clicks) => height - (clicks / maxClicks) * height;
 
   // Extend the points to the bottom to create a closed shape for the fill
-  let points = data
-    .map((d, index) => `${scaleX(index)},${scaleY(d.clicks)}`)
-    .join(' ');
+  let points = data.map((d, index) => `${scaleX(index)},${scaleY(d.clicks)}`).join(' ');
   // Close the shape by drawing a line to the bottom right corner and bottom left corner
   points += ` ${width},${height} 0,${height}`;
 
@@ -159,12 +153,7 @@ const Chart = ({ data }) => {
         </linearGradient>
       </defs>
 
-      <polyline
-        fill="url(#customGradient)"
-        stroke="currentColor"
-        strokeWidth="3"
-        points={points}
-      />
+      <polyline fill="url(#customGradient)" stroke="currentColor" strokeWidth="3" points={points} />
     </svg>
   );
 };

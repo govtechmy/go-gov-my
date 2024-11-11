@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
       waitUntil(
         redis.hset(domain, {
           [key]: JSON.stringify(link),
-        }),
+        })
       );
     }
   }

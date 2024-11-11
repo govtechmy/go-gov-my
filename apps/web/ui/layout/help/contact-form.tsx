@@ -65,10 +65,8 @@ export function ContactForm({
 
     setUploads((prev) =>
       prev.map((upload) =>
-        upload.file === file
-          ? { ...upload, uploading: false, attachmentId }
-          : upload,
-      ),
+        upload.file === file ? { ...upload, uploading: false, attachmentId } : upload
+      )
     );
     setData((prev) => ({
       ...prev,
@@ -77,9 +75,7 @@ export function ContactForm({
   };
 
   const formRef = useRef<HTMLFormElement>(null);
-  const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success'>(
-    'idle',
-  );
+  const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success'>('idle');
 
   const { handleKeyDown } = useEnterSubmit(formRef);
 
@@ -104,9 +100,7 @@ export function ContactForm({
         onClick={() => setScreen('main')}
       >
         <ChevronLeft className="h-5 w-5" />
-        <h3 className="text-lg font-semibold text-gray-700">
-          {message?.contact_support}
-        </h3>
+        <h3 className="text-lg font-semibold text-gray-700">{message?.contact_support}</h3>
       </button>
 
       <AnimatePresence>
@@ -145,27 +139,21 @@ export function ContactForm({
           >
             {typeof data.title === 'string' && (
               <label>
-                <span className="text-sm font-medium text-gray-700">
-                  {message?.issue}
-                </span>
+                <span className="text-sm font-medium text-gray-700">{message?.issue}</span>
                 <input
                   name="title"
                   required
                   placeholder="E.g. Custom domain not working"
                   autoComplete="off"
                   value={data.title}
-                  onChange={(e) =>
-                    setData((prev) => ({ ...prev, title: e.target.value }))
-                  }
+                  onChange={(e) => setData((prev) => ({ ...prev, title: e.target.value }))}
                   className="mt-1 block w-full rounded-md border-gray-300 text-gray-900 placeholder-gray-300 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm"
                 />
               </label>
             )}
 
             <label>
-              <span className="text-sm font-medium text-gray-700">
-                {message?.describe}
-              </span>
+              <span className="text-sm font-medium text-gray-700">{message?.describe}</span>
               <TextareaAutosize
                 name="message"
                 required
@@ -179,9 +167,7 @@ export function ContactForm({
                     complete(data.message);
                   }
                 }}
-                onChange={(e) =>
-                  setData((prev) => ({ ...prev, message: e.target.value }))
-                }
+                onChange={(e) => setData((prev) => ({ ...prev, message: e.target.value }))}
                 onKeyDown={handleKeyDown}
                 className={`${
                   false
@@ -203,20 +189,16 @@ export function ContactForm({
                     ) : (
                       <Paperclip className="h-4 w-4 text-gray-500" />
                     )}
-                    <p className="text-center text-sm text-gray-500">
-                      {upload.file.name}
-                    </p>
+                    <p className="text-center text-sm text-gray-500">{upload.file.name}</p>
                   </div>
                   <button
                     className="h-full rounded-r-md border-l border-gray-200 p-2"
                     onClick={() => {
-                      setUploads((prev) =>
-                        prev.filter((i) => i.file.name !== upload.file.name),
-                      );
+                      setUploads((prev) => prev.filter((i) => i.file.name !== upload.file.name));
                       setData((prev) => ({
                         ...prev,
                         attachmentIds: prev.attachmentIds.filter(
-                          (id) => id !== upload.attachmentId,
+                          (id) => id !== upload.attachmentId
                         ),
                       }));
                     }}

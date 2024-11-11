@@ -22,7 +22,7 @@ export default function useLinks() {
           { workspaceId: id, includeUser: 'true' },
           {
             ignore: ['import', 'upgrade', 'newLink'],
-          },
+          }
         )}`
       : admin
         ? `/api/admin/links${getQueryString()}`
@@ -32,7 +32,7 @@ export default function useLinks() {
       dedupingInterval: 20000,
       revalidateOnFocus: false,
       keepPreviousData: true,
-    },
+    }
   );
 
   return {

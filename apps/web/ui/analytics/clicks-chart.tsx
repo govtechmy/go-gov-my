@@ -14,7 +14,7 @@ export default function ClicksChart() {
 
   const { data } = useSWR<{ start: Date; clicks: number }[]>(
     `${baseApiPath}/timeseries?${queryString}`,
-    fetcher,
+    fetcher
   );
 
   const { messages } = useIntlClientHook();
@@ -25,7 +25,7 @@ export default function ClicksChart() {
         date: new Date(start),
         values: { clicks },
       })) ?? null,
-    [data],
+    [data]
   );
 
   const formatDate = useCallback(
@@ -51,7 +51,7 @@ export default function ClicksChart() {
           });
       }
     },
-    [interval],
+    [interval]
   );
 
   return (

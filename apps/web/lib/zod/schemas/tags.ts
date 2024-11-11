@@ -16,7 +16,7 @@ export const createTagBodySchema = z.object({
   color: tagColorSchema
     .optional()
     .describe(
-      `The color of the tag. If not provided, a random color will be used from the list: ${tagColors.join(', ')}.`,
+      `The color of the tag. If not provided, a random color will be used from the list: ${tagColors.join(', ')}.`
     ),
 });
 

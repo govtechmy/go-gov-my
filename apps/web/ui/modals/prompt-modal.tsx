@@ -1,12 +1,5 @@
 import { Button, ButtonProps, Modal, useMediaQuery } from '@dub/ui';
-import {
-  Dispatch,
-  HTMLProps,
-  SetStateAction,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import { Dispatch, HTMLProps, SetStateAction, useCallback, useMemo, useState } from 'react';
 import LinkLogo from '../links/link-logo';
 
 type PromptModelProps = {
@@ -75,12 +68,7 @@ function PromptModal({
           </div>
         </label>
 
-        <Button
-          variant="primary"
-          text="Submit"
-          loading={loading}
-          {...buttonProps}
-        />
+        <Button variant="primary" text="Submit" loading={loading} {...buttonProps} />
       </form>
     </Modal>
   );
@@ -104,6 +92,6 @@ export function usePromptModal(props: PromptModelProps) {
       setShowPromptModal,
       PromptModal: PromptModalCallback,
     }),
-    [setShowPromptModal, PromptModalCallback],
+    [setShowPromptModal, PromptModalCallback]
   );
 }

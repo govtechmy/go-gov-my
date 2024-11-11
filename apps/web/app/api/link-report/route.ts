@@ -15,10 +15,7 @@ export async function POST(req: NextRequest) {
   // Authentication check
   const authToken = req.headers.get('x-request-token');
   if (!authToken || !verifyRequestToken(authToken)) {
-    return NextResponse.json(
-      { message: 'Missing or invalid request token' },
-      { status: 401 },
-    );
+    return NextResponse.json({ message: 'Missing or invalid request token' }, { status: 401 });
   }
 
   try {
@@ -30,7 +27,7 @@ export async function POST(req: NextRequest) {
         {
           message: 'Invalid payload',
         },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -57,14 +54,11 @@ export async function POST(req: NextRequest) {
           status: false,
           error: urlError,
         } as LinkReportResponse,
-        { status: 200 },
+        { status: 200 }
       );
     }
   } catch (error) {
     console.error('Link report error:', error);
-    return NextResponse.json(
-      { message: 'Internal server error', error: error },
-      { status: 500 },
-    );
+    return NextResponse.json({ message: 'Internal server error', error: error }, { status: 500 });
   }
 }

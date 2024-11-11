@@ -8,7 +8,7 @@ export const resizeImage = (
     width: 1200, // Desired output width
     height: 630, // Desired output height
     quality: 1.0, // Set quality to maximum
-  },
+  }
 ): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -59,15 +59,14 @@ export const resizeImage = (
           0,
           0,
           targetWidth,
-          targetHeight,
+          targetHeight
         );
 
         // Convert the canvas to a base64 string
         const base64Image = canvas.toDataURL('image/jpeg', opts.quality);
         resolve(base64Image);
       };
-      img.onerror = (error) =>
-        reject(new Error('Image loading error: ' + error));
+      img.onerror = (error) => reject(new Error('Image loading error: ' + error));
     };
     reader.onerror = (error) => reject(new Error('FileReader error: ' + error));
     reader.readAsDataURL(file);

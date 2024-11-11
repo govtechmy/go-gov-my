@@ -16,23 +16,11 @@ import {
   Tooltip,
   useRouterStuff,
 } from '@dub/ui';
-import {
-  APP_DOMAIN,
-  FADE_IN_ANIMATION_SETTINGS,
-  getApexDomain,
-  linkConstructor,
-} from '@dub/utils';
+import { APP_DOMAIN, FADE_IN_ANIMATION_SETTINGS, getApexDomain, linkConstructor } from '@dub/utils';
 import { motion } from 'framer-motion';
 import { Check, ChevronRight, Link2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo, useRef, useState } from 'react';
 import { HexColorInput, HexColorPicker } from 'react-colorful';
 import { toast } from 'sonner';
 import { useDebouncedCallback } from 'use-debounce';
@@ -99,7 +87,7 @@ export function QRCodePicker({
         },
       }),
     }),
-    [props, fgColor, showLogo],
+    [props, fgColor, showLogo]
   );
 
   const [copiedImage, setCopiedImage] = useState(false);
@@ -138,12 +126,8 @@ export function QRCodePicker({
             {...(qrData.imageSettings && {
               imageSettings: {
                 ...qrData.imageSettings,
-                height: qrData.imageSettings
-                  ? qrData.imageSettings.height / 8
-                  : 0,
-                width: qrData.imageSettings
-                  ? qrData.imageSettings.width / 8
-                  : 0,
+                height: qrData.imageSettings ? qrData.imageSettings.height / 8 : 0,
+                width: qrData.imageSettings ? qrData.imageSettings.width / 8 : 0,
               },
             })}
           />
@@ -180,13 +164,7 @@ export function QRCodePicker({
               >
                 <IconMenu
                   text={message?.image}
-                  icon={
-                    copiedImage ? (
-                      <Check className="h-4 w-4" />
-                    ) : (
-                      <Photo className="h-4 w-4" />
-                    )
-                  }
+                  icon={copiedImage ? <Check className="h-4 w-4" /> : <Photo className="h-4 w-4" />}
                 />
               </button>
               <button
@@ -198,7 +176,7 @@ export function QRCodePicker({
                       searchParams: {
                         qr: '1',
                       },
-                    })}`,
+                    })}`
                   );
                   toast.success(message?.copied);
                   setCopiedURL(true);
@@ -208,13 +186,7 @@ export function QRCodePicker({
               >
                 <IconMenu
                   text="URL"
-                  icon={
-                    copiedURL ? (
-                      <Check className="h-4 w-4" />
-                    ) : (
-                      <Link2 className="h-4 w-4" />
-                    )
-                  }
+                  icon={copiedURL ? <Check className="h-4 w-4" /> : <Link2 className="h-4 w-4" />}
                 />
               </button>
             </>
@@ -240,7 +212,7 @@ export function QRCodePicker({
                         },
                       }),
                     }),
-                    'svg',
+                    'svg'
                   );
                 }}
                 className="w-full rounded-md p-2 text-left text-sm font-medium text-gray-500 transition-all duration-75 hover:bg-gray-100"
@@ -249,10 +221,7 @@ export function QRCodePicker({
               </button>
               <button
                 onClick={async () => {
-                  download(
-                    (await getQRAsCanvas(qrData, 'image/png')) as string,
-                    'png',
-                  );
+                  download((await getQRAsCanvas(qrData, 'image/png')) as string, 'png');
                 }}
                 className="w-full rounded-md p-2 text-left text-sm font-medium text-gray-500 transition-all duration-75 hover:bg-gray-100"
               >
@@ -260,10 +229,7 @@ export function QRCodePicker({
               </button>
               <button
                 onClick={async () => {
-                  download(
-                    (await getQRAsCanvas(qrData, 'image/jpeg')) as string,
-                    'jpg',
-                  );
+                  download((await getQRAsCanvas(qrData, 'image/jpeg')) as string, 'jpg');
                 }}
                 className="w-full rounded-md p-2 text-left text-sm font-medium text-gray-500 transition-all duration-75 hover:bg-gray-100"
               >
@@ -274,11 +240,7 @@ export function QRCodePicker({
         </div>
 
         {/* This will be used to prompt downloads. */}
-        <a
-          className="hidden"
-          download={`${props.key}-qrcode.svg`}
-          ref={anchorRef}
-        />
+        <a className="hidden" download={`${props.key}-qrcode.svg`} ref={anchorRef} />
       </div>
     </>
   );
@@ -305,15 +267,9 @@ function AdvancedSettings({
   return (
     <div>
       <div className="px-4 sm:px-16">
-        <button
-          type="button"
-          className="flex items-center"
-          onClick={() => setExpanded(!expanded)}
-        >
+        <button type="button" className="flex items-center" onClick={() => setExpanded(!expanded)}>
           <ChevronRight
-            className={`h-5 w-5 text-gray-600 ${
-              expanded ? 'rotate-90' : ''
-            } transition-all`}
+            className={`h-5 w-5 text-gray-600 ${expanded ? 'rotate-90' : ''} transition-all`}
           />
           <p className="text-sm text-gray-600">{message?.advanced_options}</p>
         </button>
@@ -325,13 +281,8 @@ function AdvancedSettings({
           className="mt-4 grid gap-5 border-b border-t border-gray-200 bg-white px-4 py-8 sm:px-16"
         >
           <div>
-            <label
-              htmlFor="logo-toggle"
-              className="flex items-center space-x-1"
-            >
-              <p className="text-sm font-medium text-gray-700">
-                {message?.logo}
-              </p>
+            <label htmlFor="logo-toggle" className="flex items-center space-x-1">
+              <p className="text-sm font-medium text-gray-700">{message?.logo}</p>
               {plan !== 'free' && (
                 <InfoTooltip
                   content={
@@ -353,27 +304,20 @@ function AdvancedSettings({
                 thumbTranslate="translate-x-6"
               />
               <p className="text-sm text-gray-600">
-                {message?.show}{' '}
-                {!slug || (!logo && process.env.NEXT_PUBLIC_APP_NAME)}{' '}
+                {message?.show} {!slug || (!logo && process.env.NEXT_PUBLIC_APP_NAME)}{' '}
                 {message?.logo}
               </p>
             </div>
           </div>
           <div>
-            <label
-              htmlFor="color"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="color" className="block text-sm font-medium text-gray-700">
               {message?.foreground_color}
             </label>
             <div className="relative mt-1 flex h-9 w-48 rounded-md shadow-sm">
               <Tooltip
                 content={
                   <div className="flex max-w-xs flex-col items-center space-y-3 p-5 text-center">
-                    <HexColorPicker
-                      color={qrData.fgColor}
-                      onChange={debouncedSetFgColor}
-                    />
+                    <HexColorPicker color={qrData.fgColor} onChange={debouncedSetFgColor} />
                   </div>
                 }
               >
@@ -402,13 +346,7 @@ function AdvancedSettings({
   );
 }
 
-function QrDropdown({
-  button,
-  children,
-}: {
-  button: JSX.Element;
-  children: JSX.Element;
-}) {
+function QrDropdown({ button, children }: { button: JSX.Element; children: JSX.Element }) {
   const [openPopover, setOpenPopover] = useState(false);
   return (
     <Popover
@@ -442,6 +380,6 @@ export function useLinkQRModal({ props }: { props: QRLinkProps }) {
 
   return useMemo(
     () => ({ showLinkQRModal, setShowLinkQRModal, LinkQRModal }),
-    [showLinkQRModal, setShowLinkQRModal, LinkQRModal],
+    [showLinkQRModal, setShowLinkQRModal, LinkQRModal]
   );
 }

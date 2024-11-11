@@ -35,8 +35,7 @@ describe.sequential('PATCH /links/{linkId}', async () => {
     expiresAt: '2030-04-16T17:00:00.000Z',
     expiredUrl: 'https://github.com/expired',
     ios: 'https://apps.apple.com/app/1611158928',
-    android:
-      'https://play.google.com/store/apps/details?id=com.disney.disneyplus',
+    android: 'https://play.google.com/store/apps/details?id=com.disney.disneyplus',
     geo: {
       AF: `${url}/AF`,
     },
@@ -195,85 +194,81 @@ describe.sequential('PATCH /links/{linkId}', async () => {
   });
 });
 
-describe.sequential(
-  'PUT /links/{linkId} (backwards compatibility)',
-  async () => {
-    const h = new IntegrationHarness();
-    const { workspace, http, user } = await h.init();
-    const { workspaceId } = workspace;
-    const externalId = randomId();
+describe.sequential('PUT /links/{linkId} (backwards compatibility)', async () => {
+  const h = new IntegrationHarness();
+  const { workspace, http, user } = await h.init();
+  const { workspaceId } = workspace;
+  const externalId = randomId();
 
-    const { data: link } = await http.post<Link>({
-      path: '/links',
+  const { data: link } = await http.post<Link>({
+    path: '/links',
+    query: { workspaceId },
+    body: {
+      url,
+      domain,
+      externalId,
+    },
+  });
+
+  const toUpdate: Partial<z.infer<typeof updateLinkBodySchema>> = {
+    key: randomId(),
+    url: 'https://github.com/dubinc/dub',
+    title: 'Dub Inc',
+    description: 'Open-source link management infrastructure.',
+    publicStats: true,
+    comments: 'This is a comment.',
+    expiresAt: '2030-04-16T17:00:00.000Z',
+    expiredUrl: 'https://github.com/expired',
+    ios: 'https://apps.apple.com/app/1611158928',
+    android: 'https://play.google.com/store/apps/details?id=com.disney.disneyplus',
+    geo: {
+      AF: `${url}/AF`,
+    },
+  };
+
+  afterAll(async () => {
+    await h.deleteLink(link.id);
+  });
+
+  test('update link using PUT', async () => {
+    const { data: updatedLink } = await http.put<Link>({
+      path: `/links/${link.id}`,
       query: { workspaceId },
-      body: {
-        url,
-        domain,
-        externalId,
-      },
+      body: { ...toUpdate },
     });
 
-    const toUpdate: Partial<z.infer<typeof updateLinkBodySchema>> = {
-      key: randomId(),
-      url: 'https://github.com/dubinc/dub',
-      title: 'Dub Inc',
-      description: 'Open-source link management infrastructure.',
-      publicStats: true,
-      comments: 'This is a comment.',
+    expect(updatedLink).toStrictEqual({
+      ...expectedLink,
+      ...toUpdate,
+      domain,
+      workspaceId,
+      externalId,
+      userId: user.id,
       expiresAt: '2030-04-16T17:00:00.000Z',
-      expiredUrl: 'https://github.com/expired',
-      ios: 'https://apps.apple.com/app/1611158928',
-      android:
-        'https://play.google.com/store/apps/details?id=com.disney.disneyplus',
-      geo: {
-        AF: `${url}/AF`,
-      },
-    };
-
-    afterAll(async () => {
-      await h.deleteLink(link.id);
+      projectId: workspaceId.replace('ws_', ''),
+      shortLink: `https://${domain}/${toUpdate.key}`,
+      qrCode: `https://api.dub.co/qr?url=https://${domain}/${toUpdate.key}?qr=1`,
+      tags: [],
     });
 
-    test('update link using PUT', async () => {
-      const { data: updatedLink } = await http.put<Link>({
-        path: `/links/${link.id}`,
-        query: { workspaceId },
-        body: { ...toUpdate },
-      });
-
-      expect(updatedLink).toStrictEqual({
-        ...expectedLink,
-        ...toUpdate,
-        domain,
-        workspaceId,
-        externalId,
-        userId: user.id,
-        expiresAt: '2030-04-16T17:00:00.000Z',
-        projectId: workspaceId.replace('ws_', ''),
-        shortLink: `https://${domain}/${toUpdate.key}`,
-        qrCode: `https://api.dub.co/qr?url=https://${domain}/${toUpdate.key}?qr=1`,
-        tags: [],
-      });
-
-      // Fetch the link
-      const { data: fetchedLink } = await http.get<Link>({
-        path: `/links/${link.id}`,
-        query: { workspaceId },
-      });
-
-      expect(fetchedLink).toStrictEqual({
-        ...expectedLink,
-        ...toUpdate,
-        domain,
-        workspaceId,
-        externalId,
-        userId: user.id,
-        expiresAt: '2030-04-16T17:00:00.000Z',
-        projectId: workspaceId.replace('ws_', ''),
-        shortLink: `https://${domain}/${toUpdate.key}`,
-        qrCode: `https://api.dub.co/qr?url=https://${domain}/${toUpdate.key}?qr=1`,
-        tags: [],
-      });
+    // Fetch the link
+    const { data: fetchedLink } = await http.get<Link>({
+      path: `/links/${link.id}`,
+      query: { workspaceId },
     });
-  },
-);
+
+    expect(fetchedLink).toStrictEqual({
+      ...expectedLink,
+      ...toUpdate,
+      domain,
+      workspaceId,
+      externalId,
+      userId: user.id,
+      expiresAt: '2030-04-16T17:00:00.000Z',
+      projectId: workspaceId.replace('ws_', ''),
+      shortLink: `https://${domain}/${toUpdate.key}`,
+      qrCode: `https://api.dub.co/qr?url=https://${domain}/${toUpdate.key}?qr=1`,
+      tags: [],
+    });
+  });
+});

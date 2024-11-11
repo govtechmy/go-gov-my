@@ -15,12 +15,7 @@ import {
   MARGIN_SIZE,
 } from './constants';
 import { QRProps, QRPropsCanvas } from './types';
-import {
-  SUPPORTS_PATH2D,
-  excavateModules,
-  generatePath,
-  getImageSettings,
-} from './utils';
+import { SUPPORTS_PATH2D, excavateModules, generatePath, getImageSettings } from './utils';
 export * from './types';
 export * from './utils';
 
@@ -56,19 +51,11 @@ export function QRCodeCanvas(props: QRPropsCanvas) {
         return;
       }
 
-      let cells = qrcodegen.QrCode.encodeText(
-        value,
-        ERROR_LEVEL_MAP[level],
-      ).getModules();
+      let cells = qrcodegen.QrCode.encodeText(value, ERROR_LEVEL_MAP[level]).getModules();
 
       const margin = includeMargin ? MARGIN_SIZE : 0;
       const numCells = cells.length + margin * 2;
-      const calculatedImageSettings = getImageSettings(
-        cells,
-        size,
-        includeMargin,
-        imageSettings,
-      );
+      const calculatedImageSettings = getImageSettings(cells, size, includeMargin, imageSettings);
 
       const image = _image.current;
       const haveImageToRender =
@@ -117,7 +104,7 @@ export function QRCodeCanvas(props: QRPropsCanvas) {
           calculatedImageSettings.x + margin,
           calculatedImageSettings.y + margin,
           calculatedImageSettings.w,
-          calculatedImageSettings.h,
+          calculatedImageSettings.h
         );
       }
     }
@@ -147,13 +134,7 @@ export function QRCodeCanvas(props: QRPropsCanvas) {
   }
   return (
     <>
-      <canvas
-        style={canvasStyle}
-        height={size}
-        width={size}
-        ref={_canvas}
-        {...otherProps}
-      />
+      <canvas style={canvasStyle} height={size} width={size} ref={_canvas} {...otherProps} />
       {img}
     </>
   );
@@ -170,19 +151,11 @@ export function getQRAsSVGDataUri(props: QRProps) {
     imageSettings,
   } = props;
 
-  let cells = qrcodegen.QrCode.encodeText(
-    value,
-    ERROR_LEVEL_MAP[level],
-  ).getModules();
+  let cells = qrcodegen.QrCode.encodeText(value, ERROR_LEVEL_MAP[level]).getModules();
 
   const margin = includeMargin ? MARGIN_SIZE : 0;
   const numCells = cells.length + margin * 2;
-  const calculatedImageSettings = getImageSettings(
-    cells,
-    size,
-    includeMargin,
-    imageSettings,
-  );
+  const calculatedImageSettings = getImageSettings(cells, size, includeMargin, imageSettings);
 
   let image = '';
   if (imageSettings != null && calculatedImageSettings != null) {
@@ -227,7 +200,7 @@ function waitUntilImageLoaded(img: HTMLImageElement, src: string) {
 export async function getQRAsCanvas(
   props: QRProps,
   type: string,
-  getCanvas?: boolean,
+  getCanvas?: boolean
 ): Promise<HTMLCanvasElement | string> {
   const {
     value,
@@ -242,18 +215,10 @@ export async function getQRAsCanvas(
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
-  let cells = qrcodegen.QrCode.encodeText(
-    value,
-    ERROR_LEVEL_MAP[level],
-  ).getModules();
+  let cells = qrcodegen.QrCode.encodeText(value, ERROR_LEVEL_MAP[level]).getModules();
   const margin = includeMargin ? MARGIN_SIZE : 0;
   const numCells = cells.length + margin * 2;
-  const calculatedImageSettings = getImageSettings(
-    cells,
-    size,
-    includeMargin,
-    imageSettings,
-  );
+  const calculatedImageSettings = getImageSettings(cells, size, includeMargin, imageSettings);
 
   const image = new Image();
   image.crossOrigin = 'anonymous';
@@ -300,7 +265,7 @@ export async function getQRAsCanvas(
       calculatedImageSettings.x + margin,
       calculatedImageSettings.y + margin,
       calculatedImageSettings.w,
-      calculatedImageSettings.h,
+      calculatedImageSettings.h
     );
   }
 

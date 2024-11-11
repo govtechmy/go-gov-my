@@ -10,8 +10,7 @@ export function useIntlClientHook(locale?: string) {
     'en-GB': en,
     'ms-MY': ms,
   };
-  if (locale && isSupportedLocale(locale))
-    return { messages: dictionaries[locale], locale };
+  if (locale && isSupportedLocale(locale)) return { messages: dictionaries[locale], locale };
 
   // IF NO LOCALE PASS IN AS ARGUMENT, GET LOCALE FROM ROUTER
   const routerLocale = params?.locale as string;

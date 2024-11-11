@@ -1,8 +1,4 @@
-import {
-  isBlacklistedKey,
-  isReservedKey,
-  isReservedUsername,
-} from '@/lib/edge-config';
+import { isBlacklistedKey, isReservedKey, isReservedUsername } from '@/lib/edge-config';
 import { WorkspaceProps } from '@/lib/types';
 import { checkIfKeyExists } from '@/lib/userinfos';
 import {
@@ -91,10 +87,7 @@ export async function keyChecks({
         code: 'forbidden',
       };
     }
-    if (
-      (await isReservedUsername(key)) &&
-      (!workspace || workspace.plan === 'free')
-    ) {
+    if ((await isReservedUsername(key)) && (!workspace || workspace.plan === 'free')) {
       return {
         error:
           'This is a premium key. You can only use this key on a Pro plan and above. Upgrade to Pro to register this key.',

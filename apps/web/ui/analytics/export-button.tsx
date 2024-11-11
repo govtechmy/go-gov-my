@@ -69,11 +69,7 @@ export default function ExportButton() {
         });
       }}
     >
-      {loading ? (
-        <LoadingSpinner className="h-4 w-4" />
-      ) : (
-        <Download className="h-4 w-4" />
-      )}
+      {loading ? <LoadingSpinner className="h-4 w-4" /> : <Download className="h-4 w-4" />}
     </button>
   );
 }

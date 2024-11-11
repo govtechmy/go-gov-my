@@ -6,14 +6,7 @@ import { CheckCircleFill } from '@/ui/shared/icons';
 import { ExpandingArrow, Logo, Modal } from '@dub/ui';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, useCallback, useContext, useMemo, useState } from 'react';
 
 function CompleteSetupModal({
   showCompleteSetupModal,
@@ -47,10 +40,7 @@ function CompleteSetupModal({
   }, [slug, count]);
 
   return (
-    <Modal
-      showModal={showCompleteSetupModal}
-      setShowModal={setShowCompleteSetupModal}
-    >
+    <Modal showModal={showCompleteSetupModal} setShowModal={setShowCompleteSetupModal}>
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <Logo />
         <h3 className="text-lg font-medium">{message?.almost_there}</h3>
@@ -63,9 +53,7 @@ function CompleteSetupModal({
               <div className="group flex items-center justify-between p-3">
                 <div className="flex items-center space-x-3">
                   <CheckCircleFill
-                    className={`h-5 w-5 ${
-                      checked ? 'text-green-500' : 'text-gray-400'
-                    }`}
+                    className={`h-5 w-5 ${checked ? 'text-green-500' : 'text-gray-400'}`}
                   />
                   <p className="text-sm">{display}</p>
                 </div>
@@ -80,8 +68,7 @@ function CompleteSetupModal({
                 href={cta}
                 onClick={() => {
                   setShowCompleteSetupModal(false);
-                  display === 'Create or import your links' &&
-                    setShowAddEditLinkModal(true);
+                  display === 'Create or import your links' && setShowAddEditLinkModal(true);
                 }}
               >
                 {contents}
@@ -111,6 +98,6 @@ export function useCompleteSetupModal() {
       setShowCompleteSetupModal,
       CompleteSetupModal: CompleteSetupModalCallback,
     }),
-    [setShowCompleteSetupModal, CompleteSetupModalCallback],
+    [setShowCompleteSetupModal, CompleteSetupModalCallback]
   );
 }

@@ -1,13 +1,7 @@
 import { Avatar, Button, Modal } from '@dub/ui';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 function DeleteAccountModal({
@@ -36,7 +30,7 @@ function DeleteAccountModal({
           setTimeout(() => {
             router.push('/register');
             resolve(null);
-          }, 200),
+          }, 200)
         );
       } else {
         setDeleting(false);
@@ -47,16 +41,13 @@ function DeleteAccountModal({
   }
 
   return (
-    <Modal
-      showModal={showDeleteAccountModal}
-      setShowModal={setShowDeleteAccountModal}
-    >
+    <Modal showModal={showDeleteAccountModal} setShowModal={setShowDeleteAccountModal}>
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <Avatar user={session?.user} />
         <h3 className="text-lg font-medium">Delete Account</h3>
         <p className="text-center text-sm text-gray-500">
-          Warning: This will permanently delete your account, all your
-          workspaces, and all your short links.
+          Warning: This will permanently delete your account, all your workspaces, and all your
+          short links.
         </p>
       </div>
 
@@ -73,10 +64,7 @@ function DeleteAccountModal({
       >
         <div>
           <label htmlFor="verification" className="block text-sm text-gray-700">
-            To verify, type{' '}
-            <span className="font-semibold text-black">
-              confirm delete account
-            </span>{' '}
+            To verify, type <span className="font-semibold text-black">confirm delete account</span>{' '}
             below
           </label>
           <div className="relative mt-1 rounded-md shadow-sm">
@@ -93,11 +81,7 @@ function DeleteAccountModal({
           </div>
         </div>
 
-        <Button
-          text="Confirm delete account"
-          variant="danger"
-          loading={deleting}
-        />
+        <Button text="Confirm delete account" variant="danger" loading={deleting} />
       </form>
     </Modal>
   );
@@ -120,6 +104,6 @@ export function useDeleteAccountModal() {
       setShowDeleteAccountModal,
       DeleteAccountModal: DeleteAccountModalCallback,
     }),
-    [setShowDeleteAccountModal, DeleteAccountModalCallback],
+    [setShowDeleteAccountModal, DeleteAccountModalCallback]
   );
 }

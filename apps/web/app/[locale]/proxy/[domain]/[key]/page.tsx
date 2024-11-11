@@ -1,20 +1,12 @@
 import { getLinkViaEdge } from '@/lib/userinfos';
 import { BlurImage } from '@dub/ui';
-import {
-  GOOGLE_FAVICON_URL,
-  constructMetadata,
-  getApexDomain,
-} from '@dub/utils';
+import { GOOGLE_FAVICON_URL, constructMetadata, getApexDomain } from '@dub/utils';
 import { unescape } from 'html-escaper';
 import { notFound, redirect } from 'next/navigation';
 
 export const runtime = 'edge';
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { domain: string; key: string };
-}) {
+export async function generateMetadata({ params }: { params: { domain: string; key: string } }) {
   const domain = params.domain;
   const key = decodeURIComponent(params.key); // key can potentially be encoded
 
@@ -35,11 +27,7 @@ export async function generateMetadata({
   });
 }
 
-export default async function ProxyPage({
-  params,
-}: {
-  params: { domain: string; key: string };
-}) {
+export default async function ProxyPage({ params }: { params: { domain: string; key: string } }) {
   const domain = params.domain;
   const key = decodeURIComponent(params.key);
 
@@ -73,12 +61,8 @@ export default async function ProxyPage({
             className="mt-1 h-6 w-6"
           />
           <div className="flex flex-col space-y-3">
-            <h1 className="font-bold text-gray-700">
-              {unescape(data.title || '')}
-            </h1>
-            <p className="text-sm text-gray-500">
-              {unescape(data.description || '')}
-            </p>
+            <h1 className="font-bold text-gray-700">{unescape(data.title || '')}</h1>
+            <p className="text-sm text-gray-500">{unescape(data.description || '')}</p>
           </div>
         </div>
       </div>

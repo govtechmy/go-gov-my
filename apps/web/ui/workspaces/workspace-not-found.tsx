@@ -6,8 +6,7 @@ import { useAddWorkspaceModal } from '../modals/add-workspace-modal';
 
 export default function WorkspaceNotFound() {
   const { messages, locale } = useIntlClientHook();
-  const { setShowAddWorkspaceModal, AddWorkspaceModal } =
-    useAddWorkspaceModal();
+  const { setShowAddWorkspaceModal, AddWorkspaceModal } = useAddWorkspaceModal();
 
   const searchParams = useSearchParams();
 
@@ -22,9 +21,7 @@ export default function WorkspaceNotFound() {
         {/* <div className="rounded-full bg-gray-100 p-3"> */}
         {/* <FileX2 className="h-6 w-6 text-gray-600" /> */}
         {/* </div> */}
-        <h1 className="my-3 text-xl font-semibold text-gray-700">
-          {message?.no_workspace}
-        </h1>
+        <h1 className="my-3 text-xl font-semibold text-gray-700">{message?.no_workspace}</h1>
         <p className="z-10 max-w-sm text-center text-sm text-gray-600">
           {message?.not_workspace_desc}
         </p>

@@ -10,11 +10,7 @@ import { Badge } from './badge';
 import { ButtonProps } from './button';
 
 export function TooltipProvider({ children }: { children: ReactNode }) {
-  return (
-    <TooltipPrimitive.Provider delayDuration={100}>
-      {children}
-    </TooltipPrimitive.Provider>
-  );
+  return <TooltipPrimitive.Provider delayDuration={100}>{children}</TooltipPrimitive.Provider>;
 }
 
 export interface TooltipProps {
@@ -129,8 +125,7 @@ export function LinkifyTooltipContent({ children }: { children: ReactNode }) {
         options={{
           target: '_blank',
           rel: 'noopener noreferrer nofollow',
-          className:
-            'underline underline-offset-4 text-gray-400 hover:text-gray-700',
+          className: 'underline underline-offset-4 text-gray-400 hover:text-gray-700',
         }}
       >
         {children}
@@ -185,10 +180,7 @@ export function BadgeTooltip({ children, content, ...props }: TooltipProps) {
   return (
     <Tooltip content={content} {...props}>
       <div className="flex cursor-pointer items-center">
-        <Badge
-          variant="gray"
-          className="border-gray-300 transition-all hover:bg-gray-200"
-        >
+        <Badge variant="gray" className="border-gray-300 transition-all hover:bg-gray-200">
           {children}
         </Badge>
       </div>

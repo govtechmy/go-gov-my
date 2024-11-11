@@ -1,10 +1,4 @@
-export const HIDE_BACKGROUND_SEGMENTS = [
-  'stats',
-  'changelog',
-  'terms',
-  'privacy',
-  'abuse',
-];
+export const HIDE_BACKGROUND_SEGMENTS = ['stats', 'changelog', 'terms', 'privacy', 'abuse'];
 
 export const ALL_TOOLS = [
   { name: 'Spotify Link Shortener', slug: 'spotify-link-shortener' },

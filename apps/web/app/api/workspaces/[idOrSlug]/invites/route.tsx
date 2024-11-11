@@ -23,7 +23,7 @@ export const GET = logRequestMetrics(
       },
     });
     return NextResponse.json(invites);
-  }),
+  })
 );
 
 // POST /api/workspaces/[idOrSlug]/invites – invite a teammate
@@ -32,27 +32,26 @@ export const POST = logRequestMetrics(
     async ({ req, workspace, session }) => {
       const { email } = emailInviteSchema.parse(await req.json());
 
-      const [alreadyInWorkspace, workspaceUserCount, workspaceInviteCount] =
-        await Promise.all([
-          prisma.projectUsers.findFirst({
-            where: {
-              projectId: workspace.id,
-              user: {
-                email,
-              },
+      const [alreadyInWorkspace, workspaceUserCount, workspaceInviteCount] = await Promise.all([
+        prisma.projectUsers.findFirst({
+          where: {
+            projectId: workspace.id,
+            user: {
+              email,
             },
-          }),
-          prisma.projectUsers.count({
-            where: {
-              projectId: workspace.id,
-            },
-          }),
-          prisma.projectInvite.count({
-            where: {
-              projectId: workspace.id,
-            },
-          }),
-        ]);
+          },
+        }),
+        prisma.projectUsers.count({
+          where: {
+            projectId: workspace.id,
+          },
+        }),
+        prisma.projectInvite.count({
+          where: {
+            projectId: workspace.id,
+          },
+        }),
+      ]);
 
       if (alreadyInWorkspace) {
         throw new DubApiError({
@@ -71,8 +70,8 @@ export const POST = logRequestMetrics(
     },
     {
       requiredRole: ['owner'],
-    },
-  ),
+    }
+  )
 );
 
 // DELETE /api/workspaces/[idOrSlug]/invites – delete a pending invite
@@ -92,6 +91,6 @@ export const DELETE = logRequestMetrics(
     },
     {
       requiredRole: ['owner'],
-    },
-  ),
+    }
+  )
 );

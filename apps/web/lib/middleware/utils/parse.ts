@@ -15,10 +15,7 @@ export const parse = (req: NextRequest) => {
   const firstPathSegment = path.split('/').at(1);
 
   // if path has no locale, add in default locale
-  if (
-    !firstPathSegment ||
-    !LOCALES.some((locale) => firstPathSegment === locale)
-  )
+  if (!firstPathSegment || !LOCALES.some((locale) => firstPathSegment === locale))
     path = `/${DEFAULT_LOCALE}${path}`;
 
   let locale = decodeURIComponent(path.split('/')[1]);
@@ -29,9 +26,7 @@ export const parse = (req: NextRequest) => {
 
   // fullPath is the full URL path (along with search params)
   const searchParams = req.nextUrl.searchParams.toString();
-  const fullPath = `${path}${
-    searchParams.length > 0 ? `?${searchParams}` : ''
-  }`;
+  const fullPath = `${path}${searchParams.length > 0 ? `?${searchParams}` : ''}`;
 
   const fullPathWithoutLocale = `${pathWithoutLocale}${
     searchParams.length > 0 ? `?${searchParams}` : ''

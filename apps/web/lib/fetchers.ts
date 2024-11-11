@@ -52,15 +52,13 @@ export const getWorkspace = cache(async ({ slug }: { slug: string }) => {
   });
 });
 
-export const getLink = cache(
-  async ({ domain, key }: { domain: string; key: string }) => {
-    return await prisma.link.findUnique({
-      where: {
-        domain_key: {
-          domain,
-          key,
-        },
+export const getLink = cache(async ({ domain, key }: { domain: string; key: string }) => {
+  return await prisma.link.findUnique({
+    where: {
+      domain_key: {
+        domain,
+        key,
       },
-    });
-  },
-);
+    },
+  });
+});

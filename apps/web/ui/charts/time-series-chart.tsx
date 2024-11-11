@@ -4,26 +4,18 @@ import { scaleLinear, scaleUtc } from '@visx/scale';
 import { Bar, Circle, Line } from '@visx/shape';
 import { PropsWithChildren, useMemo, useState } from 'react';
 import { ChartContext, ChartTooltipContext } from './chart-context';
-import {
-  ChartProps,
-  Datum,
-  type ChartContext as ChartContextType,
-} from './types';
+import { ChartProps, Datum, type ChartContext as ChartContextType } from './types';
 import { useTooltip } from './useTooltip';
 
 type TimeSeriesChartProps<T extends Datum> = PropsWithChildren<ChartProps<T>>;
 
-export default function TimeSeriesChart<T extends Datum>(
-  props: TimeSeriesChartProps<T>,
-) {
+export default function TimeSeriesChart<T extends Datum>(props: TimeSeriesChartProps<T>) {
   return (
     <ParentSize className="relative">
       {({ width, height }) => {
         return (
           width > 0 &&
-          height > 0 && (
-            <TimeSeriesChartInner {...props} width={width} height={height} />
-          )
+          height > 0 && <TimeSeriesChartInner {...props} width={width} height={height} />
         );
       }}
     </ParentSize>
@@ -88,10 +80,7 @@ function TimeSeriesChartInner<T extends Datum>({
     const rangeY = maxY - minY;
     return {
       yScale: scaleLinear<number>({
-        domain: [
-          minY - rangeY * (padding.bottom ?? 0),
-          maxY + rangeY * (padding.top ?? 0),
-        ],
+        domain: [minY - rangeY * (padding.bottom ?? 0), maxY + rangeY * (padding.top ?? 0)],
         range: [height, 0],
         nice: true,
         clamp: true,
@@ -195,8 +184,7 @@ function TimeSeriesChartInner<T extends Datum>({
               unstyled={true}
             >
               <div className="pointer-events-none rounded-md border border-gray-200 bg-white px-4 py-2 text-base shadow-md">
-                {tooltipContent?.(tooltipData) ??
-                  series[0].valueAccessor(tooltipData)}
+                {tooltipContent?.(tooltipData) ?? series[0].valueAccessor(tooltipData)}
               </div>
             </TooltipWrapper>
           )}

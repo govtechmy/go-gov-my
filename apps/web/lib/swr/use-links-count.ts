@@ -24,7 +24,7 @@ export default function useLinksCount({
           },
           {
             ignore: ['import', 'upgrade', 'newLink'],
-          },
+          }
         )}`
       : admin
         ? `/api/admin/links/count${getQueryString({
@@ -35,7 +35,7 @@ export default function useLinksCount({
     {
       dedupingInterval: 30000,
       keepPreviousData: true,
-    },
+    }
   );
 
   return {

@@ -22,12 +22,9 @@ const updateWorkspaceSchema = z.object({
         .refine((v) => validSlugRegex.test(v), {
           message: 'Invalid slug format',
         })
-        .refine(
-          async (v) => !((await isReservedKey(v)) || DEFAULT_REDIRECTS[v]),
-          {
-            message: 'Cannot use reserved slugs',
-          },
-        ),
+        .refine(async (v) => !((await isReservedKey(v)) || DEFAULT_REDIRECTS[v]), {
+          message: 'Cannot use reserved slugs',
+        })
     )
     .optional(),
 });
@@ -39,7 +36,7 @@ export const GET = withWorkspace(async ({ workspace, headers }) => {
       ...workspace,
       id: `ws_${workspace.id}`,
     }),
-    { headers },
+    { headers }
   );
 });
 
@@ -47,9 +44,7 @@ export const GET = withWorkspace(async ({ workspace, headers }) => {
 export const PUT = withWorkspace(
   async ({ req, workspace }) => {
     try {
-      const { name, slug } = await updateWorkspaceSchema.parseAsync(
-        await req.json(),
-      );
+      const { name, slug } = await updateWorkspaceSchema.parseAsync(await req.json());
 
       const response = await prisma.project.update({
         where: {
@@ -74,7 +69,7 @@ export const PUT = withWorkspace(
   },
   {
     requiredRole: ['owner'],
-  },
+  }
 );
 
 // DELETE /api/workspaces/[idOrSlug] – delete a specific project
@@ -86,5 +81,5 @@ export const DELETE = withWorkspace(
   },
   {
     requiredRole: ['owner'],
-  },
+  }
 );

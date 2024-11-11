@@ -1,14 +1,7 @@
 import LinkFilters from '@/ui/links/link-filters';
 import { IconMenu, Modal } from '@dub/ui';
 import { ChevronDown, Filter } from 'lucide-react';
-import {
-  Dispatch,
-  SetStateAction,
-  Suspense,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, Suspense, useCallback, useMemo, useState } from 'react';
 
 function LinkFiltersModal({
   showLinkFiltersModal,
@@ -18,10 +11,7 @@ function LinkFiltersModal({
   setShowLinkFiltersModal: Dispatch<SetStateAction<boolean>>;
 }) {
   return (
-    <Modal
-      showModal={showLinkFiltersModal}
-      setShowModal={setShowLinkFiltersModal}
-    >
+    <Modal showModal={showLinkFiltersModal} setShowModal={setShowLinkFiltersModal}>
       <Suspense>
         <LinkFilters />
       </Suspense>
@@ -78,6 +68,6 @@ export function useLinkFiltersModal() {
       LinkFiltersModal: LinkFiltersModalCallback,
       LinkFiltersButton: LinkFiltersButtonCallback,
     }),
-    [setShowLinkFiltersModal, LinkFiltersModalCallback],
+    [setShowLinkFiltersModal, LinkFiltersModalCallback]
   );
 }

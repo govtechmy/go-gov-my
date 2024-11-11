@@ -1,11 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { AnalyticsMessageSchema } from 'kafka-consumer/models/AnalyticsSchema';
 import type { Consumer, EachMessagePayload, Logger } from 'kafkajs';
-import {
-  consumeAnalytics,
-  sumTwoObj,
-  toIdempotentResource,
-} from '../utils/analytics';
+import { consumeAnalytics, sumTwoObj, toIdempotentResource } from '../utils/analytics';
 import { retryWithDelay } from '../utils/retry';
 
 export async function runAnalyticConsumer(consumer: Consumer, log: Logger) {
@@ -23,7 +19,7 @@ export async function runAnalyticConsumer(consumer: Consumer, log: Logger) {
         if (error.name === 'KafkaJSOffsetOutOfRange') {
           const { topic, partition } = payload;
           log.warn(
-            `Offset out of range for topic ${topic}, partition ${partition}. Resetting to earliest.`,
+            `Offset out of range for topic ${topic}, partition ${partition}. Resetting to earliest.`
           );
           await consumer.seek({ topic, partition, offset: '0' });
           // Optionally, you can retry processing the message here
@@ -40,14 +36,14 @@ export async function runAnalyticConsumer(consumer: Consumer, log: Logger) {
 async function processMessage(
   { topic, partition, message }: EachMessagePayload,
   consumer: Consumer,
-  log: Logger,
+  log: Logger
 ) {
   try {
     const processAnalyticsMessage = async () => {
       if (!message.value) return;
 
       const data = await AnalyticsMessageSchema.parseAsync(
-        JSON.parse(message.value.toString('utf8') || '{}'),
+        JSON.parse(message.value.toString('utf8') || '{}')
       );
       const { aggregatedDate, from, to } = data;
       const { idempotencyKey, hashedPayload } = toIdempotentResource(data);
@@ -72,73 +68,60 @@ async function processMessage(
       }
 
       await prisma.$transaction(async (tx) => {
-        const linkAnalyticsPromises = data.linkAnalytics.map(
-          async (analytics) => {
-            // Check if the link exists before attempting to update
-            const existingLink = await tx.link.findUnique({
+        const linkAnalyticsPromises = data.linkAnalytics.map(async (analytics) => {
+          // Check if the link exists before attempting to update
+          const existingLink = await tx.link.findUnique({
+            where: { id: analytics.linkId },
+            select: { id: true },
+          });
+
+          if (!existingLink) {
+            console.log(`Link with ID ${analytics.linkId} not found. Skipping update.`);
+            return; // Skip this iteration if the link doesn't exist
+          }
+
+          // 1. Get Analytics Rows
+          const row = await prisma.analytics.findMany({
+            where: {
+              AND: [
+                { aggregatedDate: new Date(aggregatedDate) },
+                { linkId: { equals: analytics.linkId } },
+              ],
+            },
+            take: 1,
+          });
+
+          if (row.length > 0) {
+            const metaDataFromDb = row[0]?.metadata || {};
+
+            // Sum metadata
+            const combineMetaData = sumTwoObj(
+              metaDataFromDb,
+              consumeAnalytics(analytics, new Date(aggregatedDate), from, to).metadata
+            );
+
+            // Update records
+            await tx.analytics.update({
+              where: { id: row[0].id },
+              data: { metadata: combineMetaData, from, to },
+            });
+          } else {
+            // 3. If not exists, create a new record (meaning new day)
+            await tx.analytics.create({
+              data: consumeAnalytics(analytics, new Date(aggregatedDate), from, to),
+            });
+          }
+
+          // Increment the link's clicks column with error handling
+          try {
+            await tx.link.update({
               where: { id: analytics.linkId },
-              select: { id: true },
+              data: { clicks: { increment: analytics.total } },
             });
-
-            if (!existingLink) {
-              console.log(
-                `Link with ID ${analytics.linkId} not found. Skipping update.`,
-              );
-              return; // Skip this iteration if the link doesn't exist
-            }
-
-            // 1. Get Analytics Rows
-            const row = await prisma.analytics.findMany({
-              where: {
-                AND: [
-                  { aggregatedDate: new Date(aggregatedDate) },
-                  { linkId: { equals: analytics.linkId } },
-                ],
-              },
-              take: 1,
-            });
-
-            if (row.length > 0) {
-              const metaDataFromDb = row[0]?.metadata || {};
-
-              // Sum metadata
-              const combineMetaData = sumTwoObj(
-                metaDataFromDb,
-                consumeAnalytics(analytics, new Date(aggregatedDate), from, to)
-                  .metadata,
-              );
-
-              // Update records
-              await tx.analytics.update({
-                where: { id: row[0].id },
-                data: { metadata: combineMetaData, from, to },
-              });
-            } else {
-              // 3. If not exists, create a new record (meaning new day)
-              await tx.analytics.create({
-                data: consumeAnalytics(
-                  analytics,
-                  new Date(aggregatedDate),
-                  from,
-                  to,
-                ),
-              });
-            }
-
-            // Increment the link's clicks column with error handling
-            try {
-              await tx.link.update({
-                where: { id: analytics.linkId },
-                data: { clicks: { increment: analytics.total } },
-              });
-            } catch (error) {
-              console.error(
-                `Failed to update clicks for linkId: ${analytics.linkId}`,
-                error,
-              );
-            }
-          },
-        );
+          } catch (error) {
+            console.error(`Failed to update clicks for linkId: ${analytics.linkId}`, error);
+          }
+        });
 
         await Promise.all(linkAnalyticsPromises);
 

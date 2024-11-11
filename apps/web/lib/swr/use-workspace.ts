@@ -23,9 +23,7 @@ export default function useWorkspace() {
   return {
     ...workspace,
     nextPlan: workspace?.plan ? getNextPlan(workspace.plan) : PRO_PLAN,
-    isOwner:
-      session?.user.role === 'super_admin' ||
-      workspace?.users.at(0)?.role === 'owner',
+    isOwner: session?.user.role === 'super_admin' || workspace?.users.at(0)?.role === 'owner',
     exceededClicks: workspace && workspace.usage >= workspace.usageLimit,
     exceededLinks: workspace && workspace.linksUsage >= workspace.linksLimit,
     exceededAI: workspace && workspace.aiUsage >= workspace.aiLimit,

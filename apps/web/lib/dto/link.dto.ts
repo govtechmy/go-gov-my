@@ -20,7 +20,7 @@ export interface LinkDTO {
 
 // This should be able to reuse anywhere.
 export async function processDTOLink(
-  response: LinkProps & { password?: string },
+  response: LinkProps & { password?: string }
 ): Promise<{ payload: LinkDTO; encryptedSecrets: string | null }> {
   const linkDTO: LinkDTO = {
     id: response.id,
@@ -29,10 +29,7 @@ export async function processDTOLink(
     expiresAt: response.expiresAt,
     ios: response.ios,
     android: response.android,
-    geo:
-      typeof response.geo === 'string'
-        ? JSON.parse(response.geo)
-        : response.geo,
+    geo: typeof response.geo === 'string' ? JSON.parse(response.geo) : response.geo,
     imageUrl: response.image,
     title: response.title,
     description: response.description,

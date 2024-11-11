@@ -5,19 +5,16 @@ import { getParamsFromURL, truncate } from '@dub/utils';
 import { trace } from '@opentelemetry/api';
 import { combineTagIds, transformLink } from './utils';
 
-export async function bulkCreateLinks({
-  links,
-}: {
-  links: ProcessedLinkProps[];
-}) {
+export async function bulkCreateLinks({ links }: { links: ProcessedLinkProps[] }) {
   if (links.length === 0) return [];
 
   // create links via Promise.all (because Prisma doesn't support nested createMany)
   // ref: https://github.com/prisma/prisma/issues/8131#issuecomment-997667070
   const createdLinks = await Promise.all(
     links.map(({ tagId, tagIds, tagNames, ...link }) => {
-      const { utm_source, utm_medium, utm_campaign, utm_term, utm_content } =
-        getParamsFromURL(link.url);
+      const { utm_source, utm_medium, utm_campaign, utm_term, utm_content } = getParamsFromURL(
+        link.url
+      );
 
       const combinedTagIds = combineTagIds({ tagId, tagIds });
 
@@ -76,7 +73,7 @@ export async function bulkCreateLinks({
           },
         },
       });
-    }),
+    })
   );
 
   await propagateBulkLinkChanges(createdLinks);
@@ -85,7 +82,7 @@ export async function bulkCreateLinks({
 }
 
 export async function propagateBulkLinkChanges(
-  links: (LinkProps & { tags: { tagId: string }[] })[],
+  links: (LinkProps & { tags: { tagId: string }[] })[]
 ) {
   const pipeline = redis.pipeline();
   const tracer = trace.getTracer('default');
@@ -103,7 +100,7 @@ export async function propagateBulkLinkChanges(
       }
       const formattedLink = await formatRedisLink(link);
       linksByDomain[domain][key.toLowerCase()] = formattedLink;
-    }),
+    })
   );
 
   Object.entries(linksByDomain).forEach(([domain, links]) => {

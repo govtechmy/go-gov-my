@@ -17,7 +17,7 @@ export default function UploadAvatar() {
       session?.user?.image ||
         (session?.user?.email
           ? `https://api.dicebear.com/7.x/micah/svg?seed=${session?.user?.email}`
-          : null),
+          : null)
     );
   }, [session]);
 
@@ -48,9 +48,7 @@ export default function UploadAvatar() {
       className="rounded-lg border border-gray-200 bg-white"
     >
       <div className="flex flex-col space-y-3 p-5 sm:p-10">
-        <h2 className="text-xl font-medium">
-          {messages?.settings?.your_avatar}
-        </h2>
+        <h2 className="text-xl font-medium">{messages?.settings?.your_avatar}</h2>
         <p className="text-sm text-gray-500">
           {messages?.settings?.this_avatar} {process.env.NEXT_PUBLIC_APP_NAME}.
         </p>
@@ -70,9 +68,7 @@ export default function UploadAvatar() {
       </div>
 
       <div className="flex items-center justify-between space-x-4 rounded-b-lg border-t border-gray-200 bg-gray-50 p-3 sm:px-10">
-        <p className="text-sm text-gray-500">
-          {messages?.settings?.size_notice}
-        </p>
+        <p className="text-sm text-gray-500">{messages?.settings?.size_notice}</p>
         <div className="shrink-0">
           <Button
             text={messages?.link?.save_changes}

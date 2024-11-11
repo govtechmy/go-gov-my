@@ -34,17 +34,14 @@ export default function Toggle() {
           'mx-auto flex w-full max-w-4xl flex-col gap-2 space-y-3 px-2.5 md:space-y-0 lg:px-0',
           {
             'md:h-10': key,
-          },
+          }
         )}
       >
         <div
-          className={cn(
-            'flex w-full flex-col items-center justify-between gap-2 md:flex-row',
-            {
-              'flex-col md:flex-row': !key,
-              'items-center': key,
-            },
-          )}
+          className={cn('flex w-full flex-col items-center justify-between gap-2 md:flex-row', {
+            'flex-col md:flex-row': !key,
+            'items-center': key,
+          })}
         >
           {isPublicStatsPage && key ? (
             <a
@@ -55,9 +52,7 @@ export default function Toggle() {
             >
               <BlurImage
                 alt={url || APP_NAME}
-                src={
-                  url ? `${GOOGLE_FAVICON_URL}${getApexDomain(url)}` : DUB_LOGO
-                }
+                src={url ? `${GOOGLE_FAVICON_URL}${getApexDomain(url)}` : DUB_LOGO}
                 className="mr-2 h-6 w-6 flex-shrink-0 overflow-hidden rounded-full"
                 width={48}
                 height={48}
@@ -72,9 +67,7 @@ export default function Toggle() {
               <ExpandingArrow className="h-5 w-5" />
             </a>
           ) : (
-            <h2 className="truncate text-2xl text-gray-600">
-              {messages?.dashboard?.analytics}
-            </h2>
+            <h2 className="truncate text-2xl text-gray-600">{messages?.dashboard?.analytics}</h2>
           )}
           <div
             className={cn('flex items-center gap-2', {

@@ -25,22 +25,14 @@ export function Footer() {
         <div className="md:flex md:justify-between">
           <div className="flex items-center gap-6">
             <Link href="/" className="block w-16 md:w-24">
-              <span className="sr-only">
-                {process.env.NEXT_PUBLIC_APP_NAME} Logo
-              </span>
+              <span className="sr-only">{process.env.NEXT_PUBLIC_APP_NAME} Logo</span>
               {/* For GoGovMy, footer must use Jata Negara */}
-              <Image
-                src="/_static/jata_logo.png"
-                alt="Jata Negara"
-                width={128}
-                height={96}
-              />
+              <Image src="/_static/jata_logo.png" alt="Jata Negara" width={128} height={96} />
             </Link>
             <div className="space-y-4">
               <p className="font-bold uppercase">Government of Malaysia</p>
               <p className="max-w-xs text-sm text-gray-500">
-                {APP_NAME} – Malaysia's open-source link management
-                infrastructure.
+                {APP_NAME} – Malaysia's open-source link management infrastructure.
               </p>
               {ENABLE_STATUS_BADGE && <StatusBadge />}
             </div>
@@ -51,10 +43,7 @@ export function Footer() {
               <ul role="list" className="mt-4 space-y-4">
                 {navigation.legal.map((item) => (
                   <li key={item.name}>
-                    <Link
-                      href={item.href}
-                      className="text-sm text-gray-500 hover:text-gray-800"
-                    >
+                    <Link href={item.href} className="text-sm text-gray-500 hover:text-gray-800">
                       {item.name}
                     </Link>
                   </li>
@@ -72,10 +61,7 @@ function StatusBadge() {
   const { data } = useSWR<{
     ongoing_incidents: {
       name: string;
-      current_worst_impact:
-        | 'degraded_performance'
-        | 'partial_outage'
-        | 'full_outage';
+      current_worst_impact: 'degraded_performance' | 'partial_outage' | 'full_outage';
     }[];
   }>('https://status.dub.co/api/v1/summary', fetcher);
 
@@ -88,9 +74,7 @@ function StatusBadge() {
     if (ongoing_incidents.length > 0) {
       const { current_worst_impact, name } = ongoing_incidents[0];
       const color =
-        current_worst_impact === 'degraded_performance'
-          ? 'bg-yellow-500'
-          : 'bg-red-500';
+        current_worst_impact === 'degraded_performance' ? 'bg-yellow-500' : 'bg-red-500';
       setStatus(name);
       setColor(color);
     } else {
@@ -110,15 +94,10 @@ function StatusBadge() {
           className={cn(
             'absolute inset-0 m-auto h-3 w-3 animate-ping items-center justify-center rounded-full group-hover:animate-none',
             color,
-            status === 'Loading status...' && 'animate-none',
+            status === 'Loading status...' && 'animate-none'
           )}
         />
-        <div
-          className={cn(
-            'absolute inset-0 z-10 m-auto h-3 w-3 rounded-full',
-            color,
-          )}
-        />
+        <div className={cn('absolute inset-0 z-10 m-auto h-3 w-3 rounded-full', color)} />
       </div>
       <p className="text-sm font-medium text-gray-800">{status}</p>
     </Link>

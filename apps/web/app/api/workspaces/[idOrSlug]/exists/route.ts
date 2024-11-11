@@ -25,5 +25,5 @@ export const GET = logRequestMetrics(
     } else {
       return NextResponse.json(0);
     }
-  }),
+  })
 );

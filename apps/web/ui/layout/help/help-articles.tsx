@@ -22,9 +22,7 @@ export function HelpArticles({
     <div>
       <div className="p-2 sm:p-4">
         <div className="p-2">
-          <h3 className="text-lg font-semibold text-gray-700">
-            👋 {message?.how}
-          </h3>
+          <h3 className="text-lg font-semibold text-gray-700">👋 {message?.how}</h3>
         </div>
         <Command label="help-portal" loop shouldFilter={false}>
           <Command.Input
@@ -48,9 +46,7 @@ export function HelpArticles({
             >
               <MessageSquareText className="h-4 w-4 text-gray-400" />
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium text-purple-600">
-                  {message?.cant_find}
-                </p>
+                <p className="text-sm font-medium text-purple-600">{message?.cant_find}</p>
                 <p className="text-xs text-gray-400">{message?.send_message}</p>
               </div>
             </Command.Empty>
@@ -76,17 +72,15 @@ export function HelpArticles({
 }
 
 const CommandResults = () => {
-  const {
-    popularHelpArticles: POPULAR_HELP_CONTENT,
-    allHelpArticles: ALL_HELP_CONTENT,
-  } = useContext(HelpContext);
+  const { popularHelpArticles: POPULAR_HELP_CONTENT, allHelpArticles: ALL_HELP_CONTENT } =
+    useContext(HelpContext);
 
   const fuse = useMemo(
     () =>
       new Fuse(ALL_HELP_CONTENT, {
         keys: ['title', 'searchableSummary'],
       }),
-    [ALL_HELP_CONTENT],
+    [ALL_HELP_CONTENT]
   );
 
   const search = useCommandState((state) => state.search);

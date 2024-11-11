@@ -12,7 +12,7 @@ export default function Referer() {
 
   const { data } = useSWR<{ referer: string; clicks: number }[]>(
     `${baseApiPath}/referers?${queryString}`,
-    fetcher,
+    fetcher
   );
 
   const { messages } = useIntlClientHook();
@@ -57,11 +57,7 @@ export default function Referer() {
 
   return (
     <>
-      <Modal
-        showModal={showModal}
-        setShowModal={setShowModal}
-        className="max-w-lg"
-      >
+      <Modal showModal={showModal} setShowModal={setShowModal} className="max-w-lg">
         <div className="border-b border-gray-200 px-6 py-4">
           <h1 className="text-lg font-semibold">{message?.referers}</h1>
         </div>
@@ -90,9 +86,7 @@ export default function Referer() {
             className="absolute inset-x-0 bottom-4 z-10 mx-auto flex w-full items-center justify-center space-x-2 rounded-md bg-gradient-to-b from-transparent to-white py-2 text-gray-500 transition-all hover:text-gray-800 active:scale-95"
           >
             <Maximize className="h-4 w-4" />
-            <p className="text-xs font-semibold uppercase">
-              {message?.view_all}
-            </p>
+            <p className="text-xs font-semibold uppercase">{message?.view_all}</p>
           </button>
         )}
       </div>

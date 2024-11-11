@@ -7,8 +7,7 @@ import { NextResponse } from 'next/server';
 
 // GET /api/links/info – get the info for a link
 export const GET = withWorkspace(async ({ headers, searchParams, link }) => {
-  const { domain, key, linkId, externalId } =
-    getLinkInfoQuerySchema.parse(searchParams);
+  const { domain, key, linkId, externalId } = getLinkInfoQuerySchema.parse(searchParams);
 
   if (!domain && !key && !linkId && !externalId) {
     throw new DubApiError({

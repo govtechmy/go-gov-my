@@ -16,9 +16,7 @@ export const GET = async (req: NextRequest) => {
   try {
     const searchParams = getSearchParams(req.url);
 
-    let { domain, key, workspaceId } = domainKeySchema
-      .and(workspaceIdSchema)
-      .parse(searchParams);
+    let { domain, key, workspaceId } = domainKeySchema.and(workspaceIdSchema).parse(searchParams);
 
     const processedKey = processKey(key);
     if (processedKey === null) {

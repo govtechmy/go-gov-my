@@ -119,15 +119,7 @@ export const ownership = ['owner', 'member', 'ahli', 'pemilik'] as const;
 
 export const roles = ['owner', 'member'] as const;
 
-export const tagColors = [
-  'red',
-  'yellow',
-  'green',
-  'blue',
-  'purple',
-  'pink',
-  'brown',
-] as const;
+export const tagColors = ['red', 'yellow', 'green', 'blue', 'purple', 'pink', 'brown'] as const;
 
 export type MetaTag = z.infer<typeof metaTagsSchema>;
 

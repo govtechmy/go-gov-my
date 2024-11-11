@@ -12,8 +12,7 @@ import { addToHistory } from './add-to-history';
 import generateIdempotencyKey from './create-idempotency-key';
 import { combineTagIds, transformLink } from './utils';
 
-const REDIRECT_SERVER_BASE_URL =
-  process.env.REDIRECT_SERVER_URL || 'http://localhost:3002';
+const REDIRECT_SERVER_BASE_URL = process.env.REDIRECT_SERVER_URL || 'http://localhost:3002';
 
 export async function createLink(
   link: ProcessedLinkProps,
@@ -22,7 +21,7 @@ export async function createLink(
   }: {
     /** To store user id who created/update the link in history */
     sessionUserId: string;
-  },
+  }
 ) {
   let { key, url, expiresAt, title, description, image, proxy, geo } = link;
   const tracer = trace.getTracer('default');
@@ -30,8 +29,7 @@ export async function createLink(
 
   const combinedTagIds = combineTagIds(link);
 
-  const { utm_source, utm_medium, utm_campaign, utm_term, utm_content } =
-    getParamsFromURL(url);
+  const { utm_source, utm_medium, utm_campaign, utm_term, utm_content } = getParamsFromURL(url);
 
   const { tagId, tagIds, tagNames, password, ...rest } = link;
 
@@ -103,19 +101,14 @@ export async function createLink(
   });
 
   // For simplicity and centralized, lets create the idempotency key at this level
-  const headersJSON = generateIdempotencyKey(
-    payload.id,
-    payload.createdAt ?? new Date(),
-  );
+  const headersJSON = generateIdempotencyKey(payload.id, payload.createdAt ?? new Date());
 
   try {
     waitUntil(
       Promise.all([
         // record link in Redis
         redis.hset(link.domain.toLowerCase(), {
-          [link.key.toLowerCase()]: JSON.stringify(
-            await formatRedisLink(response),
-          ),
+          [link.key.toLowerCase()]: JSON.stringify(await formatRedisLink(response)),
         }),
         // if proxy image is set, upload image to R2 and update the link with the uploaded image URL
         ...(proxy && image && !isStored(image)
@@ -177,7 +170,7 @@ export async function createLink(
               },
             },
           }),
-      ]),
+      ])
     );
 
     // Log results to OpenTelemetry
@@ -195,8 +188,7 @@ export async function createLink(
     return {
       ...transformLink(response),
       // optimistically set the image URL to the uploaded image URL
-      image:
-        proxy && image && !isStored(image) ? uploadedImageUrl : response.image,
+      image: proxy && image && !isStored(image) ? uploadedImageUrl : response.image,
     };
   } catch (error) {
     span.recordException(error);

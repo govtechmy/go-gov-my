@@ -1,17 +1,11 @@
 import { prisma } from '@/lib/prisma';
 import { redis } from '@/lib/redis';
 import { storage } from '@/lib/storage';
-import {
-  DUB_DOMAINS_ARRAY,
-  LEGAL_USER_ID,
-  LEGAL_WORKSPACE_ID,
-} from '@dub/utils';
+import { DUB_DOMAINS_ARRAY, LEGAL_USER_ID, LEGAL_WORKSPACE_ID } from '@dub/utils';
 import { waitUntil } from '@vercel/functions';
 import { WorkspaceProps } from '../types';
 
-export async function deleteWorkspace(
-  workspace: Pick<WorkspaceProps, 'id' | 'slug' | 'logo'>,
-) {
+export async function deleteWorkspace(workspace: Pick<WorkspaceProps, 'id' | 'slug' | 'logo'>) {
   const [defaultDomainLinks] = await Promise.all([
     prisma.link.findMany({
       where: {
@@ -70,7 +64,7 @@ export async function deleteWorkspace(
         ...defaultDomainLinks.map(({ id, proxy, image }) =>
           proxy && image?.startsWith(process.env.STORAGE_BASE_URL as string)
             ? storage.delete(`images/${id}`)
-            : Promise.resolve(),
+            : Promise.resolve()
         ),
       ]);
 
@@ -85,14 +79,14 @@ export async function deleteWorkspace(
           },
         }),
       ]);
-    })(),
+    })()
   );
 
   return response;
 }
 
 export async function deleteWorkspaceAdmin(
-  workspace: Pick<WorkspaceProps, 'id' | 'slug' | 'logo'>,
+  workspace: Pick<WorkspaceProps, 'id' | 'slug' | 'logo'>
 ) {
   await prisma.link.updateMany({
     where: {

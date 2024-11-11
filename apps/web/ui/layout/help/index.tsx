@@ -20,13 +20,8 @@ export default function HelpPortal() {
 
 async function HelpPortalRSC() {
   const { popularHelpArticles, allHelpArticles } = await fetch(
-    'https://go.gov.my/api/content',
+    'https://go.gov.my/api/content'
   ).then((res) => res.json());
 
-  return (
-    <HelpButton
-      popularHelpArticles={popularHelpArticles}
-      allHelpArticles={allHelpArticles}
-    />
-  );
+  return <HelpButton popularHelpArticles={popularHelpArticles} allHelpArticles={allHelpArticles} />;
 }

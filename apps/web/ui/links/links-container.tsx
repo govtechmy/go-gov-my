@@ -67,12 +67,7 @@ export default function LinksContainer({
                 defaultValue={0}
               />
             </div>
-            <ul
-              className={cn(
-                'grid min-h-[66.5vh] auto-rows-min gap-3',
-                compact && 'gap-0',
-              )}
-            >
+            <ul className={cn('grid min-h-[66.5vh] auto-rows-min gap-3', compact && 'gap-0')}>
               {links && !isValidating ? (
                 links.length > 0 ? (
                   links.map((props) => (
@@ -84,9 +79,7 @@ export default function LinksContainer({
                   <NoLinksPlaceholder AddEditLinkButton={AddEditLinkButton} />
                 )
               ) : (
-                Array.from({ length: 10 }).map((_, i) => (
-                  <LinkCardPlaceholder key={i} />
-                ))
+                Array.from({ length: 10 }).map((_, i) => <LinkCardPlaceholder key={i} />)
               )}
             </ul>
             {count && count > 0 ? (

@@ -10,13 +10,7 @@ import {
   isDubDomain,
   linkConstructor,
 } from '@dub/utils';
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { mutate } from 'swr';
 import LinkLogo from '../links/link-logo';
@@ -35,8 +29,7 @@ function TransferLinkModal({
   const { id } = useWorkspace();
   const { workspaces } = useWorkspaces();
   const [transferring, setTransferring] = useState(false);
-  const [selectedWorkspace, setselectedWorkspace] =
-    useState<InputSelectItemProps | null>(null);
+  const [selectedWorkspace, setselectedWorkspace] = useState<InputSelectItemProps | null>(null);
 
   const apexDomain = getApexDomain(props.url);
   const { key, domain } = props;
@@ -58,11 +51,9 @@ function TransferLinkModal({
       body: JSON.stringify({ newWorkspaceId }),
     }).then(async (res) => {
       if (res.ok) {
-        mutate(
-          (key) => typeof key === 'string' && key.startsWith('/api/links'),
-          undefined,
-          { revalidate: true },
-        );
+        mutate((key) => typeof key === 'string' && key.startsWith('/api/links'), undefined, {
+          revalidate: true,
+        });
         setShowTransferLinkModal(false);
         return true;
       } else {
@@ -108,15 +99,10 @@ function TransferLinkModal({
                 ? workspaces.map((workspace) => ({
                     id: workspace.id,
                     value: workspace.name,
-                    image:
-                      workspace.logo ||
-                      `${DICEBEAR_AVATAR_URL}${workspace.name}`,
-                    disabled:
-                      workspace.id.replace('ws_', '') === props.projectId,
+                    image: workspace.logo || `${DICEBEAR_AVATAR_URL}${workspace.name}`,
+                    disabled: workspace.id.replace('ws_', '') === props.projectId,
                     label:
-                      workspace.id.replace('ws_', '') === props.projectId
-                        ? message?.current
-                        : '',
+                      workspace.id.replace('ws_', '') === props.projectId ? message?.current : '',
                   }))
                 : []
             }
@@ -155,6 +141,6 @@ export function useTransferLinkModal({ props }: { props: LinkProps }) {
       setShowTransferLinkModal,
       TransferLinkModal: TransferLinkModalCallback,
     }),
-    [setShowTransferLinkModal, TransferLinkModalCallback],
+    [setShowTransferLinkModal, TransferLinkModalCallback]
   );
 }

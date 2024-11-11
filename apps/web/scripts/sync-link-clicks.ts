@@ -9,9 +9,7 @@ const linkClicks: { domain: string; key: string; clicks: string }[] = [];
 async function main() {
   Papa.parse(fs.createReadStream('sql.csv', 'utf-8'), {
     header: true,
-    step: (result: {
-      data: { domain: string; key: string; clicks: string };
-    }) => {
+    step: (result: { data: { domain: string; key: string; clicks: string } }) => {
       linkClicks.push(result.data);
     },
     complete: async () => {
@@ -31,9 +29,7 @@ async function main() {
       const linkClicksToUpdate = linkClicks
         .filter((linkClick) => {
           const { domain, key } = linkClick;
-          return linksWithClicks.find(
-            (link) => link.domain === domain && link.key === key,
-          );
+          return linksWithClicks.find((link) => link.domain === domain && link.key === key);
         })
         .slice(index, index + 1000);
 
@@ -52,12 +48,10 @@ async function main() {
               clicks: parseInt(clicks),
             },
           });
-        }),
+        })
       );
 
-      console.log(
-        `Done updating ${index} to ${index + linkClicksToUpdate.length} links.`,
-      );
+      console.log(`Done updating ${index} to ${index + linkClicksToUpdate.length} links.`);
     },
   });
 }

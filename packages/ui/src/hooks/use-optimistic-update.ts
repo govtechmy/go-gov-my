@@ -4,7 +4,7 @@ import useSWR from 'swr';
 
 export function useOptimisticUpdate<T>(
   url: string,
-  toastCopy?: { loading: string; success: string; error: string },
+  toastCopy?: { loading: string; success: string; error: string }
 ) {
   const { data, isLoading, mutate } = useSWR<T>(url, fetcher);
 
@@ -23,7 +23,7 @@ export function useOptimisticUpdate<T>(
           loading: toastCopy?.loading || 'Updating...',
           success: toastCopy?.success || 'Successfully updated',
           error: toastCopy?.error || 'Failed to update',
-        },
+        }
       );
     },
   };

@@ -10,26 +10,11 @@ import {
   useRouterStuff,
 } from '@dub/ui';
 import { LinkifyTooltipContent } from '@dub/ui/src/tooltip';
-import {
-  cn,
-  fetcher,
-  getApexDomain,
-  linkConstructor,
-  nFormatter,
-  truncate,
-} from '@dub/utils';
+import { cn, fetcher, getApexDomain, linkConstructor, nFormatter, truncate } from '@dub/utils';
 import { motion } from 'framer-motion';
 import { Search } from 'lucide-react';
 import Link from 'next/link';
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useContext,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { Dispatch, ReactNode, SetStateAction, useContext, useMemo, useRef, useState } from 'react';
 import useSWR from 'swr';
 import { AnalyticsContext } from '.';
 import LinkLogo from '../links/link-logo';
@@ -64,9 +49,7 @@ export default function BarList({
       return data.slice(0, limit);
     } else {
       return search
-        ? data.filter((d) =>
-            d.title.toLowerCase().includes(search.toLowerCase()),
-          )
+        ? data.filter((d) => d.title.toLowerCase().includes(search.toLowerCase()))
         : data;
     }
   }, [data, limit, search]);
@@ -107,12 +90,8 @@ export default function BarList({
         </div>
         <div>
           <div className="flex justify-between px-4 pb-1 pt-0">
-            <p className="text-xs font-semibold uppercase text-gray-600">
-              {tab}
-            </p>
-            <p className="text-xs font-semibold uppercase text-gray-600">
-              Clicks
-            </p>
+            <p className="text-xs font-semibold uppercase text-gray-600">{tab}</p>
+            <p className="text-xs font-semibold uppercase text-gray-600">Clicks</p>
           </div>
           <div className="h-[50vh] overflow-auto p-4 md:h-[40vh]">{bars}</div>
         </div>
@@ -155,13 +134,11 @@ export function LineItem({
   >(
     tab === 'link' &&
       isVisible &&
-      (admin
-        ? `/api/admin/links/${title}`
-        : `/api/links/${title}?workspaceId=${id}`),
+      (admin ? `/api/admin/links/${title}` : `/api/links/${title}?workspaceId=${id}`),
     fetcher,
     {
       dedupingInterval: 60000,
-    },
+    }
   );
 
   const { queryParams } = useRouterStuff();
@@ -173,19 +150,12 @@ export function LineItem({
 
   const lineItem = useMemo(() => {
     const apexDomain =
-      tab === 'link'
-        ? data
-          ? getApexDomain(data.url)
-          : null
-        : getApexDomain(title);
+      tab === 'link' ? (data ? getApexDomain(data.url) : null) : getApexDomain(title);
     return (
       <div className="z-10 flex items-center space-x-2 px-2">
         {tab === 'link' ? (
           data ? (
-            <LinkLogo
-              apexDomain={apexDomain}
-              className="h-5 w-5 sm:h-5 sm:w-5"
-            />
+            <LinkLogo apexDomain={apexDomain} className="h-5 w-5 sm:h-5 sm:w-5" />
           ) : (
             <div className="h-5 w-5 animate-pulse rounded-full bg-gray-100" />
           )
@@ -197,7 +167,7 @@ export function LineItem({
         <div
           className={cn(
             'truncate text-sm text-gray-800',
-            clickable && href && 'underline-offset-4 group-hover:underline',
+            clickable && href && 'underline-offset-4 group-hover:underline'
           )}
         >
           {tab === 'link' ? (
@@ -208,7 +178,7 @@ export function LineItem({
                   key: data.key,
                   pretty: true,
                 }),
-                36,
+                36
               )
             ) : (
               <div className="h-4 w-20 animate-pulse rounded bg-gray-100" />
@@ -242,13 +212,9 @@ export function LineItem({
       <div className="group flex items-center justify-between hover:bg-gray-50">
         <div className="relative z-10 flex h-8 w-full max-w-[calc(100%-2rem)] items-center">
           {tab === 'link' && data ? (
-            <Tooltip content={<LinkPreviewTooltip data={data} />}>
-              {lineItem}
-            </Tooltip>
+            <Tooltip content={<LinkPreviewTooltip data={data} />}>{lineItem}</Tooltip>
           ) : tab === 'url' ? (
-            <Tooltip
-              content={<LinkifyTooltipContent>{title}</LinkifyTooltipContent>}
-            >
+            <Tooltip content={<LinkifyTooltipContent>{title}</LinkifyTooltipContent>}>
               {lineItem}
             </Tooltip>
           ) : (
@@ -258,19 +224,14 @@ export function LineItem({
             style={{
               width: `${(clicks / (maxClicks || 0)) * 100}%`,
             }}
-            className={cn(
-              'absolute h-full origin-left rounded-sm',
-              barBackground,
-            )}
+            className={cn('absolute h-full origin-left rounded-sm', barBackground)}
             transition={{ ease: 'easeOut', duration: 0.3 }}
             initial={{ transform: 'scaleX(0)' }}
             animate={{ transform: 'scaleX(1)' }}
           />
         </div>
         <NumberTooltip value={clicks}>
-          <p className="z-10 px-2 text-sm text-gray-600">
-            {nFormatter(clicks)}
-          </p>
+          <p className="z-10 px-2 text-sm text-gray-600">{nFormatter(clicks)}</p>
         </NumberTooltip>
       </div>
     </Link>

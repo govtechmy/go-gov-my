@@ -29,7 +29,7 @@ export function CopyButton({
       }}
       className={cn(
         'group rounded-full bg-gray-100 p-1.5 transition-all duration-75 hover:scale-105 hover:bg-blue-100 active:scale-95',
-        className,
+        className
       )}
     >
       <span className="sr-only">Copy</span>

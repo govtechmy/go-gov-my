@@ -41,10 +41,7 @@ export default function WorkspaceSettingsClient() {
             body: JSON.stringify(updateData),
           }).then(async (res) => {
             if (res.status === 200) {
-              await Promise.all([
-                mutate('/api/workspaces'),
-                mutate(`/api/workspaces/${id}`),
-              ]);
+              await Promise.all([mutate('/api/workspaces'), mutate(`/api/workspaces/${id}`)]);
               toast.success(message?.success_update);
             } else {
               const { error } = await res.json();

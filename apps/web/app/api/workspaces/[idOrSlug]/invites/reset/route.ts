@@ -20,6 +20,6 @@ export const POST = logRequestMetrics(
     },
     {
       requiredRole: ['owner'],
-    },
-  ),
+    }
+  )
 );

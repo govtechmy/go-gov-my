@@ -37,10 +37,7 @@ export default function Feedback() {
             exit={{ opacity: 0, y: -10 }}
           >
             <div>
-              <label
-                htmlFor="email"
-                className="mb-2 block text-xs font-medium text-gray-500"
-              >
+              <label htmlFor="email" className="mb-2 block text-xs font-medium text-gray-500">
                 EMAIL
               </label>
               <input
@@ -52,10 +49,7 @@ export default function Feedback() {
               />
             </div>
             <div>
-              <label
-                htmlFor="feedback"
-                className="mb-2 block text-xs font-medium text-gray-500"
-              >
+              <label htmlFor="feedback" className="mb-2 block text-xs font-medium text-gray-500">
                 FEEDBACK
               </label>
               <textarea

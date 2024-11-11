@@ -30,12 +30,7 @@ import {
   truncate,
 } from '@dub/utils';
 import { TriangleAlert } from 'lucide-react';
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from 'next/navigation';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   Dispatch,
   SetStateAction,
@@ -82,12 +77,7 @@ function AddEditLinkModal({
   const { slug } = params;
   const router = useRouter();
   const pathname = usePathname();
-  const {
-    id: workspaceId,
-    aiUsage,
-    aiLimit,
-    mutate: mutateWorkspace,
-  } = useWorkspace();
+  const { id: workspaceId, aiUsage, aiLimit, mutate: mutateWorkspace } = useWorkspace();
   const { messages, locale } = useIntlClientHook();
   const message = messages?.link;
 
@@ -96,9 +86,7 @@ function AddEditLinkModal({
   const [generatingRandomKey, setGeneratingRandomKey] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const [data, setData] = useState<FormValues>(
-    props || duplicateProps || DEFAULT_LINK_PROPS,
-  );
+  const [data, setData] = useState<FormValues>(props || duplicateProps || DEFAULT_LINK_PROPS);
 
   useEffect(() => {
     // for a new link (no props or duplicateProps), set the domain to SHORT_DOMAIN
@@ -119,9 +107,7 @@ function AddEditLinkModal({
     if (domain && workspaceId) {
       setKeyError(null);
       setGeneratingRandomKey(true);
-      const res = await fetch(
-        `/api/links/random?domain=${domain}&workspaceId=${workspaceId}`,
-      );
+      const res = await fetch(`/api/links/random?domain=${domain}&workspaceId=${workspaceId}`);
       const key = await res.json();
       setData((prev) => ({ ...prev, key }));
       setGeneratingRandomKey(false);
@@ -137,7 +123,7 @@ function AddEditLinkModal({
 
   const runKeyChecks = async (value: string) => {
     const res = await fetch(
-      `/api/links/verify?domain=${domain}&key=${value}&workspaceId=${workspaceId}`,
+      `/api/links/verify?domain=${domain}&key=${value}&workspaceId=${workspaceId}`
     );
     const { error } = await res.json();
     if (error) {
@@ -147,9 +133,7 @@ function AddEditLinkModal({
     }
   };
 
-  const [generatedKeys, setGeneratedKeys] = useState<string[]>(
-    props ? [props.key] : [],
-  );
+  const [generatedKeys, setGeneratedKeys] = useState<string[]>(props ? [props.key] : []);
 
   // const {
   //   completion,
@@ -197,9 +181,7 @@ function AddEditLinkModal({
   //   }
   // }, [completion]);
 
-  const [generatingMetatags, setGeneratingMetatags] = useState(
-    props ? true : false,
-  );
+  const [generatingMetatags, setGeneratingMetatags] = useState(props ? true : false);
   const [debouncedUrl] = useDebounce(getUrlWithoutUTMParams(url), 500);
   useEffect(() => {
     // if there's a password, no need to generate metatags
@@ -208,8 +190,7 @@ function AddEditLinkModal({
       setData((prev) => ({
         ...prev,
         title: 'Password Required',
-        description:
-          'This link is password protected. Please enter the password to view it.',
+        description: 'This link is password protected. Please enter the password to view it.',
         image: '/_static/password-protected.png',
       }));
       return;
@@ -299,10 +280,7 @@ function AddEditLinkModal({
       (props &&
         Object.entries(props).every(([key, value]) => {
           // If the key is "title" or "description" and proxy is not enabled, return true (skip the check)
-          if (
-            (key === 'title' || key === 'description' || key === 'image') &&
-            !proxy
-          ) {
+          if ((key === 'title' || key === 'description' || key === 'image') && !proxy) {
             return true;
           } else if (key === 'geo') {
             const equalGeo = deepEqual(props.geo as object, data.geo as object);
@@ -346,11 +324,9 @@ function AddEditLinkModal({
   const randomLinkedInNonce = useMemo(() => nanoid(8), []);
 
   const revalidateLinks = async () => {
-    await mutate(
-      (key) => typeof key === 'string' && key.startsWith('/api/links'),
-      undefined,
-      { revalidate: true },
-    );
+    await mutate((key) => typeof key === 'string' && key.startsWith('/api/links'), undefined, {
+      revalidate: true,
+    });
   };
 
   const disablePassword = useSWRMutation(
@@ -369,7 +345,7 @@ function AddEditLinkModal({
         toast('Successfully disabled password.');
         await revalidateLinks();
       },
-    },
+    }
   );
 
   return (
@@ -449,10 +425,7 @@ function AddEditLinkModal({
                       await navigator.clipboard.writeText(data.shortLink);
                       toast.success('Copied shortlink to clipboard!');
                     } catch (e) {
-                      console.error(
-                        'Failed to automatically copy shortlink to clipboard.',
-                        e,
-                      );
+                      console.error('Failed to automatically copy shortlink to clipboard.', e);
                       toast.success('Successfully created link!');
                     }
                   } else {
@@ -528,10 +501,7 @@ function AddEditLinkModal({
                   />
                   {urlError && (
                     <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                      <AlertCircleFill
-                        className="h-5 w-5 text-red-500"
-                        aria-hidden="true"
-                      />
+                      <AlertCircleFill className="h-5 w-5 text-red-500" aria-hidden="true" />
                     </div>
                   )}
                 </div>
@@ -550,7 +520,7 @@ function AddEditLinkModal({
                       type="button"
                       onClick={() => {
                         window.confirm(
-                          'Editing an existing short link could potentially break existing links. Are you sure you want to continue?',
+                          'Editing an existing short link could potentially break existing links. Are you sure you want to continue?'
                         ) && setLockKey(false);
                       }}
                     >
@@ -601,12 +571,10 @@ function AddEditLinkModal({
                     pattern="[\p{L}\p{N}\p{Pd}\/\p{Emoji}]+"
                     onInvalid={(e) => {
                       e.currentTarget.setCustomValidity(
-                        "Only letters, numbers, '-', '/', and emojis are allowed.",
+                        "Only letters, numbers, '-', '/', and emojis are allowed."
                       );
                     }}
-                    onBlur={(e) =>
-                      e.target.value && runKeyChecks(e.target.value)
-                    }
+                    onBlur={(e) => e.target.value && runKeyChecks(e.target.value)}
                     disabled={props && lockKey}
                     autoComplete="off"
                     className={cn(
@@ -618,7 +586,7 @@ function AddEditLinkModal({
                           shortLink.length > 25,
                         'cursor-not-allowed border border-gray-300 bg-gray-100 text-gray-500':
                           props && lockKey,
-                      },
+                      }
                     )}
                     placeholder={message?.optional}
                     value={punycode(key)}
@@ -640,9 +608,7 @@ function AddEditLinkModal({
                           <div className="flex max-w-xs items-start space-x-2 bg-white p-4">
                             <TriangleAlert className="mt-0.5 h-4 w-4 flex-none text-amber-500" />
                             <div>
-                              <p className="text-sm text-gray-700">
-                                {message?.too_long}
-                              </p>
+                              <p className="text-sm text-gray-700">{message?.too_long}</p>
                               <div className="mt-2 flex items-center space-x-2">
                                 <LinkedIn className="h-4 w-4" />
                                 <p className="cursor-pointer text-sm font-semibold text-[#4783cf] hover:underline">
@@ -668,10 +634,7 @@ function AddEditLinkModal({
                     >
                       <div className="absolute inset-y-0 right-0 flex items-center pr-3">
                         {keyError ? (
-                          <AlertCircleFill
-                            className="h-5 w-5 text-red-500"
-                            aria-hidden="true"
-                          />
+                          <AlertCircleFill className="h-5 w-5 text-red-500" aria-hidden="true" />
                         ) : shortLink.length > 25 ? (
                           <AlertCircleFill className="h-5 w-5 text-amber-500" />
                         ) : null}
@@ -701,10 +664,7 @@ function AddEditLinkModal({
 
             {/* Divider */}
             <div className="relative pb-3 pt-5">
-              <div
-                className="absolute inset-0 flex items-center px-4 md:px-16"
-                aria-hidden="true"
-              >
+              <div className="absolute inset-0 flex items-center px-4 md:px-16" aria-hidden="true">
                 <div className="w-full border-t border-gray-300" />
               </div>
               <div className="relative flex justify-center">
@@ -718,10 +678,7 @@ function AddEditLinkModal({
               <TagsSection {...{ props, data, setData }} />
               <CommentsSection {...{ props, data, setData }} />
               <UTMSection {...{ props, data, setData }} />
-              <OGSection
-                {...{ props, data, setData }}
-                generatingMetatags={generatingMetatags}
-              />
+              <OGSection {...{ props, data, setData }} generatingMetatags={generatingMetatags} />
               <PasswordSection
                 passwordEnabledAt={data.passwordEnabledAt}
                 onPasswordChange={(password) => {
@@ -736,7 +693,7 @@ function AddEditLinkModal({
                 onPasswordDisable={() => {
                   if (passwordEnabled) {
                     const confirmDisable = window.confirm(
-                      'Are you sure you want to disable password protection?',
+                      'Are you sure you want to disable password protection?'
                     );
                     if (confirmDisable) {
                       setData((prev) => ({ ...prev, password: undefined }));
@@ -775,11 +732,7 @@ function AddEditLinkModal({
           </form>
         </div>
         <div className="scrollbar-hide rounded-r-2xl md:max-h-[95vh] md:overflow-auto">
-          <Preview
-            data={data}
-            setData={setData}
-            generatingMetatags={generatingMetatags}
-          />
+          <Preview data={data} setData={setData} generatingMetatags={generatingMetatags} />
         </div>
       </div>
     </Modal>
@@ -899,9 +852,7 @@ export function useAddEditLinkModal({
   }, [showAddEditLinkModal, setShowAddEditLinkModal]);
 
   const AddEditLinkButtonCallback = useCallback(() => {
-    return (
-      <AddEditLinkButton setShowAddEditLinkModal={setShowAddEditLinkModal} />
-    );
+    return <AddEditLinkButton setShowAddEditLinkModal={setShowAddEditLinkModal} />;
   }, [setShowAddEditLinkModal]);
 
   return useMemo(
@@ -916,6 +867,6 @@ export function useAddEditLinkModal({
       setShowAddEditLinkModal,
       AddEditLinkModalCallback,
       AddEditLinkButtonCallback,
-    ],
+    ]
   );
 }

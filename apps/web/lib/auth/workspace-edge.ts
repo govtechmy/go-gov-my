@@ -1,8 +1,4 @@
-import {
-  DubApiError,
-  exceededLimitError,
-  handleAndReturnErrorResponse,
-} from '@/lib/api/errors';
+import { DubApiError, exceededLimitError, handleAndReturnErrorResponse } from '@/lib/api/errors';
 import { ratelimit } from '@/lib/redis/ratelimit';
 import { PlanProps, WorkspaceProps } from '@/lib/types';
 import { API_DOMAIN, getSearchParams } from '@dub/utils';
@@ -62,12 +58,9 @@ export const withWorkspaceEdge = (
     needNotExceededAI?: boolean;
     allowSelf?: boolean;
     betaFeature?: boolean;
-  } = {},
+  } = {}
 ) => {
-  return async (
-    req: Request,
-    { params = {} }: { params: Record<string, string> | undefined },
-  ) => {
+  return async (req: Request, { params = {} }: { params: Record<string, string> | undefined }) => {
     const searchParams = getSearchParams(req.url);
 
     let apiKey: string | undefined = undefined;
@@ -88,21 +81,14 @@ export const withWorkspaceEdge = (
 
       const domain = params?.domain || searchParams.domain;
       const key = searchParams.key;
-      const linkId =
-        params?.linkId ||
-        searchParams.linkId ||
-        searchParams.externalId ||
-        undefined;
+      const linkId = params?.linkId || searchParams.linkId || searchParams.externalId || undefined;
 
       let session: Session | undefined;
       let workspaceId: string | undefined;
       let workspaceSlug: string | undefined;
 
       const idOrSlug =
-        params?.idOrSlug ||
-        searchParams.workspaceId ||
-        params?.slug ||
-        searchParams.projectSlug;
+        params?.idOrSlug || searchParams.workspaceId || params?.slug || searchParams.projectSlug;
 
       // if there's no workspace ID or slug
       if (!idOrSlug) {
@@ -145,11 +131,7 @@ export const withWorkspaceEdge = (
           });
         }
 
-        const { success, limit, reset, remaining } = await ratelimit(
-          apiKey,
-          600,
-          '1 m',
-        );
+        const { success, limit, reset, remaining } = await ratelimit(apiKey, 600, '1 m');
         headers = {
           'Retry-After': reset.toString(),
           'X-RateLimit-Limit': limit.toString(),
@@ -171,7 +153,7 @@ export const withWorkspaceEdge = (
             data: {
               lastUsed: new Date(),
             },
-          }),
+          })
         );
         session = {
           user: {
@@ -328,11 +310,7 @@ export const withWorkspaceEdge = (
 
       // analytics API checks
       const url = new URL(req.url || '', API_DOMAIN);
-      if (
-        workspace.plan === 'free' &&
-        apiKey &&
-        url.pathname.includes('/analytics')
-      ) {
+      if (workspace.plan === 'free' && apiKey && url.pathname.includes('/analytics')) {
         throw new DubApiError({
           code: 'forbidden',
           message: 'Analytics API is only available on paid plans.',

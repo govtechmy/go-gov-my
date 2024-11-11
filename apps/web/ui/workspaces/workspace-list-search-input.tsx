@@ -51,7 +51,7 @@ export const SearchInput = (props: {
         }}
         className={cn(
           'pointer-events-auto absolute inset-y-0 right-0 flex items-center pr-4',
-          !props.value.length && 'hidden',
+          !props.value.length && 'hidden'
         )}
       >
         <XCircle className="h-4 w-4 text-gray-600" />

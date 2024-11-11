@@ -47,7 +47,7 @@ export const PATCH = logRequestMetrics(
 
       throw error;
     }
-  }),
+  })
 );
 
 export const PUT = PATCH;
@@ -115,5 +115,5 @@ export const DELETE = logRequestMetrics(
     } finally {
       span.end();
     }
-  }),
+  })
 );

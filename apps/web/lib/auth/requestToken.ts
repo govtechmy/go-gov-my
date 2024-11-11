@@ -7,9 +7,7 @@ export function generateRequestToken() {
   const timestamp = Math.floor(Date.now() / 1000);
   const nonce = randomBytes(16).toString('hex');
   const payload = `${timestamp}:${nonce}`;
-  const signature = createHash('sha256')
-    .update(`${payload}:${SECRET_KEY}`)
-    .digest('hex');
+  const signature = createHash('sha256').update(`${payload}:${SECRET_KEY}`).digest('hex');
 
   return { token: `${payload}:${signature}`, timestamp };
 }

@@ -15,7 +15,7 @@ const getMetatags: ZodOpenApiOperationObject = {
           example: 'https://go.gov.my',
           description: 'The URL to retrieve metatags for.',
         }),
-      }),
+      })
     ),
   },
   responses: {

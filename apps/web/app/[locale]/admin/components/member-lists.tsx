@@ -71,9 +71,7 @@ export default function MemberLists() {
 
   const fetchUsers = async (pageNum: number, search: string) => {
     try {
-      const response = await fetch(
-        `/api/user/agency?page=${pageNum}&search=${search}`,
-      );
+      const response = await fetch(`/api/user/agency?page=${pageNum}&search=${search}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -169,22 +167,14 @@ export default function MemberLists() {
                 className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
               >
                 <td className="px-6 py-4">
-                  <Avatar
-                    src={(user.image || '').replace(/\s+/g, '-')}
-                    name={user.name}
-                  />
+                  <Avatar src={(user.image || '').replace(/\s+/g, '-')} name={user.name} />
                 </td>
-                <th
-                  scope="row"
-                  className="px-6 py-4 font-medium text-gray-900 dark:text-white"
-                >
+                <th scope="row" className="px-6 py-4 font-medium text-gray-900 dark:text-white">
                   <div className="max-w-[200px] break-words">{user.name}</div>
                 </th>
                 <td className="px-6 py-4">{user.email}</td>
                 <td className="px-6 py-4">{user.agencyCode.toUpperCase()}</td>
-                <td className="px-6 py-4">
-                  {roleDisplay[user.role as RoleType] || user.role}
-                </td>
+                <td className="px-6 py-4">{roleDisplay[user.role as RoleType] || user.role}</td>
                 <td className="px-6 py-4">{formatDate(user.createdAt)}</td>
               </tr>
             ))}
@@ -198,13 +188,10 @@ export default function MemberLists() {
         <span className="mb-4 block w-full text-sm font-normal text-gray-500 dark:text-gray-400 md:mb-0 md:inline md:w-auto">
           {messages?.admin?.user_management?.user_showing}{' '}
           <span className="font-semibold text-gray-900 dark:text-white">
-            {users.length > 0 ? (page - 1) * 10 + 1 : 0}-
-            {Math.min(page * 10, users.length)}
+            {users.length > 0 ? (page - 1) * 10 + 1 : 0}-{Math.min(page * 10, users.length)}
           </span>{' '}
           {messages?.admin?.user_management?.user_of}{' '}
-          <span className="font-semibold text-gray-900 dark:text-white">
-            {users.length}
-          </span>
+          <span className="font-semibold text-gray-900 dark:text-white">{users.length}</span>
         </span>
         <ul className="inline-flex h-8 -space-x-px text-sm rtl:space-x-reverse">
           <li>

@@ -8,9 +8,7 @@ if (!command) {
   process.exit(1);
 }
 
-const scriptPath = `./scripts/${command}.${
-  command === 'send-emails' ? 'tsx' : 'ts'
-}`;
+const scriptPath = `./scripts/${command}.${command === 'send-emails' ? 'tsx' : 'ts'}`;
 
 exec(
   `tsx  --stack-size=5120000 ${scriptPath}`,
@@ -22,5 +20,5 @@ exec(
     }
     console.log(stdout);
     console.error(stderr);
-  },
+  }
 );

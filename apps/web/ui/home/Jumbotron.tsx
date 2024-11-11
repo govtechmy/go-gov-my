@@ -12,8 +12,8 @@ export default function Jumbotron() {
                 <span className="mr-1 rounded-lg bg-blue-100 px-2.5 py-1 text-xs font-medium text-blue-500 dark:bg-blue-900 dark:text-blue-300">
                   go.gov.my
                 </span>{' '}
-                short links can only be created by public officers, so you can
-                be sure it&apos;s from a trustworthy source.
+                short links can only be created by public officers, so you can be sure it&apos;s
+                from a trustworthy source.
               </p>
               <p className="mb-4 text-lg font-normal text-gray-500 dark:text-gray-400">
                 Are you a public officer? &nbsp;

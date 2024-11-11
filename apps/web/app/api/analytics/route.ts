@@ -16,7 +16,7 @@ export const GET = logRequestMetrics(
     const { domain, key } = domainKeySchema.parse(searchParams);
     const response = await getLink({ domain, key });
     return NextResponse.json(response);
-  }),
+  })
 );
 
 // PUT /api/analytics – update the publicStats setting for a link
@@ -29,5 +29,5 @@ export const PUT = logRequestMetrics(
       data: { publicStats },
     });
     return NextResponse.json(response);
-  }),
+  })
 );

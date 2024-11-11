@@ -153,17 +153,14 @@ export function handleApiError(error: any): ErrorResponse & { status: number } {
   };
 }
 
-export function handleAndReturnErrorResponse(
-  err: unknown,
-  headers?: Record<string, string>,
-) {
+export function handleAndReturnErrorResponse(err: unknown, headers?: Record<string, string>) {
   const { error, status } = handleApiError(err);
   return NextResponse.json<ErrorResponse>({ error }, { headers, status });
 }
 
 export const errorSchemaFactory = (
   code: z.infer<typeof ErrorCode>,
-  description: string,
+  description: string
 ): ZodOpenApiResponseObject => {
   return {
     description,
@@ -179,14 +176,12 @@ export const errorSchemaFactory = (
                 code: {
                   type: 'string',
                   enum: [code],
-                  description:
-                    'A short code indicating the error code returned.',
+                  description: 'A short code indicating the error code returned.',
                   example: code,
                 },
                 message: {
                   type: 'string',
-                  description:
-                    'A human readable explanation of what went wrong.',
+                  description: 'A human readable explanation of what went wrong.',
                   example: 'The requested resource was not found.',
                 },
                 doc_url: {

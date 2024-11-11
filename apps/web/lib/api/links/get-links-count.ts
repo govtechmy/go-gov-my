@@ -12,16 +12,7 @@ export async function getLinksCount({
   workspaceId: string;
   userId?: string | null;
 }) {
-  const {
-    groupBy,
-    search,
-    domain,
-    tagId,
-    tagIds,
-    tagNames,
-    showArchived,
-    withTags,
-  } = searchParams;
+  const { groupBy, search, domain, tagId, tagIds, tagNames, showArchived, withTags } = searchParams;
 
   const combinedTagIds = combineTagIds({ tagId, tagIds });
 

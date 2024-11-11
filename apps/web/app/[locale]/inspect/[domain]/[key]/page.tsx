@@ -1,16 +1,6 @@
 import { getLinkViaEdge } from '@/lib/userinfos';
-import {
-  Background,
-  Footer,
-  LinkPreview,
-  LinkPreviewPlaceholder,
-  Nav,
-} from '@dub/ui';
-import {
-  GOOGLE_FAVICON_URL,
-  constructMetadata,
-  getApexDomain,
-} from '@dub/utils';
+import { Background, Footer, LinkPreview, LinkPreviewPlaceholder, Nav } from '@dub/ui';
+import { GOOGLE_FAVICON_URL, constructMetadata, getApexDomain } from '@dub/utils';
 import { unescape } from 'html-escaper';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
@@ -18,11 +8,7 @@ import LinkInspectorCard from './card';
 
 export const runtime = 'edge';
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { domain: string; key: string };
-}) {
+export async function generateMetadata({ params }: { params: { domain: string; key: string } }) {
   const domain = params.domain;
   const key = decodeURIComponent(params.key).slice(0, -1);
 
@@ -43,11 +29,7 @@ export async function generateMetadata({
   });
 }
 
-export default async function InspectPage({
-  params,
-}: {
-  params: { domain: string; key: string };
-}) {
+export default async function InspectPage({ params }: { params: { domain: string; key: string } }) {
   const domain = params.domain;
   const key = decodeURIComponent(params.key).slice(0, -1);
 
@@ -67,8 +49,8 @@ export default async function InspectPage({
             Link Inspector
           </h1>
           <h2 className="text-lg text-gray-600 sm:text-xl">
-            Inspect a short link on Dub to make sure it&apos;s safe to click on.
-            If you think this link is malicious, please report it.
+            Inspect a short link on Dub to make sure it&apos;s safe to click on. If you think this
+            link is malicious, please report it.
           </h2>
 
           <LinkInspectorCard domain={domain} _key={key} url={data.url} />

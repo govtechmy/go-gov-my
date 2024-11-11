@@ -31,8 +31,7 @@ export default function NavTabs() {
           <div className="m-1 rounded-md px-3 py-2 transition-all duration-75 hover:bg-gray-100 active:bg-gray-200">
             <p className="text-sm text-gray-600 hover:text-black">{name}</p>
           </div>
-          {(pathname === href ||
-            (href.endsWith('/settings') && pathname?.startsWith(href))) && (
+          {(pathname === href || (href.endsWith('/settings') && pathname?.startsWith(href))) && (
             <motion.div
               layoutId="indicator"
               transition={{
@@ -74,9 +73,7 @@ const OnboardingChecklist = () => {
       onClick={() => setShowCompleteSetupModal(true)}
       className="flex items-center space-x-2 rounded-md border-b-2 border-transparent p-1 px-3 py-2 transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
     >
-      <p className="whitespace-nowrap text-sm text-gray-600">
-        {message?.onboarding}
-      </p>
+      <p className="whitespace-nowrap text-sm text-gray-600">{message?.onboarding}</p>
       <Badge variant="blue">{remainder.toString()}</Badge>
     </button>
   );

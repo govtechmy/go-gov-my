@@ -5,11 +5,7 @@ import { APP_DOMAIN, constructMetadata, SHORT_DOMAIN } from '@dub/utils';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { key: string; locale: string };
-}) {
+export async function generateMetadata({ params }: { params: { key: string; locale: string } }) {
   const domain = SHORT_DOMAIN;
   const data = await getLink({ domain, key: params.key });
 
@@ -24,11 +20,7 @@ export async function generateMetadata({
   });
 }
 
-export default async function StatsPage({
-  params,
-}: {
-  params: { key: string };
-}) {
+export default async function StatsPage({ params }: { params: { key: string } }) {
   const domain = SHORT_DOMAIN;
   const data = await getLink({ domain, key: params.key });
 
@@ -38,9 +30,7 @@ export default async function StatsPage({
 
   return (
     <Suspense fallback={<div className="h-screen w-full bg-gray-50" />}>
-      {data && data.url && (
-        <Analytics staticDomain={domain} staticUrl={data.url} />
-      )}
+      {data && data.url && <Analytics staticDomain={domain} staticUrl={data.url} />}
     </Suspense>
   );
 }

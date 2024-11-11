@@ -54,10 +54,7 @@ export function InputSelect({
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        commandRef.current &&
-        !commandRef.current.contains(e.target as Node)
-      ) {
+      if (commandRef.current && !commandRef.current.contains(e.target as Node)) {
         setOpenCommandList(false);
       }
     };
@@ -111,12 +108,9 @@ export function InputSelect({
         <X className="h-4 w-4 text-gray-400 transition-all hover:text-gray-700" />
       ) : (
         <ChevronDown
-          className={cn(
-            'h-4 w-4 text-gray-400 transition-all hover:text-gray-700',
-            {
-              'rotate-180 transform': openCommandList,
-            },
-          )}
+          className={cn('h-4 w-4 text-gray-400 transition-all hover:text-gray-700', {
+            'rotate-180 transform': openCommandList,
+          })}
         />
       )}
     </button>
@@ -155,7 +149,7 @@ export function InputSelect({
               item.color === 'green' && 'bg-green-100 text-green-600',
               item.color === 'blue' && 'bg-blue-100 text-blue-600',
               item.color === 'purple' && 'bg-purple-100 text-purple-600',
-              item.color === 'brown' && 'bg-brown-100 text-brown-600',
+              item.color === 'brown' && 'bg-brown-100 text-brown-600'
             )}
           >
             {item.value}
@@ -169,7 +163,7 @@ export function InputSelect({
 
         <Check className="invisible h-5 w-5 text-gray-500 aria-selected:visible" />
       </Command.Item>
-    )),
+    ))
   );
 
   // when adjustForMobile is true, render the input as a drawer
@@ -177,15 +171,11 @@ export function InputSelect({
     return (
       <Drawer.Root open={openCommandList} onOpenChange={setOpenCommandList}>
         <Drawer.Trigger className="sm:hidden" asChild>
-          <Command
-            ref={commandRef}
-            className={cn('relative', containerClassName)}
-            loop
-          >
+          <Command ref={commandRef} className={cn('relative', containerClassName)} loop>
             <div
               className={cn(
                 'group relative rounded-md border border-gray-300 bg-white px-1 focus-within:border-gray-500 focus-within:ring-1 focus-within:ring-gray-500 md:min-w-[140px]',
-                className,
+                className
               )}
             >
               <div className="absolute inset-y-0 left-0 flex items-center justify-center pl-3 text-gray-400">
@@ -209,15 +199,11 @@ export function InputSelect({
         <Drawer.Overlay className="fixed inset-0 z-40 bg-gray-100 bg-opacity-10 backdrop-blur" />
         <Drawer.Portal>
           <Drawer.Content className="fixed bottom-0 left-0 right-0 z-50 mt-24 rounded-t-lg border-t border-gray-200 bg-white">
-            <Command
-              ref={commandRef}
-              className={cn('relative', containerClassName)}
-              loop
-            >
+            <Command ref={commandRef} className={cn('relative', containerClassName)} loop>
               <div
                 className={cn(
                   'group relative mb-2 rounded-t-md border-b border-gray-300 bg-white p-1 sm:border sm:py-0 sm:focus-within:border-gray-500 sm:focus-within:ring-1 sm:focus-within:ring-gray-200',
-                  className,
+                  className
                 )}
               >
                 <div className="absolute inset-y-0 left-0 flex items-center justify-center pl-3 text-gray-400">
@@ -243,9 +229,7 @@ export function InputSelect({
                     (noItemsElement ? (
                       <div>{noItemsElement}</div>
                     ) : (
-                      <p className="px-4 py-2 text-sm text-gray-600">
-                        No items found.
-                      </p>
+                      <p className="px-4 py-2 text-sm text-gray-600">No items found.</p>
                     ))}
                   {inputValue !== '' && (
                     <Command.Empty className="px-4 py-2 text-sm text-gray-600">
@@ -264,15 +248,11 @@ export function InputSelect({
   }
 
   return (
-    <Command
-      ref={commandRef}
-      className={cn('relative', containerClassName)}
-      loop
-    >
+    <Command ref={commandRef} className={cn('relative', containerClassName)} loop>
       <div
         className={cn(
           'group rounded-md border border-gray-200 bg-white px-1 transition-all focus-within:border-gray-500 focus-within:ring-4 focus-within:ring-gray-200',
-          className,
+          className
         )}
       >
         <div

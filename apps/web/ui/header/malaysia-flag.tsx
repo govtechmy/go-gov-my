@@ -1,12 +1,6 @@
 export default function MalaysiaFlag({ ...props }) {
   return (
-    <svg
-      width="32"
-      height="16"
-      viewBox="0 0 32 16"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg width="32" height="16" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clipPath="url(#clip0_1654_3921)">
         <rect width="31.9713" height="16" fill="white" />
         <path d="M16 0L31.9857 0V1.14256H16V0Z" fill="#D10525" />

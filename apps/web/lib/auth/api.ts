@@ -19,10 +19,7 @@ interface withApiAuthHandler {
 }
 
 export const withApiAuth = (handler: withApiAuthHandler, {}: {} = {}) => {
-  return async (
-    req: Request,
-    { params }: { params: Record<string, string> | undefined },
-  ) => {
+  return async (req: Request, { params }: { params: Record<string, string> | undefined }) => {
     const searchParams = getSearchParams(req.url);
 
     let headers = {};
@@ -53,11 +50,7 @@ export const withApiAuth = (handler: withApiAuthHandler, {}: {} = {}) => {
           });
         }
 
-        const { success, limit, reset, remaining } = await ratelimit(
-          apiKey,
-          600,
-          '1 m',
-        );
+        const { success, limit, reset, remaining } = await ratelimit(apiKey, 600, '1 m');
 
         headers = {
           'Retry-After': reset.toString(),

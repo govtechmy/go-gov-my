@@ -12,10 +12,7 @@ import DeviceIcon from './device-icon';
 
 export default function Devices() {
   const [tab, setTab] = useState<DeviceTabs>('devices');
-  const singularTabName = useMemo(
-    () => formatAnalyticsEndpoint(tab, 'singular'),
-    [tab],
-  );
+  const singularTabName = useMemo(() => formatAnalyticsEndpoint(tab, 'singular'), [tab]);
   const { messages, locale } = useIntlClientHook();
   const message = messages?.analytics;
 
@@ -35,13 +32,7 @@ export default function Devices() {
       tab={singularTabName}
       data={
         data?.map((d) => ({
-          icon: (
-            <DeviceIcon
-              display={d[singularTabName]}
-              tab={tab}
-              className="h-4 w-4"
-            />
-          ),
+          icon: <DeviceIcon display={d[singularTabName]} tab={tab} className="h-4 w-4" />,
           title:
             singularTabName === 'device'
               ? capitalizeFirstLetter(d[singularTabName])
@@ -64,11 +55,7 @@ export default function Devices() {
 
   return (
     <>
-      <Modal
-        showModal={showModal}
-        setShowModal={setShowModal}
-        className="max-w-lg"
-      >
+      <Modal showModal={showModal} setShowModal={setShowModal} className="max-w-lg">
         <div className="border-b border-gray-200 px-6 py-4">
           <h1 className="text-lg font-semibold">{message?.devices}</h1>
         </div>
@@ -104,9 +91,7 @@ export default function Devices() {
             className="absolute inset-x-0 bottom-4 z-10 mx-auto flex w-full items-center justify-center space-x-2 rounded-md bg-gradient-to-b from-transparent to-white py-2 text-gray-500 transition-all hover:text-gray-800 active:scale-95"
           >
             <Maximize className="h-4 w-4" />
-            <p className="text-xs font-semibold uppercase">
-              {message?.view_all}
-            </p>
+            <p className="text-xs font-semibold uppercase">{message?.view_all}</p>
           </button>
         )}
       </div>

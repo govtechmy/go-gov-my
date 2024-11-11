@@ -46,7 +46,7 @@ export const POST = withAdmin(async ({ req }) => {
           id: project.id,
           slug: project.slug,
           logo: project.logo || null,
-        }),
+        })
       ),
       // delete user
       prisma.user.delete({
@@ -61,7 +61,7 @@ export const POST = withAdmin(async ({ req }) => {
         key: 'emails',
         value: email,
       }),
-    ]),
+    ])
   );
 
   return NextResponse.json({ success: true });

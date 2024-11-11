@@ -8,9 +8,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
     <Providers>
       <Background />
-      <div className="relative z-10 flex h-screen w-screen justify-center">
-        {children}
-      </div>
+      <div className="relative z-10 flex h-screen w-screen justify-center">{children}</div>
     </Providers>
   );
 }

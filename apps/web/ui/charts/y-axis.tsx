@@ -45,15 +45,8 @@ export default function YAxis({
   tickFormat = (value: number) => value.toString(),
   tickAxisSpacing = 8,
 }: YAxisProps) {
-  const {
-    width,
-    height,
-    margin,
-    yScale,
-    minY,
-    leftAxisMargin,
-    setLeftAxisMargin,
-  } = useChartContext();
+  const { width, height, margin, yScale, minY, leftAxisMargin, setLeftAxisMargin } =
+    useChartContext();
 
   const tickValues = useMemo(() => {
     if (tickValuesProp) return tickValuesProp;
@@ -62,25 +55,16 @@ export default function YAxis({
 
     return yScale.ticks(numTicks).filter((value) =>
       // Both of these reduce the number of ticks farther below numTicks, but this should only affect small ranges
-      value >= minY && integerTicks ? Number.isInteger(value) : true,
+      value >= minY && integerTicks ? Number.isInteger(value) : true
     );
   }, [tickValuesProp, numTicksProp, height, yScale, minY, integerTicks]);
 
   useLayoutEffect(() => {
     const maxWidth =
-      Math.max(
-        ...tickValues.map(
-          (v) => getStringWidth(tickFormat(v), { fontSize: 12 }) ?? 0,
-        ),
-      ) + tickAxisSpacing;
+      Math.max(...tickValues.map((v) => getStringWidth(tickFormat(v), { fontSize: 12 }) ?? 0)) +
+      tickAxisSpacing;
     if ((leftAxisMargin ?? 0) < maxWidth) setLeftAxisMargin(maxWidth);
-  }, [
-    tickValues,
-    tickAxisSpacing,
-    leftAxisMargin,
-    setLeftAxisMargin,
-    tickFormat,
-  ]);
+  }, [tickValues, tickAxisSpacing, leftAxisMargin, setLeftAxisMargin, tickFormat]);
 
   return (
     <>

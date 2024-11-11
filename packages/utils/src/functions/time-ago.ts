@@ -6,7 +6,7 @@ export const timeAgo = (
     withAgo,
   }: {
     withAgo?: boolean;
-  } = {},
+  } = {}
 ): string => {
   if (!timestamp) return 'Never';
   const diff = Date.now() - new Date(timestamp).getTime();
@@ -18,10 +18,7 @@ export const timeAgo = (
     return new Date(timestamp).toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
-      year:
-        new Date(timestamp).getFullYear() !== new Date().getFullYear()
-          ? 'numeric'
-          : undefined,
+      year: new Date(timestamp).getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined,
     });
   }
   return `${ms(diff)}${withAgo ? ' ago' : ''}`;

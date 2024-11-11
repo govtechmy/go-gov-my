@@ -18,16 +18,13 @@ import { useState } from 'react';
 const tabs: Array<'Members' | 'Invitations'> = ['Members', 'Invitations'];
 
 export default function WorkspacePeopleClient() {
-  const { setShowInviteTeammateModal, InviteTeammateModal } =
-    useInviteTeammateModal();
+  const { setShowInviteTeammateModal, InviteTeammateModal } = useInviteTeammateModal();
   const { messages, locale } = useIntlClientHook();
   const message = messages?.people;
 
   const { setShowInviteCodeModal, InviteCodeModal } = useInviteCodeModal();
 
-  const [currentTab, setCurrentTab] = useState<'Members' | 'Invitations'>(
-    'Members',
-  );
+  const [currentTab, setCurrentTab] = useState<'Members' | 'Invitations'>('Members');
 
   const { users } = useUsers({ invites: currentTab === 'Invitations' });
 
@@ -75,13 +72,7 @@ export default function WorkspacePeopleClient() {
         <div className="grid divide-y divide-gray-200">
           {users ? (
             users.length > 0 ? (
-              users.map((user) => (
-                <UserCard
-                  key={user.email}
-                  user={user}
-                  currentTab={currentTab}
-                />
-              ))
+              users.map((user) => <UserCard key={user.email} user={user} currentTab={currentTab} />)
             ) : (
               <div className="flex flex-col items-center justify-center py-10">
                 <img
@@ -91,9 +82,7 @@ export default function WorkspacePeopleClient() {
                   height={300}
                   className="pointer-events-none -my-8"
                 />
-                <p className="text-sm text-gray-500">
-                  {message?.no_invitations}
-                </p>
+                <p className="text-sm text-gray-500">{message?.no_invitations}</p>
               </div>
             )
           ) : (
@@ -128,8 +117,10 @@ const UserCard = ({
     role,
   });
 
-  const { RemoveTeammateModal, setShowRemoveTeammateModal } =
-    useRemoveTeammateModal({ user, invite: currentTab === 'Invitations' });
+  const { RemoveTeammateModal, setShowRemoveTeammateModal } = useRemoveTeammateModal({
+    user,
+    invite: currentTab === 'Invitations',
+  });
 
   const { data: session } = useSession();
 
@@ -143,10 +134,7 @@ const UserCard = ({
     <>
       <EditRoleModal />
       <RemoveTeammateModal />
-      <div
-        key={email}
-        className="flex items-center justify-between space-x-3 px-4 py-3 sm:pl-8"
-      >
+      <div key={email} className="flex items-center justify-between space-x-3 px-4 py-3 sm:pl-8">
         <div className="flex items-start space-x-3">
           <div className="flex items-center space-x-3">
             <Avatar user={user} />
@@ -168,7 +156,7 @@ const UserCard = ({
                   'rounded-md border border-gray-200 text-xs text-gray-500 focus:border-gray-600 focus:ring-gray-600',
                   {
                     'cursor-not-allowed bg-gray-100': !isOwner,
-                  },
+                  }
                 )}
                 value={role}
                 disabled={!isOwner}

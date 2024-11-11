@@ -1,7 +1,4 @@
-import {
-  intervals,
-  VALID_ANALYTICS_ENDPOINTS,
-} from '@/lib/analytics/constants';
+import { intervals, VALID_ANALYTICS_ENDPOINTS } from '@/lib/analytics/constants';
 import { formatAnalyticsEndpoint } from '@/lib/analytics/utils';
 import z from '@/lib/zod';
 import { COUNTRY_CODES } from '@dub/utils';
@@ -19,30 +16,25 @@ export const analyticsEndpointSchema = z.object({
     })
     .transform((v) => formatAnalyticsEndpoint(v, 'plural'))
     .optional()
-    .describe(
-      'The field to group the analytics by. If undefined, returns the total click count.',
-    ),
+    .describe('The field to group the analytics by. If undefined, returns the total click count.'),
 });
 
 export const clickAnalyticsQuerySchema = z.object({
   domain: z.string().optional().describe('The domain to filter analytics for.'),
   key: z.string().optional().describe('The short link slug.'),
-  linkId: z
-    .string()
-    .optional()
-    .describe('The unique ID of the short link on Dub.'),
+  linkId: z.string().optional().describe('The unique ID of the short link on Dub.'),
   externalId: z
     .string()
     .optional()
     .describe(
-      "This is the ID of the link in the your database. Must be prefixed with 'ext_' when passed as a query parameter.",
+      "This is the ID of the link in the your database. Must be prefixed with 'ext_' when passed as a query parameter."
     ),
   interval: z
     .enum(intervals)
     .optional()
     .default('7d')
     .describe(
-      'The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.',
+      'The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.'
     ),
   start: parseDateSchema
     .refine(
@@ -52,7 +44,7 @@ export const clickAnalyticsQuerySchema = z.object({
       },
       {
         message: 'The start date cannot be earlier than September 22, 2022.',
-      },
+      }
     )
     .optional()
     .describe('The start date and time when to retrieve analytics from.'),
@@ -64,11 +56,11 @@ export const clickAnalyticsQuerySchema = z.object({
       },
       {
         message: 'The end date cannot be in future.',
-      },
+      }
     )
     .optional()
     .describe(
-      'The end date and time when to retrieve analytics from. If not provided, defaults to the current date.',
+      'The end date and time when to retrieve analytics from. If not provided, defaults to the current date.'
     ),
   country: z
     .enum(COUNTRY_CODES)
@@ -76,34 +68,22 @@ export const clickAnalyticsQuerySchema = z.object({
     .describe('The country to retrieve analytics for.')
     .openapi({ ref: 'countryCode' }),
   city: z.string().optional().describe('The city to retrieve analytics for.'),
-  device: z
-    .string()
-    .optional()
-    .describe('The device to retrieve analytics for.'),
-  browser: z
-    .string()
-    .optional()
-    .describe('The browser to retrieve analytics for.'),
+  device: z.string().optional().describe('The device to retrieve analytics for.'),
+  browser: z.string().optional().describe('The browser to retrieve analytics for.'),
   os: z.string().optional().describe('The OS to retrieve analytics for.'),
-  referer: z
-    .string()
-    .optional()
-    .describe('The referer to retrieve analytics for.'),
+  referer: z.string().optional().describe('The referer to retrieve analytics for.'),
   asn: z.string().optional().describe('The ASN to retrieve analytics for.'),
   url: z.string().optional().describe('The URL to retrieve analytics for.'),
-  tagId: z
-    .string()
-    .optional()
-    .describe('The tag ID to retrieve analytics for.'),
+  tagId: z.string().optional().describe('The tag ID to retrieve analytics for.'),
   qr: booleanQuerySchema
     .optional()
     .describe(
-      'Filter for QR code scans. If true, filter for QR codes only. If false, filter for links only. If undefined, return both.',
+      'Filter for QR code scans. If true, filter for QR codes only. If false, filter for links only. If undefined, return both.'
     ),
   root: booleanQuerySchema
     .optional()
     .describe(
-      'Filter for root domains. If true, filter for domains only. If false, filter for links only. If undefined, return both.',
+      'Filter for root domains. If true, filter for domains only. If false, filter for links only. If undefined, return both.'
     ),
 });
 
@@ -147,9 +127,7 @@ export const getClickAnalyticsResponse = {
   }),
   countries: z
     .object({
-      country: z
-        .enum(COUNTRY_CODES)
-        .describe('The 2-letter country code: https://d.to/geo'),
+      country: z.enum(COUNTRY_CODES).describe('The 2-letter country code: https://d.to/geo'),
       clicks: z.number().describe('The number of clicks from this country'),
     })
     .openapi({ ref: 'clicksByCountry' }),
@@ -180,9 +158,7 @@ export const getClickAnalyticsResponse = {
     clicks: z.number().describe('The number of clicks from this OS'),
   }),
   referers: z.object({
-    referer: z
-      .string()
-      .describe('The name of the referer. If unknown, this will be `(direct)`'),
+    referer: z.string().describe('The name of the referer. If unknown, this will be `(direct)`'),
     clicks: z.number().describe('The number of clicks from this referer'),
   }),
   top_links: z.object({

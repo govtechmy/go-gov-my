@@ -82,9 +82,7 @@ describe.sequential('POST /links', async () => {
   test('prefix', async () => {
     const prefix = 'gh';
 
-    const { status, data: link } = await http.post<
-      Link & { shortLink: string }
-    >({
+    const { status, data: link } = await http.post<Link & { shortLink: string }>({
       path: '/links',
       query: { workspaceId },
       body: {
@@ -207,8 +205,7 @@ describe.sequential('POST /links', async () => {
 
   test('device targeting', async () => {
     const ios = 'https://apps.apple.com/app/1611158928';
-    const android =
-      'https://play.google.com/store/apps/details?id=com.disney.disneyplus';
+    const android = 'https://play.google.com/store/apps/details?id=com.disney.disneyplus';
 
     const { status, data: link } = await http.post<Link>({
       path: '/links',
@@ -285,8 +282,8 @@ describe.sequential('POST /links', async () => {
           path: '/tags',
           query: { workspaceId },
           body: { tag, color },
-        }),
-      ),
+        })
+      )
     );
 
     const tagIds = response.map((r) => r.data.id);
@@ -323,10 +320,7 @@ describe.sequential('POST /links', async () => {
     });
     expect(LinkSchema.strict().parse(link)).toBeTruthy();
 
-    await Promise.all([
-      ...tagIds.map((id) => h.deleteTag(id)),
-      h.deleteLink(link.id),
-    ]);
+    await Promise.all([...tagIds.map((id) => h.deleteTag(id)), h.deleteLink(link.id)]);
   });
 
   test('custom social media cards', async () => {

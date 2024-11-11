@@ -5,10 +5,7 @@ import { processDTOLink } from '@/lib/dto/link.dto';
 import { prisma } from '@/lib/prisma';
 import { Prisma } from '@prisma/client';
 import { waitUntil } from '@vercel/functions';
-import {
-  OUTBOX_ACTIONS,
-  REDIRECT_SERVER_BASE_URL,
-} from 'kafka-consumer/utils/actions';
+import { OUTBOX_ACTIONS, REDIRECT_SERVER_BASE_URL } from 'kafka-consumer/utils/actions';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -50,10 +47,7 @@ export const PUT = withAdmin(async ({ params, req }) => {
   waitUntil(
     (async () => {
       const { payload, encryptedSecrets } = await processDTOLink(response);
-      const headersJSON = generateIdempotencyKey(
-        payload.id,
-        response.updatedAt,
-      );
+      const headersJSON = generateIdempotencyKey(payload.id, response.updatedAt);
 
       await prisma.webhookOutbox.create({
         data: {
@@ -65,7 +59,7 @@ export const PUT = withAdmin(async ({ params, req }) => {
           encryptedSecrets: encryptedSecrets,
         },
       });
-    })(),
+    })()
   );
 
   return NextResponse.json(response);

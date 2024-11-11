@@ -10,8 +10,7 @@ export function useIntlHook(locale?: string) {
     'ms-MY': ms,
   };
 
-  if (locale && isSupportedLocale(locale))
-    return { messages: dictionaries[locale], locale };
+  if (locale && isSupportedLocale(locale)) return { messages: dictionaries[locale], locale };
 
   const headersList = headers();
   const locale_header = headersList.get('NEXT_LOCALE');
@@ -30,8 +29,7 @@ export function nonHooki18nFunc(locale?: string) {
     'ms-MY': ms,
   };
 
-  if (locale && isSupportedLocale(locale))
-    return { messages: dictionaries[locale], locale };
+  if (locale && isSupportedLocale(locale)) return { messages: dictionaries[locale], locale };
 
   const headersList = headers();
   const locale_header = headersList.get('NEXT_LOCALE');

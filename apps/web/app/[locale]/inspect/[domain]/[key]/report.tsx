@@ -24,17 +24,11 @@ export default function ReportButton({ link }: { link: string }) {
       disabled={opening}
       className={cn(
         'rounded-md p-2 transition-all duration-75 focus:outline-none',
-        opening
-          ? 'cursor-not-allowed bg-gray-100'
-          : 'hover:bg-red-100 active:bg-red-200',
+        opening ? 'cursor-not-allowed bg-gray-100' : 'hover:bg-red-100 active:bg-red-200'
       )}
     >
       <span className="sr-only">Report</span>
-      {opening ? (
-        <LoadingSpinner className="h-4 w-4" />
-      ) : (
-        <Flag className="h-4 w-4 text-red-500" />
-      )}
+      {opening ? <LoadingSpinner className="h-4 w-4" /> : <Flag className="h-4 w-4 text-red-500" />}
     </button>
   );
 }

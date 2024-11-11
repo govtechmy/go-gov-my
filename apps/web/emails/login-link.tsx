@@ -47,9 +47,7 @@ export default function LoginLink({ email, url }: Props) {
               <Heading className="mx-0 my-7 p-0 text-center text-xl font-semibold text-black">
                 Your Login Link
               </Heading>
-              <Text className="text-sm leading-6 text-black">
-                Welcome to {APP_NAME}!
-              </Text>
+              <Text className="text-sm leading-6 text-black">Welcome to {APP_NAME}!</Text>
               <Text className="text-sm leading-6 text-black">
                 Please click the magic link below to sign in to your account.
               </Text>

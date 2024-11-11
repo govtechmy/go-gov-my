@@ -35,9 +35,7 @@ export default function UTMSection({
     return getParamsFromURL(url);
   }, [url]);
 
-  const [enabled, setEnabled] = useState(
-    paramsMetadata.some((param) => params[param.key]),
-  );
+  const [enabled, setEnabled] = useState(paramsMetadata.some((param) => params[param.key]));
 
   useEffect(() => {
     if (enabled) {
@@ -45,8 +43,7 @@ export default function UTMSection({
       setData({
         ...data,
         url:
-          props?.url &&
-          getUrlWithoutUTMParams(props?.url) === getUrlWithoutUTMParams(url)
+          props?.url && getUrlWithoutUTMParams(props?.url) === getUrlWithoutUTMParams(url)
             ? props?.url
             : url,
       });
@@ -60,9 +57,7 @@ export default function UTMSection({
     <div className="relative border-b border-gray-200 pb-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-between space-x-2">
-          <h2 className="text-sm font-medium text-gray-900">
-            {messages?.link?.utm_builder}
-          </h2>
+          <h2 className="text-sm font-medium text-gray-900">{messages?.link?.utm_builder}</h2>
           <InfoTooltip
             content={
               <SimpleTooltipContent

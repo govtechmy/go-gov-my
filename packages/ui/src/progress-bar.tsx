@@ -13,21 +13,14 @@ export function ProgressBar({
   className?: string;
 }) {
   return (
-    <div
-      className={cn(
-        'h-3 w-full overflow-hidden rounded-full bg-gray-200',
-        className,
-      )}
-    >
+    <div className={cn('h-3 w-full overflow-hidden rounded-full bg-gray-200', className)}>
       <motion.div
         initial={{ width: 0 }}
         animate={{
           width: value && max ? (value / max) * 100 + '%' : '0%',
         }}
         transition={{ duration: 0.5, type: 'spring', delay: 0.2 }}
-        className={`${
-          value && max && value > max ? 'bg-red-500' : 'bg-blue-500'
-        } h-full`}
+        className={`${value && max && value > max ? 'bg-red-500' : 'bg-blue-500'} h-full`}
       />
     </div>
   );

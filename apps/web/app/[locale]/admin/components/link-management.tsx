@@ -47,9 +47,7 @@ export default function LinkManagement() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedLink, setSelectedLink] = useState<LinkWithTagsProps | null>(
-    null,
-  );
+  const [selectedLink, setSelectedLink] = useState<LinkWithTagsProps | null>(null);
   const { setShowAddEditLinkModal, AddEditLinkModal } = useAddEditLinkModal({
     props: selectedLink || undefined,
   });
@@ -72,9 +70,7 @@ export default function LinkManagement() {
 
   const fetchLinks = async (pageNum: number, search: string) => {
     try {
-      const response = await fetch(
-        `/api/admin/workspaces?page=${pageNum}&search=${search}`,
-      );
+      const response = await fetch(`/api/admin/workspaces?page=${pageNum}&search=${search}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -139,9 +135,7 @@ export default function LinkManagement() {
           <input
             type="text"
             className="block w-full rounded-lg border border-gray-300 bg-white ps-10 pt-2 text-sm text-gray-900 focus:border-gray-500 focus:ring-gray-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-            placeholder={
-              messages?.admin?.workspace_management?.workspace_search
-            }
+            placeholder={messages?.admin?.workspace_management?.workspace_search}
             onChange={(e) => debouncedSearch(e.target.value)}
           />
         </div>
@@ -187,10 +181,7 @@ export default function LinkManagement() {
                 className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600"
               >
                 <td className="px-6 py-4 text-blue-500 hover:text-blue-700">
-                  <NextLink
-                    href={`https://${link.domain}/${link.key}`}
-                    target="_blank"
-                  >
+                  <NextLink href={`https://${link.domain}/${link.key}`} target="_blank">
                     {link.domain}/{link.key}
                   </NextLink>
                 </td>
@@ -248,13 +239,10 @@ export default function LinkManagement() {
         <span className="mb-4 block w-full text-sm font-normal text-gray-500 dark:text-gray-400 md:mb-0 md:inline md:w-auto">
           {messages?.admin?.workspace_management?.workspace_showing}{' '}
           <span className="font-semibold text-gray-900 dark:text-white">
-            {links.length > 0 ? (page - 1) * 10 + 1 : 0}-
-            {Math.min(page * 10, links.length)}
+            {links.length > 0 ? (page - 1) * 10 + 1 : 0}-{Math.min(page * 10, links.length)}
           </span>{' '}
           {messages?.admin?.workspace_management?.workspace_of}{' '}
-          <span className="font-semibold text-gray-900 dark:text-white">
-            {links.length}
-          </span>
+          <span className="font-semibold text-gray-900 dark:text-white">{links.length}</span>
         </span>
         <ul className="inline-flex h-8 -space-x-px text-sm rtl:space-x-reverse">
           <li>

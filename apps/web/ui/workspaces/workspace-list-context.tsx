@@ -16,11 +16,7 @@ type Context = {
 
 const WorkspaceListContext = createContext<Context>(null);
 
-export const WorkspaceListProvider = ({
-  children,
-}: {
-  children?: React.ReactNode;
-}) => {
+export const WorkspaceListProvider = ({ children }: { children?: React.ReactNode }) => {
   const [searchValue, setSearchValue] = useState('');
 
   const [debouncedSearchValue, setDebouncedSearchValue] = useState(searchValue);
@@ -51,9 +47,7 @@ export const useWorkspaceListContext = () => {
   const context = useContext(WorkspaceListContext);
 
   if (!context) {
-    throw Error(
-      'useWorkspaceListContext must be called within a WorkspaceListProvider',
-    );
+    throw Error('useWorkspaceListContext must be called within a WorkspaceListProvider');
   }
 
   return context;

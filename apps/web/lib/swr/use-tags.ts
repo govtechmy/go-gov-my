@@ -11,7 +11,7 @@ export default function useTags() {
     fetcher,
     {
       dedupingInterval: 30000,
-    },
+    }
   );
 
   return {

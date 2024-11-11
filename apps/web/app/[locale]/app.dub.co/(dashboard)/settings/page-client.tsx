@@ -20,8 +20,7 @@ export default function SettingsPageClient() {
         description={`${message?.display_name} ${APP_NAME}.`}
         inputAttrs={{
           name: 'name',
-          defaultValue:
-            status === 'loading' ? undefined : session?.user?.name || '',
+          defaultValue: status === 'loading' ? undefined : session?.user?.name || '',
           placeholder: 'Steve Jobs',
           maxLength: 32,
         }}

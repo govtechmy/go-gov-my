@@ -13,28 +13,26 @@ async function main() {
     root: false,
   }).then(async (data) => {
     return await Promise.all(
-      data.map(
-        async ({ link: linkId, clicks }: { link: string; clicks: number }) => {
-          const link = await prisma.link.findUnique({
-            where: {
-              id: linkId,
-            },
-            select: {
-              domain: true,
-              key: true,
-            },
-          });
-          if (!link) return;
-          return {
-            link: linkConstructor({
-              domain: link.domain,
-              key: link.key,
-              pretty: true,
-            }),
-            clicks,
-          };
-        },
-      ),
+      data.map(async ({ link: linkId, clicks }: { link: string; clicks: number }) => {
+        const link = await prisma.link.findUnique({
+          where: {
+            id: linkId,
+          },
+          select: {
+            domain: true,
+            key: true,
+          },
+        });
+        if (!link) return;
+        return {
+          link: linkConstructor({
+            domain: link.domain,
+            key: link.key,
+            pretty: true,
+          }),
+          clicks,
+        };
+      })
     );
   });
 

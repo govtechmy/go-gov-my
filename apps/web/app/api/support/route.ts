@@ -18,9 +18,7 @@ const supportRequestQuerySchema = z.object({
 
 // POST /api/support – file a support request
 export const POST = withSession(async ({ req, session }) => {
-  const { title, message, attachmentIds } = supportRequestQuerySchema.parse(
-    await req.json(),
-  );
+  const { title, message, attachmentIds } = supportRequestQuerySchema.parse(await req.json());
 
   const res = await plain.createThread({
     customerIdentifier: {

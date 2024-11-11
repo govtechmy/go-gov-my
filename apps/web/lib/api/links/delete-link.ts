@@ -8,8 +8,7 @@ import { waitUntil } from '@vercel/functions';
 import { OUTBOX_ACTIONS } from 'kafka-consumer/utils/actions';
 import generateIdempotencyKey from './create-idempotency-key';
 
-const REDIRECT_SERVER_BASE_URL =
-  process.env.REDIRECT_SERVER_URL || 'http://localhost:3002';
+const REDIRECT_SERVER_BASE_URL = process.env.REDIRECT_SERVER_URL || 'http://localhost:3002';
 
 export async function deleteLink(linkId: string) {
   const tracer = trace.getTracer('default');
@@ -58,7 +57,7 @@ export async function deleteLink(linkId: string) {
             encryptedSecrets: encryptedSecrets,
           },
         }),
-      ]),
+      ])
     );
 
     // Log results to OpenTelemetry

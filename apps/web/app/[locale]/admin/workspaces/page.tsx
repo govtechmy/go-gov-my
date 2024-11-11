@@ -2,12 +2,7 @@
 
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { WorkspaceProps } from '@/lib/types';
-import {
-  BlurImage,
-  LoadingSpinner,
-  MaxWidthWrapper,
-  NumberTooltip,
-} from '@dub/ui';
+import { BlurImage, LoadingSpinner, MaxWidthWrapper, NumberTooltip } from '@dub/ui';
 import { DICEBEAR_AVATAR_URL, cn, fetcher, nFormatter } from '@dub/utils';
 import { BarChart2, Link2, Search, XCircle } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -29,7 +24,7 @@ export default function Page() {
   } = useSWR<Omit<WorkspaceProps, 'users' | 'domains'>[]>(
     session.status === 'authenticated' &&
       `/api/admin/workspaces?${new URLSearchParams({ search: debouncedSearchValue })}`,
-    fetcher,
+    fetcher
   );
 
   const debounced = useDebouncedCallback((value: string) => {
@@ -48,9 +43,7 @@ export default function Page() {
       <div className="flex h-36 items-center border-b border-gray-200 bg-white">
         <MaxWidthWrapper>
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl text-gray-600">
-              {messages.dashboard.workspaces}
-            </h1>
+            <h1 className="text-2xl text-gray-600">{messages.dashboard.workspaces}</h1>
           </div>
         </MaxWidthWrapper>
       </div>
@@ -86,14 +79,10 @@ export default function Page() {
           <div className="col-span-1 auto-rows-min grid-cols-1 lg:col-span-5">
             <ul className="grid min-h-[66.5vh] auto-rows-min gap-3">
               {isLoading &&
-                new Array(10)
-                  .fill(null)
-                  .map((_, i) => <WorkspaceCardSkeleton key={i} />)}
+                new Array(10).fill(null).map((_, i) => <WorkspaceCardSkeleton key={i} />)}
               {!isLoading &&
                 workspaces &&
-                workspaces.map((workspace) => (
-                  <WorkspaceCard key={workspace.id} {...workspace} />
-                ))}
+                workspaces.map((workspace) => <WorkspaceCard key={workspace.id} {...workspace} />)}
             </ul>
             {/* <Pagination /> */}
           </div>
@@ -135,7 +124,7 @@ const SearchInput = (props: {
         }}
         className={cn(
           'pointer-events-auto absolute inset-y-0 right-0 flex items-center pr-4',
-          !props.value.length && 'hidden',
+          !props.value.length && 'hidden'
         )}
       >
         <XCircle className="h-4 w-4 text-gray-600" />
@@ -153,10 +142,7 @@ function WorkspaceCard({
   plan,
 }: Pick<WorkspaceProps, 'id' | 'name' | 'slug' | 'logo' | 'usage' | 'plan'>) {
   const { messages, locale } = useIntlClientHook();
-  const { data: linkCount } = useSWR<number>(
-    `/api/admin/links/count?workspaceId=${id}`,
-    fetcher,
-  );
+  const { data: linkCount } = useSWR<number>(`/api/admin/links/count?workspaceId=${id}`, fetcher);
 
   return (
     <div className="group relative">
@@ -175,9 +161,7 @@ function WorkspaceCard({
               height={48}
             />
             <div>
-              <h2 className="max-w-[200px] truncate text-lg font-medium text-gray-700">
-                {name}
-              </h2>
+              <h2 className="max-w-[200px] truncate text-lg font-medium text-gray-700">{name}</h2>
             </div>
           </div>
           {/* <PlanBadge plan={plan} /> */}
@@ -189,9 +173,7 @@ function WorkspaceCard({
               <NumberTooltip value={linkCount} unit="links">
                 <h2 className="whitespace-nowrap text-sm">
                   {nFormatter(linkCount)}{' '}
-                  {linkCount != 1
-                    ? messages.workspace.links
-                    : messages.workspace.link}
+                  {linkCount != 1 ? messages.workspace.links : messages.workspace.link}
                 </h2>
               </NumberTooltip>
             ) : (
@@ -203,9 +185,7 @@ function WorkspaceCard({
             <NumberTooltip value={usage}>
               <h2 className="whitespace-nowrap text-sm">
                 {nFormatter(usage)}{' '}
-                {usage != 1
-                  ? messages.workspace.clicks
-                  : messages.workspace.click}
+                {usage != 1 ? messages.workspace.clicks : messages.workspace.click}
               </h2>
             </NumberTooltip>
           </div>

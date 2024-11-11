@@ -43,9 +43,9 @@ export const GET = logRequestMetrics(
       users.map((u) => ({
         ...u.user,
         role: u.role,
-      })),
+      }))
     );
-  }),
+  })
 );
 
 // PUT /api/workspaces/[idOrSlug]/users – update a user's role for a specific workspace
@@ -68,8 +68,8 @@ export const PUT = logRequestMetrics(
     },
     {
       requiredRole: ['owner'],
-    },
-  ),
+    }
+  )
 );
 
 // DELETE /api/workspaces/[idOrSlug]/users – remove a user from a workspace
@@ -113,11 +113,7 @@ export const DELETE = logRequestMetrics(
         });
       }
       // If there is only one owner and the user is an owner and the user is trying to remove themselves
-      if (
-        totalOwners === 1 &&
-        projectUser.role === 'owner' &&
-        userId === session.user.id
-      ) {
+      if (totalOwners === 1 && projectUser.role === 'owner' && userId === session.user.id) {
         throw new DubApiError({
           code: 'bad_request',
           message:
@@ -136,6 +132,6 @@ export const DELETE = logRequestMetrics(
     },
     {
       requiredRole: ['owner', 'member'],
-    },
-  ),
+    }
+  )
 );

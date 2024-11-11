@@ -33,6 +33,6 @@ export default function useLinkHistory(opts: Options) {
         if (h.expiresAt) h.expiresAt = new Date(h.expiresAt);
       });
       return history;
-    },
+    }
   );
 }

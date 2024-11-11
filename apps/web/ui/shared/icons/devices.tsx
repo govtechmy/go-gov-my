@@ -12,14 +12,7 @@ export function Chrome({ className }: { className: string }) {
         <stop offset="0" stopColor="#1e8e3e" />
         <stop offset="1" stopColor="#34a853" />
       </linearGradient>
-      <linearGradient
-        id="c"
-        x1="42.7"
-        x2="86"
-        y1="100"
-        y2="25.13"
-        gradientUnits="userSpaceOnUse"
-      >
+      <linearGradient id="c" x1="42.7" x2="86" y1="100" y2="25.13" gradientUnits="userSpaceOnUse">
         <stop offset="0" stopColor="#fcc934" />
         <stop offset="1" stopColor="#fbbc04" />
       </linearGradient>
@@ -38,10 +31,7 @@ export function Chrome({ className }: { className: string }) {
       <path fill="url(#b)" d="M28.35 62.5 6.7 25A50 50 90 0 0 50 100l49-50z" />
       <path fill="url(#c)" d="M71.65 62.5 50 100a50 50 90 0 0 43.29-75H50z" />
       <path fill="#fff" d="M50 75a25 25 90 1 0 0-50 25 25 90 0 0 0 50z" />
-      <path
-        fill="#1a73e8"
-        d="M50 69.8a19.8 19.8 90 1 0 0-39.6 19.8 19.8 90 0 0 0 39.6z"
-      />{' '}
+      <path fill="#1a73e8" d="M50 69.8a19.8 19.8 90 1 0 0-39.6 19.8 19.8 90 0 0 0 39.6z" />{' '}
     </svg>
   );
 }
@@ -75,22 +65,14 @@ export function Safari({ className }: { className: string }) {
         d="m36.38339038 34.83805895-6.60095092-6.91272438-16.81512624 22.66471911z"
         paintOrder="markers stroke fill"
       />
-      <path
-        d="m12.96732 50.59006 23.41607-15.75201 16.81513-22.66472z"
-        opacity=".243"
-      />
+      <path d="m12.96732 50.59006 23.41607-15.75201 16.81513-22.66472z" opacity=".243" />
     </svg>
   );
 }
 
 export function Apple({ className }: { className: string }) {
   return (
-    <svg
-      viewBox="0 0 2048 2048"
-      width="2048px"
-      height="2048px"
-      className={className}
-    >
+    <svg viewBox="0 0 2048 2048" width="2048px" height="2048px" className={className}>
       <path
         fill="#424242"
         fillRule="nonzero"

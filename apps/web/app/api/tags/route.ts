@@ -23,7 +23,7 @@ export const GET = logRequestMetrics(
       },
     });
     return NextResponse.json(tags, { headers });
-  }),
+  })
 );
 
 // POST /api/workspaces/[idOrSlug]/tags - create a tag for a workspace
@@ -74,5 +74,5 @@ export const POST = logRequestMetrics(
     });
 
     return NextResponse.json(response, { headers, status: 201 });
-  }),
+  })
 );

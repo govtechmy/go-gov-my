@@ -96,7 +96,7 @@ export const POST = logRequestMetrics(
               await formatRedisLink({
                 ...link,
                 projectId: newWorkspaceId,
-              }),
+              })
             ),
           }),
           // decrement old workspace usage
@@ -127,7 +127,7 @@ export const POST = logRequestMetrics(
               },
             },
           }),
-        ]),
+        ])
       );
 
       // Log results to OpenTelemetry
@@ -150,5 +150,5 @@ export const POST = logRequestMetrics(
     } finally {
       span.end();
     }
-  }),
+  })
 );

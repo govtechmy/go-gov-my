@@ -1,13 +1,7 @@
 import useWorkspace from '@/lib/swr/use-workspace';
 import { LinkProps } from '@/lib/types';
 import { ProBadgeTooltip } from '@/ui/shared/pro-badge-tooltip';
-import {
-  ButtonTooltip,
-  FileUpload,
-  LoadingCircle,
-  SimpleTooltipContent,
-  Switch,
-} from '@dub/ui';
+import { ButtonTooltip, FileUpload, LoadingCircle, SimpleTooltipContent, Switch } from '@dub/ui';
 import { FADE_IN_ANIMATION_SETTINGS, resizeImage } from '@dub/utils';
 import { motion } from 'framer-motion';
 import { Link2 } from 'lucide-react';
@@ -33,8 +27,7 @@ export default function OGSection({
 
   const { setShowPromptModal, PromptModal } = usePromptModal({
     title: 'Use image from URL',
-    description:
-      "Paste an image URL to use for your link's social media cards.",
+    description: "Paste an image URL to use for your link's social media cards.",
     label: 'Image URL',
     inputProps: {
       placeholder: 'https://example.com/og.png',
@@ -175,17 +168,10 @@ export default function OGSection({
             }
           />
         </div>
-        <Switch
-          fn={() => setData((prev) => ({ ...prev, proxy: !proxy }))}
-          checked={proxy}
-        />
+        <Switch fn={() => setData((prev) => ({ ...prev, proxy: !proxy }))} checked={proxy} />
       </div>
       {proxy && (
-        <motion.div
-          key="og-options"
-          {...FADE_IN_ANIMATION_SETTINGS}
-          className="grid gap-5"
-        >
+        <motion.div key="og-options" {...FADE_IN_ANIMATION_SETTINGS} className="grid gap-5">
           <div>
             <div className="flex items-center justify-between">
               <p className="block text-sm font-medium text-gray-700">Image</p>
@@ -250,9 +236,7 @@ export default function OGSection({
             <div className="flex items-center justify-between">
               <p className="block text-sm font-medium text-gray-700">Title</p>
               <div className="flex items-center gap-2">
-                <p className="text-sm text-gray-500">
-                  {title?.length || 0}/120
-                </p>
+                <p className="text-sm text-gray-500">{title?.length || 0}/120</p>
                 {/* <ButtonTooltip
                   tooltipContent="Generate an optimized title using AI."
                   onClick={generateTitle}
@@ -291,13 +275,9 @@ export default function OGSection({
 
           <div>
             <div className="flex items-center justify-between">
-              <p className="block text-sm font-medium text-gray-700">
-                Description
-              </p>
+              <p className="block text-sm font-medium text-gray-700">Description</p>
               <div className="flex items-center gap-2">
-                <p className="text-sm text-gray-500">
-                  {description?.length || 0}/240
-                </p>
+                <p className="text-sm text-gray-500">{description?.length || 0}/240</p>
                 {/* <ButtonTooltip
                   tooltipContent="Generate an optimized description using AI."
                   onClick={generateDescription}

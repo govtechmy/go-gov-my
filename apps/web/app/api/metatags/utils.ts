@@ -1,10 +1,5 @@
 import { redis } from '@/lib/redis';
-import {
-  APP_NAME,
-  fetchWithTimeout,
-  getDomainWithoutWWW,
-  isValidUrl,
-} from '@dub/utils';
+import { APP_NAME, fetchWithTimeout, getDomainWithoutWWW, isValidUrl } from '@dub/utils';
 import { waitUntil } from '@vercel/functions';
 import he from 'he';
 import { parse } from 'node-html-parser';
@@ -69,9 +64,7 @@ export const getMetaTags = async (url: string) => {
     let { property, content } = metaTags[k];
 
     // !object[property] → (meaning we're taking the first instance of a metatag and ignoring the rest)
-    property &&
-      !object[property] &&
-      (object[property] = content && he.decode(content));
+    property && !object[property] && (object[property] = content && he.decode(content));
   }
 
   for (let m in linkTags) {
@@ -84,9 +77,7 @@ export const getMetaTags = async (url: string) => {
   const title = object['og:title'] || object['twitter:title'] || titleTag;
 
   const description =
-    object['description'] ||
-    object['og:description'] ||
-    object['twitter:description'];
+    object['description'] || object['og:description'] || object['twitter:description'];
 
   const image =
     object['og:image'] ||
@@ -120,9 +111,7 @@ async function recordMetatags(url: string, error: boolean) {
 
   const domain = getDomainWithoutWWW(url);
   if (!domain) {
-    throw Error(
-      `failed to record metatags, url "${url}" does not contain a domain`,
-    );
+    throw Error(`failed to record metatags, url "${url}" does not contain a domain`);
   }
 
   await redis.zincrby('metatags-zset', 1, domain);

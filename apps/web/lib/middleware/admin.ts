@@ -5,9 +5,7 @@ import { type Session } from '../auth';
 import { SESSION_TOKEN_NAME } from '../auth/constants';
 import { isInternalAdmin } from '../auth/is-internal-admin';
 
-export default async function AdminMiddleware(
-  req: NextRequest,
-): Promise<NextResponse> {
+export default async function AdminMiddleware(req: NextRequest): Promise<NextResponse> {
   const { pathWithoutLocale, locale } = parse(req);
   if (!pathWithoutLocale.startsWith('/admin')) {
     throw Error('invalid request, expected path to start with /admin');
@@ -21,15 +19,11 @@ export default async function AdminMiddleware(
     if (pathWithoutLocale === '/login') {
       return NextResponse.next();
     }
-    const response = NextResponse.redirect(
-      new URL(`/${locale}/login`, req.url),
-    );
+    const response = NextResponse.redirect(new URL(`/${locale}/login`, req.url));
     // Sign-out the user by deleting the session cookie
     response.cookies.delete(SESSION_TOKEN_NAME);
     return response;
   }
 
-  return NextResponse.rewrite(
-    new URL(`/${locale}${pathWithoutLocale}`, req.url),
-  );
+  return NextResponse.rewrite(new URL(`/${locale}${pathWithoutLocale}`, req.url));
 }

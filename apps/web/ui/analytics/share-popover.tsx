@@ -11,9 +11,7 @@ export default function SharePopover() {
   const { messages } = useIntlClientHook();
   const message = messages?.analytics;
 
-  const { baseApiPath, queryString, domain, key } = useContext(
-    AnalyticsContext,
-  ) as {
+  const { baseApiPath, queryString, domain, key } = useContext(AnalyticsContext) as {
     baseApiPath: string;
     queryString: string;
     domain: string;
@@ -43,9 +41,7 @@ export default function SharePopover() {
     }
     if (res.status === 200) {
       checked &&
-        navigator.clipboard.writeText(
-          `https://${domain}/stats/${encodeURIComponent(key)}`,
-        );
+        navigator.clipboard.writeText(`https://${domain}/stats/${encodeURIComponent(key)}`);
     }
     return { publicStats: checked };
   };
@@ -92,7 +88,7 @@ export default function SharePopover() {
                 className="h-8 flex-none border-l bg-white px-2 hover:bg-gray-50 active:bg-gray-100"
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    `https://${domain}/stats/${encodeURIComponent(key)}`,
+                    `https://${domain}/stats/${encodeURIComponent(key)}`
                   );
                   setCopied(true);
                   toast.success('Copied to clipboard');

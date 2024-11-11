@@ -128,9 +128,7 @@ export default function LoginForm() {
         />
       </form>
       {noSuchAccount && (
-        <p className="text-center text-sm text-red-500">
-          {message?.no_account_v2}
-        </p>
+        <p className="text-center text-sm text-red-500">{message?.no_account_v2}</p>
       )}
     </>
   );

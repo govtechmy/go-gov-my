@@ -3,10 +3,7 @@ import { createLink, getLinksForWorkspace, processLink } from '@/lib/api/links';
 import { parseRequestBody } from '@/lib/api/utils';
 import { withWorkspace } from '@/lib/auth';
 import { logRequestMetrics } from '@/lib/decorator/logRequestMetrics';
-import {
-  createLinkBodySchema,
-  getLinksQuerySchemaExtended,
-} from '@/lib/zod/schemas/links';
+import { createLinkBodySchema, getLinksQuerySchemaExtended } from '@/lib/zod/schemas/links';
 import { getSearchParamsWithArray } from '@dub/utils';
 import { NextResponse } from 'next/server';
 
@@ -45,7 +42,7 @@ export const GET = logRequestMetrics(
     return NextResponse.json(response, {
       headers,
     });
-  }),
+  })
 );
 
 // POST /api/links – create a new link
@@ -89,6 +86,6 @@ export const POST = logRequestMetrics(
     },
     {
       needNotExceededLinks: true,
-    },
-  ),
+    }
+  )
 );

@@ -51,13 +51,7 @@ export const getLinkViaEdge = async (domain: string, key: string) => {
   return link || null;
 };
 
-export const getLink = async ({
-  domain,
-  key,
-}: {
-  domain: string;
-  key: string;
-}) => {
+export const getLink = async ({ domain, key }: { domain: string; key: string }) => {
   const link = await prisma.link.findFirst({
     where: {
       domain: domain,

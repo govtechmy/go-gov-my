@@ -1,12 +1,7 @@
 import { AnalyticsMessage } from 'kafka-consumer/models/AnalyticsSchema';
 import crypto from 'node:crypto';
 
-export function consumeAnalytics(
-  link,
-  aggregatedDate: Date,
-  from: Date,
-  to: Date,
-) {
+export function consumeAnalytics(link, aggregatedDate: Date, from: Date, to: Date) {
   const dataObject = JSON.parse(JSON.stringify(link)); // deep clone
   delete dataObject?.linkId;
   return {
@@ -40,7 +35,7 @@ function mergeASNArrays(arr1: any[], arr2: any[]): any[] {
   const merged = [...arr1];
   arr2.forEach((item) => {
     const existingIndex = merged.findIndex(
-      (x) => x.asn === item.asn && x.organization === item.organization,
+      (x) => x.asn === item.asn && x.organization === item.organization
     );
     if (existingIndex >= 0) {
       merged[existingIndex].clicks += item.clicks;
