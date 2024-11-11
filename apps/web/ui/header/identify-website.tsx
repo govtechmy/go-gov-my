@@ -23,7 +23,7 @@ const IdentifyWebsite: React.FC<IdentifyWebsiteProps> = ({ isOpen, onOpenChange 
 
   return (
     <div className={inter.className}>
-      <div className="relative z-[99]">
+      <div className="relative">
         <div className="px-4 lg:px-0">
           <button
             className="h-[2.25rem] w-full md:h-[1.75rem]"

@@ -1,4 +1,4 @@
-import { inter, satoshi } from '@/styles/fonts';
+import { inter, poppins, satoshi } from '@/styles/fonts';
 import '@/styles/globals.css';
 import { TooltipProvider } from '@dub/ui/src/tooltip';
 import { cn, constructMetadata } from '@dub/utils';
@@ -11,7 +11,7 @@ export async function generateMetadata({ params }) {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={cn(satoshi.variable, inter.variable)}>
+    <html lang="en" className={cn(satoshi.variable, inter.variable, poppins.variable)}>
       <body>
         <TooltipProvider>
           <Toaster closeButton className="pointer-events-auto" />

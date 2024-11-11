@@ -33,12 +33,14 @@ export const SearchInput = (props: {
         {props.isLoading ? (
           <LoadingSpinner className="h-4 w-4" />
         ) : (
-          <Search className="h-4 w-4 text-gray-400" />
+          <>
+            <Search className="h-4 w-4 text-gray-400" />
+          </>
         )}
       </div>
       <input
         type="text"
-        className="peer w-full rounded-md border border-gray-300 px-10 text-black placeholder:text-gray-400 focus:border-black focus:ring-0 sm:text-sm"
+        className="peer w-full rounded-full border border-gray-300 px-10 text-black placeholder:text-gray-400 transition-all duration-300 focus:border-blue-300 focus:ring-2 focus:ring-blue-300 sm:text-sm"
         placeholder={messages.dashboard.search}
         value={props.value}
         onChange={(e) => {

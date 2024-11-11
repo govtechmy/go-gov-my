@@ -460,7 +460,7 @@ export default function LinkCard({
               <p className="whitespace-nowrap text-sm text-gray-500" suppressHydrationWarning>
                 {timeAgo(createdAt)}
               </p>
-              <p className="xs:block hidden">•</p>
+              <p className="xs:block hidden">{compact ? '' : '•'}</p>
               {passwordEnabledAt && (
                 <Tooltip
                   content={
@@ -480,9 +480,9 @@ export default function LinkCard({
                 rel="noopener noreferrer"
                 className="xs:block hidden max-w-[140px] truncate text-sm font-medium text-gray-700 underline-offset-2 hover:underline sm:max-w-[300px] md:max-w-[360px] xl:max-w-[420px]"
               >
-                {url}
+                {compact ? '' : url}
               </a>
-              <p>•</p>
+              <p>{compact ? '' : '•'}</p>
               {expiresAt && (
                 <span className="text-xs text-gray-500">
                   (Expires:{' '}
