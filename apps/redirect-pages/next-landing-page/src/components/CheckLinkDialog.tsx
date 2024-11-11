@@ -219,27 +219,27 @@ export default function CheckLinkDialog({
         <Dialog.Content className="fixed left-[50%] top-[50%] z-50 w-[calc(100%-2rem)] max-w-[31.25rem] -translate-x-1/2 -translate-y-1/2 rounded-xl bg-neutral-50 p-6 shadow-lg duration-200 font-inter data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]">
           {isReportSuccess ? (
             <>
-              <div className="flex mb-4 justify-center">
-                <div className="w-12 h-12 rounded-full border-4 border-green-700 flex items-center justify-center">
+              <div className="flex mb-6 justify-left">
+                <div className="w-10 h-10 rounded-full border-4 border-green-700 flex items-center justify-center">
                   <svg className="w-6 h-6 text-green-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={4} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
               </div>
-              <Dialog.Title className="text-xl font-semibold font-inter mb-2 text-center">
+              <Dialog.Title className="text-xl font-semibold font-inter mb-2 text-left">
                 {reportDialog.title}
               </Dialog.Title>
-              <Dialog.Description className="font-inter text-gray-700 mb-4 text-center">
+              <Dialog.Description className="font-inter text-gray-700 mb-4 text-left text-md">
                 {reportDialog.description}
               </Dialog.Description>
-              <div className="flex justify-center">
+              <div className="flex justify-center pt-4">
                 <Dialog.Close asChild>
                   <button 
                     onClick={() => {
                       setIsVerified(false);
                       setIsReportSuccess(false);
                     }}
-                    className="flex-1 max-w-[200px] rounded-lg px-6 py-3 text-base font-regular shadow-sm hover:shadow-md text-neutral-50 bg-blue-600 hover:bg-blue-700"
+                    className="flex-1 max-w-full rounded-lg px-6 py-3 text-base font-regular shadow-sm hover:shadow-md text-neutral-50 bg-blue-600 hover:bg-blue-700"
                   >
                     {reportDialog.doneBtn}
                   </button>
