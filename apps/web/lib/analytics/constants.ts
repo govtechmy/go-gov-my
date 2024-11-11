@@ -1,6 +1,19 @@
-export const intervals = ['7d', '30d', '90d', 'ytd', '1y', 'all'] as const;
+export const intervals = [
+  'custom',
+  '24h',
+  '7d',
+  '30d',
+  '90d',
+  'ytd',
+  '1y',
+  'all',
+] as const;
 
 export const INTERVAL_DISPLAYS = [
+  {
+    display: 'Last 24 hours',
+    value: '24h',
+  },
   {
     display: 'Last 7 days',
     value: '7d',
@@ -25,15 +38,23 @@ export const INTERVAL_DISPLAYS = [
     display: 'All Time',
     value: 'all',
   },
+  {
+    display: 'Custom',
+    value: 'custom',
+  },
 ];
 
 export const INTERVAL_DATA: Record<
   string,
   {
     startDate: Date;
-    granularity: 'minute' | 'hour' | 'day' | 'month';
+    granularity: 'minute' | 'hour' | 'day' | 'month' | 'custom';
   }
 > = {
+  custom: {
+    startDate: new Date(Date.now() - 3600000), // default start date for custom
+    granularity: 'custom',
+  },
   '1h': {
     startDate: new Date(Date.now() - 3600000),
     granularity: 'minute',
