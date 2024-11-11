@@ -22,13 +22,11 @@ export default function TagBadge({
         color === 'green' && 'bg-green-100 text-green-600',
         color === 'blue' && 'bg-blue-100 text-blue-600',
         color === 'purple' && 'bg-purple-100 text-purple-600',
-        color === 'brown' && 'bg-brown-100 text-brown-600',
+        color === 'brown' && 'bg-brown-100 text-brown-600'
       )}
     >
       {withIcon && <Tag className="h-3 w-3" />}
-      <p {...(withIcon && { className: 'hidden sm:inline-block' })}>
-        {truncate(name || '', 24)}
-      </p>
+      <p {...(withIcon && { className: 'hidden sm:inline-block' })}>{truncate(name || '', 24)}</p>
     </span>
   );
 }

@@ -11,21 +11,27 @@ export default function App({ params: { locale } }) {
   return (
     <MessagesProvider messages={messages}>
       <WorkspaceListProvider>
-        <div className="flex h-36 items-center border-b border-gray-200 bg-white">
-          <MaxWidthWrapper>
-            <div className="flex items-center justify-between">
+        <div className="flex flex-col border-b border-gray-200 bg-white py-6">
+          <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl">
+            <div className="flex items-center justify-between mx-6">
               <h1 className="truncate text-2xl text-gray-600">
                 {messages?.dashboard?.workspace_title}
               </h1>
               <CreateWorkspaceButton />
             </div>
-            <div className="mt-2 max-w-md">
-              <WorkspaceListSearchInput />
-            </div>
           </MaxWidthWrapper>
+
+          <div className="mt-6 w-full">
+            <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl">
+              <div className="mx-6">
+                <WorkspaceListSearchInput />
+              </div>
+            </MaxWidthWrapper>
+          </div>
         </div>
-        <MaxWidthWrapper>
-          <div className="my-10 grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3">
+
+        <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl">
+          <div className="my-10 grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 mx-6">
             <WorkspaceList />
           </div>
         </MaxWidthWrapper>

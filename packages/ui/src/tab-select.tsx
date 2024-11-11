@@ -17,23 +17,14 @@ export function TabSelect({
       {options.map((option) => (
         <button
           key={option}
-          className={cn(
-            'relative z-10 px-3 py-1 text-sm font-medium capitalize',
-            {
-              'transition-all hover:text-gray-500': option !== selected,
-            },
-          )}
+          className={cn('relative z-10 px-3 py-1 text-sm font-medium capitalize', {
+            'transition-all hover:text-gray-500': option !== selected,
+          })}
           onClick={() => selectAction(option)}
         >
           <p>
             {translation
-              ? translation[
-                  option === 'devices'
-                    ? 'Type'
-                    : option === 'os'
-                      ? 'OS'
-                      : option
-                ]
+              ? translation[option === 'devices' ? 'Type' : option === 'os' ? 'OS' : option]
               : option === 'devices'
                 ? 'Type'
                 : option === 'os'

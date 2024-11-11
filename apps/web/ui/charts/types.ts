@@ -11,9 +11,7 @@ export type TimeSeriesDatum<T extends Datum = any> = {
   values: T;
 };
 
-export type AccessorFn<T extends Datum, TValue = number> = (
-  datum: TimeSeriesDatum<T>,
-) => TValue;
+export type AccessorFn<T extends Datum, TValue = number> = (datum: TimeSeriesDatum<T>) => TValue;
 
 export type Series<T extends Datum = any, TValue = number> = {
   id: string;
@@ -52,8 +50,7 @@ type ChartOptionalProps<T extends Datum = any> = {
   };
 };
 
-export type ChartProps<T extends Datum = any> = ChartRequiredProps<T> &
-  ChartOptionalProps<T>;
+export type ChartProps<T extends Datum = any> = ChartRequiredProps<T> & ChartOptionalProps<T>;
 
 export type ChartContext<T extends Datum = any> = Required<ChartProps<T>> & {
   width: number;
@@ -70,7 +67,7 @@ export type ChartContext<T extends Datum = any> = Required<ChartProps<T>> & {
 
 export type ChartTooltipContext<T extends Datum = any> = {
   handleTooltip: (
-    event: React.TouchEvent<SVGRectElement> | React.MouseEvent<SVGRectElement>,
+    event: React.TouchEvent<SVGRectElement> | React.MouseEvent<SVGRectElement>
   ) => void;
   TooltipWrapper: FC<TooltipInPortalProps> | typeof TooltipWithBounds;
   containerRef: (element: SVGElement | HTMLElement | null) => void;

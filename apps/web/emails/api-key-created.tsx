@@ -48,9 +48,8 @@ export default function APIKeyCreated({ email, apiKeyName }: Props) {
                 New API Key Created
               </Heading>
               <Text className="text-sm leading-6 text-black">
-                You created a new API key for your {APP_NAME} account with the
-                name <strong>&apos;{apiKeyName}&apos;</strong> on{' '}
-                {formatDate(new Date().toString())}.
+                You created a new API key for your {APP_NAME} account with the name{' '}
+                <strong>&apos;{apiKeyName}&apos;</strong> on {formatDate(new Date().toString())}.
               </Text>
               <Section className="my-8 text-center">
                 <Link
@@ -62,10 +61,7 @@ export default function APIKeyCreated({ email, apiKeyName }: Props) {
               </Section>
               <Text className="text-sm leading-6 text-black">
                 If you did not create this API key, you can{' '}
-                <Link
-                  href={`${APP_DOMAIN}/settings/tokens`}
-                  className="text-black underline"
-                >
+                <Link href={`${APP_DOMAIN}/settings/tokens`} className="text-black underline">
                   <strong>delete this key</strong>
                 </Link>{' '}
                 from your account.

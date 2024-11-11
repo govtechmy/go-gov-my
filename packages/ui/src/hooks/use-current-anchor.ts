@@ -4,9 +4,7 @@ export function useCurrentAnchor() {
   const [currentAnchor, setCurrentAnchor] = useState<string | null>(null);
 
   useEffect(() => {
-    const mdxContainer: HTMLElement | null = document.querySelector(
-      '[data-mdx-container]',
-    );
+    const mdxContainer: HTMLElement | null = document.querySelector('[data-mdx-container]');
     if (!mdxContainer) return;
 
     const offsetTop = mdxContainer.offsetTop - 1;
@@ -16,16 +14,14 @@ export function useCurrentAnchor() {
         let currentEntry = entries[0];
         if (!currentEntry) return;
 
-        const offsetBottom =
-          (currentEntry.rootBounds?.height || 0) * 0.3 + offsetTop;
+        const offsetBottom = (currentEntry.rootBounds?.height || 0) * 0.3 + offsetTop;
 
         for (let i = 1; i < entries.length; i++) {
           const entry = entries[i];
           if (!entry) break;
 
           if (
-            entry.boundingClientRect.top <
-              currentEntry.boundingClientRect.top ||
+            entry.boundingClientRect.top < currentEntry.boundingClientRect.top ||
             currentEntry.boundingClientRect.bottom < offsetTop
           ) {
             currentEntry = entry;
@@ -48,7 +44,7 @@ export function useCurrentAnchor() {
       {
         threshold: 1,
         rootMargin: `-${offsetTop}px 0px 0px 0px`,
-      },
+      }
     );
 
     const siblings = new Map();

@@ -57,13 +57,10 @@ export default function CountryChart() {
   };
   const transformAnalyticsData = (analyticsData) => {
     const transformedData = [['Country', 'Clicks']];
-    Object.entries(analyticsData.countryCode).forEach(
-      ([countryCode, clicks]) => {
-        const countryName =
-          COUNTRIES[countryCode as string] || (countryCode as any);
-        transformedData.push([countryName, clicks]);
-      },
-    );
+    Object.entries(analyticsData.countryCode).forEach(([countryCode, clicks]) => {
+      const countryName = COUNTRIES[countryCode as string] || (countryCode as any);
+      transformedData.push([countryName, clicks]);
+    });
     return transformedData;
   };
 
@@ -76,10 +73,7 @@ export default function CountryChart() {
           <div className="flex items-end space-x-1">
             {totalClicks || totalClicks === 0 ? (
               <NumberTooltip value={totalClicks}>
-                <CountingNumbers
-                  as="h1"
-                  className="text-3xl font-bold sm:text-4xl"
-                >
+                <CountingNumbers as="h1" className="text-3xl font-bold sm:text-4xl">
                   {totalClicks}
                 </CountingNumbers>
               </NumberTooltip>
@@ -153,16 +147,13 @@ export default function CountryChart() {
               }
               className="flex items-center space-x-1 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1 text-sm text-gray-500 transition-all hover:bg-gray-100"
             >
-              <strong className="text-gray-800">
-                {root === 'true' ? 'Domains' : 'Links'}
-              </strong>
+              <strong className="text-gray-800">{root === 'true' ? 'Domains' : 'Links'}</strong>
               <p>{message?.only}</p>
               <X className="h-4 w-4" />
             </Link>
           )}
           {VALID_ANALYTICS_FILTERS.map((filter) => {
-            if (filter === 'tagId' || filter === 'qr' || filter === 'root')
-              return null;
+            if (filter === 'tagId' || filter === 'qr' || filter === 'root') return null;
             const value = searchParams?.get(filter);
             if (!value) return null;
             return (
@@ -178,9 +169,7 @@ export default function CountryChart() {
               >
                 <p>{capitalize(filter)}</p>
                 <strong className="text-gray-800">
-                  {filter === 'country'
-                    ? COUNTRIES[value]
-                    : truncate(value, 24)}
+                  {filter === 'country' ? COUNTRIES[value] : truncate(value, 24)}
                 </strong>
                 <X className="h-4 w-4" />
               </Link>

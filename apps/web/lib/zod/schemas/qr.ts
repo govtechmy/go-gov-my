@@ -14,34 +14,32 @@ export const getQRCodeQuerySchema = z.object({
     .number()
     .optional()
     .default(600)
-    .describe(
-      'The size of the QR code in pixels. Defaults to `600` if not provided.',
-    ),
+    .describe('The size of the QR code in pixels. Defaults to `600` if not provided.'),
   level: z
     .enum(QR_LEVELS)
     .optional()
     .default('L')
     .describe(
-      'The level of error correction to use for the QR code. Defaults to `L` if not provided.',
+      'The level of error correction to use for the QR code. Defaults to `L` if not provided.'
     ),
   fgColor: z
     .string()
     .optional()
     .default(DEFAULT_FGCOLOR)
     .describe(
-      'The foreground color of the QR code in hex format. Defaults to `#000000` if not provided.',
+      'The foreground color of the QR code in hex format. Defaults to `#000000` if not provided.'
     ),
   bgColor: z
     .string()
     .optional()
     .default(DEFAULT_BGCOLOR)
     .describe(
-      'The background color of the QR code in hex format. Defaults to `#ffffff` if not provided.',
+      'The background color of the QR code in hex format. Defaults to `#ffffff` if not provided.'
     ),
   includeMargin: booleanQuerySchema
     .optional()
     .default(`${DEFAULT_INCLUDEMARGIN}`)
     .describe(
-      'Whether to include a margin around the QR code. Defaults to `false` if not provided.',
+      'Whether to include a margin around the QR code. Defaults to `false` if not provided.'
     ),
 });

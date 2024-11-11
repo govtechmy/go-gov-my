@@ -35,18 +35,14 @@ export default function BarChart() {
 
   const { data } = useSWR<{ start: Date; clicks: number }[]>(
     `${baseApiPath}/timeseries?${queryString}`,
-    fetcher,
+    fetcher
   );
 
   const { width: screenWidth } = useMediaQuery();
 
   const [CHART_WIDTH, CHART_HEIGHT] = useMemo(() => {
-    const width = screenWidth
-      ? Math.min(screenWidth * 0.8, CHART_MAX_WIDTH)
-      : CHART_MAX_WIDTH;
-    const height = screenWidth
-      ? Math.min(screenWidth * 0.5, CHART_MAX_HEIGHT)
-      : CHART_MAX_HEIGHT;
+    const width = screenWidth ? Math.min(screenWidth * 0.8, CHART_MAX_WIDTH) : CHART_MAX_WIDTH;
+    const height = screenWidth ? Math.min(screenWidth * 0.5, CHART_MAX_HEIGHT) : CHART_MAX_HEIGHT;
     return [width, height];
   }, [screenWidth]);
 
@@ -61,10 +57,7 @@ export default function BarChart() {
   const yScale = useMemo(() => {
     return scaleLinear({
       range: [CHART_HEIGHT, 0],
-      domain: [
-        0,
-        data ? rangeFormatter(Math.max(...data.map((d) => d.clicks))) : 0,
-      ],
+      domain: [0, data ? rangeFormatter(Math.max(...data.map((d) => d.clicks))) : 0],
       nice: true,
       round: true,
     });
@@ -99,16 +92,10 @@ export default function BarChart() {
           });
       }
     },
-    [data, interval],
+    [data, interval]
   );
-  const {
-    tooltipOpen,
-    tooltipLeft,
-    tooltipTop,
-    tooltipData,
-    hideTooltip,
-    showTooltip,
-  } = useTooltip<TooltipData>();
+  const { tooltipOpen, tooltipLeft, tooltipTop, tooltipData, hideTooltip, showTooltip } =
+    useTooltip<TooltipData>();
 
   const { containerRef, TooltipInPortal } = useTooltipInPortal({
     // TooltipInPortal is rendered in a separate child of <body /> and positioned
@@ -121,9 +108,7 @@ export default function BarChart() {
   let tooltipTimeout: number | undefined;
   return (
     <figure
-      className={` ${
-        data && data.length > 0 ? '' : 'items-center justify-center'
-      } my-10 flex`}
+      className={` ${data && data.length > 0 ? '' : 'items-center justify-center'} my-10 flex`}
       style={{ width: CHART_WIDTH, height: CHART_HEIGHT }}
     >
       {data && data.length > 0 ? (
@@ -165,12 +150,7 @@ export default function BarChart() {
               numTicks={6}
               top={CHART_HEIGHT - 5}
             />
-            <GridRows
-              numTicks={5}
-              scale={yScale}
-              stroke="#E1E1E1"
-              width={CHART_WIDTH}
-            />
+            <GridRows numTicks={5} scale={yScale} stroke="#E1E1E1" width={CHART_WIDTH} />
             {data.map(({ start, clicks }, idx) => {
               const barWidth = xScale.bandwidth();
               const barHeight = CHART_HEIGHT - (yScale(clicks) ?? 0);
@@ -218,11 +198,7 @@ export default function BarChart() {
             })}
           </svg>
           {tooltipOpen && tooltipData && (
-            <TooltipInPortal
-              top={tooltipTop}
-              left={tooltipLeft}
-              className={styles.tooltip}
-            >
+            <TooltipInPortal top={tooltipTop} left={tooltipLeft} className={styles.tooltip}>
               {
                 (
                   <div className="text-center">
@@ -235,12 +211,9 @@ export default function BarChart() {
                     <p className="text-xs text-gray-600">
                       {formatTimestamp(tooltipData.start)} -{' '}
                       {interval === '24h'
-                        ? new Date(tooltipData.end).toLocaleTimeString(
-                            'en-us',
-                            {
-                              hour: 'numeric',
-                            },
-                          )
+                        ? new Date(tooltipData.end).toLocaleTimeString('en-us', {
+                            hour: 'numeric',
+                          })
                         : formatTimestamp(tooltipData.end)}
                     </p>
                   </div>

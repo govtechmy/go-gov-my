@@ -30,9 +30,7 @@ export async function GET(req: NextRequest) {
     const urlObject = new URL(url);
 
     const domain = urlObject.hostname;
-    const dns = await fetchWithTimeout(
-      `https://dns.google/resolve?name=${domain}`,
-    )
+    const dns = await fetchWithTimeout(`https://dns.google/resolve?name=${domain}`)
       .then((r) => r.json())
       .catch(() => null);
 
@@ -42,9 +40,7 @@ export async function GET(req: NextRequest) {
       dns.Answer.length > 0 &&
       dns.Answer.some(
         (a: { data: string }) =>
-          a.data === 'cname.bitly.com' ||
-          a.data === '67.199.248.12' ||
-          a.data === '67.199.248.13',
+          a.data === 'cname.bitly.com' || a.data === '67.199.248.12' || a.data === '67.199.248.13'
       )
     ) {
       return NextResponse.json({

@@ -22,9 +22,7 @@ describe('GET /workspaces/{idOrSlug}', async () => {
       slug: workspace.slug,
     });
 
-    WorkspaceSchema.extend({ createdAt: z.string() })
-      .strict()
-      .parse(workspaceFetched);
+    WorkspaceSchema.extend({ createdAt: z.string() }).strict().parse(workspaceFetched);
   });
 
   test('by slug', async () => {
@@ -41,8 +39,6 @@ describe('GET /workspaces/{idOrSlug}', async () => {
       slug: workspace.slug,
     });
 
-    WorkspaceSchema.extend({ createdAt: z.string() })
-      .strict()
-      .parse(workspaceFetched);
+    WorkspaceSchema.extend({ createdAt: z.string() }).strict().parse(workspaceFetched);
   });
 });

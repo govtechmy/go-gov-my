@@ -5,10 +5,7 @@ import { DragEvent, ReactNode, useState } from 'react';
 import { toast } from 'sonner';
 import { LoadingCircle } from './icons';
 
-const acceptFileTypes: Record<
-  string,
-  { types: string[]; errorMessage?: string }
-> = {
+const acceptFileTypes: Record<string, { types: string[]; errorMessage?: string }> = {
   any: { types: [] },
   images: {
     types: ['image/png', 'image/jpeg'],
@@ -28,7 +25,7 @@ const imageUploadVariants = cva(
     defaultVariants: {
       variant: 'default',
     },
-  },
+  }
 );
 
 type FileUploadReadFileProps =
@@ -112,9 +109,7 @@ export function FileUpload({
   const [dragActive, setDragActive] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
 
-  const onFileChange = async (
-    e: React.ChangeEvent<HTMLInputElement> | DragEvent,
-  ) => {
+  const onFileChange = async (e: React.ChangeEvent<HTMLInputElement> | DragEvent) => {
     const file =
       'dataTransfer' in e
         ? e.dataTransfer.files && e.dataTransfer.files[0]
@@ -131,16 +126,13 @@ export function FileUpload({
     const acceptedTypes = acceptFileTypes[accept].types;
 
     if (acceptedTypes.length && !acceptedTypes.includes(file.type)) {
-      toast.error(
-        acceptFileTypes[accept].errorMessage ?? 'File type not supported',
-      );
+      toast.error(acceptFileTypes[accept].errorMessage ?? 'File type not supported');
       return;
     }
 
     if (readFile) {
       const reader = new FileReader();
-      reader.onload = (e) =>
-        onChange?.({ src: e.target?.result as string, file });
+      reader.onload = (e) => onChange?.({ src: e.target?.result as string, file });
       reader.readAsDataURL(file);
 
       return;
@@ -151,11 +143,7 @@ export function FileUpload({
 
   return (
     <label
-      className={cn(
-        imageUploadVariants({ variant }),
-        clickToUpload && 'cursor-pointer',
-        className,
-      )}
+      className={cn(imageUploadVariants({ variant }), clickToUpload && 'cursor-pointer', className)}
     >
       {loading && (
         <div className="absolute inset-0 z-[5] flex items-center justify-center rounded-[inherit] bg-white">
@@ -189,18 +177,17 @@ export function FileUpload({
       <div
         className={cn(
           'absolute inset-0 z-[3] flex flex-col items-center justify-center rounded-[inherit] bg-white transition-all',
-          dragActive &&
-            'cursor-copy border-2 border-black bg-gray-50 opacity-100',
+          dragActive && 'cursor-copy border-2 border-black bg-gray-50 opacity-100',
           imageSrc
             ? cn('opacity-0', showHoverOverlay && 'group-hover:opacity-100')
-            : 'group-hover:bg-gray-50',
+            : 'group-hover:bg-gray-50'
         )}
       >
         <UploadCloud
           className={cn(
             'h-7 w-7 text-gray-500 transition-all duration-75 group-hover:scale-110 group-active:scale-95',
             dragActive ? 'scale-110' : 'scale-100',
-            iconClassName,
+            iconClassName
           )}
         />
         {content !== null && (

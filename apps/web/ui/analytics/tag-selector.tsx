@@ -49,9 +49,7 @@ export default function TagSelector() {
       containerClassName="w-full"
       noItemsElement={
         <div>
-          <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">
-            {message?.no_tag}
-          </h4>
+          <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">{message?.no_tag}</h4>
           <button
             type="button"
             className="w-full rounded-md border border-black bg-black px-3 py-1.5 text-center text-sm text-white transition-all hover:bg-white hover:text-black"

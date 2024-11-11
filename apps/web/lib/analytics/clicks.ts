@@ -3,29 +3,15 @@ import { headers } from 'next/headers';
 import { prisma } from '../prisma';
 import { clickAnalyticsQuerySchema } from '../zod/schemas/analytics';
 import { INTERVAL_DATA } from './constants';
-import {
-  AnalyticFromDBProps,
-  AnalyticsEndpoints,
-  MetadataProps,
-} from './types';
+import { AnalyticFromDBProps, AnalyticsEndpoints, MetadataProps } from './types';
 
 export const getClicks = async (
   props: z.infer<typeof clickAnalyticsQuerySchema> & {
     workspaceId?: string;
     endpoint?: AnalyticsEndpoints;
-  },
+  }
 ) => {
-  let {
-    workspaceId,
-    endpoint,
-    linkId,
-    interval,
-    start,
-    end,
-    domain,
-    key,
-    tagId,
-  } = props;
+  let { workspaceId, endpoint, linkId, interval, start, end, domain, key, tagId } = props;
 
   // get all-time clicks count if:
   // 1. linkId is defined
@@ -138,8 +124,7 @@ export const getClicks = async (
   if (endpoint === 'count') {
     const totalCount = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata as MetadataProps;
-      if (metadata?.total && !isNaN(metadata?.total))
-        return (accumulator += metadata?.total);
+      if (metadata?.total && !isNaN(metadata?.total)) return (accumulator += metadata?.total);
       return accumulator;
     }, 0);
     return totalCount;
@@ -148,8 +133,7 @@ export const getClicks = async (
   if (endpoint === 'countries') {
     const countries = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata as MetadataProps;
-      if (metadata?.countryCode)
-        return sumTwoObj(accumulator, metadata?.countryCode);
+      if (metadata?.countryCode) return sumTwoObj(accumulator, metadata?.countryCode);
       return accumulator;
     }, {});
     return Object.keys(countries)
@@ -196,15 +180,11 @@ export const getClicks = async (
   }
 
   if (endpoint === 'top_urls') {
-    const top_urls = analytics.reduce<Record<string, number>>(
-      (accumulator, row) => {
-        const metadata = row.metadata as MetadataProps;
-        if ('linkUrl' in metadata)
-          return sumTwoObj(accumulator, metadata['linkUrl']);
-        return accumulator;
-      },
-      {},
-    );
+    const top_urls = analytics.reduce<Record<string, number>>((accumulator, row) => {
+      const metadata = row.metadata as MetadataProps;
+      if ('linkUrl' in metadata) return sumTwoObj(accumulator, metadata['linkUrl']);
+      return accumulator;
+    }, {});
     return Object.entries(top_urls)
       .map(([url, clicks]) => ({ url, clicks }))
       .sort((a, b) => b.clicks - a.clicks);
@@ -226,8 +206,7 @@ export const getClicks = async (
   if (endpoint === 'devices') {
     const devices = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata as MetadataProps;
-      if (metadata?.deviceType)
-        return sumTwoObj(accumulator, metadata?.deviceType);
+      if (metadata?.deviceType) return sumTwoObj(accumulator, metadata?.deviceType);
       return accumulator;
     }, {});
     return Object.keys(devices)
@@ -253,8 +232,7 @@ export const getClicks = async (
   if (endpoint === 'os') {
     const os = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata as MetadataProps;
-      if (metadata?.operatingSystem)
-        return sumTwoObj(accumulator, metadata?.operatingSystem);
+      if (metadata?.operatingSystem) return sumTwoObj(accumulator, metadata?.operatingSystem);
       return accumulator;
     }, {});
     return Object.keys(os)
@@ -274,8 +252,7 @@ export const getClicks = async (
       accumulator[row?.aggregatedDate.toString()] = metadata?.total;
       return accumulator;
     }, {});
-    if (JSON.stringify(timeseries) === '{}')
-      return [{ start: new Date(), clicks: 0 }];
+    if (JSON.stringify(timeseries) === '{}') return [{ start: new Date(), clicks: 0 }];
     return Object.keys(timeseries).map((key) => {
       return { start: key, clicks: timeseries[key] };
     });
@@ -303,9 +280,7 @@ export const getClicks = async (
       return acc;
     }, {});
 
-    const sortedAsnData = Object.values(aggregatedAsnData).sort(
-      (a, b) => b.clicks - a.clicks,
-    );
+    const sortedAsnData = Object.values(aggregatedAsnData).sort((a, b) => b.clicks - a.clicks);
 
     return sortedAsnData;
   }

@@ -9,9 +9,7 @@ export default function NoLinksPlaceholder({
   const message = messages?.link;
   return (
     <div className="mb-12 flex flex-col items-center justify-center rounded-md border border-gray-200 bg-white py-12">
-      <h2 className="z-10 text-xl font-semibold text-gray-700">
-        {message?.no_link}
-      </h2>
+      <h2 className="z-10 text-xl font-semibold text-gray-700">{message?.no_link}</h2>
       <img
         // src="/_static/illustrations/cat-shot.svg"
         src="/_static/illustrations/empty-box.png"

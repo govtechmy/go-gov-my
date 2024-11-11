@@ -73,10 +73,7 @@ export async function POST(req: NextRequest) {
   // Add authentication check at the start
   const authToken = req.headers.get('x-request-token');
   if (!authToken || !verifyRequestToken(authToken)) {
-    return NextResponse.json(
-      { message: 'Missing or invalid request token' },
-      { status: 401 },
-    );
+    return NextResponse.json({ message: 'Missing or invalid request token' }, { status: 401 });
   }
 
   try {
@@ -88,16 +85,14 @@ export async function POST(req: NextRequest) {
         {
           message: 'Invalid payload',
         },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
     try {
       // Add protocol if it doesn't exist
       const urlWithProtocol =
-        url.startsWith('http://') || url.startsWith('https://')
-          ? url
-          : `https://${url}`;
+        url.startsWith('http://') || url.startsWith('https://') ? url : `https://${url}`;
 
       const urlObj = new URL(urlWithProtocol);
       const domain = urlObj.hostname;
@@ -116,7 +111,7 @@ export async function POST(req: NextRequest) {
             redirectUrl: null,
             shortUrl: null,
           } as LinkCheckerResponse,
-          { status: 200 },
+          { status: 200 }
         );
       }
 
@@ -132,7 +127,7 @@ export async function POST(req: NextRequest) {
             redirectUrl: null,
             shortUrl: null,
           } as LinkCheckerResponse,
-          { status: 200 },
+          { status: 200 }
         );
       }
 
@@ -146,14 +141,12 @@ export async function POST(req: NextRequest) {
             redirectUrl: null,
             shortUrl: null,
           } as LinkCheckerResponse,
-          { status: 200 },
+          { status: 200 }
         );
       }
 
       const now = new Date();
-      const isExpired = link!.expiresAt
-        ? new Date(link!.expiresAt) < now
-        : false;
+      const isExpired = link!.expiresAt ? new Date(link!.expiresAt) < now : false;
 
       const response: LinkCheckerResponse = {
         isValid: true,
@@ -165,14 +158,9 @@ export async function POST(req: NextRequest) {
               logo: link!.user.agency.logo,
             }
           : null,
-        validUntil: link!.expiresAt
-          ? new Date(link!.expiresAt).toISOString()
-          : null,
+        validUntil: link!.expiresAt ? new Date(link!.expiresAt).toISOString() : null,
         redirectUrl: isExpired ? link!.expiredUrl || null : link!.url,
-        shortUrl:
-          url.startsWith('http://') || url.startsWith('https://')
-            ? url
-            : `https://${url}`,
+        shortUrl: url.startsWith('http://') || url.startsWith('https://') ? url : `https://${url}`,
       };
 
       return NextResponse.json(response, { status: 200 });
@@ -186,14 +174,11 @@ export async function POST(req: NextRequest) {
           redirectUrl: null,
           shortUrl: null,
         } as LinkCheckerResponse,
-        { status: 200 },
+        { status: 200 }
       );
     }
   } catch (error) {
     console.error('Link checker error:', error);
-    return NextResponse.json(
-      { message: 'Internal server error' },
-      { status: 500 },
-    );
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 }

@@ -24,5 +24,5 @@ export const POST = withWorkspace(
   },
   {
     requiredRole: ['owner'],
-  },
+  }
 );

@@ -33,7 +33,7 @@ export const POST = logRequestMetrics(
             tags: true,
           },
         });
-      }),
+      })
     ).then((links) => links.filter((link) => link !== null));
 
     if (unclaimedLinks.length === 0) {
@@ -47,7 +47,7 @@ export const POST = logRequestMetrics(
           limit: workspace.linksLimit,
           type: 'links',
         }),
-        { status: 403 },
+        { status: 403 }
       );
     }
 
@@ -70,10 +70,10 @@ export const POST = logRequestMetrics(
           userId: session.user.id,
           projectId: workspace.id,
           publicStats: false,
-        })),
+        }))
       ),
     ]);
 
     return NextResponse.json(response);
-  }),
+  })
 );

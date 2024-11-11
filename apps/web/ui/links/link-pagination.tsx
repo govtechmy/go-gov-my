@@ -14,9 +14,7 @@ export default function LinkPagination() {
   const { data: count } = useLinksCount();
 
   const paginatedCount = Math.ceil(count / PAGINATION_LIMIT);
-  const paginationArray = !isNaN(paginatedCount)
-    ? Array.from(Array(paginatedCount).keys())
-    : [];
+  const paginationArray = !isNaN(paginatedCount) ? Array.from(Array(paginatedCount).keys()) : [];
 
   return (
     <div className="sticky bottom-0 mt-4 flex h-20 scale-[1.02] flex-col items-center justify-center space-y-2 rounded-t-md border border-gray-200 bg-white shadow-lg">
@@ -82,10 +80,8 @@ export default function LinkPagination() {
         )}
       </div>
       <p className="text-sm text-gray-500">
-        {messages?.dashboard?.showing}{' '}
-        {(currentPage - 1) * PAGINATION_LIMIT + 1} -{' '}
-        {Math.min(currentPage * PAGINATION_LIMIT, count)}{' '}
-        {messages?.dashboard?.of}{' '}
+        {messages?.dashboard?.showing} {(currentPage - 1) * PAGINATION_LIMIT + 1} -{' '}
+        {Math.min(currentPage * PAGINATION_LIMIT, count)} {messages?.dashboard?.of}{' '}
         <NumberTooltip value={count} unit="links">
           <span>{nFormatter(count)}</span>
         </NumberTooltip>{' '}

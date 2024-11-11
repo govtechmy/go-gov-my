@@ -13,14 +13,13 @@ const badgeVariants = cva(
         black: 'border-black bg-black text-white',
         gray: 'border-gray-200 bg-gray-100 text-gray-800',
         neutral: 'border-gray-400 text-gray-500',
-        rainbow:
-          'bg-gradient-to-r from-violet-600 to-pink-600 text-white border-transparent',
+        rainbow: 'bg-gradient-to-r from-violet-600 to-pink-600 text-white border-transparent',
       },
     },
     defaultVariants: {
       variant: 'neutral',
     },
-  },
+  }
 );
 
 interface BadgeProps
@@ -28,9 +27,7 @@ interface BadgeProps
     VariantProps<typeof badgeVariants> {}
 
 function Badge({ className, variant, ...props }: BadgeProps) {
-  return (
-    <span className={cn(badgeVariants({ variant }), className)} {...props} />
-  );
+  return <span className={cn(badgeVariants({ variant }), className)} {...props} />;
 }
 
 export { Badge, badgeVariants };

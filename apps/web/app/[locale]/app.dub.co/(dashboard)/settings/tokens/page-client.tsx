@@ -12,11 +12,7 @@ import { toast } from 'sonner';
 import useSWR from 'swr';
 
 export default function TokensPageClient() {
-  const {
-    data: tokens,
-    mutate,
-    isLoading,
-  } = useSWR<Token[]>('/api/user/tokens', fetcher);
+  const { data: tokens, mutate, isLoading } = useSWR<Token[]>('/api/user/tokens', fetcher);
   const { messages, locale } = useIntlClientHook();
   const message = messages?.tokens;
 
@@ -114,10 +110,7 @@ const TokenRow = (token: Token) => {
           </div>
         </div>
         <div className="font-mono text-sm">{token.partialKey}</div>
-        <div
-          className="text-center text-sm text-gray-500"
-          suppressHydrationWarning
-        >
+        <div className="text-center text-sm text-gray-500" suppressHydrationWarning>
           {timeAgo(token.lastUsed)}
         </div>
         <Popover
@@ -130,10 +123,7 @@ const TokenRow = (token: Token) => {
                 }}
                 className="rounded-md p-2 text-left text-sm font-medium text-red-600 transition-all duration-75 hover:bg-red-600 hover:text-white"
               >
-                <IconMenu
-                  text={message?.delete_api_key}
-                  icon={<Trash className="h-4 w-4" />}
-                />
+                <IconMenu text={message?.delete_api_key} icon={<Trash className="h-4 w-4" />} />
               </button>
             </div>
           }

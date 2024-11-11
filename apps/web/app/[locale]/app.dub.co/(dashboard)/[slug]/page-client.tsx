@@ -100,12 +100,10 @@ export default function WorkspaceLinksClient() {
   return (
     <>
       <AddEditLinkModal />
-      <div className="flex h-36 items-center border-b border-gray-200 bg-white">
-        <MaxWidthWrapper>
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl text-gray-600">
-              {messages?.dashboard?.Links}
-            </h1>
+      <div className="flex flex-col border-b border-gray-200 bg-white py-4 shadow-[inset_0_-1px_0_0_rgba(0,0,0,0.1)]">
+        <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl">
+          <div className="flex items-center justify-between mx-0">
+            <h1 className="text-2xl text-gray-600">{messages?.dashboard?.Links}</h1>
             <div className="flex gap-2">
               <div>
                 <AddEditLinkButton />

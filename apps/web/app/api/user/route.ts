@@ -16,10 +16,7 @@ export const GET = logRequestMetrics(
       },
     });
 
-    const migratedWorkspace = await redis.hget(
-      'migrated_links_users',
-      session.user.id,
-    );
+    const migratedWorkspace = await redis.hget('migrated_links_users', session.user.id);
 
     if (migratedWorkspace) {
       await redis.hdel('migrated_links_users', session.user.id);
@@ -29,7 +26,7 @@ export const GET = logRequestMetrics(
       ...user,
       migratedWorkspace,
     });
-  }),
+  })
 );
 
 const updateUserSchema = z.object({
@@ -44,10 +41,7 @@ export const PUT = logRequestMetrics(
     let { name, image } = await updateUserSchema.parseAsync(await req.json());
     try {
       if (image) {
-        const { url } = await storage.upload(
-          `avatars/${session.user.id}`,
-          image,
-        );
+        const { url } = await storage.upload(`avatars/${session.user.id}`, image);
         image = url;
       }
       const response = await prisma.user.update({
@@ -69,12 +63,12 @@ export const PUT = logRequestMetrics(
               message: 'Email is already in use.',
             },
           },
-          { status: 422 },
+          { status: 422 }
         );
       }
       return NextResponse.json({ error }, { status: 500 });
     }
-  }),
+  })
 );
 
 // DELETE /api/user – delete a specific user
@@ -89,7 +83,7 @@ export const DELETE = logRequestMetrics(
     if (userIsOwnerOfWorkspaces.length > 0) {
       return new Response(
         'You must transfer ownership of your workspaces or delete them before you can delete your account.',
-        { status: 422 },
+        { status: 422 }
       );
     } else {
       const user = await prisma.user.delete({
@@ -104,5 +98,5 @@ export const DELETE = logRequestMetrics(
       ]);
       return NextResponse.json(response);
     }
-  }),
+  })
 );

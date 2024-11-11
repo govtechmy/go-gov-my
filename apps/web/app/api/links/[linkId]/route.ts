@@ -1,10 +1,5 @@
 import { DubApiError, ErrorCodes } from '@/lib/api/errors';
-import {
-  deleteLink,
-  processLink,
-  transformLink,
-  updateLink,
-} from '@/lib/api/links';
+import { deleteLink, processLink, transformLink, updateLink } from '@/lib/api/links';
 import { parseRequestBody } from '@/lib/api/utils';
 import { withWorkspace } from '@/lib/auth';
 import { logRequestMetrics } from '@/lib/decorator/logRequestMetrics';
@@ -47,7 +42,7 @@ export const GET = logRequestMetrics(
     });
 
     return NextResponse.json(response, { headers });
-  }),
+  })
 );
 
 // PATCH /api/links/[linkId] – update a link
@@ -66,10 +61,7 @@ export const PATCH = logRequestMetrics(
     // Add body onto existing link but maintain NewLinkProps form for processLink
     const updatedLink = {
       ...link,
-      expiresAt:
-        link.expiresAt instanceof Date
-          ? link.expiresAt.toISOString()
-          : link.expiresAt,
+      expiresAt: link.expiresAt instanceof Date ? link.expiresAt.toISOString() : link.expiresAt,
       geo: link.geo as NewLinkProps['geo'],
       ...body,
     };
@@ -131,7 +123,7 @@ export const PATCH = logRequestMetrics(
         message: error.message,
       });
     }
-  }),
+  })
 );
 
 // backwards compatibility
@@ -147,7 +139,7 @@ export const DELETE = logRequestMetrics(
       { id: link!.id },
       {
         headers,
-      },
+      }
     );
-  }),
+  })
 );

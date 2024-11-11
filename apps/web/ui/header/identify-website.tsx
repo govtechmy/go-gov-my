@@ -5,161 +5,79 @@ import React, { useState } from 'react';
 import { cn } from './cn';
 import Collapse from './layout';
 import MalaysiaFlag from './malaysia-flag';
+import { poppins, inter } from '@/styles/fonts'; // Add this import
+import ChevronDown from '../icons/chevron';
+import FlagMY from '../icons/flag-my';
+import GovMY from '../icons/govmy';
+import EncryptedLock from '../icons/lock';
+import SolidLock from '../icons/solid-lock';
 
-const IdentifyWebsite: React.FC = () => {
+interface IdentifyWebsiteProps {
+  isOpen: boolean;
+  onOpenChange: (isOpen: boolean) => void;
+}
+
+const IdentifyWebsite: React.FC<IdentifyWebsiteProps> = ({ isOpen, onOpenChange }) => {
   const { messages, locale } = useIntlClientHook();
   const message = messages?.masthead;
-  const [open, setOpen] = useState(false);
 
   return (
-    <>
-      <div
-        className={cn(
-          'z-[99]',
-          open
-            ? 'from-washed-100 to-outline-200 bg-gradient-to-b from-[84.74%] to-100%'
-            : 'bg-washed-100',
-        )}
-        data-nosnippet
-      >
-        <div className="container">
-          <button className="w-full" onClick={() => setOpen(!open)}>
-            <div className="text-brand-700 ml-2 flex flex-wrap items-center gap-1.5 py-4 text-sm/4 max-sm:justify-between sm:py-1">
+    <div className={inter.className}>
+      <div className="relative">
+        <div className="px-4 lg:px-0">
+          <button
+            className="h-[2.25rem] w-full md:h-[1.75rem]"
+            onClick={() => onOpenChange(!isOpen)}
+          >
+            <div className="flex flex-wrap items-center gap-1.5 text-sm/4 text-blue-700 max-sm:justify-between sm:py-1">
               <div className="flex items-center gap-1.5">
-                <div className="size-4 sm:size-5">
-                  <MalaysiaFlag />
-                </div>
-                <span className="text-black-700">
+                <FlagMY className="h-[1rem] w-[2rem]" />
+                <span className={cn('text-gray-700', inter.className)}>
                   {message?.masthead_title}
                 </span>
               </div>
-              <div className="max-sm:bg-outline-200 flex items-center gap-0.5 max-sm:rounded-md max-sm:px-1">
-                <span className="hidden tracking-[-0.01em] text-blue-600 sm:block">
+              <div className="flex items-center gap-0.5 max-sm:rounded-md max-sm:bg-outline-200 max-sm:px-1">
+                <span className="hidden tracking-[-0.01em] sm:block">
                   {message?.masthead_subtitle}
                 </span>
-                <div
-                  className={cn('size-4 transition', open ? 'rotate-180' : '')}
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M5 8L10 13L15 8"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
+                <ChevronDown className={cn('size-4 transition', isOpen ? 'rotate-180' : '')} />
               </div>
             </div>
           </button>
-          <Collapse isOpen={open}>
-            <div className="gap-4.5 pt-4.5 grid grid-cols-1 px-2 pb-6 sm:grid-cols-2 sm:gap-6 sm:pb-8 sm:pt-6">
-              <span className="text-brand-700 static pb-5 text-sm text-blue-600 sm:hidden">
+          <Collapse isOpen={isOpen}>
+            <div className="grid grid-cols-1 gap-6 xs:pt-0 xs:pb-6 sm:grid-cols-2 sm:gap-6 sm:pb-8 sm:pt-6">
+              <span className="text-base font-medium text-blue-700 sm:hidden">
                 {message?.masthead_subtitle}
               </span>
-              <div className="flex gap-3">
-                <div className="text-dim-500 shrink-0">
-                  <svg
-                    width="25"
-                    height="25"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12 9.25H8M12 9.25H15.5M12 9.25L12.1325 9.1617C13.4102 8.30987 13.291 6.3955 11.9175 5.70874L11.0963 5.29814C10.7092 5.10461 10.3954 4.79077 10.2019 4.40372L10 4M8 9.25H4.5M8 9.25L7.86754 9.1617C6.58981 8.30987 6.70899 6.3955 8.08252 5.70874L8.90372 5.29814C9.29077 5.10461 9.60461 4.79077 9.79814 4.40372L10 4M10 4V3.25M10 3.25V2.25L12.5 2.75L10 3.25Z"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M1.75 17.75H18.25"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M3 15.25V12.25M5.5 15.25V12.25M14.5 15.25V12.25M17 12.25V15.25M8 15.25V13.5C8 12.3954 8.89543 11.5 10 11.5C11.1046 11.5 12 12.3954 12 13.5V15.25"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
-                <div className="space-y-1.5">
-                  <p className="font-medium max-sm:text-sm">
-                    {message?.masthead_official_site_title}
-                    <span className="text-bold strong">
-                      {message?.masthead_official_site_desc_domain}
-                    </span>
+
+              <div className="flex gap-4">
+                <GovMY className="size-6 shrink-0 text-dim-500" />
+                <div className="space-y-2">
+                  <p className="text-base font-semibold text-gray-900">
+                    {message?.masthead_official_site_title}{' '}
+                    {message?.masthead_official_site_desc_domain}
                   </p>
-                  <p className="text-black-700 text-balance max-w-prose text-sm">
+                  <p className="text-[15px] leading-[22px] text-gray-600">
                     {message?.masthead_official_site_desc_1}
                     <span className="font-semibold">
+                      {' '}
                       {message?.masthead_official_site_desc_domain}
                     </span>
                     {message?.masthead_official_site_desc_2}
                   </p>
                 </div>
               </div>
-              <div className="flex gap-3">
-                <div className="text-dim-500 shrink-0">
-                  <svg
-                    width="25"
-                    height="25"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M5.75 8.5V8.3427C5.75 6.78147 5.65607 5.04125 6.74646 3.9239C7.36829 3.2867 8.3745 2.75 10 2.75C11.6255 2.75 12.6317 3.2867 13.2535 3.9239C14.3439 5.04125 14.25 6.78147 14.25 8.3427V8.5M3.75 9.75C3.75 9.1977 4.19772 8.75 4.75 8.75H15.25C15.8023 8.75 16.25 9.1977 16.25 9.75V15.25C16.25 16.3546 15.3546 17.25 14.25 17.25H5.75C4.64543 17.25 3.75 16.3546 3.75 15.25V9.75Z"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </div>
-                <div className="space-y-1.5">
-                  <p className="font-medium max-sm:text-sm">
-                    {message?.masthead_ssl_title}
-                    <span className="text-bold text-green-600"> HTTPS</span>
-                  </p>
-                  <div className="text-black-700 text-balance max-w-prose text-sm">
-                    {message?.masthead_ssl_desc_1}&nbsp;&nbsp;&nbsp;
-                    <span className="size-3.5 -ml-[3px] mb-0.5 mr-px inline-block text-green-600">
-                      <svg
-                        width="12"
-                        height="14"
-                        viewBox="0 0 12 14"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M1 6.6C1 6.15816 1.35818 5.8 1.8 5.8H10.2C10.6418 5.8 11 6.15816 11 6.6V11C11 11.8837 10.2837 12.6 9.4 12.6H2.6C1.71634 12.6 1 11.8837 1 11V6.6Z"
-                          fill="currentColor"
-                        />
-                        <path
-                          d="M2.6 5.6V5.47416C2.6 4.22518 2.52486 2.833 3.39717 1.93912C3.89463 1.42936 4.6996 1 6 1C7.3004 1 8.10536 1.42936 8.6028 1.93912C9.47512 2.833 9.4 4.22518 9.4 5.47416V5.6M1 6.6C1 6.15816 1.35818 5.8 1.8 5.8H10.2C10.6418 5.8 11 6.15816 11 6.6V11C11 11.8837 10.2837 12.6 9.4 12.6H2.6C1.71634 12.6 1 11.8837 1 11V6.6Z"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
-                    &nbsp; {message?.masthead_ssl_or}
-                    <span className="font-semibold"> https:// </span>
+
+              <div className="flex gap-4">
+                <EncryptedLock className="size-6 shrink-0 text-dim-500" />
+                <div className="space-y-2">
+                  <div className="text-base font-semibold text-gray-900">
+                    {message?.masthead_ssl_title} HTTPS
+                  </div>
+                  <div className="text-[15px] leading-[22px] text-gray-600">
+                    {message?.masthead_ssl_desc_1}{' '}
+                    <SolidLock className="mb-0.5 mr-px inline size-3.5" />{' '}
+                    {message?.masthead_ssl_or} <span className="font-semibold">https://</span>{' '}
                     {message?.masthead_ssl_desc_2}
                   </div>
                 </div>
@@ -168,7 +86,7 @@ const IdentifyWebsite: React.FC = () => {
           </Collapse>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

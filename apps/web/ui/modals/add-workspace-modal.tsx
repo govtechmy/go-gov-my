@@ -1,13 +1,6 @@
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { AlertCircleFill } from '@/ui/shared/icons';
-import {
-  Button,
-  InfoTooltip,
-  Logo,
-  Modal,
-  useMediaQuery,
-  useRouterStuff,
-} from '@dub/ui';
+import { Button, InfoTooltip, Logo, Modal, useMediaQuery, useRouterStuff } from '@dub/ui';
 import { fetcher, generateDomainFromName } from '@dub/utils';
 import slugify from '@sindresorhus/slugify';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -70,8 +63,7 @@ function AddWorkspaceModalHelper({
     }));
   }, [name]);
 
-  const welcomeFlow =
-    pathname === '/welcome' || pathname === `/${locale}/welcome`;
+  const welcomeFlow = pathname === '/welcome' || pathname === `/${locale}/welcome`;
 
   const searchParams = useSearchParams();
   const { queryParams } = useRouterStuff();
@@ -95,9 +87,7 @@ function AddWorkspaceModalHelper({
     >
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <Logo />
-        <h3 className="text-lg font-medium">
-          {messages?.workspace?.create_title}
-        </h3>
+        <h3 className="text-lg font-medium">{messages?.workspace?.create_title}</h3>
         <a
           href="https://github.com/govtechmy/go-gov-my/discussions"
           target="_blank"
@@ -145,9 +135,7 @@ function AddWorkspaceModalHelper({
       >
         <div>
           <label htmlFor="name" className="flex items-center space-x-2">
-            <p className="block text-sm font-medium text-gray-700">
-              {messages?.workspace?.name}
-            </p>
+            <p className="block text-sm font-medium text-gray-700">{messages?.workspace?.name}</p>
             <InfoTooltip
               content={`This is the name of your workspace on ${process.env.NEXT_PUBLIC_APP_NAME}.`}
             />
@@ -173,9 +161,7 @@ function AddWorkspaceModalHelper({
 
         <div>
           <label htmlFor="slug" className="flex items-center space-x-2">
-            <p className="block text-sm font-medium text-gray-700">
-              {messages?.workspace?.slug}
-            </p>
+            <p className="block text-sm font-medium text-gray-700">{messages?.workspace?.slug}</p>
             <InfoTooltip
               content={`${messages?.workspace?.tooltip}${process.env.NEXT_PUBLIC_APP_NAME}.`}
             />
@@ -208,10 +194,7 @@ function AddWorkspaceModalHelper({
             />
             {slugError && (
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                <AlertCircleFill
-                  className="h-5 w-5 text-red-500"
-                  aria-hidden="true"
-                />
+                <AlertCircleFill className="h-5 w-5 text-red-500" aria-hidden="true" />
               </div>
             )}
           </div>
@@ -246,6 +229,6 @@ export function useAddWorkspaceModal() {
 
   return useMemo(
     () => ({ setShowAddWorkspaceModal, AddWorkspaceModal }),
-    [setShowAddWorkspaceModal, AddWorkspaceModal],
+    [setShowAddWorkspaceModal, AddWorkspaceModal]
   );
 }

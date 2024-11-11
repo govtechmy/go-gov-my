@@ -13,7 +13,7 @@ export const detectBot = (req: NextRequest) => {
      * - MetaInspector is for https://metatags.io/
      */
     return /bot|chatgpt|facebookexternalhit|WhatsApp|google|baidu|bing|msn|duckduckbot|teoma|slurp|yandex|MetaInspector/i.test(
-      ua,
+      ua
     );
   }
   return false;

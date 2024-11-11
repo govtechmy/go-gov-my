@@ -4,5 +4,5 @@ import path from 'path';
 
 fs.writeFileSync(
   path.join(__dirname, '../../docs/openapi.json'),
-  JSON.stringify(document, null, 2),
+  JSON.stringify(document, null, 2)
 );

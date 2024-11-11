@@ -2,13 +2,7 @@ import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import useWorkspace from '@/lib/swr/use-workspace';
 import { Button, CopyButton, Logo, Modal } from '@dub/ui';
 import { APP_DOMAIN } from '@dub/utils';
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 
 function InviteCodeModal({
   showInviteCodeModal,
@@ -29,16 +23,11 @@ function InviteCodeModal({
   const [resetting, setResetting] = useState(false);
 
   return (
-    <Modal
-      showModal={showInviteCodeModal}
-      setShowModal={setShowInviteCodeModal}
-    >
+    <Modal showModal={showInviteCodeModal} setShowModal={setShowInviteCodeModal}>
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <Logo />
         <h3 className="text-lg font-medium">{message?.invite_link}</h3>
-        <p className="text-center text-sm text-gray-500">
-          {message?.invite_link_desc}
-        </p>
+        <p className="text-center text-sm text-gray-500">{message?.invite_link_desc}</p>
       </div>
 
       <div className="flex flex-col space-y-3 bg-gray-50 px-4 py-8 text-left sm:px-16">
@@ -84,6 +73,6 @@ export function useInviteCodeModal() {
       setShowInviteCodeModal,
       InviteCodeModal: InviteCodeModalCallback,
     }),
-    [setShowInviteCodeModal, InviteCodeModalCallback],
+    [setShowInviteCodeModal, InviteCodeModalCallback]
   );
 }

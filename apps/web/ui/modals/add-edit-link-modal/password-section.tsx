@@ -56,10 +56,7 @@ export default function PasswordSection({
         />
       </div>
       {enabled && (
-        <motion.div
-          className="relative mt-3 rounded-md shadow-sm"
-          {...FADE_IN_ANIMATION_SETTINGS}
-        >
+        <motion.div className="relative mt-3 rounded-md shadow-sm" {...FADE_IN_ANIMATION_SETTINGS}>
           <input
             name="password"
             id="password"
@@ -88,8 +85,7 @@ export default function PasswordSection({
       )}
       {passwordEnabledAt && (
         <div className="mt-3 text-xs italic">
-          Last updated:{' '}
-          {new Date(passwordEnabledAt).toLocaleDateString('en-US')}
+          Last updated: {new Date(passwordEnabledAt).toLocaleDateString('en-US')}
         </div>
       )}
     </div>

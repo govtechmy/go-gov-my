@@ -3,10 +3,7 @@ import { withSession } from '@/lib/auth';
 import { logRequestMetrics } from '@/lib/decorator/logRequestMetrics';
 import { prisma } from '@/lib/prisma';
 import { checkIfUserExists } from '@/lib/userinfos';
-import {
-  WorkspaceSchema,
-  createWorkspaceSchema,
-} from '@/lib/zod/schemas/workspaces';
+import { WorkspaceSchema, createWorkspaceSchema } from '@/lib/zod/schemas/workspaces';
 import { nanoid } from '@dub/utils';
 import { Prisma } from '@prisma/client';
 import { NextResponse } from 'next/server';
@@ -68,17 +65,13 @@ export const GET = logRequestMetrics(
     });
 
     return NextResponse.json(
-      projects.map((project) =>
-        WorkspaceSchema.parse({ ...project, id: `ws_${project.id}` }),
-      ),
+      projects.map((project) => WorkspaceSchema.parse({ ...project, id: `ws_${project.id}` }))
     );
-  }),
+  })
 );
 
 export const POST = withSession(async ({ req, session }) => {
-  const { name, slug } = await createWorkspaceSchema.parseAsync(
-    await req.json(),
-  );
+  const { name, slug } = await createWorkspaceSchema.parseAsync(await req.json());
 
   const userExists = await checkIfUserExists(session.user.id);
 

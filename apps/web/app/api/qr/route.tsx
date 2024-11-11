@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
       {
         width: size,
         height: size,
-      },
+      }
     );
   } catch (error) {
     return handleAndReturnErrorResponse(error);

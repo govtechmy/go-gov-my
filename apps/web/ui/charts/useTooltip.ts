@@ -1,18 +1,8 @@
 import { localPoint } from '@visx/event';
-import {
-  TooltipWithBounds,
-  useTooltipInPortal,
-  useTooltip as useVisxTooltip,
-} from '@visx/tooltip';
+import { TooltipWithBounds, useTooltipInPortal, useTooltip as useVisxTooltip } from '@visx/tooltip';
 import { bisector } from 'd3-array';
 import { useCallback } from 'react';
-import {
-  ChartContext,
-  ChartTooltipContext,
-  Datum,
-  Series,
-  TimeSeriesDatum,
-} from './types';
+import { ChartContext, ChartTooltipContext, Datum, Series, TimeSeriesDatum } from './types';
 
 const bisectDate = bisector<Datum, Date>((d) => new Date(d.date)).left;
 
@@ -42,11 +32,7 @@ export function useTooltip<T extends Datum>({
   const visxTooltip = useVisxTooltip<TimeSeriesDatum<T>>();
 
   const handleTooltip = useCallback(
-    (
-      event:
-        | React.TouchEvent<SVGRectElement>
-        | React.MouseEvent<SVGRectElement>,
-    ) => {
+    (event: React.TouchEvent<SVGRectElement> | React.MouseEvent<SVGRectElement>) => {
       const lp = localPoint(event) || { x: 0 };
       const x = lp.x - margin.left;
       const x0 = xScale.invert(x);
@@ -55,25 +41,18 @@ export function useTooltip<T extends Datum>({
       const d1 = data[index];
       let d = d0;
       if (d1?.date) {
-        d =
-          x0.valueOf() - d0.date.valueOf() > d1.date.valueOf() - x0.valueOf()
-            ? d1
-            : d0;
+        d = x0.valueOf() - d0.date.valueOf() > d1.date.valueOf() - x0.valueOf() ? d1 : d0;
       }
       visxTooltip.showTooltip({
         tooltipData: d,
         tooltipLeft: snapToX ? xScale(d.date) : x,
-        tooltipTop: snapToY
-          ? yScale(series.find((s) => s.id === seriesId)!.valueAccessor(d))
-          : 0,
+        tooltipTop: snapToY ? yScale(series.find((s) => s.id === seriesId)!.valueAccessor(d)) : 0,
       });
     },
-    [seriesId, data, xScale, yScale, series, visxTooltip.showTooltip],
+    [seriesId, data, xScale, yScale, series, visxTooltip.showTooltip]
   );
 
-  const TooltipWrapper = renderInPortal
-    ? visxTooltipInPortal.TooltipInPortal
-    : TooltipWithBounds;
+  const TooltipWrapper = renderInPortal ? visxTooltipInPortal.TooltipInPortal : TooltipWithBounds;
 
   return {
     handleTooltip,

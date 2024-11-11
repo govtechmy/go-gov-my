@@ -56,7 +56,7 @@ export const POST = withWorkspaceEdge(
                 increment: 1,
               },
             },
-          }),
+          })
         );
       }
 
@@ -65,5 +65,5 @@ export const POST = withWorkspaceEdge(
       return handleAndReturnErrorResponse(error);
     }
   },
-  { needNotExceededAI: true },
+  { needNotExceededAI: true }
 );

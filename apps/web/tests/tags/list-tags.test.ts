@@ -32,7 +32,7 @@ test('GET /tags', async (ctx) => {
         name: tagCreated.name,
         color: tagCreated.color,
       },
-    ]),
+    ])
   );
 
   await h.deleteTag(tagCreated.id);

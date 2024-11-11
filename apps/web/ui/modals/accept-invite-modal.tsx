@@ -3,13 +3,7 @@ import useWorkspace from '@/lib/swr/use-workspace';
 import { LoadingDots, Logo, Modal } from '@dub/ui';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { mutate } from 'swr';
 
@@ -39,9 +33,7 @@ function AcceptInviteModal({
             <h3 className="text-lg font-medium">{message?.invitation}</h3>
             <p className="text-center text-sm text-gray-500">
               {message?.invited}{' '}
-              <span className="font-mono text-purple-600">
-                {slug || '......'}
-              </span>{' '}
+              <span className="font-mono text-purple-600">{slug || '......'}</span>{' '}
               {message?.workspace_on} {process.env.NEXT_PUBLIC_APP_NAME}
             </p>
           </div>
@@ -53,10 +45,7 @@ function AcceptInviteModal({
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                 }).then(async () => {
-                  await Promise.all([
-                    mutate('/api/workspaces'),
-                    mutate(`/api/workspaces/${slug}`),
-                  ]);
+                  await Promise.all([mutate('/api/workspaces'), mutate(`/api/workspaces/${slug}`)]);
                   setShowAcceptInviteModal(false);
                   toast.success('You now are a part of this workspace!');
                 });
@@ -76,12 +65,8 @@ function AcceptInviteModal({
         <>
           <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
             <Logo />
-            <h3 className="text-lg font-medium">
-              {message?.workspace_expired}
-            </h3>
-            <p className="text-center text-sm text-gray-500">
-              {message?.workspace_invalid}
-            </p>
+            <h3 className="text-lg font-medium">{message?.workspace_expired}</h3>
+            <p className="text-center text-sm text-gray-500">{message?.workspace_invalid}</p>
           </div>
           <div className="flex flex-col space-y-6 bg-gray-50 px-4 py-8 text-left sm:px-16">
             <Link
@@ -114,6 +99,6 @@ export function useAcceptInviteModal() {
       setShowAcceptInviteModal,
       AcceptInviteModal: AcceptInviteModalCallback,
     }),
-    [setShowAcceptInviteModal, AcceptInviteModalCallback],
+    [setShowAcceptInviteModal, AcceptInviteModalCallback]
   );
 }

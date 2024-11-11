@@ -59,10 +59,7 @@ export const getParamsFromURL = (url: string) => {
   }
 };
 
-export const constructURLFromUTMParams = (
-  url: string,
-  utmParams: Record<string, string>,
-) => {
+export const constructURLFromUTMParams = (url: string, utmParams: Record<string, string>) => {
   if (!url) return '';
   try {
     const newURL = new URL(url);

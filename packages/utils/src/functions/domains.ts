@@ -1,10 +1,5 @@
 import slugify from '@sindresorhus/slugify';
-import {
-  DUB_DOMAINS,
-  SECOND_LEVEL_DOMAINS,
-  SPECIAL_APEX_DOMAINS,
-  ccTLDs,
-} from '../constants';
+import { DUB_DOMAINS, SECOND_LEVEL_DOMAINS, SPECIAL_APEX_DOMAINS, ccTLDs } from '../constants';
 import { isValidUrl } from './urls';
 
 export const generateDomainFromName = (name: string) => {
@@ -21,21 +16,17 @@ export const generateDomainFromName = (name: string) => {
     return `${devowel.slice(0, -2)}.${devowel.slice(-2)}`;
   }
 
-  const shortestString = [normalizedName, devowel].reduce((a, b) =>
-    a.length < b.length ? a : b,
-  );
+  const shortestString = [normalizedName, devowel].reduce((a, b) => (a.length < b.length ? a : b));
 
   return `${shortestString}.to`;
 };
 
 // courtesy of ChatGPT: https://sharegpt.com/c/pUYXtRs
 export const validDomainRegex = new RegExp(
-  /^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/,
+  /^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/
 );
 
-export const validKeyRegex = new RegExp(
-  /^[0-9A-Za-z\u0080-\uFFFF\/\-\p{Emoji}]*$/u,
-);
+export const validKeyRegex = new RegExp(/^[0-9A-Za-z\u0080-\uFFFF\/\-\p{Emoji}]*$/u);
 
 export const validSlugRegex = new RegExp(/^[a-zA-Z0-9\-]+$/);
 
@@ -61,8 +52,7 @@ export const getApexDomain = (url: string) => {
   if (parts.length > 2) {
     if (
       // if this is a second-level TLD (e.g. co.uk, .com.ua, .org.tt), we need to return the last 3 parts
-      (SECOND_LEVEL_DOMAINS.has(parts[parts.length - 2]) &&
-        ccTLDs.has(parts[parts.length - 1])) ||
+      (SECOND_LEVEL_DOMAINS.has(parts[parts.length - 2]) && ccTLDs.has(parts[parts.length - 1])) ||
       // if it's a special subdomain for website builders (e.g. weathergpt.vercel.app/)
       SPECIAL_APEX_DOMAINS.has(parts.slice(-2).join('.'))
     ) {

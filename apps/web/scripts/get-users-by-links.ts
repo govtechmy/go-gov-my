@@ -38,7 +38,7 @@ async function main() {
           email: u.email,
           links: user._count.id,
         };
-      }),
+      })
   );
   console.table(usersWithEmails);
 }

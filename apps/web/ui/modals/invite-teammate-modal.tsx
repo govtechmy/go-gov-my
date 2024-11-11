@@ -1,13 +1,7 @@
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import useWorkspace from '@/lib/swr/use-workspace';
 import { BlurImage, Button, Logo, Modal, useMediaQuery } from '@dub/ui';
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { mutate } from 'swr';
 
@@ -26,10 +20,7 @@ function InviteTeammateModal({
   const message = messages?.people;
 
   return (
-    <Modal
-      showModal={showInviteTeammateModal}
-      setShowModal={setShowInviteTeammateModal}
-    >
+    <Modal showModal={showInviteTeammateModal} setShowModal={setShowInviteTeammateModal}>
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         {logo ? (
           <BlurImage
@@ -43,9 +34,7 @@ function InviteTeammateModal({
           <Logo />
         )}
         <h3 className="text-lg font-medium">{message?.invite_team}</h3>
-        <p className="text-center text-sm text-gray-500">
-          {message?.invite_team_desc}
-        </p>
+        <p className="text-center text-sm text-gray-500">{message?.invite_team_desc}</p>
       </div>
       <form
         onSubmit={async (e) => {
@@ -111,6 +100,6 @@ export function useInviteTeammateModal() {
       setShowInviteTeammateModal,
       InviteTeammateModal: InviteTeammateModalCallback,
     }),
-    [setShowInviteTeammateModal, InviteTeammateModalCallback],
+    [setShowInviteTeammateModal, InviteTeammateModalCallback]
   );
 }

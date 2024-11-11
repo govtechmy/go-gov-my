@@ -16,7 +16,7 @@ describe.runIf(env.CI).sequential('GET /analytics/clicks', async () => {
   const { workspaceId } = workspace;
 
   VALID_ANALYTICS_ENDPOINTS.filter(
-    (endpoint) => !DEPRECATED_ANALYTICS_ENDPOINTS.includes(endpoint),
+    (endpoint) => !DEPRECATED_ANALYTICS_ENDPOINTS.includes(endpoint)
   ).map((endpoint) => {
     test(`by ${endpoint}`, async () => {
       const { status, data } = await http.get<any[]>({
@@ -30,11 +30,7 @@ describe.runIf(env.CI).sequential('GET /analytics/clicks', async () => {
         expect(data).toBeGreaterThanOrEqual(0);
       } else {
         const parsed = z
-          .array(
-            getClickAnalyticsResponse[
-              formatAnalyticsEndpoint(endpoint, 'plural')
-            ].strict(),
-          )
+          .array(getClickAnalyticsResponse[formatAnalyticsEndpoint(endpoint, 'plural')].strict())
           .safeParse(data);
 
         expect(status).toEqual(200);
@@ -65,11 +61,7 @@ describe.runIf(env.CI).sequential('GET /analytics/clicks', async () => {
       });
 
       const parsed = z
-        .array(
-          getClickAnalyticsResponse[
-            formatAnalyticsEndpoint(endpoint, 'plural')
-          ].strict(),
-        )
+        .array(getClickAnalyticsResponse[formatAnalyticsEndpoint(endpoint, 'plural')].strict())
         .safeParse(data);
 
       expect(status).toEqual(200);

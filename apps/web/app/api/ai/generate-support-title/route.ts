@@ -24,11 +24,7 @@ export async function POST(req: NextRequest) {
     }
 
     // you can only generate a support completion 3 times per minute
-    const { success } = await ratelimit(
-      `ai-completion:${session.sub}`,
-      3,
-      '1 m',
-    );
+    const { success } = await ratelimit(`ai-completion:${session.sub}`, 3, '1 m');
     if (!success) {
       throw new DubApiError({
         code: 'rate_limit_exceeded',

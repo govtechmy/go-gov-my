@@ -22,10 +22,7 @@ interface WithSessionHandler {
 
 export const withSession =
   (handler: WithSessionHandler) =>
-  async (
-    req: Request,
-    { params = {} }: { params: Record<string, string> | undefined },
-  ) => {
+  async (req: Request, { params = {} }: { params: Record<string, string> | undefined }) => {
     try {
       let session: Session | undefined;
       let headers = {};
@@ -66,11 +63,7 @@ export const withSession =
           });
         }
 
-        const { success, limit, reset, remaining } = await ratelimit(
-          apiKey,
-          600,
-          '1 m',
-        );
+        const { success, limit, reset, remaining } = await ratelimit(apiKey, 600, '1 m');
 
         headers = {
           'Retry-After': reset.toString(),
@@ -93,7 +86,7 @@ export const withSession =
             data: {
               lastUsed: new Date(),
             },
-          }),
+          })
         );
         session = {
           user: {

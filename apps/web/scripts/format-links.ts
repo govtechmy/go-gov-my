@@ -19,8 +19,8 @@ async function main() {
         ...linkCriteria,
         skip: idx * 100000,
         take: 100000,
-      }),
-    ),
+      })
+    )
   ).then((results) => results.flat());
 
   const file = fs.createWriteStream(`links-metadata.ndjson`);
@@ -37,7 +37,7 @@ async function main() {
         url: obj.url || '',
         project_id: obj.projectId || '',
         deleted: 0,
-      }) + '\n',
+      }) + '\n'
     );
   });
 

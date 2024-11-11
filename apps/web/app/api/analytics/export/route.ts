@@ -31,10 +31,7 @@ export const GET = withWorkspace(
     const { domain, key, interval } = parsedParams;
 
     // return 403 if project is on the free plan and interval is 90d or all
-    if (
-      workspace?.plan === 'free' &&
-      (interval === 'all' || interval === '90d')
-    ) {
+    if (workspace?.plan === 'free' && (interval === 'all' || interval === '90d')) {
       throw new DubApiError({
         code: 'forbidden',
         message: 'Require higher plan',
@@ -116,7 +113,7 @@ export const GET = withWorkspace(
           const csvData = convertToCSV(response);
           zip.file(`${endpoint}.csv`, csvData);
         }
-      }),
+      })
     );
 
     const zipData = await zip.generateAsync({ type: 'nodebuffer' });
@@ -130,5 +127,5 @@ export const GET = withWorkspace(
   },
   {
     needNotExceededClicks: true,
-  },
+  }
 );

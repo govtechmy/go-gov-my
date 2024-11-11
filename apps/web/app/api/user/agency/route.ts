@@ -16,9 +16,7 @@ export const GET = logRequestMetrics(
     }
 
     const where = {
-      ...(session.user.role === 'agency_admin'
-        ? { agencyCode: session.user.agencyCode }
-        : {}),
+      ...(session.user.role === 'agency_admin' ? { agencyCode: session.user.agencyCode } : {}),
       OR: [
         { name: { contains: search, mode: 'insensitive' } },
         { email: { contains: search, mode: 'insensitive' } },
@@ -91,5 +89,5 @@ export const GET = logRequestMetrics(
       totalPages,
       currentPage: page,
     });
-  }),
+  })
 );

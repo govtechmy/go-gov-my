@@ -95,7 +95,7 @@ export default function Analytics({
           [filter]: searchParams.get(filter),
         }),
       }),
-      {},
+      {}
     );
     return new URLSearchParams({
       ...(id && { workspaceId: id }),
@@ -109,10 +109,7 @@ export default function Analytics({
     }).toString();
   }, [id, domain, key, searchParams, interval, tagId]);
 
-  const { data: totalClicks } = useSWR<number>(
-    `${baseApiPath}/count?${queryString}`,
-    fetcher,
-  );
+  const { data: totalClicks } = useSWR<number>(`${baseApiPath}/count?${queryString}`, fetcher);
 
   const isPublicStatsPage = basePath.startsWith('/stats');
 

@@ -15,14 +15,7 @@ import {
   useRouterStuff,
 } from '@dub/ui';
 import { capitalize, cn } from '@dub/utils';
-import {
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import { Dispatch, FormEvent, SetStateAction, useCallback, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { mutate } from 'swr';
 import { COLORS_LIST, randomBadgeColor } from '../links/tag-badge';
@@ -48,7 +41,7 @@ function AddEditTagModal({
       id: '',
       name: '',
       color: randomBadgeColor(),
-    },
+    }
   );
   const { id, name, color } = data;
 
@@ -57,9 +50,8 @@ function AddEditTagModal({
       saving ||
       !name ||
       !color ||
-      (props &&
-        Object.entries(props).every(([key, value]) => data[key] === value)),
-    [props, data],
+      (props && Object.entries(props).every(([key, value]) => data[key] === value)),
+    [props, data]
   );
 
   const endpoint = useMemo(
@@ -75,20 +67,15 @@ function AddEditTagModal({
             url: `/api/tags?workspaceId=${workspaceId}`,
             successMessage: message?.success_add_tag,
           },
-    [id],
+    [id]
   );
 
   return (
-    <Modal
-      showModal={showAddEditTagModal}
-      setShowModal={setShowAddEditTagModal}
-    >
+    <Modal showModal={showAddEditTagModal} setShowModal={setShowAddEditTagModal}>
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <Logo />
         <div className="flex flex-col space-y-1 text-center">
-          <h3 className="text-lg font-medium">
-            {props ? message?.edit : message?.add} tag
-          </h3>
+          <h3 className="text-lg font-medium">{props ? message?.edit : message?.add} tag</h3>
           <p className="text-sm text-gray-500">
             {message?.use_tag}{' '}
             <a
@@ -124,10 +111,9 @@ function AddEditTagModal({
                 mutate(`/api/tags?workspaceId=${workspaceId}`),
                 props
                   ? mutate(
-                      (key) =>
-                        typeof key === 'string' && key.startsWith('/api/links'),
+                      (key) => typeof key === 'string' && key.startsWith('/api/links'),
                       undefined,
-                      { revalidate: true },
+                      { revalidate: true }
                     )
                   : null,
               ]);
@@ -144,9 +130,7 @@ function AddEditTagModal({
       >
         <div>
           <label htmlFor="name" className="flex items-center space-x-2">
-            <p className="block text-sm font-medium text-gray-700">
-              {message?.tag_name}
-            </p>
+            <p className="block text-sm font-medium text-gray-700">{message?.tag_name}</p>
           </label>
           <div className="mt-2 flex rounded-md shadow-sm">
             <input
@@ -168,9 +152,7 @@ function AddEditTagModal({
 
         <div>
           <label htmlFor="name" className="flex items-center space-x-2">
-            <p className="block text-sm font-medium text-gray-700">
-              {message?.tag_colour}
-            </p>
+            <p className="block text-sm font-medium text-gray-700">{message?.tag_colour}</p>
             <InfoTooltip content={`A color to make your tag stand out.`} />
           </label>
           <RadioGroup
@@ -192,7 +174,7 @@ function AddEditTagModal({
                   className={cn(
                     'cursor-pointer whitespace-nowrap rounded-md px-2 py-0.5 text-sm capitalize ring-current peer-focus-visible:ring-offset-2',
                     css,
-                    color === colorOption && 'ring-2',
+                    color === colorOption && 'ring-2'
                   )}
                 >
                   {colorOption}
@@ -276,6 +258,6 @@ export function useAddEditTagModal({ props }: { props?: TagProps } = {}) {
       AddEditTagModal: AddEditTagModalCallback,
       AddTagButton: AddTagButtonCallback,
     }),
-    [setShowAddEditTagModal, AddEditTagModalCallback, AddTagButtonCallback],
+    [setShowAddEditTagModal, AddEditTagModalCallback, AddTagButtonCallback]
   );
 }

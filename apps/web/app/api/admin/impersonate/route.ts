@@ -69,7 +69,7 @@ export const POST = withAdmin(async ({ req }) => {
         }
         return acc;
       },
-      {} as Record<string, number>,
+      {} as Record<string, number>
     ),
     workspaces: response.projects.map(({ project }) => ({
       ...project,

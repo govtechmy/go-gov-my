@@ -145,11 +145,7 @@ export async function processLink<T extends Record<string, any>>({
           link: payload,
           error:
             'Invalid tagIds detected: ' +
-            tagIds
-              .filter(
-                (tagId) => tags.find(({ id }) => tagId === id) === undefined,
-              )
-              .join(', '),
+            tagIds.filter((tagId) => tags.find(({ id }) => tagId === id) === undefined).join(', '),
           code: 'unprocessable_entity',
         };
       }
@@ -184,10 +180,7 @@ export async function processLink<T extends Record<string, any>>({
         error:
           'Invalid tagNames detected: ' +
           tagNames
-            .filter(
-              (tagName) =>
-                tags.find(({ name }) => tagName === name) === undefined,
-            )
+            .filter((tagName) => tags.find(({ name }) => tagName === name) === undefined)
             .join(', '),
         code: 'unprocessable_entity',
       };

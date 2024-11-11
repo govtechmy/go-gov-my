@@ -9,9 +9,7 @@ export default function WorkspaceList() {
   const { workspaces, loading } = useWorkspaceListContext();
 
   if (loading) {
-    return Array.from({ length: 6 }).map((_, i) => (
-      <WorkspaceCardPlaceholder key={i} />
-    ));
+    return Array.from({ length: 6 }).map((_, i) => <WorkspaceCardPlaceholder key={i} />);
   }
 
   if (!workspaces || workspaces.length === 0) {

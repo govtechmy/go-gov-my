@@ -27,7 +27,7 @@ async function main() {
           {
             width: 1200,
             height: 630,
-          },
+          }
         );
 
         await prisma.link.update({
@@ -64,7 +64,7 @@ async function main() {
           original: truncate(link.image, 80),
         };
       }
-    }),
+    })
   ).then((res) =>
     res.map((r) => {
       if (r.status === 'fulfilled') {
@@ -72,7 +72,7 @@ async function main() {
       } else {
         return r.reason;
       }
-    }),
+    })
   );
 
   console.table(res);

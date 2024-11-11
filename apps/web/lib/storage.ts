@@ -1,8 +1,4 @@
-import {
-  DeleteObjectCommand,
-  PutObjectCommand,
-  S3Client,
-} from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { fetchWithTimeout } from '@dub/utils';
 
 interface ImageOptions {
@@ -45,7 +41,7 @@ class StorageClient {
           Body: Buffer.from(uploadBody),
           ContentType: opts?.contentType,
           ContentLength: uploadBody.byteLength,
-        }),
+        })
       );
       return {
         url: `${process.env.STORAGE_BASE_URL}/${key}`,
@@ -60,7 +56,7 @@ class StorageClient {
       new DeleteObjectCommand({
         Bucket: this.bucket,
         Key: key,
-      }),
+      })
     );
   }
 
@@ -68,7 +64,7 @@ class StorageClient {
     const base64Data = base64.replace(/^data:.+;base64,/, '');
     const paddedBase64Data = base64Data.padEnd(
       base64Data.length + ((4 - (base64Data.length % 4)) % 4),
-      '=',
+      '='
     );
 
     return Buffer.from(paddedBase64Data, 'base64');

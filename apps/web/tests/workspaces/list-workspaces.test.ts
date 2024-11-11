@@ -28,7 +28,5 @@ test('GET /workspaces', async (ctx) => {
     slug: workspace.slug,
   });
 
-  z.array(WorkspaceSchema.extend({ createdAt: z.string() }).strict()).parse(
-    workspaces,
-  );
+  z.array(WorkspaceSchema.extend({ createdAt: z.string() }).strict()).parse(workspaces);
 });

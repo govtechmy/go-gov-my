@@ -7,8 +7,7 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function WelcomePageClient() {
-  const { setShowAddWorkspaceModal, AddWorkspaceModal } =
-    useAddWorkspaceModal();
+  const { setShowAddWorkspaceModal, AddWorkspaceModal } = useAddWorkspaceModal();
 
   const searchParams = useSearchParams();
 

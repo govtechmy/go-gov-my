@@ -16,10 +16,7 @@ function sortByDateAsc(metadata: metaDataType[]): metaDataType[] {
   metadata.forEach((item) => {
     const normalizedDate = normalizeDate(item.date);
     if (uniqueData.has(normalizedDate)) {
-      uniqueData.set(
-        normalizedDate,
-        Math.max(uniqueData.get(normalizedDate)!, item.total),
-      );
+      uniqueData.set(normalizedDate, Math.max(uniqueData.get(normalizedDate)!, item.total));
     } else {
       uniqueData.set(normalizedDate, item.total);
     }
@@ -108,9 +105,7 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    const response = await fetch(
-      `${process.env.STORAGE_BASE_URL}/public/stats2.json`,
-    );
+    const response = await fetch(`${process.env.STORAGE_BASE_URL}/public/stats2.json`);
     const content = await response.json();
 
     const parsed = schema.parse(content);

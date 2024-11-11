@@ -26,9 +26,7 @@ export default async function BannedPage() {
         <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-gray-300 bg-white/30">
           <ShieldBan className="h-6 w-6 text-gray-400" />
         </div>
-        <h1 className="font-display text-5xl font-bold">
-          {message?.banned_link}
-        </h1>
+        <h1 className="font-display text-5xl font-bold">{message?.banned_link}</h1>
         <p className="text-lg text-gray-600">{message?.banned_desc}</p>
         <a
           href="https://go.gov.my"

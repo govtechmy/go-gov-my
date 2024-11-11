@@ -4,8 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { UserProps } from '../types';
 
 export default async function AppMiddleware(req: NextRequest) {
-  const { path, fullPath, locale, pathWithoutLocale, fullPathWithoutLocale } =
-    parse(req);
+  const { path, fullPath, locale, pathWithoutLocale, fullPathWithoutLocale } = parse(req);
 
   const session = (await getToken({
     req,
@@ -22,16 +21,12 @@ export default async function AppMiddleware(req: NextRequest) {
   }
 
   // if there's no session and the path isn't /login or /register, redirect to /login
-  if (
-    !session?.email &&
-    pathWithoutLocale !== '/login' &&
-    pathWithoutLocale !== '/register'
-  ) {
+  if (!session?.email && pathWithoutLocale !== '/login' && pathWithoutLocale !== '/register') {
     const response = NextResponse.redirect(
       new URL(
         `/${locale}/login${pathWithoutLocale === '/' ? '' : `?next=${encodeURIComponent(fullPathWithoutLocale)}`}`,
-        req.url,
-      ),
+        req.url
+      )
     );
     response.headers.set('NEXT_LOCALE', locale);
     return response;
@@ -46,17 +41,12 @@ export default async function AppMiddleware(req: NextRequest) {
       // here we include the root page + /new (since they're going through welcome flow already)
       (pathWithoutLocale === '/' || pathWithoutLocale === '/new')
     ) {
-      const response = NextResponse.redirect(
-        new URL(`/${locale}/welcome`, req.url),
-      );
+      const response = NextResponse.redirect(new URL(`/${locale}/welcome`, req.url));
       response.headers.set('NEXT_LOCALE', locale);
       return response;
 
       // if the path is /login or /register, redirect to "/"
-    } else if (
-      pathWithoutLocale === '/login' ||
-      pathWithoutLocale === '/register'
-    ) {
+    } else if (pathWithoutLocale === '/login' || pathWithoutLocale === '/register') {
       const response = NextResponse.redirect(new URL(`/${locale}`, req.url));
       response.headers.set('NEXT_LOCALE', locale);
       return response;
@@ -69,8 +59,8 @@ export default async function AppMiddleware(req: NextRequest) {
   return NextResponse.rewrite(
     new URL(
       `/${locale}/app.dub.co${fullPathWithoutLocale === '/' ? '' : fullPathWithoutLocale}`,
-      req.url,
+      req.url
     ),
-    { request: { headers: headers } },
+    { request: { headers: headers } }
   );
 }

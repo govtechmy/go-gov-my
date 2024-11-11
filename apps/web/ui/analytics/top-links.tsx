@@ -15,8 +15,7 @@ export default function TopLinks() {
   const { messages, locale } = useIntlClientHook();
   const message = messages?.analytics;
 
-  const { basePath, baseApiPath, queryString, domain, key } =
-    useContext(AnalyticsContext);
+  const { basePath, baseApiPath, queryString, domain, key } = useContext(AnalyticsContext);
 
   useEffect(() => {
     if (domain && key) {
@@ -62,23 +61,15 @@ export default function TopLinks() {
 
   return (
     <>
-      <Modal
-        showModal={showModal}
-        setShowModal={setShowModal}
-        className="max-w-lg"
-      >
+      <Modal showModal={showModal} setShowModal={setShowModal} className="max-w-lg">
         <div className="border-b border-gray-200 px-6 py-4">
-          <h1 className="text-lg font-semibold">
-            {tab === 'link' ? 'Links' : 'URLs'}
-          </h1>
+          <h1 className="text-lg font-semibold">{tab === 'link' ? 'Links' : 'URLs'}</h1>
         </div>
         {barList()}
       </Modal>
       <div className="scrollbar-hide relative z-0 h-[400px] border border-gray-200 bg-white px-7 py-5 sm:rounded-lg sm:border-gray-100 sm:shadow-lg">
         <div className="mb-3 flex justify-between">
-          <h1 className="text-lg font-semibold capitalize">
-            {tab === 'link' ? 'Links' : 'URLs'}
-          </h1>
+          <h1 className="text-lg font-semibold capitalize">{tab === 'link' ? 'Links' : 'URLs'}</h1>
           {domain && key ? (
             !basePath.startsWith('/stats') && (
               <Link
@@ -137,9 +128,7 @@ export default function TopLinks() {
           >
             <div className="flex items-center space-x-1 bg-white px-4 py-2">
               <Maximize className="h-4 w-4" />
-              <p className="text-xs font-semibold uppercase">
-                {message?.view_all}
-              </p>
+              <p className="text-xs font-semibold uppercase">{message?.view_all}</p>
             </div>
           </button>
         )}

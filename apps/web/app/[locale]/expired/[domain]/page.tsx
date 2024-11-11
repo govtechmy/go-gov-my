@@ -15,11 +15,7 @@ export async function generateMetadata({ params }) {
   });
 }
 
-export default async function ExpiredPage({
-  params,
-}: {
-  params: { domain: string };
-}) {
+export default async function ExpiredPage({ params }: { params: { domain: string } }) {
   const { messages } = useIntlHook();
   const message = messages?.expired;
   return (
@@ -29,9 +25,7 @@ export default async function ExpiredPage({
         <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border border-gray-300 bg-white/30">
           <TimerOff className="h-6 w-6 text-gray-400" />
         </div>
-        <h1 className="font-display text-5xl font-bold">
-          {message?.expired_link}
-        </h1>
+        <h1 className="font-display text-5xl font-bold">{message?.expired_link}</h1>
         <p className="text-lg text-gray-600">{message?.expired_desc}</p>
         <a
           href="https://go.gov.my"

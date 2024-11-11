@@ -1,12 +1,7 @@
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { LinkProps } from '@/lib/types';
 import { ProBadgeTooltip } from '@/ui/shared/pro-badge-tooltip';
-import {
-  ExpandingArrow,
-  InfoTooltip,
-  SimpleTooltipContent,
-  Switch,
-} from '@dub/ui';
+import { ExpandingArrow, InfoTooltip, SimpleTooltipContent, Switch } from '@dub/ui';
 import {
   FADE_IN_ANIMATION_SETTINGS,
   formatDateTime,
@@ -49,9 +44,7 @@ export default function ExpirationSection({
     <div className="relative border-b border-gray-200 pb-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-between space-x-2">
-          <h2 className="text-sm font-medium text-gray-900">
-            {messages?.link?.link_expiration}
-          </h2>
+          <h2 className="text-sm font-medium text-gray-900">{messages?.link?.link_expiration}</h2>
           <ProBadgeTooltip
             content={
               <SimpleTooltipContent
@@ -100,13 +93,8 @@ export default function ExpirationSection({
           </div>
           <div className="mt-4">
             <div className="flex items-center justify-between">
-              <label
-                htmlFor="expiredUrl"
-                className="flex items-center space-x-2"
-              >
-                <p className="text-sm font-medium text-gray-700">
-                  Expiration URL
-                </p>
+              <label htmlFor="expiredUrl" className="flex items-center space-x-2">
+                <p className="text-sm font-medium text-gray-700">Expiration URL</p>
                 <InfoTooltip
                   content={
                     <SimpleTooltipContent

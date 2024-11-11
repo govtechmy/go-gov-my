@@ -12,9 +12,7 @@ export default function UnsubscribeForm() {
         <Logo className="h-12 w-12" />
       </Link>
       <h1 className="font-display text-4xl font-bold">Email Preferences</h1>
-      <p className="text-lg text-gray-600">
-        Configure your email preferences for {APP_NAME}.
-      </p>
+      <p className="text-lg text-gray-600">Configure your email preferences for {APP_NAME}.</p>
       <div className="rounded-lg border border-gray-200 bg-white px-6 py-3">
         <UpdateSubscription />
       </div>

@@ -5,21 +5,8 @@ export const redis = new Redis(process.env.REDIS_URL!, {
   lazyConnect: true,
 });
 
-export async function formatRedisLink(
-  link: LinkProps,
-): Promise<RedisLinkProps> {
-  const {
-    id,
-    domain,
-    url,
-    proxy,
-    expiresAt,
-    expiredUrl,
-    ios,
-    android,
-    geo,
-    projectId,
-  } = link;
+export async function formatRedisLink(link: LinkProps): Promise<RedisLinkProps> {
+  const { id, domain, url, proxy, expiresAt, expiredUrl, ios, android, geo, projectId } = link;
 
   return {
     id,

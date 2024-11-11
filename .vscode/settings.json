@@ -11,6 +11,13 @@
       "__azurite*": true,
       "__blobstorage__": true,
       "__queuestorage__": true
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
     }
   }
   

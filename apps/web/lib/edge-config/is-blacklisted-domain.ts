@@ -23,13 +23,10 @@ export const isBlacklistedDomain = async ({
     } = await getAll(['domains', 'terms', 'whitelistedDomains']);
 
     const blacklistedTermsRegex = new RegExp(
-      blacklistedTerms
-        .map((term: string) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'))
-        .join('|'),
+      blacklistedTerms.map((term: string) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')
     );
 
-    const isBlacklisted =
-      blacklistedDomains.includes(domain) || blacklistedTermsRegex.test(domain);
+    const isBlacklisted = blacklistedDomains.includes(domain) || blacklistedTermsRegex.test(domain);
 
     if (isBlacklisted) {
       return true;

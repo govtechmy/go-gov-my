@@ -70,7 +70,7 @@ export default function Collapse({
         className={cn(
           'py-1 transition-opacity duration-500 ease-in-out motion-reduce:transition-none',
           isOpen ? 'opacity-100' : 'opacity-0',
-          className,
+          className
         )}
       >
         {children}

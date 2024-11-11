@@ -21,10 +21,7 @@ export const DELETE = logRequestMetrics(
       data: { passwordEnabledAt: null },
     });
 
-    const { 'X-Idempotency-Key': idempotencyKey } = generateIdempotencyKey(
-      link.id,
-      new Date(),
-    );
+    const { 'X-Idempotency-Key': idempotencyKey } = generateIdempotencyKey(link.id, new Date());
 
     const outboxPromise = prisma.webhookOutbox.create({
       data: {
@@ -41,5 +38,5 @@ export const DELETE = logRequestMetrics(
     waitUntil(Promise.all([outboxPromise]));
 
     return new Response();
-  }),
+  })
 );

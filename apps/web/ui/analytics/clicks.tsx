@@ -34,10 +34,7 @@ export default function Clicks() {
           <div className="flex items-end space-x-1">
             {totalClicks || totalClicks === 0 ? (
               <NumberTooltip value={totalClicks}>
-                <CountingNumbers
-                  as="h1"
-                  className="text-3xl font-bold sm:text-4xl"
-                >
+                <CountingNumbers as="h1" className="text-3xl font-bold sm:text-4xl">
                   {totalClicks}
                 </CountingNumbers>
               </NumberTooltip>
@@ -46,9 +43,7 @@ export default function Clicks() {
             )}
             <Chart className="mb-1 h-6 w-6 text-gray-600" />
           </div>
-          <p className="text-sm font-medium uppercase text-gray-600">
-            {message?.total_clicks}
-          </p>
+          <p className="text-sm font-medium uppercase text-gray-600">{message?.total_clicks}</p>
         </div>
         <div className="flex flex-wrap items-center justify-end gap-2">
           {domain &&
@@ -110,16 +105,13 @@ export default function Clicks() {
               }
               className="flex items-center space-x-1 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1 text-sm text-gray-500 transition-all hover:bg-gray-100"
             >
-              <strong className="text-gray-800">
-                {root === 'true' ? 'Domains' : 'Links'}
-              </strong>
+              <strong className="text-gray-800">{root === 'true' ? 'Domains' : 'Links'}</strong>
               <p>{message?.only}</p>
               <X className="h-4 w-4" />
             </Link>
           )}
           {VALID_ANALYTICS_FILTERS.map((filter) => {
-            if (filter === 'tagId' || filter === 'qr' || filter === 'root')
-              return null;
+            if (filter === 'tagId' || filter === 'qr' || filter === 'root') return null;
             const value = searchParams?.get(filter);
             if (!value) return null;
             return (
@@ -135,9 +127,7 @@ export default function Clicks() {
               >
                 <p>{capitalize(filter)}</p>
                 <strong className="text-gray-800">
-                  {filter === 'country'
-                    ? COUNTRIES[value]
-                    : truncate(value, 24)}
+                  {filter === 'country' ? COUNTRIES[value] : truncate(value, 24)}
                 </strong>
                 <X className="h-4 w-4" />
               </Link>

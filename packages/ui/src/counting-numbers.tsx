@@ -1,12 +1,6 @@
 import { nFormatter } from '@dub/utils';
 import { Slot } from '@radix-ui/react-slot';
-import React, {
-  ElementType,
-  ForwardedRef,
-  ReactNode,
-  useEffect,
-  useState,
-} from 'react';
+import React, { ElementType, ForwardedRef, ReactNode, useEffect, useState } from 'react';
 
 interface CountingNumbersProps {
   asChild?: boolean;
@@ -18,15 +12,8 @@ interface CountingNumbersProps {
 
 const CountingNumbers = React.forwardRef<HTMLSpanElement, CountingNumbersProps>(
   (
-    {
-      asChild,
-      className,
-      children,
-      duration = 250,
-      as: Component = 'span',
-      ...props
-    },
-    ref: ForwardedRef<any>,
+    { asChild, className, children, duration = 250, as: Component = 'span', ...props },
+    ref: ForwardedRef<any>
   ) => {
     const [displayValue, setDisplayValue] = useState(Number(children));
 
@@ -61,7 +48,7 @@ const CountingNumbers = React.forwardRef<HTMLSpanElement, CountingNumbersProps>(
         {nFormatter(displayValue)}
       </Comp>
     );
-  },
+  }
 );
 
 CountingNumbers.displayName = 'CountingNumbers';

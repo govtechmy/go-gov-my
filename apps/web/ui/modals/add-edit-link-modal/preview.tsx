@@ -50,8 +50,7 @@ export default function Preview({
   const { messages } = useIntlClientHook();
   const message = messages?.link;
 
-  const onImageChange = (image: string) =>
-    setData((prev) => ({ ...prev, image, proxy: true }));
+  const onImageChange = (image: string) => setData((prev) => ({ ...prev, image, proxy: true }));
 
   return (
     <div>
@@ -62,10 +61,7 @@ export default function Preview({
         {/* Twitter */}
         <div>
           <div className="relative mb-2">
-            <div
-              className="absolute inset-0 flex items-center"
-              aria-hidden="true"
-            >
+            <div className="absolute inset-0 flex items-center" aria-hidden="true">
               <div className="w-full border-t border-gray-200" />
             </div>
             <div className="relative flex justify-center">
@@ -83,24 +79,17 @@ export default function Preview({
             />
             {title && (
               <div className="absolute bottom-2 left-2 rounded-md bg-[#414142] px-1.5 py-px">
-                <h3 className="max-w-sm truncate text-sm text-white">
-                  {title}
-                </h3>
+                <h3 className="max-w-sm truncate text-sm text-white">{title}</h3>
               </div>
             )}
           </div>
-          {hostname && (
-            <p className="mt-2 text-[0.8rem] text-[#606770]">{hostname}</p>
-          )}
+          {hostname && <p className="mt-2 text-[0.8rem] text-[#606770]">{hostname}</p>}
         </div>
 
         {/* Facebook */}
         <div>
           <div className="relative mb-2">
-            <div
-              className="absolute inset-0 flex items-center"
-              aria-hidden="true"
-            >
+            <div className="absolute inset-0 flex items-center" aria-hidden="true">
               <div className="w-full border-t border-gray-200" />
             </div>
             <div className="relative flex justify-center">
@@ -118,23 +107,17 @@ export default function Preview({
             />
             <div className="grid gap-1 border-t border-gray-300 bg-[#f2f3f5] p-3">
               {hostname ? (
-                <p className="text-[0.8rem] uppercase text-[#606770]">
-                  {hostname}
-                </p>
+                <p className="text-[0.8rem] uppercase text-[#606770]">{hostname}</p>
               ) : (
                 <div className="mb-1 h-4 w-24 rounded-md bg-gray-200" />
               )}
               {title ? (
-                <h3 className="truncate font-semibold text-[#1d2129]">
-                  {title}
-                </h3>
+                <h3 className="truncate font-semibold text-[#1d2129]">{title}</h3>
               ) : (
                 <div className="mb-1 h-5 w-full rounded-md bg-gray-200" />
               )}
               {description ? (
-                <p className="line-clamp-2 text-sm text-[#606770]">
-                  {description}
-                </p>
+                <p className="line-clamp-2 text-sm text-[#606770]">{description}</p>
               ) : (
                 <div className="grid gap-2">
                   <div className="h-4 w-full rounded-md bg-gray-200" />
@@ -148,10 +131,7 @@ export default function Preview({
         {/* LinkedIn */}
         <div>
           <div className="relative mb-2">
-            <div
-              className="absolute inset-0 flex items-center"
-              aria-hidden="true"
-            >
+            <div className="absolute inset-0 flex items-center" aria-hidden="true">
               <div className="w-full border-t border-gray-200" />
             </div>
             <div className="relative flex justify-center">
@@ -169,9 +149,7 @@ export default function Preview({
             />
             <div className="grid gap-1 border-t border-gray-300 bg-white p-3">
               {title ? (
-                <h3 className="truncate font-semibold text-[#000000E6]">
-                  {title}
-                </h3>
+                <h3 className="truncate font-semibold text-[#000000E6]">{title}</h3>
               ) : (
                 <div className="mb-1 h-5 w-full rounded-md bg-gray-200" />
               )}
@@ -207,8 +185,7 @@ const ImagePreview = ({
 
   const { setShowPromptModal, PromptModal } = usePromptModal({
     title: 'Use image from URL',
-    description:
-      "Paste an image URL to use for your link's social media cards.",
+    description: "Paste an image URL to use for your link's social media cards.",
     label: 'Image URL',
     inputProps: {
       placeholder: 'https://example.com/og.png',
@@ -236,7 +213,7 @@ const ImagePreview = ({
       // Delay to prevent flickering
       setTimeout(() => setResizing(false), 500);
     },
-    [onImageChange],
+    [onImageChange]
   );
 
   const previewImage = useMemo(() => {
@@ -337,9 +314,7 @@ const ImagePreviewPopoverContent = ({
     <motion.div
       className="relative overflow-hidden"
       animate={{
-        width: isMobile
-          ? '100%'
-          : resizeObserverEntry?.borderBoxSize[0].inlineSize ?? 'auto',
+        width: isMobile ? '100%' : resizeObserverEntry?.borderBoxSize[0].inlineSize ?? 'auto',
         height: resizeObserverEntry?.borderBoxSize[0].blockSize ?? 'auto',
       }}
       transition={{ type: 'spring', duration: 0.3, bounce: 0.15 }}
@@ -347,10 +322,7 @@ const ImagePreviewPopoverContent = ({
       <div ref={contentWrapperRef} className="inline-block w-full sm:w-auto">
         <AnimatePresence>
           {state === 'unsplash' && (
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-            >
+            <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
               {/* <UnsplashSearch
                 onImageSelected={onImageChange}
                 setOpenPopover={setOpenPopover}

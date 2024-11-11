@@ -2,13 +2,7 @@
 
 import { MessagesContext } from '@/ui/switcher/provider';
 import { Avatar, Badge, IconMenu, Popover } from '@dub/ui';
-import {
-  AppWindow,
-  BookText,
-  CircleGauge,
-  LogOut,
-  Settings,
-} from 'lucide-react';
+import { AppWindow, BookText, CircleGauge, LogOut, Settings } from 'lucide-react';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -28,27 +22,18 @@ export default function UserDropdown() {
       <Popover
         content={
           <div className="flex w-full flex-col space-y-px rounded-md bg-white p-3 sm:w-56">
-            <Link
-              href={`/${locale}`}
-              className="p-2"
-              onClick={() => setOpenPopover(false)}
-            >
+            <Link href={`/${locale}`} className="p-2" onClick={() => setOpenPopover(false)}>
               {session?.user?.name && (
-                <p className="truncate text-sm font-medium text-gray-900">
-                  {session?.user?.name}
-                </p>
+                <p className="truncate text-sm font-medium text-gray-900">{session?.user?.name}</p>
               )}
-              <p className="truncate text-sm text-gray-500">
-                {session?.user?.email}
-              </p>
+              <p className="truncate text-sm text-gray-500">{session?.user?.email}</p>
               {session && (
                 <div className="mt-1 flex gap-1">
                   <RoleBadge role={session.user.role} />
                 </div>
               )}
             </Link>
-            {session?.user?.role === 'super_admin' ||
-            session?.user?.role === 'agency_admin' ? (
+            {session?.user?.role === 'super_admin' || session?.user?.role === 'agency_admin' ? (
               <Link
                 href={isAdminPath ? `/${locale}` : `/${locale}/admin`}
                 onClick={() => setOpenPopover(false)}
@@ -73,20 +58,14 @@ export default function UserDropdown() {
               onClick={() => setOpenPopover(false)}
               className="block w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
             >
-              <IconMenu
-                text={message?.settings}
-                icon={<Settings className="h-4 w-4" />}
-              />
+              <IconMenu text={message?.settings} icon={<Settings className="h-4 w-4" />} />
             </Link>
             <Link
               href={`https://docs.${process.env.NEXT_PUBLIC_APP_SHORT_DOMAIN}`}
               target="_blank"
               className="block w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
             >
-              <IconMenu
-                text={message?.documentation}
-                icon={<BookText className="h-4 w-4" />}
-              />
+              <IconMenu text={message?.documentation} icon={<BookText className="h-4 w-4" />} />
             </Link>
             {/* <Link
               href={`https://github.com/govtechmy/go-gov-my/discussions`}
@@ -116,10 +95,7 @@ export default function UserDropdown() {
                 });
               }}
             >
-              <IconMenu
-                text={message?.logout}
-                icon={<LogOut className="h-4 w-4" />}
-              />
+              <IconMenu text={message?.logout} icon={<LogOut className="h-4 w-4" />} />
             </button>
           </div>
         }
@@ -127,10 +103,7 @@ export default function UserDropdown() {
         openPopover={openPopover}
         setOpenPopover={setOpenPopover}
       >
-        <button
-          onClick={() => setOpenPopover(!openPopover)}
-          className="group relative"
-        >
+        <button onClick={() => setOpenPopover(!openPopover)} className="group relative">
           {session?.user ? (
             <Avatar
               user={session.user}
@@ -145,11 +118,7 @@ export default function UserDropdown() {
   );
 }
 
-function RoleBadge({
-  role,
-}: {
-  role: 'staff' | 'super_admin' | 'agency_admin';
-}) {
+function RoleBadge({ role }: { role: 'staff' | 'super_admin' | 'agency_admin' }) {
   const label = {
     staff: 'Staff',
     super_admin: 'Super Admin',

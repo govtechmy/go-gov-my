@@ -3,13 +3,7 @@ import useTags from '@/lib/swr/use-tags';
 import useWorkspace from '@/lib/swr/use-workspace';
 import { LinkWithTagsProps, TagProps } from '@/lib/types';
 import TagBadge from '@/ui/links/tag-badge';
-import {
-  Badge,
-  LoadingCircle,
-  Magic,
-  SimpleTooltipContent,
-  Tooltip,
-} from '@dub/ui';
+import { Badge, LoadingCircle, Magic, SimpleTooltipContent, Tooltip } from '@dub/ui';
 import { Command, useCommandState } from 'cmdk';
 import { Check, ChevronDown, Tag, X } from 'lucide-react';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
@@ -28,19 +22,13 @@ export default function TagsSection({
 
   const [inputValue, setInputValue] = useState('');
 
-  const {
-    id: workspaceId,
-    exceededAI,
-    mutate: mutateWorkspace,
-  } = useWorkspace();
+  const { id: workspaceId, exceededAI, mutate: mutateWorkspace } = useWorkspace();
 
   const { messages, locale } = useIntlClientHook();
   const message = messages?.modal;
 
   const [suggestedTags, setSuggestedTags] = useState<TagProps[]>([]);
-  const tagMatch = availableTags
-    ?.map(({ name }) => name)
-    .includes(inputValue.trim());
+  const tagMatch = availableTags?.map(({ name }) => name).includes(inputValue.trim());
 
   // const { complete } = useCompletion({
   //   api: `/api/ai/completion?workspaceId=${workspaceId}`,
@@ -151,10 +139,7 @@ export default function TagsSection({
             createTag(inputValue);
 
             // remove the last tag if backspaced
-          } else if (
-            ['Backspace', 'Delete'].includes(e.key) &&
-            inputValue === ''
-          ) {
+          } else if (['Backspace', 'Delete'].includes(e.key) && inputValue === '') {
             setData((data) => {
               const popped = [...data.tags];
               popped.pop();
@@ -221,9 +206,7 @@ export default function TagsSection({
         {openCommandList && (
           <Command.List className="absolute z-20 mt-2 h-[calc(var(--cmdk-list-height)+17px)] max-h-[300px] w-full overflow-auto rounded-md border border-gray-200 bg-white p-2 shadow-md transition-all">
             {availableTags?.length === 0 && inputValue.length === 0 && (
-              <p className="px-4 py-2.5 text-sm text-gray-900">
-                Start typing to create tag...
-              </p>
+              <p className="px-4 py-2.5 text-sm text-gray-900">Start typing to create tag...</p>
             )}
             <Command.Empty>
               {inputValue.length > 0 && (
@@ -244,9 +227,7 @@ export default function TagsSection({
                 key={tag.id}
                 value={tag.name}
                 onSelect={() => {
-                  const isRemoving = data.tags
-                    .map(({ id }) => id)
-                    .includes(tag.id);
+                  const isRemoving = data.tags.map(({ id }) => id).includes(tag.id);
                   setData({
                     ...data,
                     tags: isRemoving
@@ -299,9 +280,7 @@ export default function TagsSection({
                     ...data,
                     tags: [...tags, tag],
                   });
-                  setSuggestedTags((tags) =>
-                    tags.filter(({ id }) => id !== tag.id),
-                  );
+                  setSuggestedTags((tags) => tags.filter(({ id }) => id !== tag.id));
                 }}
                 className="group flex items-center transition-all active:scale-95"
               >

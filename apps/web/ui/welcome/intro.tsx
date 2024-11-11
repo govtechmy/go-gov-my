@@ -17,12 +17,7 @@ export default function Intro() {
       <div
         className={`animate-scaleBlur mt-[7vh] grid h-[50vh] w-screen place-items-center object-cover transition-all duration-1000`}
       >
-        <Image
-          src="/_static/logo.png"
-          height={200}
-          width={200}
-          alt="App Logo"
-        />
+        <Image src="/_static/logo.png" height={200} width={200} alt="App Logo" />
       </div>
       <motion.div
         variants={{

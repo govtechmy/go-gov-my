@@ -16,9 +16,7 @@ export const dynamic = 'force-dynamic';
 export const GET = async (req: NextRequest) => {
   try {
     const searchParams = getSearchParams(req.url);
-    const { domain } = domainKeySchema
-      .pick({ domain: true })
-      .parse(searchParams);
+    const { domain } = domainKeySchema.pick({ domain: true }).parse(searchParams);
 
     // Rate limit if user is not logged in
     const session = await getToken({

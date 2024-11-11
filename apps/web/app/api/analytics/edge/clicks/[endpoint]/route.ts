@@ -1,24 +1,14 @@
 import { getClicks } from '@/lib/analytics/clicks';
 import { validDateRangeForPlan } from '@/lib/analytics/utils';
-import {
-  DubApiError,
-  exceededLimitError,
-  handleAndReturnErrorResponse,
-} from '@/lib/api/errors';
+import { DubApiError, exceededLimitError, handleAndReturnErrorResponse } from '@/lib/api/errors';
 import { ratelimit } from '@/lib/redis/ratelimit';
 import { getLink, getWorkspaceViaEdge } from '@/lib/userinfos';
-import {
-  analyticsEndpointSchema,
-  clickAnalyticsQuerySchema,
-} from '@/lib/zod/schemas/analytics';
+import { analyticsEndpointSchema, clickAnalyticsQuerySchema } from '@/lib/zod/schemas/analytics';
 import { DUB_DEMO_LINKS, DUB_WORKSPACE_ID, getSearchParams } from '@dub/utils';
 import { ipAddress } from '@vercel/edge';
 import { NextResponse, type NextRequest } from 'next/server';
 
-export const GET = async (
-  req: NextRequest,
-  { params }: { params: Record<string, string> },
-) => {
+export const GET = async (req: NextRequest, { params }: { params: Record<string, string> }) => {
   try {
     const { endpoint } = analyticsEndpointSchema.parse(params);
 
@@ -36,9 +26,7 @@ export const GET = async (
 
     let link;
 
-    const demoLink = DUB_DEMO_LINKS.find(
-      (l) => l.domain === domain && l.key === key,
-    );
+    const demoLink = DUB_DEMO_LINKS.find((l) => l.domain === domain && l.key === key);
 
     // if it's a demo link
     if (demoLink) {
@@ -48,7 +36,7 @@ export const GET = async (
         const { success } = await ratelimit(
           `demo-analytics:${demoLink.id}:${ip}:${endpoint || 'clicks'}`,
           15,
-          endpoint ? '1 m' : '10 s',
+          endpoint ? '1 m' : '10 s'
         );
 
         if (!success) {
@@ -71,8 +59,7 @@ export const GET = async (
           message: 'Analytics for this link are not public',
         });
       }
-      const workspace =
-        link?.projectId && (await getWorkspaceViaEdge(link.projectId));
+      const workspace = link?.projectId && (await getWorkspaceViaEdge(link.projectId));
 
       validDateRangeForPlan({
         plan: workspace.plan,

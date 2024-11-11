@@ -16,12 +16,10 @@ export default function WorkspaceExceededClicks() {
         <div className="rounded-full bg-gray-100 p-3">
           <Lock className="h-6 w-6 text-gray-600" />
         </div>
-        <h1 className="my-3 text-xl font-semibold text-gray-700">
-          Stats Locked
-        </h1>
+        <h1 className="my-3 text-xl font-semibold text-gray-700">Stats Locked</h1>
         <p className="z-10 max-w-sm text-center text-sm text-gray-600">
-          Your workspace has exceeded your monthly clicks limits. We're still
-          collecting data on your links, but you need to upgrade to view them.
+          Your workspace has exceeded your monthly clicks limits. We're still collecting data on
+          your links, but you need to upgrade to view them.
         </p>
         <img
           src="/_static/illustrations/video-park.svg"

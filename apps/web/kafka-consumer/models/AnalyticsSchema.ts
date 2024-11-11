@@ -9,9 +9,7 @@ const ASNInfo = z.object({
 });
 
 export const AnalyticsMessageSchema = z.object({
-  aggregatedDate: z
-    .string()
-    .describe('A short date in the format of YYYY-MM-DD'),
+  aggregatedDate: z.string().describe('A short date in the format of YYYY-MM-DD'),
   from: z.coerce.date(),
   to: z.coerce.date(),
   linkAnalytics: z.array(
@@ -27,7 +25,7 @@ export const AnalyticsMessageSchema = z.object({
       operatingSystem: ClicksRecord,
       referer: ClicksRecord,
       asn: z.array(ASNInfo),
-    }),
+    })
   ),
 });
 

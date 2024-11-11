@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import PlanBadge from './plan-badge';
 
+
 export default function WorkspaceCard({
   id,
   name,
@@ -44,9 +45,7 @@ export default function WorkspaceCard({
             if (data && data.projectUsers && data.projectUsers.length > 0) {
               const role = data.projectUsers[0].role; // Assuming you want the role of the first entry
               if (locale === 'ms-MY') {
-                role === 'owner'
-                  ? setWorkspaceOwnership('pemilik')
-                  : setWorkspaceOwnership('ahli');
+                role === 'owner' ? setWorkspaceOwnership('pemilik') : setWorkspaceOwnership('ahli');
               } else {
                 setWorkspaceOwnership(role);
               }
@@ -82,9 +81,7 @@ export default function WorkspaceCard({
               height={48}
             />
             <div>
-              <h2 className="max-w-[200px] truncate text-lg font-medium text-gray-700">
-                {name}
-              </h2>
+              <h2 className="max-w-[200px] truncate text-lg font-medium text-gray-700">{name}</h2>
             </div>
           </div>
           {workspaceOwnership && <PlanBadge plan={workspaceOwnership} />}
@@ -95,8 +92,10 @@ export default function WorkspaceCard({
             {linksUsage || linksUsage === 0 ? (
               <NumberTooltip value={linksUsage} unit="links">
                 <h2 className="whitespace-nowrap text-sm">
+
                   {nFormatter(linksUsage)}{' '}
                   {linksUsage != 1 ? workspace_msg?.links : workspace_msg?.link}
+
                 </h2>
               </NumberTooltip>
             ) : (
@@ -107,8 +106,7 @@ export default function WorkspaceCard({
             <BarChart2 className="h-4 w-4" />
             <NumberTooltip value={usage}>
               <h2 className="whitespace-nowrap text-sm">
-                {nFormatter(usage)}{' '}
-                {usage != 1 ? workspace_msg?.clicks : workspace_msg?.click}
+                {nFormatter(usage)} {usage != 1 ? workspace_msg?.clicks : workspace_msg?.click}
               </h2>
             </NumberTooltip>
           </div>

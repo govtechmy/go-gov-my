@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 export function useCookies<T>(
   key: string,
   initialValue: T,
-  opts?: Cookies.CookieAttributes,
+  opts?: Cookies.CookieAttributes
 ): [T, (value: T) => void] {
   const [storedValue, setStoredValue] = useState<T>(() => {
     // Retrieve from Cookies

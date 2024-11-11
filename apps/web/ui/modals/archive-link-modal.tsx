@@ -3,14 +3,7 @@ import useWorkspace from '@/lib/swr/use-workspace';
 import { LinkProps } from '@/lib/types';
 import { Button, Modal, useToastWithUndo } from '@dub/ui';
 import { getApexDomain, linkConstructor } from '@dub/utils';
-import {
-  Dispatch,
-  MouseEvent,
-  SetStateAction,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import { Dispatch, MouseEvent, SetStateAction, useCallback, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { mutate } from 'swr';
 import LinkLogo from '../links/link-logo';
@@ -34,11 +27,9 @@ const sendArchiveRequest = ({
 };
 
 const revalidateLinks = () => {
-  return mutate(
-    (key) => typeof key === 'string' && key.startsWith('/api/links'),
-    undefined,
-    { revalidate: true },
-  );
+  return mutate((key) => typeof key === 'string' && key.startsWith('/api/links'), undefined, {
+    revalidate: true,
+  });
 };
 
 function ArchiveLinkModal({
@@ -109,15 +100,12 @@ function ArchiveLinkModal({
           revalidateLinks();
           return message?.undo_successful;
         },
-      },
+      }
     );
   };
 
   return (
-    <Modal
-      showModal={showArchiveLinkModal}
-      setShowModal={setShowArchiveLinkModal}
-    >
+    <Modal showModal={showArchiveLinkModal} setShowModal={setShowArchiveLinkModal}>
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 text-center sm:px-16">
         <LinkLogo apexDomain={apexDomain} />
         <h3 className="text-lg font-medium">
@@ -158,6 +146,6 @@ export function useArchiveLinkModal({ props }: { props: LinkProps }) {
       setShowArchiveLinkModal,
       ArchiveLinkModal: ArchiveLinkModalCallback,
     }),
-    [setShowArchiveLinkModal, ArchiveLinkModalCallback],
+    [setShowArchiveLinkModal, ArchiveLinkModalCallback]
   );
 }

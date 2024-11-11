@@ -17,8 +17,7 @@ export default function AgencyLabel() {
           const response = await fetch('/api/agency');
           if (response.ok) {
             const data = await response.json();
-            const name =
-              locale === 'ms-MY' ? data.user.names.ms : data.user.names.en;
+            const name = locale === 'ms-MY' ? data.user.names.ms : data.user.names.en;
             setAgencyName(name);
           } else {
             console.error('Failed to fetch agency data');

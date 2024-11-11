@@ -19,12 +19,7 @@ type CustomSelectProps = {
   defaultValue: number;
 };
 
-export function CustomSelect({
-  icon,
-  options,
-  onChange,
-  defaultValue,
-}: CustomSelectProps) {
+export function CustomSelect({ icon, options, onChange, defaultValue }: CustomSelectProps) {
   const [showMenu, setShowMenu] = useState(false);
   const [selectedOption, setSelectedOption] = useState(options[defaultValue]);
 
@@ -54,9 +49,7 @@ export function CustomSelect({
               className="flex w-full items-center justify-between space-x-2 rounded-md px-1 py-2 hover:bg-gray-100 active:bg-gray-200"
             >
               <IconMenu text={option.full} icon={null} />
-              {isSelected(option) && (
-                <CheckCircle className="text-blue-600" aria-hidden="true" />
-              )}
+              {isSelected(option) && <CheckCircle className="text-blue-600" aria-hidden="true" />}
             </button>
           ))}
         </div>

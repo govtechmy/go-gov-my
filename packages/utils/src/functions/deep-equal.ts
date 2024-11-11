@@ -1,19 +1,11 @@
-type DeepEqual = (
-  obj1: Record<string, any>,
-  obj2: Record<string, any>,
-) => boolean;
+type DeepEqual = (obj1: Record<string, any>, obj2: Record<string, any>) => boolean;
 
 export const deepEqual: DeepEqual = (obj1, obj2) => {
   if (obj1 === obj2) {
     return true;
   }
 
-  if (
-    typeof obj1 !== 'object' ||
-    typeof obj2 !== 'object' ||
-    obj1 === null ||
-    obj2 === null
-  ) {
+  if (typeof obj1 !== 'object' || typeof obj2 !== 'object' || obj1 === null || obj2 === null) {
     return false;
   }
 

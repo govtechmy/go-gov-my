@@ -3,13 +3,7 @@ import useWorkspace from '@/lib/swr/use-workspace';
 import { LinkProps } from '@/lib/types';
 import { Button, Modal, useMediaQuery } from '@dub/ui';
 import { getApexDomain, linkConstructor } from '@dub/utils';
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { mutate } from 'swr';
 import LinkLogo from '../links/link-logo';
@@ -42,10 +36,7 @@ function DeleteLinkModal({
   const { isMobile } = useMediaQuery();
 
   return (
-    <Modal
-      showModal={showDeleteLinkModal}
-      setShowModal={setShowDeleteLinkModal}
-    >
+    <Modal showModal={showDeleteLinkModal} setShowModal={setShowDeleteLinkModal}>
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 text-center sm:px-16">
         <LinkLogo apexDomain={apexDomain} />
         <h3 className="text-lg font-medium">
@@ -66,10 +57,9 @@ function DeleteLinkModal({
           }).then(async (res) => {
             if (res.status === 200) {
               await mutate(
-                (key) =>
-                  typeof key === 'string' && key.startsWith('/api/links'),
+                (key) => typeof key === 'string' && key.startsWith('/api/links'),
                 undefined,
-                { revalidate: true },
+                { revalidate: true }
               );
               setShowDeleteLinkModal(false);
               toast.success(message?.delete_link_success);
@@ -84,8 +74,7 @@ function DeleteLinkModal({
       >
         <div>
           <label htmlFor="verification" className="block text-sm text-gray-700">
-            {message?.to_verify}{' '}
-            <span className="font-semibold">{shortlink}</span> {message?.below}
+            {message?.to_verify} <span className="font-semibold">{shortlink}</span> {message?.below}
           </label>
           <div className="relative mt-1 rounded-md shadow-sm">
             <input
@@ -101,11 +90,7 @@ function DeleteLinkModal({
           </div>
         </div>
 
-        <Button
-          variant="danger"
-          text={message?.confirm_delete}
-          loading={deleting}
-        />
+        <Button variant="danger" text={message?.confirm_delete} loading={deleting} />
       </form>
     </Modal>
   );
@@ -129,6 +114,6 @@ export function useDeleteLinkModal({ props }: { props?: LinkProps }) {
       setShowDeleteLinkModal,
       DeleteLinkModal: DeleteLinkModalCallback,
     }),
-    [setShowDeleteLinkModal, DeleteLinkModalCallback],
+    [setShowDeleteLinkModal, DeleteLinkModalCallback]
   );
 }

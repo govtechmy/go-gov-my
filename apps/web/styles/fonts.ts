@@ -1,4 +1,4 @@
-import { Inter } from 'next/font/google';
+import { Inter, Poppins } from 'next/font/google';
 import localFont from 'next/font/local';
 
 export const satoshi = localFont({
@@ -10,6 +10,15 @@ export const satoshi = localFont({
 });
 
 export const inter = Inter({
-  variable: '--font-inter',
   subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-inter',
+});
+
+export const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-poppins',
 });

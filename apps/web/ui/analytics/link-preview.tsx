@@ -11,11 +11,7 @@ import {
 } from '@dub/utils';
 import { Archive, Globe } from 'lucide-react';
 
-export default function LinkPreviewTooltip({
-  data,
-}: {
-  data: LinkProps & { user?: UserProps };
-}) {
+export default function LinkPreviewTooltip({ data }: { data: LinkProps & { user?: UserProps } }) {
   const { url, createdAt, archived, user } = data;
   const apexDomain = getApexDomain(url);
   const { messages } = useIntlClientHook();
@@ -52,7 +48,7 @@ export default function LinkPreviewTooltip({
                 'w-full max-w-[140px] truncate text-sm font-semibold text-blue-800 sm:max-w-[300px] sm:text-base md:max-w-[360px] xl:max-w-[500px]',
                 {
                   'text-gray-500': archived,
-                },
+                }
               )}
               href={linkConstructor({ domain: data.domain, key: data.key })}
               target="_blank"
@@ -65,12 +61,10 @@ export default function LinkPreviewTooltip({
                   key: data.key,
                   pretty: true,
                 }),
-                32,
+                32
               )}
             </a>
-            <CopyButton
-              value={linkConstructor({ domain: data.domain, key: data.key })}
-            />
+            <CopyButton value={linkConstructor({ domain: data.domain, key: data.key })} />
           </div>
           <div className="flex max-w-fit items-center space-x-1">
             {user && (
@@ -81,10 +75,7 @@ export default function LinkPreviewTooltip({
             )}
             {createdAt && (
               <>
-                <p
-                  className="whitespace-nowrap text-sm text-gray-500"
-                  suppressHydrationWarning
-                >
+                <p className="whitespace-nowrap text-sm text-gray-500" suppressHydrationWarning>
                   {timeAgo(createdAt)}
                 </p>
                 <p>•</p>

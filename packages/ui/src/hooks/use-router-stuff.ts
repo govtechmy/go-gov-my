@@ -10,7 +10,7 @@ export function useRouterStuff() {
     kv?: Record<string, string>,
     opts?: {
       ignore?: string[];
-    },
+    }
   ) => {
     const newParams = new URLSearchParams(searchParams);
     if (kv) {
@@ -39,7 +39,7 @@ export function useRouterStuff() {
     const newParams = new URLSearchParams(searchParams);
     if (set) {
       Object.entries(set).forEach(([k, v]) =>
-        newParams.set(k, Array.isArray(v) ? v.join(arrayDelimiter) : v),
+        newParams.set(k, Array.isArray(v) ? v.join(arrayDelimiter) : v)
       );
     }
     if (del) {
@@ -50,9 +50,7 @@ export function useRouterStuff() {
       }
     }
     const queryString = newParams.toString();
-    const newPath = `${pathname}${
-      queryString.length > 0 ? `?${queryString}` : ''
-    }`;
+    const newPath = `${pathname}${queryString.length > 0 ? `?${queryString}` : ''}`;
     if (getNewPath) return newPath;
     if (replace) {
       router.replace(newPath, { scroll: false });

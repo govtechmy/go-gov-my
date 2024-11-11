@@ -13,12 +13,9 @@ export function useChartContext<T extends Datum>(): ChartContextType<T> {
   return chartContext;
 }
 
-export const ChartTooltipContext =
-  createContext<ChartTooltipContextType | null>(null);
+export const ChartTooltipContext = createContext<ChartTooltipContextType | null>(null);
 
-export function useChartTooltipContext<
-  T extends Datum,
->(): ChartTooltipContextType<T> {
+export function useChartTooltipContext<T extends Datum>(): ChartTooltipContextType<T> {
   const chartTooltipContext = useContext(ChartTooltipContext);
   if (!chartTooltipContext) throw new Error('No chart tooltip context');
   return chartTooltipContext;

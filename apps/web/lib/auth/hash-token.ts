@@ -4,13 +4,11 @@ export const hashToken = async (
     secret = false,
   }: {
     secret?: boolean;
-  } = {},
+  } = {}
 ) => {
   const encoder = new TextEncoder();
 
-  const data = encoder.encode(
-    `${token}${secret ? process.env.NEXTAUTH_SECRET : ''}`,
-  );
+  const data = encoder.encode(`${token}${secret ? process.env.NEXTAUTH_SECRET : ''}`);
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
 

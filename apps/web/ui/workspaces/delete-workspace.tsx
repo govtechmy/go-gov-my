@@ -7,8 +7,7 @@ import { Button } from '@dub/ui';
 import { cn } from '@dub/utils';
 
 export default function DeleteWorkspace() {
-  const { setShowDeleteWorkspaceModal, DeleteWorkspaceModal } =
-    useDeleteWorkspaceModal();
+  const { setShowDeleteWorkspaceModal, DeleteWorkspaceModal } = useDeleteWorkspaceModal();
   const { messages, locale } = useIntlClientHook();
   const message = messages?.workspace;
 

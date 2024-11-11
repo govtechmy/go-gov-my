@@ -1,10 +1,7 @@
 import { getDaysDifference } from '@dub/utils';
 import { DubApiError } from '../api/errors';
 
-export const formatAnalyticsEndpoint = (
-  endpoint: string,
-  type: 'plural' | 'singular',
-) => {
+export const formatAnalyticsEndpoint = (endpoint: string, type: 'plural' | 'singular') => {
   const plural = {
     country: 'countries',
     city: 'cities',

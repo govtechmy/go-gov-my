@@ -18,9 +18,7 @@ export async function runOutboxConsumer(consumer: any, log: any) {
       console.log('message received');
 
       const processMessage = async () => {
-        const { payload: debeziumPayload } = JSON.parse(
-          message.value.toString('utf8') || '{}',
-        );
+        const { payload: debeziumPayload } = JSON.parse(message.value.toString('utf8') || '{}');
 
         console.log('payload extracted', debeziumPayload);
 
@@ -62,13 +60,8 @@ export async function runOutboxConsumer(consumer: any, log: any) {
               await prisma.webhookOutbox.delete({ where: { id: outboxId } });
               log.info(`WebhookOutbox with ID ${outboxId} has been processed`);
             } catch (error) {
-              if (
-                error instanceof Prisma.PrismaClientKnownRequestError &&
-                error.code === 'P2025'
-              ) {
-                log.warn(
-                  `WebhookOutbox with ID ${outboxId} was already processed before`,
-                );
+              if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
+                log.warn(`WebhookOutbox with ID ${outboxId} was already processed before`);
               } else {
                 throw error;
               }
@@ -81,9 +74,7 @@ export async function runOutboxConsumer(consumer: any, log: any) {
               },
             ]);
           } else {
-            throw new Error(
-              `Response unsuccessful, status: ${response.status}`,
-            );
+            throw new Error(`Response unsuccessful, status: ${response.status}`);
           }
         }
       };

@@ -46,9 +46,7 @@ export default function GeoSection({
     <div className="relative border-b border-gray-200 pb-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-between space-x-2">
-          <h2 className="text-sm font-medium text-gray-900">
-            {messages?.link?.geo_targeting}
-          </h2>
+          <h2 className="text-sm font-medium text-gray-900">{messages?.link?.geo_targeting}</h2>
           <ProBadgeTooltip
             content={
               <SimpleTooltipContent
@@ -65,12 +63,7 @@ export default function GeoSection({
         <motion.div className="mt-3 grid gap-2" {...FADE_IN_ANIMATION_SETTINGS}>
           {geo &&
             Object.entries(geo).map(([country, url]) => (
-              <GeoSelector
-                key={country}
-                country={country}
-                url={url}
-                setData={setData}
-              />
+              <GeoSelector key={country} country={country} url={url} setData={setData} />
             ))}
           <button
             type="button"

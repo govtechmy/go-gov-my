@@ -28,7 +28,7 @@ async function main() {
 
   // sort apex domains by count of occurrences
   const sortedApexDomains = Object.keys(apexDomainsWithCount).sort(
-    (a, b) => apexDomainsWithCount[b] - apexDomainsWithCount[a],
+    (a, b) => apexDomainsWithCount[b] - apexDomainsWithCount[a]
   );
 
   const topApexDomains = sortedApexDomains.slice(0, 100).map((domain) => {
@@ -43,7 +43,7 @@ async function main() {
   // apex domains with count of occurrences >= 5
 
   const popularApexDomains = sortedApexDomains.filter(
-    (domain) => apexDomainsWithCount[domain] >= 5,
+    (domain) => apexDomainsWithCount[domain] >= 5
   );
 
   console.log({
@@ -51,10 +51,7 @@ async function main() {
     popularApexDomains: popularApexDomains.length,
   });
 
-  fs.writeFileSync(
-    'popular-domains.json',
-    JSON.stringify(popularApexDomains, null, 2),
-  );
+  fs.writeFileSync('popular-domains.json', JSON.stringify(popularApexDomains, null, 2));
 }
 
 main();

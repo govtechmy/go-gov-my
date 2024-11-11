@@ -16,8 +16,7 @@ const cases = [
           code: 'unprocessable_entity',
           message:
             'invalid_enum_value: color: Invalid color. Must be one of: red, yellow, green, blue, purple, pink, brown',
-          doc_url:
-            'https://go.gov.my/docs/api-reference/errors#unprocessable-entity',
+          doc_url: 'https://go.gov.my/docs/api-reference/errors#unprocessable-entity',
         },
       },
     },
@@ -33,8 +32,7 @@ const cases = [
         error: {
           code: 'unprocessable_entity',
           message: 'invalid_type: tag: Required',
-          doc_url:
-            'https://go.gov.my/docs/api-reference/errors#unprocessable-entity',
+          doc_url: 'https://go.gov.my/docs/api-reference/errors#unprocessable-entity',
         },
       },
     },

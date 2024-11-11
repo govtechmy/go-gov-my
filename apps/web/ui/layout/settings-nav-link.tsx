@@ -31,7 +31,7 @@ export default function NavLink({
         'rounded-md p-2.5 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200',
         {
           'font-semibold text-black': selectedLayoutSegment === segment,
-        },
+        }
       )}
     >
       {children}

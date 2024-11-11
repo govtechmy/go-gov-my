@@ -76,14 +76,10 @@ export default function TableCard({
 
   const [primaryTags, additionalTags] = useMemo(() => {
     const primaryTagsCount = 1;
-    const filteredTagIds =
-      searchParams?.get('tagIds')?.split(',')?.filter(Boolean) ?? [];
+    const filteredTagIds = searchParams?.get('tagIds')?.split(',')?.filter(Boolean) ?? [];
     const sortedTags =
       filteredTagIds.length > 0
-        ? [...tags].sort(
-            (a, b) =>
-              filteredTagIds.indexOf(b.id) - filteredTagIds.indexOf(a.id),
-          )
+        ? [...tags].sort((a, b) => filteredTagIds.indexOf(b.id) - filteredTagIds.indexOf(a.id))
         : tags;
 
     return [
@@ -101,17 +97,11 @@ export default function TableCard({
         if (h.expiresAt) h.expiresAt = new Date(h.expiresAt);
       });
       return history;
-    },
+    }
   );
 
   // Duplicate link Modal
-  const {
-    id: _,
-    createdAt: __,
-    updatedAt: ___,
-    userId: ____,
-    ...propsToDuplicate
-  } = props;
+  const { id: _, createdAt: __, updatedAt: ___, userId: ____, ...propsToDuplicate } = props;
   const {
     setShowAddEditLinkModal: setShowDuplicateLinkModal,
     AddEditLinkModal: DuplicateLinkModal,
@@ -165,13 +155,11 @@ export default function TableCard({
 
   const handlClickOnLinkCard = (e: any) => {
     // Check if the clicked element is a linkRef or one of its descendants
-    const isLinkCardClick =
-      linkRef.current && linkRef.current.contains(e.target);
+    const isLinkCardClick = linkRef.current && linkRef.current.contains(e.target);
 
     // Check if the clicked element is an <a> or <button> element
     const isExcludedElement =
-      e.target.tagName.toLowerCase() === 'a' ||
-      e.target.tagName.toLowerCase() === 'button';
+      e.target.tagName.toLowerCase() === 'a' || e.target.tagName.toLowerCase() === 'button';
 
     if (isLinkCardClick && !isExcludedElement) {
       setSelected(!selected);
@@ -205,10 +193,7 @@ export default function TableCard({
     // - link is selected or the 3 dots menu is open
     // - the key pressed is one of the shortcuts
     // - there is no existing modal backdrop
-    if (
-      (selected || openPopover) &&
-      ['e', 'd', 'q', 'a', 't', 'i', 'x', 'h'].includes(key)
-    ) {
+    if ((selected || openPopover) && ['e', 'd', 'q', 'a', 't', 'i', 'x', 'h'].includes(key)) {
       setSelected(false);
       e.preventDefault();
       switch (key) {
@@ -307,7 +292,7 @@ export default function TableCard({
                     'max-w-[140px] truncate text-sm font-semibold text-blue-800 sm:max-w-[300px] sm:text-base md:max-w-[360px] xl:max-w-[500px]',
                     {
                       'text-gray-500': archived || expired,
-                    },
+                    }
                   )}
                   href={linkConstructor({
                     domain,
@@ -330,11 +315,7 @@ export default function TableCard({
                 })}
               />
               {comments && (
-                <Tooltip
-                  content={
-                    <LinkifyTooltipContent>{comments}</LinkifyTooltipContent>
-                  }
-                >
+                <Tooltip content={<LinkifyTooltipContent>{comments}</LinkifyTooltipContent>}>
                   <button
                     onClick={() => {
                       setShowAddEditLinkModal(true);
@@ -382,10 +363,7 @@ export default function TableCard({
 
       <td className="px-2 py-2">
         <div className="flex">
-          <p
-            className="whitespace-nowrap text-sm text-gray-500"
-            suppressHydrationWarning
-          >
+          <p className="whitespace-nowrap text-sm text-gray-500" suppressHydrationWarning>
             {timeAgo(createdAt)}
             {/* {new Date(createdAt).toLocaleDateString("en-GB")} */}
           </p>
@@ -399,8 +377,7 @@ function TagButton(tag: TagProps) {
   const { queryParams } = useRouterStuff();
   const searchParams = useSearchParams();
 
-  const selectedTagIds =
-    searchParams?.get('tagIds')?.split(',')?.filter(Boolean) ?? [];
+  const selectedTagIds = searchParams?.get('tagIds')?.split(',')?.filter(Boolean) ?? [];
 
   return (
     <button

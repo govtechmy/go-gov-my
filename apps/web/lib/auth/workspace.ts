@@ -1,8 +1,4 @@
-import {
-  DubApiError,
-  exceededLimitError,
-  handleAndReturnErrorResponse,
-} from '@/lib/api/errors';
+import { DubApiError, exceededLimitError, handleAndReturnErrorResponse } from '@/lib/api/errors';
 import { prisma } from '@/lib/prisma';
 import { ratelimit } from '@/lib/redis/ratelimit';
 import { PlanProps, WorkspaceProps } from '@/lib/types';
@@ -58,12 +54,9 @@ export const withWorkspace = (
     needNotExceededClicks?: boolean;
     needNotExceededLinks?: boolean;
     skipLinkChecks?: boolean;
-  } = {},
+  } = {}
 ) => {
-  return async (
-    req: Request,
-    { params = {} }: { params: Record<string, string> | undefined },
-  ) => {
+  return async (req: Request, { params = {} }: { params: Record<string, string> | undefined }) => {
     const searchParams = getSearchParams(req.url);
 
     let apiKey: string | undefined = undefined;
@@ -85,21 +78,14 @@ export const withWorkspace = (
 
       const domain = params?.domain || searchParams.domain;
       const key = searchParams.key;
-      const linkId =
-        params?.linkId ||
-        searchParams.linkId ||
-        searchParams.externalId ||
-        undefined;
+      const linkId = params?.linkId || searchParams.linkId || searchParams.externalId || undefined;
 
       let session: Session | undefined;
       let workspaceId: string | undefined;
       let workspaceSlug: string | undefined;
 
       const idOrSlug =
-        params?.idOrSlug ||
-        searchParams.workspaceId ||
-        params?.slug ||
-        searchParams.projectSlug;
+        params?.idOrSlug || searchParams.workspaceId || params?.slug || searchParams.projectSlug;
 
       // if there's no workspace ID or slug
       if (!idOrSlug) {
@@ -142,11 +128,7 @@ export const withWorkspace = (
           });
         }
 
-        const { success, limit, reset, remaining } = await ratelimit(
-          apiKey,
-          600,
-          '1 m',
-        );
+        const { success, limit, reset, remaining } = await ratelimit(apiKey, 600, '1 m');
         headers = {
           'Retry-After': reset.toString(),
           'X-RateLimit-Limit': limit.toString(),
@@ -168,7 +150,7 @@ export const withWorkspace = (
             data: {
               lastUsed: new Date(),
             },
-          }),
+          })
         );
         session = {
           user: {
@@ -342,11 +324,7 @@ export const withWorkspace = (
 
       // analytics API checks
       const url = new URL(req.url || '', API_DOMAIN);
-      if (
-        workspace.plan === 'free' &&
-        apiKey &&
-        url.pathname.includes('/analytics')
-      ) {
+      if (workspace.plan === 'free' && apiKey && url.pathname.includes('/analytics')) {
         throw new DubApiError({
           code: 'forbidden',
           message: 'Analytics API is only available on paid plans.',

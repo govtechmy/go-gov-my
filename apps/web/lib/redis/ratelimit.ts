@@ -1,12 +1,7 @@
 import { RateLimiterRedis, RateLimiterRes } from 'rate-limiter-flexible';
 import { redis } from '.';
 
-type Duration =
-  | `${number} ms`
-  | `${number} s`
-  | `${number} m`
-  | `${number} h`
-  | `${number} d`;
+type Duration = `${number} ms` | `${number} s` | `${number} m` | `${number} h` | `${number} d`;
 
 type RateLimitResult = {
   /** Whether the request may pass(true) or exceeded the limit(false) */
@@ -23,7 +18,7 @@ type RateLimitResult = {
 export const ratelimit = async (
   key: string,
   requests: number = 10,
-  duration: Duration = '10 s',
+  duration: Duration = '10 s'
 ): Promise<RateLimitResult> => {
   const ratelimiter = new RateLimiterRedis({
     storeClient: redis,
@@ -69,7 +64,7 @@ function durationToSeconds(duration: Duration): number {
 
 function toRateLimitResult(
   { points }: RateLimiterRedis,
-  { consumedPoints, msBeforeNext, remainingPoints }: RateLimiterRes,
+  { consumedPoints, msBeforeNext, remainingPoints }: RateLimiterRes
 ): RateLimitResult {
   return {
     success: consumedPoints <= points,

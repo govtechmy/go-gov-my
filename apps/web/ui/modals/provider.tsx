@@ -8,13 +8,7 @@ import { useAddWorkspaceModal } from '@/ui/modals/add-workspace-modal';
 import { useCompleteSetupModal } from '@/ui/modals/complete-setup-modal';
 import { useCookies } from '@dub/ui';
 import { useSearchParams } from 'next/navigation';
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  createContext,
-  useEffect,
-} from 'react';
+import { Dispatch, ReactNode, SetStateAction, createContext, useEffect } from 'react';
 import { toast } from 'sonner';
 import { mutate } from 'swr';
 import { useAddEditTagModal } from './add-edit-tag-modal';
@@ -32,12 +26,9 @@ export const ModalContext = createContext<{
 });
 
 export default function ModalProvider({ children }: { children: ReactNode }) {
-  const { AddWorkspaceModal, setShowAddWorkspaceModal } =
-    useAddWorkspaceModal();
-  const { CompleteSetupModal, setShowCompleteSetupModal } =
-    useCompleteSetupModal();
-  const { AcceptInviteModal, setShowAcceptInviteModal } =
-    useAcceptInviteModal();
+  const { AddWorkspaceModal, setShowAddWorkspaceModal } = useAddWorkspaceModal();
+  const { CompleteSetupModal, setShowCompleteSetupModal } = useCompleteSetupModal();
+  const { AcceptInviteModal, setShowAcceptInviteModal } = useAcceptInviteModal();
   const { setShowAddEditLinkModal, AddEditLinkModal } = useAddEditLinkModal();
   const { setShowAddEditTagModal, AddEditTagModal } = useAddEditTagModal();
 
@@ -61,7 +52,7 @@ export default function ModalProvider({ children }: { children: ReactNode }) {
             await mutate(
               (key) => typeof key === 'string' && key.startsWith('/api/links'),
               undefined,
-              { revalidate: true },
+              { revalidate: true }
             );
             setHashes([]);
           }
@@ -70,7 +61,7 @@ export default function ModalProvider({ children }: { children: ReactNode }) {
           loading: 'Importing links...',
           success: 'Links imported successfully!',
           error: 'Something went wrong while importing links.',
-        },
+        }
       );
     }
   }, [hashes, id]);

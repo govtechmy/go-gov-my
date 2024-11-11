@@ -2,13 +2,7 @@ import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { Button, Google, Logo, Modal } from '@dub/ui';
 import Cookies from 'js-cookie';
 import { signIn } from 'next-auth/react';
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useMemo,
-  useState,
-} from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 
 function GoogleOauthModal({
   showGoogleOauthModal,
@@ -22,16 +16,12 @@ function GoogleOauthModal({
   const message = messages?.modal;
 
   return (
-    <Modal
-      showModal={showGoogleOauthModal}
-      setShowModal={setShowGoogleOauthModal}
-    >
+    <Modal showModal={showGoogleOauthModal} setShowModal={setShowGoogleOauthModal}>
       <div className="flex flex-col items-center justify-center space-y-3 border-b border-gray-200 px-4 py-4 pt-8 sm:px-16">
         <Logo />
         <h3 className="text-lg font-medium">{message?.google}</h3>
         <p className="text-center text-sm text-gray-500">
-          {message?.google_desc_1} {process.env.NEXT_PUBLIC_APP_NAME}{' '}
-          {message?.google_desc_2}{' '}
+          {message?.google_desc_1} {process.env.NEXT_PUBLIC_APP_NAME} {message?.google_desc_2}{' '}
           <a
             className="underline underline-offset-4 transition-colors hover:text-black"
             href="https://github.com/govtechmy/go-gov-my/releases"
@@ -85,6 +75,6 @@ export function useGoogleOauthModal() {
       setShowGoogleOauthModal,
       GoogleOauthModal: GoogleOauthModalCallback,
     }),
-    [setShowGoogleOauthModal, GoogleOauthModalCallback],
+    [setShowGoogleOauthModal, GoogleOauthModalCallback]
   );
 }

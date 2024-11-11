@@ -56,20 +56,16 @@ function LinkHistoryTimeline({ history }: { history: LinkHistory[] }) {
           return (
             <div className="flex gap-4" key={i}>
               {arr.length > 1 && (
-                <VerticalTimeline
-                  isFirst={i === 0}
-                  isLast={i === arr.length - 1}
-                />
+                <VerticalTimeline isFirst={i === 0} isLast={i === arr.length - 1} />
               )}
               <div className="my-2 flex-1 rounded-lg border p-4">
                 <h3 className="mb-4">
-                  {messages.link.history.created_on} {formatDate(h.timestamp)}{' '}
-                  by <strong>{h.committedByUser.name}</strong>
+                  {messages.link.history.created_on} {formatDate(h.timestamp)} by{' '}
+                  <strong>{h.committedByUser.name}</strong>
                 </h3>
                 <ul className="ml-4 list-disc">
                   <li>
-                    {`https://${h.domain}/${h.key}`}{' '}
-                    {messages.link.history.was_created}
+                    {`https://${h.domain}/${h.key}`} {messages.link.history.was_created}
                   </li>
                 </ul>
               </div>
@@ -102,42 +98,24 @@ function LinkHistoryTimeline({ history }: { history: LinkHistory[] }) {
   );
 }
 
-function VerticalTimeline({
-  isFirst,
-  isLast,
-}: {
-  isFirst?: boolean;
-  isLast?: boolean;
-}) {
+function VerticalTimeline({ isFirst, isLast }: { isFirst?: boolean; isLast?: boolean }) {
   return (
     <div className="relative w-8">
       {!isFirst && (
-        <div
-          aria-hidden
-          className="absolute inset-0 bottom-[50%] mx-auto w-0 border-l"
-        ></div>
+        <div aria-hidden className="absolute inset-0 bottom-[50%] mx-auto w-0 border-l"></div>
       )}
       <div
         aria-hidden
         className="bg-grey-400 absolute bottom-[50%] left-0 right-0 mx-auto h-3 w-3 rounded-full bg-gray-300"
       ></div>
       {!isLast && (
-        <div
-          aria-hidden
-          className="absolute inset-0 top-[50%] mx-auto w-0 border-l"
-        ></div>
+        <div aria-hidden className="absolute inset-0 top-[50%] mx-auto w-0 border-l"></div>
       )}
     </div>
   );
 }
 
-function UpdateMessages({
-  prev,
-  curr,
-}: {
-  prev: LinkHistory;
-  curr: LinkHistory;
-}) {
+function UpdateMessages({ prev, curr }: { prev: LinkHistory; curr: LinkHistory }) {
   const { messages } = useIntlClientHook();
   const changes: React.ReactNode[] = [];
 
@@ -184,11 +162,9 @@ function UpdateMessages({
         <li>
           Link was{' '}
           <strong>
-            {currVal
-              ? messages.link.history.archived
-              : messages.link.history.unarchived}
+            {currVal ? messages.link.history.archived : messages.link.history.unarchived}
           </strong>
-        </li>,
+        </li>
       );
       continue;
     }
@@ -198,11 +174,9 @@ function UpdateMessages({
         <li>
           <strong>{formatKey(key)}</strong> {messages.link.history.was}{' '}
           <strong>
-            {currVal
-              ? messages.link.history.enabled
-              : messages.link.history.disabled}
+            {currVal ? messages.link.history.enabled : messages.link.history.disabled}
           </strong>
-        </li>,
+        </li>
       );
       continue;
     }
@@ -218,7 +192,7 @@ function UpdateMessages({
                   .join(', ')
               : currVal?.toString()}
           </strong>
-        </li>,
+        </li>
       );
       continue;
     }
@@ -226,9 +200,8 @@ function UpdateMessages({
     if (prevVal && !currVal) {
       changes.push(
         <li>
-          <strong>{formatKey(key)}</strong> {messages.link.history.was}{' '}
-          <strong>removed</strong>
-        </li>,
+          <strong>{formatKey(key)}</strong> {messages.link.history.was} <strong>removed</strong>
+        </li>
       );
       continue;
     }
@@ -255,7 +228,7 @@ function UpdateMessages({
                   .join(', ')
               : currVal?.toString()}
           </strong>
-        </li>,
+        </li>
       );
       continue;
     }
@@ -263,7 +236,7 @@ function UpdateMessages({
     changes.push(
       <li>
         {key} {messages.link.history.was_changed}
-      </li>,
+      </li>
     );
   }
 

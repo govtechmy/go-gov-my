@@ -36,17 +36,13 @@ export const authOptions: NextAuthOptions = {
   session: { strategy: 'jwt' },
   cookies: {
     sessionToken: {
-      name: IS_PRODUCTION
-        ? `__Secure-${SESSION_TOKEN_NAME}`
-        : SESSION_TOKEN_NAME,
+      name: IS_PRODUCTION ? `__Secure-${SESSION_TOKEN_NAME}` : SESSION_TOKEN_NAME,
       options: {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
         // When working on localhost, the cookie domain must be omitted entirely (https://stackoverflow.com/a/1188145)
-        domain: IS_PRODUCTION
-          ? `.${process.env.NEXT_PUBLIC_APP_DOMAIN}`
-          : undefined,
+        domain: IS_PRODUCTION ? `.${process.env.NEXT_PUBLIC_APP_DOMAIN}` : undefined,
         secure: IS_PRODUCTION,
       },
     },
@@ -83,18 +79,11 @@ export const authOptions: NextAuthOptions = {
         // if the user already exists via email,
         // update the user with their name and image
         if (userExists && profile) {
-          const profilePic =
-            profile[account.provider === 'google' ? 'picture' : 'avatar_url'];
+          const profilePic = profile[account.provider === 'google' ? 'picture' : 'avatar_url'];
           let newAvatar: string | null = null;
           // if the existing user doesn't have an image or the image is not stored in R2
-          if (
-            (!userExists.image || !isStored(userExists.image)) &&
-            profilePic
-          ) {
-            const { url } = await storage.upload(
-              `avatars/${userExists.id}`,
-              profilePic,
-            );
+          if ((!userExists.image || !isStored(userExists.image)) && profilePic) {
+            const { url } = await storage.upload(`avatars/${userExists.id}`, profilePic);
             newAvatar = url;
           }
           await prisma.user.update({
@@ -142,10 +131,7 @@ export const authOptions: NextAuthOptions = {
       // lazily backup user avatar to R2
       const currentImage = message.user.image;
       if (currentImage && !isStored(currentImage)) {
-        const { url } = await storage.upload(
-          `avatars/${message.user.id}`,
-          currentImage,
-        );
+        const { url } = await storage.upload(`avatars/${message.user.id}`, currentImage);
         await prisma.user.update({
           where: {
             id: message.user.id,

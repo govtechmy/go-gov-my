@@ -21,16 +21,12 @@ export default function WorkspaceSwitcher() {
   };
 
   const selected = useMemo(() => {
-    const selectedWorkspace = workspaces?.find(
-      (workspace) => workspace.slug === slug,
-    );
+    const selectedWorkspace = workspaces?.find((workspace) => workspace.slug === slug);
 
     if (slug && workspaces && selectedWorkspace) {
       return {
         ...selectedWorkspace,
-        image:
-          selectedWorkspace.logo ||
-          `${DICEBEAR_AVATAR_URL}${selectedWorkspace.name}`,
+        image: selectedWorkspace.logo || `${DICEBEAR_AVATAR_URL}${selectedWorkspace.name}`,
       };
 
       // return personal account selector if there's no workspace or error (user doesn't have access to workspace)
@@ -84,21 +80,14 @@ export default function WorkspaceSwitcher() {
               alt={selected.id || selected.name}
               className="h-8 w-8 flex-none overflow-hidden rounded-full object-cover"
             />
-            <div
-              className={`${
-                key ? 'hidden' : 'flex'
-              } items-center space-x-3 sm:flex`}
-            >
+            <div className={`${key ? 'hidden' : 'flex'} items-center space-x-3 sm:flex`}>
               <span className="inline-block max-w-[100px] truncate text-sm font-medium sm:max-w-[200px]">
                 {selected.name}
               </span>
               {/* {selected.slug !== "/" && <PlanBadge plan={selected.plan} />} */}
             </div>
           </div>
-          <ChevronsUpDown
-            className="h-4 w-4 text-gray-400"
-            aria-hidden="true"
-          />
+          <ChevronsUpDown className="h-4 w-4 text-gray-400" aria-hidden="true" />
         </button>
       </Popover>
     </div>
@@ -134,14 +123,12 @@ function WorkspaceList({
         return pathname?.replace(selected.slug, slug).split('?')[0] || '/';
       }
     },
-    [domain, key, pathname, selected.slug],
+    [domain, key, pathname, selected.slug]
   );
 
   return (
     <div className="relative mt-1 max-h-72 w-full space-y-0.5 overflow-auto rounded-md bg-white p-2 text-base sm:w-60 sm:text-sm sm:shadow-lg">
-      <div className="p-2 text-xs text-gray-500">
-        {messages?.dashboard?.workspace_title}
-      </div>
+      <div className="p-2 text-xs text-gray-500">{messages?.dashboard?.workspace_title}</div>
       {workspaces.map(({ id, name, slug, logo }) => {
         return (
           <Link

@@ -52,5 +52,5 @@ export const POST = logRequestMetrics(
       }),
     ]);
     return NextResponse.json(response);
-  }),
+  })
 );

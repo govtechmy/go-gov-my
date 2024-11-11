@@ -35,9 +35,7 @@ export default function IOSSection({
     <div className="relative border-b border-gray-200 pb-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-between space-x-2">
-          <h2 className="text-sm font-medium text-gray-900">
-            {messages?.link?.ios_targeting}
-          </h2>
+          <h2 className="text-sm font-medium text-gray-900">{messages?.link?.ios_targeting}</h2>
           <ProBadgeTooltip
             content={
               <SimpleTooltipContent
@@ -51,10 +49,7 @@ export default function IOSSection({
         <Switch fn={() => setEnabled(!enabled)} checked={enabled} />
       </div>
       {enabled && (
-        <motion.div
-          className="mt-3 flex rounded-md shadow-sm"
-          {...FADE_IN_ANIMATION_SETTINGS}
-        >
+        <motion.div className="mt-3 flex rounded-md shadow-sm" {...FADE_IN_ANIMATION_SETTINGS}>
           <input
             name="ios-url"
             id="ios-url"

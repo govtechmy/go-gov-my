@@ -48,13 +48,8 @@ export default function LinkSort() {
               }}
               className="flex w-full items-center justify-between space-x-2 rounded-md px-1 py-2 hover:bg-gray-100 active:bg-gray-200"
             >
-              <IconMenu
-                text={display}
-                icon={<SortDesc className="h-4 w-4" />}
-              />
-              {selectedSort.slug === slug && (
-                <Tick className="h-4 w-4" aria-hidden="true" />
-              )}
+              <IconMenu text={display} icon={<SortDesc className="h-4 w-4" />} />
+              {selectedSort.slug === slug && <Tick className="h-4 w-4" aria-hidden="true" />}
             </button>
           ))}
         </div>
@@ -68,13 +63,7 @@ export default function LinkSort() {
       >
         <IconMenu
           text={sort ? selectedSort.display : messages?.dashboard?.sort_by}
-          icon={
-            sort ? (
-              <SortDesc className="h-4 w-4" />
-            ) : (
-              <Sort className="h-4 w-4 shrink-0" />
-            )
-          }
+          icon={sort ? <SortDesc className="h-4 w-4" /> : <Sort className="h-4 w-4 shrink-0" />}
         />
         <ChevronDown
           className={`h-5 w-5 text-gray-400 ${

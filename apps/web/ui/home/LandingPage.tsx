@@ -45,9 +45,9 @@ export default function LandingPage() {
                   Start with Flowbite Design System
                 </h2>
                 <p className="mb-4 text-lg font-normal text-gray-500 dark:text-gray-400">
-                  Static websites are now used to bootstrap lots of websites and
-                  are becoming the basis for a variety of tools that even
-                  influence both web designers and developers.
+                  Static websites are now used to bootstrap lots of websites and are becoming the
+                  basis for a variety of tools that even influence both web designers and
+                  developers.
                 </p>
                 <a
                   href="#"
@@ -91,9 +91,9 @@ export default function LandingPage() {
                   Start with Flowbite Design System
                 </h2>
                 <p className="mb-4 text-lg font-normal text-gray-500 dark:text-gray-400">
-                  Static websites are now used to bootstrap lots of websites and
-                  are becoming the basis for a variety of tools that even
-                  influence both web designers and developers.
+                  Static websites are now used to bootstrap lots of websites and are becoming the
+                  basis for a variety of tools that even influence both web designers and
+                  developers.
                 </p>
                 <a
                   href="#"
@@ -143,9 +143,9 @@ export default function LandingPage() {
                   Best react libraries around the web
                 </h2>
                 <p className="mb-4 text-lg font-normal text-gray-500 dark:text-gray-400">
-                  Static websites are now used to bootstrap lots of websites and
-                  are becoming the basis for a variety of tools that even
-                  influence both web designers and developers.
+                  Static websites are now used to bootstrap lots of websites and are becoming the
+                  basis for a variety of tools that even influence both web designers and
+                  developers.
                 </p>
                 <a
                   href="#"
@@ -191,9 +191,9 @@ export default function LandingPage() {
                   Start with Flowbite Design System
                 </h2>
                 <p className="mb-4 text-lg font-normal text-gray-500 dark:text-gray-400">
-                  Static websites are now used to bootstrap lots of websites and
-                  are becoming the basis for a variety of tools that even
-                  influence both web designers and developers.
+                  Static websites are now used to bootstrap lots of websites and are becoming the
+                  basis for a variety of tools that even influence both web designers and
+                  developers.
                 </p>
                 <a
                   href="#"
@@ -249,10 +249,7 @@ export default function LandingPage() {
                     </a>
                   </li>
                   <li>
-                    <a
-                      href="https://tailwindcss.com/"
-                      className="hover:underline"
-                    >
+                    <a href="https://tailwindcss.com/" className="hover:underline">
                       Tailwind CSS
                     </a>
                   </li>
@@ -264,18 +261,12 @@ export default function LandingPage() {
                 </h2>
                 <ul className="font-medium text-gray-500 dark:text-gray-400">
                   <li className="mb-4">
-                    <a
-                      href="https://github.com/themesberg/flowbite"
-                      className="hover:underline"
-                    >
+                    <a href="https://github.com/themesberg/flowbite" className="hover:underline">
                       Github
                     </a>
                   </li>
                   <li>
-                    <a
-                      href="https://discord.gg/4eeurUVvTy"
-                      className="hover:underline"
-                    >
+                    <a href="https://discord.gg/4eeurUVvTy" className="hover:underline">
                       Discord
                     </a>
                   </li>
@@ -310,10 +301,7 @@ export default function LandingPage() {
               . All Rights Reserved.
             </span>
             <div className="mt-4 flex sm:mt-0 sm:justify-center">
-              <a
-                href="#"
-                className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
-              >
+              <a href="#" className="text-gray-500 hover:text-gray-900 dark:hover:text-white">
                 <svg
                   className="h-4 w-4"
                   aria-hidden="true"
@@ -329,10 +317,7 @@ export default function LandingPage() {
                 </svg>
                 <span className="sr-only">Facebook page</span>
               </a>
-              <a
-                href="#"
-                className="ms-5 text-gray-500 hover:text-gray-900 dark:hover:text-white"
-              >
+              <a href="#" className="ms-5 text-gray-500 hover:text-gray-900 dark:hover:text-white">
                 <svg
                   className="h-4 w-4"
                   aria-hidden="true"
@@ -344,10 +329,7 @@ export default function LandingPage() {
                 </svg>
                 <span className="sr-only">Discord community</span>
               </a>
-              <a
-                href="#"
-                className="ms-5 text-gray-500 hover:text-gray-900 dark:hover:text-white"
-              >
+              <a href="#" className="ms-5 text-gray-500 hover:text-gray-900 dark:hover:text-white">
                 <svg
                   className="h-4 w-4"
                   aria-hidden="true"
@@ -363,10 +345,7 @@ export default function LandingPage() {
                 </svg>
                 <span className="sr-only">Twitter page</span>
               </a>
-              <a
-                href="#"
-                className="ms-5 text-gray-500 hover:text-gray-900 dark:hover:text-white"
-              >
+              <a href="#" className="ms-5 text-gray-500 hover:text-gray-900 dark:hover:text-white">
                 <svg
                   className="h-4 w-4"
                   aria-hidden="true"
@@ -382,10 +361,7 @@ export default function LandingPage() {
                 </svg>
                 <span className="sr-only">GitHub account</span>
               </a>
-              <a
-                href="#"
-                className="ms-5 text-gray-500 hover:text-gray-900 dark:hover:text-white"
-              >
+              <a href="#" className="ms-5 text-gray-500 hover:text-gray-900 dark:hover:text-white">
                 <svg
                   className="h-4 w-4"
                   aria-hidden="true"

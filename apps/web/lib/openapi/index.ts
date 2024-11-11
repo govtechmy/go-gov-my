@@ -15,8 +15,7 @@ export const document = createDocument({
   openapi: '3.0.3',
   info: {
     title: 'GoGovMy API',
-    description:
-      "GoGovMY - Malaysia's open-source link management infrastructure.",
+    description: "GoGovMY - Malaysia's open-source link management infrastructure.",
     version: '0.0.1',
     contact: {
       name: 'GoGovMy Support',

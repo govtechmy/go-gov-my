@@ -2,14 +2,7 @@ import { INTERVAL_DISPLAYS } from '@/lib/analytics/constants';
 import { validDateRangeForPlan } from '@/lib/analytics/utils';
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import useWorkspace from '@/lib/swr/use-workspace';
-import {
-  IconMenu,
-  Popover,
-  Tick,
-  Tooltip,
-  TooltipContent,
-  useRouterStuff,
-} from '@dub/ui';
+import { IconMenu, Popover, Tick, Tooltip, TooltipContent, useRouterStuff } from '@dub/ui';
 import { APP_DOMAIN, cn, getNextPlan } from '@dub/utils';
 import { Calendar, ChevronDown, Lock } from 'lucide-react';
 import Link from 'next/link';
@@ -26,10 +19,7 @@ export default function DateRangePicker() {
   const [openDatePopover, setOpenDatePopover] = useState(false);
 
   const selectedInterval = useMemo(() => {
-    return (
-      INTERVAL_DISPLAYS.find((s) => s.value === interval) ||
-      INTERVAL_DISPLAYS[1]
-    );
+    return INTERVAL_DISPLAYS.find((s) => s.value === interval) || INTERVAL_DISPLAYS[1];
   }, [interval]);
 
   const { plan } = useWorkspace();
@@ -96,7 +86,7 @@ export default function DateRangePicker() {
                   <Tick className="h-4 w-4" aria-hidden="true" />
                 )}
               </Link>
-            ),
+            )
           )}
         </div>
       }
@@ -109,7 +99,7 @@ export default function DateRangePicker() {
           'flex w-full items-center justify-between space-x-2 truncate rounded-md border border-gray-200 bg-white px-3 py-2.5 transition-all md:w-48',
           {
             'truncate border-gray-500 ring-4 ring-gray-200': openDatePopover,
-          },
+          }
         )}
       >
         <IconMenu

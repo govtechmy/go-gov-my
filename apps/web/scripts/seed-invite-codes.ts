@@ -23,7 +23,7 @@ async function main() {
           inviteCode: nanoid(24),
         },
       });
-    }),
+    })
   );
 
   console.log(res.length);

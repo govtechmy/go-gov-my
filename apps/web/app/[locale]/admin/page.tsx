@@ -12,11 +12,7 @@ export async function generateMetadata({ params }) {
   });
 }
 
-export default function AdminPage({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default function AdminPage({ params: { locale } }: { params: { locale: string } }) {
   const { messages } = useIntlHook(locale);
   return (
     <div className="mx-auto flex w-full max-w-screen-lg flex-col divide-y divide-gray-200 overflow-auto bg-white">
@@ -41,10 +37,7 @@ export default function AdminPage({
           {messages?.admin?.workspace_management?.workspace_management_title}
         </h2>
         <p className="text-sm text-gray-500">
-          {
-            messages?.admin?.workspace_management
-              ?.workspace_management_description
-          }
+          {messages?.admin?.workspace_management?.workspace_management_description}
         </p>
         <LinkManagement />
       </div>

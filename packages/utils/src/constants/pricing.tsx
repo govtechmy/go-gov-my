@@ -77,8 +77,7 @@ const BUSINESS_PLAN_MODIFIER = ({
     {
       text: 'Custom branding',
       footnote: {
-        title:
-          'Set custom QR code logos, password-protected links logos, and more.',
+        title: 'Set custom QR code logos, password-protected links logos, and more.',
         cta: 'Learn more.',
         href: 'https://github.com/govtechmy/go-gov-my/discussions',
       },
@@ -311,19 +310,12 @@ export const PLANS = [
 export const FREE_PLAN = PLANS.find((plan) => plan.name === 'Free')!;
 export const PRO_PLAN = PLANS.find((plan) => plan.name === 'Pro')!;
 export const BUSINESS_PLAN = PLANS.find((plan) => plan.name === 'Business')!;
-export const ENTERPRISE_PLAN = PLANS.find(
-  (plan) => plan.name === 'Enterprise',
-)!;
+export const ENTERPRISE_PLAN = PLANS.find((plan) => plan.name === 'Enterprise')!;
 
-export const PUBLIC_PLANS = [
-  FREE_PLAN,
-  PRO_PLAN,
-  BUSINESS_PLAN,
-  ENTERPRISE_PLAN,
-];
+export const PUBLIC_PLANS = [FREE_PLAN, PRO_PLAN, BUSINESS_PLAN, ENTERPRISE_PLAN];
 
 export const SELF_SERVE_PAID_PLANS = PLANS.filter(
-  (p) => p.name !== 'Free' && p.name !== 'Enterprise',
+  (p) => p.name !== 'Free' && p.name !== 'Enterprise'
 );
 
 export const FREE_WORKSPACES_LIMIT = 2;
@@ -333,14 +325,10 @@ export const getPlanFromPriceId = (priceId: string) => {
 };
 
 export const getPlanDetails = (plan: string) => {
-  return SELF_SERVE_PAID_PLANS.find(
-    (p) => p.name.toLowerCase() === plan.toLowerCase(),
-  )!;
+  return SELF_SERVE_PAID_PLANS.find((p) => p.name.toLowerCase() === plan.toLowerCase())!;
 };
 
 export const getNextPlan = (plan?: string | null) => {
   if (!plan) return PRO_PLAN;
-  return PLANS[
-    PLANS.findIndex((p) => p.name.toLowerCase() === plan.toLowerCase()) + 1
-  ];
+  return PLANS[PLANS.findIndex((p) => p.name.toLowerCase() === plan.toLowerCase()) + 1];
 };

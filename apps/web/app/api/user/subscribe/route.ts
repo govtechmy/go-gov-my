@@ -24,7 +24,7 @@ export const GET = logRequestMetrics(
     }
 
     return NextResponse.json(user);
-  }),
+  })
 );
 
 // POST /api/user/subscribe – subscribe a specific user
@@ -52,7 +52,7 @@ export const POST = logRequestMetrics(
     ]);
 
     return NextResponse.json(user);
-  }),
+  })
 );
 
 // DELETE /api/user/subscribe – unsubscribe a specific user
@@ -76,5 +76,5 @@ export const DELETE = logRequestMetrics(
     ]);
 
     return NextResponse.json(user);
-  }),
+  })
 );

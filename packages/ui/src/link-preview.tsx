@@ -12,8 +12,7 @@ import { LoadingCircle, Photo } from './icons';
 export function LinkPreview({ defaultUrl }: { defaultUrl?: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const url =
-    defaultUrl || searchParams?.get('url') || 'https://github.com/dubinc/dub';
+  const url = defaultUrl || searchParams?.get('url') || 'https://github.com/dubinc/dub';
   const [debouncedUrl] = useDebounce(getUrlFromString(url), 500);
   const hostname = useMemo(() => {
     return getDomainWithoutWWW(debouncedUrl || '');
@@ -23,13 +22,9 @@ export function LinkPreview({ defaultUrl }: { defaultUrl?: string }) {
     title: string | null;
     description: string | null;
     image: string | null;
-  }>(
-    debouncedUrl && `/api/metatags?url=${encodeURIComponent(debouncedUrl)}`,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    },
-  );
+  }>(debouncedUrl && `/api/metatags?url=${encodeURIComponent(debouncedUrl)}`, fetcher, {
+    revalidateOnFocus: false,
+  });
 
   const { title, description, image } = data || {};
 
@@ -58,9 +53,7 @@ export function LinkPreview({ defaultUrl }: { defaultUrl?: string }) {
             defaultValue={url}
             onChange={(e) =>
               router.replace(
-                `/tools/metatags${
-                  e.target.value.length > 0 ? `?url=${e.target.value}` : ''
-                }`,
+                `/tools/metatags${e.target.value.length > 0 ? `?url=${e.target.value}` : ''}`
               )
             }
             aria-invalid="true"
@@ -83,9 +76,7 @@ export function LinkPreview({ defaultUrl }: { defaultUrl?: string }) {
         ) : (
           <div className="flex h-[250px] w-full flex-col items-center justify-center space-y-4 border-b border-gray-300">
             <Photo className="h-8 w-8 text-gray-400" />
-            <p className="text-sm text-gray-400">
-              Enter a link to generate a preview.
-            </p>
+            <p className="text-sm text-gray-400">Enter a link to generate a preview.</p>
           </div>
         )}
         <div className="grid gap-1 bg-white p-3 text-left">
@@ -95,9 +86,7 @@ export function LinkPreview({ defaultUrl }: { defaultUrl?: string }) {
             <div className="mb-1 h-4 w-24 rounded-md bg-gray-100" />
           )}
           {title ? (
-            <h3 className="truncate text-sm font-medium text-[#0f1419]">
-              {title}
-            </h3>
+            <h3 className="truncate text-sm font-medium text-[#0f1419]">{title}</h3>
           ) : (
             <div className="mb-1 h-4 w-full rounded-md bg-gray-100" />
           )}
@@ -115,11 +104,7 @@ export function LinkPreview({ defaultUrl }: { defaultUrl?: string }) {
   );
 }
 
-export function LinkPreviewPlaceholder({
-  defaultUrl,
-}: {
-  defaultUrl?: string;
-}) {
+export function LinkPreviewPlaceholder({ defaultUrl }: { defaultUrl?: string }) {
   return (
     <>
       <div className="relative flex items-center">

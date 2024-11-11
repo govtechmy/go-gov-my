@@ -13,10 +13,7 @@ import { Excavation, ImageSettings, Modules, QRPropsSVG } from './types';
 
 // We could just do this in generatePath, except that we want to support
 // non-Path2D canvas, so we need to keep it an explicit step.
-export function excavateModules(
-  modules: Modules,
-  excavation: Excavation,
-): Modules {
+export function excavateModules(modules: Modules, excavation: Excavation): Modules {
   return modules.slice().map((row, y) => {
     if (y < excavation.y || y >= excavation.y + excavation.h) {
       return row;
@@ -38,9 +35,7 @@ export function generatePath(modules: Modules, margin = 0): string {
       if (!cell && start !== null) {
         // M0 0h7v1H0z injects the space with the move and drops the comma,
         // saving a char per operation
-        ops.push(
-          `M${start + margin} ${y + margin}h${x - start}v1H${start + margin}z`,
-        );
+        ops.push(`M${start + margin} ${y + margin}h${x - start}v1H${start + margin}z`);
         start = null;
         return;
       }
@@ -57,11 +52,7 @@ export function generatePath(modules: Modules, margin = 0): string {
           ops.push(`M${x + margin},${y + margin} h1v1H${x + margin}z`);
         } else {
           // Otherwise finish the current line.
-          ops.push(
-            `M${start + margin},${y + margin} h${x + 1 - start}v1H${
-              start + margin
-            }z`,
-          );
+          ops.push(`M${start + margin},${y + margin} h${x + 1 - start}v1H${start + margin}z`);
         }
         return;
       }
@@ -78,7 +69,7 @@ export function getImageSettings(
   cells: Modules,
   size: number,
   includeMargin: boolean,
-  imageSettings?: ImageSettings,
+  imageSettings?: ImageSettings
 ): null | {
   x: number;
   y: number;
@@ -95,14 +86,8 @@ export function getImageSettings(
   const scale = numCells / size;
   const w = (imageSettings.width || defaultSize) * scale;
   const h = (imageSettings.height || defaultSize) * scale;
-  const x =
-    imageSettings.x == null
-      ? cells.length / 2 - w / 2
-      : imageSettings.x * scale;
-  const y =
-    imageSettings.y == null
-      ? cells.length / 2 - h / 2
-      : imageSettings.y * scale;
+  const x = imageSettings.x == null ? cells.length / 2 - w / 2 : imageSettings.x * scale;
+  const y = imageSettings.y == null ? cells.length / 2 - h / 2 : imageSettings.y * scale;
 
   let excavation: Excavation | null = null;
   if (imageSettings.excavate) {
@@ -128,19 +113,11 @@ export function QRCodeSVG(props: QRPropsSVG) {
     ...otherProps
   } = props;
 
-  let cells = qrcodegen.QrCode.encodeText(
-    value,
-    ERROR_LEVEL_MAP[level],
-  ).getModules();
+  let cells = qrcodegen.QrCode.encodeText(value, ERROR_LEVEL_MAP[level]).getModules();
 
   const margin = includeMargin ? MARGIN_SIZE : 0;
   const numCells = cells.length + margin * 2;
-  const calculatedImageSettings = getImageSettings(
-    cells,
-    size,
-    includeMargin,
-    imageSettings,
-  );
+  const calculatedImageSettings = getImageSettings(cells, size, includeMargin, imageSettings);
 
   let image: null | JSX.Element = null;
   if (imageSettings != null && calculatedImageSettings != null) {
@@ -169,17 +146,8 @@ export function QRCodeSVG(props: QRPropsSVG) {
   const fgPath = generatePath(cells, margin);
 
   return (
-    <svg
-      height={size}
-      width={size}
-      viewBox={`0 0 ${numCells} ${numCells}`}
-      {...otherProps}
-    >
-      <path
-        fill={bgColor}
-        d={`M0,0 h${numCells}v${numCells}H0z`}
-        shapeRendering="crispEdges"
-      />
+    <svg height={size} width={size} viewBox={`0 0 ${numCells} ${numCells}`} {...otherProps}>
+      <path fill={bgColor} d={`M0,0 h${numCells}v${numCells}H0z`} shapeRendering="crispEdges" />
       <path fill={fgColor} d={fgPath} shapeRendering="crispEdges" />
       {image}
     </svg>

@@ -74,12 +74,7 @@ export function NavLogo({
           {variant === 'full' ? (
             <Wordmark className={className} />
           ) : (
-            <Logo
-              className={cn(
-                'h-8 w-8 transition-all duration-75 active:scale-95',
-                className,
-              )}
-            />
+            <Logo className={cn('h-8 w-8 transition-all duration-75 active:scale-95', className)} />
           )}
         </div>
       </Popover.Anchor>
@@ -87,10 +82,7 @@ export function NavLogo({
         <Popover.Content
           sideOffset={14}
           align="start"
-          className={cn(
-            'z-50 -mt-1.5 -translate-x-10',
-            theme === 'dark' && 'dark',
-          )}
+          className={cn('z-50 -mt-1.5 -translate-x-10', theme === 'dark' && 'dark')}
           onClick={(e) => {
             e.stopPropagation();
             setIsPopoverOpen(false);
@@ -113,10 +105,7 @@ export function NavLogo({
               text="Brand Guidelines"
               variant="outline"
               onClick={() =>
-                window.open(
-                  `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}/brand`,
-                  '_blank',
-                )
+                window.open(`https://${process.env.NEXT_PUBLIC_APP_DOMAIN}/brand`, '_blank')
               }
               icon={<BoxSelect strokeWidth={2} className="h-4 w-4" />}
             />
@@ -126,10 +115,7 @@ export function NavLogo({
                 text="Home Page"
                 variant="outline"
                 onClick={() =>
-                  window.open(
-                    `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}`,
-                    '_blank',
-                  )
+                  window.open(`https://${process.env.NEXT_PUBLIC_APP_DOMAIN}`, '_blank')
                 }
                 icon={<Home strokeWidth={2} className="h-4 w-4" />}
               />
@@ -138,10 +124,7 @@ export function NavLogo({
                 text="Dashboard"
                 variant="outline"
                 onClick={() =>
-                  window.open(
-                    `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}`,
-                    '_blank',
-                  )
+                  window.open(`https://${process.env.NEXT_PUBLIC_APP_DOMAIN}`, '_blank')
                 }
                 icon={<LayoutGrid strokeWidth={2} className="h-4 w-4" />}
               />
@@ -158,7 +141,7 @@ function ContextMenuButton({ className, ...rest }: ButtonProps) {
     <Button
       className={cn(
         'h-9 justify-start px-3 font-medium hover:text-gray-700 dark:text-white/70 dark:hover:bg-white/[0.15] dark:hover:text-white',
-        className,
+        className
       )}
       {...rest}
     />
