@@ -10,7 +10,7 @@ export default function LandingPage() {
   return (
     <div className="flex min-h-screen flex-col bg-gray-50">
       <div className="flex justify-center py-1">
-        <IdentifyWebsite />
+        <IdentifyWebsite isOpen={true} onOpenChange={() => {}} />
       </div>
       <HomeNavBar
       // session={session}

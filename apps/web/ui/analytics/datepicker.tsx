@@ -32,17 +32,11 @@ export default function Datepicker() {
   useEffect(() => {
     if (startDate && endDate && endDate >= startDate) {
       startDate.setHours(0, 0, 0);
-      const isToday =
-        new Date().toDateString() === new Date(endDate).toDateString();
+      const isToday = new Date().toDateString() === new Date(endDate).toDateString();
       // if the endDate is today, we set the time to current time, else set it to midnight
       if (isToday) {
         const now = new Date();
-        endDate.setHours(
-          now.getHours(),
-          now.getMinutes(),
-          now.getSeconds(),
-          now.getMilliseconds(),
-        );
+        endDate.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
       } else {
         endDate.setHours(23, 59, 59, 999);
       }

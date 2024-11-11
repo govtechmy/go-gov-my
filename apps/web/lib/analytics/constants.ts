@@ -1,13 +1,4 @@
-export const intervals = [
-  'custom',
-  '24h',
-  '7d',
-  '30d',
-  '90d',
-  'ytd',
-  '1y',
-  'all',
-] as const;
+export const intervals = ['custom', '24h', '7d', '30d', '90d', 'ytd', '1y', 'all'] as const;
 
 export const INTERVAL_DISPLAYS = [
   {

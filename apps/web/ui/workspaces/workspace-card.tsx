@@ -10,7 +10,6 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import PlanBadge from './plan-badge';
 
-
 export default function WorkspaceCard({
   id,
   name,
@@ -92,10 +91,8 @@ export default function WorkspaceCard({
             {linksUsage || linksUsage === 0 ? (
               <NumberTooltip value={linksUsage} unit="links">
                 <h2 className="whitespace-nowrap text-sm">
-
                   {nFormatter(linksUsage)}{' '}
                   {linksUsage != 1 ? workspace_msg?.links : workspace_msg?.link}
-
                 </h2>
               </NumberTooltip>
             ) : (
