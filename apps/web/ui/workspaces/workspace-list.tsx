@@ -10,7 +10,7 @@ import WorkspaceSort from './workspace-sort';
 export default function WorkspaceList() {
   const { workspaces } = useWorkspaceListContext();
   const searchParams = useSearchParams();
-  const sort = searchParams?.get('sort') || 'name'; // default sort by name
+  const sort = searchParams?.get('sort') || 'links'; // Changed default from 'name' to 'links'
 
   const sortedWorkspaces = useMemo(() => {
     if (!workspaces) return [];

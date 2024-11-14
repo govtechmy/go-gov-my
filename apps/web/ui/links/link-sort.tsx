@@ -34,7 +34,7 @@ export default function LinkSort() {
   return (
     <Popover
       content={
-        <div className="w-full p-2 md:w-48">
+        <div className="w-full p-2 sm:w-48">
           {sortOptions.map(({ display, slug }) => (
             <button
               key={slug}
@@ -59,7 +59,7 @@ export default function LinkSort() {
     >
       <button
         onClick={() => setOpenPopover(!openPopover)}
-        className="flex w-48 items-center justify-between space-x-2 rounded-md bg-white px-3 py-2.5 shadow transition-all duration-75 hover:shadow-md"
+        className="flex w-full sm:w-48 items-center justify-between space-x-2 rounded-md bg-white px-3 py-2.5 shadow transition-all duration-75 hover:shadow-md"
       >
         <IconMenu
           text={sort ? selectedSort.display : messages?.dashboard?.sort_by}

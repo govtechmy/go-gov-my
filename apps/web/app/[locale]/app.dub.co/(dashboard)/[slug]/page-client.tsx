@@ -3,19 +3,23 @@
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import useLinks from '@/lib/swr/use-links';
 import NavTabs from '@/ui/layout/nav-tabs';
+import { SearchBox } from '@/ui/links/link-filters';
+
 import LinksContainer from '@/ui/links/links-container';
 import { useAddEditLinkModal } from '@/ui/modals/add-edit-link-modal';
+import WorkspaceListSearchInput from '@/ui/workspaces/workspace-list-search-input';
 import { MaxWidthWrapper } from '@dub/ui';
 import { Button } from '@dub/ui/src/button';
 import { saveAs } from 'file-saver';
 import { json2csv } from 'json-2-csv';
 import { Download } from 'lucide-react';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 export default function WorkspaceLinksClient() {
   const { AddEditLinkModal, AddEditLinkButton } = useAddEditLinkModal();
   const { messages } = useIntlClientHook();
   const { links, isValidating } = useLinks();
+  const searchInputRef = useRef();
 
   const convertToCSV = async (data: object[]) => {
     const headers = [
@@ -128,14 +132,14 @@ export default function WorkspaceLinksClient() {
   return (
     <>
       <AddEditLinkModal />
-      <div className="flex flex-col border-b border-gray-200 bg-white pt-2">
-        <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl py-6">
-          <div className="flex items-center justify-between mx-0">
-            <h1 className="truncate text-2xl text-gray-600 font-inter font-medium hidden xs:block mr-auto">
+      <div className="flex flex-col border-b border-gray-200 bg-white py-6 xs:px-4">
+        <MaxWidthWrapper>
+          <div className="flex items-center justify-between">
+            <h1 className="truncate text-2xl font-semibold hidden xs:block font-poppins">
               {messages?.dashboard?.Links}
             </h1>
-            <div className="flex gap-2">
-              <div className="whitespace-nowrap">
+            <div className="flex items-center space-x-4">
+              <div className="whitespace-nowrap font-poppins">
                 <AddEditLinkButton />
               </div>
               <Button
@@ -148,10 +152,10 @@ export default function WorkspaceLinksClient() {
           </div>
         </MaxWidthWrapper>
       </div>
-      <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl py-6">
-        <div className="w-full flex justify-center container">
+      <MaxWidthWrapper>
+        {/* <div className="w-full flex justify-center container">
           <NavTabs />
-        </div>
+        </div> */}
         <LinksContainer AddEditLinkButton={AddEditLinkButton} />
       </MaxWidthWrapper>
     </>
