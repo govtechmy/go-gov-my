@@ -128,9 +128,9 @@ export default function WorkspaceLinksClient() {
   return (
     <>
       <AddEditLinkModal />
-      <div className="flex flex-col border-b border-gray-200 bg-white py-6">
-        <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl">
-          <div className="flex items-center justify-between mx-6">
+      <div className="flex flex-col border-b border-gray-200 bg-white pt-2">
+        <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl py-6">
+          <div className="flex items-center justify-between mx-0">
             <h1 className="truncate text-2xl text-gray-600 font-inter font-medium hidden xs:block mr-auto">
               {messages?.dashboard?.Links}
             </h1>
@@ -147,11 +147,11 @@ export default function WorkspaceLinksClient() {
             </div>
           </div>
         </MaxWidthWrapper>
-        <div className="w-full flex justify-center">
+      </div>
+      <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl py-6">
+        <div className="w-full flex justify-center container">
           <NavTabs />
         </div>
-      </div>
-      <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl">
         <LinksContainer AddEditLinkButton={AddEditLinkButton} />
       </MaxWidthWrapper>
     </>

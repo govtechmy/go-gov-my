@@ -2,14 +2,19 @@
 
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { LinkProps, WorkspaceProps } from '@/lib/types';
-import { BlurImage, NumberTooltip } from '@dub/ui';
-import { DICEBEAR_AVATAR_URL, fetcher, nFormatter } from '@dub/utils';
-import { BarChart2, Link2 } from 'lucide-react';
+import { BlurImage, CopyButton, CustomSelect, NumberTooltip } from '@dub/ui';
+import { cn, DICEBEAR_AVATAR_URL, fetcher, linkConstructor, nFormatter } from '@dub/utils';
+import { BarChart2, Link2, Users } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import PlanBadge from './plan-badge';
 import useSWR from 'swr';
+import LinkPagination from '../links/link-pagination';
+import LinkCard from '../links/link-card';
+import NoLinksPlaceholder from '../links/no-links-placeholder';
+import LinkCardPlaceholder from '../links/link-card-placeholder';
+import WorkspaceSort from './workspace-sort';
 
 type linkTypes = {
   domain: string;
@@ -31,6 +36,7 @@ export default function WorkspaceCard({
   const { messages, locale } = useIntlClientHook();
   const { data: session } = useSession();
   const workspace_msg = messages?.workspace;
+  const shortDomain = process.env.NEXT_PUBLIC_APP_SHORT_DOMAIN;
 
   const [workspaceOwnership, setWorkspaceOwnership] = useState<
     'member' | 'owner' | 'pemilik' | 'ahli'
@@ -66,60 +72,58 @@ export default function WorkspaceCard({
   }, [session, locale]);
 
   return (
-    <div className="group relative">
-      <Link
-        key={slug}
-        href={`/${locale}/${slug}`}
-        className="relative flex flex-col justify-between space-y-10 rounded-lg border border-gray-100 bg-white p-6 shadow transition-all hover:shadow-lg"
-      >
-        <div className="flex items-start justify-between">
-          <div className="flex items-center space-x-3">
-            <BlurImage
-              src={logo || `${DICEBEAR_AVATAR_URL}${name}`}
-              alt={id}
-              className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full object-cover"
-              width={48}
-              height={48}
-            />
-            <div>
-              <h2 className="max-w-[200px] truncate text-lg font-medium text-gray-700">{name}</h2>
+    <>
+      <div className="group relative">
+        <Link
+          key={slug}
+          href={`/${locale}/${slug}`}
+          className="relative flex flex-col space-y-2 rounded-lg border border-gray-200 bg-white p-5 shadow-sm transition-all hover:shadow-md font-poppins"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <BlurImage
+                src={logo || `${DICEBEAR_AVATAR_URL}${name}`}
+                alt={id}
+                className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full"
+                width={32}
+                height={32}
+              />
+              <div className="flex flex-col">
+                <h2 className="text-base font-medium text-gray-700">{name}</h2>
+                <p className="text-sm text-gray-500">
+                  {/* {linkConstructor({ domain: 'app.pautan.org', key: slug })} */}
+                  {/* How to get current url? */}
+                  {typeof window !== 'undefined'
+                    ? `${window.location.origin}/${locale}/${slug}`
+                    : `https://${shortDomain}/${locale}/${slug}`}
+                </p>
+              </div>
             </div>
           </div>
-          {workspaceOwnership && <PlanBadge plan={workspaceOwnership} />}
-        </div>
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-1 text-gray-500">
-            <Link2 className="h-4 w-4" />
-            {linksUsage || linksUsage === 0 ? (
-              <NumberTooltip value={linksUsage} unit="links">
-                <h2 className="whitespace-nowrap text-sm">
-                  {nFormatter(linksUsage)}{' '}
-                  {linksUsage != 1 ? workspace_msg?.links : workspace_msg?.link}
-                </h2>
+
+          <div className="flex items-center space-x-4 text-sm text-gray-500">
+            <div className="flex items-center space-x-1">
+              <Link2 className="h-4 w-4" />
+              <NumberTooltip value={linksUsage || 0}>
+                <span>
+                  {nFormatter(linksUsage || 0)} {messages?.dashboard?.Link_Short}
+                </span>
               </NumberTooltip>
-            ) : (
-              <div className="h-4 w-16 animate-pulse rounded-md bg-gray-200" />
-            )}
+            </div>
+            <div className="flex items-center space-x-1">
+              <BarChart2 className="h-4 w-4" />
+              <NumberTooltip
+                value={links ? links.reduce((acc, curr) => acc + curr.clicks, 0) : usage}
+              >
+                <span>
+                  {nFormatter(links ? links.reduce((acc, curr) => acc + curr.clicks, 0) : usage)}{' '}
+                  {messages?.dashboard?.Clicks}
+                </span>
+              </NumberTooltip>
+            </div>
           </div>
-          <div className="flex items-center space-x-1 text-gray-500">
-            <BarChart2 className="h-4 w-4" />
-            <NumberTooltip
-              value={links ? links.reduce((acc, curr) => acc + curr.clicks, 0) : usage}
-            >
-              <h2 className="whitespace-nowrap text-sm">
-                {nFormatter(links ? links.reduce((acc, curr) => acc + curr.clicks, 0) : usage)}{' '}
-                {links
-                  ? links.reduce((acc, curr) => acc + curr.clicks, 0) != 1
-                    ? workspace_msg?.clicks
-                    : workspace_msg?.click
-                  : usage != 1
-                    ? workspace_msg?.clicks
-                    : workspace_msg?.click}
-              </h2>
-            </NumberTooltip>
-          </div>
-        </div>
-      </Link>
-    </div>
+        </Link>
+      </div>
+    </>
   );
 }

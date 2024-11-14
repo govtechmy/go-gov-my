@@ -2,6 +2,7 @@ import { useIntlHook } from '@/lib/middleware/utils/useI18n';
 import { constructMetadata } from '@dub/utils';
 import LinkManagement from './components/link-management';
 import MemberLists from './components/member-lists';
+import ClicksAdmin from '@/ui/analytics/clicks-admin';
 
 export async function generateMetadata({ params }) {
   const { locale } = params;
@@ -19,7 +20,8 @@ export default function AdminPage({ params: { locale } }: { params: { locale: st
       <div className="flex flex-col space-y-4 px-5 py-10">
         <h2 className="text-xl font-semibold">Analytics</h2>
         <p className="text-sm text-gray-500">Lorem Ipsum Dolor Sit Amet</p>
-        {/* <LinkManagement /> */}
+        <ClicksAdmin />
+        {/* Show user in json string */}
       </div>
 
       <div className="flex flex-col space-y-4 px-5 py-10">

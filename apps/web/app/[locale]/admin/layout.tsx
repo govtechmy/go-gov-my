@@ -32,7 +32,7 @@ export default function Layout({
         <div className="min-h-screen w-full bg-gray-50">
           <Header />
           <div className="sticky left-0 right-0 top-0 z-20 border-b border-gray-200 bg-white">
-            <MaxWidthWrapper>
+            <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl">
               <div className="flex h-16 items-center justify-between">
                 <div className="flex items-center">
                   <Link href={`/${locale}`} className="hidden sm:block">

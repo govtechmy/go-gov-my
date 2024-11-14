@@ -1,20 +1,44 @@
 'use client';
 
-import NoWorkspacesPlaceholder from '@/ui/workspaces/no-workspaces-placeholder';
-import WorkspaceCard from '@/ui/workspaces/workspace-card';
-import WorkspaceCardPlaceholder from './workspace-card-placeholder';
+import { WorkspaceProps } from '@/lib/types';
 import { useWorkspaceListContext } from './workspace-list-context';
+import WorkspaceCard from './workspace-card';
+import { useSearchParams } from 'next/navigation';
+import { useMemo } from 'react';
+import WorkspaceSort from './workspace-sort';
 
 export default function WorkspaceList() {
-  const { workspaces, loading } = useWorkspaceListContext();
+  const { workspaces } = useWorkspaceListContext();
+  const searchParams = useSearchParams();
+  const sort = searchParams?.get('sort') || 'name'; // default sort by name
 
-  if (loading) {
-    return Array.from({ length: 6 }).map((_, i) => <WorkspaceCardPlaceholder key={i} />);
-  }
+  const sortedWorkspaces = useMemo(() => {
+    if (!workspaces) return [];
 
-  if (!workspaces || workspaces.length === 0) {
-    return <NoWorkspacesPlaceholder />;
-  }
+    return [...workspaces].sort((a, b) => {
+      switch (sort) {
+        case 'name':
+          return a.name.localeCompare(b.name);
+        case 'clicks':
+          return (b.usage || 0) - (a.usage || 0);
+        case 'links':
+          return (b.linksUsage || 0) - (a.linksUsage || 0);
+        default:
+          return a.name.localeCompare(b.name);
+      }
+    });
+  }, [workspaces, sort]);
 
-  return workspaces.map((d) => <WorkspaceCard key={d.slug} {...d} />);
+  if (!workspaces) return null;
+
+  return (
+    <div className="space-y-2">
+      <div className="flex justify-end pb-2">
+        <WorkspaceSort />
+      </div>
+      {sortedWorkspaces.map((workspace) => (
+        <WorkspaceCard key={workspace.id} {...workspace} />
+      ))}
+    </div>
+  );
 }

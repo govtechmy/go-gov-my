@@ -167,7 +167,7 @@ function AddWorkspaceModalHelper({
               autoFocus={!isMobile}
               autoComplete="off"
               className="block w-full rounded-md border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:outline-none focus:ring-gray-500 sm:text-sm"
-              placeholder="Acme, Inc."
+              placeholder="For-Malaysia"
               value={name}
               onChange={(e) => {
                 setData({ ...data, name: e.target.value });
@@ -200,7 +200,7 @@ function AddWorkspaceModalHelper({
                   ? 'border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500'
                   : 'border-gray-300 text-gray-900 placeholder-gray-400 focus:border-gray-500 focus:ring-gray-500'
               } block w-full rounded-r-md focus:outline-none sm:text-sm`}
-              placeholder="acme"
+              placeholder="malaysia"
               value={slug}
               minLength={3}
               maxLength={48}

@@ -28,6 +28,8 @@
     "create_workspace": "Create Workspace",
     "links": "links",
     "Links": "Links",
+    "Link_Short": "Links",
+    "Clicks": "Clicks",
     "sort_by": "Sort By",
     "date_added": "Date Added",
     "number_clicks": "Number of Clicks",
