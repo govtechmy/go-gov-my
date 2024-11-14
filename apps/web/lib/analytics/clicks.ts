@@ -11,7 +11,7 @@ export const getClicks = async (
     endpoint?: AnalyticsEndpoints;
   }
 ) => {
-  let { workspaceId, endpoint, linkId, interval, start, end, domain, key, tagId } = props;
+  let { workspaceId, endpoint, linkId, link, interval, start, end, domain, key, tagId } = props;
 
   // get all-time clicks count if:
   // 1. linkId is defined
@@ -86,6 +86,7 @@ export const getClicks = async (
       ...(domain && { domain }),
       ...(key && { key }),
       ...(tagId && { tags: { some: { tagId } } }),
+      ...(link && { key: link }),
     },
     select: {
       id: true,

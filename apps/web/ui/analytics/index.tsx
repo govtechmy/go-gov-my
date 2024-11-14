@@ -25,6 +25,8 @@ export const AnalyticsContext = createContext<{
   admin?: boolean;
   start: string;
   end: string;
+  workspaceId: string | undefined;
+  link: string;
 }>({
   basePath: '',
   baseApiPath: '',
@@ -34,6 +36,8 @@ export const AnalyticsContext = createContext<{
   admin: false,
   start: '',
   end: '',
+  workspaceId: '',
+  link: '',
 });
 
 export default function Analytics({
@@ -62,6 +66,7 @@ export default function Analytics({
   const end = searchParams?.get('end') || '';
 
   const tagId = searchParams?.get('tagId') ?? undefined;
+  const link = searchParams?.get('link') || '';
 
   const { basePath, domain, baseApiPath } = useMemo(() => {
     // Workspace analytics page, e.g. app.dub.co/dub/analytics?domain=dub.sh&key=github
@@ -104,10 +109,11 @@ export default function Analytics({
       ...(interval && { interval }),
       ...(start && { start }),
       ...(end && { end }),
+      ...(link && { link }),
       ...(tagId && { tagId }),
       ...availableFilterParams,
     }).toString();
-  }, [id, domain, key, searchParams, interval, tagId]);
+  }, [id, domain, key, searchParams, interval, tagId, link]);
 
   const { data: totalClicks } = useSWR<number>(`${baseApiPath}/count?${queryString}`, fetcher);
 
@@ -128,6 +134,8 @@ export default function Analytics({
         admin, // whether the user is an admin
         start, // start date if interval is custom
         end, // end date if interval is custom
+        workspaceId: id,
+        link,
       }}
     >
       <div className="bg-gray-50">

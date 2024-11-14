@@ -23,6 +23,7 @@ export const clickAnalyticsQuerySchema = z.object({
   domain: z.string().optional().describe('The domain to filter analytics for.'),
   key: z.string().optional().describe('The short link slug.'),
   linkId: z.string().optional().describe('The unique ID of the short link on Dub.'),
+  link: z.string().optional().describe('The unique key of the short link on Dub.'),
   externalId: z
     .string()
     .optional()

@@ -13,6 +13,8 @@ import { AnalyticsContext } from '.';
 import DateRangePicker from './date-range-picker';
 import Datepicker from './datepicker';
 import ExportButton from './export-button';
+import FilterBar from './filter-bar';
+import SharePopover from './share-popover';
 
 export default function Toggle() {
   const { basePath, domain, key, url, admin } = useContext(AnalyticsContext);
@@ -77,6 +79,7 @@ export default function Toggle() {
               'w-full md:w-auto': key,
             })}
           >
+            <FilterBar />
             <div
               className={cn('flex w-full items-center gap-2', {
                 'min-[550px]:w-auto': !key,
