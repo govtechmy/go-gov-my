@@ -19,11 +19,14 @@ if (!process.env.NEXT_PUBLIC_APP_DOMAIN) {
   throw Error('missing env variable NEXT_PUBLIC_APP_DOMAIN');
 }
 
-export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME; // e.g. GoGovMY
+// This should be your app name i.e.GoGovMY
+export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME;
 
-export const SHORT_DOMAIN = process.env.NEXT_PUBLIC_APP_SHORT_DOMAIN; // e.g. go.gov.my
+// This should be your app short link domain i.e. app.go.gov.my
+export const SHORT_DOMAIN = process.env.NEXT_PUBLIC_APP_SHORT_DOMAIN;
 
-export const HOME_DOMAIN = `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}`; // e.g. https://go.gov.my
+// This should be your main short link domain i.e. go.gov.my
+export const HOME_DOMAIN = `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}`;
 
 export const APP_HOSTNAMES = new Set([
   `app.${process.env.NEXT_PUBLIC_APP_DOMAIN}`,
@@ -60,8 +63,8 @@ export const ADMIN_HOSTNAMES = new Set([
 ]);
 
 export const DUB_LOGO = `${APP_DOMAIN}/_static/logo.png`;
-export const DUB_THUMBNAIL_MS = `https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaMs-min.png`;
-export const DUB_THUMBNAIL_EN = `https://gogovmy-dev.s3.ap-southeast-2.amazonaws.com//public/GoGovMetaEn-min.png`;
+export const DUB_THUMBNAIL_MS = `https://s3.ap-southeast-1.amazonaws.com/pautan.org/og/images/ms-MY.png`;
+export const DUB_THUMBNAIL_EN = `https://s3.ap-southeast-1.amazonaws.com/pautan.org/og/images/en-MY.png`;
 
 export const DUB_WORKSPACE_ID = 'cl7pj5kq4006835rbjlt2ofka';
 export const LEGAL_WORKSPACE_ID = 'clrflia0j0000vs7sqfhz9c7q';
@@ -90,25 +93,5 @@ export const DUB_DEMO_LINKS = [
     id: 'clqo10sum0006js08vutzfxt3',
     domain: SHORT_DOMAIN,
     key: 'try',
-  },
-  {
-    id: 'clot0z5rg000djp08ue98hxkn',
-    domain: 'chatg.pt',
-    key: 'domains',
-  },
-  {
-    id: 'clp4jh9av0001l308ormavtlu',
-    domain: 'spti.fi',
-    key: 'hans',
-  },
-  {
-    id: 'cltgtsex40003ck8z444hum5u',
-    domain: 'git.new',
-    key: 'dub',
-  },
-  {
-    id: 'clp3k3yoi0001ju0874nz899q',
-    domain: 'amzn.id',
-    key: 'tv',
   },
 ];

@@ -1,9 +1,9 @@
 const logTypeToEnv = {
-  alerts: process.env.DUB_SLACK_HOOK_ALERTS,
-  cron: process.env.DUB_SLACK_HOOK_CRON,
-  links: process.env.DUB_SLACK_HOOK_LINKS,
-  subscribers: process.env.DUB_SLACK_HOOK_SUBSCRIBERS,
-  errors: process.env.DUB_SLACK_HOOK_ERRORS,
+  alerts: process.env.GOVTECH_SLACK_HOOK_ALERTS,
+  cron: process.env.GOVTECH_SLACK_HOOK_CRON,
+  links: process.env.GOVTECH_SLACK_HOOK_LINKS,
+  subscribers: process.env.GOVTECH_SLACK_HOOK_SUBSCRIBERS,
+  errors: process.env.GOVTECH_SLACK_HOOK_ERRORS,
 };
 
 export const log = async ({
@@ -17,11 +17,11 @@ export const log = async ({
 }) => {
   if (
     process.env.NODE_ENV === 'development' ||
-    !process.env.DUB_SLACK_HOOK_ALERTS ||
-    !process.env.DUB_SLACK_HOOK_CRON ||
-    !process.env.DUB_SLACK_HOOK_LINKS ||
-    !process.env.DUB_SLACK_HOOK_SUBSCRIBERS ||
-    !process.env.DUB_SLACK_HOOK_ERRORS
+    !process.env.GOVTECH_SLACK_HOOK_ALERTS ||
+    !process.env.GOVTECH_SLACK_HOOK_CRON ||
+    !process.env.GOVTECH_SLACK_HOOK_LINKS ||
+    !process.env.GOVTECH_SLACK_HOOK_SUBSCRIBERS ||
+    !process.env.GOVTECH_SLACK_HOOK_ERRORS
   ) {
     console.log(message);
   }
@@ -48,6 +48,6 @@ export const log = async ({
       }),
     });
   } catch (e) {
-    console.log(`Failed to log to Dub Slack. Error: ${e}`);
+    console.log(`Failed to log to GovTech Slack. Error: ${e}`);
   }
 };

@@ -1,8 +1,8 @@
 export const LOCALHOST_GEO_DATA = {
-  city: 'San Francisco',
-  region: 'CA',
-  country: 'US',
-  latitude: '37.7695',
-  longitude: '-122.385',
+  city: 'Kuala Lumpur',
+  region: 'KL',
+  country: 'MY',
+  latitude: '3.1390',
+  longitude: '101.6869',
 };
-export const LOCALHOST_IP = '63.141.57.109';
+export const LOCALHOST_IP = '127.0.0.1';
