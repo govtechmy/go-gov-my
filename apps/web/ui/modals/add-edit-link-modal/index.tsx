@@ -809,22 +809,8 @@ function AddEditLinkButton({
       text={message?.create_link}
       shortcut="C"
       variant="success"
-      disabledTooltip={
-        exceededLinks ? (
-          <TooltipContent
-            title="Your workspace has exceeded its monthly links limit. We're still collecting data on your existing links, but you need to upgrade to add more links."
-            cta={`Upgrade to ${nextPlan.name}`}
-            onClick={() => {
-              queryParams({
-                set: {
-                  upgrade: nextPlan.name.toLowerCase(),
-                },
-              });
-            }}
-          />
-        ) : undefined
-      }
       onClick={() => setShowAddEditLinkModal(true)}
+      className="px-4 py-2 text-sm font-medium font-poppins whitespace-nowrap"
     />
   );
 }

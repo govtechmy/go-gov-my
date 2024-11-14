@@ -2,14 +2,13 @@
 
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import useLinks from '@/lib/swr/use-links';
-import NavTabs from '@/ui/layout/nav-tabs';
-import { SearchBox } from '@/ui/links/link-filters';
 
 import LinksContainer from '@/ui/links/links-container';
 import { useAddEditLinkModal } from '@/ui/modals/add-edit-link-modal';
-import WorkspaceListSearchInput from '@/ui/workspaces/workspace-list-search-input';
+import PageTitle from '@/ui/typography/page-title';
 import { MaxWidthWrapper } from '@dub/ui';
 import { Button } from '@dub/ui/src/button';
+import { cn } from '@dub/utils';
 import { saveAs } from 'file-saver';
 import { json2csv } from 'json-2-csv';
 import { Download } from 'lucide-react';
@@ -19,7 +18,6 @@ export default function WorkspaceLinksClient() {
   const { AddEditLinkModal, AddEditLinkButton } = useAddEditLinkModal();
   const { messages } = useIntlClientHook();
   const { links, isValidating } = useLinks();
-  const searchInputRef = useRef();
 
   const convertToCSV = async (data: object[]) => {
     const headers = [
@@ -132,31 +130,27 @@ export default function WorkspaceLinksClient() {
   return (
     <>
       <AddEditLinkModal />
-      <div className="flex flex-col border-b border-gray-200 bg-white py-6 xs:px-4">
-        <MaxWidthWrapper>
-          <div className="flex items-center justify-between">
-            <h1 className="truncate text-2xl font-semibold hidden xs:block font-poppins">
-              {messages?.dashboard?.Links}
-            </h1>
-            <div className="flex items-center space-x-4">
-              <div className="whitespace-nowrap font-poppins">
-                <AddEditLinkButton />
-              </div>
-              <Button
-                icon={<Download className="h-4 w-4" />}
-                variant="secondary"
-                shortcut="E"
-                onClick={exportToCSV}
-              />
-            </div>
+      <MaxWidthWrapper className={cn('flex flex-col border-b border-gray-200 bg-white py-6')}>
+        <div className="flex flex-row items-center justify-between px-4 md:px-8 lg:px-16 xl:px-32">
+          <PageTitle text={messages?.dashboard?.Links} />
+          <div className="flex items-center gap-3 ">
+            <AddEditLinkButton />
+            <Button
+              icon={<Download className="h-4 w-4" />}
+              variant="secondary"
+              shortcut="E"
+              onClick={exportToCSV}
+            />
           </div>
-        </MaxWidthWrapper>
-      </div>
+        </div>
+      </MaxWidthWrapper>
       <MaxWidthWrapper>
+        <div className="my-4 grid grid-cols-1 gap-5 px-4 md:px-8 lg:px-16 xl:px-32">
+          <LinksContainer AddEditLinkButton={AddEditLinkButton} />
+        </div>
         {/* <div className="w-full flex justify-center container">
           <NavTabs />
         </div> */}
-        <LinksContainer AddEditLinkButton={AddEditLinkButton} />
       </MaxWidthWrapper>
     </>
   );

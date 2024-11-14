@@ -59,7 +59,7 @@ export default function LinkSort() {
     >
       <button
         onClick={() => setOpenPopover(!openPopover)}
-        className={`flex items-center justify-between space-x-2 rounded-md bg-white px-2 py-2 border border-gray-200 shadow transition-all duration-75 hover:shadow-md`}
+        className="flex w-full items-center justify-between space-x-2 rounded-md bg-white px-2 py-2 border border-gray-200 shadow transition-all duration-75 hover:shadow-md"
       >
         <IconMenu
           text={sort ? selectedSort.display : messages?.dashboard?.sort_by}

@@ -29,7 +29,7 @@ function LinkFiltersButton({
   return (
     <button
       onClick={() => setShowLinkFiltersModal(true)}
-      className="mr-5 flex flex-1 items-center justify-between space-x-2 rounded-md bg-white px-3 py-2.5 shadow transition-all duration-75 hover:shadow-md active:scale-95 lg:hidden"
+      className="xs:mr-0 sm:mr-2 md:mr-5 lg:mr-5 xl:mr-5 flex flex-1 items-center justify-between space-x-2 rounded-md bg-white px-3 py-2.5 shadow transition-all duration-75 hover:shadow-md active:scale-95 lg:hidden"
     >
       <IconMenu text="Filters" icon={<Filter className="h-4 w-4 shrink-0" />} />
       <ChevronDown

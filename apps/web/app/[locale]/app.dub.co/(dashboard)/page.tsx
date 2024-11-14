@@ -4,23 +4,8 @@ import PageTitle from '@/ui/typography/page-title';
 import CreateWorkspaceButton from '@/ui/workspaces/create-workspace-button';
 import WorkspaceList from '@/ui/workspaces/workspace-list';
 import { WorkspaceListProvider } from '@/ui/workspaces/workspace-list-context';
-import WorkspaceListSearchInput from '@/ui/workspaces/workspace-list-search-input';
-import WorkspaceSort from '@/ui/workspaces/workspace-sort';
 import { MaxWidthWrapper } from '@dub/ui';
 import { cn } from '@dub/utils';
-import { Inter, Poppins } from 'next/font/google';
-
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-poppins',
-});
-
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  weight: ['400', '500', '600', '700'],
-});
 
 export default function App({ params: { locale } }) {
   const { messages } = useIntlHook(locale);
