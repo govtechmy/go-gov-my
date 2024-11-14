@@ -14,7 +14,6 @@ const config: Pick<Config, 'presets'> = {
       theme: {
         extend: {
           fontFamily: {
-            satoshi: ['var(--font-satoshi)'],
             inter: ['var(--font-inter)'],
             poppins: ['var(--font-poppins)'],
           },
