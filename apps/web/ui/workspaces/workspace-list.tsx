@@ -6,11 +6,12 @@ import WorkspaceCard from './workspace-card';
 import { useSearchParams } from 'next/navigation';
 import { useMemo } from 'react';
 import WorkspaceSort from './workspace-sort';
+import WorkspaceListSearchInput from './workspace-list-search-input';
 
 export default function WorkspaceList() {
   const { workspaces } = useWorkspaceListContext();
   const searchParams = useSearchParams();
-  const sort = searchParams?.get('sort') || 'links'; // Changed default from 'name' to 'links'
+  const sort = searchParams?.get('sort') || 'links';
 
   const sortedWorkspaces = useMemo(() => {
     if (!workspaces) return [];
@@ -33,7 +34,10 @@ export default function WorkspaceList() {
 
   return (
     <div className="space-y-2">
-      <div className="flex justify-end pb-2">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between pb-2">
+        <div className="w-full sm:w-72">
+          <WorkspaceListSearchInput />
+        </div>
         <WorkspaceSort />
       </div>
       {sortedWorkspaces.map((workspace) => (

@@ -1,5 +1,6 @@
 import { useIntlHook } from '@/lib/middleware/utils/useI18n';
 import { MessagesProvider } from '@/ui/switcher/provider';
+import PageTitle from '@/ui/typography/page-title';
 import CreateWorkspaceButton from '@/ui/workspaces/create-workspace-button';
 import WorkspaceList from '@/ui/workspaces/workspace-list';
 import { WorkspaceListProvider } from '@/ui/workspaces/workspace-list-context';
@@ -26,25 +27,14 @@ export default function App({ params: { locale } }) {
   return (
     <MessagesProvider messages={messages}>
       <WorkspaceListProvider>
-        <div className="flex flex-col border-b border-gray-200 bg-white py-6 xs:px-4">
-          <MaxWidthWrapper>
-            <div className="flex items-center justify-between">
-              <h1 className="truncate text-2xl font-semibold hidden xs:block font-poppins">
-                {messages?.dashboard?.workspace_title}
-              </h1>
-              <div className="flex items-center space-x-4">
-                <CreateWorkspaceButton />
-              </div>
-            </div>
-          </MaxWidthWrapper>
-          <div className="mt-6 xs:px-4">
-            <MaxWidthWrapper>
-              <WorkspaceListSearchInput />
-            </MaxWidthWrapper>
+        <MaxWidthWrapper className={cn('flex flex-col border-b border-gray-200 bg-white py-6')}>
+          <div className="flex flex-row items-center justify-between px-4 md:px-8 lg:px-16 xl:px-32">
+            <PageTitle text={messages?.dashboard?.workspace_title} />
+            <CreateWorkspaceButton />
           </div>
-        </div>
+        </MaxWidthWrapper>
         <MaxWidthWrapper>
-          <div className="my-4 grid grid-cols-1 gap-5 lg:grid-cols-1 xl:grid-cols-1 xs:px-4 sm:px-2 md:px-2 lg:px-2 xl:px-0">
+          <div className="my-4 grid grid-cols-1 gap-5 px-4 md:px-8 lg:px-16 xl:px-32">
             <WorkspaceList />
           </div>
         </MaxWidthWrapper>

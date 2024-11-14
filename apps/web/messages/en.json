@@ -9,7 +9,16 @@
     "masthead_ssl_title": "Secure websites use",
     "masthead_ssl_desc_1": "Look for a lock (",
     "masthead_ssl_or": ") or",
-    "masthead_ssl_desc_2": "as an added precaution. Share sensitive information only on official, secure websites."
+    "masthead_ssl_desc_2": "as an added precaution. Share sensitive information only on official, secure websites.",
+    "official_gov_website": "Official Malaysia Government Website",
+    "how_to_identify": "Here's how you know",
+    "official": "Official government websites end with .gov.my",
+    "not_govmy": "If the link does not end with ",
+    "close_site": ", exit the website immediately even if it looks similar.",
+    "secure": "Secure websites use HTTPS",
+    "find_lock": "Look for a lock (",
+    "or": ") or ",
+    "precaution": " as an added precaution. If not present, do not share any sensitive information."
   },
   "language": "en-GB",
   "login": {
@@ -463,5 +472,23 @@
     "expired_link": "Expired Link ",
     "expired_desc": "This link has expired. Please contact the owner of this link to get a new one.",
     "analytics": "Analytics for "
+  },
+  "Footer": {
+    "copyright": "All Rights Reserved",
+    "last_update": "Last Updated",
+    "kd": "Ministry of Digital",
+    "disclaimer": "Disclaimer",
+    "privacy_policy": "Privacy Policy",
+    "follow_us": "Follow Us",
+    "address": "Aras 13, 14 dan 15, Blok Menara,\nMenara Usahawan\nNo. 18, Persiaran Perdana, Presint 2\nPusat Pentadbiran Kerajaan Persekutuan\n62000 Putrajaya, Malaysia.",
+    "links": {
+      "title": {
+        "openSource": "Open Source"
+      },
+      "name": {
+        "github": "GitHub Repo",
+        "figma": "Figma"
+      }
+    }
   }
 }

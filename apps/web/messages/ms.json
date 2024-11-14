@@ -9,7 +9,16 @@
     "masthead_ssl_title": "Portal yang selamat menggunakan ",
     "masthead_ssl_desc_1": "Periksa ikon kekunci mangga (",
     "masthead_ssl_or": ") atau",
-    "masthead_ssl_desc_2": "di depan pautan. Sekiranya tiada, jangan kongsikan sebarang maklumat sensitif."
+    "masthead_ssl_desc_2": "di depan pautan. Sekiranya tiada, jangan kongsikan sebarang maklumat sensitif.",
+    "official_gov_website": "Portal Rasmi Kerajaan Malaysia",
+    "how_to_identify": "Kenal pasti begini",
+    "official": "Pautan portal rasmi berakhir dengan .gov.my",
+    "not_govmy": "Sekiranya anda melihat pautan selain ",
+    "close_site": ", segera tutupkan halaman itu walaupun ia menyerupai portal rasmi!",
+    "secure": "Portal yang selamat menggunakan HTTPS",
+    "find_lock": "Periksa ikon loker (",
+    "or": ") atau ",
+    "precaution": " di depan pautan. Sekiranya tiada, jangan kongsikan sebarang maklumat sensitif."
   },
   "language": "ms-MY",
   "login": {
@@ -463,5 +472,23 @@
     "expired_link": "Pautan tamat tempoh",
     "expired_desc": "Tempoh pautan ini sudah tamat. Sila hubungi pemilik pautan ini untuk mendapatkan pautan yang baharu.",
     "analytics": "Statistik untuk "
+  },
+  "Footer": {
+    "copyright": "Hak Cipta Terpelihara",
+    "last_update": "Kemaskini Terakhir",
+    "kd": "Kementerian Digital",
+    "disclaimer": "Penafian",
+    "privacy_policy": "Dasar Privasi",
+    "follow_us": "Ikuti Kami",
+    "address": "Aras 13, 14 dan 15, Blok Menara,\nMenara Usahawan\nNo. 18, Persiaran Perdana, Presint 2\nPusat Pentadbiran Kerajaan Persekutuan\n62000 Putrajaya, Malaysia.",
+    "links": {
+      "title": {
+        "openSource": "Sumber terbuka"
+      },
+      "name": {
+        "github": "Repo GitHub",
+        "figma": "Figma"
+      }
+    }
   }
 }

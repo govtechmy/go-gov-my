@@ -32,6 +32,22 @@
       }
     ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "ui/shared/icons/checkmark.tsx",
+    "ui/shared/icons/chevron.tsx",
+    "ui/shared/icons/flag-my.tsx",
+    "ui/shared/icons/globe.tsx",
+    "ui/shared/icons/govmy.tsx",
+    "../../packages/ui/src/icons/lock.tsx",
+    "ui/shared/icons/solid-lock.tsx",
+    "ui/shared/icons/chevron-down.tsx",
+    "ui/shared/icons/chevron-left.tsx",
+    "ui/shared/icons/chevron-right.tsx",
+    "ui/shared/icons/chevron-up.tsx"
+  ],
   "exclude": ["node_modules"]
 }

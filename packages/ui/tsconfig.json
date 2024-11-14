@@ -1,5 +1,17 @@
 {
   "extends": "tsconfig/react-library.json",
-  "include": ["."],
+  "include": [
+    ".",
+    "../../apps/web/ui/shared/icons/checkmark.tsx",
+    "../../apps/web/ui/shared/icons/chevron-down.tsx",
+    "../../apps/web/ui/shared/icons/chevron-left.tsx",
+    "../../apps/web/ui/shared/icons/chevron-right.tsx",
+    "../../apps/web/ui/shared/icons/chevron-up.tsx",
+    "../../apps/web/ui/shared/icons/chevron.tsx",
+    "../../apps/web/ui/shared/icons/solid-lock.tsx",
+    "../../apps/web/ui/shared/icons/govmy.tsx",
+    "../../apps/web/ui/shared/icons/globe.tsx",
+    "../../apps/web/ui/shared/icons/flag-my.tsx"
+  ],
   "exclude": ["dist", "build", "node_modules"]
 }
