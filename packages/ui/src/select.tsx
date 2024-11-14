@@ -17,6 +17,8 @@ type CustomSelectProps = {
   options: Option[];
   onChange: (newValue: Option) => void;
   defaultValue: number;
+  className?: string;
+  buttonClassName?: string;
 };
 
 export function CustomSelect({ icon, options, onChange, defaultValue }: CustomSelectProps) {
@@ -46,7 +48,7 @@ export function CustomSelect({ icon, options, onChange, defaultValue }: CustomSe
             <button
               key={option.value}
               onClick={() => onItemClick(option)}
-              className="flex w-full items-center justify-between space-x-2 rounded-md px-1 py-2 hover:bg-gray-100 active:bg-gray-200"
+              className="flex  w-full items-center justify-between space-x-2 rounded-md px-1 py-2 hover:bg-gray-100 active:bg-gray-200 font-poppins"
             >
               <IconMenu text={option.full} icon={null} />
               {isSelected(option) && <CheckCircle className="text-blue-600" aria-hidden="true" />}
@@ -59,11 +61,11 @@ export function CustomSelect({ icon, options, onChange, defaultValue }: CustomSe
     >
       <button
         onClick={() => setShowMenu((prev) => !prev)}
-        className="flex w-full sm:w-48 items-center justify-between space-x-2 rounded-md bg-white px-3 py-2.5 shadow transition-all duration-75 hover:shadow-md"
+        className={`flex items-center justify-between space-x-2 rounded-md bg-white px-2 py-2 border border-gray-200 shadow transition-all duration-75 hover:shadow-md`}
       >
         <IconMenu text={selectedOption.label} icon={icon} />
         <ChevronDown
-          className={`h-5 w-5 text-gray-400 ${
+          className={`h-5 w-5 text-gray-800 ${
             showMenu ? 'rotate-180 transform' : ''
           } transition-all duration-75`}
         />
