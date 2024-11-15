@@ -15,6 +15,7 @@ import LinkCard from '../links/link-card';
 import NoLinksPlaceholder from '../links/no-links-placeholder';
 import LinkCardPlaceholder from '../links/link-card-placeholder';
 import WorkspaceSort from './workspace-sort';
+import { LinkButton } from '@dub/ui/src/link-button';
 
 type linkTypes = {
   domain: string;
@@ -99,20 +100,16 @@ export default function WorkspaceCard({
             </div>
 
             <div className="flex items-center space-x-2 z-10" onClick={(e) => e.preventDefault()}>
-              <Link
-                href={`/${locale}/${slug}/settings`}
-                className="p-2 hover:bg-gray-200 rounded-md transition-colors bg-gray-100"
-                title="Settings"
-              >
-                <Settings className="h-5 w-5 text-gray-500 hover:text-gray-600" />
-              </Link>
-              <Link
+              <LinkButton
+                icon={<LineChart className="h-4 w-4" />}
+                variant="secondary-outline"
                 href={`/${locale}/${slug}/analytics`}
-                className="p-2 hover:bg-yellow-200 bg-yellow-100 rounded-md transition-colors"
-                title="Analytics"
-              >
-                <LineChart className="h-5 w-5 text-yellow-500 hover:text-yellow-600" />
-              </Link>
+              />
+              <LinkButton
+                icon={<Settings className="h-4 w-4" />}
+                variant="secondary"
+                href={`/${locale}/${slug}/settings`}
+              />
             </div>
           </div>
 

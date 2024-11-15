@@ -2,22 +2,29 @@
 
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import useLinks from '@/lib/swr/use-links';
+import { useParams, useRouter } from 'next/navigation';
 
 import LinksContainer from '@/ui/links/links-container';
 import { useAddEditLinkModal } from '@/ui/modals/add-edit-link-modal';
 import PageTitle from '@/ui/typography/page-title';
 import { MaxWidthWrapper } from '@dub/ui';
 import { Button } from '@dub/ui/src/button';
+import { LinkButton } from '@dub/ui/src/link-button';
 import { cn } from '@dub/utils';
 import { saveAs } from 'file-saver';
 import { json2csv } from 'json-2-csv';
-import { Download } from 'lucide-react';
+import { Download, LineChart, Settings } from 'lucide-react';
+import Link from 'next/link';
 import { useCallback, useEffect, useRef } from 'react';
+import router from 'next/router';
 
 export default function WorkspaceLinksClient() {
   const { AddEditLinkModal, AddEditLinkButton } = useAddEditLinkModal();
-  const { messages } = useIntlClientHook();
+  const { messages, locale } = useIntlClientHook();
   const { links, isValidating } = useLinks();
+  const params = useParams() as { slug: string };
+  const { slug } = params;
+  const router = useRouter();
 
   const convertToCSV = async (data: object[]) => {
     const headers = [
@@ -107,7 +114,6 @@ export default function WorkspaceLinksClient() {
       const existingModalBackdrop = document.getElementById('modal-backdrop');
 
       if (
-        e.key.toLowerCase() === 'e' &&
         !e.metaKey &&
         !e.ctrlKey &&
         target.tagName !== 'INPUT' &&
@@ -115,11 +121,25 @@ export default function WorkspaceLinksClient() {
         !existingModalBackdrop &&
         !isValidating
       ) {
-        e.preventDefault();
-        exportToCSV();
+        const key = e.key.toLowerCase();
+
+        switch (key) {
+          case 'e':
+            e.preventDefault();
+            exportToCSV();
+            break;
+          case 'a':
+            e.preventDefault();
+            router.push(`/${locale}/${slug}/analytics`);
+            break;
+          case 's':
+            e.preventDefault();
+            router.push(`/${locale}/${slug}/settings`);
+            break;
+        }
       }
     },
-    [isValidating]
+    [isValidating, locale, slug, router]
   );
 
   useEffect(() => {
@@ -134,13 +154,39 @@ export default function WorkspaceLinksClient() {
         <div className="flex flex-row items-center justify-between px-4 md:px-8 lg:px-16 xl:px-32">
           <PageTitle text={messages?.dashboard?.Links} />
           <div className="flex items-center gap-3 ">
-            <AddEditLinkButton />
-            <Button
-              icon={<Download className="h-4 w-4" />}
-              variant="secondary"
-              shortcut="E"
-              onClick={exportToCSV}
-            />
+            <div
+              className="flex items-center space-x-2 z-10 font-poppins"
+              onClick={(e) => e.preventDefault()}
+            >
+              <AddEditLinkButton />
+              <LinkButton
+                icon={<LineChart className="h-4 w-4" />}
+                variant="secondary-outline"
+                shortcut="A"
+                href={`/${locale}/${slug}/analytics`}
+                text="Analytics"
+                className="hidden sm:flex"
+              />
+              <LinkButton
+                icon={<LineChart className="h-4 w-4" />}
+                variant="secondary-outline"
+                href={`/${locale}/${slug}/analytics`}
+                className="sm:hidden flex"
+              />
+
+              <Button
+                icon={<Download className="h-4 w-4" />}
+                variant="secondary"
+                shortcut="E"
+                onClick={exportToCSV}
+              />
+              <LinkButton
+                icon={<Settings className="h-4 w-4" />}
+                variant="secondary"
+                shortcut="S"
+                href={`/${locale}/${slug}/settings`}
+              />
+            </div>
           </div>
         </div>
       </MaxWidthWrapper>
