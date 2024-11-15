@@ -116,21 +116,23 @@ export default function WorkspaceAnalytics() {
 
   return (
     <Suspense fallback={<LayoutLoader />}>
-      <MaxWidthWrapper className={cn('flex flex-col border-b border-gray-200 bg-white py-6')}>
-        <AnalyticsClient>
-          <div className="flex flex-row items-center justify-between px-4 md:px-8 lg:px-16 xl:px-32">
-            <PageTitle text={messages?.dashboard?.analytics} />
-            <HeaderButtons
-              loading={loading}
-              exportData={exportData}
-              messages={messages}
-              locale={locale}
-              slug={slug}
-              queryString={queryString}
-            />
-          </div>
-        </AnalyticsClient>
-      </MaxWidthWrapper>
+      <div className="bg-white w-full border-b border-gray-200">
+        <MaxWidthWrapper className={cn('flex flex-col bg-white py-6 max-w-7xl')}>
+          <AnalyticsClient>
+            <div className="flex flex-row items-center justify-between xs:px-4 sm:px-4 md:px-2 lg:px-0">
+              <PageTitle text={messages?.dashboard?.analytics} />
+              <HeaderButtons
+                loading={loading}
+                exportData={exportData}
+                messages={messages}
+                locale={locale}
+                slug={slug}
+                queryString={queryString}
+              />
+            </div>
+          </AnalyticsClient>
+        </MaxWidthWrapper>
+      </div>
       <MaxWidthWrapper>
         <AnalyticsClient>
           <Analytics />

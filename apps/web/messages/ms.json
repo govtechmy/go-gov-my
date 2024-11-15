@@ -31,7 +31,7 @@
     "no_account_v2": "Tiada sebarang akaun dijumpai."
   },
   "dashboard": {
-    "workspace_title": "Ruang Kerja Saya",
+    "workspace_title": "Ruang Kerja",
     "workspaces": "Ruang Kerja",
     "filter_workspaces": "Tapisan Ruang Kerja",
     "create_workspace": "Tambah Ruang Kerja",
@@ -115,7 +115,7 @@
     "card_view_full": "Susunan Kad",
     "compact_view_short": "Susunan Padat",
     "compact_view_full": "Susunan Padat",
-    "create_link": "Membina Pautan",
+    "create_link": "Bina Pautan",
     "save_changes": "Kemaskini",
     "create_new_link": "Tambah pautan baharu",
     "social_preview": "Contoh Paparan",

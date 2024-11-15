@@ -65,36 +65,34 @@ export default function SettingsLayout({
 
   return (
     <>
-      <MaxWidthWrapper className={cn('flex flex-col border-b border-gray-200 bg-white py-6')}>
-        <div className="flex flex-row items-center justify-between px-4 md:px-8 lg:px-16 xl:px-32">
-          <PageTitle text={messages?.dashboard?.settings} />
-          <div className="flex items-center gap-3 ">
-            <div
-              className="flex items-center space-x-2 z-10 font-poppins"
-              onClick={(e) => e.preventDefault()}
-            >
-              <LinkButton
-                icon={<List className="h-4 w-4" />}
-                variant="success"
-                shortcut="W"
-                href={`/${locale}`}
-                text={messages?.dashboard?.workspaces}
-                className="hidden sm:flex"
-              />
-              <LinkButton
-                icon={<List className="h-4 w-4" />}
-                variant="success"
-                href={`/${locale}/${slug}`}
-                className="sm:hidden flex"
-              />
+      <div className="bg-white w-full border-b border-gray-200">
+        <MaxWidthWrapper className="flex flex-col bg-white py-4 sm:py-6 max-w-7xl">
+          <div className="flex flex-row items-center justify-between xs:px-4 sm:px-4 md:px-2 lg:px-0">
+            <PageTitle text={messages?.dashboard?.settings} />
+            <div className="flex items-center gap-3">
+              <div className="flex items-center space-x-2 z-10 font-poppins">
+                <LinkButton
+                  icon={<List className="h-4 w-4" />}
+                  variant="success"
+                  shortcut="W"
+                  href={`/${locale}`}
+                  text={messages?.dashboard?.workspaces}
+                  className="hidden sm:flex"
+                />
+                <LinkButton
+                  icon={<List className="h-4 w-4" />}
+                  variant="success"
+                  href={`/${locale}/${slug}`}
+                  className="sm:hidden flex"
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </MaxWidthWrapper>
-      <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl font-poppins">
-        <div className="flex gap-8 p-6 ">
-          {/* Left sidebar */}
-          <div className="w-64 flex-shrink-0 ">
+        </MaxWidthWrapper>
+      </div>
+      <MaxWidthWrapper className="max-w-7xl">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-8 p-4 sm:p-6">
+          <div className="w-full md:w-64 md:flex-shrink-0">
             <div className="flex flex-col gap-1 bg-white rounded-lg p-4 font-poppins">
               {tabs.map(({ name, segment }) => (
                 <NavLink key={name} segment={segment}>
@@ -103,7 +101,6 @@ export default function SettingsLayout({
               ))}
             </div>
           </div>
-          {/* Main content */}
           <div className="flex-1 [&>*]:mb-3">{children}</div>
         </div>
       </MaxWidthWrapper>

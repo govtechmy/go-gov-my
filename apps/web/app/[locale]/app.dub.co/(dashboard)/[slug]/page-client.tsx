@@ -150,48 +150,50 @@ export default function WorkspaceLinksClient() {
   return (
     <>
       <AddEditLinkModal />
-      <MaxWidthWrapper className={cn('flex flex-col border-b border-gray-200 bg-white py-6')}>
-        <div className="flex flex-row items-center justify-between px-4 md:px-8 lg:px-16 xl:px-32">
-          <PageTitle text={messages?.dashboard?.Links} />
-          <div className="flex items-center gap-3 ">
-            <div
-              className="flex items-center space-x-2 z-10 font-poppins"
-              onClick={(e) => e.preventDefault()}
-            >
-              <AddEditLinkButton />
-              <LinkButton
-                icon={<LineChart className="h-4 w-4" />}
-                variant="secondary-outline"
-                shortcut="A"
-                href={`/${locale}/${slug}/analytics`}
-                text={messages?.dashboard?.analytics}
-                className="hidden sm:flex"
-              />
-              <LinkButton
-                icon={<LineChart className="h-4 w-4" />}
-                variant="secondary-outline"
-                href={`/${locale}/${slug}/analytics`}
-                className="sm:hidden flex"
-              />
+      <div className="bg-white w-full border-b border-gray-200">
+        <MaxWidthWrapper className={cn('flex flex-col  bg-white py-6 max-w-7xl')}>
+          <div className="flex flex-row items-center justify-between xs:px-4 sm:px-4 md:px-2 lg:px-0">
+            <PageTitle text={messages?.dashboard?.Link_Short} />
+            <div className="flex items-center gap-3 ">
+              <div
+                className="flex items-center space-x-2 z-10 font-poppins"
+                onClick={(e) => e.preventDefault()}
+              >
+                <AddEditLinkButton />
+                <LinkButton
+                  icon={<LineChart className="h-4 w-4" />}
+                  variant="secondary-outline"
+                  shortcut="A"
+                  href={`/${locale}/${slug}/analytics`}
+                  text={messages?.dashboard?.analytics}
+                  className="hidden sm:flex"
+                />
+                <LinkButton
+                  icon={<LineChart className="h-4 w-4" />}
+                  variant="secondary-outline"
+                  href={`/${locale}/${slug}/analytics`}
+                  className="sm:hidden flex"
+                />
 
-              <Button
-                icon={<Download className="h-4 w-4" />}
-                variant="secondary"
-                shortcut="E"
-                onClick={exportToCSV}
-              />
-              <LinkButton
-                icon={<Settings className="h-4 w-4" />}
-                variant="secondary"
-                shortcut="S"
-                href={`/${locale}/${slug}/settings`}
-              />
+                <Button
+                  icon={<Download className="h-4 w-4" />}
+                  variant="secondary"
+                  shortcut="E"
+                  onClick={exportToCSV}
+                />
+                <LinkButton
+                  icon={<Settings className="h-4 w-4" />}
+                  variant="secondary"
+                  shortcut="S"
+                  href={`/${locale}/${slug}/settings`}
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </MaxWidthWrapper>
-      <MaxWidthWrapper>
-        <div className="my-4 grid grid-cols-1 gap-5 px-4 md:px-8 lg:px-16 xl:px-32">
+        </MaxWidthWrapper>
+      </div>
+      <MaxWidthWrapper className="max-w-7xl">
+        <div className="my-4 grid grid-cols-1 gap-5 xs:px-4 sm:px-4 md:px-2 lg:px-0">
           <LinksContainer AddEditLinkButton={AddEditLinkButton} />
         </div>
       </MaxWidthWrapper>
