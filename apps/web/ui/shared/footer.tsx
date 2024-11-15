@@ -53,23 +53,23 @@ export default function Footer(props: Props) {
           <div className="flex flex-col gap-4 lg:gap-4.5">
             <div className="flex items-center gap-x-2.5">
               <img
-                src="https://s3.ap-southeast-1.amazonaws.com/pautan.org/_static/jata_logo.png"
+                src="https://s3.ap-southeast-1.amazonaws.com/pautan.org/logo.svg"
                 width={28}
                 height={28}
                 className={cn('object-contain')}
-                alt="Jata Negara"
+                alt="GoGovMY Logo"
               />
               <div>
                 <h6 className="whitespace-nowrap font-poppins font-semibold">{props.ministry}</h6>
               </div>
             </div>
-            <p
+            {/* <p
               className="text-sm text-black-700"
               dangerouslySetInnerHTML={{
                 __html: props.descriptionWithNewlines.replaceAll('\n', '<br/>'),
               }}
-            ></p>
-            <div className="space-y-2 lg:space-y-3">
+            ></p> */}
+            {/* <div className="space-y-2 lg:space-y-3">
               <p className="text-sm font-semibold">{props.followUsKey}</p>
               <div className="flex gap-3">
                 {social_media.map(({ icon, href }) => (
@@ -78,7 +78,7 @@ export default function Footer(props: Props) {
                   </a>
                 ))}
               </div>
-            </div>
+            </div> */}
           </div>
           {/* Right menu */}
           <div className="flex flex-col gap-6 text-sm lg:flex-row">

@@ -4,7 +4,7 @@ import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { LinkProps, WorkspaceProps } from '@/lib/types';
 import { BlurImage, CopyButton, CustomSelect, NumberTooltip } from '@dub/ui';
 import { cn, DICEBEAR_AVATAR_URL, fetcher, linkConstructor, nFormatter } from '@dub/utils';
-import { BarChart2, Link2, Users } from 'lucide-react';
+import { BarChart2, Link2, Users, Settings, LineChart } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { Suspense, useEffect, useState } from 'react';
@@ -90,14 +90,29 @@ export default function WorkspaceCard({
               />
               <div className="flex flex-col">
                 <h2 className="text-base font-medium text-gray-700">{name}</h2>
-                <p className="text-sm text-gray-500">
-                  {/* {linkConstructor({ domain: 'app.pautan.org', key: slug })} */}
-                  {/* How to get current url? */}
+                <p className="text-sm text-gray-500 xs:hidden sm:block">
                   {typeof window !== 'undefined'
                     ? `${window.location.origin}/${locale}/${slug}`
                     : `https://${shortDomain}/${locale}/${slug}`}
                 </p>
               </div>
+            </div>
+
+            <div className="flex items-center space-x-2 z-10" onClick={(e) => e.preventDefault()}>
+              <Link
+                href={`/${locale}/${slug}/settings`}
+                className="p-2 hover:bg-gray-200 rounded-md transition-colors bg-gray-100"
+                title="Settings"
+              >
+                <Settings className="h-5 w-5 text-gray-500 hover:text-gray-600" />
+              </Link>
+              <Link
+                href={`/${locale}/${slug}/analytics`}
+                className="p-2 hover:bg-yellow-200 bg-yellow-100 rounded-md transition-colors"
+                title="Analytics"
+              >
+                <LineChart className="h-5 w-5 text-yellow-500 hover:text-yellow-600" />
+              </Link>
             </div>
           </div>
 
