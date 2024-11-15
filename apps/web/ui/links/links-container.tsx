@@ -29,7 +29,6 @@ export default function LinksContainer({
   const searchInputRef = useRef();
   const [linkView, setLinkView] = useState<LinkView>('cards');
   const { messages } = useIntlClientHook();
-  const message = messages?.links;
 
   const options: { label: string; value: LinkView; full: string }[] = [
     {

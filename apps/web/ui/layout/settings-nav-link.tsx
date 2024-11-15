@@ -28,9 +28,10 @@ export default function NavLink({
       key={href}
       href={href}
       className={cn(
-        'rounded-md p-2.5 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200',
+        'rounded-md p-2.5 hover:text-blue-700 text-sm transition-all duration-75 hover:bg-blue-100 active:bg-blue-200',
         {
-          'font-semibold text-black': selectedLayoutSegment === segment,
+          'font-semibold text-blue-700 bg-blue-100 hover:bg-blue-200 active:bg-blue-300':
+            selectedLayoutSegment === segment,
         }
       )}
     >

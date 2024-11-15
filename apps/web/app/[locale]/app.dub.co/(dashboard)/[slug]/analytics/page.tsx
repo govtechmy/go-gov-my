@@ -1,7 +1,7 @@
 'use client';
 import Analytics from '@/ui/analytics';
 import LayoutLoader from '@/ui/layout/layout-loader';
-import { Suspense, useState, useContext, useEffect } from 'react';
+import { Suspense, useState, useContext, useEffect, useCallback } from 'react';
 import AnalyticsClient from './client';
 import { Button, MaxWidthWrapper } from '@dub/ui';
 import PageTitle from '@/ui/typography/page-title';
@@ -9,7 +9,7 @@ import { cn } from '@dub/utils';
 import { Download, Settings } from 'lucide-react';
 import { LinkButton } from '@dub/ui/src/link-button';
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { Link } from '@/ui/shared/icons';
 import { toast } from 'sonner';
 import { LoadingSpinner } from '@dub/ui';
@@ -25,6 +25,46 @@ export default function WorkspaceAnalytics() {
   const { slug } = params;
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const onKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      const existingModalBackdrop = document.getElementById('modal-backdrop');
+
+      if (
+        !e.metaKey &&
+        !e.ctrlKey &&
+        target.tagName !== 'INPUT' &&
+        target.tagName !== 'TEXTAREA' &&
+        !existingModalBackdrop &&
+        !loading
+      ) {
+        const key = e.key.toLowerCase();
+
+        switch (key) {
+          case 'l':
+            e.preventDefault();
+            router.push(`/${locale}/${slug}`);
+            break;
+          case 'e':
+            e.preventDefault();
+            exportData();
+            break;
+          case 's':
+            e.preventDefault();
+            router.push(`/${locale}/${slug}/settings`);
+            break;
+        }
+      }
+    },
+    [loading, locale, slug, router]
+  );
+
+  useEffect(() => {
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [onKeyDown]);
 
   // Construct queryString similar to Analytics component
   const queryString = useMemo(() => {

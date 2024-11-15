@@ -194,9 +194,6 @@ export default function WorkspaceLinksClient() {
         <div className="my-4 grid grid-cols-1 gap-5 px-4 md:px-8 lg:px-16 xl:px-32">
           <LinksContainer AddEditLinkButton={AddEditLinkButton} />
         </div>
-        {/* <div className="w-full flex justify-center container">
-          <NavTabs />
-        </div> */}
       </MaxWidthWrapper>
     </>
   );

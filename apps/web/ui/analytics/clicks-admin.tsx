@@ -44,7 +44,7 @@ export default function ClicksAdmin() {
       basePath: '/admin/analytics',
       baseApiPath: '/api/admin/analytic-clicks',
       queryString: shouldFetch ? `userId=${session?.user?.id}` : '', // Only add userId when session is loaded
-      interval: '7d',
+      interval: '30d',
       totalClicks,
       start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
       end: new Date().toISOString(),
