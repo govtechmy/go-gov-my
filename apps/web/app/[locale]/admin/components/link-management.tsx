@@ -3,6 +3,7 @@
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { LinkWithTagsProps } from '@/lib/types';
 import { useAddEditLinkModal } from '@/ui/modals/add-edit-link-modal';
+import PageTitle from '@/ui/typography/page-title';
 import { Link as PrismaLink } from '@prisma/client';
 import { debounce } from 'lodash';
 import { Download, EllipsisVertical, Users } from 'lucide-react';
@@ -112,8 +113,9 @@ export default function LinkManagement() {
   }, [selectedLink, setShowAddEditLinkModal]);
 
   return (
-    <div>
-      <div className="flex flex-row items-center justify-between space-x-4 bg-white pb-4 dark:bg-gray-900">
+    <div className="max-w-7xl overflow-hidden border border-gray-200 bg-white p-5 sm:rounded-lg sm:border-gray-100 sm:p-10 sm:shadow-lg">
+      <PageTitle text={messages?.admin?.workspace_management?.workspace_management_title} />
+      <div className="flex my-5 flex-row items-center justify-between space-x-4 bg-white pb-4 dark:bg-gray-900">
         <div className="relative flex-grow">
           <div className="rtl:inset-r-0 pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
             <svg

@@ -8,6 +8,7 @@ import useSWR from 'swr';
 import { fetcher } from '@dub/utils';
 import { AnalyticsContext } from '.';
 import { useSession } from 'next-auth/react';
+import PageTitle from '../typography/page-title';
 
 export default function ClicksAdmin() {
   const { messages } = useIntlClientHook();
@@ -58,30 +59,33 @@ export default function ClicksAdmin() {
   }
 
   return (
-    <div className="max-w-7xl overflow-hidden border border-gray-200 bg-white p-5 sm:rounded-lg sm:border-gray-100 sm:p-10 sm:shadow-lg">
-      <div className="mb-5 flex items-start justify-between space-x-4">
-        <div className="flex-none">
-          <div className="flex items-end space-x-1">
-            {!isLoading ? (
-              <NumberTooltip value={totalClicks}>
-                <CountingNumbers as="h1" className="text-3xl font-bold sm:text-4xl">
-                  {totalClicks}
-                </CountingNumbers>
-              </NumberTooltip>
-            ) : (
-              <div className="h-10 w-12 animate-pulse rounded-md bg-gray-200" />
-            )}
-            <Chart className="mb-1 h-6 w-6 text-gray-600" />
+    <>
+      <div className="max-w-7xl overflow-hidden border border-gray-200 bg-white p-5 sm:rounded-lg sm:border-gray-100 sm:p-10 sm:shadow-lg my-5">
+        <PageTitle text={messages?.dashboard?.analytics} />
+        <div className="my-5 flex items-start justify-between space-x-4">
+          <div className="flex-none">
+            <div className="flex items-end space-x-1">
+              {!isLoading ? (
+                <NumberTooltip value={totalClicks}>
+                  <CountingNumbers as="h1" className="text-3xl font-bold sm:text-4xl">
+                    {totalClicks}
+                  </CountingNumbers>
+                </NumberTooltip>
+              ) : (
+                <div className="h-10 w-12 animate-pulse rounded-md bg-gray-200" />
+              )}
+              <Chart className="mb-1 h-6 w-6 text-gray-600" />
+            </div>
+            <p className="text-sm font-medium uppercase text-gray-600">
+              Total Clicks for this Agency
+            </p>
           </div>
-          <p className="text-sm font-medium uppercase text-gray-600">
-            Total Clicks for this Agency
-          </p>
         </div>
-      </div>
 
-      <AnalyticsContext.Provider value={contextValue}>
-        <ClicksChart />
-      </AnalyticsContext.Provider>
-    </div>
+        <AnalyticsContext.Provider value={contextValue}>
+          <ClicksChart />
+        </AnalyticsContext.Provider>
+      </div>
+    </>
   );
 }
