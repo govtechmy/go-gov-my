@@ -1,14 +1,16 @@
+// Farhan - To be removed
+
 import { nFormatter } from '../functions';
 
 const BUSINESS_PLAN_MODIFIER = ({
   name = 'Business',
-  monthly = 59,
-  yearly = 49,
-  links = 5000,
-  clicks = 150000,
-  domains = 40,
-  tags = 150,
-  users = 15,
+  monthly = 0,
+  yearly = 0,
+  links = 99999999,
+  clicks = 99999999,
+  domains = 99999999,
+  tags = 99999999,
+  users = 99999999,
   ids = [],
 }: {
   name: string;
@@ -22,7 +24,7 @@ const BUSINESS_PLAN_MODIFIER = ({
   ids: string[];
 }) => ({
   name,
-  tagline: 'For larger teams with increased usage',
+  tagline: 'Deprecated - not used.',
   link: 'https://github.com/govtechmy/go-gov-my/discussions',
   price: {
     monthly,
@@ -44,7 +46,7 @@ const BUSINESS_PLAN_MODIFIER = ({
   cta: {
     text: 'Get started with Business',
     shortText: 'Get started',
-    href: 'https://app.go.gov.my/register',
+    href: 'https://app.go.gov.my/login',
     color: 'bg-sky-900 hover:bg-sky-800 hover:ring-sky-100',
   },
   featureTitle: 'Everything in Pro, plus:',

@@ -4,8 +4,8 @@ env:
 on:
   push:
     tags:
-      - "web@STAGING-v*"
-      - "web@v*"
+      - 'web@STAGING-v*'
+      - 'web@v*'
     paths-ignore:
       - apps/redirect-server/**
       - apps/redirect-pages/**
@@ -60,7 +60,7 @@ jobs:
           build-args: |
             "NEXT_PUBLIC_APP_NAME=Pautan"
             "NEXT_PUBLIC_APP_DOMAIN=pautan.org"
-            "NEXT_PUBLIC_APP_SHORT_DOMAIN=pautan.org"
+            "NEXT_PUBLIC_APP_SHORT_DOMAIN=app.pautan.org"
       - name: Log out of Amazon ECR
         run: docker logout ${{ steps.login-ecr.outputs.registry }}
       - name: Deploy with Spinnaker

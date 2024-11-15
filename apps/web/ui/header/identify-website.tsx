@@ -6,11 +6,11 @@ import { cn } from './cn';
 import Collapse from './layout';
 import MalaysiaFlag from './malaysia-flag';
 import { poppins, inter } from '@/styles/fonts'; // Add this import
-import ChevronDown from '../icons/chevron';
-import FlagMY from '../icons/flag-my';
-import GovMY from '../icons/govmy';
-import EncryptedLock from '../icons/lock';
-import SolidLock from '../icons/solid-lock';
+import ChevronDown from '@/ui/shared/icons/chevron-down';
+import FlagMY from '@/ui/shared/icons/flag-my';
+import GovMY from '@/ui/shared/icons/govmy';
+import EncryptedLock from '@/ui/shared/icons/lock';
+import SolidLock from '@/ui/shared/icons/solid-lock';
 
 interface IdentifyWebsiteProps {
   isOpen: boolean;

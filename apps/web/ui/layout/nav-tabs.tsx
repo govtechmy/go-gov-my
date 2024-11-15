@@ -44,7 +44,7 @@ export default function NavTabs() {
           )}
         </Link>
       ))}
-      <OnboardingChecklist />
+      {/* <OnboardingChecklist /> */}
     </div>
   );
 }

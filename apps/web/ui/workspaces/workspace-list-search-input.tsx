@@ -40,7 +40,7 @@ export const SearchInput = (props: {
       </div>
       <input
         type="text"
-        className="peer w-full rounded-full border border-gray-300 px-10 text-black placeholder:text-gray-400 transition-all duration-300 focus:border-blue-300 focus:ring-2 focus:ring-blue-300 sm:text-sm"
+        className="peer w-full rounded-full border border-gray-300 px-10 text-black placeholder:text-gray-400 transition-all duration-300 focus:border-blue-300 focus:ring-2 focus:ring-blue-300 sm:text-sm font-poppins"
         placeholder={messages.dashboard.search}
         value={props.value}
         onChange={(e) => {

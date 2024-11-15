@@ -3,10 +3,12 @@
 import IdentifyWebsite from './identify-website';
 import { useState } from 'react';
 import { cn } from './cn';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import Masthead from './Masthead';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const { messages, locale } = useIntlClientHook();
   return (
     <div
       className={cn(
@@ -18,7 +20,7 @@ const Header = () => {
       )}
     >
       <div className="mx-auto max-w-7xl">
-        <IdentifyWebsite onOpenChange={setIsOpen} isOpen={isOpen} />
+        <IdentifyWebsite isOpen={isOpen} onOpenChange={setIsOpen} />
       </div>
     </div>
   );

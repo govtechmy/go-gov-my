@@ -73,6 +73,7 @@ export function Form({
         <div className="shrink-0">
           <Button
             text={buttonText}
+            variant="success"
             loading={saving}
             disabled={saveDisabled}
             disabledTooltip={disabledTooltip}

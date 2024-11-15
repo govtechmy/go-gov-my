@@ -1,36 +1,25 @@
 import { useIntlHook } from '@/lib/middleware/utils/useI18n';
 import { MessagesProvider } from '@/ui/switcher/provider';
+import PageTitle from '@/ui/typography/page-title';
 import CreateWorkspaceButton from '@/ui/workspaces/create-workspace-button';
 import WorkspaceList from '@/ui/workspaces/workspace-list';
 import { WorkspaceListProvider } from '@/ui/workspaces/workspace-list-context';
-import WorkspaceListSearchInput from '@/ui/workspaces/workspace-list-search-input';
 import { MaxWidthWrapper } from '@dub/ui';
+import { cn } from '@dub/utils';
 
 export default function App({ params: { locale } }) {
   const { messages } = useIntlHook(locale);
   return (
     <MessagesProvider messages={messages}>
       <WorkspaceListProvider>
-        <div className="flex flex-col border-b border-gray-200 bg-white py-6">
-          <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl">
-            <div className="flex items-center justify-end mx-6">
-              <h1 className="truncate text-2xl text-gray-600 hidden xs:block mr-auto">
-                {messages?.dashboard?.workspace_title}
-              </h1>
-              <CreateWorkspaceButton />
-            </div>
-          </MaxWidthWrapper>
-
-          <div className="mt-6 w-full">
-            <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl">
-              <div className="mx-6">
-                <WorkspaceListSearchInput />
-              </div>
-            </MaxWidthWrapper>
+        <MaxWidthWrapper className={cn('flex flex-col border-b border-gray-200 bg-white py-6')}>
+          <div className="flex flex-row items-center justify-between px-4 md:px-8 lg:px-16 xl:px-32">
+            <PageTitle text={messages?.dashboard?.workspace_title} />
+            <CreateWorkspaceButton />
           </div>
-        </div>
-        <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl">
-          <div className="my-10 grid grid-cols-1 gap-5 lg:grid-cols-2 xl:grid-cols-3 mx-6">
+        </MaxWidthWrapper>
+        <MaxWidthWrapper>
+          <div className="my-4 grid grid-cols-1 gap-5 px-4 md:px-8 lg:px-16 xl:px-32">
             <WorkspaceList />
           </div>
         </MaxWidthWrapper>

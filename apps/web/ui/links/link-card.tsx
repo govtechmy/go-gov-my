@@ -298,8 +298,8 @@ export default function LinkCard({
       className={cn(
         selected ? 'border-black' : 'border-gray-50',
         compact
-          ? 'relative border-l border-r border-t border-gray-200 bg-white p-2 transition-all first:rounded-t-lg last:rounded-b-lg last:border-b'
-          : 'relative rounded-lg border-2 bg-white p-3 pr-1 shadow transition-all hover:shadow-md sm:p-4'
+          ? 'relative border-l border-r border-t border-gray-200 bg-white p-3 transition-all first:rounded-t-lg last:rounded-b-lg last:border-b hover:bg-gray-100'
+          : 'relative flex flex-col space-y-2 rounded-lg border border-gray-200 bg-white xs:p-2 md:p-5 shadow-sm transition-all hover:shadow-md font-poppins hover:bg-gray-100'
       )}
     >
       {isVisible && (
@@ -501,7 +501,7 @@ export default function LinkCard({
         <div className="flex items-center space-x-2">
           <NumberTooltip value={clicks} lastClicked={lastClicked}>
             <Link
-              href={`/${locale}/${slug}/analytics?domain=${domain}&key=${key}`}
+              href={`/${locale}/${slug}/analytics?key=${key}`}
               className="flex items-center space-x-1 rounded-md bg-gray-100 px-2 py-0.5 transition-all duration-75 hover:scale-105 active:scale-100"
             >
               <Chart className="h-4 w-4" />

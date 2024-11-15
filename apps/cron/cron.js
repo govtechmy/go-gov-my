@@ -9,13 +9,14 @@ async function fetchData() {
   try {
     console.log(`calling ..${process.env.WEB_BASE}/api/stats`);
     const response = await fetch(`${process.env.WEB_BASE}/api/stats`, {
-      method: "GET",
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'API_KEY': process.env.API_KEY,
+        API_KEY: process.env.API_KEY,
       },
     });
     if (!response.ok) {
+      console.log('response', response);
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();

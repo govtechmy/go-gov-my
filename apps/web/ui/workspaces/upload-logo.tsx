@@ -70,6 +70,7 @@ export default function UploadLogo() {
           <Button
             text={messages?.link?.save_changes}
             loading={uploading}
+            variant="success"
             disabled={!isOwner || !image || logo === image}
             {...(!isOwner && {
               disabledTooltip: message?.is_owner,

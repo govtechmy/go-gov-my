@@ -9,8 +9,6 @@ export function MaxWidthWrapper({
   children: ReactNode;
 }) {
   return (
-    <div className={cn('mx-auto w-full max-w-screen-xl px-2.5 lg:px-20', className)}>
-      {children}
-    </div>
+    <div className={cn('mx-auto w-full px-0 md:px-0 lg:px-0 py-0', className)}>{children}</div>
   );
 }

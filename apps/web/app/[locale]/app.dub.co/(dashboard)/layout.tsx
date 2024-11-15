@@ -10,10 +10,17 @@ import LocaleSwitcher from '@/ui/switcher/switcher';
 import { MaxWidthWrapper, NavLogo } from '@dub/ui';
 import { cn, constructMetadata } from '@dub/utils';
 import Link from 'next/link';
-import { ReactNode, Suspense } from 'react';
+import { ReactNode } from 'react';
 import Providers from './providers';
 export const dynamic = 'force-static';
-import { poppins, inter } from '@/styles/fonts'; // Add this import
+import Footer from '@/ui/shared/footer';
+
+export const URL_GITHUB = 'https://github.com/govtechmy/go-gov-my';
+export const URL_FIGMA =
+  'https://www.figma.com/design/uwQdDuSxZ6FohazX1r7hxs/GoGovMy?node-id=0-1&t=qR9nMkJsfRphwT9g-1';
+export const URL_APP_MAIN = 'https://pautan.org';
+export const URL_APP_LOGIN = 'https://app.pautan.org/login';
+
 export async function generateMetadata({ params }) {
   const { locale } = params;
   return constructMetadata({ locale });
@@ -52,8 +59,34 @@ export default function Layout({
               </MaxWidthWrapper>
             </div>
           </div>
-          <div className="pb-20">{children}</div>
+          <div className="xs:pb-2 lg:pb-5 xl:pb-10">{children}</div>
         </div>
+        <MaxWidthWrapper>
+          <Footer
+            ministry={messages?.Footer?.kd}
+            copyrightKey={messages?.Footer?.copyright}
+            lastUpdateKey={messages?.Footer?.last_update}
+            disclaimerKey={messages?.Footer?.disclaimer}
+            privacyPolicyKey={messages?.Footer?.privacy_policy}
+            descriptionWithNewlines={messages?.Footer?.address}
+            followUsKey={messages?.Footer?.follow_us}
+            links={[
+              {
+                title: messages?.Footer?.links?.title?.openSource,
+                links: [
+                  {
+                    name: messages?.Footer?.links?.name?.figma,
+                    href: URL_FIGMA,
+                  },
+                  {
+                    name: messages?.Footer?.links?.name?.github,
+                    href: URL_GITHUB,
+                  },
+                ],
+              },
+            ]}
+          />
+        </MaxWidthWrapper>
       </MessagesProvider>
     </Providers>
   );

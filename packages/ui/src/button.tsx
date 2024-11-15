@@ -66,7 +66,7 @@ export function Button({
               'border-gray-200 bg-white text-gray-600 hover:bg-gray-100': variant === 'secondary',
               'border-transparent text-gray-500 duration-75 hover:bg-gray-100':
                 variant === 'outline',
-              'border-blue-700 bg-blue-600 text-white hover:bg-white hover:text-blue-600':
+              'border-blue-700 bg-blue-700 text-white hover:bg-white hover:text-blue-700':
                 variant === 'success',
               'border-red-500 bg-red-500 text-white hover:bg-red-600 hover:ring-4 hover:ring-red-100':
                 variant === 'danger',

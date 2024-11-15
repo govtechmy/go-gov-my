@@ -2,9 +2,9 @@
 
 import useLinks from '@/lib/swr/use-links';
 import useLinksCount from '@/lib/swr/use-links-count';
-import { CustomSelect, MaxWidthWrapper } from '@dub/ui';
+import { CustomSelect, IconMenu, MaxWidthWrapper } from '@dub/ui';
 import { cn } from '@dub/utils';
-import { Rows2Icon, Rows3Icon } from 'lucide-react';
+import { ChevronDown, Filter, Rows2Icon, Rows3Icon } from 'lucide-react';
 import { ReactNode, Suspense, useRef, useState } from 'react';
 import { useLinkFiltersModal } from '../modals/link-filters-modal';
 import LinkCard from './link-card';
@@ -13,6 +13,7 @@ import LinkFilters, { SearchBox } from './link-filters';
 import LinkPagination from './link-pagination';
 import LinkSort from './link-sort';
 import NoLinksPlaceholder from './no-links-placeholder';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 
 type LinkView = 'cards' | 'compact';
 
@@ -24,12 +25,22 @@ export default function LinksContainer({
   const { links, isValidating } = useLinks();
   const { data: count } = useLinksCount();
   const { LinkFiltersButton, LinkFiltersModal } = useLinkFiltersModal();
+  const [openPopover, setOpenPopover] = useState(false);
   const searchInputRef = useRef();
   const [linkView, setLinkView] = useState<LinkView>('cards');
+  const { messages } = useIntlClientHook();
 
   const options: { label: string; value: LinkView; full: string }[] = [
-    { label: 'Card View', value: 'cards', full: 'Card View' },
-    { label: 'Compact View', value: 'compact', full: 'Compact View' },
+    {
+      label: messages?.link?.card_view_short || 'Card View',
+      value: 'cards',
+      full: messages?.link?.card_view_full || 'Card View',
+    },
+    {
+      label: messages?.link?.compact_view_short || 'Compact View',
+      value: 'compact',
+      full: messages?.link?.compact_view_full || 'Compact View',
+    },
   ];
 
   const viewIcon: Record<LinkView, ReactNode> = {
@@ -42,24 +53,19 @@ export default function LinksContainer({
   return (
     <>
       <LinkFiltersModal />
-      <MaxWidthWrapper className="flex flex-col space-y-3 py-3">
-        <div className="flex h-10 w-full justify-center lg:justify-end">
-          <LinkFiltersButton />
-          <Suspense>
-            <LinkSort />
-          </Suspense>
-        </div>
-        <div className="block lg:hidden">
-          <SearchBox searchInputRef={searchInputRef} />
-        </div>
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-7">
-          <div className="scrollbar-hide sticky top-32 col-span-2 hidden max-h-[calc(100vh-150px)] self-start overflow-auto rounded-lg border border-gray-100 bg-white shadow lg:block">
-            <Suspense>
-              <LinkFilters />
-            </Suspense>
+      <MaxWidthWrapper className="flex flex-col space-y-3 font-inter px-2 sm:px-2 xl:px-0">
+        <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col sm:hidden pb-1">
+            <LinkFiltersButton />
           </div>
-          <div className="col-span-1 auto-rows-min grid-cols-1 lg:col-span-5">
-            <div className="mb-4">
+          <div className="hidden sm:block">
+            <LinkFiltersButton />
+          </div>
+          <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:flex-row sm:items-center sm:gap-2">
+            <div className="flex flex-col sm:w-auto">
+              <LinkSort />
+            </div>
+            <div className="flex flex-col sm:w-auto">
               <CustomSelect
                 icon={viewIcon[linkView]}
                 options={options}
@@ -67,6 +73,15 @@ export default function LinksContainer({
                 defaultValue={0}
               />
             </div>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-8">
+          <div className="scrollbar-hide sticky top-32 col-span-2 hidden max-h-[calc(100vh-150px)] self-start overflow-auto rounded-lg border border-gray-100 bg-white shadow lg:block lg:col-span-2">
+            <Suspense>
+              <LinkFilters />
+            </Suspense>
+          </div>
+          <div className="col-span-1 auto-rows-min grid-cols-1 lg:col-span-6">
             <ul className={cn('grid min-h-[66.5vh] auto-rows-min gap-3', compact && 'gap-0')}>
               {links && !isValidating ? (
                 links.length > 0 ? (

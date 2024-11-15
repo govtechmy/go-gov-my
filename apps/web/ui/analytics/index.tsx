@@ -40,10 +40,12 @@ export default function Analytics({
   staticDomain,
   staticUrl,
   admin,
+  actions,
 }: {
   staticDomain?: string;
   staticUrl?: string;
   admin?: boolean;
+  actions?: React.ReactNode;
 }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -56,7 +58,7 @@ export default function Analytics({
   key = searchParams?.get('key') || key;
 
   const domainSlug = searchParams?.get('domain');
-  const interval = searchParams?.get('interval') || '7d';
+  const interval = searchParams?.get('interval') || '30d';
 
   const start = searchParams?.get('start') || '';
   const end = searchParams?.get('end') || '';
@@ -131,7 +133,7 @@ export default function Analytics({
       }}
     >
       <div className="bg-gray-50">
-        <Toggle />
+        <Toggle actions={actions} />
         <div className="mx-auto grid max-w-7xl gap-5 px-2">
           <Clicks />
           {/* <CountryChart /> */}

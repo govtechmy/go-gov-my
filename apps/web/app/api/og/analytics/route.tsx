@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
     ...(link.projectId && { workspaceId: link.projectId }),
     linkId: link.id,
     endpoint: 'timeseries',
-    interval: '7d',
+    interval: '30d',
   });
 
   const clicks = data.reduce((acc, { clicks }) => acc + clicks, 0);

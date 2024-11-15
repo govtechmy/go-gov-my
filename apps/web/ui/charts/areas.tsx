@@ -9,6 +9,11 @@ export default function Areas() {
   const { data, series, margin, xScale, yScale, startDate, endDate } = useChartContext();
   const { tooltipData } = useChartTooltipContext();
 
+  // Return null if no data or missing required props
+  if (!data || data.length === 0 || !startDate || !endDate) {
+    return null;
+  }
+
   // Data with all values set to zero to animate from
   const zeroedData = useMemo(() => {
     return data.map((d) => ({
@@ -17,11 +22,17 @@ export default function Areas() {
     })) as typeof data;
   }, [data]);
 
+  // Generate a safe key that handles undefined dates
+  const getFragmentKey = (seriesId: string) => {
+    const start = startDate?.toString() || 'start';
+    const end = endDate?.toString() || 'end';
+    return `${seriesId}_${start}_${end}`;
+  };
+
   return (
     <Group left={margin.left} top={margin.top}>
       {series.map((s) => (
-        // Prevent ugly x-scale animations when start/end dates change with unique key
-        <Fragment key={`${s.id}_${startDate.toString()}_${endDate.toString()}`}>
+        <Fragment key={getFragmentKey(s.id)}>
           {/* Area background gradient */}
           <LinearGradient
             className="text-blue-500"
@@ -69,8 +80,8 @@ export default function Areas() {
             )}
           </Area>
 
-          {/* Latest value dot */}
-          {!tooltipData && (
+          {/* Latest value dot - with null check */}
+          {!tooltipData && data.length > 0 && (
             <Circle
               cx={xScale(data.at(-1)!.date)}
               cy={yScale(s.valueAccessor(data.at(-1)!))}

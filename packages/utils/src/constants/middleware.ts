@@ -1,16 +1,15 @@
-import { APP_NAME } from '.';
+import { APP_NAME, SHORT_DOMAIN } from '.';
 
 export const DEFAULT_REDIRECTS = {
-  home: 'https://go.gov.my',
-  signin: 'https://go.gov.my/login',
-  login: 'https://go.gov.my/login',
-  register: 'https://go.gov.my/register',
-  signup: 'https://go.gov.my/register',
-  app: 'https://go.gov.my',
-  dashboard: 'https://go.gov.my',
-  links: 'https://go.go.my/links',
-  settings: 'https://go.gov.my/settings',
-  welcome: 'https://go.gov.my/welcome',
+  home: `https://${SHORT_DOMAIN}`,
+  signin: `https://${SHORT_DOMAIN}/login`,
+  login: `https://${SHORT_DOMAIN}/login`,
+  register: `https://${SHORT_DOMAIN}/login`,
+  signup: `https://${SHORT_DOMAIN}/login`,
+  app: `https://app.${SHORT_DOMAIN}`,
+  dashboard: `https://app.${SHORT_DOMAIN}`,
+  links: `https://app.${SHORT_DOMAIN}/links`,
+  settings: `https://app.${SHORT_DOMAIN}/settings`,
 };
 
 export const DUB_HEADERS = {

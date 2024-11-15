@@ -14,7 +14,7 @@ import DateRangePicker from './date-range-picker';
 import Datepicker from './datepicker';
 import ExportButton from './export-button';
 
-export default function Toggle() {
+export default function Toggle({ actions }: { actions?: React.ReactNode }) {
   const { basePath, domain, key, url, admin } = useContext(AnalyticsContext);
   const { messages } = useIntlClientHook();
 
@@ -83,13 +83,9 @@ export default function Toggle() {
                 'justify-end md:w-auto': key,
               })}
             >
+              {actions}
               <DateRangePicker />
               <Datepicker />
-              {!isPublicStatsPage && (
-                <div className="w-auto">
-                  <ExportButton />
-                </div>
-              )}
             </div>
           </div>
         </div>

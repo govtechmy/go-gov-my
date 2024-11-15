@@ -38,7 +38,7 @@ export default function CreateWorkspaceButton() {
     <div>
       <Button
         text={messages?.dashboard?.create_workspace}
-        className="flex-shrink-0 truncate"
+        className="flex-shrink-0 truncate font-poppins"
         shortcut="C"
         variant="success"
         onClick={() => setShowAddWorkspaceModal(true)}

@@ -90,7 +90,7 @@ Please create a `.env` (using as .env.example as example) file in the root direc
 
 NEXT_PUBLIC_APP_NAME=GoGovMy
 NEXT_PUBLIC_APP_DOMAIN=gogovmy
-NEXT_PUBLIC_APP_SHORT_DOMAIN=go.gov.my
+NEXT_PUBLIC_APP_SHORT_DOMAIN=app.go.gov.my
 NEXT_PUBLIC_APP_APP_DOMAIN=locahost:8888
 NODE_ENV=development
 

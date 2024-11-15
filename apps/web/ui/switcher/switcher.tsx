@@ -2,7 +2,7 @@
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { CustomSelect } from '@dub/ui';
 import { usePathname, useRouter } from 'next/navigation';
-import Globe from '../icons/globe';
+import Globe from '@/ui/shared/icons/globe';
 
 export default function LocaleSwitcher() {
   // get current route

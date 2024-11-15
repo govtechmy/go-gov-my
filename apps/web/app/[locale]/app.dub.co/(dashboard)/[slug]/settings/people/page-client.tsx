@@ -41,11 +41,12 @@ export default function WorkspacePeopleClient() {
           <div className="flex space-x-2">
             <Button
               text={message?.invite}
+              variant="success"
               onClick={() => setShowInviteTeammateModal(true)}
               className="h-9"
             />
             <Button
-              icon={<LinkIcon className="h-4 w-4 text-gray-800" />}
+              icon={<LinkIcon className="h-4 w-4 text-blue-700" />}
               variant="secondary"
               onClick={() => setShowInviteCodeModal(true)}
               className="h-9"
