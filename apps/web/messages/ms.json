@@ -111,6 +111,10 @@
     "add_new": "Tambah ruang kerja baharu"
   },
   "link": {
+    "card_view_short": "Susunan Kad",
+    "card_view_full": "Susunan Kad",
+    "compact_view_short": "Susunan Padat",
+    "compact_view_full": "Susunan Padat",
     "create_link": "Membina Pautan",
     "save_changes": "Kemaskini",
     "create_new_link": "Tambah pautan baharu",

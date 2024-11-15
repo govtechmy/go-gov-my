@@ -164,7 +164,7 @@ export default function WorkspaceLinksClient() {
                 variant="secondary-outline"
                 shortcut="A"
                 href={`/${locale}/${slug}/analytics`}
-                text="Analytics"
+                text={messages?.dashboard?.analytics}
                 className="hidden sm:flex"
               />
               <LinkButton

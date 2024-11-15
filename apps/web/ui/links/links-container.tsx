@@ -13,6 +13,7 @@ import LinkFilters, { SearchBox } from './link-filters';
 import LinkPagination from './link-pagination';
 import LinkSort from './link-sort';
 import NoLinksPlaceholder from './no-links-placeholder';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 
 type LinkView = 'cards' | 'compact';
 
@@ -27,10 +28,20 @@ export default function LinksContainer({
   const [openPopover, setOpenPopover] = useState(false);
   const searchInputRef = useRef();
   const [linkView, setLinkView] = useState<LinkView>('cards');
+  const { messages } = useIntlClientHook();
+  const message = messages?.links;
 
   const options: { label: string; value: LinkView; full: string }[] = [
-    { label: 'Card View', value: 'cards', full: 'Card View' },
-    { label: 'Compact View', value: 'compact', full: 'Compact View' },
+    {
+      label: messages?.link?.card_view_short || 'Card View',
+      value: 'cards',
+      full: messages?.link?.card_view_full || 'Card View',
+    },
+    {
+      label: messages?.link?.compact_view_short || 'Compact View',
+      value: 'compact',
+      full: messages?.link?.compact_view_full || 'Compact View',
+    },
   ];
 
   const viewIcon: Record<LinkView, ReactNode> = {

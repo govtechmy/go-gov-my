@@ -1,28 +1,193 @@
+'use client';
 import Analytics from '@/ui/analytics';
 import LayoutLoader from '@/ui/layout/layout-loader';
-import { Suspense } from 'react';
+import { Suspense, useState, useContext, useEffect } from 'react';
 import AnalyticsClient from './client';
-import { MaxWidthWrapper } from '@dub/ui';
-import NavTabs from '@/ui/layout/nav-tabs';
+import { Button, MaxWidthWrapper } from '@dub/ui';
+import PageTitle from '@/ui/typography/page-title';
+import { cn } from '@dub/utils';
+import { Download, Settings } from 'lucide-react';
+import { LinkButton } from '@dub/ui/src/link-button';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { useParams, useSearchParams } from 'next/navigation';
+import { Link } from '@/ui/shared/icons';
+import { toast } from 'sonner';
+import { LoadingSpinner } from '@dub/ui';
+import { Tooltip, TooltipContent } from '@dub/ui';
+import { useMemo } from 'react';
+import { VALID_ANALYTICS_FILTERS } from '@/lib/analytics/constants';
+import useWorkspace from '@/lib/swr/use-workspace';
 
 export default function WorkspaceAnalytics() {
+  const { messages, locale } = useIntlClientHook();
+  const { id } = useWorkspace();
+  const params = useParams() as { slug: string };
+  const { slug } = params;
+  const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+
+  // Construct queryString similar to Analytics component
+  const queryString = useMemo(() => {
+    const availableFilterParams = VALID_ANALYTICS_FILTERS.reduce((acc, filter) => {
+      const value = searchParams?.get(filter);
+      return value ? { ...acc, [filter]: value } : acc;
+    }, {});
+
+    const params = {
+      ...(slug && { workspaceId: id }),
+      ...(searchParams?.get('domain') && { domain: searchParams.get('domain')! }),
+      ...(searchParams?.get('key') && { key: searchParams.get('key')! }),
+      ...(searchParams?.get('interval') && { interval: searchParams.get('interval')! }),
+      ...(searchParams?.get('start') && { start: searchParams.get('start')! }),
+      ...(searchParams?.get('end') && { end: searchParams.get('end')! }),
+      ...(searchParams?.get('tagId') && { tagId: searchParams.get('tagId')! }),
+      ...availableFilterParams,
+    };
+
+    return new URLSearchParams(params as Record<string, string>).toString();
+  }, [searchParams, slug]);
+
+  async function exportData() {
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/analytics/export?${queryString}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        setLoading(false);
+        throw new Error(response.statusText);
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${process.env.NEXT_PUBLIC_APP_DOMAIN} Export - ${new Date().toISOString()}.zip`;
+      a.click();
+    } catch (error) {
+      throw new Error(error);
+    }
+    setLoading(false);
+  }
+
   return (
     <Suspense fallback={<LayoutLoader />}>
-      <div className="flex flex-col border-b border-gray-200 bg-white py-6">
-        <MaxWidthWrapper className="px-0 md:px-0 lg:px-0 max-w-7xl">
-          <div className="flex items-center justify-between mx-6">
-            <h1 className="truncate text-2xl text-gray-600 font-medium hidden xs:block mr-auto">
-              Analytics
-            </h1>
+      <MaxWidthWrapper className={cn('flex flex-col border-b border-gray-200 bg-white py-6')}>
+        <AnalyticsClient>
+          <div className="flex flex-row items-center justify-between px-4 md:px-8 lg:px-16 xl:px-32">
+            <PageTitle text={messages?.dashboard?.analytics} />
+            <HeaderButtons
+              loading={loading}
+              exportData={exportData}
+              messages={messages}
+              locale={locale}
+              slug={slug}
+              queryString={queryString}
+            />
           </div>
-        </MaxWidthWrapper>
-        <div className="w-full flex justify-center">
-          <NavTabs />
-        </div>
-      </div>
-      <AnalyticsClient>
-        <Analytics />
-      </AnalyticsClient>
+        </AnalyticsClient>
+      </MaxWidthWrapper>
+      <MaxWidthWrapper>
+        <AnalyticsClient>
+          <Analytics />
+        </AnalyticsClient>
+      </MaxWidthWrapper>
     </Suspense>
+  );
+}
+
+function HeaderButtons({ loading, exportData, messages, locale, slug, queryString }) {
+  const [totalClicks, setTotalClicks] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchTotalClicks = async () => {
+      try {
+        const response = await fetch(`/api/analytics/clicks/count?${queryString}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            credentials: 'include',
+          },
+        });
+
+        if (!response.ok) throw new Error(response.statusText);
+        const data = await response.json();
+        setTotalClicks(data.count || 0);
+      } catch (error) {
+        console.error('Error fetching total clicks:', error);
+        setTotalClicks(0);
+      }
+    };
+
+    if (queryString) {
+      fetchTotalClicks();
+    }
+  }, [queryString]);
+
+  return (
+    <div className="flex items-center gap-3">
+      <div className="flex items-center space-x-2 z-10 font-poppins">
+        <LinkButton
+          icon={<Link className="h-4 w-4" />}
+          variant="secondary-outline"
+          shortcut="L"
+          href={`/${locale}/${slug}`}
+          text={messages?.dashboard?.Link_Short}
+          className="hidden sm:flex items-center gap-2 px-4 py-2"
+        />
+        <LinkButton
+          icon={<Link className="h-4 w-4" />}
+          variant="secondary-outline"
+          href={`/${locale}/${slug}`}
+          className="sm:hidden flex items-center px-3 py-2"
+        />
+
+        <>
+          <Button
+            icon={
+              loading ? <LoadingSpinner className="h-4 w-4" /> : <Download className="h-4 w-4" />
+            }
+            variant="secondary"
+            shortcut="E"
+            text={messages?.modal?.export}
+            className="hidden sm:flex items-center gap-2 px-4 py-2"
+            disabled={loading}
+            onClick={() => {
+              toast.promise(exportData(), {
+                loading: messages?.analytics?.export_loading,
+                success: messages?.analytics?.export_successfully,
+                error: (error) => error,
+              });
+            }}
+          />
+          <Button
+            icon={
+              loading ? <LoadingSpinner className="h-4 w-4" /> : <Download className="h-4 w-4" />
+            }
+            variant="secondary"
+            disabled={loading}
+            className="sm:hidden flex items-center px-3 py-2"
+            onClick={() => {
+              toast.promise(exportData(), {
+                loading: messages?.analytics?.export_loading,
+                success: messages?.analytics?.export_successfully,
+                error: (error) => error,
+              });
+            }}
+          />
+        </>
+        <LinkButton
+          icon={<Settings className="h-4 w-4" />}
+          variant="secondary"
+          shortcut="S"
+          href={`/${locale}/${slug}/settings`}
+          className="items-center px-3 py-2"
+        />
+      </div>
+    </div>
   );
 }
