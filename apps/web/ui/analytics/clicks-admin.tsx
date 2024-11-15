@@ -77,7 +77,7 @@ export default function ClicksAdmin() {
               <Chart className="mb-1 h-6 w-6 text-gray-600" />
             </div>
             <p className="text-sm font-medium uppercase text-gray-600">
-              Total Clicks for this Agency
+              {messages?.analytics?.analytics_click_desc}
             </p>
           </div>
         </div>

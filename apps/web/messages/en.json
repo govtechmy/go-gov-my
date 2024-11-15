@@ -230,6 +230,7 @@
     "incorrect": "Incorrect Password"
   },
   "analytics": {
+    "analytics_click_desc": "Total Clicks for this Agency",
     "domain": "Domain",
     "link": "Link",
     "only": "Only",

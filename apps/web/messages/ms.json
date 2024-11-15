@@ -230,6 +230,7 @@
     "incorrect": "Kata Laluan Salah"
   },
   "analytics": {
+    "analytics_click_desc": "Jumlah Capaian untuk Agensi ini",
     "domain": "Domain",
     "link": "Pautan",
     "only": "Sahaja ",
