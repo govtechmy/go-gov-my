@@ -1,6 +1,6 @@
 import { InputSelect, useRouterStuff } from '@dub/ui';
 import { DUB_LOGO, GOOGLE_FAVICON_URL, getApexDomain } from '@dub/utils';
-import { LinkIcon } from 'lucide-react';
+import { Globe } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useContext, useMemo } from 'react';
 import { ModalContext } from '../modals/provider';
@@ -8,7 +8,7 @@ import useSWR from 'swr';
 import { AnalyticsContext } from '.';
 import { fetcher } from '@dub/utils';
 
-export default function LinkSelector() {
+export default function CitySelector() {
   const { queryParams } = useRouterStuff();
   const { workspaceId } = useContext(AnalyticsContext);
 
@@ -16,7 +16,7 @@ export default function LinkSelector() {
     data: links,
     isValidating: isFetchingLinks,
     isLoading,
-  } = useSWR<any>(`/api/links?workspaceId=${workspaceId}`, fetcher);
+  } = useSWR<any>(`/api/city?workspaceId=${workspaceId}`, fetcher);
 
   const searchParams = useSearchParams();
   const selectedLink = useMemo(() => {
@@ -43,7 +43,7 @@ export default function LinkSelector() {
           key: key,
           image: `${GOOGLE_FAVICON_URL}${key}`,
         }))}
-      icon={<LinkIcon className="h-4 w-4 text-black" />}
+      icon={<Globe className="h-4 w-4 text-black" />}
       selectedItem={{
         id: selectedLink?.id || '',
         label: selectedLink?.url || '',

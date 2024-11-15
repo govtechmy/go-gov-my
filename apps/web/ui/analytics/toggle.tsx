@@ -74,7 +74,7 @@ export default function Toggle() {
             // <h2 className="truncate text-2xl text-gray-600">{messages?.dashboard?.analytics}</h2>
           )}
           <div
-            className={cn('flex items-center gap-2', {
+            className={cn('flex flex-wrap items-center gap-2', {
               'w-full flex-col min-[550px]:flex-row md:w-auto': !key,
               'w-full md:w-auto': key,
             })}

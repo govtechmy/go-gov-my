@@ -11,7 +11,22 @@ export const getClicks = async (
     endpoint?: AnalyticsEndpoints;
   }
 ) => {
-  let { workspaceId, endpoint, linkId, link, interval, start, end, domain, key, tagId } = props;
+  let {
+    workspaceId,
+    endpoint,
+    linkId,
+    link,
+    interval,
+    start,
+    end,
+    domain,
+    key,
+    tagId,
+    country,
+    device,
+    os,
+    browser,
+  } = props;
 
   // get all-time clicks count if:
   // 1. linkId is defined
@@ -125,7 +140,19 @@ export const getClicks = async (
   if (endpoint === 'count') {
     const totalCount = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata as MetadataProps;
-      if (metadata?.total && !isNaN(metadata?.total)) return (accumulator += metadata?.total);
+      const countryCode = Object.keys(metadata.countryCode)[0];
+      const deviceType = Object.keys(metadata.deviceType)[0];
+      const operatingSystem = Object.keys(metadata.operatingSystem)[0];
+      const browserType = Object.keys(metadata.browser)[0];
+      if (
+        metadata?.total &&
+        !isNaN(metadata?.total) &&
+        (!country || countryCode === country) &&
+        (!browser || browserType === browser) &&
+        (!device || deviceType === device) &&
+        (!os || operatingSystem === os)
+      )
+        return (accumulator += metadata?.total);
       return accumulator;
     }, 0);
     return totalCount;
@@ -246,7 +273,8 @@ export const getClicks = async (
   if (endpoint === 'timeseries') {
     const timeseries = analytics.reduce((accumulator, row) => {
       const metadata = row?.metadata as MetadataProps;
-      if (row?.aggregatedDate.toString() in accumulator) {
+      const countryCode = Object.keys(metadata.countryCode)[0];
+      if (row?.aggregatedDate.toString() in accumulator && (!country || countryCode === country)) {
         accumulator[row?.aggregatedDate.toString()] += metadata?.total;
         return accumulator;
       }
