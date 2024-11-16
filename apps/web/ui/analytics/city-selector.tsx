@@ -1,9 +1,8 @@
 import { InputSelect, useRouterStuff } from '@dub/ui';
-import { DUB_LOGO, GOOGLE_FAVICON_URL, getApexDomain } from '@dub/utils';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { Building2 } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useContext, useMemo } from 'react';
-import { ModalContext } from '../modals/provider';
 import useSWR from 'swr';
 import { AnalyticsContext } from '.';
 import { fetcher } from '@dub/utils';
@@ -11,6 +10,8 @@ import { DeviceTabs } from '@/lib/analytics/types';
 
 export default function CitySelector() {
   const { queryParams } = useRouterStuff();
+  const { messages } = useIntlClientHook();
+  const message = messages?.analytics;
 
   const { baseApiPath, queryString } = useContext(AnalyticsContext);
 
@@ -52,14 +53,12 @@ export default function CitySelector() {
         }
       }}
       inputAttrs={{
-        placeholder: 'Filter cities',
+        placeholder: message?.filter_cities,
       }}
       className="lg:w-48"
       noItemsElement={
         <div>
-          <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">
-            No cities found in this workspace
-          </h4>
+          <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">{message?.no_cities}</h4>
         </div>
       }
     />

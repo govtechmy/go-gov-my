@@ -1,5 +1,5 @@
 import { InputSelect, useRouterStuff } from '@dub/ui';
-import { DUB_LOGO, GOOGLE_FAVICON_URL, getApexDomain } from '@dub/utils';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { Network } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useContext, useMemo } from 'react';
@@ -11,8 +11,8 @@ import { DeviceTabs } from '@/lib/analytics/types';
 export default function ASNSelector() {
   const { queryParams } = useRouterStuff();
 
-  //const { messages } = useIntlClientHook();
-  //const message = messages?.analytics;
+  const { messages } = useIntlClientHook();
+  const message = messages?.analytics;
 
   const { baseApiPath, queryString } = useContext(AnalyticsContext);
 
@@ -53,12 +53,12 @@ export default function ASNSelector() {
         }
       }}
       inputAttrs={{
-        placeholder: 'Filter ASN',
+        placeholder: message?.filter_ASN,
       }}
       className="lg:w-48"
       noItemsElement={
         <div>
-          <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">No ASN found in this workspace</h4>
+          <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">{message?.no_asn}</h4>
         </div>
       }
     />

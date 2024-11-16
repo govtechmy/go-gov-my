@@ -1,5 +1,5 @@
 import { InputSelect, useRouterStuff } from '@dub/ui';
-import { DUB_LOGO, GOOGLE_FAVICON_URL, getApexDomain } from '@dub/utils';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { MonitorSmartphone, MonitorSmartphoneIcon } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useContext, useMemo, useState } from 'react';
@@ -12,8 +12,8 @@ import DeviceIcon from './device-icon';
 export default function DeviceSelector() {
   const { queryParams } = useRouterStuff();
 
-  //const { messages } = useIntlClientHook();
-  //const message = messages?.analytics;
+  const { messages } = useIntlClientHook();
+  const message = messages?.analytics;
 
   const { baseApiPath, queryString } = useContext(AnalyticsContext);
 
@@ -53,14 +53,12 @@ export default function DeviceSelector() {
         }
       }}
       inputAttrs={{
-        placeholder: 'Filter devices',
+        placeholder: message?.filter_devices,
       }}
       className="lg:w-48"
       noItemsElement={
         <div>
-          <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">
-            No devices found in this workspace
-          </h4>
+          <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">{message?.no_devices}</h4>
         </div>
       }
     />

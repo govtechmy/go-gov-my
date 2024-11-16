@@ -13,6 +13,7 @@ export default function TagSelector() {
   const searchParams = useSearchParams();
   const selectedTagId = searchParams?.get('tagId');
   const { setShowAddEditTagModal } = useContext(ModalContext);
+
   const { messages } = useIntlClientHook();
   const message = messages?.analytics;
 

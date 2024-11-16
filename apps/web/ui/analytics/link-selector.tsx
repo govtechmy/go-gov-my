@@ -1,4 +1,5 @@
 import { InputSelect, useRouterStuff } from '@dub/ui';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { DUB_LOGO, GOOGLE_FAVICON_URL, getApexDomain } from '@dub/utils';
 import { LinkIcon } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
@@ -11,6 +12,9 @@ import { fetcher } from '@dub/utils';
 export default function LinkSelector() {
   const { queryParams } = useRouterStuff();
   const { workspaceId } = useContext(AnalyticsContext);
+
+  const { messages } = useIntlClientHook();
+  const message = messages?.analytics;
 
   const {
     data: links,
@@ -65,18 +69,18 @@ export default function LinkSelector() {
         }
       }}
       inputAttrs={{
-        placeholder: 'Filter links',
+        placeholder: message?.filter_links,
       }}
       className="lg:w-48"
       noItemsElement={
         <div>
-          <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">No links found in this workspace</h4>
+          <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">{message?.no_links}</h4>
           <button
             type="button"
             className="w-full rounded-md border border-black bg-black px-3 py-1.5 text-center text-sm text-white transition-all hover:bg-white hover:text-black"
             onClick={() => setShowAddEditLinkModal(true)}
           >
-            Add a link
+            {message?.add_link}
           </button>
         </div>
       }

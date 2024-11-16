@@ -1,4 +1,5 @@
 import { InputSelect, useRouterStuff } from '@dub/ui';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { ChromeIcon } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useContext, useMemo, useState } from 'react';
@@ -10,8 +11,8 @@ import { DeviceTabs } from '@/lib/analytics/types';
 export default function BrowserSelector() {
   const { queryParams } = useRouterStuff();
 
-  //const { messages } = useIntlClientHook();
-  //const message = messages?.analytics;
+  const { messages } = useIntlClientHook();
+  const message = messages?.analytics;
 
   const { baseApiPath, queryString } = useContext(AnalyticsContext);
 
@@ -51,14 +52,12 @@ export default function BrowserSelector() {
         }
       }}
       inputAttrs={{
-        placeholder: 'Filter browsers',
+        placeholder: message?.filter_browsers,
       }}
       className="lg:w-48"
       noItemsElement={
         <div>
-          <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">
-            No browsers found in this workspace
-          </h4>
+          <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">{message?.no_browsers}</h4>
         </div>
       }
     />
