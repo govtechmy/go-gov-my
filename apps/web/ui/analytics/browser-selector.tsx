@@ -53,7 +53,7 @@ export default function BrowserSelector() {
       inputAttrs={{
         placeholder: 'Filter browsers',
       }}
-      className="w-full lg:w-48"
+      className="lg:w-48"
       noItemsElement={
         <div>
           <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">

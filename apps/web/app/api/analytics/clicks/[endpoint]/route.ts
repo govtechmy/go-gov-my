@@ -24,6 +24,8 @@ export const GET = logRequestMetrics(
 
       const linkId = link ? link.id : null;
 
+      console.log('parsedParams', parsedParams);
+
       const response = await getClicks({
         ...parsedParams,
         endpoint,

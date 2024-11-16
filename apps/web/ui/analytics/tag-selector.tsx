@@ -46,7 +46,7 @@ export default function TagSelector() {
         placeholder: message?.filter_tags,
       }}
       className="lg:w-48"
-      containerClassName="w-full"
+      containerClassName=""
       noItemsElement={
         <div>
           <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">{message?.no_tag}</h4>

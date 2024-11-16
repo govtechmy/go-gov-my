@@ -1,14 +1,14 @@
 import { InputSelect, useRouterStuff } from '@dub/ui';
 import { DUB_LOGO, GOOGLE_FAVICON_URL, getApexDomain } from '@dub/utils';
-import { AppWindow } from 'lucide-react';
+import { Network } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo } from 'react';
 import useSWR from 'swr';
 import { AnalyticsContext } from '.';
 import { fetcher } from '@dub/utils';
 import { DeviceTabs } from '@/lib/analytics/types';
 
-export default function OSSelector() {
+export default function ASNSelector() {
   const { queryParams } = useRouterStuff();
 
   //const { messages } = useIntlClientHook();
@@ -20,44 +20,45 @@ export default function OSSelector() {
     ({
       [key in DeviceTabs]: string;
     } & { clicks: number })[]
-  >(`${baseApiPath}/os?${queryString}`, fetcher);
+  >(`${baseApiPath}/asn?${queryString}`, fetcher);
 
   const searchParams = useSearchParams();
-  const selectedOS = useMemo(() => {
+  const selectedASN = useMemo(() => {
     if (data && data.length > 0) {
-      const searchParamOS = searchParams.get('os');
-      return data.find(({ os }) => os === searchParamOS);
+      const searchParamASN = searchParams.get('asn');
+      return data.find(({ asn }) => asn === searchParamASN);
     }
   }, [searchParams, data]);
 
   return data ? (
     <InputSelect
       adjustForMobile
-      items={data.map(({ os }) => ({
-        id: os,
-        value: os,
+      items={data.map(({ asn, organization }) => ({
+        id: asn,
+        value: asn,
+        organization: organization,
       }))}
-      icon={<AppWindow className="h-4 w-4 text-black" />}
+      icon={<Network className="h-4 w-4 text-black" />}
       selectedItem={{
-        id: selectedOS?.os || '',
-        value: selectedOS?.os || '',
+        id: selectedASN?.asn || '',
+        value: selectedASN?.asn || '',
       }}
-      setSelectedItem={(os) => {
-        if (os && typeof os !== 'function' && os.value) {
+      setSelectedItem={(asn) => {
+        if (asn && typeof asn !== 'function' && asn.value) {
           queryParams({
-            set: { os: os.value },
+            set: { asn: asn.value },
           });
         } else {
-          queryParams({ del: 'os' });
+          queryParams({ del: 'asn' });
         }
       }}
       inputAttrs={{
-        placeholder: 'Filter OS',
+        placeholder: 'Filter ASN',
       }}
       className="lg:w-48"
       noItemsElement={
         <div>
-          <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">No OS found in this workspace</h4>
+          <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">No ASN found in this workspace</h4>
         </div>
       }
     />
