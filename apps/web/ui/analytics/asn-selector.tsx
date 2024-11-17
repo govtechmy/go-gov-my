@@ -30,18 +30,24 @@ export default function ASNSelector() {
     }
   }, [searchParams, data]);
 
+  function limitLength(text: string) {
+    if (text.length > 10) return text.substring(0, 10) + '...';
+    return text;
+  }
+
   return data ? (
     <InputSelect
       adjustForMobile
       items={data.map(({ asn, organization }) => ({
         id: asn,
+        label: limitLength(organization),
         value: asn,
-        organization: organization,
       }))}
       icon={<Network className="h-4 w-4 text-black" />}
       selectedItem={{
         id: selectedASN?.asn || '',
         value: selectedASN?.asn || '',
+        label: selectedASN?.label || '',
       }}
       setSelectedItem={(asn) => {
         if (asn && typeof asn !== 'function' && asn.value) {
