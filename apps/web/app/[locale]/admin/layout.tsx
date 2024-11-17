@@ -14,17 +14,13 @@ import { ReactNode, Suspense } from 'react';
 import Providers from './providers';
 export const dynamic = 'force-static';
 import Footer from '@/ui/shared/footer';
+import { URL_GITHUB } from './constant';
+import { URL_FIGMA } from './constant';
 
 export async function generateMetadata({ params }) {
   const { locale } = params;
   return constructMetadata({ locale });
 }
-
-export const URL_GITHUB = 'https://github.com/govtechmy/go-gov-my';
-export const URL_FIGMA =
-  'https://www.figma.com/design/uwQdDuSxZ6FohazX1r7hxs/GoGovMy?node-id=0-1&t=qR9nMkJsfRphwT9g-1';
-export const URL_APP_MAIN = 'https://pautan.org';
-export const URL_APP_LOGIN = 'https://app.pautan.org/login';
 
 export default function Layout({
   children,

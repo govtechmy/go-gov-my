@@ -26,7 +26,7 @@ export default function WorkspaceLinksClient() {
   const { slug } = params;
   const router = useRouter();
 
-  const convertToCSV = async (data: object[]) => {
+  const convertToCSV = useCallback(async (data: object[]) => {
     const headers = [
       'id',
       'domain',
@@ -87,17 +87,17 @@ export default function WorkspaceLinksClient() {
         return defaultParser(fieldValue);
       },
     });
-  };
+  }, []);
 
-  const getShortDate = () => {
+  const getShortDate = useCallback(() => {
     const date = new Date();
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}${month}${day}`;
-  };
+  }, []);
 
-  const exportToCSV = async () => {
+  const exportToCSV = useCallback(async () => {
     try {
       const csv = links ? await convertToCSV(links) : '';
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -106,7 +106,7 @@ export default function WorkspaceLinksClient() {
     } catch (error) {
       console.error('Error exporting to CSV:', error);
     }
-  };
+  }, [links, convertToCSV, getShortDate]);
 
   const onKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -139,7 +139,7 @@ export default function WorkspaceLinksClient() {
         }
       }
     },
-    [isValidating, locale, slug, router]
+    [isValidating, locale, slug, router, exportToCSV]
   );
 
   useEffect(() => {

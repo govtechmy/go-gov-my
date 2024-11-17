@@ -1,7 +1,7 @@
 'use client';
 import Analytics from '@/ui/analytics';
 import LayoutLoader from '@/ui/layout/layout-loader';
-import { Suspense, useState, useContext, useEffect, useCallback } from 'react';
+import { Suspense, useState, useContext, useEffect, useCallback, useMemo } from 'react';
 import AnalyticsClient from './client';
 import { Button, MaxWidthWrapper } from '@dub/ui';
 import PageTitle from '@/ui/typography/page-title';
@@ -14,7 +14,6 @@ import { Link } from '@/ui/shared/icons';
 import { toast } from 'sonner';
 import { LoadingSpinner } from '@dub/ui';
 import { Tooltip, TooltipContent } from '@dub/ui';
-import { useMemo } from 'react';
 import { VALID_ANALYTICS_FILTERS } from '@/lib/analytics/constants';
 import useWorkspace from '@/lib/swr/use-workspace';
 
@@ -85,9 +84,10 @@ export default function WorkspaceAnalytics() {
     };
 
     return new URLSearchParams(params as Record<string, string>).toString();
-  }, [searchParams, slug]);
+  }, [searchParams, slug, id]);
 
-  async function exportData() {
+  // Add exportData to useCallback
+  const exportData = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`/api/analytics/export?${queryString}`, {
@@ -112,7 +112,7 @@ export default function WorkspaceAnalytics() {
       throw new Error(error);
     }
     setLoading(false);
-  }
+  }, [queryString]); // Add queryString as dependency
 
   return (
     <Suspense fallback={<LayoutLoader />}>
