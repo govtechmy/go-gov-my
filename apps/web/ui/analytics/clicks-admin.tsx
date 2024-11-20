@@ -82,7 +82,13 @@ export default function ClicksAdmin() {
           </div>
         </div>
 
-        <AnalyticsContext.Provider value={contextValue}>
+        <AnalyticsContext.Provider
+          value={{
+            ...contextValue,
+            workspaceId: session?.user?.id,
+            link: window?.location?.origin || '',
+          }}
+        >
           <ClicksChart />
         </AnalyticsContext.Provider>
       </div>
