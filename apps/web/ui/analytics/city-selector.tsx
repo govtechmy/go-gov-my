@@ -25,23 +25,26 @@ export default function CitySelector() {
   const selectedCity = useMemo(() => {
     if (cities && cities.length > 0) {
       const searchParamCity = searchParams.get('city');
-      return cities.find(({ city }) => city === searchParamCity);
+      return cities.find((city) => {
+        const [country, cityName] = searchParamCity?.split(':') || [];
+        return `${country}:${cityName}` === searchParamCity;
+      });
     }
   }, [searchParams, cities]);
 
   return cities ? (
     <InputSelect
       adjustForMobile
-      items={cities.map(({ city, country }) => ({
-        id: `${country}:${city}`,
-        value: `${country}:${city}`,
-        country: country,
-        city: city,
+      items={cities.map((city) => ({
+        id: `${city.devices}:${city.browsers}`,
+        value: `${city.devices}:${city.browsers}`,
+        country: city.devices,
+        city: city.browsers,
       }))}
       icon={<Building2 className="h-4 w-4 text-black" />}
       selectedItem={{
-        id: selectedCity?.value || '',
-        value: selectedCity?.value || '',
+        id: selectedCity ? `${selectedCity.devices}:${selectedCity.browsers}` : '',
+        value: selectedCity ? `${selectedCity.devices}:${selectedCity.browsers}` : '',
       }}
       setSelectedItem={(city) => {
         if (city && typeof city !== 'function' && city.value) {

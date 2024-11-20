@@ -27,21 +27,21 @@ export default function DeviceSelector() {
   const selectedDevice = useMemo(() => {
     if (data && data.length > 0) {
       const searchParamDevice = searchParams.get('device');
-      return data.find(({ device }) => device === searchParamDevice);
+      return data.find((device) => device.devices === searchParamDevice);
     }
   }, [searchParams, data]);
 
   return data ? (
     <InputSelect
       adjustForMobile
-      items={data.map(({ device }) => ({
-        id: device,
-        value: device,
+      items={data.map(({ devices }) => ({
+        id: devices,
+        value: devices,
       }))}
       icon={<MonitorSmartphoneIcon className="h-4 w-4 text-black" />}
       selectedItem={{
-        id: selectedDevice?.device || '',
-        value: selectedDevice?.device || '',
+        id: selectedDevice?.devices || '',
+        value: selectedDevice?.devices || '',
       }}
       setSelectedItem={(device) => {
         if (device && typeof device !== 'function' && device.value) {

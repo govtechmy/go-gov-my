@@ -26,21 +26,21 @@ export default function BrowserSelector() {
   const selectedBrowser = useMemo(() => {
     if (data && data.length > 0) {
       const searchParamBrowser = searchParams.get('browser');
-      return data.find(({ browser }) => browser === searchParamBrowser);
+      return data.find(({ browsers }) => browsers === searchParamBrowser);
     }
   }, [searchParams, data]);
 
   return data ? (
     <InputSelect
       adjustForMobile
-      items={data.map(({ browser }) => ({
-        id: browser,
-        value: browser,
+      items={data.map(({ browsers }) => ({
+        id: browsers,
+        value: browsers,
       }))}
       icon={<ChromeIcon className="h-4 w-4 text-black" />}
       selectedItem={{
-        id: selectedBrowser?.browser || '',
-        value: selectedBrowser?.browser || '',
+        id: selectedBrowser?.browsers || '',
+        value: selectedBrowser?.browsers || '',
       }}
       setSelectedItem={(browser) => {
         if (browser && typeof browser !== 'function' && browser.value) {

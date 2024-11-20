@@ -52,7 +52,6 @@ export default function LinkSelector() {
         id: selectedLink?.id || '',
         label: selectedLink?.url || '',
         value: cleanUrl(selectedLink?.url) || '',
-        key: selectedLink?.key || '',
         image: selectedLink
           ? selectedLink.url
             ? `${GOOGLE_FAVICON_URL}${getApexDomain(selectedLink.url)}`
@@ -60,7 +59,7 @@ export default function LinkSelector() {
           : undefined,
       }}
       setSelectedItem={(link) => {
-        if (link && typeof link !== 'function' && link.key) {
+        if (link && typeof link !== 'function' && 'key' in link && typeof link.key === 'string') {
           queryParams({
             set: { link: link.key },
           });
