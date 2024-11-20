@@ -15,7 +15,7 @@ export type AnalyticsEndpoints =
   | 'top_urls';
 export type LocationTabs = 'countries' | 'cities' | 'asn' | 'organization' | 'label';
 export type TopLinksTabs = 'link' | 'url';
-export type DeviceTabs = 'devices' | 'browsers' | 'os' | 'organization' | 'label';
+export type DeviceTabs = 'devices' | 'browsers' | 'os' | 'device' | 'browser' | 'label';
 
 export type ObjectProps = {
   [key: string]: number | ObjectProps;
