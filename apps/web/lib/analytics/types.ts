@@ -13,7 +13,7 @@ export type AnalyticsEndpoints =
   | 'referers'
   | 'top_links'
   | 'top_urls';
-export type LocationTabs = 'countries' | 'cities' | 'asn';
+export type LocationTabs = 'countries' | 'cities' | 'asn' | 'organization' | 'label';
 export type TopLinksTabs = 'link' | 'url';
 export type DeviceTabs = 'devices' | 'browsers' | 'os' | 'organization' | 'label';
 
