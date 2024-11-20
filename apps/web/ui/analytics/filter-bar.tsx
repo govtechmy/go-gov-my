@@ -11,15 +11,17 @@ import ASNSelector from './asn-selector';
 export default function FilterBar() {
   return (
     <ClientOnly>
-      <div className="grid flex-wrap w-full grid-cols-2 gap-1 rounded-lg  p-1 min-[550px]:w-auto lg:flex">
-        <TagSelector />
-        <LinkSelector />
-        <CountrySelector />
-        <DeviceSelector />
-        <OSSelector />
-        <BrowserSelector />
-        <CitySelector />
-        <ASNSelector />
+      <div className="grid w-full grid-cols-4 lg:grid-cols-8 gap-2">
+        <div className="contents [&>*]:min-w-0">
+          <TagSelector />
+          <LinkSelector />
+          <CountrySelector />
+          <DeviceSelector />
+          <OSSelector />
+          <BrowserSelector />
+          <CitySelector />
+          <ASNSelector />
+        </div>
       </div>
     </ClientOnly>
   );

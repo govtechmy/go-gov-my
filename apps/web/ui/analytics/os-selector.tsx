@@ -54,7 +54,8 @@ export default function OSSelector() {
       inputAttrs={{
         placeholder: message?.filter_OS,
       }}
-      className="lg:w-48"
+      className="w-full"
+      containerClassName="w-full"
       noItemsElement={
         <div>
           <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">{message?.no_os}</h4>

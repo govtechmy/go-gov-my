@@ -50,19 +50,19 @@ export default function Datepicker() {
   return (
     <div className="">
       {interval == 'custom' && (
-        <div className="flex-rows flex">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-0">
           <DatePicker
             selected={startDate}
             onChange={(date) => setStartDate(date)}
             maxDate={new Date()}
-            className="mx-1 rounded-md border border-gray-300 px-2 py-1 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full sm:w-auto font-inter rounded-md border border-gray-300 shadow-sm focus:border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300"
           />
-          -
+          <span className="xs:hidden sm:block mx-2 my-auto text-gray-600 font-inter">to</span>
           <DatePicker
             selected={endDate}
             onChange={(date) => setEndDate(date)}
             maxDate={new Date()}
-            className="mx-1 rounded-md border border-gray-300 px-2 py-1 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full sm:w-auto font-inter rounded-md border border-gray-300 shadow-sm focus:border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300"
           />
         </div>
       )}

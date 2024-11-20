@@ -96,7 +96,7 @@ export default function DateRangePicker() {
       <button
         onClick={() => setOpenDatePopover(!openDatePopover)}
         className={cn(
-          'flex w-full items-center justify-between space-x-2 truncate rounded-md border border-gray-200 bg-white px-3 py-2.5 transition-all md:w-48',
+          'flex items-center justify-between space-x-2 truncate rounded-md border border-gray-200 bg-white px-3 py-2.5 transition-all',
           {
             'truncate border-gray-500 ring-4 ring-gray-200': openDatePopover,
           }

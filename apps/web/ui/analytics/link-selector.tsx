@@ -71,7 +71,8 @@ export default function LinkSelector() {
       inputAttrs={{
         placeholder: message?.filter_links,
       }}
-      className="lg:w-48"
+      className="w-full"
+      containerClassName="w-full"
       noItemsElement={
         <div>
           <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">{message?.no_links}</h4>

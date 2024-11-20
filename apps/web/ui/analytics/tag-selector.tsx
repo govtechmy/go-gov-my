@@ -19,7 +19,7 @@ export default function TagSelector() {
 
   return (
     <InputSelect
-      adjustForMobile
+      adjustForMobile={true}
       disabled={!tags}
       items={
         tags?.map(({ id, name, color }) => ({
@@ -28,7 +28,7 @@ export default function TagSelector() {
           value: name,
         })) || []
       }
-      icon={<Tag className="h-4 w-4 text-black" />}
+      icon={<Tag className="h-4 w-4 text-black sm:mr-2" />}
       selectedItem={{
         id: selectedTagId!,
         value: tags?.find(({ id }) => id === selectedTagId)?.name || '',
@@ -46,8 +46,8 @@ export default function TagSelector() {
       inputAttrs={{
         placeholder: message?.filter_tags,
       }}
-      className="lg:w-48"
-      containerClassName=""
+      className="w-full [&>button>span]:hidden md:[&>button>span]:block [&>button]:justify-center md:[&>button]:justify-between"
+      containerClassName="w-full"
       noItemsElement={
         <div>
           <h4 className="mb-2 px-2 py-2 text-sm text-gray-600">{message?.no_tag}</h4>

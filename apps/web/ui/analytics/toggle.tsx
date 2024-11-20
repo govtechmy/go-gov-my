@@ -79,16 +79,21 @@ export default function Toggle({ actions }: { actions?: React.ReactNode }) {
               'w-full md:w-auto': key,
             })}
           >
-            <FilterBar />
-            <div
-              className={cn('flex w-full items-center gap-2', {
-                'min-[550px]:w-auto': !key,
-                'justify-end md:w-auto': key,
-              })}
-            >
-              {actions}
-              <DateRangePicker />
-              <Datepicker />
+            <div className="mx-auto w-full max-w-7xl px-2.5 lg:px-2">
+              <div className="flex flex-col gap-4">
+                {/* Date Range Controls - Responsive */}
+                <div className="flex flex-wrap justify-end items-center gap-2">
+                  <div className="w-full sm:w-auto">
+                    <DateRangePicker />
+                  </div>
+                  <div className="w-full sm:w-auto">
+                    <Datepicker />
+                  </div>
+                </div>
+
+                {/* Filter Bar */}
+                <FilterBar />
+              </div>
             </div>
           </div>
         </div>
