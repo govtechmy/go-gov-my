@@ -6,7 +6,7 @@ import { useContext, useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { AnalyticsContext } from '.';
 import { fetcher } from '@dub/utils';
-import { DeviceTabs } from '@/lib/analytics/types';
+import { AnalyticsType } from '@/lib/analytics/types';
 
 export default function OSSelector() {
   const { queryParams } = useRouterStuff();
@@ -18,7 +18,7 @@ export default function OSSelector() {
 
   const { data } = useSWR<
     ({
-      [key in DeviceTabs]: string;
+      [key in AnalyticsType]: string;
     } & { clicks: number })[]
   >(`${baseApiPath}/os?${queryString}`, fetcher);
 

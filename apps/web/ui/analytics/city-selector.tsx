@@ -6,7 +6,7 @@ import { useContext, useMemo } from 'react';
 import useSWR from 'swr';
 import { AnalyticsContext } from '.';
 import { fetcher } from '@dub/utils';
-import { LocationTabs } from '@/lib/analytics/types';
+import { AnalyticsType } from '@/lib/analytics/types';
 
 export default function CitySelector() {
   const { queryParams } = useRouterStuff();
@@ -17,7 +17,7 @@ export default function CitySelector() {
 
   const { data: cities } = useSWR<
     ({
-      [key in LocationTabs]: string;
+      [key in AnalyticsType]: string;
     } & { clicks: number })[]
   >(`${baseApiPath}/cities?${queryString}`, fetcher);
 
