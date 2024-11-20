@@ -114,4 +114,5 @@ export const VALID_ANALYTICS_FILTERS = [
   'tagId',
   'qr',
   'root',
+  'asn',
 ];

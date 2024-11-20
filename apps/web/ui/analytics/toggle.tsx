@@ -13,6 +13,8 @@ import { AnalyticsContext } from '.';
 import DateRangePicker from './date-range-picker';
 import Datepicker from './datepicker';
 import ExportButton from './export-button';
+import FilterBar from './filter-bar';
+import SharePopover from './share-popover';
 
 export default function Toggle({ actions }: { actions?: React.ReactNode }) {
   const { basePath, domain, key, url, admin } = useContext(AnalyticsContext);
@@ -72,11 +74,12 @@ export default function Toggle({ actions }: { actions?: React.ReactNode }) {
             // <h2 className="truncate text-2xl text-gray-600">{messages?.dashboard?.analytics}</h2>
           )}
           <div
-            className={cn('flex items-center gap-2', {
+            className={cn('flex flex-wrap items-center gap-2', {
               'w-full flex-col min-[550px]:flex-row md:w-auto': !key,
               'w-full md:w-auto': key,
             })}
           >
+            <FilterBar />
             <div
               className={cn('flex w-full items-center gap-2', {
                 'min-[550px]:w-auto': !key,

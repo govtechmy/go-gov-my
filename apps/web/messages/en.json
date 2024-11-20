@@ -263,7 +263,22 @@
     "Domains": "Domains",
     "Type": "Type",
     "browsers": "Browsers",
-    "OS": "OS"
+    "OS": "OS",
+    "no_cities": "No cities found in this workspace",
+    "filter_cities": "Filter Cities",
+    "no_asn": "No ASN found in this workspace",
+    "filter_ASN": "Filter ASN",
+    "no_os": "No OS",
+    "filter_OS": "Filter OS",
+    "no_devices": "No devices found in this workspace",
+    "filter_devices": "Filter Devices",
+    "no_browsers": "No browsers found in this workspace",
+    "filter_browsers": "Filter Browsers",
+    "no_countries": "No countries found in this workspace",
+    "filter_countries": "Filter Countries",
+    "no_links": "No links found in this workspace",
+    "filter_links": "Filter Links",
+    "add_link": "Add a link"
   },
   "help": {
     "contact_support": "Contact support",

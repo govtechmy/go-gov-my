@@ -263,7 +263,22 @@
     "Domains": "Domains",
     "Type": "Jenis",
     "browsers": "Pelayar",
-    "OS": "OS"
+    "OS": "OS",
+    "no_cities": "Tiada bandar ditemui dalam ruang kerja ini",
+    "filter_cities": "Tapis Bandar",
+    "no_asn": "Tiada ASN ditemui dalam ruang kerja ini",
+    "filter_ASN": "Tapis ASN",
+    "no_os": "Tiada Sistem Operasi",
+    "filter_OS": "Tapis Sistem Operasi",
+    "no_devices": "Tiada peranti ditemui dalam ruang kerja ini",
+    "filter_devices": "Tapis Peranti",
+    "no_browsers": "Tiada pelayar ditemui dalam ruang kerja ini",
+    "filter_browsers": "Tapis Pelayar",
+    "no_countries": "Tiada negara ditemui dalam ruang kerja ini",
+    "filter_countries": "Tapis Negara",
+    "no_links": "Tiada pautan ditemui dalam ruang kerja ini",
+    "filter_links": "Tapis Pautan",
+    "add_link": "Tambah pautan"
   },
   "help": {
     "contact_support": "Hubungi Pusat Bantuan",
