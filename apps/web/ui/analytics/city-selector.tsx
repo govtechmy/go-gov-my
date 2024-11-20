@@ -6,7 +6,7 @@ import { useContext, useMemo } from 'react';
 import useSWR from 'swr';
 import { AnalyticsContext } from '.';
 import { fetcher } from '@dub/utils';
-import { DeviceTabs } from '@/lib/analytics/types';
+import { LocationTabs } from '@/lib/analytics/types';
 
 export default function CitySelector() {
   const { queryParams } = useRouterStuff();
@@ -17,7 +17,7 @@ export default function CitySelector() {
 
   const { data: cities } = useSWR<
     ({
-      [key in DeviceTabs]: string;
+      [key in LocationTabs]: string;
     } & { clicks: number })[]
   >(`${baseApiPath}/cities?${queryString}`, fetcher);
 
@@ -25,9 +25,8 @@ export default function CitySelector() {
   const selectedCity = useMemo(() => {
     if (cities && cities.length > 0) {
       const searchParamCity = searchParams.get('city');
-      return cities.find((city) => {
-        const [country, cityName] = searchParamCity?.split(':') || [];
-        return `${country}:${cityName}` === searchParamCity;
+      return cities.find(({ city, country }) => {
+        return `${country}:${city}` === searchParamCity;
       });
     }
   }, [searchParams, cities]);
@@ -35,16 +34,16 @@ export default function CitySelector() {
   return cities ? (
     <InputSelect
       adjustForMobile
-      items={cities.map((city) => ({
-        id: `${city.devices}:${city.browsers}`,
-        value: `${city.devices}:${city.browsers}`,
-        country: city.devices,
-        city: city.browsers,
+      items={cities.map(({ city, country }) => ({
+        id: `${country}:${city}`,
+        value: `${country}:${city}`,
+        country: country,
+        city: city,
       }))}
       icon={<Building2 className="h-4 w-4 text-black" />}
       selectedItem={{
-        id: selectedCity ? `${selectedCity.devices}:${selectedCity.browsers}` : '',
-        value: selectedCity ? `${selectedCity.devices}:${selectedCity.browsers}` : '',
+        id: selectedCity ? `${selectedCity.country}:${selectedCity.city}` : '',
+        value: selectedCity ? `${selectedCity.country}:${selectedCity.city}` : '',
       }}
       setSelectedItem={(city) => {
         if (city && typeof city !== 'function' && city.value) {

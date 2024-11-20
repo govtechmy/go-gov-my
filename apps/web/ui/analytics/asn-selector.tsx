@@ -6,7 +6,7 @@ import { useContext, useMemo } from 'react';
 import useSWR from 'swr';
 import { AnalyticsContext } from '.';
 import { fetcher } from '@dub/utils';
-import { DeviceTabs } from '@/lib/analytics/types';
+import { LocationTabs } from '@/lib/analytics/types';
 
 export default function ASNSelector() {
   const { queryParams } = useRouterStuff();
@@ -18,7 +18,7 @@ export default function ASNSelector() {
 
   const { data } = useSWR<
     ({
-      [key in DeviceTabs]: string;
+      [key in LocationTabs]: string;
     } & { clicks: number })[]
   >(`${baseApiPath}/asn?${queryString}`, fetcher);
 

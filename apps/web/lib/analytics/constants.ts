@@ -115,4 +115,5 @@ export const VALID_ANALYTICS_FILTERS = [
   'qr',
   'root',
   'asn',
+  'link',
 ];
