@@ -1,4 +1,4 @@
-import { DubApiError, exceededLimitError } from '@/lib/api/errors';
+import { DubApiError } from '@/lib/api/errors';
 import { withWorkspace } from '@/lib/auth';
 import { logRequestMetrics } from '@/lib/decorator/logRequestMetrics';
 import { prisma } from '@/lib/prisma';
@@ -34,17 +34,6 @@ export const POST = logRequestMetrics(
         projectId: workspace.id,
       },
     });
-
-    if (tagsCount >= workspace.tagsLimit) {
-      throw new DubApiError({
-        code: 'exceeded_limit',
-        message: exceededLimitError({
-          plan: workspace.plan,
-          limit: workspace.tagsLimit,
-          type: 'tags',
-        }),
-      });
-    }
 
     const { tag, color } = createTagBodySchema.parse(await req.json());
 
