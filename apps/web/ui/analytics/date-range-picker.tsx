@@ -1,5 +1,4 @@
 import { INTERVAL_DISPLAYS } from '@/lib/analytics/constants';
-import { validDateRangeForPlan } from '@/lib/analytics/utils';
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import useWorkspace from '@/lib/swr/use-workspace';
 import { IconMenu, Popover, Tick, Tooltip, TooltipContent, useRouterStuff } from '@dub/ui';
@@ -30,64 +29,25 @@ export default function DateRangePicker() {
     <Popover
       content={
         <div className="grid w-full p-2 md:w-48">
-          {INTERVAL_DISPLAYS.map(({ display, value }) =>
-            !validDateRangeForPlan({
-              plan,
-              interval: value,
-            }) && !admin ? (
-              <Tooltip
-                key={value}
-                content={
-                  <TooltipContent
-                    title={`${display} stats can only be viewed on a ${value === 'all' ? 'Business' : getNextPlan(plan).name} plan or higher. Upgrade now to view all-time stats.`}
-                    cta={`Upgrade to ${value === 'all' ? 'Business' : getNextPlan(plan).name}`}
-                    {...(isPublicStatsPage
-                      ? {
-                          href: APP_DOMAIN,
-                        }
-                      : {
-                          onClick: () => {
-                            setOpenDatePopover(false);
-                            queryParams({
-                              set: {
-                                upgrade:
-                                  value === 'all'
-                                    ? 'business'
-                                    : getNextPlan(plan).name.toLowerCase(),
-                              },
-                            });
-                          },
-                        })}
-                  />
-                }
-              >
-                <div className="flex w-full cursor-not-allowed items-center justify-between space-x-2 rounded-md p-2 text-sm text-gray-400">
-                  <p>{display}</p>
-                  <Lock className="h-4 w-4" aria-hidden="true" />
-                </div>
-              </Tooltip>
-            ) : (
-              <Link
-                key={value}
-                href={
-                  queryParams({
-                    set: {
-                      interval: value,
-                      start: '',
-                      end: '',
-                    },
-                    getNewPath: true,
-                  }) as string
-                }
-                className="flex w-full items-center justify-between space-x-2 rounded-md p-2 hover:bg-gray-100 active:bg-gray-200"
-              >
-                <p className="text-sm">{wrapper[display]}</p>
-                {selectedInterval.value === value && (
-                  <Tick className="h-4 w-4" aria-hidden="true" />
-                )}
-              </Link>
-            )
-          )}
+          {INTERVAL_DISPLAYS.map(({ display, value }) => (
+            <Link
+              key={value}
+              href={
+                queryParams({
+                  set: {
+                    interval: value,
+                    start: '',
+                    end: '',
+                  },
+                  getNewPath: true,
+                }) as string
+              }
+              className="flex w-full items-center justify-between space-x-2 rounded-md p-2 hover:bg-gray-100 active:bg-gray-200"
+            >
+              <p className="text-sm">{wrapper[display]}</p>
+              {selectedInterval.value === value && <Tick className="h-4 w-4" aria-hidden="true" />}
+            </Link>
+          ))}
         </div>
       }
       openPopover={openDatePopover}
