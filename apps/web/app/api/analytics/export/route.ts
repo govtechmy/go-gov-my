@@ -30,14 +30,6 @@ export const GET = withWorkspace(
     const parsedParams = clickAnalyticsQuerySchema.parse(searchParams);
     const { domain, key, interval } = parsedParams;
 
-    // return 403 if project is on the free plan and interval is 90d or all
-    if (workspace?.plan === 'free' && (interval === 'all' || interval === '90d')) {
-      throw new DubApiError({
-        code: 'forbidden',
-        message: 'Require higher plan',
-      });
-    }
-
     const linkId = link ? link.id : null;
 
     const zip = new JSZip();

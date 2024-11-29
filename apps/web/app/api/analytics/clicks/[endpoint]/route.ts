@@ -1,5 +1,4 @@
 import { getClicks } from '@/lib/analytics/clicks';
-import { validDateRangeForPlan } from '@/lib/analytics/utils';
 import { withWorkspace } from '@/lib/auth';
 import { logRequestMetrics } from '@/lib/decorator/logRequestMetrics';
 import { analyticsEndpointSchema, clickAnalyticsQuerySchema } from '@/lib/zod/schemas/analytics';
@@ -13,14 +12,6 @@ export const GET = logRequestMetrics(
 
       const parsedParams = clickAnalyticsQuerySchema.parse(searchParams);
       const { domain, key, interval, start, end } = parsedParams;
-
-      validDateRangeForPlan({
-        plan: workspace.plan,
-        interval,
-        start,
-        end,
-        throwError: true,
-      });
 
       const linkId = link ? link.id : null;
 

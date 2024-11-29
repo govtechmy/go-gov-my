@@ -1,4 +1,3 @@
-import { exceededLimitError } from '@/lib/api/errors';
 import { propagateBulkLinkChanges } from '@/lib/api/links';
 import { withWorkspace } from '@/lib/auth';
 import { logRequestMetrics } from '@/lib/decorator/logRequestMetrics';
@@ -38,17 +37,6 @@ export const POST = logRequestMetrics(
 
     if (unclaimedLinks.length === 0) {
       return new Response('No links created.', { status: 200 });
-    }
-
-    if (workspace.linksUsage + unclaimedLinks.length > workspace.linksLimit) {
-      return new Response(
-        exceededLimitError({
-          plan: workspace.plan,
-          limit: workspace.linksLimit,
-          type: 'links',
-        }),
-        { status: 403 }
-      );
     }
 
     const response = await Promise.allSettled([

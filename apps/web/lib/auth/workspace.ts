@@ -1,4 +1,4 @@
-import { DubApiError, exceededLimitError, handleAndReturnErrorResponse } from '@/lib/api/errors';
+import { DubApiError, handleAndReturnErrorResponse } from '@/lib/api/errors';
 import { prisma } from '@/lib/prisma';
 import { ratelimit } from '@/lib/redis/ratelimit';
 import { PlanProps, WorkspaceProps } from '@/lib/types';
@@ -283,51 +283,6 @@ export const withWorkspace = (
         throw new DubApiError({
           code: 'forbidden',
           message: 'Unauthorized: Insufficient permissions.',
-        });
-      }
-
-      // clicks usage overage checks
-      if (needNotExceededClicks && workspace.usage > workspace.usageLimit) {
-        throw new DubApiError({
-          code: 'forbidden',
-          message: exceededLimitError({
-            plan: workspace.plan,
-            limit: workspace.usageLimit,
-            type: 'clicks',
-          }),
-        });
-      }
-
-      // links usage overage checks
-      if (
-        needNotExceededLinks &&
-        workspace.linksUsage > workspace.linksLimit &&
-        (workspace.plan === 'free' || workspace.plan === 'pro')
-      ) {
-        throw new DubApiError({
-          code: 'forbidden',
-          message: exceededLimitError({
-            plan: workspace.plan,
-            limit: workspace.linksLimit,
-            type: 'links',
-          }),
-        });
-      }
-
-      // plan checks
-      if (!requiredPlan.includes(workspace.plan)) {
-        throw new DubApiError({
-          code: 'forbidden',
-          message: 'Unauthorized: Need higher plan.',
-        });
-      }
-
-      // analytics API checks
-      const url = new URL(req.url || '', API_DOMAIN);
-      if (workspace.plan === 'free' && apiKey && url.pathname.includes('/analytics')) {
-        throw new DubApiError({
-          code: 'forbidden',
-          message: 'Analytics API is only available on paid plans.',
         });
       }
 

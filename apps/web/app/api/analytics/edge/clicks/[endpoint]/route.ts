@@ -1,6 +1,5 @@
 import { getClicks } from '@/lib/analytics/clicks';
-import { validDateRangeForPlan } from '@/lib/analytics/utils';
-import { DubApiError, exceededLimitError, handleAndReturnErrorResponse } from '@/lib/api/errors';
+import { DubApiError, handleAndReturnErrorResponse } from '@/lib/api/errors';
 import { ratelimit } from '@/lib/redis/ratelimit';
 import { getLink, getWorkspaceViaEdge } from '@/lib/userinfos';
 import { analyticsEndpointSchema, clickAnalyticsQuerySchema } from '@/lib/zod/schemas/analytics';
@@ -60,23 +59,6 @@ export const GET = async (req: NextRequest, { params }: { params: Record<string,
         });
       }
       const workspace = link?.projectId && (await getWorkspaceViaEdge(link.projectId));
-
-      validDateRangeForPlan({
-        plan: workspace.plan,
-        interval,
-        throwError: true,
-      });
-
-      if (workspace && workspace.usage > workspace.usageLimit) {
-        throw new DubApiError({
-          code: 'forbidden',
-          message: exceededLimitError({
-            plan: workspace.plan,
-            limit: workspace.usageLimit,
-            type: 'clicks',
-          }),
-        });
-      }
     }
 
     const response = await getClicks({
