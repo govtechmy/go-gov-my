@@ -316,6 +316,7 @@ model File {
   fileUrl     String
   createdAt   DateTime  @default(now()) @db.Timestamptz(6)
   updatedAt   DateTime  @updatedAt
+  createdBy   String
   status      String
 
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
