@@ -36,7 +36,7 @@ model User {
   sessions      Session[]
   tokens        Token[]
   agency        Agency         @relation(fields: [agencyCode], references: [code])
-  File          File[]
+  file          File[]
 
   @@index([agencyCode])
 }
@@ -118,7 +118,7 @@ model Project {
   users             ProjectUsers[]
   sentEmails        SentEmail[]
   tags              Tag[]
-  File              File[]
+  file              File[]
 }
 
 model ProjectInvite {
