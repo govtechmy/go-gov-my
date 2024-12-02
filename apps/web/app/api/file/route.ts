@@ -65,6 +65,12 @@ const parseFormData = async (formData: FormData) => {
 // POST /api/file upload a specific file
 export const POST = logRequestMetrics(
   withSession(async ({ req, session }) => {
+    // Check for the API key in the headers
+    const apiKey = req.headers.get('api_key');
+    if (apiKey !== process.env.S3_API_KEY) {
+      return NextResponse.json({ error: 'Unauthorized: Invalid API key.' }, { status: 401 });
+    }
+
     const formData = await req.formData();
     let { projectId, userId, linkId, files } = await parseFormData(formData);
     try {
