@@ -206,6 +206,7 @@ model Link {
   user              User?         @relation(fields: [userId], references: [id])
   history           LinkHistory[]
   tags              LinkTag[]
+  file              File[]
 
   @@unique([domain, key])
   @@unique([projectId, externalId])
@@ -325,7 +326,6 @@ model File {
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   link    Link    @relation(fields: [linkId], references: [id], onDelete: Cascade)
-
 }
 
 enum UploadStatus {
