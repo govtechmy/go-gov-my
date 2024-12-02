@@ -5,6 +5,7 @@ import { storage } from '@/lib/storage';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { v4 as uuidv4 } from 'uuid';
+import { DubApiError, ErrorCodes } from '@/lib/api/errors';
 
 // PDF, .PNG, .JPEG, DOCX, XLSX, CSV, PPTX
 const allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf', 'docx', 'xlsx', 'csv', 'pptx'];
@@ -26,8 +27,9 @@ const isFileValid = (file: File) => {
 };
 
 const formDataSchema = z.object({
-  projectId: z.string().uuid({ message: 'Invalid projectId. Must be a valid UUID.' }),
-  userId: z.string().uuid({ message: 'Invalid userId. Must be a valid UUID.' }),
+  projectId: z.string().uuid({ message: 'Invalid project Id. Must be a valid UUID.' }),
+  userId: z.string().uuid({ message: 'Invalid user Id. Must be a valid UUID.' }),
+  linkId: z.string().uuid({ message: 'Invalid link Id. Must be a valid UUID.' }),
   files: z
     .array(
       z.instanceof(File).refine((file) => isFileValid(file), {
@@ -40,16 +42,21 @@ const formDataSchema = z.object({
 const parseFormData = async (formData: FormData) => {
   const projectId = formData.get('projectId');
   const userId = formData.get('userId');
+  const linkId = formData.get('linkId');
   const files = formData.getAll('files');
 
   const parsedData = formDataSchema.safeParse({
     projectId,
     userId,
+    linkId,
     files,
   });
 
   if (!parsedData.success) {
-    throw new Error(JSON.stringify(parsedData.error.format(), null, 2));
+    throw new DubApiError({
+      code: 'bad_request',
+      message: JSON.stringify(parsedData.error.format(), null, 2),
+    });
   }
 
   return parsedData.data;
@@ -59,7 +66,7 @@ const parseFormData = async (formData: FormData) => {
 export const POST = logRequestMetrics(
   withSession(async ({ req, session }) => {
     const formData = await req.formData();
-    let { projectId, userId, files } = await parseFormData(formData);
+    let { projectId, userId, linkId, files } = await parseFormData(formData);
     try {
       // get user name from id
       const userName = await prisma.user.findUnique({
@@ -67,17 +74,19 @@ export const POST = logRequestMetrics(
           id: session.user.id,
         },
       });
-      console.log(projectId, userId, files);
+
       const responses: any[] = [];
       for (let i = 0; i < files.length; i++) {
         const newFileName = `${uuidv4()}_${files[i].name}`;
         const { url } = await storage.upload(`FileUpload/${projectId}/${newFileName}`, files[i]);
+        const fileUrl = url;
 
         const writeToDbSuccess = await prisma.file.create({
           data: {
             ...(projectId && { projectId }),
             ...(userId && { userId }),
-            ...(url && { url }),
+            ...(fileUrl && { fileUrl }),
+            ...(linkId && { linkId }),
             status: 'Uploading',
             createdBy: userName.name,
           },
