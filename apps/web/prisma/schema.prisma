@@ -36,6 +36,7 @@ model User {
   sessions      Session[]
   tokens        Token[]
   agency        Agency         @relation(fields: [agencyCode], references: [code])
+  files          File[]
 
   @@index([agencyCode])
 }
@@ -117,6 +118,7 @@ model Project {
   users             ProjectUsers[]
   sentEmails        SentEmail[]
   tags              Tag[]
+  files              File[]
 }
 
 model ProjectInvite {
@@ -204,6 +206,7 @@ model Link {
   user              User?         @relation(fields: [userId], references: [id])
   history           LinkHistory[]
   tags              LinkTag[]
+  files              File[]
 
   @@unique([domain, key])
   @@unique([projectId, externalId])
@@ -307,6 +310,29 @@ model ReportedLink {
   ipAddress String
   userAgent String
   createdAt DateTime @default(now()) @db.Timestamptz(6)
+}
+
+model File {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  projectId String   @db.Uuid
+  userId    String   @db.Uuid
+  fileUrl   String
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt
+  createdBy String
+  linkId    String   @db.Uuid
+  status    UploadStatus @default(Uploading)
+  isFileLink Boolean @default(false)
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  link    Link    @relation(fields: [linkId], references: [id], onDelete: Cascade)
+}
+
+enum UploadStatus {
+  Uploading
+  Completed
+  Error
 }
 
 enum UserRole {
