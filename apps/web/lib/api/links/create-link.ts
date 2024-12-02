@@ -11,7 +11,6 @@ import { OUTBOX_ACTIONS } from 'kafka-consumer/utils/actions';
 import { addToHistory } from './add-to-history';
 import generateIdempotencyKey from './create-idempotency-key';
 import { combineTagIds, transformLink } from './utils';
-import uploadFiles from './upload-files';
 
 const REDIRECT_SERVER_BASE_URL = process.env.REDIRECT_SERVER_URL || 'http://localhost:3002';
 
@@ -32,7 +31,7 @@ export async function createLink(
 
   const { utm_source, utm_medium, utm_campaign, utm_term, utm_content } = getParamsFromURL(url);
 
-  const { tagId, tagIds, tagNames, password, files, ...rest } = link;
+  const { tagId, tagIds, tagNames, password, ...rest } = link;
 
   const response = await prisma.link.create({
     data: {
@@ -92,17 +91,6 @@ export async function createLink(
       },
     },
   });
-
-  // start uploading files if any
-  let filesUpload: { file: string; success: boolean }[] | null = null;
-  if (files) {
-    filesUpload = await uploadFiles({
-      projectId: link.projectId,
-      userId: sessionUserId,
-      linkId: response.id,
-      files,
-    });
-  }
 
   const uploadedImageUrl = `${process.env.STORAGE_BASE_URL}/images/${response.id}`;
 
@@ -195,12 +183,10 @@ export async function createLink(
       workspace_id: response.projectId?.toString(),
       created_at: response.createdAt.toISOString(),
       logtime: new Date().toISOString(),
-      filesUpload: filesUpload?.toString() ?? '',
     });
 
     return {
       ...transformLink(response),
-      filesUpload: filesUpload ?? [],
       // optimistically set the image URL to the uploaded image URL
       image: proxy && image && !isStored(image) ? uploadedImageUrl : response.image,
     };
