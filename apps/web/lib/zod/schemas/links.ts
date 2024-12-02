@@ -95,6 +95,27 @@ export const domainKeySchema = z.object({
     .describe('The key of the link to retrieve. E.g. for `d.to/github`, the key is `github`.'),
 });
 
+// PDF, .PNG, .JPEG, DOCX, XLSX, CSV, PPTX
+const allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf', 'docx', 'xlsx', 'csv', 'pptx'];
+const allowedMimeTypes = [
+  'image/jpeg',
+  'image/png',
+  'application/pdf',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'text/csv',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+];
+
+const isFileValid = (file: File) => {
+  const fileSizeLimit = 5 * 1024 * 1024; // 5MB in bytes
+  const mimeTypeValid = allowedMimeTypes.includes(file.type);
+  const extensionValid = allowedExtensions.some((ext) =>
+    file.name.toLowerCase().endsWith(`.${ext}`)
+  );
+  return mimeTypeValid && extensionValid && file.size <= fileSizeLimit;
+};
+
 export const createLinkBodySchema = z.object({
   url: parseUrlSchema.describe('The destination URL of the short link.').openapi({
     example: 'https://google/com',
@@ -190,6 +211,14 @@ export const createLinkBodySchema = z.object({
       'Geo targeting information for the short link in JSON format `{[COUNTRY]: https://example.com }`.'
     )
     .openapi({ ref: 'linkGeoTargeting' }),
+  files: z
+    .array(
+      z.instanceof(File).refine((file) => isFileValid(file), {
+        message: 'File must be below 5MB and have a valid MIME type and extension.',
+      })
+    )
+    .nullish()
+    .describe('files to be uploaded'),
 });
 
 export const updateLinkBodySchema = createLinkBodySchema.partial().optional();
