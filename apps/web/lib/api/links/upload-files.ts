@@ -99,6 +99,7 @@ export default async function uploadFiles(formData: FormData) {
         success: true,
       });
     } catch (error) {
+      console.error(`Error uploading file ${files[i].name}:`, error);
       responses.push({
         file: files[i].name,
         success: false,
