@@ -36,7 +36,7 @@ model User {
   sessions      Session[]
   tokens        Token[]
   agency        Agency         @relation(fields: [agencyCode], references: [code])
-  file          File[]
+  files          File[]
 
   @@index([agencyCode])
 }
@@ -118,7 +118,7 @@ model Project {
   users             ProjectUsers[]
   sentEmails        SentEmail[]
   tags              Tag[]
-  file              File[]
+  files              File[]
 }
 
 model ProjectInvite {
@@ -206,7 +206,7 @@ model Link {
   user              User?         @relation(fields: [userId], references: [id])
   history           LinkHistory[]
   tags              LinkTag[]
-  file              File[]
+  files              File[]
 
   @@unique([domain, key])
   @@unique([projectId, externalId])
