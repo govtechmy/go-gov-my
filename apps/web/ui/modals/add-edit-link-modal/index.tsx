@@ -55,6 +55,7 @@ import PasswordSection from './password-section';
 import Preview from './preview';
 import TagsSection from './tags-section';
 import UTMSection from './utm-section';
+import UploadDocuments from './upload-documents';
 
 export type FormValues = LinkWithTagsProps & {
   password?: string;
@@ -675,6 +676,7 @@ function AddEditLinkModal({
             </div>
 
             <div className="grid gap-5 px-4 md:px-16">
+              <UploadDocuments {...{ props, data, setData }} />
               <TagsSection {...{ props, data, setData }} />
               <CommentsSection {...{ props, data, setData }} />
               <UTMSection {...{ props, data, setData }} />
