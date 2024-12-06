@@ -37,8 +37,8 @@ apps/redirect-page/next-landing-page/.env
 ## Apps - Docs ##
 apps/docs/node_modules
 
-## Apps - Cron ##
-apps/cron/node_modules
+## Apps - Scheduler Services ##
+apps/scheduler-services/node_modules
 
 ## TBD
 Dockerfile

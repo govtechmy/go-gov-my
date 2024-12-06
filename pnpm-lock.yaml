@@ -34,7 +34,7 @@ importers:
         specifier: ^1.12.5
         version: 1.12.5
 
-  apps/cron:
+  apps/scheduler-services:
     dependencies:
       '@aws-sdk/client-s3':
         specifier: ^3.631.0

@@ -2,9 +2,11 @@
 .turbo
 .DS_Store
     
-# Apps - Cron
-/apps/cron/node_modules
-/apps/cron/dist
+# Apps - Scheduler Services
+/apps/scheduler-services/node_modules
+/apps/scheduler-services/dist
+/apps/scheduler-services/logs
+/apps/scheduler-services/logs/*
 
 # Apps - Docs
 /apps/docs/node_modules

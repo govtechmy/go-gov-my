@@ -4,13 +4,13 @@ env:
 on:
   push:
     tags:
-      - "redirect-api@STAGING-v*"
-      - "redirect-api@v*"
+      - 'redirect-api@STAGING-v*'
+      - 'redirect-api@v*'
     paths-ignore:
       - apps/web/**
       - apps/docs/**
       - packages/**
-      - apps/cron/**
+      - apps/scheduler-services/**
       - docker/Dockerfile.prometheus
       - docker/Dockerfile.jaeger
       - docker/Dockerfile.grafana

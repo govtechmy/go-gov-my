@@ -4,14 +4,14 @@ env:
 on:
   push:
     tags:
-      - "docs@STAGING-v*"
-      - "docs@v*"
+      - 'docs@STAGING-v*'
+      - 'docs@v*'
     paths-ignore:
       - apps/redirect-server/**
       - apps/redirect-pages/**
       - apps/web/**
       - packages/**
-      - apps/cron/**
+      - apps/scheduler-services/**
   workflow_dispatch:
 permissions:
   id-token: write # This is required for requesting the JWT

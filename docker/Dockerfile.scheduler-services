@@ -1,0 +1,26 @@
+FROM node:20-alpine AS base
+
+RUN apk update && apk upgrade
+
+WORKDIR /app
+
+# Copy package.json and install dependencies
+COPY ./apps/scheduler-services/package.json ./
+RUN npm install
+
+# Copy the rest of the application
+COPY ./apps/scheduler-services .
+
+# Set NODE_PATH to include global modules
+ARG API_KEY
+ARG WEB_BASE
+ARG ENVIRONMENT
+ARG LOG_LEVEL
+ARG DISCORD_WEBHOOK_URL
+ARG DISCORD_THREAD_ID
+
+RUN npm run build
+# RUN npm run start
+CMD ["node", "dist/index.js"]
+
+
