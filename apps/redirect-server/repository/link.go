@@ -18,6 +18,8 @@ type Link struct {
 	ImageURL    string            `json:"imageUrl,omitempty"`
 	Password    string            `json:"password,omitempty"`
 	Banned      bool              `json:"banned,omitempty"`
+	IsFileLink	bool			  `json:"isFileLink,omitempty"`
+	Files       []string          `json:"files,omitempty"`
 }
 
 type UpdateLinkData struct {

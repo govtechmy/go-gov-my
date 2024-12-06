@@ -29,11 +29,16 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+/*
+	this go app handles the logic when public resolves to one of our short links
+*/
+
 type WaitPageProps struct {
 	URL         string
 	Title       string
 	Description string
 	ImageURL    string
+	Files       []string
 }
 
 type AuthPageProps struct {
@@ -271,13 +276,26 @@ func main() {
 		// Redirect URL could be a geo-specific/ios/android link.
 		redirectURL := redirectMetadata.LinkURL
 
-		if err := redirectT.ExecuteTemplate(w, "en-GB.html", WaitPageProps{
-			URL:         redirectURL,
-			Title:       link.Title,
-			Description: link.Description,
-			ImageURL:    link.ImageURL,
-		}); err != nil {
-			logger.Error("failed to execute template", zap.Error(err))
+		// if is file link render file link html
+		if link.IsFileLink {
+			if err := redirectT.ExecuteTemplate(w, "en-GB-download.html", WaitPageProps{
+				URL:         redirectURL,
+				Title:       link.Title,
+				Description: link.Description,
+				ImageURL:    link.ImageURL,
+				Files: 		 link.Files,
+			}); err != nil {
+				logger.Error("failed to execute template", zap.Error(err))
+			}
+		} else {
+			if err := redirectT.ExecuteTemplate(w, "en-GB.html", WaitPageProps{
+				URL:         redirectURL,
+				Title:       link.Title,
+				Description: link.Description,
+				ImageURL:    link.ImageURL,
+			}); err != nil {
+				logger.Error("failed to execute template", zap.Error(err))
+			}
 		}
 	}), "handleLinkVisit"))
 

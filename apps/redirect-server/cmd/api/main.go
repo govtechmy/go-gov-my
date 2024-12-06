@@ -18,6 +18,10 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
 
+/*
+	This go app is to handle the logic when a new short link is created
+*/
+
 func main() {
 
 	var elasticURL string
