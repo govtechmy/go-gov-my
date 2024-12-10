@@ -53,9 +53,9 @@ export default function UploadDocuments({
       <div className="flex flex-col p-2 bg-white rounded border-[1px] border-gray-200">
         <div className="flex items-center justify-between p-2">
           <div className="flex flex-col items-left justify-between">
-            <div className="text-sm">Upload Documents</div>
-            <div className="text-gray-500 text-xs">File types: JPG, PNG & PDF</div>
-            <div className="text-gray-500 text-xs">Max file size: 25MB</div>
+            <div className="text-sm">{messages.Upload.upload_documents}</div>
+            <div className="text-gray-500 text-xs">{messages.Upload.file_type}</div>
+            <div className="text-gray-500 text-xs">{messages.Upload.max_size}</div>
           </div>
           <input
             type="file"
@@ -72,7 +72,7 @@ export default function UploadDocuments({
             }}
           >
             <Upload />
-            Upload
+            {messages.Upload.upload}
           </button>
         </div>
         <div>

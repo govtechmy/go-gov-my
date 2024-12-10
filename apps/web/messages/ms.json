@@ -510,5 +510,11 @@
         "figma": "Figma"
       }
     }
+  },
+  "Upload": {
+    "upload_documents": "Muat Naik Dokumen",
+    "file_type": "Jenis fail: JPG, PNG & PDF",
+    "max_size": "Saiz fail maksimum: 25MB",
+    "upload": "Muat Naik"
   }
 }

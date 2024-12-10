@@ -510,5 +510,11 @@
         "figma": "Figma"
       }
     }
+  },
+  "Upload": {
+    "upload_documents": "Upload Documents",
+    "file_type": "File types: JPG, PNG & PDF",
+    "max_size": "Max file size: 25MB",
+    "upload": "Upload"
   }
 }
