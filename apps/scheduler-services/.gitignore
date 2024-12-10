@@ -1,9 +1,12 @@
 # Turbo
 .turbo
 
-# Apps - Cron
-/apps/cron/node_modules
-/apps/cron/dist
+# Apps - scheduler-services
+/apps/scheduler-services/node_modules
+/apps/scheduler-services/dist
+/apps/scheduler-services/logs
+/apps/scheduler-services/logs/*
+/logs/*
 
 # Apps - Docs
 /apps/docs/node_modules

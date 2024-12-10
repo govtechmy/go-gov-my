@@ -8,13 +8,13 @@ env:
 on:
   push:
     tags:
-      - "redirectd@STAGING-v*"
-      - "redirectd@v*"
+      - 'redirectd@STAGING-v*'
+      - 'redirectd@v*'
     paths-ignore:
       - apps/web/**
       - apps/docs/**
       - packages/**
-      - apps/cron/**
+      - apps/scheduler-services/**
       - docker/Dockerfile.prometheus
       - docker/Dockerfile.jaeger
       - docker/Dockerfile.grafana

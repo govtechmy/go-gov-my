@@ -4,14 +4,14 @@ env:
 on:
   push:
     tags:
-      - "kafka-exporter@STAGING-v*"
-      - "kafka-exporter@v*"
+      - 'kafka-exporter@STAGING-v*'
+      - 'kafka-exporter@v*'
     paths-ignore:
       - apps/redirect-server/**
       - apps/redirect-pages/**
       - apps/docs/**
       - packages/**
-      - apps/cron/**
+      - apps/scheduler-services/**
       - apps/grafana/**
       - apps/jaeger/**
   workflow_dispatch:

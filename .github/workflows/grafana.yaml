@@ -4,21 +4,21 @@ env:
 on:
   push:
     tags:
-      - "grafana@STAGING-v*"
-      - "grafana@v*"
+      - 'grafana@STAGING-v*'
+      - 'grafana@v*'
     paths-ignore:
       - apps/redirect-server/**
       - apps/redirect-pages/**
       - apps/docs/**
       - apps/web/**
       - packages/**
-      - apps/cron
+      - apps/scheduler-services
       - docker/Dockerfile.web
       - docker/Dockerfile.api
       - docker/Dockerfile.redirectd
       - docker/Dockerfile.outbox
       - docker/Dockerfile.analytics-aggregator
-      - docker/Dockerfile.cron
+      - docker/Dockerfile.scheduler-services
       - docker/Dockerfile.docs
   workflow_dispatch:
 permissions:

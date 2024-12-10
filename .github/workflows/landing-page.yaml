@@ -5,10 +5,10 @@ env:
 on:
   push:
     tags:
-      - "landing-page@STAGING-v*"
-      - "landing-page@v*"
+      - 'landing-page@STAGING-v*'
+      - 'landing-page@v*'
     paths-ignore:
-      - apps/cron/**
+      - apps/scheduler-services/**
       - apps/docs/**
       - apps/redirect-server/**
       - apps/web/**

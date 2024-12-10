@@ -1,11 +1,11 @@
-name: Deploy gogov-cron
+name: Deploy gogov-scheduler-services
 env:
-  IMAGE: gogov-cron
+  IMAGE: gogov-scheduler-services
 on:
   push:
     tags:
-      - "cron@STAGING-v*"
-      - "cron@v*"
+      - 'scheduler-services@STAGING-v*'
+      - 'scheduler-services@v*'
     paths-ignore:
       - apps/redirect-server/**
       - apps/redirect-pages/**
@@ -42,9 +42,9 @@ jobs:
       - name: Determine environment
         id: determine-env
         run: |
-          if [[ ${{ github.ref }} == refs/tags/cron@STAGING-v* ]]; then
+          if [[ ${{ github.ref }} == refs/tags/scheduler-services@STAGING-v* ]]; then
             echo "ENVIRONMENT=staging" >> $GITHUB_OUTPUT
-          elif [[ ${{ github.ref }} == refs/tags/cron@v* ]]; then
+          elif [[ ${{ github.ref }} == refs/tags/scheduler-services@v* ]]; then
             echo "ENVIRONMENT=production" >> $GITHUB_OUTPUT
           else
             echo "ENVIRONMENT=development" >> $GITHUB_OUTPUT
@@ -53,7 +53,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: docker/Dockerfile.cron
+          file: docker/Dockerfile.scheduler-services
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
