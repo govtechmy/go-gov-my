@@ -7778,9 +7778,10 @@ packages:
   postcss@8.4.32:
     resolution: {integrity: sha512-D/kj5JNu6oo2EIy+XL/26JEDTlIbB8hw85G8StOE6L74RQAVVP5rej6wxCNqyMbR4RkPfqvezVbPw81Ngd6Kcw==}
     engines: {node: ^10 || ^12 || >=14}
-
+    
   postcss@8.4.49:
     resolution: {integrity: sha512-OCVPnIObs4N29kxTjzLfUryOkvZEq+pf8jTF0lg8E7uETuWHA+v7j3c/xJmiqpX450191LlmZfUKkXxkTry7nA==}
+
     engines: {node: ^10 || ^12 || >=14}
 
   preact-render-to-string@5.2.6:
@@ -18667,7 +18668,7 @@ snapshots:
       nanoid: 3.3.7
       picocolors: 1.0.0
       source-map-js: 1.2.0
-
+      
   postcss@8.4.49:
     dependencies:
       nanoid: 3.3.8
@@ -18675,6 +18676,7 @@ snapshots:
       source-map-js: 1.2.1
 
   preact-render-to-string@5.2.6(preact@10.25.1):
+
     dependencies:
       preact: 10.25.1
       pretty-format: 3.8.0
@@ -20385,7 +20387,7 @@ snapshots:
     dependencies:
       browserslist: 4.22.1
       escalade: 3.1.1
-      picocolors: 1.0.0
+      picocolors: 1.0.1
 
   uri-js@4.4.1:
     dependencies:
@@ -20557,8 +20559,10 @@ snapshots:
   vite@5.2.14(@types/node@18.11.9)(terser@5.27.0):
     dependencies:
       esbuild: 0.20.2
+
       postcss: 8.4.49
       rollup: 4.28.1
+
     optionalDependencies:
       '@types/node': 18.11.9
       fsevents: 2.3.3
