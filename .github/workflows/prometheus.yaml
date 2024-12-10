@@ -8,8 +8,9 @@ on:
       - 'prometheus@v*'
     paths-ignore:
       - apps/redirect-server/**
-      - apps/redirect-pages/**
-      - apps/docs/**
+      - apps/landing-app/**
+      - apps/redirect-app/**
+      - apps/docs-app/**
       - apps/web/**
       - packages/**
       - apps/scheduler-services

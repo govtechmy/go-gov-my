@@ -5,7 +5,7 @@ RUN apk update && apk upgrade
 WORKDIR /app
 
 # Change this line to copy the entire docs directory
-COPY ./apps/docs .
+COPY ./apps/docs-app .
 
 RUN npm install -g npm@10.8.3
 

@@ -9,7 +9,7 @@ WORKDIR /app
 
 COPY . .
 
-WORKDIR /app/apps/redirect-pages/next-landing-page
+WORKDIR /app/apps/landing-app
 
 ARG LANDING_STATS_JSON_URL
 
@@ -22,11 +22,11 @@ RUN apk add --no-cache nodejs npm
 
 WORKDIR /app
 
-COPY --from=builder /app/apps/redirect-pages/next-landing-page ./
-COPY --from=builder /app/apps/redirect-pages/next-landing-page/.next ./.next
-COPY --from=builder /app/apps/redirect-pages/next-landing-page/public ./public
+COPY --from=builder /app/apps/landing-app ./
+COPY --from=builder /app/apps/landing-app/.next ./.next
+COPY --from=builder /app/apps/landing-app/public ./public
 
-COPY apps/redirect-pages/next-landing-page/nginx.conf /etc/nginx/conf.d/default.conf
+COPY apps/landing-app/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 

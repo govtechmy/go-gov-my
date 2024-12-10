@@ -407,7 +407,7 @@ services:
     networks:
       - my-network
 
-  # next-landing-page:
+  # landing-app:
   #   build:
   #     context: .
   #     dockerfile: docker/Dockerfile.landing

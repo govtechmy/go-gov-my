@@ -9,20 +9,20 @@
 /apps/scheduler-services/logs/*
 
 # Apps - Docs
-/apps/docs/node_modules
-/apps/docs/dist
+/apps/docs-app/node_modules
+/apps/docs-app/dist
 
 # Apps - Landing Pages
-/apps/redirect-pages/next-landing-page/.next
-/apps/redirect-pages/next-landing-page/node_modules
-/apps/redirect-pages/next-landing-page/out
-/apps/redirect-pages/next-landing-page/.env
+/apps/landing-app/.next
+/apps/landing-app/node_modules
+/apps/landing-app/out
+/apps/landing-app/.env
 
 # Apps - Redirect Pages
-/apps/redirect-pages/next-redirect-page/.next
-/apps/redirect-pages/next-redirect-page/node_modules
-/apps/redirect-pages/next-redirect-page/out
-/apps/redirect-pages/next-redirect-page/.env
+/apps/redirect-app/.next
+/apps/redirect-app/node_modules
+/apps/redirect-app/out
+/apps/redirect-app/.env
 
 # Apps - Redirect Server
 /apps/redirect-server/logs

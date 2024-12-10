@@ -26,20 +26,16 @@ apps/redirect-server/logs
 apps/redirect-server/.env
 
 ## Apps - Redirect-Page ##
-apps/redirect-page/next-redirect-page/.next
-apps/redirect-page/next-redirect-page/node_modules
+apps/redirect-app.next
+apps/redirect-appnode_modules
 
 ## Apps - Landing-Page ##
-apps/redirect-page/next-landing-page/.next
-apps/redirect-page/next-landing-page/node_modules
-apps/redirect-page/next-landing-page/.env
+apps/landing-app/.next
+apps/landing-app/node_modules
+apps/landing-app/.env
 
 ## Apps - Docs ##
-apps/docs/node_modules
+apps/docs-app/node_modules
 
 ## Apps - Scheduler Services ##
 apps/scheduler-services/node_modules
-
-## TBD
-Dockerfile
-Dockerfile.outbox

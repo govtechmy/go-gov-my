@@ -8,8 +8,9 @@ on:
       - 'kafka-exporter@v*'
     paths-ignore:
       - apps/redirect-server/**
-      - apps/redirect-pages/**
-      - apps/docs/**
+      - apps/landing-app/**
+      - apps/redirect-app/**
+      - apps/docs-app/**
       - packages/**
       - apps/scheduler-services/**
       - apps/grafana/**

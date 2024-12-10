@@ -4,11 +4,11 @@ env:
 on:
   push:
     tags:
-      - "analytics-aggregator@STAGING-v*"
-      - "analytics-aggregator@v*"
+      - 'analytics-aggregator@STAGING-v*'
+      - 'analytics-aggregator@v*'
     paths-ignore:
       - apps/web/**
-      - apps/docs/**
+      - apps/docs-app/**
       - packages/**
       - docker/Dockerfile.prometheus
       - docker/Dockerfile.jaeger
