@@ -1,5 +1,4 @@
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
-import { FileUploadProps } from '@/lib/types';
 import { ProBadgeTooltip } from '@/ui/shared/pro-badge-tooltip';
 import { Button, SimpleTooltipContent, Switch } from '@dub/ui';
 import { COUNTRIES, FADE_IN_ANIMATION_SETTINGS } from '@dub/utils';
@@ -63,6 +62,7 @@ export default function UploadDocuments({
             onChange={onFileSelected}
           />
           <button
+            type="button"
             className="flex gap-1 rounded border-[1px] border-grat-200 bg-white p-2 drop-shadow-sm"
             onClick={() => {
               fileUploadRef.current?.click();

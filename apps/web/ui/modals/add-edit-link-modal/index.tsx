@@ -402,20 +402,20 @@ function AddEditLinkModal({
               // @ts-ignore – exclude extra attributes from `data` object before sending to API
               const { user, tags, tagId, ...rest } = data;
               // upload files if user attached file
-              if (filesSelected) {
+              if (filesSelected && filesSelected.length > 0) {
                 const formData = new FormData();
                 const headers = new Headers();
-                headers.append('Content-Type', 'application/json');
-                headers.append('api_key', process.env.S3_API_KEY || '');
+                // headers.append('Content-Type', 'application/json');
+                // headers.append('api_key', process.env.S3_API_KEY || '');
                 Array.from(filesSelected).forEach((file) => {
                   formData.append('files', file);
                 });
                 try {
                   const res = await fetch('/api/file', {
                     method: 'POST',
-                    headers: {
-                      api_key: process.env.S3_API_KEY || '',
-                    },
+                    // headers: {
+                    //   api_key: process.env.S3_API_KEY || '',
+                    // },
                     body: formData,
                   });
 
@@ -430,13 +430,14 @@ function AddEditLinkModal({
                       } else if (message.includes('url')) {
                         setUrlError(error.message);
                       }
-
+                      setSaving(false);
                       return;
                     }
                   }
                 } catch (err) {
                   console.error('Error uploading files:', err);
                   toast.error('An unexpected error occurred while uploading files.');
+                  setSaving(false);
                   return;
                 }
               }
