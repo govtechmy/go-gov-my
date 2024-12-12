@@ -446,7 +446,7 @@ function AddEditLinkModal({
                 ...rest,
                 // Map tags to tagIds
                 tagIds: tags.map(({ id }) => id),
-                isFileLink: filesSelected != null,
+                isFileLink: filesSelected != null && filesSelected.length > 0,
               };
               fetch(endpoint.url, {
                 method: endpoint.method,
