@@ -190,6 +190,12 @@ export const createLinkBodySchema = z.object({
       'Geo targeting information for the short link in JSON format `{[COUNTRY]: https://example.com }`.'
     )
     .openapi({ ref: 'linkGeoTargeting' }),
+  isFileLink: z
+    .boolean()
+    .default(false)
+    .describe(
+      'Whether the short link points to a file. This value is true if a file is associated; otherwise, false.'
+    ),
 });
 
 export const updateLinkBodySchema = createLinkBodySchema.partial().optional();

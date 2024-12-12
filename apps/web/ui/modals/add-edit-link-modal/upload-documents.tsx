@@ -1,5 +1,5 @@
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
-import { LinkProps } from '@/lib/types';
+import { FileUploadProps } from '@/lib/types';
 import { ProBadgeTooltip } from '@/ui/shared/pro-badge-tooltip';
 import { Button, SimpleTooltipContent, Switch } from '@dub/ui';
 import { COUNTRIES, FADE_IN_ANIMATION_SETTINGS } from '@dub/utils';
@@ -10,16 +10,13 @@ import { Upload, X } from 'lucide-react';
 import { shortenFilename, parseFileSize } from '@/lib/utils';
 
 export default function UploadDocuments({
-  props,
-  data,
-  setData,
+  filesSelected,
+  setFilesSelected,
 }: {
-  props?: LinkProps;
-  data: LinkProps;
-  setData: Dispatch<SetStateAction<LinkProps>>;
+  filesSelected: FileList | null;
+  setFilesSelected: Dispatch<SetStateAction<FileList | null>>;
 }) {
   const { messages, locale } = useIntlClientHook();
-  const [filesSelected, setFilesSelected] = useState<FileList | null>(null);
   const fileUploadRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {

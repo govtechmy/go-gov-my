@@ -86,6 +86,7 @@ function AddEditLinkModal({
   const [urlError, setUrlError] = useState<string | null>(null);
   const [generatingRandomKey, setGeneratingRandomKey] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [filesSelected, setFilesSelected] = useState<FileList | null>(null);
 
   const [data, setData] = useState<FormValues>(props || duplicateProps || DEFAULT_LINK_PROPS);
 
@@ -400,10 +401,51 @@ function AddEditLinkModal({
               generateRandomKey.cancel();
               // @ts-ignore – exclude extra attributes from `data` object before sending to API
               const { user, tags, tagId, ...rest } = data;
+              // upload files if user attached file
+              if (filesSelected) {
+                const formData = new FormData();
+                const headers = new Headers();
+                headers.append('Content-Type', 'application/json');
+                headers.append('api_key', process.env.S3_API_KEY || '');
+                Array.from(filesSelected).forEach((file) => {
+                  formData.append('files', file);
+                });
+                try {
+                  const res = await fetch('/api/file', {
+                    method: 'POST',
+                    headers: {
+                      api_key: process.env.S3_API_KEY || '',
+                    },
+                    body: formData,
+                  });
+
+                  if (res.status !== 200) {
+                    const { error } = await res.json();
+                    if (error) {
+                      toast.error(error.message);
+                      const message = error.message.toLowerCase();
+
+                      if (message.includes('key')) {
+                        setKeyError(error.message);
+                      } else if (message.includes('url')) {
+                        setUrlError(error.message);
+                      }
+
+                      return;
+                    }
+                  }
+                } catch (err) {
+                  console.error('Error uploading files:', err);
+                  toast.error('An unexpected error occurred while uploading files.');
+                  return;
+                }
+              }
+              // now, create link
               const bodyData = {
                 ...rest,
                 // Map tags to tagIds
                 tagIds: tags.map(({ id }) => id),
+                isFileLink: filesSelected != null,
               };
               fetch(endpoint.url, {
                 method: endpoint.method,
@@ -436,16 +478,7 @@ function AddEditLinkModal({
                 } else {
                   const { error } = await res.json();
                   if (error) {
-                    if (error.message.includes('Upgrade to Pro')) {
-                      toast.custom(() => (
-                        <UpgradeToProToast
-                          title="You've discovered a Pro feature!"
-                          message={error.message}
-                        />
-                      ));
-                    } else {
-                      toast.error(error.message);
-                    }
+                    toast.error(error.message);
                     const message = error.message.toLowerCase();
 
                     if (message.includes('key') || message.includes('domain')) {
@@ -676,7 +709,7 @@ function AddEditLinkModal({
             </div>
 
             <div className="grid gap-5 px-4 md:px-16">
-              <UploadDocuments {...{ props, data, setData }} />
+              <UploadDocuments {...{ filesSelected, setFilesSelected }} />
               <TagsSection {...{ props, data, setData }} />
               <CommentsSection {...{ props, data, setData }} />
               <UTMSection {...{ props, data, setData }} />
