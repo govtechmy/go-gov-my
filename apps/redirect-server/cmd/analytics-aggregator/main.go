@@ -60,10 +60,10 @@ func main() {
 	var failedSavesLogPath string
 	{
 		flag.StringVar(&kafkaAddr, "kafka-addr", os.Getenv("KAFKA_ADDR"), "Kafka address e.g. localhost:9092")
-		flag.StringVar(&kafkaProducerTopic, "producer-topic", "link_analytics", "Kafka producer topic")
-		flag.StringVar(&kafkaConsumerTopic, "consumer-topic", "redirect_logs", "Kafka consumer topic")
+		flag.StringVar(&kafkaProducerTopic, "producer-topic", os.Getenv("KAFKA_ANALYTIC_TOPIC"), "Kafka producer topic")
+		flag.StringVar(&kafkaConsumerTopic, "consumer-topic", os.Getenv("KAFKA_REDIRECT_LOGS_TOPIC"), "Kafka consumer topic")
 		// Declare the Group ID
-		flag.StringVar(&groupID, "group-id", "analytics-aggregator", "Kafka consumer group ID")
+		flag.StringVar(&groupID, "group-id", os.Getenv("KAFKA_GROUP_ID_ANALYTICS_AGGREGATOR"), "Kafka consumer group ID")
 		flag.StringVar(&elasticURL, "elastic-url", os.Getenv("ELASTIC_URL"), "Elasticsearch URL e.g. http://localhost:9200")
 		flag.StringVar(&elasticUser, "elastic-user", os.Getenv("ELASTIC_USER"), "Elasticsearch username")
 		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")

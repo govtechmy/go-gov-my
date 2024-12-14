@@ -147,7 +147,7 @@ STORAGE_ENDPOINT=
 STORAGE_BASE_URL=
 
 # Redirect Services
-OUTBOX_TOPIC=ps-postgres.public.WebhookOutbox
+KAFKA_OUTBOX_TOPIC=gogov-kafka-outbox-events
 REDIRECT_SERVER_URL=http://localhost:3000
 KAFKA_BROKER_URL=localhost:9092
 

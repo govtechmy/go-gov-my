@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 3335 --open",
     "build": "next build",
-    "generate": "BUILD_MODE=ssg next build",
-    "serve": "npx serve out",
     "start": "next start",
     "lint": "next lint",
+    "clean": "rm -rf .next out",
+    "generate": "BUILD_MODE=ssg next build",
+    "serve": "npx serve out",
     "update-static-build": "bash update-static-build.sh"
   },
   "dependencies": {

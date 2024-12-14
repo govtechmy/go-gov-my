@@ -2,6 +2,7 @@ import { Icon } from "@/icons/social-media";
 import { cn } from "@/lib/utils";
 import { useFormatter, useTranslations } from "next-intl";
 import Link from "next/link";
+import Image from "next/image";
 
 type Props = {
   ministry: string;
@@ -52,7 +53,7 @@ export default function Footer(props: Props) {
         <div className="flex flex-col gap-6 pb-8 lg:flex-row lg:justify-between">
           <div className="flex flex-col gap-4 lg:gap-4.5">
             <div className="flex items-center gap-x-2.5">
-              <img
+              <Image
                 src="/jata-negara.png"
                 width={28}
                 height={28}

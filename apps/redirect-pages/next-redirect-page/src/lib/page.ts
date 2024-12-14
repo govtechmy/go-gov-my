@@ -20,7 +20,7 @@ export function getPageMetadata(options: PageMetadataOptions): Metadata {
       title: options.title,
       description: options.description,
       siteName: options.siteName,
-      url: options.url || process.env.APP_URL,
+      url: options.url || process.env.NEXT_PUBLIC_APP_DOMAIN,
       type: "website",
     },
     other: {

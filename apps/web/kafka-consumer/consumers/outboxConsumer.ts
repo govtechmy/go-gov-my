@@ -6,7 +6,7 @@ import { retryWithDelay } from '../utils/retry';
 
 export async function runOutboxConsumer(consumer: any, log: any) {
   await consumer.subscribe({
-    topic: process.env.OUTBOX_TOPIC!,
+    topic: process.env.KAFKA_OUTBOX_TOPIC!,
     fromBeginning: true,
   });
 

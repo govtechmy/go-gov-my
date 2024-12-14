@@ -6,7 +6,7 @@ import { retryWithDelay } from '../utils/retry';
 
 export async function runAnalyticConsumer(consumer: Consumer, log: Logger) {
   await consumer.subscribe({
-    topic: process.env.ANALYTIC_TOPIC!,
+    topic: process.env.KAFKA_ANALYTIC_TOPIC!,
     fromBeginning: true,
   });
 

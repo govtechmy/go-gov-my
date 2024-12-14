@@ -4,6 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AlertCircle, AlertTriangle, X } from "lucide-react";
 import IconLinkFill from "@/icons/link-fill";
+import Image from "next/image";
 
 type Props = {
   children: React.ReactNode;
@@ -359,7 +360,7 @@ export default function CheckLinkDialog({
                 <div className="p-3 bg-white rounded-full border border-gray-200 mb-6">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-md overflow-hidden">
-                      <img src={linkData.agency.logo} alt="Agency Logo" className="w-full h-full object-contain" />
+                      <Image src={linkData.agency.logo} alt="Agency Logo" className="w-full h-full object-contain" />
                     </div>
                     <div className="flex flex-col">
                       <span className="text-sm text-gray-600">{linkData.agency.names.en}</span>
@@ -391,7 +392,7 @@ export default function CheckLinkDialog({
                 <div className="p-3 bg-yellow-50 rounded-full border border-yellow-400 mb-6">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-md overflow-hidden">
-                      <img src={linkData.agency.logo} alt="Agency Logo" className="w-full h-full object-contain" />
+                      <Image src={linkData.agency.logo} alt="Agency Logo" className="w-full h-full object-contain" />
                     </div>
                     <div className="flex flex-col">
                       <span className="text-sm text-yellow-700">{linkData.agency.names.en}</span>

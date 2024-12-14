@@ -2,7 +2,10 @@
   "name": "docs",
   "version": "0.1.0",
   "scripts": {
-    "dev": "mintlify dev --port 3334"
+    "dev": "mintlify dev --port 3334 --open",
+    "build": "mintlify build",
+    "lint": "mintlify check",
+    "start": "mintlify dev"
   },
   "dependencies": {
     "mintlify": "^4.0.218"

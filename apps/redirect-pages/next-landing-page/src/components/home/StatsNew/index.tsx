@@ -10,6 +10,7 @@ import RangeSlider from "./RangeSlider";
 import { SliderProvider } from "./Slider";
 import Timeseries from "./Timeseries";
 import { ChartData } from "chart.js";
+import Image from "next/image";
 
 type MetadataItem = {
   date: string;
@@ -154,7 +155,7 @@ export default function StatsNew(props: Props) {
     <Section className={cn("col-span-full", "px-4 md:px-6 lg:px-8", "overflow-hidden")}>
       <div className="relative w-full">
         <div className="col-span-full flex flex-col items-center mb-4">
-          <img
+          <Image
             src="/logo.svg"
             width={32}
             height={32}

@@ -11,7 +11,7 @@ import type { Metadata } from "next";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 
 const REDIRECT_URL = GOAPP_PARAM_URL;
-const REDIRECT_SECONDS = 10;
+const REDIRECT_SECONDS = Number(process.env.REDIRECT_SECONDS) || 10;
 
 export async function generateMetadata({
   params: { locale },

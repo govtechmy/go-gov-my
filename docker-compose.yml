@@ -1,29 +1,4 @@
 services:
-  ######################
-  # Required Container #
-  ######################
-
-  ######################
-  # Port List (sorted) #
-  ######################
-  # zookeeper:                2181
-  # analytics-aggregator:     3003
-  # scheduler-services:       3003
-  # grafana-app:              3004
-  # docs-app:                 3334
-  # prometheus-app:           3005
-  # jaeger-app:               3006
-  # filebeat:                 5044
-  # logstash:                 5044
-  # ps-postgres:              5432
-  # redis:                    6379
-  # debezium:                 8083
-  # init-debezium-connector:  8083
-  # broker:                   9092
-  # elasticsearch:            9200
-  # init-elasticsearch:       9200
-  ######################
-
   ## Database App Port: 5432 ##
   ps-postgres:
     image: postgres:13
@@ -175,9 +150,20 @@ services:
       INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
       CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema-registry:8081
-    depends_on: [broker, ps-postgres]
+      CONNECT_BOOTSTRAP_SERVERS: broker:29092
+      CONNECT_REST_ADVERTISED_HOST_NAME: debezium
+      CONNECT_REST_PORT: 8083
+      CONNECT_GROUP_ID: 1
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+    depends_on:
+      broker:
+        condition: service_started
+      ps-postgres:
+        condition: service_started
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://debezium:8083/connectors']
+      test: ['CMD', 'curl', '-f', 'http://localhost:8083/connectors']
       interval: 3s
       timeout: 5s
       retries: 5
@@ -257,175 +243,13 @@ services:
     networks:
       - my-network
 
-  ##########################
-  # Optional Container     #
-  # Mainly for Development #
-  # UI Toolkit             #
-  ##########################
-
-  ## Kafka UI Tools Port: 9000 ##
-  # kafdrop:
-  #   image: obsidiandynamics/kafdrop
-  #   container_name: kafdrop
-  #   restart: always
-  #   ports:
-  #     - 9000:9000
-  #   environment:
-  #     KAFKA_BROKER_CONNECT: "broker:29092"
-  #   depends_on:
-  #     - broker
-  #   networks:
-  #     - my-network
-
-  ## Debezium UI Tools Port: 8080 ##
-  # debezium-ui:
-  #   image: quay.io/debezium/debezium-ui:latest
-  #   container_name: debezium-ui
-  #   platform: linux/amd64
-  #   restart: always
-  #   ports:
-  #     - "8080:8080"
-  #   environment:
-  #     - KAFKA_CONNECT_URIS=http://debezium:8083
-  #   depends_on:
-  #     - debezium
-  #   networks:
-  #     - my-network
-
-  ## Uptime Kuma Port: 3001 ##
-  # uptime-kuma:
-  #   image: louislam/uptime-kuma:1
-  #   restart: always
-  #   volumes:
-  #     - uptime-kuma:/app/data
-  #   ports:
-  #     - 3001:3001
-  #   networks:
-  #     - my-network
-
-  ##########################
-  # Optional Container     #
-  # Mainly for Development #
-  # Optional Application   #
-  ##########################
-
-  ## Go API Port: 3002 ##
-  # Comment this out during development
-  # go-api:
-  #   container_name: go-api
-  #   build:
-  #     context: .
-  #     dockerfile: docker/Dockerfile.api
-  #   ports:
-  #     - "3002:3002"
-  #   env_file:
-  #     - ./apps/redirect-server/.env
-  #   environment:
-  #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-  #   command:
-  #     - "/api"
-  #     - "--elastic-url=http://elasticsearch:9200"
-  #   volumes:
-  #     - .:/app
-  #   depends_on:
-  #     - elasticsearch
-  #   networks:
-  #     - my-network
-
-  ## Redirectd Port: 3000 ##
-  # Comment this out during development
-  # go-redirectd:
-  #   container_name: go-redirectd
-  #   build:
-  #     context: .
-  #     dockerfile: docker/Dockerfile.redirectd
-  #   ports:
-  #     - "3000:3000"
-  #   env_file:
-  #    - ./apps/redirect-server/.env
-  #   environment:
-  #     - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
-  #   command:
-  #     - "/redirectd"
-  #     - "--elastic-url=http://elasticsearch:9200"
-  #   volumes:
-  #     - .:/app
-  #   depends_on:
-  #     - elasticsearch
-
-  ## Analytics Aggregator Port: 3003 ##
-  analytics-aggregator:
-    container_name: analytics-aggregator
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.analytics-aggregator
-    ports:
-      - '3003:3003'
-    env_file:
-      - ./apps/redirect-server/.env
-    command:
-      - '/analytics-aggregator'
-    volumes:
-      - ./apps/redirect-server:/app
-    depends_on:
-      - broker
-    networks:
-      - my-network
-
-  ## Landing Page stats SCHEDULER SERVICES ##
-  scheduler-services:
-    container_name: scheduler-services
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.scheduler-services
-    env_file:
-      - ./apps/scheduler-services/.env
-    environment:
-      - API_KEY=${API_KEY}
-      - WEB_BASE=${WEB_BASE}
-      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL}
-      - DISCORD_THREAD_ID=${DISCORD_THREAD_ID}
-      - ENVIRONMENT=${ENVIRONMENT}
-      - LOG_LEVEL=${LOG_LEVEL}
-    volumes:
-      - ./apps/scheduler-services/logs:/app/logs
-    networks:
-      - my-network
-
-  ## Docs Port: 3334 ##
-  docs-app:
-    container_name: docs-app
-    build:
-      context: .
-      dockerfile: docker/Dockerfile.docs
-    ports:
-      - '3334:3334'
-    env_file:
-      - .env
-    volumes:
-      - ./apps/docs:/app
-    networks:
-      - my-network
-
-  # next-landing-page:
-  #   build:
-  #     context: .
-  #     dockerfile: docker/Dockerfile.landing
-  #   ports:
-  #     - "3000:3000"
-  #   environment:
-  #     - LANDING_STATS_JSON_URL=https://gogov-web-staging.s3.ap-southeast-1.amazonaws.com/public/stats.json
-
 networks:
   my-network:
 
 volumes:
-  ## Required Volumes ##
   ps-postgres:
   filebeatdata:
   grafanadata:
   prometheusdata:
   jaegerdata:
   esdata:
-## Optional Volumes ##
-# uptime-kuma:

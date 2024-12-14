@@ -1,8 +1,8 @@
 output.kafka:
-  hosts: ["broker:29092"]
-  topic: "redirect_logs"
+  hosts: ['broker:29092']
+  topic: 'gogov-kafka-redirect-logs'
   partition.hash:
-    hash: ["linkId"]
+    hash: ['linkId']
     reachable_only: false
     random: false
 
