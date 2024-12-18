@@ -13,18 +13,30 @@ async function main() {
     'KAFKA_GROUP_ID_ANALYTICS'
   );
 
-  const kafka = createKafkaClient(process.env.KAFKA_BROKER_URL!);
-  const outboxConsumer = await createConsumer(
-    kafka,
-    process.env.KAFKA_GROUP_ID_REDIRECT || 'redirect-group'
-  );
-  const analyticConsumer = await createConsumer(
-    kafka,
-    process.env.KAFKA_GROUP_ID_ANALYTICS || 'analytics-group'
-  );
+  console.log('Connecting to Kafka broker at:', process.env.KAFKA_BROKER_URL);
 
-  runOutboxConsumer(outboxConsumer, outboxConsumer.logger());
-  runAnalyticConsumer(analyticConsumer, analyticConsumer.logger());
+  const kafka = createKafkaClient(process.env.KAFKA_BROKER_URL!);
+
+  try {
+    const outboxConsumer = await createConsumer(
+      kafka,
+      process.env.KAFKA_GROUP_ID_REDIRECT || 'redirect-group'
+    );
+    const analyticConsumer = await createConsumer(
+      kafka,
+      process.env.KAFKA_GROUP_ID_ANALYTICS || 'analytics-group'
+    );
+
+    console.log('Successfully connected to Kafka');
+
+    runOutboxConsumer(outboxConsumer, outboxConsumer.logger());
+    runAnalyticConsumer(analyticConsumer, analyticConsumer.logger());
+
+    console.log('Kafka consumers started');
+  } catch (error) {
+    console.error('Failed to connect to Kafka:', error);
+    process.exit(1);
+  }
 }
 
 main();
