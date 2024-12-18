@@ -186,7 +186,7 @@ function AddWorkspaceModalHelper({
           </label>
           <div className="relative mt-2 flex rounded-md shadow-sm">
             <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-5 text-gray-500 sm:text-sm">
-              app.{process.env.NEXT_PUBLIC_APP_DOMAIN}
+              {process.env.NEXT_PUBLIC_APP_DOMAIN}
             </span>
             <input
               name="slug"

@@ -22,8 +22,8 @@ if (!process.env.NEXT_PUBLIC_APP_DOMAIN) {
 // This should be your app name i.e.GoGovMY
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME;
 
-// This should be your app short link domain i.e. app.go.gov.my
-export const SHORT_DOMAIN = process.env.NEXT_PUBLIC_APP_DOMAIN;
+// This should be your app short link domain i.e. go.gov.my/{{slug}}
+export const SHORT_DOMAIN = process.env.NEXT_PUBLIC_APP_SHORT_DOMAIN;
 
 // This should be your main short link domain i.e. go.gov.my
 export const HOME_DOMAIN = `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}`;

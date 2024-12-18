@@ -113,7 +113,7 @@ services:
     networks:
       - my-network
 
-  # ## Kafka Broker Port: 9092 ##
+  ## Kafka Broker Port: 9092 ##
   broker:
     image: quay.io/strimzi/kafka:0.44.0-kafka-3.8.0
     command:

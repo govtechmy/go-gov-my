@@ -5,14 +5,21 @@ import { consumeAnalytics, sumTwoObj, toIdempotentResource } from '../utils/anal
 import { retryWithDelay } from '../utils/retry';
 
 export async function runAnalyticConsumer(consumer: Consumer, log: Logger) {
+  log.info('Starting analytic consumer...');
   await consumer.subscribe({
     topic: process.env.KAFKA_ANALYTIC_TOPIC!,
     fromBeginning: true,
   });
+  log.info(`Subscribed to topic: ${process.env.KAFKA_ANALYTIC_TOPIC}`);
 
   await consumer.run({
     autoCommit: false,
     eachMessage: async (payload: EachMessagePayload) => {
+      log.info('Received analytics message:', {
+        topic: payload.topic,
+        partition: payload.partition,
+        offset: payload.message.offset,
+      });
       try {
         await processMessage(payload, consumer, log);
       } catch (error) {

@@ -19,7 +19,7 @@ if [ "$ENV" = "local" ]; then
     echo "
     To use locally:
     export KAFKA_BROKER_URL=$BOOTSTRAP_SERVER
-    export KAFKA_TOPIC=gogov-kafka-outbox-events
+    export KAFKA_TOPIC=ps-postgres.public.WebhookOutbox
     "
 elif [ "$ENV" = "prod" ]; then
     echo "Configuring for production..."
