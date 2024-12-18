@@ -37,6 +37,28 @@ type RedirectMetadataLog struct {
 	RedirectMetadata repository.RedirectMetadata `json:"redirectMetadata"`
 }
 
+func verifyKafkaConnection(brokers []string) error {
+	config := sarama.NewConfig()
+	config.Version = sarama.V2_1_0_0
+
+	// Create admin client
+	admin, err := sarama.NewClusterAdmin(brokers, config)
+	if err != nil {
+		return fmt.Errorf("failed to create admin client: %w", err)
+	}
+	defer admin.Close()
+
+	// List topics to verify connection
+	topics, err := admin.ListTopics()
+	if err != nil {
+		return fmt.Errorf("failed to list topics: %w", err)
+	}
+
+	slog.Info("Successfully connected to Kafka", 
+		slog.Int("numTopics", len(topics)))
+	return nil
+}
+
 func main() {
 
 	loggerConfig := zap.NewProductionConfig()
@@ -59,7 +81,7 @@ func main() {
 	var groupID string
 	var failedSavesLogPath string
 	{
-		flag.StringVar(&kafkaAddr, "kafka-addr", os.Getenv("KAFKA_ADDR"), "Kafka address e.g. localhost:9092")
+		flag.StringVar(&kafkaAddr, "kafka-addr", os.Getenv("KAFKA_ADDR"), "Kafka address e.g. broker:29092")
 		flag.StringVar(&kafkaProducerTopic, "producer-topic", os.Getenv("KAFKA_ANALYTIC_TOPIC"), "Kafka producer topic")
 		flag.StringVar(&kafkaConsumerTopic, "consumer-topic", os.Getenv("KAFKA_REDIRECT_LOGS_TOPIC"), "Kafka consumer topic")
 		// Declare the Group ID
@@ -71,29 +93,45 @@ func main() {
 	}
 	flag.Parse()
 
+	// Verify Kafka connection before starting
+	brokers := []string{kafkaAddr}
+	for i := 0; i < 5; i++ {
+		if err := verifyKafkaConnection(brokers); err != nil {
+			slog.Error("Failed to verify Kafka connection", 
+				slog.String("error", err.Error()),
+				slog.Int("attempt", i+1))
+			time.Sleep(time.Second * 5)
+			continue
+		}
+		break
+	}
+
 	// Config AutoCommit to false
 	config := sarama.NewConfig()
 	config.Version = sarama.V2_1_0_0
 	config.Consumer.Group.Rebalance.Strategy = sarama.NewBalanceStrategyRoundRobin()
 	config.Consumer.Offsets.Initial = sarama.OffsetNewest
 	config.Consumer.Offsets.AutoCommit.Enable = false // Disable auto-commit
+	config.Net.DialTimeout = time.Second * 30
+	config.Net.ReadTimeout = time.Second * 30
+	config.Net.WriteTimeout = time.Second * 30
 
-	esClient, err := elastic.NewSimpleClient(
+	esClient, err1 := elastic.NewSimpleClient(
 		elastic.SetURL(elasticURL),
 		elastic.SetBasicAuth(elasticUser, elasticPassword),
 		elastic.SetHttpClient(otelhttp.DefaultClient),
 		elastic.SetRetrier(NewElasticRetrier()),
 	)
 
-	if err != nil {
-		logger.Fatal("cannot initiate Elasticsearch client", zap.Error(err))
+	if err1 != nil {
+		logger.Fatal("cannot initiate Elasticsearch client", zap.Error(err1))
 	}
 
 	esRepo := es.NewAnalyticRepo(esClient)
 
-	kafkaProducer, err := sarama.NewSyncProducer([]string{kafkaAddr}, nil)
-	if err != nil {
-		panic(err)
+	kafkaProducer, err2 := sarama.NewSyncProducer([]string{kafkaAddr}, nil)
+	if err2 != nil {
+		panic(err2)
 	}
 	defer func() {
 		err := kafkaProducer.Close()
@@ -102,14 +140,31 @@ func main() {
 		}
 	}()
 
-	// Change this to use Consumer Group instead of Consumer and send by group
-	consumerGroup, err := sarama.NewConsumerGroup([]string{kafkaAddr}, groupID, config)
+	// Add retry logic for Kafka connection
+	var consumerGroup sarama.ConsumerGroup
+	var err error
+	retries := 5
+	for retries > 0 {
+		consumerGroup, err = sarama.NewConsumerGroup([]string{kafkaAddr}, groupID, config)
+		if err != nil {
+			slog.Error("Failed to create consumer group", 
+				slog.String("error", err.Error()),
+				slog.Int("retriesLeft", retries))
+			retries--
+			time.Sleep(time.Second * 5)
+			continue
+		}
+		break
+	}
 	if err != nil {
-		panic(err)
+		slog.Error("Failed to create consumer group after all retries", 
+			slog.String("error", err.Error()))
+		os.Exit(1)
 	}
 	defer func() {
 		if err := consumerGroup.Close(); err != nil {
-			log.Fatalln(err)
+			slog.Error("Failed to close consumer group", 
+				slog.String("error", err.Error()))
 		}
 	}()
 
@@ -138,11 +193,28 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
+	if kafkaConsumerTopic == "" {
+		slog.Error("KAFKA_REDIRECT_LOGS_TOPIC is not set")
+		os.Exit(1)
+	}
+
+	slog.Info("starting analytics aggregator",
+		slog.String("kafkaAddr", kafkaAddr),
+		slog.String("kafkaConsumerTopic", kafkaConsumerTopic),
+		slog.String("groupID", groupID))
+
 	go func() {
 		for {
-			// Tell the kafka to consume the message with the group config
-			if err := consumerGroup.Consume(ctx, []string{kafkaConsumerTopic}, app); err != nil {
-				log.Fatalf("Error from consumer: %v", err)
+			slog.Info("starting consumer group session")
+			topics := []string{kafkaConsumerTopic}
+			slog.Info("attempting to consume from topics", 
+				slog.Any("topics", topics))
+			if err := consumerGroup.Consume(ctx, topics, app); err != nil {
+				slog.Error("Error from consumer", 
+					slog.String("error", err.Error()),
+					slog.Any("topics", topics))
+				time.Sleep(time.Second)
+				continue
 			}
 			if ctx.Err() != nil {
 				return
@@ -165,72 +237,90 @@ func (app *application) Cleanup(_ sarama.ConsumerGroupSession) error {
 }
 
 func (app *application) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
-	ticker := time.NewTicker(SEND_INTERVAL)
-	defer ticker.Stop()
+    slog.Info("starting to consume messages", 
+        slog.String("topic", claim.Topic()),
+        slog.Int("partition", int(claim.Partition())))
 
-	// Make a map of link IDs to their aggregated analytics
-	linkAnalytics := make(map[string]*repository.LinkAnalytics)
+    // Initialize analytics map and time tracking
+    linkAnalytics := make(map[string]*repository.LinkAnalytics)
+    lastSendTime := time.Now()
+    ticker := time.NewTicker(SEND_INTERVAL)
+    defer ticker.Stop()
 
-	// An array of RedirectMetadataLog (Individual metadata // non aggregated data)
-	var individualMetadata []repository.RedirectMetadata
+    for {
+        select {
+        case msg, ok := <-claim.Messages():
+            if !ok {
+                slog.Info("message channel closed")
+                return nil
+            }
+            
+            slog.Info("received message", 
+                slog.String("topic", msg.Topic),
+                slog.Int("partition", int(msg.Partition)),
+                slog.Int64("offset", msg.Offset))
 
-	// Keep track of the time between send intervals
-	var intervalStart time.Time = time.Now()
+            var metadataLog RedirectMetadataLog
+            if err := json.Unmarshal(msg.Value, &metadataLog); err != nil {
+                slog.Error("failed to unmarshal message", 
+                    slog.String("error", err.Error()),
+                    slog.String("message", string(msg.Value)))
+                continue
+            }
 
-	for {
-		select {
-		case msg := <-claim.Messages():
-			var log RedirectMetadataLog
-			err := json.Unmarshal(msg.Value, &log)
-			if err != nil {
-				break
-			}
-			app.aggregateRedirectMetadata(linkAnalytics, log.RedirectMetadata)
+            slog.Info("parsed message successfully",
+                slog.String("linkId", metadataLog.RedirectMetadata.LinkID),
+                slog.String("linkSlug", metadataLog.RedirectMetadata.LinkSlug))
 
-			// Collect individual metadata to batch save later
-			// We won't do it here because we're doing manual commit, so if the kafka is
-			// rebalanced or replayed, then it will have a duplication in the ES
-			individualMetadata = append(individualMetadata, log.RedirectMetadata)
+            // Save to Elasticsearch
+            err := app.saveIndividualMetadata(metadataLog.RedirectMetadata)
+            if err != nil {
+                slog.Error("failed to save to elasticsearch", 
+                    slog.String("error", err.Error()))
+                // Save to fallback file
+                if err := app.saveIndividualMetadataToFallback(metadataLog.RedirectMetadata); err != nil {
+                    slog.Error("failed to save to fallback", 
+                        slog.String("error", err.Error()))
+                }
+            }
 
-			sess.MarkMessage(msg, "") // https://github.com/IBM/sarama/issues/1780
+            // Aggregate analytics
+            app.aggregateRedirectMetadata(linkAnalytics, metadataLog.RedirectMetadata)
 
-		case <-ticker.C:
-			if len(linkAnalytics) > 0 {
-				intervalEnd := time.Now()
+            // Mark message as processed
+            sess.MarkMessage(msg, "")
 
-				// Save individual metadata into elasticsearch first...
-				slog.Info("saving redirect metadatas to Elasticsearch")
-				for _, metadata := range individualMetadata {
-					err := app.saveIndividualMetadata(metadata)
-					if err != nil {
-						slog.Error("failed to save metadata to Elasticsearch", slog.String("errMessage", err.Error()))
-						err := app.saveIndividualMetadataToFallback(metadata)
-						if err != nil {
-							slog.Error("failed to save metadata to fallback", slog.String("errMessage", err.Error()))
-						}
-					}
-				}
+        case <-ticker.C:
+            // Send analytics if we have any data and enough time has passed
+            if len(linkAnalytics) > 0 {
+                now := time.Now()
+                if err := app.sendAnalytics(linkAnalytics, lastSendTime, now); err != nil {
+                    slog.Error("failed to send analytics", 
+                        slog.String("error", err.Error()))
+                } else {
+                    slog.Info("sent analytics successfully",
+                        slog.Int("numAnalytics", len(linkAnalytics)),
+                        slog.Time("from", lastSendTime),
+                        slog.Time("to", now))
+                    // Reset analytics and update last send time
+                    linkAnalytics = make(map[string]*repository.LinkAnalytics)
+                    lastSendTime = now
+                }
+            }
 
-				// Clear individual metadata array after saving to avoid ES duplication
-				individualMetadata = []repository.RedirectMetadata{}
-
-				err := app.sendAnalytics(linkAnalytics, intervalStart, intervalEnd) // Send the analytics aggregated
-				if err != nil {
-					slog.Error("failed to send analytics",
-						slog.String("errorMessage:", err.Error()),
-					)
-				} else {
-					sess.Commit()                                              // Commit the offset after successful processing
-					linkAnalytics = make(map[string]*repository.LinkAnalytics) // Re-make the link analytics map
-					intervalStart = intervalEnd                                // Update interval start time
-				}
-			}
-
-		// Not sure why this happen but it seems like it doesn't dispose the context properly...
-		case <-sess.Context().Done():
-			return nil
-		}
-	}
+        case <-sess.Context().Done():
+            slog.Info("context cancelled, stopping consumer")
+            // Send any remaining analytics before stopping
+            if len(linkAnalytics) > 0 {
+                now := time.Now()
+                if err := app.sendAnalytics(linkAnalytics, lastSendTime, now); err != nil {
+                    slog.Error("failed to send final analytics", 
+                        slog.String("error", err.Error()))
+                }
+            }
+            return nil
+        }
+    }
 }
 
 func (app *application) aggregateRedirectMetadata(linkAnalytics map[string]*repository.LinkAnalytics, rm repository.RedirectMetadata) {
