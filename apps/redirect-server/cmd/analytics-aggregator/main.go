@@ -59,6 +59,14 @@ func verifyKafkaConnection(brokers []string) error {
 	return nil
 }
 
+func getKafkaBrokers(kafkaAddr string) []string {
+	// If KAFKA_ADDR is not set, default to localhost for local development
+	if kafkaAddr == "" {
+		return []string{"localhost:9092"}
+	}
+	return []string{kafkaAddr}
+}
+
 func main() {
 
 	loggerConfig := zap.NewProductionConfig()
@@ -81,25 +89,28 @@ func main() {
 	var groupID string
 	var failedSavesLogPath string
 	{
-		flag.StringVar(&kafkaAddr, "kafka-addr", os.Getenv("KAFKA_ADDR"), "Kafka address e.g. broker:29092")
-		flag.StringVar(&kafkaProducerTopic, "producer-topic", os.Getenv("KAFKA_ANALYTIC_TOPIC"), "Kafka producer topic")
-		flag.StringVar(&kafkaConsumerTopic, "consumer-topic", os.Getenv("KAFKA_REDIRECT_LOGS_TOPIC"), "Kafka consumer topic")
+		flag.StringVar(&kafkaAddr, "kafka-addr", os.Getenv("KAFKA_ADDR"), "Kafka address e.g. broker:29092 or localhost:9092")
+		flag.StringVar(&kafkaProducerTopic, "producer-topic", "link_analytics", "Kafka producer topic")
+		flag.StringVar(&kafkaConsumerTopic, "consumer-topic", "redirect_logs", "Kafka consumer topic")
 		// Declare the Group ID
-		flag.StringVar(&groupID, "group-id", os.Getenv("KAFKA_GROUP_ID_ANALYTICS_AGGREGATOR"), "Kafka consumer group ID")
+		flag.StringVar(&groupID, "group-id", "analytics-aggregator", "Kafka consumer group ID")
 		flag.StringVar(&elasticURL, "elastic-url", os.Getenv("ELASTIC_URL"), "Elasticsearch URL e.g. http://localhost:9200")
 		flag.StringVar(&elasticUser, "elastic-user", os.Getenv("ELASTIC_USER"), "Elasticsearch username")
 		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
-		flag.StringVar(&failedSavesLogPath, "failed-saves-path", os.Getenv("FAILED_SAVES_LOG_PATH"), "Path to a file that stores redirect metadatas which failed to save to Elasticsearch")
+		flag.StringVar(&failedSavesLogPath, "failed-saves-path", "./logs/aggregator-failed-saves.log", "Path to a file that stores redirect metadatas which failed to save to Elasticsearch")
 	}
 	flag.Parse()
 
+	// Use the getKafkaBrokers function to get the appropriate broker address
+	brokers := getKafkaBrokers(kafkaAddr)
+	
 	// Verify Kafka connection before starting
-	brokers := []string{kafkaAddr}
 	for i := 0; i < 5; i++ {
 		if err := verifyKafkaConnection(brokers); err != nil {
 			slog.Error("Failed to verify Kafka connection", 
 				slog.String("error", err.Error()),
-				slog.Int("attempt", i+1))
+				slog.Int("attempt", i+1),
+				slog.Any("brokers", brokers))
 			time.Sleep(time.Second * 5)
 			continue
 		}
@@ -129,7 +140,7 @@ func main() {
 
 	esRepo := es.NewAnalyticRepo(esClient)
 
-	kafkaProducer, err2 := sarama.NewSyncProducer([]string{kafkaAddr}, nil)
+	kafkaProducer, err2 := sarama.NewSyncProducer(brokers, nil)
 	if err2 != nil {
 		panic(err2)
 	}
@@ -145,11 +156,12 @@ func main() {
 	var err error
 	retries := 5
 	for retries > 0 {
-		consumerGroup, err = sarama.NewConsumerGroup([]string{kafkaAddr}, groupID, config)
+		consumerGroup, err = sarama.NewConsumerGroup(brokers, groupID, config)
 		if err != nil {
 			slog.Error("Failed to create consumer group", 
 				slog.String("error", err.Error()),
-				slog.Int("retriesLeft", retries))
+				slog.Int("retriesLeft", retries),
+				slog.Any("brokers", brokers))
 			retries--
 			time.Sleep(time.Second * 5)
 			continue
