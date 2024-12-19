@@ -1,6 +1,6 @@
 name: Deploy gogov-docs
 env:
-  IMAGE: gogov-doc-app
+  IMAGE: gogov-docs-app
 on:
   push:
     tags:
