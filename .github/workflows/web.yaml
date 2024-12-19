@@ -9,7 +9,8 @@ on:
     paths-ignore:
       - apps/redirect-server/**
       - apps/redirect-pages/**
-      - apps/docs/**
+      - apps/landing-app/**
+      - apps/docs-app/**
       - docker/Dockerfile.prometheus
       - docker/Dockerfile.jaeger
       - docker/Dockerfile.grafana

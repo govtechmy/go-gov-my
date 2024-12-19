@@ -30,9 +30,9 @@ apps/redirect-page/next-redirect-page/.next
 apps/redirect-page/next-redirect-page/node_modules
 
 ## Apps - Landing-Page ##
-apps/redirect-page/next-landing-page/.next
-apps/redirect-page/next-landing-page/node_modules
-apps/redirect-page/next-landing-page/.env
+apps/landing-app/.next
+apps/landing-app/node_modules
+apps/landing-app/.env
 
 ## Apps - Docs ##
 apps/docs/node_modules

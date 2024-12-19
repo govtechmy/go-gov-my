@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # Change to the Next.js landing page directory
-cd ../apps/redirect-pages/next-landing-page
-
+cd ../apps/landing-app
 # Build the Next.js landing page
 npm run generate
 

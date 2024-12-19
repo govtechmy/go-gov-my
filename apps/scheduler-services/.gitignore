@@ -16,10 +16,10 @@
 .env.production
 
 # Apps - Landing Pages
-/apps/redirect-pages/next-landing-page/.next
-/apps/redirect-pages/next-landing-page/node_modules
-/apps/redirect-pages/next-landing-page/out
-/apps/redirect-pages/next-landing-page/.env
+/apps/landing-app/.next
+/apps/landing-app/node_modules
+/apps/landing-app/out
+/apps/landing-app/.env
 
 # Apps - Redirect Pages
 /apps/redirect-pages/next-redirect-page/.next

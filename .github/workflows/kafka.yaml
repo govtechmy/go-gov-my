@@ -9,13 +9,15 @@ on:
     paths-ignore:
       - apps/redirect-server/**
       - apps/redirect-pages/**
-      - apps/docs/**
+      - apps/docs-app/**
+      - apps/landing-app/**
       - apps/web/**
       - packages/**
       - apps/scheduler-services/**
       - docker/Dockerfile.prometheus
       - docker/Dockerfile.jaeger
       - docker/Dockerfile.grafana
+      - docker/Dockerfile.landing-app
   workflow_dispatch:
 permissions:
   id-token: write # This is required for requesting the JWT

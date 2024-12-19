@@ -9,7 +9,8 @@ on:
     paths-ignore:
       - apps/redirect-server/**
       - apps/redirect-pages/**
-      - apps/docs/**
+      - apps/docs-app/**
+      - apps/landing-app/**
       - packages/**
       - apps/scheduler-services/**
       - apps/grafana/**

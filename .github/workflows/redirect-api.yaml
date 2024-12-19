@@ -8,7 +8,7 @@ on:
       - 'redirect-api@v*'
     paths-ignore:
       - apps/web/**
-      - apps/docs/**
+      - apps/docs-app/**
       - packages/**
       - apps/scheduler-services/**
       - docker/Dockerfile.prometheus

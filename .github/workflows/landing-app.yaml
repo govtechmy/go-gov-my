@@ -1,15 +1,15 @@
 name: Deploy gogov-landing-page
 env:
-  IMAGE: gogov-landing
+  IMAGE: gogov-landing-app
   LANDING_STATS_JSON_URL: ${{ vars.LANDING_STATS_JSON_URL_DEV }}
 on:
   push:
     tags:
-      - 'landing-page@STAGING-v*'
-      - 'landing-page@v*'
+      - 'landing-app@STAGING-v*'
+      - 'landing-app@v*'
     paths-ignore:
       - apps/scheduler-services/**
-      - apps/docs/**
+      - apps/docs-app/**
       - apps/redirect-server/**
       - apps/web/**
   workflow_dispatch:
@@ -37,14 +37,16 @@ jobs:
           images: |
             ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}
           tags: |
-            type=sha
+            type=ref,event=tag,pattern=landing-app@STAGING-v(.*)
+            type=ref,event=tag,pattern=landing-app@v(.*)
+            type=sha,prefix=sha-
       - name: Determine environment
         id: determine-env
         run: |
-          if [[ ${{ github.ref }} == refs/tags/landing-page@STAGING-v* ]]; then
+          if [[ ${{ github.ref }} == refs/tags/landing-app@STAGING-v* ]]; then
             echo "ENVIRONMENT=staging" >> $GITHUB_OUTPUT
             echo "LANDING_STATS_JSON_URL=${{ vars.LANDING_STATS_JSON_URL_DEV }}" >> $GITHUB_OUTPUT
-          elif [[ ${{ github.ref }} == refs/tags/landing-page@v* ]]; then
+          elif [[ ${{ github.ref }} == refs/tags/landing-app@v* ]]; then
             echo "ENVIRONMENT=production" >> $GITHUB_OUTPUT
             echo "LANDING_STATS_JSON_URL=${{ vars.LANDING_STATS_JSON_URL_DEV }}" >> $GITHUB_OUTPUT
           else
@@ -55,7 +57,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: docker/Dockerfile.landing
+          file: docker/Dockerfile.landing-app
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -65,6 +67,9 @@ jobs:
         run: docker logout ${{ steps.login-ecr.outputs.registry }}
       - name: Deploy with Spinnaker
         run: |
+          # Get the first tag (main version tag)
+          MAIN_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n 1)
+
           curl --request POST \
               --url https://spin-gate.govtechmy.dev/webhooks/webhook/github \
               --header 'Content-Type: application/json' \
@@ -73,7 +78,7 @@ jobs:
                 "artifacts": [
                   {
                     "type": "docker/image",
-                    "reference": "${{ steps.meta.outputs.tags }}",
+                    "reference": "'"${MAIN_TAG}"'",
                     "name": "${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}",
                     "version": "${{ steps.meta.outputs.version }}"
                   }

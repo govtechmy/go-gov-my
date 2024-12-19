@@ -9,7 +9,8 @@ on:
     paths-ignore:
       - apps/redirect-server/**
       - apps/redirect-pages/**
-      - apps/docs/**
+      - apps/landing-app/**
+      - apps/docs-app/**
       - apps/web/**
       - packages/**
       - apps/scheduler-services
@@ -19,7 +20,8 @@ on:
       - docker/Dockerfile.outbox
       - docker/Dockerfile.analytics-aggregator
       - docker/Dockerfile.scheduler-services
-      - docker/Dockerfile.docs
+      - docker/Dockerfile.docs-app
+      - docker/Dockerfile.landing-app
   workflow_dispatch:
 permissions:
   id-token: write # This is required for requesting the JWT
