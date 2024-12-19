@@ -37,9 +37,9 @@ jobs:
           images: |
             ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}
           tags: |
-            type=sha
             type=ref,event=tag,pattern=docs-app@STAGING-v(.*)
             type=ref,event=tag,pattern=docs-app@v(.*)
+            type=sha,prefix=sha-
       - name: Determine environment
         id: determine-env
         run: |
