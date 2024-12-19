@@ -25,6 +25,7 @@
     <a href="#contributing"><strong>Contributing</strong></a>
     <a href="#license"><strong>License</strong></a>
 </p>
+<div></div>
 
 <br/>
 
