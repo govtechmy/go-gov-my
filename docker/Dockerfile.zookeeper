@@ -1,0 +1,12 @@
+FROM quay.io/strimzi/kafka:0.44.0-kafka-3.8.0
+
+# Set environment variables
+ENV LOG_DIR=/tmp/logs \
+    ZOOKEEPER_CLIENT_PORT=2181 \
+    ZOOKEEPER_TICK_TIME=2000
+
+# Expose ports
+EXPOSE 2181
+
+# Command to start Zookeeper
+CMD ["sh", "-c", "bin/zookeeper-server-start.sh config/zookeeper.properties"]
