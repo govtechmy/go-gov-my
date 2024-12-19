@@ -1,7 +1,8 @@
 module redirect-server
 
-go 1.21
-toolchain go1.22.5
+go 1.22
+
+toolchain go1.22.6
 
 // Please enable this locally, not sure why the CI fails at here, will take a look into details later
 // toolchain go1.22.1

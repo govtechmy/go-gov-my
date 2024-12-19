@@ -37,7 +37,7 @@ importers:
   apps/docs:
     dependencies:
       mintlify:
-        specifier: ^4.0.218
+        specifier: ^4.0.299
         version: 4.0.299(@types/react@18.3.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.5.4)
 
   apps/redirect-server: {}
@@ -23261,7 +23261,7 @@ snapshots:
   yargs@17.7.2:
     dependencies:
       cliui: 8.0.1
-      escalade: 3.1.1
+      escalade: 3.2.0
       get-caller-file: 2.0.5
       require-directory: 2.1.1
       string-width: 4.2.3
