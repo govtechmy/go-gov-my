@@ -1,4 +1,4 @@
-name: Deploy gogov-docs
+name: Deploy gogov-docs-app
 env:
   IMAGE: gogov-docs-app
 on:
