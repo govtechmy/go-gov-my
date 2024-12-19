@@ -291,32 +291,6 @@ services:
     networks:
       - my-network
 
-  # analytics-aggregator:
-  #   build:
-  #     context: .
-  #     dockerfile: docker/Dockerfile.analytics-aggregator
-  #   environment:
-  #     KAFKA_ADDR: broker:29092
-  #     ELASTIC_URL: http://elasticsearch:9200
-  #     ELASTIC_USER: elastic
-  #     ELASTIC_PASSWORD: changeme
-  #     KAFKA_GROUP_ID_ANALYTICS_AGGREGATOR: analytics-aggregator
-  #     KAFKA_REDIRECT_LOGS_TOPIC: redirect_logs
-  #     KAFKA_ANALYTIC_TOPIC: link_analytics
-  #     FAILED_SAVES_LOG_PATH: /app/logs/aggregator-failed-saves.log
-  #   volumes:
-  #     - ./apps/redirect-server/logs:/app/logs
-  #   depends_on:
-  #     broker:
-  #       condition: service_healthy
-  #     elasticsearch:
-  #       condition: service_healthy
-  #     init-kafka:
-  #       condition: service_completed_successfully
-  #   networks:
-  #     - my-network
-  #   restart: on-failure
-
 networks:
   my-network:
 
