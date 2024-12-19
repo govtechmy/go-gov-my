@@ -62,6 +62,9 @@ jobs:
         run: docker logout ${{ steps.login-ecr.outputs.registry }}
       - name: Deploy with Spinnaker
         run: |
+          # Get the first tag (main version tag)
+          MAIN_TAG=$(echo "${{ steps.meta.outputs.tags }}" | head -n 1)
+
           curl --request POST \
               --url https://spin-gate.govtechmy.dev/webhooks/webhook/github \
               --header 'Content-Type: application/json' \
@@ -70,7 +73,7 @@ jobs:
                 "artifacts": [
                   {
                     "type": "docker/image",
-                    "reference": "${{ steps.meta.outputs.tags }}",
+                    "reference": "'"${MAIN_TAG}"'",
                     "name": "${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}",
                     "version": "${{ steps.meta.outputs.version }}"
                   }
