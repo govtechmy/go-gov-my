@@ -4,14 +4,8 @@ env:
   LANDING_STATS_JSON_URL: ${{ vars.LANDING_STATS_JSON_URL_DEV }}
 on:
   push:
-    tags:
-      - 'landing-page@STAGING-v*'
-      - 'landing-page@v*'
-    paths-ignore:
-      - apps/scheduler-services/**
-      - apps/docs/**
-      - apps/redirect-server/**
-      - apps/web/**
+    branches:
+      - feat/kafka-strimzi
   workflow_dispatch:
 permissions:
   id-token: write # This is required for requesting the JWT
