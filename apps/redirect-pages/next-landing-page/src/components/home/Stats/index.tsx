@@ -15,6 +15,7 @@ import StatGroup from "./StatGroup";
 import StatNumber from "./StatNumber";
 import StatTag from "./StatTag";
 import { Item as StatDropdownItem } from "@/components/Dropdown";
+import Image from "next/image";
 
 type Props = {
   total: {
@@ -94,7 +95,7 @@ export default function Stats(props: Props) {
       )}
     >
       <div className="col-span-full flex flex-col items-center">
-        <img
+        <Image
           src="/logo.svg"
           width={32}
           height={32}

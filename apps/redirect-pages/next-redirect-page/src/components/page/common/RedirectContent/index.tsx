@@ -35,7 +35,7 @@ export default function RedirectContent(props: Props) {
         {t.rich("pages.index.verify.description", {
           em: (chunks) => (
             <RoundedText variant="primary" weight="medium" textSize="small">
-              go.gov.my
+              {process.env.NEXT_PUBLIC_APP_DOMAIN}
             </RoundedText>
           ),
         })}

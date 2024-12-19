@@ -12,7 +12,7 @@ type Props = {
   slug: string;
 };
 
-const REDIRECT_SECONDS = 10;
+const REDIRECT_SECONDS = Number(process.env.REDIRECT_SECONDS) || 10;
 
 export default function SecureLinkContent(props: Props) {
   const t = useTranslations();

@@ -9,8 +9,8 @@ import { Metadata } from "next";
 import { getTranslations, unstable_setRequestLocale } from "next-intl/server";
 import { useRouter } from "next/router";
 
-const URL = "https://go.gov.my/"
-const REDIRECT_SECONDS = 10;
+const URL = process.env.NEXT_PUBLIC_APP_DOMAIN || "https://go.gov.my/";
+const REDIRECT_SECONDS = Number(process.env.REDIRECT_SECONDS) || 10;
 
 export async function generateMetadata({
   params: { locale },

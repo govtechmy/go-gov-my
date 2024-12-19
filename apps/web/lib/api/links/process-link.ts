@@ -66,6 +66,8 @@ export async function processLink<T extends Record<string, any>>({
   // In GoGovMy, we removed custom domains. All links must use SHORT_DOMAIN.
   const domain = SHORT_DOMAIN;
 
+  console.log('domain', domain);
+
   // check if user exists (if userId is passed)
   if (userId) {
     const userExists = await checkIfUserExists(userId);

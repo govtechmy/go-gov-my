@@ -8,7 +8,7 @@ const quickLinks = [
     title: {
       key: "pages.index.quickLinks.governmentOfMalaysia.title",
     },
-    href: "https://www.malaysia.gov.my/portal/",
+    href: process.env.MALAYSIA_GOV_URL || "https://www.malaysia.gov.my/portal/",
     img: {
       src: "/__goapp_public__/jata-negara.png",
       alt: {
@@ -20,7 +20,7 @@ const quickLinks = [
     title: {
       key: "pages.index.quickLinks.goGovMy.title",
     },
-    href: "https://go.gov.my/",
+    href: process.env.NEXT_PUBLIC_APP_DOMAIN || "https://go.gov.my/",
     img: {
       src: "/__goapp_public__/icons/logo.svg",
       alt: {

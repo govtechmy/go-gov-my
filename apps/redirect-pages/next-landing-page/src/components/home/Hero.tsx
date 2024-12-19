@@ -99,7 +99,7 @@ export default function Hero(props: Props) {
           <ButtonB
             variant="primary"
             size="large"
-            href={URL_APP_MAIN}
+            href={process.env.NEXT_PUBLIC_APP_DOMAIN}
             target="_blank"
             iconEnd={<IconLink />}
           >

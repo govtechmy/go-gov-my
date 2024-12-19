@@ -5,14 +5,22 @@ import { OutboxSchema } from '../models/OutboxSchema';
 import { retryWithDelay } from '../utils/retry';
 
 export async function runOutboxConsumer(consumer: any, log: any) {
+  log.info('Starting outbox consumer...');
   await consumer.subscribe({
-    topic: process.env.OUTBOX_TOPIC!,
+    topic: process.env.KAFKA_OUTBOX_TOPIC!,
     fromBeginning: true,
   });
+  log.info(`Subscribed to topic: ${process.env.KAFKA_OUTBOX_TOPIC}`);
 
   await consumer.run({
     autoCommit: false,
     eachMessage: async ({ topic, partition, message }) => {
+      log.info('Received outbox message:', {
+        topic,
+        partition,
+        offset: message.offset,
+      });
+
       if (!message.value) return;
 
       console.log('message received');

@@ -4,9 +4,9 @@ tmp_dir = "tmp"
 
 [build]
   full_bin = """
-  ELASTIC_URL=http://localhost:9200 KAFKA_ADDR=localhost:9092 FAILED_SAVES_LOG_PATH=./aggregator-failed-saves.log ./tmp/analytics-aggregator & 
+  ELASTIC_URL=http://localhost:9200 KAFKA_ADDR=localhost:9092 FAILED_SAVES_LOG_PATH=./logs/aggregator-failed-saves.log ./tmp/analytics-aggregator & 
   ELSATIC_URL=http://localhost:9200 ./tmp/api & 
-  ELASTIC_URL=http://localhost:9200 NEXTJS_BASE_URL=http://localhost:8888 LOG_FILE_PATH=./logs/redirectd.log ./tmp/redirectd
+  ELASTIC_URL=http://localhost:9200 NEXTJS_BASE_URL=http://localhost:3000 LOG_FILE_PATH=./logs/redirectd.log GEOLITE2_DB_PATH=./GeoLite2-City.mmdb GEOLITE2_ASN_PATH=./GeoLite2-ASN.mmdb ./tmp/redirectd
   """
   cmd = "go build -o ./tmp/ ./cmd/..."
   include_ext = ["go", "tpl", "tmpl", "html"]

@@ -9,6 +9,7 @@ import {
   SheetOverlay,
   SheetPortal,
 } from "@/components/Sheet";
+import Image from "next/image";
 import { URL_APP_LOGIN } from "@/constants/urls";
 import { Link, usePathname } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -42,7 +43,7 @@ export function Header(props: { signInKey: string }) {
     <header className="sticky top-0 z-50 bg-background lg:border-b lg:bg-background/80 lg:backdrop-blur-[30px]">
       <div className="container flex w-full items-center justify-between gap-3 bg-background py-3 max-lg:border-b lg:gap-4 lg:bg-transparent xl:px-0">
         <a href="#" className="flex h-full flex-none items-center">
-          <img
+          <Image
             width={32}
             height={32}
             src="/logo.svg"
@@ -109,7 +110,7 @@ export function Header(props: { signInKey: string }) {
               {/* <ThemeToggle /> */}
             <Locale />
           </Suspense>
-          <ButtonB variant="primary" size="small" href={URL_APP_LOGIN}>
+          <ButtonB variant="primary" size="small" href={process.env.NEXT_PUBLIC_APP_DOMAIN}>
             {props.signInKey}
           </ButtonB>
         </div>
