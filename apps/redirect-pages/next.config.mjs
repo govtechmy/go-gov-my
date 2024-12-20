@@ -2,7 +2,7 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
+  output: 'standalone',
   env: {
     LAST_UPDATED: new Date().toISOString(),
   },
