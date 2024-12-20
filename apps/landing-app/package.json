@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --port 3335",
     "build": "next build",
-    "start": "next build && node .next/standalone/server.js",
+    "start": "next start",
     "lint": "next lint",
     "clean": "rm -rf .next out",
     "generate": "BUILD_MODE=ssg next build",
