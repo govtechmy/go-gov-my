@@ -1,4 +1,4 @@
-cd ../apps/redirect-pages/next-redirect-page
+cd ../apps/redirect-pages
 
 npm run build
 

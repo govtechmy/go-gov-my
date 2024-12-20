@@ -19,10 +19,10 @@
 /apps/landing-app/.env
 
 # Apps - Redirect Pages
-/apps/redirect-pages/next-redirect-page/.next
-/apps/redirect-pages/next-redirect-page/node_modules
-/apps/redirect-pages/next-redirect-page/out
-/apps/redirect-pages/next-redirect-page/.env
+/apps/redirect-pages/.next
+/apps/redirect-pages/node_modules
+/apps/redirect-pages/out
+/apps/redirect-pages/.env
 
 # Apps - Redirect Server
 /apps/redirect-server/logs
