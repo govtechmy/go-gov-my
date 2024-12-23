@@ -4,9 +4,14 @@ import createNextIntlPlugin from "next-intl/plugin";
 const nextConfig = {
   output: 'standalone', //process.env.BUILD_MODE === "ssg" ? "export" : undefined,
   env: {
+    LANDING_STATS_JSON_URL: process.env.LANDING_STATS_JSON_URL,
     LAST_UPDATED: new Date().toISOString(),
-    API_SECRET_KEY: process.env.API_SECRET_KEY,
+    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
+    NEXT_PUBLIC_APP_DOMAIN: process.env.NEXT_PUBLIC_APP_DOMAIN,
     ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
+    API_SECRET_KEY: process.env.API_SECRET_KEY,
+    APP_URL: process.env.APP_URL,
+    LANDING_DOMAIN: process.env.LANDING_DOMAIN,
   },
 };
 
