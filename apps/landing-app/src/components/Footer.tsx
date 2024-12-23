@@ -125,21 +125,19 @@ export default function Footer(props: Props) {
               ))}
             </div>
           </div>
-          {process.env.NEXT_PUBLIC_LAST_UPDATED && (
-            <span>
-              {props.lastUpdateKey +
-                ": " +
-                format.dateTime(new Date(process.env.NEXT_PUBLIC_LAST_UPDATED), {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                  hour12: true,
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  timeZone: "Asia/Kuala_Lumpur",
-                })}
-            </span>
-          )}
+          <span>
+            {props.lastUpdateKey +
+              ": " +
+              format.dateTime(new Date(), {
+                year: "numeric",
+                month: "long", 
+                day: "numeric",
+                hour12: true,
+                hour: "2-digit",
+                minute: "2-digit",
+                timeZone: "Asia/Kuala_Lumpur",
+              })}
+          </span>
         </div>
       </div>
     </div>
