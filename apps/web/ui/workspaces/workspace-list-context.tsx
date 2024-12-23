@@ -2,7 +2,7 @@
 
 import useWorkspaces from '@/lib/swr/use-workspaces';
 import { WorkspaceProps } from '@/lib/types';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
 type Context = {
@@ -16,7 +16,7 @@ type Context = {
 
 const WorkspaceListContext = createContext<Context>(null);
 
-export const WorkspaceListProvider = ({ children }: { children?: React.ReactNode }) => {
+export const WorkspaceListProvider = ({ children }: { children: ReactNode }) => {
   const [searchValue, setSearchValue] = useState('');
 
   const [debouncedSearchValue, setDebouncedSearchValue] = useState(searchValue);

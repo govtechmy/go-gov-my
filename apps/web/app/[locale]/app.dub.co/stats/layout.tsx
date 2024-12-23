@@ -1,8 +1,9 @@
 import { Footer, Nav } from '@dub/ui';
 import Providers from '../(auth)/providers';
+import { ReactNode } from 'react';
 
 type Props = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 export default function StatsLayout(props: Props) {

@@ -1,8 +1,7 @@
 import { prisma } from '@/lib/prisma';
-import { cache } from 'react';
 import { getSession } from './auth';
 
-export const getDefaultWorkspace = cache(async () => {
+export const getDefaultWorkspace = async () => {
   const session = await getSession();
   if (!session) {
     return null;
@@ -19,9 +18,9 @@ export const getDefaultWorkspace = cache(async () => {
       slug: true,
     },
   });
-});
+};
 
-export const getWorkspace = cache(async ({ slug }: { slug: string }) => {
+export const getWorkspace = async ({ slug }: { slug: string }) => {
   const session = await getSession();
   if (!session) {
     return null;
@@ -50,9 +49,9 @@ export const getWorkspace = cache(async ({ slug }: { slug: string }) => {
       },
     },
   });
-});
+};
 
-export const getLink = cache(async ({ domain, key }: { domain: string; key: string }) => {
+export const getLink = async ({ domain, key }: { domain: string; key: string }) => {
   return await prisma.link.findUnique({
     where: {
       domain_key: {
@@ -61,4 +60,4 @@ export const getLink = cache(async ({ domain, key }: { domain: string; key: stri
       },
     },
   });
-});
+};

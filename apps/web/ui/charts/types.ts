@@ -2,7 +2,7 @@ import { ScaleTypeToD3Scale } from '@visx/scale';
 import { TooltipWithBounds } from '@visx/tooltip';
 import { UseTooltipParams } from '@visx/tooltip/lib/hooks/useTooltip';
 import { TooltipInPortalProps } from '@visx/tooltip/lib/hooks/useTooltipInPortal';
-import { Dispatch, FC, ReactElement, SetStateAction } from 'react';
+import { Dispatch, FC, ReactElement, SetStateAction, ComponentType } from 'react';
 
 export type Datum = Record<string, any>;
 
@@ -65,10 +65,21 @@ export type ChartContext<T extends Datum = any> = Required<ChartProps<T>> & {
   setLeftAxisMargin: Dispatch<SetStateAction<number | undefined>>;
 };
 
+export interface BaseTooltipProps {
+  top?: number;
+  left?: number;
+  children?: ReactElement;
+  style?: React.CSSProperties;
+  className?: string;
+  offsetLeft?: number;
+  offsetTop?: number;
+  unstyled?: boolean;
+}
+
 export type ChartTooltipContext<T extends Datum = any> = {
   handleTooltip: (
     event: React.TouchEvent<SVGRectElement> | React.MouseEvent<SVGRectElement>
   ) => void;
-  TooltipWrapper: FC<TooltipInPortalProps> | typeof TooltipWithBounds;
+  TooltipWrapper: ComponentType<BaseTooltipProps>;
   containerRef: (element: SVGElement | HTMLElement | null) => void;
 } & UseTooltipParams<TimeSeriesDatum<T>>;

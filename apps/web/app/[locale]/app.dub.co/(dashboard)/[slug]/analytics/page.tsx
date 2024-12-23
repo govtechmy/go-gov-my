@@ -1,7 +1,7 @@
 'use client';
 import Analytics from '@/ui/analytics';
 import LayoutLoader from '@/ui/layout/layout-loader';
-import { Suspense, useState, useContext, useEffect, useCallback, useMemo } from 'react';
+import { Suspense, useState, useEffect, useCallback, useMemo } from 'react';
 import AnalyticsClient from './client';
 import { Button, MaxWidthWrapper } from '@dub/ui';
 import PageTitle from '@/ui/typography/page-title';
@@ -13,7 +13,6 @@ import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { Link } from '@/ui/shared/icons';
 import { toast } from 'sonner';
 import { LoadingSpinner } from '@dub/ui';
-import { Tooltip, TooltipContent } from '@dub/ui';
 import { VALID_ANALYTICS_FILTERS } from '@/lib/analytics/constants';
 import useWorkspace from '@/lib/swr/use-workspace';
 
@@ -25,6 +24,56 @@ export default function WorkspaceAnalytics() {
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  // Construct queryString similar to Analytics component
+  const queryString = useMemo(() => {
+    const availableFilterParams = VALID_ANALYTICS_FILTERS.reduce((acc, filter) => {
+      const value = searchParams?.get(filter);
+      return value ? { ...acc, [filter]: value } : acc;
+    }, {});
+
+    const params = {
+      ...(slug && { workspaceId: id }),
+      ...(searchParams?.get('domain') && { domain: searchParams.get('domain')! }),
+      ...(searchParams?.get('key') && { key: searchParams.get('key')! }),
+      ...(searchParams?.get('interval') && { interval: searchParams.get('interval')! }),
+      ...(searchParams?.get('start') && { start: searchParams.get('start')! }),
+      ...(searchParams?.get('end') && { end: searchParams.get('end')! }),
+      ...(searchParams?.get('tagId') && { tagId: searchParams.get('tagId')! }),
+      ...availableFilterParams,
+    };
+
+    return new URLSearchParams(params as Record<string, string>).toString();
+  }, [searchParams, slug, id]);
+
+  const exportData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/analytics/export?${queryString}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        setLoading(false);
+        toast.error(messages['Error.Generic']);
+        return;
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `analytics-${slug}-${new Date().toISOString()}.csv`;
+      a.click();
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      toast.error(messages['Error.Generic']);
+    }
+  }, [queryString, slug, messages]);
 
   const onKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -57,62 +106,13 @@ export default function WorkspaceAnalytics() {
         }
       }
     },
-    [loading, locale, slug, router]
+    [loading, locale, slug, router, exportData]
   );
 
   useEffect(() => {
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [onKeyDown]);
-
-  // Construct queryString similar to Analytics component
-  const queryString = useMemo(() => {
-    const availableFilterParams = VALID_ANALYTICS_FILTERS.reduce((acc, filter) => {
-      const value = searchParams?.get(filter);
-      return value ? { ...acc, [filter]: value } : acc;
-    }, {});
-
-    const params = {
-      ...(slug && { workspaceId: id }),
-      ...(searchParams?.get('domain') && { domain: searchParams.get('domain')! }),
-      ...(searchParams?.get('key') && { key: searchParams.get('key')! }),
-      ...(searchParams?.get('interval') && { interval: searchParams.get('interval')! }),
-      ...(searchParams?.get('start') && { start: searchParams.get('start')! }),
-      ...(searchParams?.get('end') && { end: searchParams.get('end')! }),
-      ...(searchParams?.get('tagId') && { tagId: searchParams.get('tagId')! }),
-      ...availableFilterParams,
-    };
-
-    return new URLSearchParams(params as Record<string, string>).toString();
-  }, [searchParams, slug, id]);
-
-  // Add exportData to useCallback
-  const exportData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(`/api/analytics/export?${queryString}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        setLoading(false);
-        throw new Error(response.statusText);
-      }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${process.env.NEXT_PUBLIC_APP_DOMAIN} Export - ${new Date().toISOString()}.zip`;
-      a.click();
-    } catch (error) {
-      throw new Error(error);
-    }
-    setLoading(false);
-  }, [queryString]); // Add queryString as dependency
 
   return (
     <Suspense fallback={<LayoutLoader />}>

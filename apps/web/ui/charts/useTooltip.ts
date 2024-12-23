@@ -2,7 +2,15 @@ import { localPoint } from '@visx/event';
 import { TooltipWithBounds, useTooltipInPortal, useTooltip as useVisxTooltip } from '@visx/tooltip';
 import { bisector } from 'd3-array';
 import { useCallback } from 'react';
-import { ChartContext, ChartTooltipContext, Datum, Series, TimeSeriesDatum } from './types';
+import {
+  ChartContext,
+  ChartTooltipContext,
+  Datum,
+  Series,
+  TimeSeriesDatum,
+  BaseTooltipProps,
+} from './types';
+import { ComponentType } from 'react';
 
 const bisectDate = bisector<Datum, Date>((d) => new Date(d.date)).left;
 
@@ -52,7 +60,9 @@ export function useTooltip<T extends Datum>({
     [seriesId, data, xScale, yScale, series, visxTooltip.showTooltip]
   );
 
-  const TooltipWrapper = renderInPortal ? visxTooltipInPortal.TooltipInPortal : TooltipWithBounds;
+  const TooltipWrapper: ComponentType<BaseTooltipProps> = renderInPortal
+    ? (visxTooltipInPortal.TooltipInPortal as ComponentType<BaseTooltipProps>)
+    : (TooltipWithBounds as ComponentType<BaseTooltipProps>);
 
   return {
     handleTooltip,
