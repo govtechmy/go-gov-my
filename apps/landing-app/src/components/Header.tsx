@@ -37,7 +37,7 @@ export function Header(props: { signInKey: string }) {
     // TODO: Put your nav items here
   ];
 
-  const landingDomain = process.env.APP_DOMAIN || "https://app.go.gov.my";
+  const landingDomain = process.env.NEXT_PUBLIC_APP_DOMAIN || "https://app.go.gov.my";
 
   const [showMenu, setMenu] = useState<boolean>(false);
 

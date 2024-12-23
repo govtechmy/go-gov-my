@@ -51,7 +51,7 @@ export default function CheckLinkDialog({
   notFoundDialog,
   reportDialog
 }: Props) {
-  const APP_DOMAIN = process.env.APP_DOMAIN;
+  const APP_DOMAIN = process.env.NEXT_PUBLIC_APP_DOMAIN;
   const searchParams = useSearchParams();
   const router = useRouter();
   const showDialog = searchParams.get("dialog") === "true";
@@ -466,7 +466,7 @@ export default function CheckLinkDialog({
                       </button>
                     </Dialog.Close>
                     <a 
-                      href={linkData.shortUrl || `${process.env.APP_DOMAIN}`}
+                      href={linkData.shortUrl || `${process.env.NEXT_PUBLIC_APP_DOMAIN}`}
                       target="_blank"
                       className="flex-1 text-center text-neutral-50 rounded-lg px-6 py-3 text-base font-regular shadow-sm hover:shadow-md hover:bg-blue-700 bg-blue-600"
                     >

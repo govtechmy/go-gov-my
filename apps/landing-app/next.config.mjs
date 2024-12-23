@@ -5,12 +5,12 @@ const nextConfig = {
   output: 'standalone', //process.env.BUILD_MODE === "ssg" ? "export" : undefined,
   env: {
     LANDING_STATS_JSON_URL: process.env.LANDING_STATS_JSON_URL,
-    LAST_UPDATED: process.env.LAST_UPDATED,
-    API_BASE_URL: process.env.API_BASE_URL,
-    APP_DOMAIN: process.env.APP_DOMAIN,
+    NEXT_PUBLIC_LAST_UPDATED: process.env.NEXT_PUBLIC_LAST_UPDATED,
+    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
+    NEXT_PUBLIC_APP_DOMAIN: process.env.NEXT_PUBLIC_APP_DOMAIN,
     ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
     API_SECRET_KEY: process.env.API_SECRET_KEY,
-    APP_URL: process.env.APP_URL,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     LANDING_DOMAIN: process.env.LANDING_DOMAIN,
   },
 };
