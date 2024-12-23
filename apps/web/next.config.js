@@ -1,11 +1,4 @@
-const REDIRECT_SEGMENTS = [
-  'pricing',
-  'blog',
-  'help',
-  'changelog',
-  'tools',
-  '_static',
-];
+const REDIRECT_SEGMENTS = ['pricing', 'blog', 'help', 'changelog', 'tools', '_static'];
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -25,7 +18,7 @@ const nextConfig = {
         new webpack.IgnorePlugin({
           resourceRegExp:
             /(^@google-cloud\/spanner|^@mongodb-js\/zstd|^aws-crt|^aws4$|^pg-native$|^mongodb-client-encryption$|^@sap\/hana-client$|^@sap\/hana-client\/extension\/Stream$|^snappy$|^react-native-sqlite-storage$|^bson-ext$|^cardinal$|^kerberos$|^hdb-pool$|^sql.js$|^sqlite3$|^better-sqlite3$|^typeorm-aurora-data-api-driver$|^pg-query-stream$|^oracledb$|^mysql$|^snappy\/package\.json$|^cloudflare:sockets$)/,
-        }),
+        })
       );
     }
 
@@ -39,19 +32,10 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: 'assets.dub.co', // for Dub's static assets
-      },
-      {
-        hostname: 'dubassets.com', // for Dub's user generated images
-      },
-      {
         hostname: 'www.google.com',
       },
       {
         hostname: 'avatar.vercel.sh',
-      },
-      {
-        hostname: 'faisalman.github.io',
       },
       {
         hostname: 'api.dicebear.com',
@@ -158,21 +142,21 @@ const nextConfig = {
             has: [
               {
                 type: 'host',
-                value: 'dub.sh',
+                value: 'go.gov.my',
               },
             ],
             destination: `https://go.gov.my/${segment}/:path*`,
             permanent: true,
             statusCode: 301,
           }
-        ),
+        )
       ),
       {
         source: '/metatags',
         has: [
           {
             type: 'host',
-            value: 'dub.sh',
+            value: 'go.gov.my',
           },
         ],
         destination: 'https://go.gov.my/tools/metatags',

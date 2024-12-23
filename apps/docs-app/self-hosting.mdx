@@ -1,7 +1,7 @@
 ---
-title: "Self-hosting GoGovMy"
-"og:title": "How to self-host GoGovMy in 8 easy steps"
-description: "An end-to-end guide on how to self-host GoGovMy – the open-source link management platform."
+title: 'Self-hosting GoGovMy'
+'og:title': 'How to self-host GoGovMy in 8 easy steps'
+description: 'An end-to-end guide on how to self-host GoGovMy – the open-source link management platform.'
 ---
 
 <Frame>
@@ -294,7 +294,7 @@ We recommend using [Cloudflare R2](https://cloudflare.com/r2) for self-hosting G
 
 <Note>You'll need to subscribe to the R2 service if you haven't already.</Note>
 
-In your [Cloudflare account](https://dash.cloudflare.com/), create a new R2 bucket. We recommend giving your bucket a descriptive name (e.g. `dubassets`) and leaving the remaining settings as is.
+In your [Cloudflare account](https://dash.cloudflare.com/), create a new R2 bucket. We recommend giving your bucket a descriptive name (e.g. `gogovmyassets`) and leaving the remaining settings as is.
 
 <Frame>![Cloudflare R2 bucket](/images/cloudflare-r2-create-bucket.png)</Frame>
 
@@ -376,7 +376,7 @@ GoGovMy uses Unsplash's API for the [Custom Social Media Cards](https://github.c
 
 <Frame>
   ![Custom social media
-  cards](https://assets.dub.co/changelog/custom-social-cards.png)
+  cards](https://assets.go.gov.my/changelog/custom-social-cards.png)
 </Frame>
 
 Check out Unsplash's [official documentation](https://unsplash.com/documentation#creating-a-developer-account) to learn how you can set up the `UNSPLASH_ACCESS_KEY` env var.
@@ -456,4 +456,4 @@ This guide is meant to be a starting point for self-hosting GoGovMy. It currentl
 
 In the future, we plan to make it easier to self-host GoGovMy by making these dependencies optional by swapping them out for native databases (e.g. mysql, redis, clickhouse, [GeoLite2](https://github.com/GitSquared/node-geolite2-redist) etc.)
 
-Also, Docker is currently not supported, but we have a few [open](https://github.com/dubinc/dub/issues/25) [issues](https://github.com/dubinc/dub/issues/378) and [PRs](https://github.com/dubinc/dub/pull/391) for it.
+Also, Docker is currently not supported, but we have a few [open](https://github.com/govtechmy/go-gov-my/issues/25) [issues](https://github.com/govtechmy/go-gov-my/issues/378) and [PRs](https://github.com/govtechmy/go-gov-my/pull/391) for it.

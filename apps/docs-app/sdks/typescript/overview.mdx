@@ -1,6 +1,6 @@
 ---
-title: "Overview"
-description: "TypeScript SDK for GoGovMy"
+title: 'Overview'
+description: 'TypeScript SDK for GoGovMy'
 ---
 
 ## Install
@@ -9,7 +9,7 @@ description: "TypeScript SDK for GoGovMy"
   <Tab title="npm">
 
     ```bash
-    npm install dub
+    npm install gogovmy
     ```
 
   </Tab>
@@ -17,7 +17,7 @@ description: "TypeScript SDK for GoGovMy"
   <Tab title="pnpm">
   
   ```bash 
-  pnpm add dub 
+  pnpm add gogovmy 
   ```
   
   </Tab>
@@ -25,7 +25,7 @@ description: "TypeScript SDK for GoGovMy"
   <Tab title="yarn">
   
   ```bash
-  yarn add dub 
+  yarn add gogovmy 
   ```
   
   </Tab>
@@ -53,14 +53,14 @@ The SDK constructor accepts an options object with the following properties:
 ## Usage
 
 ```typescript
-import { Dub } from "dub";
+import { GoGovMy } from 'gogovmy';
 
-const dub = new Dub({
-  token: "DUB_API_KEY",
-  workspaceId: "ws_clugls3...",
+const gogovmy = new GoGovMy({
+  token: 'GOGOVMY_API_KEY',
+  workspaceId: 'ws_clugls3...',
 });
 
-await go.gov.my.links.create({
-  url: "https://google/com",
+await gogovmy.links.create({
+  url: 'https://google/com',
 });
 ```

@@ -24,7 +24,7 @@ export const document = createDocument({
     },
     license: {
       name: 'AGPL-3.0 license',
-      url: 'https://github.com/dubinc/dub/blob/main/LICENSE.md',
+      url: 'https://github.com/govtechmy/dub/blob/main/LICENSE.md',
     },
   },
   servers: [

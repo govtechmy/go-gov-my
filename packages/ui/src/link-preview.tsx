@@ -12,7 +12,7 @@ import { LoadingCircle, Photo } from './icons';
 export function LinkPreview({ defaultUrl }: { defaultUrl?: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const url = defaultUrl || searchParams?.get('url') || 'https://github.com/dubinc/dub';
+  const url = defaultUrl || searchParams?.get('url') || 'https://github.com/govtechmy/dub';
   const [debouncedUrl] = useDebounce(getUrlFromString(url), 500);
   const hostname = useMemo(() => {
     return getDomainWithoutWWW(debouncedUrl || '');
@@ -116,7 +116,7 @@ export function LinkPreviewPlaceholder({ defaultUrl }: { defaultUrl?: string }) 
           disabled
           className="block w-full rounded-md border-gray-200 pl-10 text-sm text-gray-900 placeholder-gray-400 shadow-lg focus:border-gray-500 focus:outline-none focus:ring-gray-500"
           placeholder="Enter your URL"
-          defaultValue={defaultUrl || 'https://github.com/dubinc/dub'}
+          defaultValue={defaultUrl || 'https://github.com/govtechmy/dub'}
         />
       </div>
       <div className="relative overflow-hidden rounded-md border border-gray-300 bg-gray-50">

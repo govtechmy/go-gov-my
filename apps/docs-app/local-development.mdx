@@ -1,6 +1,6 @@
 ---
-title: "Local Development"
-"og:title": "How to setup GoGovMyGoGovMy for Local Development (6 steps)"
+title: 'Local Development'
+'og:title': 'How to setup GoGovMyGoGovMy for Local Development (6 steps)'
 description: "A guide on how to run GoGovMy's codebase locally."
 ---
 
@@ -15,7 +15,7 @@ description: "A guide on how to run GoGovMy's codebase locally."
 
 ## Introduction
 
-GoGovMy's codebase is set up in a monorepo (via [Turborepo](https://turbo.build/repo)) and is fully [open-source on GitHub](https://github.com/dubinc/dub).
+GoGovMy's codebase is set up in a monorepo (via [Turborepo](https://turbo.build/repo)) and is fully [open-source on GitHub](https://github.com/govtechmy/go-gov-my).
 
 Here's the monorepo structure:
 
@@ -48,11 +48,11 @@ The `packages` directory contains the code for:
 
 GoGovMy's web app is built with [Next.js](https://nextjs.org) and [TailwindCSS](https://tailwindcss.com).
 
-It also utilizes code from the `packages` directory, specifically the `@dub/ui` and `@dub/utils` packages.
+It also utilizes code from the `packages` directory, specifically the `@gogovmy/ui` and `@gogovmy/utils` packages.
 
-All of the code for the web app is located in here: [`main`/apps/web/app/app.dub.co](https://github.com/dubinc/dub/tree/main/apps/web/app/app.dub.co). This is using the Next.js [route group pattern](https://nextjs.org/docs/app/building-your-application/routing/route-groups).
+All of the code for the web app is located in here: [`main`/apps/web/app/app.go.gov.my](https://github.com/govtechmy/go-gov-my/tree/main/apps/web/app/app.go.gov.my). This is using the Next.js [route group pattern](https://nextjs.org/docs/app/building-your-application/routing/route-groups).
 
-There's also the API server, which is located in here: [`main`/apps/web/app/api](https://github.com/dubinc/dub/tree/main/apps/web/app/api)
+There's also the API server, which is located in here: [`main`/apps/web/app/api](https://github.com/govtechmy/go-gov-my/tree/main/apps/web/app/api)
 
 When you run `pnpm dev` to start the development server, the app will be available at [http://localhost:8888](http://localhost:8888). The reason we use `localhost:8888` and not `app.localhost:8888` is because Google OAuth doesn't allow you to use localhost subdomains.
 
@@ -64,8 +64,8 @@ To handle high traffic, we use Redis to cache every link's metadata when it's fi
 
 Here's the code that powers link redirects:
 
-- Link redirects: [`main`/apps/web/lib/middleware/link.ts](https://github.com/dubinc/dub/blob/main/apps/web/lib/middleware/link.ts).
-- Root domain redirects: [`main`/apps/web/lib/middleware/root.ts](https://github.com/dubinc/dub/blob/main/apps/web/lib/middleware/root.ts).
+- Link redirects: [`main`/apps/web/lib/middleware/link.ts](https://github.com/govtechmy/go-gov-my/blob/main/apps/web/lib/middleware/link.ts).
+- Root domain redirects: [`main`/apps/web/lib/middleware/root.ts](https://github.com/govtechmy/go-gov-my/blob/main/apps/web/lib/middleware/root.ts).
 
 ## Running GoGovMy locally
 
@@ -86,7 +86,7 @@ First, you'll need to clone the GoGovMy.co repo and install the dependencies.
 First, clone the [GoGovMy.co repo](https://d.to/github) into a public GitHub repository.
 
     ```bash Terminal
-    git clone https://github.com/dubinc/dub.git
+    git clone https://github.com/govtechmy/go-gov-my.git
     ```
 
   </Step>

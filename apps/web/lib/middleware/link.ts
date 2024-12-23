@@ -56,7 +56,7 @@ export default async function LinkMiddleware(req: NextRequest, ev: NextFetchEven
   const linkData = await fetchLinkData(domain, key);
   if (!linkData) {
     // short link not found, redirect to root
-    // TODO: log 404s (https://github.com/dubinc/dub/issues/559)
+    // TODO: log 404s (https://github.com/govtechmy/dub/issues/559)
     return NextResponse.redirect(new URL('/', APP_DOMAIN), {
       ...DUB_HEADERS,
       status: 302,

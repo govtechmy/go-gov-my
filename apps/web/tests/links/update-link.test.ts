@@ -27,7 +27,7 @@ describe.sequential('PATCH /links/{linkId}', async () => {
 
   const toUpdate: Partial<z.infer<typeof updateLinkBodySchema>> = {
     key: randomId(),
-    url: 'https://github.com/dubinc/dub',
+    url: 'https://github.com/govtechmy/dub',
     title: 'Dub Inc',
     description: 'Open-source link management infrastructure.',
     publicStats: true,
@@ -163,7 +163,7 @@ describe.sequential('PATCH /links/{linkId}', async () => {
       path: `/links/ext_${externalId}`,
       query: { workspaceId },
       body: {
-        url: 'https://github.com/dubinc',
+        url: 'https://github.com/govtechmy',
       },
     });
 
@@ -176,7 +176,7 @@ describe.sequential('PATCH /links/{linkId}', async () => {
       externalId,
       archived: false,
       userId: user.id,
-      url: 'https://github.com/dubinc',
+      url: 'https://github.com/govtechmy',
       expiresAt: '2030-04-16T17:00:00.000Z',
       projectId: workspaceId.replace('ws_', ''),
       shortLink: `https://${domain}/${toUpdate.key}`,
@@ -190,7 +190,7 @@ describe.sequential('PATCH /links/{linkId}', async () => {
       query: { workspaceId },
     });
 
-    expect(linkUpdated.url).toEqual('https://github.com/dubinc');
+    expect(linkUpdated.url).toEqual('https://github.com/govtechmy');
   });
 });
 
@@ -212,7 +212,7 @@ describe.sequential('PUT /links/{linkId} (backwards compatibility)', async () =>
 
   const toUpdate: Partial<z.infer<typeof updateLinkBodySchema>> = {
     key: randomId(),
-    url: 'https://github.com/dubinc/dub',
+    url: 'https://github.com/govtechmy/dub',
     title: 'Dub Inc',
     description: 'Open-source link management infrastructure.',
     publicStats: true,

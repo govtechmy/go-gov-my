@@ -100,7 +100,7 @@ export const getMetaTags = async (url: string) => {
  * If there's an error, it will be logged to a separate redis list for debugging
  **/
 async function recordMetatags(url: string, error: boolean) {
-  if (url === 'https://github.com/dubinc/dub') {
+  if (url === 'https://github.com/govtechmy/dub') {
     // don't log metatag generation for default URL
     return null;
   }

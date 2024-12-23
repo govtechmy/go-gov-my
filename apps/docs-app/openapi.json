@@ -11,7 +11,7 @@
     },
     "license": {
       "name": "AGPL-3.0 license",
-      "url": "https://github.com/dubinc/dub/blob/main/LICENSE.md"
+      "url": "https://github.com/govtechmy/go-gov-my/blob/main/LICENSE.md"
     }
   },
   "servers": [
@@ -50,7 +50,9 @@
         "x-speakeasy-usage-example": true,
         "summary": "Create a new link",
         "description": "Create a new link for the authenticated workspace.",
-        "tags": ["Links"],
+        "tags": [
+          "Links"
+        ],
         "security": [
           {
             "token": []
@@ -135,7 +137,9 @@
                       }
                     ],
                     "description": "The unique IDs of the tags assigned to the short link.",
-                    "example": ["clux0rgak00011..."]
+                    "example": [
+                      "clux0rgak00011..."
+                    ]
                   },
                   "tagNames": {
                     "anyOf": [
@@ -179,17 +183,17 @@
                   "title": {
                     "type": "string",
                     "nullable": true,
-                    "description": "The title of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
+                    "description": "The title of the short link generated via `api.go.gov.my/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
                   },
                   "description": {
                     "type": "string",
                     "nullable": true,
-                    "description": "The description of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
+                    "description": "The description of the short link generated via `api.go.gov.my/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
                   },
                   "image": {
                     "type": "string",
                     "nullable": true,
-                    "description": "The image of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
+                    "description": "The image of the short link generated via `api.go.gov.my/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
                   },
                   "ios": {
                     "type": "string",
@@ -205,7 +209,9 @@
                     "$ref": "#/components/schemas/linkGeoTargeting"
                   }
                 },
-                "required": ["url"]
+                "required": [
+                  "url"
+                ]
               }
             }
           }
@@ -255,7 +261,9 @@
         "x-speakeasy-name-override": "list",
         "summary": "Retrieve a list of links",
         "description": "Retrieve a list of links for the authenticated workspace. The list will be paginated and the provided query parameters allow filtering the returned links.",
-        "tags": ["Links"],
+        "tags": [
+          "Links"
+        ],
         "security": [
           {
             "token": []
@@ -384,7 +392,11 @@
             "description": "The field to sort the links by. The default is `createdAt`, and sort order is always descending.",
             "schema": {
               "type": "string",
-              "enum": ["createdAt", "clicks", "lastClicked"],
+              "enum": [
+                "createdAt",
+                "clicks",
+                "lastClicked"
+              ],
               "default": "createdAt",
               "description": "The field to sort the links by. The default is `createdAt`, and sort order is always descending."
             }
@@ -449,7 +461,9 @@
         "x-speakeasy-name-override": "count",
         "summary": "Retrieve the number of links",
         "description": "Retrieve the number of links for the authenticated workspace. The provided query parameters allow filtering the returned links.",
-        "tags": ["Links"],
+        "tags": [
+          "Links"
+        ],
         "security": [
           {
             "token": []
@@ -580,11 +594,15 @@
               "anyOf": [
                 {
                   "type": "string",
-                  "enum": ["domain"]
+                  "enum": [
+                    "domain"
+                  ]
                 },
                 {
                   "type": "string",
-                  "enum": ["tagId"]
+                  "enum": [
+                    "tagId"
+                  ]
                 }
               ],
               "description": "The field to group the links by."
@@ -639,7 +657,9 @@
         "x-speakeasy-name-override": "get",
         "summary": "Retrieve a link",
         "description": "Retrieve the info for a link.",
-        "tags": ["Links"],
+        "tags": [
+          "Links"
+        ],
         "security": [
           {
             "token": []
@@ -755,7 +775,9 @@
         "x-speakeasy-max-method-params": 2,
         "summary": "Update a link",
         "description": "Update a link for the authenticated workspace. If there's no change, returns it as it is.",
-        "tags": ["Links"],
+        "tags": [
+          "Links"
+        ],
         "security": [
           {
             "token": []
@@ -850,7 +872,9 @@
                       }
                     ],
                     "description": "The unique IDs of the tags assigned to the short link.",
-                    "example": ["clux0rgak00011..."]
+                    "example": [
+                      "clux0rgak00011..."
+                    ]
                   },
                   "tagNames": {
                     "anyOf": [
@@ -894,17 +918,17 @@
                   "title": {
                     "type": "string",
                     "nullable": true,
-                    "description": "The title of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
+                    "description": "The title of the short link generated via `api.go.gov.my/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
                   },
                   "description": {
                     "type": "string",
                     "nullable": true,
-                    "description": "The description of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
+                    "description": "The description of the short link generated via `api.go.gov.my/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
                   },
                   "image": {
                     "type": "string",
                     "nullable": true,
-                    "description": "The image of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
+                    "description": "The image of the short link generated via `api.go.gov.my/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
                   },
                   "ios": {
                     "type": "string",
@@ -920,7 +944,9 @@
                     "$ref": "#/components/schemas/linkGeoTargeting"
                   }
                 },
-                "required": ["url"]
+                "required": [
+                  "url"
+                ]
               }
             }
           }
@@ -971,7 +997,9 @@
         "x-speakeasy-max-method-params": 1,
         "summary": "Delete a link",
         "description": "Delete a link for the authenticated workspace.",
-        "tags": ["Links"],
+        "tags": [
+          "Links"
+        ],
         "security": [
           {
             "token": []
@@ -1023,7 +1051,9 @@
                       "description": "The ID of the link."
                     }
                   },
-                  "required": ["id"]
+                  "required": [
+                    "id"
+                  ]
                 }
               }
             }
@@ -1064,7 +1094,9 @@
         "x-speakeasy-name-override": "get",
         "summary": "Retrieve a QR code",
         "description": "Retrieve a QR code for a link.",
-        "tags": ["QR Codes"],
+        "tags": [
+          "QR Codes"
+        ],
         "parameters": [
           {
             "in": "query",
@@ -1092,7 +1124,12 @@
             "description": "The level of error correction to use for the QR code. Defaults to `L` if not provided.",
             "schema": {
               "type": "string",
-              "enum": ["L", "M", "Q", "H"],
+              "enum": [
+                "L",
+                "M",
+                "Q",
+                "H"
+              ],
               "default": "L",
               "description": "The level of error correction to use for the QR code. Defaults to `L` if not provided."
             }
@@ -1175,7 +1212,9 @@
         "x-speakeasy-name-override": "count",
         "summary": "Retrieve the total clicks count",
         "description": "Retrieve the total number of clicks for a link, a domain, or the authenticated workspace.",
-        "tags": ["analytics.clicks"],
+        "tags": [
+          "analytics.clicks"
+        ],
         "security": [
           {
             "token": []
@@ -1224,10 +1263,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -1245,7 +1284,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -1406,7 +1453,9 @@
         "x-speakeasy-name-override": "timeseries",
         "summary": "Retrieve timeseries click analytics",
         "description": "Retrieve timeseries click analytics for a link, a domain, or the authenticated workspace over a period of time.",
-        "tags": ["analytics.clicks"],
+        "tags": [
+          "analytics.clicks"
+        ],
         "security": [
           {
             "token": []
@@ -1455,10 +1504,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -1476,7 +1525,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -1608,7 +1665,10 @@
                         "description": "The number of clicks in the interval"
                       }
                     },
-                    "required": ["start", "clicks"]
+                    "required": [
+                      "start",
+                      "clicks"
+                    ]
                   }
                 }
               }
@@ -1650,7 +1710,9 @@
         "x-speakeasy-name-override": "countries",
         "summary": "Retrieve top countries by clicks",
         "description": "Retrieve the top countries by number of clicks for a link, a domain, or the authenticated workspace.",
-        "tags": ["analytics.clicks"],
+        "tags": [
+          "analytics.clicks"
+        ],
         "security": [
           {
             "token": []
@@ -1699,10 +1761,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -1720,7 +1782,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -1883,7 +1953,9 @@
         "x-speakeasy-name-override": "cities",
         "summary": "Retrieve top cities by clicks",
         "description": "Retrieve the top countries by number of clicks for a link, a domain, or the authenticated workspace.",
-        "tags": ["analytics.clicks"],
+        "tags": [
+          "analytics.clicks"
+        ],
         "security": [
           {
             "token": []
@@ -1932,10 +2004,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -1953,7 +2025,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -2116,7 +2196,9 @@
         "x-speakeasy-name-override": "devices",
         "summary": "Retrieve top devices by clicks",
         "description": "Retrieve the top devices by number of clicks for a link, a domain, or the authenticated workspace.",
-        "tags": ["analytics.clicks"],
+        "tags": [
+          "analytics.clicks"
+        ],
         "security": [
           {
             "token": []
@@ -2165,10 +2247,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -2186,7 +2268,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -2318,7 +2408,10 @@
                         "description": "The number of clicks from this device"
                       }
                     },
-                    "required": ["device", "clicks"]
+                    "required": [
+                      "device",
+                      "clicks"
+                    ]
                   }
                 }
               }
@@ -2360,7 +2453,9 @@
         "x-speakeasy-name-override": "browsers",
         "summary": "Retrieve top browsers by clicks",
         "description": "Retrieve the top browsers by number of clicks for a link, a domain, or the authenticated workspace.",
-        "tags": ["analytics.clicks"],
+        "tags": [
+          "analytics.clicks"
+        ],
         "security": [
           {
             "token": []
@@ -2409,10 +2504,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -2430,7 +2525,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -2562,7 +2665,10 @@
                         "description": "The number of clicks from this browser"
                       }
                     },
-                    "required": ["browser", "clicks"]
+                    "required": [
+                      "browser",
+                      "clicks"
+                    ]
                   }
                 }
               }
@@ -2604,7 +2710,9 @@
         "x-speakeasy-name-override": "os",
         "summary": "Retrieve top OS by clicks",
         "description": "Retrieve the top OS by number of clicks for a link, a domain, or the authenticated workspace.",
-        "tags": ["analytics.clicks"],
+        "tags": [
+          "analytics.clicks"
+        ],
         "security": [
           {
             "token": []
@@ -2653,10 +2761,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -2674,7 +2782,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -2806,7 +2922,10 @@
                         "description": "The number of clicks from this OS"
                       }
                     },
-                    "required": ["os", "clicks"]
+                    "required": [
+                      "os",
+                      "clicks"
+                    ]
                   }
                 }
               }
@@ -2848,7 +2967,9 @@
         "x-speakeasy-name-override": "referers",
         "summary": "Retrieve top referers by clicks",
         "description": "Retrieve the top referers by number of clicks for a link, a domain, or the authenticated workspace.",
-        "tags": ["analytics.clicks"],
+        "tags": [
+          "analytics.clicks"
+        ],
         "security": [
           {
             "token": []
@@ -2897,10 +3018,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -2918,7 +3039,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -3050,7 +3179,10 @@
                         "description": "The number of clicks from this referer"
                       }
                     },
-                    "required": ["referer", "clicks"]
+                    "required": [
+                      "referer",
+                      "clicks"
+                    ]
                   }
                 }
               }
@@ -3092,7 +3224,9 @@
         "x-speakeasy-name-override": "topLinks",
         "summary": "Retrieve top links by clicks",
         "description": "Retrieve the top links by number of clicks for a domain or the authenticated workspace.",
-        "tags": ["analytics.clicks"],
+        "tags": [
+          "analytics.clicks"
+        ],
         "security": [
           {
             "token": []
@@ -3141,10 +3275,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -3162,7 +3296,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -3294,7 +3436,10 @@
                         "description": "The number of clicks from this link"
                       }
                     },
-                    "required": ["link", "clicks"]
+                    "required": [
+                      "link",
+                      "clicks"
+                    ]
                   }
                 }
               }
@@ -3336,7 +3481,9 @@
         "x-speakeasy-name-override": "topUrls",
         "summary": "Retrieve top URLs by clicks",
         "description": "Retrieve the top URLs by number of clicks for a given short link.",
-        "tags": ["analytics.clicks"],
+        "tags": [
+          "analytics.clicks"
+        ],
         "security": [
           {
             "token": []
@@ -3385,10 +3532,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -3406,7 +3553,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -3538,7 +3693,10 @@
                         "description": "The number of clicks from this URL"
                       }
                     },
-                    "required": ["url", "clicks"]
+                    "required": [
+                      "url",
+                      "clicks"
+                    ]
                   }
                 }
               }
@@ -3579,13 +3737,15 @@
         "operationId": "getClicksCountDeprecated",
         "summary": "Retrieve the total clicks count",
         "description": "Retrieve the total number of clicks for a link, a domain, or the authenticated workspace.",
-        "tags": ["analytics.clicks"],
+        "tags": [
+          "analytics.clicks"
+        ],
         "security": [
           {
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.count instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.count instead.",
         "x-speakeasy-deprecation-replacement": "getClicksCount",
         "deprecated": true,
         "parameters": [
@@ -3631,10 +3791,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -3652,7 +3812,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -3813,13 +3981,15 @@
         "x-speakeasy-name-override": "timeseries",
         "summary": "Retrieve timeseries click analytics",
         "description": "Retrieve timeseries click analytics for a link, a domain, or the authenticated workspace over a period of time.",
-        "tags": ["analytics"],
+        "tags": [
+          "analytics"
+        ],
         "security": [
           {
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.timeseries instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.timeseries instead.",
         "x-speakeasy-deprecation-replacement": "getTimeseriesByClicks",
         "deprecated": true,
         "parameters": [
@@ -3865,10 +4035,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -3886,7 +4056,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -4018,7 +4196,10 @@
                         "description": "The number of clicks in the interval"
                       }
                     },
-                    "required": ["start", "clicks"]
+                    "required": [
+                      "start",
+                      "clicks"
+                    ]
                   }
                 }
               }
@@ -4060,13 +4241,15 @@
         "x-speakeasy-name-override": "country",
         "summary": "Retrieve top countries by clicks",
         "description": "Retrieve the top countries by number of clicks for a link, a domain, or the authenticated workspace.",
-        "tags": ["analytics"],
+        "tags": [
+          "analytics"
+        ],
         "security": [
           {
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.countries instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.countries instead.",
         "x-speakeasy-deprecation-replacement": "getCountriesByClicks",
         "deprecated": true,
         "parameters": [
@@ -4112,10 +4295,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on Dugo.gov.myb."
             }
           },
           {
@@ -4133,7 +4316,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -4296,13 +4487,15 @@
         "x-speakeasy-name-override": "city",
         "summary": "Retrieve top cities by clicks",
         "description": "Retrieve the top countries by number of clicks for a link, a domain, or the authenticated workspace.",
-        "tags": ["analytics"],
+        "tags": [
+          "analytics"
+        ],
         "security": [
           {
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.cities instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.cities instead.",
         "x-speakeasy-deprecation-replacement": "getCitiesByClicks",
         "deprecated": true,
         "parameters": [
@@ -4348,10 +4541,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -4369,7 +4562,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -4532,13 +4733,15 @@
         "x-speakeasy-name-override": "device",
         "summary": "Retrieve top devices by clicks",
         "description": "Retrieve the top devices by number of clicks for a link, a domain, or the authenticated workspace.",
-        "tags": ["analytics"],
+        "tags": [
+          "analytics"
+        ],
         "security": [
           {
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.devices instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.devices instead.",
         "x-speakeasy-deprecation-replacement": "getDevicesByClicks",
         "deprecated": true,
         "parameters": [
@@ -4584,10 +4787,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -4605,7 +4808,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -4737,7 +4948,10 @@
                         "description": "The number of clicks from this device"
                       }
                     },
-                    "required": ["device", "clicks"]
+                    "required": [
+                      "device",
+                      "clicks"
+                    ]
                   }
                 }
               }
@@ -4779,13 +4993,15 @@
         "x-speakeasy-name-override": "browser",
         "summary": "Retrieve top browsers by clicks",
         "description": "Retrieve the top browsers by number of clicks for a link, a domain, or the authenticated workspace.",
-        "tags": ["analytics"],
+        "tags": [
+          "analytics"
+        ],
         "security": [
           {
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.browsers instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.browsers instead.",
         "x-speakeasy-deprecation-replacement": "getBrowsersByClicks",
         "deprecated": true,
         "parameters": [
@@ -4831,10 +5047,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -4852,7 +5068,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -4984,7 +5208,10 @@
                         "description": "The number of clicks from this browser"
                       }
                     },
-                    "required": ["browser", "clicks"]
+                    "required": [
+                      "browser",
+                      "clicks"
+                    ]
                   }
                 }
               }
@@ -5026,13 +5253,15 @@
         "x-speakeasy-name-override": "os",
         "summary": "Retrieve top OS by clicks",
         "description": "Retrieve the top OS by number of clicks for a link, a domain, or the authenticated workspace.",
-        "tags": ["analytics"],
+        "tags": [
+          "analytics"
+        ],
         "security": [
           {
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.os instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.os instead.",
         "x-speakeasy-deprecation-replacement": "getOSByClicks",
         "deprecated": true,
         "parameters": [
@@ -5078,10 +5307,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -5099,7 +5328,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -5231,7 +5468,10 @@
                         "description": "The number of clicks from this OS"
                       }
                     },
-                    "required": ["os", "clicks"]
+                    "required": [
+                      "os",
+                      "clicks"
+                    ]
                   }
                 }
               }
@@ -5273,13 +5513,15 @@
         "x-speakeasy-name-override": "referer",
         "summary": "Retrieve top referers by clicks",
         "description": "Retrieve the top referers by number of clicks for a link, a domain, or the authenticated workspace.",
-        "tags": ["analytics"],
+        "tags": [
+          "analytics"
+        ],
         "security": [
           {
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.referers instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.referers instead.",
         "x-speakeasy-deprecation-replacement": "getReferersByClicks",
         "deprecated": true,
         "parameters": [
@@ -5325,10 +5567,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -5346,7 +5588,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -5478,7 +5728,10 @@
                         "description": "The number of clicks from this referer"
                       }
                     },
-                    "required": ["referer", "clicks"]
+                    "required": [
+                      "referer",
+                      "clicks"
+                    ]
                   }
                 }
               }
@@ -5520,13 +5773,15 @@
         "x-speakeasy-name-override": "topLinks",
         "summary": "Retrieve top links by clicks",
         "description": "Retrieve the top links by number of clicks for a domain or the authenticated workspace.",
-        "tags": ["analytics"],
+        "tags": [
+          "analytics"
+        ],
         "security": [
           {
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.topLinks instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.topLinks instead.",
         "x-speakeasy-deprecation-replacement": "getTopLinksByClicks",
         "deprecated": true,
         "parameters": [
@@ -5572,10 +5827,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -5593,7 +5848,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -5725,7 +5988,10 @@
                         "description": "The number of clicks from this link"
                       }
                     },
-                    "required": ["link", "clicks"]
+                    "required": [
+                      "link",
+                      "clicks"
+                    ]
                   }
                 }
               }
@@ -5767,13 +6033,15 @@
         "x-speakeasy-name-override": "topUrls",
         "summary": "Retrieve top URLs by clicks",
         "description": "Retrieve the top URLs by number of clicks for a given short link.",
-        "tags": ["analytics"],
+        "tags": [
+          "analytics"
+        ],
         "security": [
           {
             "token": []
           }
         ],
-        "x-speakeasy-deprecation-message": "This method is deprecated. Use dub.analytics.clicks.topUrls instead.",
+        "x-speakeasy-deprecation-message": "This method is deprecated. Use go.gov.my.analytics.clicks.topUrls instead.",
         "x-speakeasy-deprecation-replacement": "getTopURLsByClicks",
         "deprecated": true,
         "parameters": [
@@ -5819,10 +6087,10 @@
           {
             "in": "query",
             "name": "linkId",
-            "description": "The unique ID of the short link on Dub.",
+            "description": "The unique ID of the short link on go.gov.my.",
             "schema": {
               "type": "string",
-              "description": "The unique ID of the short link on Dub."
+              "description": "The unique ID of the short link on go.gov.my."
             }
           },
           {
@@ -5840,7 +6108,15 @@
             "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h.",
             "schema": {
               "type": "string",
-              "enum": ["24h", "7d", "30d", "90d", "ytd", "1y", "all"],
+              "enum": [
+                "24h",
+                "7d",
+                "30d",
+                "90d",
+                "ytd",
+                "1y",
+                "all"
+              ],
               "default": "24h",
               "description": "The interval to retrieve analytics for. Takes precedence over start and end. If undefined, defaults to 24h."
             }
@@ -5972,7 +6248,10 @@
                         "description": "The number of clicks from this URL"
                       }
                     },
-                    "required": ["url", "clicks"]
+                    "required": [
+                      "url",
+                      "clicks"
+                    ]
                   }
                 }
               }
@@ -6014,7 +6293,9 @@
         "x-speakeasy-name-override": "list",
         "summary": "Retrieve a list of workspaces",
         "description": "Retrieve a list of workspaces for the authenticated user.",
-        "tags": ["Workspaces"],
+        "tags": [
+          "Workspaces"
+        ],
         "security": [
           {
             "token": []
@@ -6068,7 +6349,9 @@
         "x-speakeasy-name-override": "create",
         "summary": "Create a workspace",
         "description": "Create a new workspace for the authenticated user.",
-        "tags": ["Workspaces"],
+        "tags": [
+          "Workspaces"
+        ],
         "security": [
           {
             "token": []
@@ -6091,7 +6374,10 @@
                     "maxLength": 48
                   }
                 },
-                "required": ["name", "slug"]
+                "required": [
+                  "name",
+                  "slug"
+                ]
               }
             }
           }
@@ -6143,7 +6429,9 @@
         "x-speakeasy-name-override": "get",
         "summary": "Retrieve a workspace",
         "description": "Retrieve a workspace for the authenticated user.",
-        "tags": ["Workspaces"],
+        "tags": [
+          "Workspaces"
+        ],
         "security": [
           {
             "token": []
@@ -6208,7 +6496,9 @@
         "x-speakeasy-name-override": "create",
         "summary": "Create a new tag",
         "description": "Create a new tag for the authenticated workspace.",
-        "tags": ["Tags"],
+        "tags": [
+          "Tags"
+        ],
         "security": [
           {
             "token": []
@@ -6262,7 +6552,9 @@
                     "description": "The color of the tag. If not provided, a random color will be used from the list: red, yellow, green, blue, purple, pink, brown."
                   }
                 },
-                "required": ["tag"]
+                "required": [
+                  "tag"
+                ]
               }
             }
           }
@@ -6312,7 +6604,9 @@
         "x-speakeasy-name-override": "list",
         "summary": "Retrieve a list of tags",
         "description": "Retrieve a list of tags for the authenticated workspace.",
-        "tags": ["Tags"],
+        "tags": [
+          "Tags"
+        ],
         "security": [
           {
             "token": []
@@ -6391,7 +6685,9 @@
         "x-speakeasy-name-override": "get",
         "summary": "Retrieve the metatags for a URL",
         "description": "Retrieve the metatags for a URL.",
-        "tags": ["Metatags"],
+        "tags": [
+          "Metatags"
+        ],
         "parameters": [
           {
             "in": "query",
@@ -6429,10 +6725,14 @@
                       "type": "string",
                       "nullable": true,
                       "description": "The OpenGraph image for the URL.",
-                      "example": "https://assets.dub.co/thumbnail.jpg"
+                      "example": "https://assets.go.gov.my/thumbnail.jpg"
                     }
                   },
-                  "required": ["title", "description", "image"]
+                  "required": [
+                    "title",
+                    "description",
+                    "image"
+                  ]
                 }
               }
             }
@@ -6447,7 +6747,7 @@
         "type": "http",
         "description": "Default authentication mechanism",
         "scheme": "bearer",
-        "x-speakeasy-example": "DUB_API_KEY"
+        "x-speakeasy-example": "API_KEY"
       }
     },
     "schemas": {
@@ -6510,17 +6810,17 @@
           "title": {
             "type": "string",
             "nullable": true,
-            "description": "The title of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
+            "description": "The title of the short link generated via `api.go.gov.my/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
           },
           "description": {
             "type": "string",
             "nullable": true,
-            "description": "The description of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
+            "description": "The description of the short link generated via `api.go.gov.my/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
           },
           "image": {
             "type": "string",
             "nullable": true,
-            "description": "The image of the short link generated via `api.dub.co/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
+            "description": "The image of the short link generated via `api.go.gov.my/metatags`. Will be used for Custom Social Media Cards if `proxy` is true."
           },
           "ios": {
             "type": "string",
@@ -7572,7 +7872,7 @@
           "qrCode": {
             "type": "string",
             "format": "uri",
-            "description": "The full URL of the QR code for the short link (e.g. `https://api.dub.co/qr?url=https://go.gov.my/try`)."
+            "description": "The full URL of the QR code for the short link (e.g. `https://api.go.gov.my/qr?url=https://go.gov.my/try`)."
           },
           "utm_source": {
             "type": "string",
@@ -7743,11 +8043,16 @@
               "properties": {
                 "role": {
                   "type": "string",
-                  "enum": ["owner", "member"],
+                  "enum": [
+                    "owner",
+                    "member"
+                  ],
                   "description": "The role of the authenticated user in the workspace."
                 }
               },
-              "required": ["role"]
+              "required": [
+                "role"
+              ]
             },
             "description": "The role of the authenticated user in the workspace."
           },
@@ -7801,7 +8106,11 @@
             "description": "The color of the tag."
           }
         },
-        "required": ["id", "name", "color"],
+        "required": [
+          "id",
+          "name",
+          "color"
+        ],
         "title": "Tag"
       },
       "linkGeoTargeting": {
@@ -9082,7 +9391,10 @@
             "description": "The number of clicks from this country"
           }
         },
-        "required": ["country", "clicks"]
+        "required": [
+          "country",
+          "clicks"
+        ]
       },
       "clicksByCities": {
         "type": "object",
@@ -9352,7 +9664,11 @@
             "description": "The number of clicks from this city"
           }
         },
-        "required": ["city", "country", "clicks"]
+        "required": [
+          "city",
+          "country",
+          "clicks"
+        ]
       }
     },
     "responses": {
@@ -9369,7 +9685,9 @@
                   "properties": {
                     "code": {
                       "type": "string",
-                      "enum": ["bad_request"],
+                      "enum": [
+                        "bad_request"
+                      ],
                       "description": "A short code indicating the error code returned.",
                       "example": "bad_request"
                     },
@@ -9384,10 +9702,15 @@
                       "example": "https://go.gov.my/docs/api-reference/errors#bad-request"
                     }
                   },
-                  "required": ["code", "message"]
+                  "required": [
+                    "code",
+                    "message"
+                  ]
                 }
               },
-              "required": ["error"]
+              "required": [
+                "error"
+              ]
             }
           }
         }
@@ -9405,7 +9728,9 @@
                   "properties": {
                     "code": {
                       "type": "string",
-                      "enum": ["unauthorized"],
+                      "enum": [
+                        "unauthorized"
+                      ],
                       "description": "A short code indicating the error code returned.",
                       "example": "unauthorized"
                     },
@@ -9420,10 +9745,15 @@
                       "example": "https://go.gov.my/docs/api-reference/errors#unauthorized"
                     }
                   },
-                  "required": ["code", "message"]
+                  "required": [
+                    "code",
+                    "message"
+                  ]
                 }
               },
-              "required": ["error"]
+              "required": [
+                "error"
+              ]
             }
           }
         }
@@ -9441,7 +9771,9 @@
                   "properties": {
                     "code": {
                       "type": "string",
-                      "enum": ["forbidden"],
+                      "enum": [
+                        "forbidden"
+                      ],
                       "description": "A short code indicating the error code returned.",
                       "example": "forbidden"
                     },
@@ -9456,10 +9788,15 @@
                       "example": "https://go.gov.my/docs/api-reference/errors#forbidden"
                     }
                   },
-                  "required": ["code", "message"]
+                  "required": [
+                    "code",
+                    "message"
+                  ]
                 }
               },
-              "required": ["error"]
+              "required": [
+                "error"
+              ]
             }
           }
         }
@@ -9477,7 +9814,9 @@
                   "properties": {
                     "code": {
                       "type": "string",
-                      "enum": ["not_found"],
+                      "enum": [
+                        "not_found"
+                      ],
                       "description": "A short code indicating the error code returned.",
                       "example": "not_found"
                     },
@@ -9492,10 +9831,15 @@
                       "example": "https://go.gov.my/docs/api-reference/errors#not-found"
                     }
                   },
-                  "required": ["code", "message"]
+                  "required": [
+                    "code",
+                    "message"
+                  ]
                 }
               },
-              "required": ["error"]
+              "required": [
+                "error"
+              ]
             }
           }
         }
@@ -9513,7 +9857,9 @@
                   "properties": {
                     "code": {
                       "type": "string",
-                      "enum": ["conflict"],
+                      "enum": [
+                        "conflict"
+                      ],
                       "description": "A short code indicating the error code returned.",
                       "example": "conflict"
                     },
@@ -9528,10 +9874,15 @@
                       "example": "https://go.gov.my/docs/api-reference/errors#conflict"
                     }
                   },
-                  "required": ["code", "message"]
+                  "required": [
+                    "code",
+                    "message"
+                  ]
                 }
               },
-              "required": ["error"]
+              "required": [
+                "error"
+              ]
             }
           }
         }
@@ -9549,7 +9900,9 @@
                   "properties": {
                     "code": {
                       "type": "string",
-                      "enum": ["invite_expired"],
+                      "enum": [
+                        "invite_expired"
+                      ],
                       "description": "A short code indicating the error code returned.",
                       "example": "invite_expired"
                     },
@@ -9564,10 +9917,15 @@
                       "example": "https://go.gov.my/docs/api-reference/errors#invite-expired"
                     }
                   },
-                  "required": ["code", "message"]
+                  "required": [
+                    "code",
+                    "message"
+                  ]
                 }
               },
-              "required": ["error"]
+              "required": [
+                "error"
+              ]
             }
           }
         }
@@ -9585,7 +9943,9 @@
                   "properties": {
                     "code": {
                       "type": "string",
-                      "enum": ["unprocessable_entity"],
+                      "enum": [
+                        "unprocessable_entity"
+                      ],
                       "description": "A short code indicating the error code returned.",
                       "example": "unprocessable_entity"
                     },
@@ -9600,10 +9960,15 @@
                       "example": "https://go.gov.my/docs/api-reference/errors#unprocessable-entity"
                     }
                   },
-                  "required": ["code", "message"]
+                  "required": [
+                    "code",
+                    "message"
+                  ]
                 }
               },
-              "required": ["error"]
+              "required": [
+                "error"
+              ]
             }
           }
         }
@@ -9621,7 +9986,9 @@
                   "properties": {
                     "code": {
                       "type": "string",
-                      "enum": ["rate_limit_exceeded"],
+                      "enum": [
+                        "rate_limit_exceeded"
+                      ],
                       "description": "A short code indicating the error code returned.",
                       "example": "rate_limit_exceeded"
                     },
@@ -9636,10 +10003,15 @@
                       "example": "https://go.gov.my/docs/api-reference/errors#rate-limit_exceeded"
                     }
                   },
-                  "required": ["code", "message"]
+                  "required": [
+                    "code",
+                    "message"
+                  ]
                 }
               },
-              "required": ["error"]
+              "required": [
+                "error"
+              ]
             }
           }
         }
@@ -9657,7 +10029,9 @@
                   "properties": {
                     "code": {
                       "type": "string",
-                      "enum": ["internal_server_error"],
+                      "enum": [
+                        "internal_server_error"
+                      ],
                       "description": "A short code indicating the error code returned.",
                       "example": "internal_server_error"
                     },
@@ -9672,10 +10046,15 @@
                       "example": "https://go.gov.my/docs/api-reference/errors#internal-server_error"
                     }
                   },
-                  "required": ["code", "message"]
+                  "required": [
+                    "code",
+                    "message"
+                  ]
                 }
               },
-              "required": ["error"]
+              "required": [
+                "error"
+              ]
             }
           }
         }

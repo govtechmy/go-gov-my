@@ -58,7 +58,7 @@ export default async function AppMiddleware(req: NextRequest) {
   headers.set('NEXT_LOCALE', locale);
   return NextResponse.rewrite(
     new URL(
-      `/${locale}/app.dub.co${fullPathWithoutLocale === '/' ? '' : fullPathWithoutLocale}`,
+      `/${locale}/app.go.gov.my${fullPathWithoutLocale === '/' ? '' : fullPathWithoutLocale}`,
       req.url
     ),
     { request: { headers: headers } }

@@ -71,7 +71,7 @@ export default function Analytics({
   const link = searchParams?.get('link') || '';
 
   const { basePath, domain, baseApiPath } = useMemo(() => {
-    // Workspace analytics page, e.g. app.dub.co/dub/analytics?domain=dub.sh&key=github
+    // Workspace analytics page, e.g. app.go.gov.my/{workspaceId}/analytics?domain=dub.sh&key=github
     if (admin) {
       return {
         basePath: `/analytics`,

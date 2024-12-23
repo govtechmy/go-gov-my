@@ -6,8 +6,8 @@ const nextConfig = {
   env: {
     LANDING_STATS_JSON_URL: process.env.LANDING_STATS_JSON_URL,
     LAST_UPDATED: new Date().toISOString(),
-    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
-    NEXT_PUBLIC_APP_DOMAIN: process.env.NEXT_PUBLIC_APP_DOMAIN,
+    API_BASE_URL: process.env.API_BASE_URL,
+    APP_DOMAIN: process.env.APP_DOMAIN,
     ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
     API_SECRET_KEY: process.env.API_SECRET_KEY,
     APP_URL: process.env.APP_URL,
