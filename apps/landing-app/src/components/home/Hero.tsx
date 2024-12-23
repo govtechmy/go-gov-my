@@ -56,6 +56,7 @@ type Props = {
 
 export default function Hero(props: Props) {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const landingDomain = process.env.NEXT_PUBLIC_APP_DOMAIN || "https://app.go.gov.my";
 
   return (
     // Disable left/right padding on the container
@@ -99,7 +100,7 @@ export default function Hero(props: Props) {
           <ButtonB
             variant="primary"
             size="large"
-            href={process.env.NEXT_PUBLIC_APP_DOMAIN}
+            href={landingDomain}
             target="_blank"
             iconEnd={<IconLink />}
           >

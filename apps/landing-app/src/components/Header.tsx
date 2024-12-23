@@ -37,6 +37,8 @@ export function Header(props: { signInKey: string }) {
     // TODO: Put your nav items here
   ];
 
+  const landingDomain = process.env.NEXT_PUBLIC_APP_DOMAIN || "https://app.go.gov.my";
+
   const [showMenu, setMenu] = useState<boolean>(false);
 
   return (
@@ -110,7 +112,7 @@ export function Header(props: { signInKey: string }) {
               {/* <ThemeToggle /> */}
             <Locale />
           </Suspense>
-          <ButtonB variant="primary" size="small" href={process.env.NEXT_PUBLIC_APP_DOMAIN}>
+          <ButtonB variant="primary" size="small" href={landingDomain}>
             {props.signInKey}
           </ButtonB>
         </div>

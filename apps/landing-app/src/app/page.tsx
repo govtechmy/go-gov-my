@@ -224,7 +224,7 @@ export default async function Home({ searchParams }: Props) {
             description={t.rich(action.descriptionKey, {
               em: (chunks) => (
                 <AnimatedRoundedText
-                  prefix="go.gov.my/"
+                  prefix={`${process.env.LANDING_DOMAIN}/`}
                   variant="primary"
                   items={SEGMENTS}
                   interval={2000}
