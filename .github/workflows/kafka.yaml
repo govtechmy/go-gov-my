@@ -1,0 +1,49 @@
+name: Deploy Kafka to Kubernetes
+env:
+  IMAGE: gogov-kafka
+on:
+  push:
+    tags:
+      - 'kafka@STAGING-v*'
+      - 'kafka@v*'
+    paths-ignore:
+      - apps/redirect-server/**
+      - apps/redirect-pages/**
+      - apps/docs-app/**
+      - apps/landing-app/**
+      - packages/**
+      - apps/scheduler-services/**
+      - apps/grafana/**
+      - apps/jaeger/**
+  workflow_dispatch:
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+
+      - name: Authenticate with Kubernetes
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
+          export KUBECONFIG=kubeconfig.yaml
+
+      - name: Create Kafka Cluster
+        run: |
+          kubectl apply -f .kube/kafka/base/kafka.yaml
+
+      - name: Verify Kafka Deployment
+        run: |
+          kubectl get kafka gogov-kafka
