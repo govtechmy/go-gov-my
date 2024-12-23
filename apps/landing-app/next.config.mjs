@@ -5,7 +5,6 @@ const nextConfig = {
   output: 'standalone', //process.env.BUILD_MODE === "ssg" ? "export" : undefined,
   env: {
     LANDING_STATS_JSON_URL: process.env.LANDING_STATS_JSON_URL,
-    NEXT_PUBLIC_LAST_UPDATED: process.env.NEXT_PUBLIC_LAST_UPDATED,
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
     NEXT_PUBLIC_APP_DOMAIN: process.env.NEXT_PUBLIC_APP_DOMAIN,
     ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS,
