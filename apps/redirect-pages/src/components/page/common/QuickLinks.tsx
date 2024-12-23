@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { getTranslations } from "next-intl/server";
 import React from "react";
 import ButtonB from "../../ButtonB";
+import Image from "next/image";
 
 const quickLinks = [
   {
@@ -51,14 +52,16 @@ export default async function QuickLinks() {
                 target="_blank"
                 className={cn("flex flex-row items-center", "gap-x-[0.5rem]")}
               >
-                <img
+                <Image
                   src={img.src}
+                  width={36}
+                  height={28}
                   className="h-[1.75rem] w-[2.25rem] object-contain md:h-[1.5rem] md:w-[1.875rem]"
                   alt={t(img.alt.key)}
                 />
                 <span
                   className={cn(
-                    "hidden md:inline",
+                    "hidden md:inline", 
                     "font-heading font-semibold text-black-900",
                   )}
                 >

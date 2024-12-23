@@ -7,6 +7,7 @@ import Heading from "@/components/Heading";
 import { Paragraph } from "@/components/Paragraph";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 
 type Props = {
   slug: string;
@@ -33,7 +34,7 @@ export default function SecureLinkContent(props: Props) {
         "flex grow flex-col items-center justify-start tall:justify-center",
       )}
     >
-      <img
+      <Image
         width={32}
         height={32}
         src="/__goapp_public__/icons/padlock.svg"

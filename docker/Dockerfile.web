@@ -1,4 +1,4 @@
-FROM node:20-alpine AS base
+FROM node:23.4.0-alpine AS base
 
 RUN apk update && apk upgrade
 
@@ -21,6 +21,9 @@ RUN [ \
     ]
 
 COPY ../ .
+
+# Add missing dependency to landing-app
+RUN cd apps/landing-app && pnpm add @radix-ui/react-slot@^1.0.2
 
 RUN [ \
     "pnpm", \

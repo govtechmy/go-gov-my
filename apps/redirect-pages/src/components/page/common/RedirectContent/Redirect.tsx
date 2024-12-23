@@ -25,7 +25,7 @@ export default function Redirect(props: Props) {
     }, 1000);
 
     return () => clearTimeout(timeout);
-  }, [count]);
+  }, [count, props.url, router]);
 
   return <span>{t("common.seconds", { count })}</span>;
 }
