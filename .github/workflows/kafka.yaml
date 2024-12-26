@@ -40,6 +40,15 @@ jobs:
           echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
           export KUBECONFIG=kubeconfig.yaml
 
+      - name: Install Strimzi CRDs
+        run: |
+          curl -L "https://strimzi.io/install/latest?namespace=gogov" -o strimzi-install.yaml
+          kubectl apply -f strimzi-install.yaml
+
+      - name: Verify Strimzi Installation
+        run: |
+          kubectl get crds | grep kafka.strimzi.io
+
       - name: Create Kafka Cluster
         run: |
           kubectl apply -f .kube/kafka/base/kafka.yaml
