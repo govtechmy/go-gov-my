@@ -1,0 +1,8 @@
+# https://debezium.io/documentation/reference/stable/connectors/postgresql.html
+# https://strimzi.io/blog/2020/01/27/deploying-debezium-with-kafkaconnector-resource/
+
+FROM strimzi/kafka:0.16.1-kafka-2.4.0
+USER root:root
+RUN mkdir -p /opt/kafka/plugins/debezium
+COPY ./debezium-connector-postgres/ /opt/kafka/plugins/debezium/
+USER 1001
