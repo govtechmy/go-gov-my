@@ -97,7 +97,7 @@ func main() {
 		flag.StringVar(&elasticURL, "elastic-url", os.Getenv("ELASTIC_URL"), "Elasticsearch URL e.g. http://localhost:9200")
 		flag.StringVar(&elasticUser, "elastic-user", os.Getenv("ELASTIC_USER"), "Elasticsearch username")
 		flag.StringVar(&elasticPassword, "elastic-password", os.Getenv("ELASTIC_PASSWORD"), "Elasticsearch password")
-		flag.StringVar(&failedSavesLogPath, "failed-saves-path", "./logs/aggregator-failed-saves.log", "Path to a file that stores redirect metadatas which failed to save to Elasticsearch")
+		flag.StringVar(&failedSavesLogPath, "failed-saves-path", "./aggregator-logs/failed-saves.log", "Path to a file that stores redirect metadatas which failed to save to Elasticsearch")
 	}
 	flag.Parse()
 
