@@ -2,10 +2,8 @@ import ButtonB from "@/components/ButtonB";
 import Heading from "@/components/Heading";
 import Paragraph from "@/components/Paragraph";
 import Section from "@/components/Section";
-import { URL_APP_MAIN } from "@/constants/urls";
 import IconLink from "@/icons/link";
 import { cn } from "@/lib/utils";
-import { useTranslations } from "next-intl";
 import { ReactNode } from "react";
 
 type Props = {
@@ -50,7 +48,7 @@ export default function Action(props: Props) {
         <ButtonB
           variant="primary"
           size="large"
-          href={URL_APP_MAIN}
+          href={process.env.NEXT_PUBLIC_APP_DOMAIN}
           target="_blank"
           iconEnd={<IconLink />}
         >

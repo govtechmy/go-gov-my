@@ -12,6 +12,7 @@ import {
 import Image from "next/image";
 import { URL_APP_LOGIN } from "@/constants/urls";
 import { Link, usePathname } from "@/lib/i18n";
+import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import { VariantProps } from "class-variance-authority";
@@ -32,19 +33,19 @@ type NavItem = {
 export function Header(props: { signInKey: string }) {
   const t = useTranslations();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const locale = searchParams.get("locale") || "en-GB";
   const isActive = (href: string) => pathname.startsWith(href) && href !== "/";
   const navItems: NavItem[] = [
     // TODO: Put your nav items here
   ];
-
-  const landingDomain = process.env.NEXT_PUBLIC_APP_DOMAIN || "https://app.go.gov.my";
 
   const [showMenu, setMenu] = useState<boolean>(false);
 
   return (
     <header className="sticky top-0 z-50 bg-background lg:border-b lg:bg-background/80 lg:backdrop-blur-[30px]">
       <div className="container flex w-full items-center justify-between gap-3 bg-background py-3 max-lg:border-b lg:gap-4 lg:bg-transparent xl:px-0">
-        <a href="#" className="flex h-full flex-none items-center">
+        <a href={`/?locale=${locale}`} className="flex h-full flex-none items-center">
           <Image
             width={32}
             height={32}
@@ -93,7 +94,7 @@ export function Header(props: { signInKey: string }) {
               .map(({ component, href }, i) => (
                 <NavigationMenu.Item key={i}>
                   <Link
-                    href={href}
+                    href={`${href}?locale=${locale}`}
                     data-state={isActive(href) ? "open" : "close"}
                     className={cn(
                       buttonVariants({ variant: "tertiary" }),
@@ -112,7 +113,7 @@ export function Header(props: { signInKey: string }) {
               {/* <ThemeToggle /> */}
             <Locale />
           </Suspense>
-          <ButtonB variant="primary" size="small" href={landingDomain}>
+          <ButtonB variant="primary" size="small" href={process.env.NEXT_PUBLIC_APP_DOMAIN}>
             {props.signInKey}
           </ButtonB>
         </div>

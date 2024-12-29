@@ -1,8 +1,11 @@
+"use client";
+
 import { Icon } from "@/icons/social-media";
 import { cn } from "@/lib/utils";
 import { useFormatter, useTranslations } from "next-intl";
 import Link from "next/link";
 import Image from "next/image";
+import { useSearchParams } from 'next/navigation';
 
 type Props = {
   ministry: string;
@@ -42,6 +45,8 @@ export const social_media = [
 export default function Footer(props: Props) {
   const format = useFormatter();
   const t = useTranslations("components.Footer");
+  const searchParams = useSearchParams();
+  const locale = searchParams.get("locale") || "en-GB";
 
   const className = {
     link: "text-sm text-black-700 [text-underline-position:from-font] hover:text-black-900 hover:underline",
@@ -113,12 +118,11 @@ export default function Footer(props: Props) {
             </p>
              <span className="hidden h-3 w-px bg-outline-300 lg:block"></span>
               <div className="flex flex-wrap gap-x-3 gap-y-2 text-black-700">
-              {["disclaimer", "privacy_policy"].map((link) => (
+              {["disclaimer", "privacy-policy"].map((link) => (
                 <Link
                   key={link}
-                  className="underline-font text-sm text-black-700 hover:text-foreground hover:underline"
-                  // href={`/${link}`}
-                  href='#'
+                  className="underline-font text-sm text-black-700 hover:text-foreground hover:underline" 
+                  href={`/${link}?locale=${locale}`}
                 >
                   {link === "disclaimer" ? props.disclaimerKey : props.privacyPolicyKey}
                 </Link>
@@ -128,7 +132,7 @@ export default function Footer(props: Props) {
           <span>
             {props.lastUpdateKey +
               ": " +
-              format.dateTime(new Date(), {
+              format.dateTime(new Date(process.env.NEXT_PUBLIC_LAST_UPDATED || Date.now()), {
                 year: "numeric",
                 month: "long", 
                 day: "numeric",
