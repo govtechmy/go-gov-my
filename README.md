@@ -148,7 +148,7 @@ STORAGE_ENDPOINT=
 STORAGE_BASE_URL=
 
 # Redirect Services
-KAFKA_OUTBOX_TOPIC=ps-postgres.public.WebhookOutbox
+KAFKA_OUTBOX_TOPIC=outbox-topic
 REDIRECT_SERVER_URL=http://localhost:3000
 KAFKA_BROKER_URL=localhost:9092
 
