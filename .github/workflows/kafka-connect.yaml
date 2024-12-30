@@ -9,14 +9,7 @@ on:
     paths:
       - '.kube/kafka-connect/**'
       - '.github/workflows/kafka-connect.yaml'
-    paths-ignore:
-      - apps/redirect-server/**
-      - apps/redirect-pages/**
-      - apps/landing-app/**
-      - apps/docs-app/**
-      - docker/Dockerfile.prometheus
-      - docker/Dockerfile.jaeger
-      - docker/Dockerfile.grafana
+      - 'docker/kafka-connect/**'
   workflow_dispatch:
 permissions:
   id-token: write
