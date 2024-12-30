@@ -39,9 +39,9 @@ COPY packages/tsconfig ./packages/tsconfig
 COPY apps/web ./apps/web
 
 # Build packages first
-RUN pnpm --filter "@dub/ui" build && \
-    pnpm --filter "@dub/utils" build && \
-    pnpm --filter "@gogovmy/tailwind-config" build
+RUN pnpm --filter "@dub/utils" build && \
+    pnpm --filter "@gogovmy/tailwind-config" build && \
+    pnpm --filter "@dub/ui" build
 
 # Build web app
 WORKDIR /app/apps/web
