@@ -52,51 +52,56 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     signIn: async ({ user, account, profile }) => {
-      console.log({ user, account, profile });
-
-      if (!user.email) {
-        return false;
-      }
-
-      // TODO: Remove dub.co's isBlacklistedEmail function
-      // if (!user.email || (await isBlacklistedEmail(user.email))) {
-      //   return false;
-      // }
-
-      // Disabling for now to test
-      // if (!allowedDomain(user.email, !IS_PRODUCTION)) {
-      //   return false;
-      // }
-
-      if (account?.provider === 'google') {
-        const userExists = await prisma.user.findUnique({
-          where: { email: user.email },
-          select: { id: true, name: true, image: true },
-        });
-        if (!userExists || !profile) {
-          return true;
+      try {
+        console.log('Starting signIn callback');
+        if (!user.email) {
+          return false;
         }
-        // if the user already exists via email,
-        // update the user with their name and image
-        if (userExists && profile) {
-          const profilePic = profile[account.provider === 'google' ? 'picture' : 'avatar_url'];
-          let newAvatar: string | null = null;
-          // if the existing user doesn't have an image or the image is not stored in R2
-          if ((!userExists.image || !isStored(userExists.image)) && profilePic) {
-            const { url } = await storage.upload(`avatars/${userExists.id}`, profilePic);
-            newAvatar = url;
-          }
-          await prisma.user.update({
+
+        if (account?.provider === 'google') {
+          const userExists = await prisma.user.findUnique({
             where: { email: user.email },
-            data: {
-              // @ts-expect-error - this is a bug in the types, `login` is a valid on the `Profile` type
-              ...(!userExists.name && { name: profile.name || profile.login }),
-              ...(newAvatar && { image: newAvatar }),
-            },
+            select: { id: true, name: true, image: true },
           });
+
+          if (!userExists || !profile) {
+            return true;
+          }
+
+          // if the user already exists via email,
+          // update the user with their name and image
+          if (userExists && profile) {
+            const profilePic = profile[account.provider === 'google' ? 'picture' : 'avatar_url'];
+            let newAvatar: string | null = null;
+
+            try {
+              // Only attempt upload if there's a profile picture and it needs updating
+              if ((!userExists.image || !isStored(userExists.image)) && profilePic) {
+                const { url } = await storage.upload(`avatars/${userExists.id}`, profilePic);
+                newAvatar = url;
+              }
+
+              await prisma.user.update({
+                where: { email: user.email },
+                data: {
+                  // @ts-expect-error - this is a bug in the types, `login` is a valid on the `Profile` type
+                  name: profile.name || profile.login,
+                  ...(newAvatar && { image: newAvatar }),
+                },
+              });
+            } catch (error) {
+              console.error('Error updating user profile:', error);
+              // Continue the sign-in process even if avatar upload fails
+              return true;
+            }
+          }
         }
+        return true;
+      } catch (error) {
+        console.error('SignIn callback error:', error);
+        // Continue the sign-in process even if there's an error
+        return true;
       }
-      return true;
     },
     jwt: async ({ token, user, trigger }) => {
       if (user) {
