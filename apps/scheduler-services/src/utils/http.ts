@@ -6,17 +6,29 @@ export class HttpClient {
 
   async fetch<T>(path: string, options: RequestInit = {}): Promise<T> {
     const url = `${this.config.webBase}${path}`;
+
+    // Merge default headers with custom headers
     const headers = {
       'Content-Type': 'application/json',
-      'API-Key': this.config.apiKey,
       ...options.headers,
     };
 
     try {
-      const response = await fetch(url, { ...options, headers });
+      console.log(`Making request to ${url} with headers:`, headers);
+
+      const response = await fetch(url, {
+        ...options,
+        headers,
+      });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const errorText = await response.text();
+        console.error(`Error response from ${url}:`, {
+          status: response.status,
+          statusText: response.statusText,
+          body: errorText,
+        });
+        throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
       }
 
       return response.json();

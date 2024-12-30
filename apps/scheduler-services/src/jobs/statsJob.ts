@@ -1,5 +1,6 @@
 import { JobConfig, JobContext, JobResult } from '../types';
 import { HttpClient } from '../utils/http';
+import jwt from 'jsonwebtoken';
 
 export const statsJobConfig: JobConfig = {
   name: 'stats',
@@ -15,7 +16,38 @@ export async function statsJob(context: JobContext): Promise<JobResult> {
   try {
     logger.info(`Starting stats job`);
 
-    const data = await client.fetch<any>('/api/stats');
+    const apiSecretKey = process.env.API_SECRET_KEY;
+    const apiKey = process.env.API_KEY;
+
+    if (!apiSecretKey) {
+      throw new Error('API_SECRET_KEY environment variable is not set');
+    }
+    if (!apiKey) {
+      throw new Error('API_KEY environment variable is not set');
+    }
+
+    // Generate security hash for token request
+    const timestamp = Date.now().toString();
+    const securityHash = jwt.sign({ timestamp }, apiSecretKey);
+
+    // First, get the token
+    logger.info('Requesting authentication token...');
+    const tokenResponse = await client.fetch<{ token: string }>('/api/generate-token', {
+      headers: {
+        'X-API-Key': apiSecretKey,
+        'X-Security-Timestamp': timestamp,
+        'X-Security-Hash': securityHash,
+      },
+    });
+
+    logger.info('Token received, fetching stats...');
+
+    // Then use the token to call the stats endpoint
+    const data = await client.fetch<any>('/api/stats', {
+      headers: {
+        API_KEY: apiKey,
+      },
+    });
 
     await discord.notify({
       title: '📊 Stats Updated',
