@@ -8,6 +8,7 @@ on:
       - staging
     paths:
       - '.kube/kafka-connect/**'
+      - '.kube/debezium-connector/**'
       - '.github/workflows/kafka-connect.yaml'
       - 'docker/kafka-connect/**'
   workflow_dispatch:
@@ -51,12 +52,10 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: .kube/kafka-connect/docker/Dockerfile.kafka-connect
+          file: docker/Dockerfile.kafka-connect
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-      - name: Log out of Amazon ECR
-        run: docker logout ${{ steps.login-ecr.outputs.registry }}
       - name: Deploy with Spinnaker
         run: |
           # Get the first tag (main version tag)
