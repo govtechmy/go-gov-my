@@ -4,6 +4,6 @@ USER root:root
 
 RUN mkdir -p /opt/kafka/plugins/debezium
 
-COPY ./pg-debezium-connector/ /opt/kafka/plugins/debezium/
+COPY .kube/debezium-connector/ /opt/kafka/plugins/debezium/
 
 USER 1001
