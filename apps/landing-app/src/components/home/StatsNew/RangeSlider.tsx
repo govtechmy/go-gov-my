@@ -26,6 +26,7 @@ export default function RangeSlider({
   const [hoveredThumb, setHoveredThumb] = useState<number | null>(null);
   const [currentStart, setCurrentStart] = useState(initialStart);
   const [currentEnd, setCurrentEnd] = useState(initialEnd);
+  const [isHovered, setIsHovered] = useState(false);
 
   const dateToValue = (date: Date) => {
     const total = endDate.getTime() - startDate.getTime();
@@ -68,9 +69,18 @@ export default function RangeSlider({
           }}
         >
           {/* Track */}
-          <SliderPrimitive.Track className="relative w-full h-[8px] bg-gray-400 rounded-full">
+          <SliderPrimitive.Track 
+            className="relative w-full h-[8px] bg-gray-200 rounded-full"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
             {/* Range */}
-            <SliderPrimitive.Range className="absolute bg-blue-600 rounded-full h-full" />
+            <SliderPrimitive.Range 
+              className={cn(
+                "absolute bg-gray-400 rounded-full h-full transition-colors",
+                isHovered && "bg-blue-600"
+              )} 
+            />
           </SliderPrimitive.Track>
 
           {/* Thumbs */}
@@ -79,17 +89,24 @@ export default function RangeSlider({
               <Popover.Trigger asChild>
                 <SliderPrimitive.Thumb
                   className={cn(
-                    "block w-5 h-5 border-2 border-primary border-blue-600 rounded-full bg-gray-50 focus:outline-none",
-                    hoveredThumb === index && "border-4 border-blue-600"
+                    "block w-5 h-5 border-2 border-primary rounded-full bg-gray-50 focus:outline-none transition-colors border-gray-400",
+                    (isHovered || hoveredThumb === index) && "border-blue-600 border-4",
+                    hoveredThumb === index
                   )}
-                  onMouseEnter={() => setHoveredThumb(index)}
-                  onMouseLeave={() => setHoveredThumb(null)}
+                  onMouseEnter={() => {
+                    setHoveredThumb(index);
+                    setIsHovered(true); 
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredThumb(null);
+                    setIsHovered(false);
+                  }}
                   aria-label={`Thumb ${index + 1}`}
                 />
               </Popover.Trigger>
               <Popover.Portal>
                 <Popover.Content
-                  className="bg-black text-white px-2 py-1 rounded-md shadow-sm z-50 text-xs"
+                  className="bg-black-900 text-gray-50 border-0 outline-none px-2 py-2 rounded-md shadow-sm z-50 text-sm"
                   side="top"
                   sideOffset={5}
                 >
