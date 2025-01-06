@@ -56,7 +56,7 @@ type Props = {
 
 export default function Hero(props: Props) {
   const [dialogOpen, setDialogOpen] = useState(false);
-  const landingDomain = process.env.NEXT_PUBLIC_APP_DOMAIN || "https://app.go.gov.my";
+  const landingDomain = process.env.NEXT_PUBLIC_APP_DOMAIN || "https://app.pautan.org";
 
   return (
     // Disable left/right padding on the container
