@@ -18,6 +18,8 @@ export interface LinkDTO {
   createdAt: Date | null;
 }
 
+const DISABLE_ENCRYPTION = process.env.DISABLE_ENCRYPTION !== undefined;
+
 // This should be able to reuse anywhere.
 export async function processDTOLink(
   response: LinkProps & { password?: string }
@@ -41,16 +43,18 @@ export async function processDTOLink(
   const secrets: Record<string, string> = {};
   let encryptedSecrets: string | null = null;
 
-  // If a password is set, store it as a secret
-  if (linkDTO.password) {
-    const placeholder = '{{PASSWORD}}';
-    secrets[placeholder] = linkDTO.password;
-    linkDTO.password = placeholder;
-  }
+  if (!DISABLE_ENCRYPTION) {
+    // If a password is set, store it as a secret
+    if (linkDTO.password) {
+      const placeholder = '{{PASSWORD}}';
+      secrets[placeholder] = linkDTO.password;
+      linkDTO.password = placeholder;
+    }
 
-  const hasSecrets = Object.entries(secrets).length > 0;
-  if (hasSecrets) {
-    encryptedSecrets = await encryptOutboxSecrets(secrets);
+    const hasSecrets = Object.entries(secrets).length > 0;
+    if (hasSecrets) {
+      encryptedSecrets = await encryptOutboxSecrets(secrets);
+    }
   }
 
   return { payload: linkDTO, encryptedSecrets };
