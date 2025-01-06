@@ -61,7 +61,7 @@ export default function UserDropdown() {
               <IconMenu text={message?.settings} icon={<Settings className="h-4 w-4" />} />
             </Link>
             <Link
-              href={`https://docs.${process.env.NEXT_PUBLIC_APP_DOMAIN}`}
+              href={`https://docs.${process.env.NEXT_PUBLIC_APP_SHORT_DOMAIN}`}
               target="_blank"
               className="block w-full rounded-md p-2 text-sm transition-all duration-75 hover:bg-gray-100 active:bg-gray-200"
             >
