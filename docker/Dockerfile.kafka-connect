@@ -2,6 +2,8 @@ FROM strimzi/kafka:0.20.1-kafka-2.5.0
 
 USER root:root
 
+## comment here.
+
 RUN mkdir -p /opt/kafka/plugins/debezium
 
 COPY .kube/debezium-connector/ /opt/kafka/plugins/debezium/
