@@ -1,4 +1,4 @@
-FROM strimzi/kafka:0.39.0-kafka-3.6.1
+FROM strimzi/kafka:0.20.1-kafka-2.5.0
 
 USER root:root
 
