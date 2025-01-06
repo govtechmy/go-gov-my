@@ -18,7 +18,10 @@ export interface LinkDTO {
   createdAt: Date | null;
 }
 
-const DISABLE_ENCRYPTION = process.env.DISABLE_ENCRYPTION !== undefined;
+// const DISABLE_ENCRYPTION = process.env.DISABLE_ENCRYPTION !== undefined;
+
+// TEMP: hardcode as true for now
+const DISABLE_ENCRYPTION = true;
 
 // This should be able to reuse anywhere.
 export async function processDTOLink(
