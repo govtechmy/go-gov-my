@@ -4,8 +4,8 @@ env:
 on:
   push:
     tags:
-      - 'kafka@STAGING-v*'
-      - 'kafka@v*'
+      - 'kafka-connector@STAGING-v*'
+      - 'kafka-connector@v*'
     paths-ignore:
       - apps/redirect-server/**
       - apps/redirect-pages/**
