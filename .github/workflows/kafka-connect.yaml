@@ -10,7 +10,7 @@ on:
       - '.kube/kafka-connect/**'
       - '.kube/debezium-connector/**'
       - '.github/workflows/kafka-connect.yaml'
-      - 'docker/kafka-connect/**'
+      - 'docker/**'
   workflow_dispatch:
 permissions:
   id-token: write
