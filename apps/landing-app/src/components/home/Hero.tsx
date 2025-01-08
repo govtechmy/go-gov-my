@@ -57,7 +57,6 @@ type Props = {
 export default function Hero(props: Props) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const landingDomain = process.env.NEXT_PUBLIC_APP_DOMAIN || "https://app.pautan.org";
-
   return (
     // Disable left/right padding on the container
     <BorderedSection
@@ -93,14 +92,14 @@ export default function Hero(props: Props) {
               "text-center lg:text-start",
             )}
           >
-            {props.descriptionKey}
+            <span className="bg-blue-100 text-blue-600 me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{`${process.env.NEXT_PUBLIC_LANDING_DOMAIN}`}</span>{props.descriptionKey}
           </Paragraph>
         </div>
         <div className="mt-[2.25rem] flex flex-row items-center">
           <ButtonB
             variant="primary"
             size="large"
-            href={landingDomain}
+            href={process.env.NEXT_PUBLIC_APP_DOMAIN}
             target="_blank"
             iconEnd={<IconLink />}
           >

@@ -40,7 +40,7 @@ const SEGMENTS = [
   "miti",
   "digital",
   "moe",
-  "mohr",
+  "moh",
   "motac",
   "epf",
   "mof",
