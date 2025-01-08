@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Heading from '../Heading';
 
 type Props = {
   header: string;
@@ -23,6 +24,10 @@ type Props = {
     };
   };
   lastUpdate: string;
+  policyAmendment: {
+    title: string;
+    description: string;
+  };
 };
 
 export default function Content(props: Props) {
@@ -30,7 +35,7 @@ export default function Content(props: Props) {
     <div className="flex w-full flex-col">
       <div className="container flex w-full flex-col gap-3 py-8 lg:gap-4 xl:px-0">
         <div className="flex flex-col gap-8">
-          <h1 className="text-3xl font-bold">{props.header}</h1>
+          <Heading level={1} className="text-3xl font-semibold text-center">{props.header}</Heading>
           
           {/* Your Privacy Section */}
           <section className="flex flex-col gap-4">
@@ -73,6 +78,12 @@ export default function Content(props: Props) {
                 );
               })}
             </p>
+          </section>
+
+          {/* Policy Amendment Section */}
+          <section className="flex flex-col gap-4">
+            <h2 className="text-xl font-semibold">{props.policyAmendment.title}</h2>
+            <p className="text-gray-600">{props.policyAmendment.description}</p>
           </section>
 
           {/* Last Update */}

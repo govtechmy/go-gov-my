@@ -1,13 +1,11 @@
-import AnimatedRoundedText from '@/components/AnimatedRoundedText';
 import Footer from '@/components/Footer';
 import { Header } from '@/components/Header';
-import Action from '@/components/home/Action';
 import Masthead from '@/components/Masthead';
 import { URL_GITHUB } from '@/constants/urls';
 import { URL_FIGMA } from '@/constants/urls';
 import { extract, getLocaleFromURL, keypath } from '@/lib/i18n';
 import { getMessages, getTranslations, unstable_setRequestLocale } from 'next-intl/server';
-import React, { ReactNode } from 'react';
+import React from 'react';
 import Content from '@/components/privacy-policy/Content';
 
 type Props = {
@@ -16,20 +14,7 @@ type Props = {
 const MASTHEAD_BASE_PATH = "components.Masthead";
 const HEADER_BASE_PATH = "components.Header";
 const FOOTER_BASE_PATH = "components.Footer";
-const ACTION_BASE_PATH = "pages.Home.Action";
 
-const SEGMENTS = [
-  "mygcc",
-  "moh",
-  "miti",
-  "digital",
-  "moe",
-  "moh",
-  "motac",
-  "epf",
-  "mof",
-  "mcmc",
-];
 
 export default async function PrivacyPolicyPage({ searchParams }: Props) {
   const locale = getLocaleFromURL(
@@ -76,6 +61,10 @@ const messages = await getMessages({ locale });
             description: t('pages.Privacy.personal_data_act_desc'),
           },
         }}
+        policyAmendment={{
+          title: t('pages.Privacy.policy_amendment'),
+          description: t('pages.Privacy.policy_amendment_desc'),
+        }}
         lastUpdate={t('pages.Privacy.last_update')}
       />
       <Footer
@@ -108,16 +97,6 @@ const messages = await getMessages({ locale });
   );
 } 
 
-function Main(props: { children: ReactNode }) {
-  return (
-    <main className="flex w-full flex-col divide-y divide-washed-100 lg:py-0">
-      {React.Children.map(props.children, (child) => (
-        <article>{child}</article>
-      ))}
-    </main>
-  );
-}
-
 const masthead = {
   officialGovWebsiteKey: keypath(MASTHEAD_BASE_PATH, "official_gov_website"),
   howToIdentifyKey: keypath(MASTHEAD_BASE_PATH, "how_to_identify"),
@@ -139,10 +118,4 @@ const footer = {
   lastUpdateKey: keypath(FOOTER_BASE_PATH, "last_update"),
   disclaimerKey: keypath(FOOTER_BASE_PATH, "disclaimer"),
   privacyPolicyKey: keypath(FOOTER_BASE_PATH, "privacy_policy"),
-};
-
-const action = {
-  titleKey: keypath(ACTION_BASE_PATH, "title"),
-  descriptionKey: keypath(ACTION_BASE_PATH, "description"),
-  buttonKey: keypath(ACTION_BASE_PATH, "buttons.createLink"),
 };
