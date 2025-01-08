@@ -38,7 +38,7 @@ class StorageClient {
         new PutObjectCommand({
           Bucket: this.bucket,
           Key: key,
-          Body: Buffer.from(uploadBody),
+          Body: uploadBody,
           ContentType: opts?.contentType,
           ContentLength: uploadBody.byteLength,
         })

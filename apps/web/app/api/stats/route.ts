@@ -95,24 +95,36 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    const userCount = await prisma.user.count();
-
-    const linkCount = await prisma.link.count();
-
+    // Initialize with default values
+    const userCount = (await prisma.user.count()) || 0;
+    const linkCount = (await prisma.link.count()) || 0;
     const totalClicks = await prisma.link.aggregate({
       _sum: {
         clicks: true,
       },
     });
 
-    const response = await fetch(`${process.env.STORAGE_BASE_URL}/public/stats2.json`);
-    const content = await response.json();
+    // Create empty stats file if it doesn't exist
+    let content;
+    try {
+      const response = await fetch(`${process.env.STORAGE_BASE_URL}/public/stats2.json`);
+      content = await response.json();
+    } catch (error) {
+      // If file doesn't exist or is invalid, create initial structure
+      content = {
+        clicksMetadata: [],
+        linksMetadata: [],
+        officersMetadata: [],
+      };
+    }
 
     const parsed = schema.parse(content);
 
     const clicksMetadataSorted = sortByDateAsc(parsed.clicksMetadata);
     const linksMetadataSorted = sortByDateAsc(parsed.linksMetadata);
     const officersMetadataSorted = sortByDateAsc(parsed.officersMetadata);
+
+    // Add current stats
     fillData(clicksMetadataSorted, {
       date: new Date().toISOString(),
       total: totalClicks._sum.clicks || 0,
@@ -139,6 +151,11 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       url,
+      stats: {
+        users: userCount,
+        links: linkCount,
+        clicks: totalClicks._sum.clicks || 0,
+      },
     });
   } catch (error) {
     console.log('error', error);

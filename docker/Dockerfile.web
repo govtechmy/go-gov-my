@@ -1,57 +1,53 @@
-FROM node:23.4.0-alpine AS base
+FROM node:20-alpine AS base
 
-RUN apk update && apk upgrade
+# Install necessary system dependencies
+RUN apk add --no-cache \
+    openssl \
+    libc6-compat
 
 WORKDIR /app
 
-#install pnpm first
-RUN [ \
-    "npm", \
-    "install", \
-    "-g", \
-    "pnpm@9.1.3" \
-    ]
+# Install pnpm globally
+RUN npm install -g pnpm@9.1.3
 
-#install turbo first
-RUN [ \
-    "npm", \
-    "install", \
-    "-g", \
-    "turbo@^1.12.5" \
-    ]
-
-COPY ../ .
-
-# Add missing dependency to landing-app
-RUN cd apps/landing-app && pnpm add @radix-ui/react-slot@^1.0.2
-
-RUN [ \
-    "pnpm", \
-    "turbo", \
-    "prune", \
-    "web" \
-    ]
-
-RUN cd out
-
+# Add build arguments
 ARG NEXT_PUBLIC_APP_NAME
 ARG NEXT_PUBLIC_APP_DOMAIN
 ARG NEXT_PUBLIC_APP_SHORT_DOMAIN
 
-RUN [ \
-    "pnpm", \
-    "i" \
-    ]
+# Set environment variables
+ENV NEXT_PUBLIC_APP_NAME=${NEXT_PUBLIC_APP_NAME}
+ENV NEXT_PUBLIC_APP_DOMAIN=${NEXT_PUBLIC_APP_DOMAIN}
+ENV NEXT_PUBLIC_APP_SHORT_DOMAIN=${NEXT_PUBLIC_APP_SHORT_DOMAIN}
 
-RUN [ \
-    "pnpm", \
-    "build" \
-    ]
+# Copy package files
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/web/package.json ./apps/web/
+COPY packages/ui/package.json ./packages/ui/
+COPY packages/utils/package.json ./packages/utils/
+COPY packages/tailwind-config/package.json ./packages/tailwind-config/
+COPY packages/tsconfig/package.json ./packages/tsconfig/
 
-CMD [ \
-    "sh", \
-    "-c", \
-    "cd apps/web && pnpm start" \
-    ]
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy source files
+COPY packages/ui ./packages/ui
+COPY packages/utils ./packages/utils
+COPY packages/tailwind-config ./packages/tailwind-config
+COPY packages/tsconfig ./packages/tsconfig
+COPY apps/web ./apps/web
+
+# Build packages first
+RUN pnpm --filter "@dub/utils" build && \
+    pnpm --filter "@gogovmy/tailwind-config" build && \
+    pnpm --filter "@dub/ui" build
+
+# Build web app
+WORKDIR /app/apps/web
+RUN pnpm build
+
+# Start the app
+CMD ["pnpm", "start"]
 
 EXPOSE 8888

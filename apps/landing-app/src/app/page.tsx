@@ -224,7 +224,7 @@ export default async function Home({ searchParams }: Props) {
             description={t.rich(action.descriptionKey, {
               em: (chunks) => (
                 <AnimatedRoundedText
-                  prefix={`${process.env.NEXT_PUBLIC_LANDING_DOMAIN}/`}
+                  prefix={`${process.env.LANDING_DOMAIN || "https://pautan.org"}/`}
                   variant="primary"
                   items={SEGMENTS}
                   interval={2000}

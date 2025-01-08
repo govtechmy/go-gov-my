@@ -1,19 +1,20 @@
-name: Deploy gogov-web
+name: Deploy gogov-kafka-connect
 env:
-  IMAGE: gogov-dashboard
+  IMAGE: gogov-kafka-connect
 on:
   push:
     tags:
-      - 'web@STAGING-v*'
-      - 'web@v*'
+      - 'kafka-connect@STAGING-v*'
+      - 'kafka-connect@v*'
     paths-ignore:
       - apps/redirect-server/**
       - apps/redirect-pages/**
-      - apps/landing-app/**
       - apps/docs-app/**
-      - docker/Dockerfile.prometheus
-      - docker/Dockerfile.jaeger
-      - docker/Dockerfile.grafana
+      - apps/landing-app/**
+      - packages/**
+      - apps/scheduler-services/**
+      - apps/grafana/**
+      - apps/jaeger/**
   workflow_dispatch:
 permissions:
   id-token: write # This is required for requesting the JWT
@@ -39,15 +40,15 @@ jobs:
           images: |
             ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}
           tags: |
-            type=ref,event=tag,pattern=web@STAGING-v(.*)
-            type=ref,event=tag,pattern=web@v(.*)
+            type=ref,event=tag,pattern=kafka-connect@STAGING-v(.*)
+            type=ref,event=tag,pattern=kafka-connect@v(.*)
             type=sha,prefix=sha-
       - name: Determine environment
         id: determine-env
         run: |
-          if [[ ${{ github.ref }} == refs/tags/web@STAGING-v* ]]; then
+          if [[ ${{ github.ref }} == refs/tags/kafka-connect@STAGING-v* ]]; then
             echo "ENVIRONMENT=staging" >> $GITHUB_OUTPUT
-          elif [[ ${{ github.ref }} == refs/tags/web@v* ]]; then
+          elif [[ ${{ github.ref }} == refs/tags/kafka-connect@v* ]]; then
             echo "ENVIRONMENT=production" >> $GITHUB_OUTPUT
           else
             echo "ENVIRONMENT=development" >> $GITHUB_OUTPUT
@@ -55,15 +56,11 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: docker/Dockerfile.web
+          context: docker/
+          file: docker/Dockerfile.kafka-connect
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            "NEXT_PUBLIC_APP_NAME=Pautan"
-            "NEXT_PUBLIC_APP_DOMAIN=app.pautan.org"
-            "NEXT_PUBLIC_APP_SHORT_DOMAIN=pautan.org"
       - name: Log out of Amazon ECR
         run: docker logout ${{ steps.login-ecr.outputs.registry }}
       - name: Deploy with Spinnaker

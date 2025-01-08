@@ -39,7 +39,7 @@ export function Header(props: { signInKey: string }) {
   const navItems: NavItem[] = [
     // TODO: Put your nav items here
   ];
-
+  const landingDomain = process.env.NEXT_PUBLIC_APP_DOMAIN || "https://app.pautan.org";
   const [showMenu, setMenu] = useState<boolean>(false);
 
   return (
