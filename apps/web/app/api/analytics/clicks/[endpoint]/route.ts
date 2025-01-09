@@ -8,16 +8,12 @@ import { NextResponse } from 'next/server';
 export const GET = logRequestMetrics(
   withWorkspace(
     async ({ params, searchParams, workspace, link }) => {
-      console.log('111', params, searchParams, workspace, link);
       const { endpoint = 'count' } = analyticsEndpointSchema.parse(params);
 
       const parsedParams = clickAnalyticsQuerySchema.parse(searchParams);
       const { domain, key, interval, start, end } = parsedParams;
-      console.log('222', parsedParams);
 
       const linkId = link ? link.id : null;
-
-      console.log('333', linkId);
 
       const response = await getClicks({
         ...parsedParams,
@@ -25,8 +21,6 @@ export const GET = logRequestMetrics(
         ...(linkId && { linkId }),
         workspaceId: workspace.id,
       });
-
-      console.log('444', response);
 
       return NextResponse.json(response);
     },
