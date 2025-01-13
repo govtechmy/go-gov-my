@@ -8,5 +8,8 @@
   },
   "dependencies": {
     "mintlify": "^4.0.299"
+  },
+  "devDependencies": {
+    "create-fumadocs-app": "^14.7.3"
   }
 }
