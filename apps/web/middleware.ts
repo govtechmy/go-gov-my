@@ -23,29 +23,64 @@ export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
 
   // Staging auth
   if (process.env.NEXT_PUBLIC_APP_ENV?.toLocaleLowerCase() === 'staging') {
+    // Check cookie first
+    const stagingAuth = req.cookies.get('staging-auth')?.value;
+
+    if (stagingAuth) {
+      const [timestamp, authValue] = stagingAuth.split('.');
+      const expiryTime = parseInt(timestamp);
+
+      // Check if auth is expired (2 hours)
+      if (Date.now() > expiryTime) {
+        return new NextResponse('Auth expired', {
+          status: 401,
+          headers: {
+            'WWW-Authenticate': 'Basic realm="Secure Area"',
+          },
+        });
+      }
+
+      const [user, password] = atob(authValue).split(':');
+
+      if (user === 'admin' && password === process.env.STAGING_AUTH_PASSWORD) {
+        // Let the request continue through the middleware chain
+        return AppMiddleware(req);
+      }
+    }
+
+    // If no valid cookie, check basic auth header
     const basicAuth = req.headers.get('authorization');
+
     if (basicAuth) {
       const authValue = basicAuth.split(' ')[1];
       const [user, password] = atob(authValue).split(':');
 
       if (user === 'admin' && password === process.env.STAGING_AUTH_PASSWORD) {
-        const response = NextResponse.next({
-          request: { headers: req.headers },
+        // Create response and continue through middleware chain
+        const response = await AppMiddleware(req);
+
+        // Set cookie with 2 hour expiry
+        const expiryTime = Date.now() + 2 * 60 * 60 * 1000; // 2 hours
+        const cookieValue = `${expiryTime}.${authValue}`;
+
+        response.cookies.set('staging-auth', cookieValue, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: 2 * 60 * 60, // 2 hours in seconds
+          path: '/',
         });
-        response.headers.set('Authorization', basicAuth);
-        // return response;
-      } else {
-        return new NextResponse('Auth required', {
-          status: 401,
-          headers: { 'WWW-Authenticate': `Basic realm="Secure Area"` },
-        });
+
+        return response;
       }
-    } else {
-      return new NextResponse('Auth required', {
-        status: 401,
-        headers: { 'WWW-Authenticate': `Basic realm="Secure Area"` },
-      });
     }
+
+    return new NextResponse('Auth required', {
+      status: 401,
+      headers: {
+        'WWW-Authenticate': 'Basic realm="Secure Area"',
+      },
+    });
   }
 
   // for Admin
