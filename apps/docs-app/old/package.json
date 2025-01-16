@@ -1,0 +1,15 @@
+{
+  "name": "docs",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "mintlify dev --port 3334",
+    "lint": "mintlify openapi-check openapi.json",
+    "start": "mintlify dev --host 0.0.0.0 --port 3334"
+  },
+  "dependencies": {
+    "mintlify": "^4.0.299"
+  },
+  "devDependencies": {
+    "create-fumadocs-app": "^14.7.3"
+  }
+}
