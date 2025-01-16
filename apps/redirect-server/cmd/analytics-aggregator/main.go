@@ -256,20 +256,25 @@ func (app *application) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sar
     // Initialize analytics map and time tracking
     linkAnalytics := make(map[string]*repository.LinkAnalytics)
     lastSendTime := time.Now()
+
+    // Use a consistent ticker across all partitions
     ticker := time.NewTicker(SEND_INTERVAL)
     defer ticker.Stop()
+
+    slog.Info("starting analytics aggregation",
+        slog.Duration("interval", SEND_INTERVAL),
+        slog.Time("startTime", lastSendTime))
 
     for {
         select {
         case msg, ok := <-claim.Messages():
             if !ok {
-                slog.Info("message channel closed")
                 return nil
             }
             
-            slog.Info("received message", 
-                slog.String("topic", msg.Topic),
-                slog.Int("partition", int(msg.Partition)),
+            // Add debug logging for message processing
+            slog.Info("processing message", 
+                slog.Time("messageTime", time.Now()),
                 slog.Int64("offset", msg.Offset))
 
             var metadataLog RedirectMetadataLog
@@ -302,34 +307,28 @@ func (app *application) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sar
             // Mark message as processed
             sess.MarkMessage(msg, "")
 
-        case <-ticker.C:
-            // Send analytics if we have any data and enough time has passed
+        case t := <-ticker.C:
+            // Add debug logging for ticker events
+            slog.Info("ticker triggered", 
+                slog.Time("tickTime", t),
+                slog.Int("analyticsCount", len(linkAnalytics)))
+
             if len(linkAnalytics) > 0 {
-                now := time.Now()
+                now := t  // Use the ticker time instead of Now()
                 if err := app.sendAnalytics(linkAnalytics, lastSendTime, now); err != nil {
                     slog.Error("failed to send analytics", 
                         slog.String("error", err.Error()))
                 } else {
-                    slog.Info("sent analytics successfully",
-                        slog.Int("numAnalytics", len(linkAnalytics)),
+                    slog.Info("analytics batch processed",
+                        slog.Int("count", len(linkAnalytics)),
                         slog.Time("from", lastSendTime),
                         slog.Time("to", now))
-                    // Reset analytics and update last send time
                     linkAnalytics = make(map[string]*repository.LinkAnalytics)
                     lastSendTime = now
                 }
             }
 
         case <-sess.Context().Done():
-            slog.Info("context cancelled, stopping consumer")
-            // Send any remaining analytics before stopping
-            if len(linkAnalytics) > 0 {
-                now := time.Now()
-                if err := app.sendAnalytics(linkAnalytics, lastSendTime, now); err != nil {
-                    slog.Error("failed to send final analytics", 
-                        slog.String("error", err.Error()))
-                }
-            }
             return nil
         }
     }
