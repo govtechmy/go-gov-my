@@ -1,15 +1,30 @@
 {
-  "name": "docs",
-  "version": "0.1.0",
+  "name": "docs-app",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "dev": "mintlify dev --port 3334",
-    "lint": "mintlify openapi-check openapi.json",
-    "start": "mintlify dev --host 0.0.0.0 --port 3334"
+    "build": "next build",
+    "dev": "next dev -p 3334",
+    "start": "next start"
   },
   "dependencies": {
-    "mintlify": "^4.0.299"
+    "next": "15.1.4",
+    "fumadocs-ui": "14.7.3",
+    "fumadocs-core": "14.7.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@fumadocs/content-collections": "1.1.6",
+    "@content-collections/core": "^0.8.0",
+    "@content-collections/mdx": "^0.2.0",
+    "@content-collections/next": "^0.2.4"
   },
   "devDependencies": {
-    "create-fumadocs-app": "^14.7.3"
+    "@types/node": "22.10.5",
+    "@types/react": "^19.0.4",
+    "@types/react-dom": "^19.0.2",
+    "typescript": "^5.7.3",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17"
   }
 }
