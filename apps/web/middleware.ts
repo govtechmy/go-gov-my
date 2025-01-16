@@ -21,68 +21,103 @@ export const config = {
 export default async function middleware(req: NextRequest, ev: NextFetchEvent) {
   const { domain, path, key, pathWithoutLocale } = parse(req);
 
-  // Staging auth
-  if (process.env.NEXT_PUBLIC_APP_ENV?.toLocaleLowerCase() === 'staging') {
-    // Check cookie first
-    const stagingAuth = req.cookies.get('staging-auth')?.value;
-
-    if (stagingAuth) {
-      const [timestamp, authValue] = stagingAuth.split('.');
-      const expiryTime = parseInt(timestamp);
-
-      // Check if auth is expired (2 hours)
-      if (Date.now() > expiryTime) {
-        return new NextResponse('Auth expired', {
-          status: 401,
-          headers: {
-            'WWW-Authenticate': 'Basic realm="Secure Area"',
-          },
-        });
-      }
-
-      const [user, password] = atob(authValue).split(':');
-
-      if (user === 'admin' && password === process.env.STAGING_AUTH_PASSWORD) {
-        // Let the request continue through the middleware chain
-        return AppMiddleware(req);
-      }
+  if (process.env.NEXT_PUBLIC_APP_ENV === 'staging') {
+    // Check for password authentication
+    const authPassword = process.env.STAGING_AUTH_PASSWORD;
+    if (!authPassword) {
+      console.warn('AUTH_PASSWORD not set in environment variables');
+      return new NextResponse('Server configuration error', { status: 500 });
     }
 
-    // If no valid cookie, check basic auth header
-    const basicAuth = req.headers.get('authorization');
+    // Skip auth for public assets or specific paths if needed
+    if (path.includes('/_next') || path.includes('/public')) {
+      return NextResponse.next();
+    }
 
-    if (basicAuth) {
-      const authValue = basicAuth.split(' ')[1];
-      const [user, password] = atob(authValue).split(':');
+    // Check for password in cookie
+    const authCookie = req.cookies.get('auth_token');
+    if (!authCookie?.value) {
+      // If no auth cookie, check for password in query parameter
+      const url = new URL(req.url);
+      const passwordParam = url.searchParams.get('password');
 
-      if (user === 'admin' && password === process.env.STAGING_AUTH_PASSWORD) {
-        // Create response and continue through middleware chain
-        const response = await AppMiddleware(req);
-
-        // Set cookie with 2 hour expiry
-        const expiryTime = Date.now() + 2 * 60 * 60 * 1000; // 2 hours
-        const cookieValue = `${expiryTime}.${authValue}`;
-
-        response.cookies.set('staging-auth', cookieValue, {
+      if (passwordParam === authPassword) {
+        // Set auth cookie and redirect to requested path without password parameter
+        const response = NextResponse.redirect(new URL(path, req.url));
+        response.cookies.set('auth_token', 'authenticated', {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'lax',
-          maxAge: 2 * 60 * 60, // 2 hours in seconds
-          path: '/',
+          maxAge: 60 * 60 * 24 * 7, // 7 days
         });
-
         return response;
       }
+
+      // If no valid password, redirect to password page
+      return new NextResponse(
+        `
+      <html>
+        <head>
+          <title>Password Required</title>
+          <style>
+            body {
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 100vh;
+              margin: 0;
+              background-color: #f5f5f5;
+            }
+            form {
+              background: white;
+              padding: 2rem;
+              border-radius: 8px;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+              text-align: center;
+            }
+            input {
+              display: block;
+              width: 100%;
+              padding: 0.75rem;
+              margin: 1rem 0;
+              border: 1px solid #ddd;
+              border-radius: 4px;
+              font-size: 1rem;
+            }
+            button {
+              background: #0070f3;
+              color: white;
+              border: none;
+              padding: 0.75rem 1.5rem;
+              border-radius: 4px;
+              font-size: 1rem;
+              cursor: pointer;
+              transition: background 0.2s ease;
+            }
+            button:hover {
+              background: #0051cc;
+            }
+          </style>
+        </head>
+        <body>
+          <form method="get">
+            <h1>Staging Access</h1>
+            <input type="password" name="password" placeholder="Enter password" />
+            <button type="submit">Submit</button>
+          </form>
+        </body>
+      </html>
+      `,
+        {
+          status: 401,
+          headers: {
+            'Content-Type': 'text/html',
+          },
+        }
+      );
     }
-
-    return new NextResponse('Auth required', {
-      status: 401,
-      headers: {
-        'WWW-Authenticate': 'Basic realm="Secure Area"',
-      },
-    });
   }
-
   // for Admin
   if (pathWithoutLocale.startsWith('/admin')) {
     return AdminMiddleware(req);
