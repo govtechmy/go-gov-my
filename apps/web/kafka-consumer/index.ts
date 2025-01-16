@@ -10,7 +10,8 @@ async function main() {
     'KAFKA_BROKER_URL',
     'ENCRYPTION_KEY_ID',
     'KAFKA_GROUP_ID_REDIRECT',
-    'KAFKA_GROUP_ID_ANALYTICS'
+    'KAFKA_GROUP_ID_ANALYTICS',
+    'DATABASE_URL'
   );
 
   console.log('Connecting to Kafka broker at:', process.env.KAFKA_BROKER_URL);
@@ -24,6 +25,7 @@ async function main() {
     KAFKA_BROKER_URL: process.env.KAFKA_BROKER_URL,
     KAFKA_GROUP_ID_REDIRECT: process.env.KAFKA_GROUP_ID_REDIRECT,
     KAFKA_GROUP_ID_ANALYTICS: process.env.KAFKA_GROUP_ID_ANALYTICS,
+    DATABASE_URL: process.env.DATABASE_URL,
   });
 
   try {
