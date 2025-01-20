@@ -88,12 +88,6 @@ export async function generateStaticParams() {
 }
 
 export default async function Home({ searchParams }: Props) {
-  console.log('Environment variables:', {
-  NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
-  NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-  NEXT_PUBLIC_APP_DOMAIN: process.env.NEXT_PUBLIC_APP_DOMAIN,
-  // ... other variables
-});
   const locale = getLocaleFromURL(
     new URL(`http://example.com?${new URLSearchParams(searchParams)}`),
   );
@@ -133,6 +127,8 @@ export default async function Home({ searchParams }: Props) {
         precautionKey={t(masthead.precautionKey)}
       />
       <Header signInKey={t(header.signInKey)} />
+      {process.env.NEXT_PUBLIC_APP_DOMAIN}
+      {process.env.NEXT_PUBLIC_LANDING_DOMAIN}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-0">
         <Main>
           <Hero
