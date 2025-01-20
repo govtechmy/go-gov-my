@@ -88,6 +88,12 @@ export async function generateStaticParams() {
 }
 
 export default async function Home({ searchParams }: Props) {
+  console.log('Environment variables:', {
+  NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+  NEXT_PUBLIC_APP_DOMAIN: process.env.NEXT_PUBLIC_APP_DOMAIN,
+  // ... other variables
+});
   const locale = getLocaleFromURL(
     new URL(`http://example.com?${new URLSearchParams(searchParams)}`),
   );
