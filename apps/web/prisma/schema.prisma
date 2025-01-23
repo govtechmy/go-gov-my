@@ -325,3 +325,8 @@ enum LinkHistoryType {
   create
   update
 }
+
+model TestTable {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  content         String
+}
