@@ -13,44 +13,49 @@ const REDIRECT_SERVER_BASE_URL = process.env.REDIRECT_SERVER_URL || 'http://loca
 export async function deleteLink(linkId: string) {
   const tracer = trace.getTracer('default');
   const span = tracer.startSpan('recordLinks');
-  const link = await prisma.link.delete({
-    where: {
-      id: linkId,
-    },
-    include: {
-      tags: true,
-    },
-  });
-
-  // Transform into DTOs
-  const { payload, encryptedSecrets } = await processDTOLink(link);
-
-  // For simplicity and centralized, lets create the idempotency key at this level
-  const headersJSON = generateIdempotencyKey(payload.id, new Date());
 
   try {
+    const result = await prisma.$transaction(async (tx) => {
+      // Delete the link
+      const link = await tx.link.delete({
+        where: { id: linkId },
+        include: { tags: true },
+      });
+
+      // Delete related analytics records
+      await tx.analytics.deleteMany({
+        where: { linkId },
+      });
+
+      return link;
+    });
+
+    const { payload, encryptedSecrets } = await processDTOLink(result);
+
+    const headersJSON = generateIdempotencyKey(payload.id, new Date());
+
     waitUntil(
       Promise.allSettled([
-        // if the image is stored in Cloudflare R2, delete it
-        link.proxy &&
-          link.image?.startsWith(process.env.STORAGE_BASE_URL as string) &&
-          storage.delete(`images/${link.id}`),
-        redis.hdel(link.domain.toLowerCase(), link.key.toLowerCase()),
-        link.projectId &&
+        // Delete image in storage if applicable
+        result.proxy &&
+          result.image?.startsWith(process.env.STORAGE_BASE_URL as string) &&
+          storage.delete(`images/${result.id}`),
+
+        // Remove Redis cache entry
+        redis.hdel(result.domain.toLowerCase(), result.key.toLowerCase()),
+
+        // Update project usage stats if projectId exists
+        result.projectId &&
           prisma.project.update({
-            where: {
-              id: link.projectId,
-            },
-            data: {
-              linksUsage: {
-                decrement: 1,
-              },
-            },
+            where: { id: result.projectId },
+            data: { linksUsage: { decrement: 1 } },
           }),
+
+        // Record in webhookOutbox
         prisma.webhookOutbox.create({
           data: {
             action: OUTBOX_ACTIONS.DELETE_LINK,
-            host: REDIRECT_SERVER_BASE_URL + '/links/' + link.id,
+            host: REDIRECT_SERVER_BASE_URL + '/links/' + result.id,
             payload: payload as unknown as Prisma.InputJsonValue,
             headers: headersJSON,
             partitionKey: payload.slug,
@@ -60,20 +65,19 @@ export async function deleteLink(linkId: string) {
       ])
     );
 
-    // Log results to OpenTelemetry
     span.addEvent('recordLinks', {
-      link_id: link.id,
-      domain: link.domain,
-      key: link.key,
-      url: link.url,
-      tag_ids: link.tags.map((tag) => tag.tagId),
-      workspace_id: link.projectId?.toString(),
-      created_at: link.createdAt.toISOString(),
+      link_id: result.id,
+      domain: result.domain,
+      key: result.key,
+      url: result.url,
+      tag_ids: result.tags.map((tag) => tag.tagId),
+      workspace_id: result.projectId?.toString(),
+      created_at: result.createdAt.toISOString(),
       deleted: true,
       logtime: new Date().toISOString(),
     });
 
-    return link;
+    return result;
   } catch (error) {
     span.recordException(error);
     throw error;
