@@ -119,27 +119,6 @@ async function processMessage(
             });
           }
 
-          if (row.length > 0) {
-            const metaDataFromDb = row[0]?.metadata || {};
-
-            // Sum metadata
-            const combineMetaData = sumTwoObj(
-              metaDataFromDb,
-              consumeAnalytics(analytics, new Date(aggregatedDate), from, to).metadata
-            );
-
-            // Update records
-            await tx.analytics.update({
-              where: { id: row[0].id },
-              data: { metadata: combineMetaData, from, to },
-            });
-          } else {
-            // 3. If not exists, create a new record (meaning new day)
-            await tx.analytics.create({
-              data: consumeAnalytics(analytics, new Date(aggregatedDate), from, to),
-            });
-          }
-
           // Increment the link's clicks column with error handling
           try {
             await tx.link.update({
