@@ -81,5 +81,7 @@ jobs:
                     "version": "${{ steps.meta.outputs.version }}"
                   }
                 ],
-                "environment": "${{ steps.determine-env.outputs.ENVIRONMENT }}"
+                "parameters": {
+                  "KAFKA_CONNECT_IMAGE": "${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}:${{ steps.meta.outputs.version }}"
+                }
               }'
