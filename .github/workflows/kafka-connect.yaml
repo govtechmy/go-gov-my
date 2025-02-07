@@ -76,7 +76,7 @@ jobs:
                 "artifacts": [
                   {
                     "type": "docker/image",
-                    "reference": "'"${MAIN_TAG}"'",
+                    "reference": "${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}",
                     "name": "${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE }}",
                     "version": "${{ steps.meta.outputs.version }}"
                   }
