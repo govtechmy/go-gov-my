@@ -92,7 +92,7 @@ export default function Hero(props: Props) {
               "text-center lg:text-start",
             )}
           >
-            <span className="bg-blue-100 text-blue-600 me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{`${process.env.NEXT_PUBLIC_LANDING_DOMAIN}`}</span>{props.descriptionKey}
+            <span className="bg-blue-100 text-blue-600 me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{`${process.env.LANDING_DOMAIN}`}</span>{props.descriptionKey}
           </Paragraph>
         </div>
         <div className="mt-[2.25rem] flex flex-row items-center">
