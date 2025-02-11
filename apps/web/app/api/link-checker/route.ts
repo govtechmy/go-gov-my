@@ -101,6 +101,7 @@ export async function POST(req: NextRequest) {
       const key = pathWithoutQuery.slice(1); // Remove leading slash
 
       const isValidDomain = await isDomainValid(domain);
+      console.log('0000', isValidDomain);
       if (!isValidDomain) {
         return NextResponse.json(
           {
@@ -116,6 +117,7 @@ export async function POST(req: NextRequest) {
       }
 
       const { exists, link, error } = await isLinkExists(domain, key);
+      console.log('1111', exists, link, error);
 
       if (error) {
         return NextResponse.json(
