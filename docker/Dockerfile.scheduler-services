@@ -13,6 +13,7 @@ COPY ./apps/scheduler-services .
 
 # Set NODE_PATH to include global modules
 ARG API_KEY
+ARG API_SECRET_KEY
 ARG WEB_BASE
 ARG ENVIRONMENT
 ARG LOG_LEVEL
