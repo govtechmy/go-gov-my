@@ -55,8 +55,13 @@ type Props = {
 };
 
 export default function Hero(props: Props) {
+
   const [dialogOpen, setDialogOpen] = useState(false);
-  const landingDomain = process.env.NEXT_PUBLIC_APP_DOMAIN || "https://app.pautan.org";
+  const APP_DOMAIN = process.env.NEXT_PUBLIC_APP_DOMAIN || "https://app.pautan.org";
+  const LANDING_DOMAIN = process.env.LANDING_DOMAIN || "pautan.org";
+  const [url, setUrl] = useState("")
+
+
   return (
     // Disable left/right padding on the container
     <BorderedSection
@@ -95,8 +100,8 @@ export default function Hero(props: Props) {
             <span className="bg-blue-100 text-blue-600 me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{`${process.env.NEXT_PUBLIC_LANDING_DOMAIN}`}</span>{props.descriptionKey}
           </Paragraph>
         </div>
-        <div className="mt-[2.25rem] flex flex-row items-center">
-          <ButtonB
+        <div className=" flex flex-col items-center w-full">
+          {/* <ButtonB
             variant="primary"
             size="large"
             href={process.env.NEXT_PUBLIC_APP_DOMAIN}
@@ -104,26 +109,72 @@ export default function Hero(props: Props) {
             iconEnd={<IconLink />}
           >
             <span>{props.buttonKey}</span>
-          </ButtonB>
-          <div className="w-[0.5rem] mt-[2.25rem] flex flex-row items-center"></div>
+          </ButtonB> */}
+          <div className="w-full mt-[2.25rem] flex flex-row items-center"></div>
+          
+          <div className="w-full flex flex-row gap-3">
+            <input 
+              type="text" 
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder={`${LANDING_DOMAIN ? LANDING_DOMAIN : 'pautan.org'}/example`}
+              className={cn(
+                "flex-1 w-full rounded-lg border shadow-sm border-washed-300 px-4 py-3 text-base focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500",
+                dialogOpen && "bg-gray-100 cursor-not-allowed"
+              )}
+              disabled={dialogOpen}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && url.trim()) {
+                  setDialogOpen(true);
+                }
+              }}
+            />
+        
+            <button 
+              onClick={()=>{
+                setDialogOpen(true)
+              }}
+              disabled={dialogOpen || !url.trim()}
+              className={cn(
+                "flex-3 shadow-sm hover:shadow-md rounded-lg px-3 py-2 text-base xl:text-base font-regular text-neutral-50",
+                dialogOpen || !url.trim() ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+              )}
+            >
+              {dialogOpen ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                    <circle 
+                      className="opacity-25" 
+                      cx="12" 
+                      cy="12" 
+                      r="10" 
+                      stroke="currentColor" 
+                      strokeWidth="4"
+                      fill="none"
+                    />
+                    <path 
+                      className="opacity-75" 
+                      fill="currentColor" 
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                  Checking...
+                </span>
+              ) : props.checkLinkDialog.mainDialog.checkLinkBtn}
+            </button>
+            
+          </div>
           <CheckLinkDialog 
             open={dialogOpen} 
             onOpenChange={setDialogOpen}
+            url={url}
             mainDialog={props.checkLinkDialog.mainDialog}
             successDialog={props.checkLinkDialog.successDialog}
             expiredDialog={props.checkLinkDialog.expiredDialog}
             notFoundDialog={props.checkLinkDialog.notFoundDialog}
             reportDialog={props.checkLinkDialog.reportDialog}
-          >
-            <Button
-              className="border border-washed-300 rounded-lg shadow-sm hover:shadow-md bg-neutral-50"
-              variant="tertiary"
-              size="large"
-              onClick={() => setDialogOpen(true)}
-            >
-              <span className="text-gray-700 font-medium text-base">{props.checkLinkKey}</span>
-            </Button>
-          </CheckLinkDialog>
+          />
+
         </div>
         <Paragraph className="mt-[1.125rem] text-center lg:text-start">
           {props.signInKey}

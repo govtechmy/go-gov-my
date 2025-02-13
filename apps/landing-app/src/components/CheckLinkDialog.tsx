@@ -7,9 +7,9 @@ import IconLinkFill from "@/icons/link-fill";
 import Image from "next/image";
 
 type Props = {
-  children: React.ReactNode;
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  url: string;
   mainDialog: {
     title: string;
     description: string;
@@ -42,9 +42,9 @@ type Props = {
 };
 
 export default function CheckLinkDialog({ 
-  children, 
   open, 
   onOpenChange,
+  url,
   mainDialog,
   successDialog,
   expiredDialog,
@@ -61,7 +61,6 @@ export default function CheckLinkDialog({
   const [token, setToken] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [url, setUrl] = useState('');
   const [linkData, setLinkData] = useState<{
     isValid: boolean;
     isExpired: boolean;
@@ -80,7 +79,15 @@ export default function CheckLinkDialog({
   const [isReportSuccess, setIsReportSuccess] = useState(false);
   const [reportError, setReportError] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (open && url) {
+      console.log("fadfasdfsad")
+      handleCheckLink();
+    }
+  }, [open, url]);
+
    useEffect(() => {
+    console.log("111111")
     const fetchToken = async () => {
       setLoading(true);
       try {
@@ -125,7 +132,6 @@ export default function CheckLinkDialog({
       params.set("dialog", "true");
     } else {
       params.delete("dialog");
-      setUrl('');
       setIsVerified(false);
       setError(null);
       setReportError(null);
@@ -215,7 +221,6 @@ export default function CheckLinkDialog({
 
   return (
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
-      <Dialog.Trigger asChild>{children}</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-gray-950/30" />
         <Dialog.Content className="fixed left-[50%] top-[50%] z-50 w-[calc(100%-2rem)] max-w-[31.25rem] -translate-x-1/2 -translate-y-1/2 rounded-xl bg-neutral-50 p-6 shadow-lg duration-200 font-inter data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]">
@@ -257,27 +262,9 @@ export default function CheckLinkDialog({
                 </Dialog.Title>
               </div>
               
-              <div className="mt-6">
-                <input 
-                  type="text" 
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  placeholder={`${LANDING_DOMAIN ? LANDING_DOMAIN : 'pautan.org'}/example`}
-                  className={cn(
-                    "w-full rounded-lg border shadow-sm border-washed-300 px-4 py-3 text-base focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500",
-                    isLoading && "bg-gray-100 cursor-not-allowed"
-                  )}
-                  disabled={isLoading}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && url.trim()) {
-                      handleCheckLink();
-                    }
-                  }}
-                />
-              </div>
-              <Dialog.Description className="mt-4 text-md text-gray-500">
+              {/* <Dialog.Description className="mt-4 text-md text-gray-500">
                 {mainDialog.description}
-              </Dialog.Description>
+              </Dialog.Description> */}
 
               <div className="mt-6 flex gap-3">
                 <Dialog.Close asChild>
@@ -288,36 +275,6 @@ export default function CheckLinkDialog({
                     {mainDialog.cancelBtn}
                   </button>
                 </Dialog.Close>
-                <button 
-                  onClick={handleCheckLink}
-                  disabled={isLoading || !url.trim()}
-                  className={cn(
-                    "flex-1 shadow-sm hover:shadow-md rounded-lg px-6 py-3 text-base xl:text-base font-regular text-neutral-50",
-                    isLoading || !url.trim() ? "bg-blue-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
-                  )}
-                >
-                  {isLoading ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                        <circle 
-                          className="opacity-25" 
-                          cx="12" 
-                          cy="12" 
-                          r="10" 
-                          stroke="currentColor" 
-                          strokeWidth="4"
-                          fill="none"
-                        />
-                        <path 
-                          className="opacity-75" 
-                          fill="currentColor" 
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        />
-                      </svg>
-                      Checking...
-                    </span>
-                  ) : mainDialog.checkLinkBtn}
-                </button>
               </div>
             </>
           ) : (
