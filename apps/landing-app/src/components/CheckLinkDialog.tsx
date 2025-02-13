@@ -87,7 +87,6 @@ export default function CheckLinkDialog({
   }, [open, url]);
 
    useEffect(() => {
-    console.log("111111")
     const fetchToken = async () => {
       setLoading(true);
       try {
