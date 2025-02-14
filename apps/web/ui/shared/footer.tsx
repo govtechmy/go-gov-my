@@ -1,6 +1,11 @@
-import { Icon } from '@/ui/shared/icons/social-media';
+'use client';
+
+import { Icon } from './social-media';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 
 type Props = {
   ministry: string;
@@ -9,7 +14,6 @@ type Props = {
   descriptionWithNewlines: string;
   disclaimerKey: string;
   privacyPolicyKey: string;
-  followUsKey: string;
   links: {
     title?: string;
     links: {
@@ -38,9 +42,27 @@ export const social_media = [
   },
 ];
 
+function formatDateTime(
+  dateInput: string | number | Date | undefined,
+  timeZone: string = 'Asia/Kuala_Lumpur'
+) {
+  // Convert input to a Date object
+  const date = new Date(dateInput || Date.now());
+
+  // Use Intl.DateTimeFormat for localization
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour12: true,
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone,
+  }).format(date);
+}
+
 export default function Footer(props: Props) {
-  //   const format = useFormatter();
-  //   const t = useTranslations('components.Footer');
+  const { messages, locale } = useIntlClientHook();
 
   const className = {
     link: 'text-sm text-black-700 [text-underline-position:from-font] hover:text-black-900 hover:underline',
@@ -52,25 +74,25 @@ export default function Footer(props: Props) {
         <div className="flex flex-col gap-6 pb-8 lg:flex-row lg:justify-between">
           <div className="flex flex-col gap-4 lg:gap-4.5">
             <div className="flex items-center gap-x-2.5">
-              <img
-                src="https://s3.ap-southeast-1.amazonaws.com/pautan.org/logo.svg"
+              <Image
+                src="/jata_logo1.png"
                 width={28}
                 height={28}
                 className={cn('object-contain')}
-                alt="GoGovMY Logo"
+                alt="Jata Negara"
               />
               <div>
                 <h6 className="whitespace-nowrap font-poppins font-semibold">{props.ministry}</h6>
               </div>
             </div>
-            {/* <p
+            <p
               className="text-sm text-black-700"
               dangerouslySetInnerHTML={{
                 __html: props.descriptionWithNewlines.replaceAll('\n', '<br/>'),
               }}
-            ></p> */}
-            {/* <div className="space-y-2 lg:space-y-3">
-              <p className="text-sm font-semibold">{props.followUsKey}</p>
+            ></p>
+            <div className="space-y-2 lg:space-y-3">
+              <p className="text-sm font-semibold">{messages?.Footer?.follow_us}</p>
               <div className="flex gap-3">
                 {social_media.map(({ icon, href }) => (
                   <a key={href} href={href} target="_blank" rel="noopenner noreferrer">
@@ -78,7 +100,7 @@ export default function Footer(props: Props) {
                   </a>
                 ))}
               </div>
-            </div> */}
+            </div>
           </div>
           {/* Right menu */}
           <div className="flex flex-col gap-6 text-sm lg:flex-row">
@@ -110,29 +132,20 @@ export default function Footer(props: Props) {
             </p>
             <span className="hidden h-3 w-px bg-outline-300 lg:block"></span>
             <div className="flex flex-wrap gap-x-3 gap-y-2 text-black-700">
-              {['disclaimer', 'privacy_policy'].map((link) => (
+              {['disclaimer', 'privacy-policy'].map((link) => (
                 <Link
                   key={link}
                   className="underline-font text-sm text-black-700 hover:text-foreground hover:underline"
-                  // href={`/${link}`}
-                  href="#"
+                  href={`/${link}?locale=${locale}`}
                 >
                   {link === 'disclaimer' ? props.disclaimerKey : props.privacyPolicyKey}
                 </Link>
               ))}
             </div>
           </div>
-          {props.lastUpdateKey +
-            ': ' +
-            new Date().toLocaleString('en-MY', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              hour12: true,
-              hour: '2-digit',
-              minute: '2-digit',
-              timeZone: 'Asia/Kuala_Lumpur',
-            })}
+          <span>
+            {props.lastUpdateKey + ': ' + formatDateTime(process.env.NEXT_PUBLIC_LAST_UPDATED)}
+          </span>
         </div>
       </div>
     </div>
