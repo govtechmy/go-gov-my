@@ -10,6 +10,7 @@ import {
   Legend,
   ChartData,
   ChartOptions,
+  TimeScale
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import 'chartjs-adapter-luxon';
@@ -23,7 +24,8 @@ ChartJS.register(
   Title,
   Tooltip,
   Filler,
-  Legend
+  Legend,
+  TimeScale
 );
 
 interface TimeseriesProps {
@@ -84,6 +86,14 @@ export default function Timeseries({
     },
     scales: {
       x: {
+        type: 'time', // Ensure x-axis uses time scale
+        time: {
+          unit: 'day', // Group data by day
+          displayFormats: {
+            day: 'dd-MMM-yyyy', // Format: "01-Jan-2024"
+          },
+          tooltipFormat: 'dd-MMM-yyyy', // Also updates tooltip format
+        },
         grid: {
           display: enableGridX,
           drawBorder: false,

@@ -244,16 +244,21 @@ export default function StatsNew(props: Props) {
                         enableGridY={true}
                         enableAnimation={true}
                         tooltipCallback={(tooltipItem) => {
-                          const date = new Date(tooltipItem.label);
-                          return `${date.toLocaleString(props.locale, {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            hour12: false
-                          })}: ${formatNumber(tooltipItem.parsed.y)}`;
+                          const timestamp = new Date(tooltipItem.label).getTime();
+                        
+                          if (isNaN(timestamp)) {
+                            return `Invalid date: ${tooltipItem.label}`;
+                          }
+                        
+                          const formattedDate = new Intl.DateTimeFormat(props.locale, {
+                            day: '2-digit',       // "01"
+                            month: 'short',       // "Jan"
+                            year: 'numeric',      // "2024"
+                          }).format(timestamp).replace(',', ''); 
+                        
+                          return `${formattedDate}: ${formatNumber(tooltipItem.parsed.y)}`;
                         }}
+                        
                       />
                     </div>
                   )}

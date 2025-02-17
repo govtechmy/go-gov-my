@@ -26,7 +26,7 @@ type LinkCheckerRequest = {
 
 async function isDomainValid(domain: string): Promise<boolean> {
   const cleanDomain = getDomainWithoutWWW(domain);
-  return cleanDomain === process.env.NEXT_PUBLIC_APP_DOMAIN;
+  return cleanDomain === process.env.NEXT_PUBLIC_APP_SHORT_DOMAIN;
 }
 
 async function isLinkExists(domain: string, rawKey: string) {

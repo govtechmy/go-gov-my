@@ -52,7 +52,7 @@ export default function CheckLinkDialog({
   reportDialog
 }: Props) {
   const APP_DOMAIN = process.env.NEXT_PUBLIC_APP_DOMAIN || "https://app.pautan.org";
-  const LANDING_DOMAIN = process.env.LANDING_DOMAIN || "https://pautan.org";
+  const LANDING_DOMAIN = process.env.LANDING_DOMAIN || "pautan.org";
   const searchParams = useSearchParams();
   const router = useRouter();
   const showDialog = searchParams.get("dialog") === "true";
@@ -262,7 +262,7 @@ export default function CheckLinkDialog({
                   type="text" 
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
-                  placeholder={`${LANDING_DOMAIN ? LANDING_DOMAIN : 'https://pautan.org'}/example`}
+                  placeholder={`${LANDING_DOMAIN ? LANDING_DOMAIN : 'pautan.org'}/example`}
                   className={cn(
                     "w-full rounded-lg border shadow-sm border-washed-300 px-4 py-3 text-base focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500",
                     isLoading && "bg-gray-100 cursor-not-allowed"
