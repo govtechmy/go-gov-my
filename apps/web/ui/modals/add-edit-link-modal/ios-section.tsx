@@ -1,6 +1,5 @@
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { LinkProps } from '@/lib/types';
-import { ProBadgeTooltip } from '@/ui/shared/pro-badge-tooltip';
 import { SimpleTooltipContent, Switch } from '@dub/ui';
 import { FADE_IN_ANIMATION_SETTINGS } from '@dub/utils';
 import { motion } from 'framer-motion';
@@ -36,14 +35,10 @@ export default function IOSSection({
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-between space-x-2">
           <h2 className="text-sm font-medium text-gray-900">{messages?.link?.ios_targeting}</h2>
-          <ProBadgeTooltip
-            content={
-              <SimpleTooltipContent
-                title="Redirect your iOS users to a different link."
-                cta="Learn more about device targeting."
-                href="https://github.com/govtechmy/go-gov-my/discussions"
-              />
-            }
+          <SimpleTooltipContent
+            title="Redirect your iOS users to a different link."
+            cta="Learn more about device targeting."
+            href="https://github.com/govtechmy/go-gov-my/discussions"
           />
         </div>
         <Switch fn={() => setEnabled(!enabled)} checked={enabled} />
