@@ -81,7 +81,6 @@ export default function CheckLinkDialog({
 
   useEffect(() => {
     if (open && url) {
-      console.log("fadfasdfsad")
       handleCheckLink();
     }
   }, [open, url]);
