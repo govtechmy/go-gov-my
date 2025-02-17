@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<div align="center">
+  <a href="https://go.gov.my">
+  <img width="100" alt="GoGovMY - Malaysia's open-source link management infrastructure." src="./apps/web/public/_static/jata_192.png">
+    <img width="100" alt="GoGovMY - Malaysia's open-source link management infrastructure." src="./apps/web/public/_static/logo.png">
+    
+  </a>
+</div>
 
-## Getting Started
+<h3 align="center">GoGovMy Landing app </h3>
 
-First, run the development server:
+### Setup Local Environment Variables
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Please create a `.env` (using as .env.example as example) file in the root directory and add the following environment variables:
+
+```
+API_SECRET_KEY=
+APP_URL=
+LANDING_STATS_JSON_URL=
+ALLOWED_ORIGINS=
+NEXT_PUBLIC_APP_DOMAIN=
+LAST_UPDATED=
+NEXT_PUBLIC_API_BASE_URL=
+NEXT_PUBLIC_APP_URL=
+NEXT_PUBLIC_LANDING_DOMAIN=
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Local Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+## Clone the repository
+git clone https://github.com/govtechmy/go-gov-my.git
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## CD into directories
+cd go-gov-my
 
-## Learn More
+## CD into landing app repo
+cd apps/landing-app
 
-To learn more about Next.js, take a look at the following resources:
+## Install dependencies
+npm i
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Start the development server
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Alternatively you can go to root directory and 
 
-## Deploy on Vercel
+```
+## Install dependencies
+pnpm install
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Start the development server
+docker-compose up -d
+pnpm dev
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Open landing-app
+localhost:3335
+```
+
