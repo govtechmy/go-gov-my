@@ -70,7 +70,7 @@ export const DUB_WORKSPACE_ID = 'cl7pj5kq4006835rbjlt2ofka';
 export const LEGAL_WORKSPACE_ID = 'clrflia0j0000vs7sqfhz9c7q';
 export const LEGAL_USER_ID = 'clqei1lgc0000vsnzi01pbf47';
 
-export const DUB_DOMAINS = [
+export const ALLOWED_DOMAINS = [
   {
     id: 'clce1z7ch00j0rbstbjufva4j',
     slug: SHORT_DOMAIN,
@@ -86,7 +86,7 @@ export const DUB_DOMAINS = [
   },
 ];
 
-export const DUB_DOMAINS_ARRAY = DUB_DOMAINS.map((domain) => domain.slug);
+export const DUB_DOMAINS_ARRAY = ALLOWED_DOMAINS.map((domain) => domain.slug);
 
 export const DUB_DEMO_LINKS = [
   {

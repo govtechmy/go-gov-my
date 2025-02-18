@@ -1,5 +1,5 @@
 import slugify from '@sindresorhus/slugify';
-import { DUB_DOMAINS, SECOND_LEVEL_DOMAINS, SPECIAL_APEX_DOMAINS, ccTLDs } from '../constants';
+import { ALLOWED_DOMAINS, SECOND_LEVEL_DOMAINS, SPECIAL_APEX_DOMAINS, ccTLDs } from '../constants';
 import { isValidUrl } from './urls';
 
 export const generateDomainFromName = (name: string) => {
@@ -78,6 +78,6 @@ export const getDomainWithoutWWW = (url: string) => {
   }
 };
 
-export const isDubDomain = (domain: string) => {
-  return DUB_DOMAINS.some((d) => d.slug === domain);
+export const isAllowedDomain = (domain: string) => {
+  return ALLOWED_DOMAINS.some((d) => d.slug === domain);
 };
