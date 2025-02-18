@@ -32,9 +32,7 @@ export default function ModalProvider({ children }: { children: ReactNode }) {
   const { setShowAddEditLinkModal, AddEditLinkModal } = useAddEditLinkModal();
   const { setShowAddEditTagModal, AddEditTagModal } = useAddEditTagModal();
 
-  const [hashes, setHashes] = useCookies<SimpleLinkProps[]>('hashes__dub', [], {
-    domain: !!process.env.NEXT_PUBLIC_VERCEL_URL ? '.dub.co' : undefined,
-  });
+  const [hashes, setHashes] = useCookies<SimpleLinkProps[]>('hashes__dub', []);
 
   const { id, error } = useWorkspace();
 
