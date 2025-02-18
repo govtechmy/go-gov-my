@@ -164,7 +164,6 @@ function WorkspaceCard({
               <h2 className="max-w-[200px] truncate text-lg font-medium text-gray-700">{name}</h2>
             </div>
           </div>
-          {/* <PlanBadge plan={plan} /> */}
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-1 text-gray-500">
