@@ -328,6 +328,6 @@ enum LinkHistoryType {
 
 model AllowedDomains {
   id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  domain         String
+  domain         String   @unique
   isActive       Boolean
 }
