@@ -1,0 +1,14 @@
+[
+  {
+    "domain": "gov.my",
+    "isActive": true
+  },
+  {
+    "domain": "moe.gov.my",
+    "isActive": true
+  },
+  {
+    "domain": "mof.gov.my",
+    "isActive": true
+  }
+]

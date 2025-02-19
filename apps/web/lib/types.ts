@@ -3,6 +3,7 @@ import { metaTagsSchema } from '@/lib/zod/schemas/metatags';
 import { Link } from '@prisma/client';
 import { AgencySchema } from './zod/schemas/agencies';
 import { createLinkBodySchema } from './zod/schemas/links';
+import { AllowedDomainsSchema } from './zod/schemas/allowedDomains';
 
 export type LinkProps = Link;
 
@@ -124,3 +125,5 @@ export const tagColors = ['red', 'yellow', 'green', 'blue', 'purple', 'pink', 'b
 export type MetaTag = z.infer<typeof metaTagsSchema>;
 
 export type AgencyProps = z.infer<typeof AgencySchema>;
+
+export type AllowedDomainsProps = z.infer<typeof AllowedDomainsSchema>;
