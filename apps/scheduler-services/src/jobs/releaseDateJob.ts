@@ -12,6 +12,7 @@ export const releaseJobsConfig: JobConfig = {
 
 export async function releaseJob(context: JobContext): Promise<JobResult> {
   const { logger, config, discord } = context;
+  config.webBase = '';
   const client = new HttpClient(config);
 
   try {
