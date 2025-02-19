@@ -20,7 +20,7 @@ import {
   cn,
   fetcher,
   getApexDomain,
-  isDubDomain,
+  isAllowedDomain,
   linkConstructor,
   punycode,
   timeAgo,
@@ -210,7 +210,7 @@ export default function TableCard({
           setShowArchiveLinkModal(true);
           break;
         case 't':
-          if (isDubDomain(domain)) {
+          if (isAllowedDomain(domain)) {
             setShowTransferLinkModal(true);
           }
           break;

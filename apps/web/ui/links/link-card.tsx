@@ -26,7 +26,7 @@ import { LinkifyTooltipContent } from '@dub/ui/src/tooltip';
 import {
   cn,
   getApexDomain,
-  isDubDomain,
+  isAllowedDomain,
   linkConstructor,
   nFormatter,
   punycode,
@@ -230,7 +230,7 @@ export default function LinkCard({
             setShowArchiveLinkModal(true);
             break;
           case 't':
-            if (isDubDomain(domain)) {
+            if (isAllowedDomain(domain)) {
               setShowTransferLinkModal(true);
             }
             break;
@@ -570,7 +570,7 @@ export default function LinkCard({
                   icon={<FolderInput className="h-4 w-4" />}
                   shortcut="T"
                   className="h-9 px-2 font-medium"
-                  {...(!isDubDomain(domain) && {
+                  {...(!isAllowedDomain(domain) && {
                     disabledTooltip: (
                       <SimpleTooltipContent
                         title="Since this is a custom domain link, you can only transfer it to another workspace if you transfer the domain as well."

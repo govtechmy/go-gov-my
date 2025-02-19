@@ -1,4 +1,4 @@
-import { SHORT_DOMAIN, isDubDomain } from '@dub/utils';
+import { SHORT_DOMAIN, isAllowedDomain } from '@dub/utils';
 import { MetadataRoute } from 'next';
 import { headers } from 'next/headers';
 
@@ -11,7 +11,7 @@ export default function robots(): MetadataRoute.Robots {
     domain = SHORT_DOMAIN;
   }
 
-  if (isDubDomain(domain)) {
+  if (isAllowedDomain(domain)) {
     return {
       rules: [
         {
