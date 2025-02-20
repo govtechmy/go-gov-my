@@ -95,3 +95,5 @@ export const DUB_DEMO_LINKS = [
     key: 'try',
   },
 ];
+
+export const GITHUB_DISCUSSIONS = 'https://github.com/govtechmy/go-gov-my/discussions';

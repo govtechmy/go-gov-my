@@ -7,6 +7,7 @@ import {
   getParamsFromURL,
   getUrlWithoutUTMParams,
   paramsMetadata,
+  GITHUB_DISCUSSIONS,
 } from '@dub/utils';
 import { motion } from 'framer-motion';
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
@@ -63,7 +64,7 @@ export default function UTMSection({
               <SimpleTooltipContent
                 title="Add UTM parameters to your short links for conversion tracking."
                 cta="Learn more."
-                href="https://github.com/govtechmy/go-gov-my/discussions"
+                href={GITHUB_DISCUSSIONS}
               />
             }
           />
