@@ -8,6 +8,7 @@ export * from './localhost';
 export * from './middleware';
 export * from './misc';
 export * from './pricing';
+export * from './social-media';
 
 if (!process.env.NEXT_PUBLIC_APP_NAME) {
   throw Error('missing env variable NEXT_PUBLIC_APP_NAME');

@@ -1,6 +1,6 @@
 'use client';
 
-import { Icon } from './social-media';
+import { SOCMED } from '@dub/utils';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -22,25 +22,6 @@ type Props = {
     }[];
   }[];
 };
-
-export const social_media = [
-  {
-    icon: <Icon.Facebook />,
-    name: 'Facebook',
-    href: 'https://www.facebook.com/KementerianDigitalMalaysia/',
-  },
-  { icon: <Icon.X />, name: 'X', href: 'https://x.com/KemDigitalMsia' },
-  {
-    icon: <Icon.Instagram />,
-    name: 'Instagram',
-    href: 'https://www.instagram.com/kementeriandigitalmalaysia/',
-  },
-  {
-    icon: <Icon.Tiktok />,
-    name: 'Tiktok',
-    href: 'https://www.tiktok.com/@kementeriandigital',
-  },
-];
 
 function formatDateTime(
   dateInput: string | number | Date | undefined,
@@ -94,7 +75,7 @@ export default function Footer(props: Props) {
             <div className="space-y-2 lg:space-y-3">
               <p className="text-base font-semibold">{messages?.Footer?.follow_us}</p>
               <div className="flex gap-3">
-                {social_media.map(({ icon, href }) => (
+                {SOCMED.map(({ icon, href }) => (
                   <a key={href} href={href} target="_blank" rel="noopenner noreferrer">
                     {icon}
                   </a>
