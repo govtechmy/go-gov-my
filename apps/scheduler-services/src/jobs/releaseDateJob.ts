@@ -41,7 +41,7 @@ export async function releaseJob(context: JobContext): Promise<JobResult> {
 
     const reduced = reduceGithubReleases(releases);
 
-    if (!config.bucketName || !config.bucketRegion || !config.s3AccessKey || !config.s3SecretKey) {
+    if (!config.bucketName || !config.bucketRegion) {
       console.error('S3 configuration missing');
       throw new Error('Missing S3 configuration');
     }
