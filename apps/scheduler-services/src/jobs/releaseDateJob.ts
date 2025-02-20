@@ -46,12 +46,7 @@ export async function releaseJob(context: JobContext): Promise<JobResult> {
       throw new Error('Missing S3 configuration');
     }
 
-    const uploader = new S3Uploader(
-      config.bucketName,
-      config.bucketRegion,
-      config.s3AccessKey,
-      config.s3SecretKey
-    );
+    const uploader = new S3Uploader(config.bucketName, config.bucketRegion);
 
     const s3UploadJson = JSON.stringify(reduced, null, 2);
 
