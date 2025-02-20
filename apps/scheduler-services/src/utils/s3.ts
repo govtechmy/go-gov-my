@@ -6,16 +6,10 @@ export class S3Uploader {
 
   constructor(
     private bucketName: string,
-    private region: string,
-    private accessKeyId: string,
-    private secretAccessKey: string
+    private region: string
   ) {
     this.s3 = new S3Client({
       region: this.region,
-      credentials: {
-        accessKeyId: this.accessKeyId,
-        secretAccessKey: this.secretAccessKey,
-      },
     });
   }
 
