@@ -1,5 +1,6 @@
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { Button, Google, Logo, Modal } from '@dub/ui';
+import { GITHUB_RELEASES } from '@dub/utils';
 import Cookies from 'js-cookie';
 import { signIn } from 'next-auth/react';
 import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
@@ -24,7 +25,7 @@ function GoogleOauthModal({
           {message?.google_desc_1} {process.env.NEXT_PUBLIC_APP_NAME} {message?.google_desc_2}{' '}
           <a
             className="underline underline-offset-4 transition-colors hover:text-black"
-            href="https://github.com/govtechmy/go-gov-my/releases"
+            href={GITHUB_RELEASES}
             target="_blank"
             rel="noopener noreferrer"
           >
