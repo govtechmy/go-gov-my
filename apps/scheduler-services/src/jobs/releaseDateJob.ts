@@ -69,7 +69,7 @@ export async function releaseJob(context: JobContext): Promise<JobResult> {
     return { success: true, data: reduced };
   } catch (error) {
     await discord.notify({
-      title: '❌ Stats Collection Failed',
+      title: '❌ Release Date Collection Failed',
       description: 'Failed to collect statistics',
       status: 'error',
       data: {
