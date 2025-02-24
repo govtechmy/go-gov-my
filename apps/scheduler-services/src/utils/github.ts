@@ -8,11 +8,15 @@ export const reduceGithubReleases = (releases: GitHubReleases): FormattedRelease
     const existingApp = acc.find((item) => item.app === appName);
 
     if (!existingApp) {
-      acc.push({ app: appName, last_released: release.published_at });
+      acc.push({
+        app: appName,
+        releaseDate: release.published_at,
+        releaseVersion: release.tag_name.split('-')[release.tag_name.split('-').length - 1],
+      });
     } else {
       // Update the latest release date if the current one is newer
-      if (new Date(release.published_at) > new Date(existingApp.last_released)) {
-        existingApp.last_released = release.published_at;
+      if (new Date(release.published_at) > new Date(existingApp.releaseDate)) {
+        existingApp.releaseDate = release.published_at;
       }
     }
 

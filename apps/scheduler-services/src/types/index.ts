@@ -91,5 +91,6 @@ export interface App {
 
 export interface FormattedRelease {
   app: string;
-  last_released: string;
+  releaseDate: string;
+  releaseVersion: string;
 }
