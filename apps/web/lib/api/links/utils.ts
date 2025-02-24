@@ -4,7 +4,7 @@ import { checkIfKeyExists } from '@/lib/userinfos';
 import {
   DEFAULT_REDIRECTS,
   SHORT_DOMAIN,
-  isDubDomain,
+  isAllowedDomain,
   linkConstructor,
   punyEncode,
   validKeyRegex,
@@ -65,7 +65,7 @@ export async function keyChecks({
     };
   }
 
-  if (isDubDomain(domain) && process.env.NEXT_PUBLIC_IS_DUB) {
+  if (isAllowedDomain(domain) && process.env.NEXT_PUBLIC_IS_DUB) {
     if (domain === SHORT_DOMAIN) {
       if (DEFAULT_REDIRECTS[key] || (await isReservedKey(key))) {
         return {

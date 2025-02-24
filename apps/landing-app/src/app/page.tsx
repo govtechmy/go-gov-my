@@ -17,7 +17,11 @@ import Masthead from "@/components/Masthead";
 import { Header } from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import StatsNew from "@/components/home/StatsNew";
+import dynamic from "next/dynamic";
+
+const StatsNew = dynamic(() => import("@/components/home/StatsNew"), {
+  ssr: false,
+});
 
 type Props = {
   searchParams: { locale?: string };

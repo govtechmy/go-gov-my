@@ -7,7 +7,7 @@ import {
   APP_NAME,
   DICEBEAR_AVATAR_URL,
   getApexDomain,
-  isDubDomain,
+  isAllowedDomain,
   linkConstructor,
 } from '@dub/utils';
 import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
@@ -113,7 +113,7 @@ function TransferLinkModal({
             }}
           />
           <Button
-            disabled={!selectedWorkspace || !isDubDomain(domain)}
+            disabled={!selectedWorkspace || !isAllowedDomain(domain)}
             loading={transferring}
             text={message?.confirm_transfer}
           />

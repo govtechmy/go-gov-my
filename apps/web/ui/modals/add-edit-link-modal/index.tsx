@@ -5,7 +5,6 @@ import useWorkspace from '@/lib/swr/use-workspace';
 import { LinkWithTagsProps } from '@/lib/types';
 import LinkLogo from '@/ui/links/link-logo';
 import { AlertCircleFill, Lock, X } from '@/ui/shared/icons';
-import { UpgradeToProToast } from '@/ui/shared/upgrade-to-pro-toast';
 import {
   Button,
   LinkedIn,
@@ -134,53 +133,6 @@ function AddEditLinkModal({
   };
 
   const [generatedKeys, setGeneratedKeys] = useState<string[]>(props ? [props.key] : []);
-
-  // const {
-  //   completion,
-  //   isLoading: generatingAIKey,
-  //   complete,
-  // } = useCompletion({
-  //   api: `/api/ai/completion?workspaceId=${workspaceId}`,
-  //   onError: (error) => {
-  //     if (error.message.includes("Upgrade to Pro")) {
-  //       toast.custom(() => (
-  //         <UpgradeToProToast
-  //           title="You've exceeded your AI usage limit"
-  //           message={error.message}
-  //         />
-  //       ));
-  //     } else {
-  //       toast.error(error.message);
-  //     }
-  //   },
-  //   onFinish: (_, completion) => {
-  //     setGeneratedKeys((prev) => [...prev, completion]);
-  //     mutateWorkspace();
-  //     runKeyChecks(completion);
-  //   },
-  // });
-
-  // const generateAIKey = useCallback(async () => {
-  //   setKeyError(null);
-  //   complete(
-  //     `For the following URL, suggest a relevant short link slug that is at most ${Math.max(25 - domain.length, 12)} characters long.
-
-  //       - URL: ${data.url}
-  //       - Meta title: ${data.title}
-  //       - Meta description: ${data.description}.
-
-  //     Only respond with the short link slug and nothing else. Don't use quotation marks or special characters (dash and slash are allowed).
-
-  //     Make sure your answer does not exist in this list of generated slugs: ${generatedKeys.join(", ")}`,
-  //   );
-  // }, [data.url, data.title, data.description, generatedKeys]);
-
-  // useEffect(() => {
-  //   if (completion) {
-  //     setData((prev) => ({ ...prev, key: completion }));
-  //   }
-  // }, [completion]);
-
   const [generatingMetatags, setGeneratingMetatags] = useState(props ? true : false);
   const [debouncedUrl] = useDebounce(getUrlWithoutUTMParams(url), 500);
   useEffect(() => {
@@ -435,16 +387,7 @@ function AddEditLinkModal({
                 } else {
                   const { error } = await res.json();
                   if (error) {
-                    if (error.message.includes('Upgrade to Pro')) {
-                      toast.custom(() => (
-                        <UpgradeToProToast
-                          title="You've discovered a Pro feature!"
-                          message={error.message}
-                        />
-                      ));
-                    } else {
-                      toast.error(error.message);
-                    }
+                    toast.error(error.message);
                     const message = error.message.toLowerCase();
 
                     if (message.includes('key') || message.includes('domain')) {

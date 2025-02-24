@@ -1,6 +1,5 @@
 import useWorkspace from '@/lib/swr/use-workspace';
 import { LinkProps } from '@/lib/types';
-import { ProBadgeTooltip } from '@/ui/shared/pro-badge-tooltip';
 import { ButtonTooltip, FileUpload, LoadingCircle, SimpleTooltipContent, Switch } from '@dub/ui';
 import { FADE_IN_ANIMATION_SETTINGS, resizeImage } from '@dub/utils';
 import { motion } from 'framer-motion';
@@ -39,91 +38,6 @@ export default function OGSection({
 
   const { title, description, image, proxy } = data;
 
-  // const {
-  //   completion: completionTitle,
-  //   isLoading: generatingTitle,
-  //   complete: completeTitle,
-  // } = useCompletion({
-  //   api: `/api/ai/completion?workspaceId=${workspaceId}`,
-  //   id: "metatags-title-ai",
-  //   onError: (error) => {
-  //     if (error.message.includes("Upgrade to Pro")) {
-  //       toast.custom(() => (
-  //         <UpgradeToProToast
-  //           title="You've exceeded your AI usage limit"
-  //           message={error.message}
-  //         />
-  //       ));
-  //     } else {
-  //       toast.error(error.message);
-  //     }
-  //   },
-  //   onFinish: (_, completion) => {
-  //     mutate();
-  //   },
-  // });
-
-  // const generateTitle = async () => {
-  //   completeTitle(
-  //     `You are an SEO expert. Generate an SEO-optimized meta title (max 120 characters) for the following URL:
-
-  //     - URL: ${data.url}
-  //     - Meta title: ${data.title}
-  //     - Meta description: ${data.description}.
-
-  //     Only respond with the title without quotation marks or special characters.
-  //     `,
-  //   );
-  // };
-
-  // useEffect(() => {
-  //   if (completionTitle) {
-  //     setData((prev) => ({ ...prev, title: completionTitle }));
-  //   }
-  // }, [completionTitle]);
-
-  // const {
-  //   completion: completionDescription,
-  //   isLoading: generatingDescription,
-  //   complete: completeDescription,
-  // } = useCompletion({
-  //   api: `/api/ai/completion?workspaceId=${workspaceId}`,
-  //   id: "metatags-description-ai",
-  //   onError: (error) => {
-  //     if (error.message.includes("Upgrade to Pro")) {
-  //       toast.custom(() => (
-  //         <UpgradeToProToast
-  //           title="You've exceeded your AI usage limit"
-  //           message={error.message}
-  //         />
-  //       ));
-  //     } else {
-  //       toast.error(error.message);
-  //     }
-  //   },
-  //   onFinish: (_, completion) => {
-  //     mutate();
-  //   },
-  // });
-
-  // const generateDescription = async () => {
-  //   completeDescription(
-  //     `You are an SEO expert. Generate an SEO-optimized meta description (max 240 characters) for the following URL:
-
-  //     - URL: ${data.url}
-  //     - Meta title: ${data.title}
-  //     - Meta description: ${data.description}.
-
-  //     Only respond with the description without quotation marks or special characters.`,
-  //   );
-  // };
-
-  // useEffect(() => {
-  //   if (completionDescription) {
-  //     setData((prev) => ({ ...prev, description: completionDescription }));
-  //   }
-  // }, [completionDescription]);
-
   useEffect(() => {
     if (proxy && props) {
       // if custom OG is enabled
@@ -158,14 +72,10 @@ export default function OGSection({
           <h2 className="text-sm font-medium text-gray-900">
             {messages?.link?.custom_socmed_cards}
           </h2>
-          <ProBadgeTooltip
-            content={
-              <SimpleTooltipContent
-                title="Customize how your links look when shared on social media."
-                cta="Learn more."
-                href="https://github.com/govtechmy/go-gov-my/discussions"
-              />
-            }
+          <SimpleTooltipContent
+            title="Customize how your links look when shared on social media."
+            cta="Learn more."
+            href="https://github.com/govtechmy/go-gov-my/discussions"
           />
         </div>
         <Switch fn={() => setData((prev) => ({ ...prev, proxy: !proxy }))} checked={proxy} />

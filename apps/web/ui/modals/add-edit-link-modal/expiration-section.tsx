@@ -1,6 +1,5 @@
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { LinkProps } from '@/lib/types';
-import { ProBadgeTooltip } from '@/ui/shared/pro-badge-tooltip';
 import { ExpandingArrow, InfoTooltip, SimpleTooltipContent, Switch } from '@dub/ui';
 import {
   FADE_IN_ANIMATION_SETTINGS,
@@ -45,14 +44,10 @@ export default function ExpirationSection({
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-between space-x-2">
           <h2 className="text-sm font-medium text-gray-900">{messages?.link?.link_expiration}</h2>
-          <ProBadgeTooltip
-            content={
-              <SimpleTooltipContent
-                title={message?.set_expiration}
-                cta={message?.learn_more}
-                href="https://github.com/govtechmy/go-gov-my/discussions"
-              />
-            }
+          <SimpleTooltipContent
+            title={message?.set_expiration}
+            cta={message?.learn_more}
+            href="https://github.com/govtechmy/go-gov-my/discussions"
           />
         </div>
         <Switch fn={() => setEnabled(!enabled)} checked={enabled} />

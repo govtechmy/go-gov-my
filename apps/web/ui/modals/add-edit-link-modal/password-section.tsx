@@ -1,6 +1,5 @@
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
 import { Eye, EyeOff } from '@/ui/shared/icons';
-import { ProBadgeTooltip } from '@/ui/shared/pro-badge-tooltip';
 import { SimpleTooltipContent, Switch } from '@dub/ui';
 import { FADE_IN_ANIMATION_SETTINGS } from '@dub/utils';
 import { motion } from 'framer-motion';
@@ -32,14 +31,10 @@ export default function PasswordSection({
           <h2 className="text-sm font-medium text-gray-900">
             {messages?.link?.password_protection}
           </h2>
-          <ProBadgeTooltip
-            content={
-              <SimpleTooltipContent
-                title="Restrict access to your short links by encrypting it with a password."
-                cta="Learn more."
-                href="https://github.com/govtechmy/go-gov-my/discussions"
-              />
-            }
+          <SimpleTooltipContent
+            title="Restrict access to your short links by encrypting it with a password."
+            cta="Learn more."
+            href="https://github.com/govtechmy/go-gov-my/discussions"
           />
         </div>
         <Switch

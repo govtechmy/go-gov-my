@@ -8,7 +8,6 @@ import { BarChart2, Link2, Users, Settings, LineChart } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { Suspense, useEffect, useState } from 'react';
-import PlanBadge from './plan-badge';
 import useSWR from 'swr';
 import LinkPagination from '../links/link-pagination';
 import LinkCard from '../links/link-card';

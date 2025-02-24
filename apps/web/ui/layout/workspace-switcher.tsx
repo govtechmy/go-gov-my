@@ -84,7 +84,6 @@ export default function WorkspaceSwitcher() {
               <span className="inline-block max-w-[100px] truncate text-sm font-medium sm:max-w-[200px]">
                 {selected.name}
               </span>
-              {/* {selected.slug !== "/" && <PlanBadge plan={selected.plan} />} */}
             </div>
           </div>
           <ChevronsUpDown className="h-4 w-4 text-gray-400" aria-hidden="true" />

@@ -140,7 +140,7 @@ export default function Footer(props: Props) {
                 hour: "2-digit",
                 minute: "2-digit",
                 timeZone: "Asia/Kuala_Lumpur",
-              })}
+              }).replace(/\bam\b/, "AM").replace(/\bpm\b/, "PM")}
           </span>
         </div>
       </div>
