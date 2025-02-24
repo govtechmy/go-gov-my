@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { useState, useEffect } from 'react';
 
 type Props = {
   ministry: string;
@@ -27,6 +28,7 @@ function formatDateTime(
   dateInput: string | number | Date | undefined,
   timeZone: string = 'Asia/Kuala_Lumpur'
 ) {
+  if (!dateInput) return '';
   // Convert input to a Date object
   const date = new Date(dateInput || Date.now());
 
@@ -44,13 +46,62 @@ function formatDateTime(
 
 export default function Footer(props: Props) {
   const { messages, locale } = useIntlClientHook();
+  const [releaseDate, setReleaseDate] = useState('');
+
+  type releaseDateJson = {
+    app: string;
+    releaseDate: string;
+    releaseVersion: string;
+  };
+
+  async function fetchReleaseDateStats(): Promise<releaseDateJson[]> {
+    try {
+      const url = process.env.NEXT_PUBLIC_RELEASE_DATE_JSON_URL;
+      if (!url) {
+        throw new Error('NEXT_PUBLIC_RELEASE_DATE_JSON_URL is not set');
+      }
+
+      const response = await fetch(url, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch stats: ${response.statusText}`);
+      }
+
+      // Ensure the data is typed as an array
+      const data: releaseDateJson[] = await response.json();
+
+      // Safely find the entry for the "web" app
+      const webEntry = data.find((item) => item.app === 'web');
+      if (webEntry && webEntry.releaseDate) {
+        setReleaseDate(webEntry.releaseDate);
+      } else {
+        setReleaseDate('');
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+      setReleaseDate('');
+      throw error;
+    }
+  }
+
+  // Run fetchReleaseDateStats once when the component mounts
+  useEffect(() => {
+    fetchReleaseDateStats();
+  }, []);
 
   const className = {
     link: 'text-base text-black-700 [text-underline-position:from-font] hover:text-black-900 hover:underline',
   };
 
   return (
-    <div className="px-4 border-t border-outline-200 bg-background-50 py-8 lg:py-16 print:hidden">
+    <div className="border-t border-outline-200 bg-background-50 py-8 lg:py-16 print:hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-0">
         <div className="flex flex-col gap-6 pb-8 lg:flex-row lg:justify-between">
           <div className="flex flex-col gap-4 lg:gap-4.5">
@@ -63,11 +114,13 @@ export default function Footer(props: Props) {
                 alt="Jata Negara"
               />
               <div>
-                <h6 className="whitespace-nowrap font-poppins font-semibold">{props.ministry}</h6>
+                <h6 className="text-xl whitespace-nowrap font-poppins font-semibold">
+                  {props.ministry}
+                </h6>
               </div>
             </div>
             <p
-              className="text-base text-black-700"
+              className="text-lg text-black-700"
               dangerouslySetInnerHTML={{
                 __html: props.descriptionWithNewlines.replaceAll('\n', '<br/>'),
               }}
@@ -133,9 +186,7 @@ export default function Footer(props: Props) {
               ))}
             </div>
           </div>
-          <span>
-            {props.lastUpdateKey + ': ' + formatDateTime(process.env.NEXT_PUBLIC_LAST_UPDATED)}
-          </span>
+          <span>{props.lastUpdateKey + ': ' + formatDateTime(releaseDate)}</span>
         </div>
       </div>
     </div>
