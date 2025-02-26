@@ -4,7 +4,7 @@ title: 'Self-hosting GoGovMy'
 description: 'An end-to-end guide on how to self-host GoGovMy – the open-source link management platform.'
 ---
 
-
+<Card>
   <img
     src="/images/logo-background-gradient.png"
     alt="GoGovMy Logo on a gradient background"
@@ -271,10 +271,10 @@ Don't forget to set the following Callback URLs:
 - `https://app.go.gov.my/api/auth/callback/github`
 - `http://localhost:8888/api/auth/callback/github` for local development.
 
-<Info>
+<Callout>
   Optional: Set the "Email addresses" account permission to **read-only** in
   order to access private email addresses on GitHub.
-</Info>
+</Callout>
 
 Once your GitHub App is created, copy the `Client ID` and `Client Secret` into your `.env` file as the `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` environment variables.
 
