@@ -37,12 +37,12 @@ export const APP_HOSTNAMES = new Set([
 
 export const APP_DOMAIN =
   process.env.NODE_ENV === 'production'
-    ? `https://app.${process.env.NEXT_PUBLIC_APP_DOMAIN}`
+    ? `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}`
     : 'http://localhost:8888';
 
 export const APP_DOMAIN_WITH_NGROK =
   process.env.NODE_ENV === 'production'
-    ? `https://app.${process.env.NEXT_PUBLIC_APP_DOMAIN}`
+    ? `https://${process.env.NEXT_PUBLIC_APP_DOMAIN}`
     : process.env.NEXT_PUBLIC_NGROK_URL || 'http://localhost:8888';
 
 export const API_HOSTNAMES = new Set([
