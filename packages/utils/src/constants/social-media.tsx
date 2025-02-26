@@ -133,7 +133,7 @@ export const Icon = {
   ),
 };
 
-export const SOCMED = [
+export const social_media = [
   {
     icon: <Icon.Facebook />,
     name: 'Facebook',

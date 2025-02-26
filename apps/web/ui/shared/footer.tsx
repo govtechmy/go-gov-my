@@ -1,6 +1,6 @@
 'use client';
 
-import { SOCMED } from '@dub/utils';
+import { social_media } from '@dub/utils';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -97,7 +97,7 @@ export default function Footer(props: Props) {
   }, []);
 
   const className = {
-    link: 'text-base text-black-700 [text-underline-position:from-font] hover:text-black-900 hover:underline',
+    link: 'text-sm text-black-700 [text-underline-position:from-font] hover:text-black-900 hover:underline',
   };
 
   return (
@@ -120,15 +120,15 @@ export default function Footer(props: Props) {
               </div>
             </div>
             <p
-              className="text-lg text-black-700"
+              className="text-sm text-black-700"
               dangerouslySetInnerHTML={{
                 __html: props.descriptionWithNewlines.replaceAll('\n', '<br/>'),
               }}
             ></p>
             <div className="space-y-2 lg:space-y-3">
-              <p className="text-base font-semibold">{messages?.Footer?.follow_us}</p>
+              <p className="text-sm font-semibold">{messages?.Footer?.follow_us}</p>
               <div className="flex gap-3">
-                {SOCMED.map(({ icon, href }) => (
+                {social_media.map(({ icon, href }) => (
                   <a key={href} href={href} target="_blank" rel="noopenner noreferrer">
                     {icon}
                   </a>
@@ -137,7 +137,7 @@ export default function Footer(props: Props) {
             </div>
           </div>
           {/* Right menu */}
-          <div className="flex flex-col gap-6 text-base lg:flex-row">
+          <div className="flex flex-col gap-6 text-sm lg:flex-row">
             {props.links.map((item, index) => (
               <div className="space-y-2" key={index}>
                 {item.title && <p className="font-semibold">{item.title}</p>}
@@ -159,7 +159,7 @@ export default function Footer(props: Props) {
           </div>
         </div>
 
-        <div className="flex flex-col justify-between gap-6 pt-8 text-base text-dim-500 lg:flex-row">
+        <div className="flex flex-col justify-between gap-6 pt-8 text-sm text-dim-500 lg:flex-row">
           <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
             <p>
               {props.copyrightKey} © {new Date().getFullYear()}
@@ -178,7 +178,7 @@ export default function Footer(props: Props) {
               ].map((link) => (
                 <Link
                   key={link.key}
-                  className="underline-font text-base text-black-700 hover:text-foreground hover:underline"
+                  className="underline-font text-sm text-black-700 hover:text-foreground hover:underline"
                   href={`${link.link}?locale=${locale}`}
                 >
                   {link.key === 'disclaimer' ? props.disclaimerKey : props.privacyPolicyKey}
