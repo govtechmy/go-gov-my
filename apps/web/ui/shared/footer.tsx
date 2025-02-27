@@ -101,7 +101,7 @@ export default function Footer(props: Props) {
   };
 
   return (
-    <div className="border-t border-outline-200 bg-background-50 py-8 lg:py-16 print:hidden">
+    <div className="border-t border-outline-200 bg-[rgb(250,250,250)] py-8 lg:py-16 print:hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-0">
         <div className="flex flex-col gap-6 pb-8 lg:flex-row lg:justify-between">
           <div className="flex flex-col gap-4 lg:gap-4.5">
