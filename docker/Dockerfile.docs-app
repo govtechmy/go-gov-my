@@ -11,13 +11,13 @@ WORKDIR /app
 COPY ./apps/docs-app .
 
 # Install dependencies separately to take advantage of Docker's caching
-RUN npm install
+RUN npm install --production
 
-# Build the Next.js app (optional: comment this out if you want to use `dev` mode)
+# Build the Next.js app
 RUN npm run build
 
 # Expose the port for the Next.js server
 EXPOSE 3334
 
-# Run Next.js in development mode
-CMD ["npm", "run", "dev"]
+# Use Next.js built-in start command for production
+CMD ["npm", "run", "start"]
