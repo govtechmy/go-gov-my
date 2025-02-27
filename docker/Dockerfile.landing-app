@@ -10,16 +10,22 @@ WORKDIR /app
 RUN npm install -g pnpm@9.1.3
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/web/package.json ./apps/web/
 COPY packages/ui/package.json ./packages/ui/
 COPY packages/utils/package.json ./packages/utils/
+COPY packages/tailwind-config/package.json ./packages/tailwind-config/
+COPY packages/tsconfig/package.json ./packages/tsconfig/
 
 RUN pnpm install --frozen-lockfile
 
 # Copy source files
 COPY packages/ui ./packages/ui
 COPY packages/utils ./packages/utils
+COPY packages/tailwind-config ./packages/tailwind-config
+COPY packages/tsconfig ./packages/tsconfig
 
 RUN pnpm --filter "@dub/utils" build && \
+    pnpm --filter "@gogovmy/tailwind-config" build && \
     pnpm --filter "@dub/ui" build
 
 COPY . .
