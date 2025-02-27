@@ -63,6 +63,7 @@ export default function Layout({
           disclaimerKey={messages?.Footer?.disclaimer}
           privacyPolicyKey={messages?.Footer?.privacy_policy}
           descriptionWithNewlines={messages?.Footer?.address}
+          followUsKey={messages?.Footer?.follow_us}
           links={[
             {
               title: messages?.Footer?.links?.title?.openSource,
