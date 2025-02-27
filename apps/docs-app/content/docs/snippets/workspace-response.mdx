@@ -4,6 +4,10 @@ title: 'Workspace Response'
 description: 'Explore ideas and examples of what you can build with the GoGovMy.co API'
 ---
 
+
+
+import ParamField from '@/app/components/ParamField'
+
 <ParamField name="id" type="string" required>
   The unique ID of the workspace.
 </ParamField>
@@ -67,18 +71,17 @@ description: 'Explore ideas and examples of what you can build with the GoGovMy.
 <ParamField name="users" type="object[]" required>
 The role of the authenticated user in the workspace.
 
-  <Accordions title="properties">
+
     <ParamField name="users.role" type="string" required>
       The role of the authenticated user in the workspace.
     </ParamField>
-  </Accordions>
+
 </ParamField>
 
 <ParamField name="domains" type="object[]" required>
 The domains of the workspace.
 
-  <Accordions title="properties">
-  <Accordion>
+
     <ParamField name="domains.slug" type="string">
       The domain of the workspace.
     </ParamField>
@@ -86,6 +89,5 @@ The domains of the workspace.
     <ParamField name="domains.primary" type="string">
       Indicates if the domain is the primary domain.
     </ParamField>
-    </Accordion>
-  </Accordions>
+
 </ParamField>

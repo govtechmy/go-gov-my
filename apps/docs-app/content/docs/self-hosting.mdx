@@ -197,7 +197,7 @@ Navigate to the [QStash tab](https://console.upstash.com/qstash) and copy the `Q
 Next, you'll need to set up a [PlanetScale](https://planetscale.com/)-compatible MySQL database. This will be used to store user data and link metadata.
 
 {/* prettier-ignore */}
-<Note>
+<Callout>
   PlanetScale recently [removed their free
   tier](https://planetscale.com/blog/planetscale-forever), so you'll need to pay
   for this option. A cheaper alternative is to use a [MySQL database on
@@ -205,7 +205,7 @@ Next, you'll need to set up a [PlanetScale](https://planetscale.com/)-compatible
   
   For [local development](local-development), we recommend using a [local MySQL database
   with PlanetScale simulator](local-development#option-1-local-mysql-database-with-planetscale-simulator-recommended) (100% free).
-</Note>
+</Callout>
 
 <Steps>
 
@@ -292,7 +292,7 @@ We recommend using [Cloudflare R2](https://cloudflare.com/r2) for self-hosting G
 
   <Step title="Create R2 bucket">
 
-<Note>You'll need to subscribe to the R2 service if you haven't already.</Note>
+<Callout>You'll need to subscribe to the R2 service if you haven't already.</Callout>
 
 In your [Cloudflare account](https://dash.cloudflare.com/), create a new R2 bucket. We recommend giving your bucket a descriptive name (e.g. `gogovmyassets`) and leaving the remaining settings as is.
 
@@ -360,9 +360,9 @@ STORAGE_BASE_URL={URL your assets as available at} # https://static.example.com
 
 ## Step 7: Set up Postmark (optional)
 
-<Note>
+<Callout>
   Note that if you want to use magic link sign-in, this is a required step.
-</Note>
+</Callout>
 
 Next, you'll need to set up Postmark for transactional emails (e.g. magic link emails):
 
@@ -413,7 +413,7 @@ Once you've set up all of the above services, you can now deploy your app to Ver
 
     Click on **Deploy** to deploy your project.
 
-    <Tip>
+    <Callout>
       If you get a `No Output Directory called "public" was found after the build
       completed` error, make sure that your [Vercel deployment
       settings](https://vercel.com/docs/deployments/configure-a-build) to make sure that they match the following:
@@ -422,7 +422,7 @@ Once you've set up all of the above services, you can now deploy your app to Ver
     ![Vercel Deploy settings](/images/vercel-deploy-settings.png)
     </Card>
 
-    </Tip>
+    </Callout>
 
     </Step>
 

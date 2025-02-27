@@ -5,6 +5,8 @@ description: 'Explore ideas and examples of what you can build with the GoGovMy.
 ---
 
 
+import ParamField from '@/app/components/ParamField'
+
 <ParamField name="id" type="string" required>
   The unique ID of the short link.
 </ParamField>
@@ -88,7 +90,7 @@ description: 'Explore ideas and examples of what you can build with the GoGovMy.
 <ParamField name="tags" type="object[] | null" required>
   The tags assigned to the short link.
 
-  <Accordions title="properties">
+
     <ParamField name="tags.id" type="string" required>
       The unique ID of the tag.
     </ParamField>
@@ -101,7 +103,7 @@ description: 'Explore ideas and examples of what you can build with the GoGovMy.
       The color of the tag.
     </ParamField>
 
-  </Accordions>
+
 </ParamField>
 
 <ParamField name="comments" type="string | null" required>
