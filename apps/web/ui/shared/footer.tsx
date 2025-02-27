@@ -13,6 +13,7 @@ type Props = {
   copyrightKey: string;
   lastUpdateKey: string;
   descriptionWithNewlines: string;
+  followUsKey: string;
   disclaimerKey: string;
   privacyPolicyKey: string;
   links: {
@@ -45,7 +46,7 @@ function formatDateTime(
 }
 
 export default function Footer(props: Props) {
-  const { messages, locale } = useIntlClientHook();
+  const { locale } = useIntlClientHook();
   const [releaseDate, setReleaseDate] = useState('');
 
   type releaseDateJson = {
@@ -126,7 +127,7 @@ export default function Footer(props: Props) {
               }}
             ></p>
             <div className="space-y-2 lg:space-y-3">
-              <p className="text-sm font-semibold">{messages?.Footer?.follow_us}</p>
+              <p className="text-sm font-semibold">{props.followUsKey}</p>
               <div className="flex gap-3">
                 {social_media.map(({ icon, href }) => (
                   <a key={href} href={href} target="_blank" rel="noopenner noreferrer">
