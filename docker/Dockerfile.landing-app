@@ -13,6 +13,15 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY packages/ui/package.json ./packages/ui/
 COPY packages/utils/package.json ./packages/utils/
 
+RUN pnpm install --frozen-lockfile
+
+# Copy source files
+COPY packages/ui ./packages/ui
+COPY packages/utils ./packages/utils
+
+RUN pnpm --filter "@dub/utils" build && \
+    pnpm --filter "@dub/ui" build
+
 COPY . .
 
 WORKDIR /app/apps/landing-app
