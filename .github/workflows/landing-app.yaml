@@ -66,6 +66,7 @@ jobs:
             NEXT_PUBLIC_APP_URL=${{ vars.NEXT_PUBLIC_APP_URL }}
             NEXT_PUBLIC_APP_DOMAIN=${{ vars.NEXT_PUBLIC_APP_DOMAIN }}
             NEXT_PUBLIC_LANDING_DOMAIN=${{ vars.NEXT_PUBLIC_LANDING_DOMAIN }}
+            NEXT_PUBLIC_RELEASE_DATE_JSON_URL=${{ vars.NEXT_PUBLIC_RELEASE_DATE_JSON_URL }}
             "LANDING_STATS_JSON_URL=${{ steps.determine-env.outputs.LANDING_STATS_JSON_URL }}"
       - name: Log out of Amazon ECR
         run: docker logout ${{ steps.login-ecr.outputs.registry }}

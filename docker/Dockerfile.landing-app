@@ -8,7 +8,6 @@ ENV PATH=$PATH:$PNPM_HOME
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY apps/web/package.json ./apps/web/
 COPY packages/ui/package.json ./packages/ui/
 COPY packages/utils/package.json ./packages/utils/
 COPY packages/tailwind-config/package.json ./packages/tailwind-config/
@@ -22,7 +21,8 @@ COPY packages/utils ./packages/utils
 COPY packages/tailwind-config ./packages/tailwind-config
 COPY packages/tsconfig ./packages/tsconfig
 
-RUN pnpm --filter "@dub/utils" build && \ 
+RUN pnpm --filter "@dub/utils" build && \
+    pnpm --filter "@gogovmy/tailwind-config" build && \
     pnpm --filter "@dub/ui" build
 
 COPY . .
@@ -46,7 +46,7 @@ ENV NEXT_PUBLIC_RELEASE_DATE_JSON_URL=${NEXT_PUBLIC_RELEASE_DATE_JSON_URL}
 
 
 RUN pnpm install
-RUN pnpm build
+RUN npm run build
 
 FROM nginx:alpine
 
