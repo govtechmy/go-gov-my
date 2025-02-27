@@ -7,8 +7,6 @@ ENV PATH=$PATH:$PNPM_HOME
 
 WORKDIR /app
 
-RUN npm install -g pnpm@9.1.3
-
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/web/package.json ./apps/web/
 COPY packages/ui/package.json ./packages/ui/
@@ -24,8 +22,7 @@ COPY packages/utils ./packages/utils
 COPY packages/tailwind-config ./packages/tailwind-config
 COPY packages/tsconfig ./packages/tsconfig
 
-RUN pnpm --filter "@dub/utils" build && \
-    pnpm --filter "@gogovmy/tailwind-config" build && \
+RUN pnpm --filter "@dub/utils" build && \ 
     pnpm --filter "@dub/ui" build
 
 COPY . .
@@ -38,16 +35,18 @@ ARG NEXT_PUBLIC_APP_URL
 ARG NEXT_PUBLIC_APP_DOMAIN
 ARG LANDING_STATS_JSON_URL
 ARG NEXT_PUBLIC_LANDING_DOMAIN
+ARG NEXT_PUBLIC_RELEASE_DATE_JSON_URL
 
 ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
 ENV NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
 ENV NEXT_PUBLIC_APP_DOMAIN=${NEXT_PUBLIC_APP_DOMAIN}
 ENV LANDING_STATS_JSON_URL=${LANDING_STATS_JSON_URL}
 ENV NEXT_PUBLIC_LANDING_DOMAIN=${NEXT_PUBLIC_LANDING_DOMAIN}
+ENV NEXT_PUBLIC_RELEASE_DATE_JSON_URL=${NEXT_PUBLIC_RELEASE_DATE_JSON_URL}
 
 
-RUN npm install
-RUN npm run build
+RUN pnpm install
+RUN pnpm build
 
 FROM nginx:alpine
 
