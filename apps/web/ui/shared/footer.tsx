@@ -1,6 +1,12 @@
-import { Icon } from '@/ui/shared/icons/social-media';
+'use client';
+
+import { social_media } from '@dub/utils';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
+import { useIntlClientHook } from '@/lib/middleware/utils/useI18nClient';
+import { useState, useEffect } from 'react';
 
 type Props = {
   ministry: string;
@@ -9,7 +15,6 @@ type Props = {
   descriptionWithNewlines: string;
   disclaimerKey: string;
   privacyPolicyKey: string;
-  followUsKey: string;
   links: {
     title?: string;
     links: {
@@ -19,58 +24,109 @@ type Props = {
   }[];
 };
 
-export const social_media = [
-  {
-    icon: <Icon.Facebook />,
-    name: 'Facebook',
-    href: 'https://www.facebook.com/KementerianDigitalMalaysia/',
-  },
-  { icon: <Icon.X />, name: 'X', href: 'https://x.com/KemDigitalMsia' },
-  {
-    icon: <Icon.Instagram />,
-    name: 'Instagram',
-    href: 'https://www.instagram.com/kementeriandigitalmalaysia/',
-  },
-  {
-    icon: <Icon.Tiktok />,
-    name: 'Tiktok',
-    href: 'https://www.tiktok.com/@kementeriandigital',
-  },
-];
+function formatDateTime(
+  dateInput: string | number | Date | undefined,
+  timeZone: string = 'Asia/Kuala_Lumpur'
+) {
+  if (!dateInput) return '';
+  // Convert input to a Date object
+  const date = new Date(dateInput || Date.now());
+
+  // Use Intl.DateTimeFormat for localization
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour12: true,
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone,
+  }).format(date);
+}
 
 export default function Footer(props: Props) {
-  //   const format = useFormatter();
-  //   const t = useTranslations('components.Footer');
+  const { messages, locale } = useIntlClientHook();
+  const [releaseDate, setReleaseDate] = useState('');
+
+  type releaseDateJson = {
+    app: string;
+    releaseDate: string;
+    releaseVersion: string;
+  };
+
+  async function fetchReleaseDateStats(): Promise<releaseDateJson[]> {
+    try {
+      const url = process.env.NEXT_PUBLIC_RELEASE_DATE_JSON_URL;
+      if (!url) {
+        throw new Error('NEXT_PUBLIC_RELEASE_DATE_JSON_URL is not set');
+      }
+
+      const response = await fetch(url, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch stats: ${response.statusText}`);
+      }
+
+      // Ensure the data is typed as an array
+      const data: releaseDateJson[] = await response.json();
+
+      // Safely find the entry for the "web" app
+      const webEntry = data.find((item) => item.app === 'web');
+      if (webEntry && webEntry.releaseDate) {
+        setReleaseDate(webEntry.releaseDate);
+      } else {
+        setReleaseDate('');
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+      setReleaseDate('');
+      throw error;
+    }
+  }
+
+  // Run fetchReleaseDateStats once when the component mounts
+  useEffect(() => {
+    fetchReleaseDateStats();
+  }, []);
 
   const className = {
     link: 'text-sm text-black-700 [text-underline-position:from-font] hover:text-black-900 hover:underline',
   };
 
   return (
-    <div className="border-t border-outline-200 bg-background-50 py-8 lg:py-16 print:hidden">
+    <div className="border-t border-outline-200 bg-[rgb(250,250,250)] py-8 lg:py-16 print:hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-0">
         <div className="flex flex-col gap-6 pb-8 lg:flex-row lg:justify-between">
           <div className="flex flex-col gap-4 lg:gap-4.5">
             <div className="flex items-center gap-x-2.5">
-              <img
-                src="https://s3.ap-southeast-1.amazonaws.com/pautan.org/logo.svg"
+              <Image
+                src="/jata_logo1.png"
                 width={28}
                 height={28}
                 className={cn('object-contain')}
-                alt="GoGovMY Logo"
+                alt="Jata Negara"
               />
               <div>
-                <h6 className="whitespace-nowrap font-poppins font-semibold">{props.ministry}</h6>
+                <h6 className="text-xl whitespace-nowrap font-poppins font-semibold">
+                  {props.ministry}
+                </h6>
               </div>
             </div>
-            {/* <p
+            <p
               className="text-sm text-black-700"
               dangerouslySetInnerHTML={{
                 __html: props.descriptionWithNewlines.replaceAll('\n', '<br/>'),
               }}
-            ></p> */}
-            {/* <div className="space-y-2 lg:space-y-3">
-              <p className="text-sm font-semibold">{props.followUsKey}</p>
+            ></p>
+            <div className="space-y-2 lg:space-y-3">
+              <p className="text-sm font-semibold">{messages?.Footer?.follow_us}</p>
               <div className="flex gap-3">
                 {social_media.map(({ icon, href }) => (
                   <a key={href} href={href} target="_blank" rel="noopenner noreferrer">
@@ -78,7 +134,7 @@ export default function Footer(props: Props) {
                   </a>
                 ))}
               </div>
-            </div> */}
+            </div>
           </div>
           {/* Right menu */}
           <div className="flex flex-col gap-6 text-sm lg:flex-row">
@@ -110,29 +166,27 @@ export default function Footer(props: Props) {
             </p>
             <span className="hidden h-3 w-px bg-outline-300 lg:block"></span>
             <div className="flex flex-wrap gap-x-3 gap-y-2 text-black-700">
-              {['disclaimer', 'privacy_policy'].map((link) => (
+              {[
+                {
+                  key: 'disclaimer',
+                  link: 'https://www.pautan.org/disclaimer?locale=en-GB',
+                },
+                {
+                  key: 'privacy-policy',
+                  link: 'https://www.pautan.org/privacy-policy?locale=en-GB',
+                },
+              ].map((link) => (
                 <Link
-                  key={link}
+                  key={link.key}
                   className="underline-font text-sm text-black-700 hover:text-foreground hover:underline"
-                  // href={`/${link}`}
-                  href="#"
+                  href={`${link.link}?locale=${locale}`}
                 >
-                  {link === 'disclaimer' ? props.disclaimerKey : props.privacyPolicyKey}
+                  {link.key === 'disclaimer' ? props.disclaimerKey : props.privacyPolicyKey}
                 </Link>
               ))}
             </div>
           </div>
-          {props.lastUpdateKey +
-            ': ' +
-            new Date().toLocaleString('en-MY', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              hour12: true,
-              hour: '2-digit',
-              minute: '2-digit',
-              timeZone: 'Asia/Kuala_Lumpur',
-            })}
+          <span>{props.lastUpdateKey + ': ' + formatDateTime(releaseDate)}</span>
         </div>
       </div>
     </div>

@@ -56,32 +56,29 @@ export default function Layout({
           </div>
           <div className="xs:pb-2 lg:pb-5 xl:pb-10">{children}</div>
         </div>
-        <MaxWidthWrapper>
-          <Footer
-            ministry={messages?.Footer?.kd}
-            copyrightKey={messages?.Footer?.copyright}
-            lastUpdateKey={messages?.Footer?.last_update}
-            disclaimerKey={messages?.Footer?.disclaimer}
-            privacyPolicyKey={messages?.Footer?.privacy_policy}
-            descriptionWithNewlines={messages?.Footer?.address}
-            followUsKey={messages?.Footer?.follow_us}
-            links={[
-              {
-                title: messages?.Footer?.links?.title?.openSource,
-                links: [
-                  {
-                    name: messages?.Footer?.links?.name?.figma,
-                    href: URL_FIGMA,
-                  },
-                  {
-                    name: messages?.Footer?.links?.name?.github,
-                    href: URL_GITHUB,
-                  },
-                ],
-              },
-            ]}
-          />
-        </MaxWidthWrapper>
+        <Footer
+          ministry={messages?.Footer?.kd}
+          copyrightKey={messages?.Footer?.copyright}
+          lastUpdateKey={messages?.Footer?.last_update}
+          disclaimerKey={messages?.Footer?.disclaimer}
+          privacyPolicyKey={messages?.Footer?.privacy_policy}
+          descriptionWithNewlines={messages?.Footer?.address}
+          links={[
+            {
+              title: messages?.Footer?.links?.title?.openSource,
+              links: [
+                {
+                  name: messages?.Footer?.links?.name?.figma,
+                  href: URL_FIGMA,
+                },
+                {
+                  name: messages?.Footer?.links?.name?.github,
+                  href: URL_GITHUB,
+                },
+              ],
+            },
+          ]}
+        />
       </MessagesProvider>
     </Providers>
   );

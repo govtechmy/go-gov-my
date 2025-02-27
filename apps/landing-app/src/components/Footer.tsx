@@ -6,6 +6,8 @@ import { useFormatter, useTranslations } from "next-intl";
 import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { social_media } from '@dub/utils';
 
 type Props = {
   ministry: string;
@@ -23,30 +25,99 @@ type Props = {
   }[];
 };
 
-export const social_media = [
-  {
-    icon: <Icon.Facebook />,
-    name: "Facebook",
-    href: "https://www.facebook.com/KementerianDigitalMalaysia/",
-  },
-  { icon: <Icon.X />, name: "X", href: "https://x.com/KemDigitalMsia" },
-  {
-    icon: <Icon.Instagram />,
-    name: "Instagram",
-    href: "https://www.instagram.com/kementeriandigitalmalaysia/",
-  },
-  {
-    icon: <Icon.Tiktok />,
-    name: "Tiktok",
-    href: "https://www.tiktok.com/@kementeriandigital",
-  },
-];
+function formatDateTime(
+  dateInput: string | number | Date | undefined,
+  timeZone: string = 'Asia/Kuala_Lumpur'
+) {
+  if (!dateInput) return '';
+  // Convert input to a Date object
+  const date = new Date(dateInput || Date.now());
+
+  // Use Intl.DateTimeFormat for localization
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour12: true,
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone,
+  }).format(date);
+}
+
+// export const social_media = [
+//   {
+//     icon: <Icon.Facebook />,
+//     name: "Facebook",
+//     href: "https://www.facebook.com/KementerianDigitalMalaysia/",
+//   },
+//   { icon: <Icon.X />, name: "X", href: "https://x.com/KemDigitalMsia" },
+//   {
+//     icon: <Icon.Instagram />,
+//     name: "Instagram",
+//     href: "https://www.instagram.com/kementeriandigitalmalaysia/",
+//   },
+//   {
+//     icon: <Icon.Tiktok />,
+//     name: "Tiktok",
+//     href: "https://www.tiktok.com/@kementeriandigital",
+//   },
+// ];
 
 export default function Footer(props: Props) {
   const format = useFormatter();
   const t = useTranslations("components.Footer");
   const searchParams = useSearchParams();
   const locale = searchParams.get("locale") || "en-GB";
+  const [releaseDate, setReleaseDate] = useState('');
+
+  type releaseDateJson = {
+    app: string;
+    releaseDate: string;
+    releaseVersion: string;
+  };
+
+  async function fetchReleaseDateStats(): Promise<releaseDateJson[]> {
+    try {
+      const url = process.env.NEXT_PUBLIC_RELEASE_DATE_JSON_URL;
+      if (!url) {
+        throw new Error('NEXT_PUBLIC_RELEASE_DATE_JSON_URL is not set');
+      }
+
+      const response = await fetch(url, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch stats: ${response.statusText}`);
+      }
+
+      // Ensure the data is typed as an array
+      const data: releaseDateJson[] = await response.json();
+
+      // Safely find the entry for the "web" app
+      const webEntry = data.find((item) => item.app === 'landing-app');
+      if (webEntry && webEntry.releaseDate) {
+        setReleaseDate(webEntry.releaseDate);
+      } else {
+        setReleaseDate('');
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+      setReleaseDate('');
+      throw error;
+    }
+  }
+
+  // Run fetchReleaseDateStats once when the component mounts
+  useEffect(() => {
+    fetchReleaseDateStats();
+  }, []);
 
   const className = {
     link: "text-sm text-black-700 [text-underline-position:from-font] hover:text-black-900 hover:underline",
@@ -129,19 +200,7 @@ export default function Footer(props: Props) {
               ))}
             </div>
           </div>
-          <span>
-            {props.lastUpdateKey +
-              ": " +
-              format.dateTime(new Date(process.env.NEXT_PUBLIC_LAST_UPDATED || Date.now()), {
-                year: "numeric",
-                month: "long", 
-                day: "numeric",
-                hour12: true,
-                hour: "2-digit",
-                minute: "2-digit",
-                timeZone: "Asia/Kuala_Lumpur",
-              }).replace(/\bam\b/, "AM").replace(/\bpm\b/, "PM")}
-          </span>
+          <span>{props.lastUpdateKey + ': ' + formatDateTime(releaseDate)}</span>
         </div>
       </div>
     </div>
