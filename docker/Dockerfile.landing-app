@@ -7,6 +7,9 @@ ENV PATH=$PATH:$PNPM_HOME
 
 WORKDIR /app
 
+COPY packages/ui/package.json ./packages/ui/
+COPY packages/utils/package.json ./packages/utils/
+
 COPY . .
 
 WORKDIR /app/apps/landing-app
@@ -24,8 +27,6 @@ ENV NEXT_PUBLIC_APP_DOMAIN=${NEXT_PUBLIC_APP_DOMAIN}
 ENV LANDING_STATS_JSON_URL=${LANDING_STATS_JSON_URL}
 ENV NEXT_PUBLIC_LANDING_DOMAIN=${NEXT_PUBLIC_LANDING_DOMAIN}
 
-COPY packages/ui/package.json ./packages/ui/
-COPY packages/utils/package.json ./packages/utils/
 
 RUN npm install
 RUN npm run build
