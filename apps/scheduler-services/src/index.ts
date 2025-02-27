@@ -6,6 +6,11 @@ import { JobContext } from './types';
 import { DiscordNotifier } from './utils/discord';
 
 async function main() {
+  if (config.environment === 'local') {
+    logger.info('Skipping job execution in local debug mode');
+    process.exit(0);
+  }
+
   const discord = new DiscordNotifier(config.discordWebhook, config.discordThreadId);
   const jobContext: JobContext = {
     logger,
