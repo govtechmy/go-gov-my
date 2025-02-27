@@ -1,0 +1,170 @@
+---
+title: 'Link Response'
+'og:title': 'GoGovMy.co API Examples - Build with the GoGovMy.co API'
+description: 'Explore ideas and examples of what you can build with the GoGovMy.co API'
+---
+
+
+import ParamField from '@/app/components/ParamField'
+
+<ParamField name="id" type="string" required>
+  The unique ID of the short link.
+</ParamField>
+
+<ParamField name="domain" type="string" required>
+  The domain of the short link. If not provided, the primary domain for the
+  workspace will be used (or go.gov.my if the workspace has no domains).
+</ParamField>
+
+<ParamField name="key" type="string" required>
+  The short link slug. If not provided, a random 7-character slug will be
+  generated.
+</ParamField>
+
+<ParamField name="externalId" type="string | null" required>
+  This is the ID of the link in your database. If set, it can be used to
+  identify the link in the future. Must be prefixed with `ext_` when provided to
+  `links.get`, `links.update`, and `links.delete` methods.
+</ParamField>
+
+<ParamField name="url" type="string" required>
+  The destination URL of the short link.
+</ParamField>
+
+<ParamField name="archived" type="boolean" required default="false">
+  Whether the short link is archived.
+</ParamField>
+
+<ParamField name="expiresAt" type="string | null" required>
+  The date and time when the short link will expire in ISO-8601 format.
+</ParamField>
+
+<ParamField name="expiredUrl" type="string | null" required>
+  The URL to redirect to when the short link has expired.
+</ParamField>
+
+<ParamField name="password" type="string | null" required>
+  The password required to access the destination URL of the short link.
+</ParamField>
+
+<ParamField name="proxy" type="boolean" required default="false">
+  Whether the short link uses Custom Social Media Cards feature.
+</ParamField>
+
+<ParamField name="title" type="string | null" required>
+  The title of the short link generated via api.go.gov.my/metatags. Will be used
+  for Custom Social Media Cards if proxy is true.
+</ParamField>
+
+<ParamField name="description" type="string | null" required>
+  The description of the short link generated via api.go.gov.my/metatags. Will be
+  used for Custom Social Media Cards if proxy is true.
+</ParamField>
+
+<ParamField name="image" type="string | null" required>
+  The image of the short link generated via api.go.gov.my/metatags. Will be used
+  for Custom Social Media Cards if proxy is true.
+</ParamField>
+
+<ParamField name="rewrite" type="boolean" required default="false">
+  Whether the short link uses link cloaking.
+</ParamField>
+
+<ParamField name="ios" type="string | null" required>
+  The iOS destination URL for the short link for iOS device targeting.
+</ParamField>
+
+<ParamField name="android" type="string | null" required>
+  The Android destination URL for the short link for Android device targeting.
+</ParamField>
+
+<ParamField name="publicStats" type="boolean" required default="false">
+  Whether the short link's stats are publicly accessible.
+</ParamField>
+
+<ParamField name="tagId" type="string | null" required>
+  The unique ID of the tag assigned to the short link. This field is deprecated
+  – use `tags` instead.
+</ParamField>
+
+<ParamField name="tags" type="object[] | null" required>
+  The tags assigned to the short link.
+
+
+    <ParamField name="tags.id" type="string" required>
+      The unique ID of the tag.
+    </ParamField>
+
+    <ParamField name="tags.name" type="string" required>
+      The name of the tag.
+    </ParamField>
+
+    <ParamField name="tags.color" type="string" required>
+      The color of the tag.
+    </ParamField>
+
+
+</ParamField>
+
+<ParamField name="comments" type="string | null" required>
+  The comments for the short link.
+</ParamField>
+
+<ParamField name="shortLink" type="string" required>
+  The full URL of the short link, including the https protocol (e.g.
+  `https://go.gov.my/try`).
+</ParamField>
+
+<ParamField name="qrCode" type="string" required>
+  The full URL of the QR code for the short link (e.g.
+  `https://api.go.gov.my/qr?url=https://go.gov.my/try`).
+</ParamField>
+
+<ParamField name="utm_source" type="string | null" required>
+  The UTM source of the short link.
+</ParamField>
+
+<ParamField name="utm_medium" type="string | null" required>
+  The UTM medium of the short link.
+</ParamField>
+
+<ParamField name="utm_campaign" type="string | null" required>
+  The UTM campaign of the short link.
+</ParamField>
+
+<ParamField name="utm_term" type="string | null" required>
+  The UTM term of the short link.
+</ParamField>
+
+<ParamField name="utm_content" type="string | null" required>
+  The UTM content of the short link.
+</ParamField>
+
+<ParamField name="userId" type="string" required>
+  The user ID of the creator of the short link.
+</ParamField>
+
+<ParamField name="workspaceId" type="string" required>
+  The workspace ID of the short link.
+</ParamField>
+
+<ParamField name="clicks" type="number" required default="0">
+  The number of clicks on the short link.
+</ParamField>
+
+<ParamField name="lastClicked" type="string | null" required>
+  The date and time when the short link was last clicked.
+</ParamField>
+
+<ParamField name="createdAt" type="string" required>
+  The date and time when the short link was created.
+</ParamField>
+
+<ParamField name="updatedAt" type="string" required>
+  The date and time when the short link was last updated.
+</ParamField>
+
+<ParamField name="projectId" type="string" required>
+  The project ID of the short link. This field is deprecated – use `workspaceId`
+  instead.
+</ParamField>

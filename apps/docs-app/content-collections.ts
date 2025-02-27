@@ -13,6 +13,14 @@ const docs = defineCollection({
   transform: transformMDX,
 });
 
+const snippets = defineCollection({
+  name: 'snippets',
+  directory: 'content/docs/snippets',
+  include: '**/*.mdx',
+  schema: createDocSchema,
+  transform: transformMDX,
+});
+
 const metas = defineCollection({
   name: 'meta',
   directory: 'content/docs',
@@ -22,5 +30,5 @@ const metas = defineCollection({
 });
 
 export default defineConfig({
-  collections: [docs, metas],
+  collections: [docs, metas, snippets],
 });

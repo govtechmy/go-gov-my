@@ -1,0 +1,93 @@
+---
+title: 'Workspace Response'
+'og:title': 'GoGovMy.co API Examples - Build with the GoGovMy.co API'
+description: 'Explore ideas and examples of what you can build with the GoGovMy.co API'
+---
+
+
+
+import ParamField from '@/app/components/ParamField'
+
+<ParamField name="id" type="string" required>
+  The unique ID of the workspace.
+</ParamField>
+
+<ParamField name="name" type="string" required>
+  The name of the workspace.
+</ParamField>
+
+<ParamField name="slug" type="string" required>
+  The slug of the workspace.
+</ParamField>
+
+<ParamField name="logo" type="string | null" required>
+  The logo of the workspace.
+</ParamField>
+
+<ParamField name="usage" type="number" required>
+  The usage of the workspace.
+</ParamField>
+
+<ParamField name="usageLimit" type="number" required>
+  The usage limit of the workspace.
+</ParamField>
+
+<ParamField name="linksUsage" type="number" required>
+  The links usage of the workspace.
+</ParamField>
+
+<ParamField name="linksLimit" type="number" required>
+  The links limit of the workspace.
+</ParamField>
+
+<ParamField name="domainsLimit" type="number" required>
+  The domains limit of the workspace.
+</ParamField>
+
+<ParamField name="tagsLimit" type="number" required>
+  The tags limit of the workspace.
+</ParamField>
+
+<ParamField name="usersLimit" type="number" required>
+  The users limit of the workspace.
+</ParamField>
+
+<ParamField name="plan" type="string" required>
+  The plan of the workspace.
+</ParamField>
+
+<ParamField name="stripeId" type="string | null" required>
+  The Stripe ID of the workspace.
+</ParamField>
+
+<ParamField name="billingCycleStart" type="number" required>
+  The date and time when the billing cycle starts for the workspace.
+</ParamField>
+
+<ParamField name="createdAt" type="string" required>
+  The date and time when the workspace was created.
+</ParamField>
+
+<ParamField name="users" type="object[]" required>
+The role of the authenticated user in the workspace.
+
+
+    <ParamField name="users.role" type="string" required>
+      The role of the authenticated user in the workspace.
+    </ParamField>
+
+</ParamField>
+
+<ParamField name="domains" type="object[]" required>
+The domains of the workspace.
+
+
+    <ParamField name="domains.slug" type="string">
+      The domain of the workspace.
+    </ParamField>
+
+    <ParamField name="domains.primary" type="string">
+      Indicates if the domain is the primary domain.
+    </ParamField>
+
+</ParamField>

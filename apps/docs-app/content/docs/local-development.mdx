@@ -4,14 +4,14 @@ title: 'Local Development'
 description: "A guide on how to run GoGovMy's codebase locally."
 ---
 
-<Frame>
+<Card>
   <img
     src="/images/logo-background-gradient.png"
     alt="GoGovMy Logo on a gradient background"
     width="1200"
     height="630"
   />
-</Frame>
+</Card>
 
 ## Introduction
 
@@ -193,7 +193,12 @@ In your [Upstash account](https://console.upstash.com/), create a new database.
 
 For better performance & read times, we recommend setting up a global database with several read regions.
 
-<Frame>![Upstash Redis database](/images/upstash-create-db.png)</Frame>
+<Card><Image 
+    src="/images/upstash-create-db.png" 
+    alt="Upstash Redis database" 
+    width={500} 
+    height={300} 
+  /></Card>
 
   </Step>
 
@@ -201,11 +206,25 @@ For better performance & read times, we recommend setting up a global database w
 
 Once your database is created, copy the `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` from the **REST API** section into your `.env` file.
 
-<Frame>![Upstash Redis tokens](/images/upstash-redis-tokens.png)</Frame>
+<Card>
+  <Image 
+    src="/images/upstash-reids-token.png" 
+    alt="Upstash Redis database" 
+    width={500} 
+    height={300} 
+  />
+</Card>
 
 Navigate to the [QStash tab](https://console.upstash.com/qstash) and copy the `QSTASH_TOKEN`, `QSTASH_CURRENT_SIGNING_KEY`, and `QSTASH_NEXT_SIGNING_KEY` from the **Request Builder** section into your `.env` file.
 
-<Frame>![Upstash QStash tokens](/images/upstash-qstash-tokens.png)</Frame>
+<Card>
+  <Image 
+    src="/images/upstash-qstash-token.png" 
+    alt="Upstash Redis database" 
+    width={500} 
+    height={300} 
+  />
+</Card>
 
   </Step>
 
@@ -263,9 +282,10 @@ Prerequisites:
 
     Here, we are using the open-source [PlanetScale simulator](https://github.com/mattrobenolt/ps-http-sim) so the application can continue to use the `@planetscale/database` SDK.
 
-    <Tip>
+    <Callout type="info" title="Tip">
       While we're using two different values in local development, in production or staging environments, you'll only need the `DATABASE_URL` value.
-    </Tip>
+    </Callout>
+
 
   </Step>
 
@@ -289,12 +309,6 @@ Prerequisites:
 
 ### Option 2: PlanetScale hosted database
 
-<Note>
-  PlanetScale recently [removed their free
-  tier](https://planetscale.com/blog/planetscale-forever), so you'll need to pay
-  for this option. A cheaper alternative is to use a [MySQL database on
-  Railway](https://railway.app/template/mysql) ($5/month).
-</Note>
 
 <Steps>
 
@@ -304,9 +318,14 @@ Prerequisites:
 
     Once your database is created, you'll be prompted to select your language or Framework. Select **Prisma**.
 
-    <Frame>
-    ![PlanetScale choose framework](/images/planetscale-choose-framework.png)
-    </Frame>
+  <Card>
+    <Image 
+      src="/images/planetscale-choose-framework.png" 
+      alt="Upstash Redis database" 
+      width={500} 
+      height={300} 
+    />
+  </Card>
 
   </Step>
 
@@ -314,9 +333,14 @@ Prerequisites:
 
     Then, you'll have to create a new password for your database. Once the password is created, scroll down to the **Add credentials to .env** section and copy the `DATABASE_URL` into your `.env` file.
 
-    <Frame>
-    ![PlanetScale add credentials](/images/planetscale-add-credentials.png)
-    </Frame>
+    <Card>
+      <Image 
+        src="/images/planetscale-add-credentials.png" 
+        alt="Upstash Redis database" 
+        width={500} 
+        height={300} 
+      />
+    </Card>
 
   </Step>
 

@@ -1,28 +1,23 @@
+# Use Node.js 20 with Alpine for a lightweight image
 FROM node:20-alpine
 
+# Update and upgrade Alpine packages
 RUN apk update && apk upgrade
 
+# Set the working directory inside the container
 WORKDIR /app
 
-# Change this line to copy the entire docs directory
+# Copy the entire project
 COPY ./apps/docs-app .
 
-RUN npm install -g npm@10.8.3
-
+# Install dependencies separately to take advantage of Docker's caching
 RUN npm install
 
-RUN npm install @mintlify/cli
+# Build the Next.js app
+RUN npm run build
 
-RUN npm install -g mintlify
-
-# Add a verification step to check if mint.json exists
-RUN if [ ! -f mint.json ]; then echo "mint.json is missing" && exit 1; fi
-
+# Expose the port for the Next.js server
 EXPOSE 3334
 
-CMD [ \
-    "mintlify", \
-    "dev", \
-    "--port", \
-    "3334" \
-    ]
+# Use Next.js built-in start command for production
+CMD ["npm", "run", "start"]
