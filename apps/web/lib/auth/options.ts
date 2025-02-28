@@ -26,11 +26,11 @@ export const authOptions: NextAuthOptions = {
         });
       },
     }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-      allowDangerousEmailAccountLinking: true,
-    }),
+    // GoogleProvider({
+    //   clientId: process.env.GOOGLE_CLIENT_ID as string,
+    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    //   allowDangerousEmailAccountLinking: true,
+    // }),
   ],
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
@@ -58,44 +58,44 @@ export const authOptions: NextAuthOptions = {
           return false;
         }
 
-        if (account?.provider === 'google') {
-          const userExists = await prisma.user.findUnique({
-            where: { email: user.email },
-            select: { id: true, name: true, image: true },
-          });
+        // if (account?.provider === 'google') {
+        //   const userExists = await prisma.user.findUnique({
+        //     where: { email: user.email },
+        //     select: { id: true, name: true, image: true },
+        //   });
 
-          if (!userExists || !profile) {
-            return true;
-          }
+        //   if (!userExists || !profile) {
+        //     return true;
+        //   }
 
-          // if the user already exists via email,
-          // update the user with their name and image
-          if (userExists && profile) {
-            const profilePic = profile[account.provider === 'google' ? 'picture' : 'avatar_url'];
-            let newAvatar: string | null = null;
+        //   // if the user already exists via email,
+        //   // update the user with their name and image
+        //   if (userExists && profile) {
+        //     const profilePic = profile[account.provider === 'google' ? 'picture' : 'avatar_url'];
+        //     let newAvatar: string | null = null;
 
-            try {
-              // Only attempt upload if there's a profile picture and it needs updating
-              if ((!userExists.image || !isStored(userExists.image)) && profilePic) {
-                const { url } = await storage.upload(`avatars/${userExists.id}`, profilePic);
-                newAvatar = url;
-              }
+        //     try {
+        //       // Only attempt upload if there's a profile picture and it needs updating
+        //       if ((!userExists.image || !isStored(userExists.image)) && profilePic) {
+        //         const { url } = await storage.upload(`avatars/${userExists.id}`, profilePic);
+        //         newAvatar = url;
+        //       }
 
-              await prisma.user.update({
-                where: { email: user.email },
-                data: {
-                  // @ts-expect-error - this is a bug in the types, `login` is a valid on the `Profile` type
-                  name: profile.name || profile.login,
-                  ...(newAvatar && { image: newAvatar }),
-                },
-              });
-            } catch (error) {
-              console.error('Error updating user profile:', error);
-              // Continue the sign-in process even if avatar upload fails
-              return true;
-            }
-          }
-        }
+        //       await prisma.user.update({
+        //         where: { email: user.email },
+        //         data: {
+        //           // @ts-expect-error - this is a bug in the types, `login` is a valid on the `Profile` type
+        //           name: profile.name || profile.login,
+        //           ...(newAvatar && { image: newAvatar }),
+        //         },
+        //       });
+        //     } catch (error) {
+        //       console.error('Error updating user profile:', error);
+        //       // Continue the sign-in process even if avatar upload fails
+        //       return true;
+        //     }
+        //   }
+        // }
         return true;
       } catch (error) {
         console.error('SignIn callback error:', error);

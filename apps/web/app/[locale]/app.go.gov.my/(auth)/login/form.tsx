@@ -15,7 +15,7 @@ export default function LoginForm() {
   const [showEmailOption, setShowEmailOption] = useState(false);
   const [noSuchAccount, setNoSuchAccount] = useState(false);
   const [email, setEmail] = useState('');
-  const [clickedGoogle, setClickedGoogle] = useState(false);
+  // const [clickedGoogle, setClickedGoogle] = useState(false);
   const [clickedEmail, setClickedEmail] = useState(false);
   const [clickedSSO, setClickedSSO] = useState(false);
   const { messages, locale } = useIntlClientHook();
@@ -31,7 +31,7 @@ export default function LoginForm() {
   useEffect(() => {
     // when leave page, reset state
     return () => {
-      setClickedGoogle(false);
+      // setClickedGoogle(false);
       setClickedEmail(false);
       setClickedSSO(false);
     };
@@ -39,7 +39,7 @@ export default function LoginForm() {
 
   return (
     <>
-      <div className="flex space-x-2">
+      {/* <div className="flex space-x-2">
         <Button
           variant="secondary"
           onClick={() => {
@@ -53,7 +53,7 @@ export default function LoginForm() {
           icon={<Google className="h-5 w-5" />}
           text={message?.cont_google}
         />
-      </div>
+      </div> */}
       <form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -124,7 +124,8 @@ export default function LoginForm() {
             },
           })}
           loading={clickedEmail}
-          disabled={clickedGoogle || clickedSSO}
+          // disabled={clickedGoogle || clickedSSO}
+          disabled={clickedSSO}
         />
       </form>
       {noSuchAccount && (
