@@ -10,6 +10,11 @@ const emailInviteSchema = z.object({
   email: z.string().email(),
 });
 
+function getEmailDomain(email: string): string {
+  const match = email.match(/@([a-zA-Z0-9.-]+)$/);
+  return match ? match[1] : '';
+}
+
 // GET /api/workspaces/[idOrSlug]/invites – get invites for a specific workspace
 export const GET = logRequestMetrics(
   withWorkspace(async ({ workspace }) => {
@@ -31,6 +36,20 @@ export const POST = logRequestMetrics(
   withWorkspace(
     async ({ req, workspace, session }) => {
       const { email } = emailInviteSchema.parse(await req.json());
+
+      const emailDomain = getEmailDomain(email);
+      const allAllowedDomains = await prisma.allowedDomains.findMany({
+        where: { isActive: true },
+      });
+      const allowedDomainList = allAllowedDomains.map((domain) => domain.domain.toLowerCase());
+
+      // Check if the email domain is allowed
+      if (!allowedDomainList.includes(emailDomain)) {
+        return NextResponse.json(
+          { error: 'Email domain not allowed' },
+          { status: 403 } // 403 Forbidden
+        );
+      }
 
       const [alreadyInWorkspace, workspaceUserCount, workspaceInviteCount] = await Promise.all([
         prisma.projectUsers.findFirst({
