@@ -46,7 +46,11 @@ export const POST = logRequestMetrics(
       // Check if the email domain is allowed
       if (!allowedDomainList.includes(emailDomain)) {
         return NextResponse.json(
-          { error: 'Email domain not allowed' },
+          {
+            error: {
+              message: 'Email domain not allowed',
+            },
+          },
           { status: 403 } // 403 Forbidden
         );
       }
