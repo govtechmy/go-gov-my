@@ -1,4 +1,4 @@
-const REDIRECT_SEGMENTS = ['pricing', 'blog', 'help', 'changelog', 'tools', '_static'];
+// const REDIRECT_SEGMENTS = ['pricing', 'blog', 'help', 'changelog', 'tools', '_static'];
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -32,25 +32,7 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: 'www.google.com',
-      },
-      {
-        hostname: 'avatar.vercel.sh',
-      },
-      {
         hostname: 'api.dicebear.com',
-      },
-      {
-        hostname: 'pbs.twimg.com',
-      },
-      {
-        hostname: 'lh3.googleusercontent.com',
-      },
-      {
-        hostname: 'avatars.githubusercontent.com',
-      },
-      {
-        hostname: 'media.cleanshot.cloud', // only for staging purposes
       },
       {
         hostname: 'gogov-web-dev.s3.ap-southeast-1.amazonaws.com',
