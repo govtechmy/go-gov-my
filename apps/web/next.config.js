@@ -1,4 +1,4 @@
-// const REDIRECT_SEGMENTS = ['pricing', 'blog', 'help', 'changelog', 'tools', '_static'];
+
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -105,34 +105,6 @@ const nextConfig = {
         permanent: true,
         statusCode: 301,
       },
-      ...REDIRECT_SEGMENTS.map(
-        (segment) => (
-          {
-            source: `/${segment}`,
-            has: [
-              {
-                type: 'host',
-                value: 'pautan.org',
-              },
-            ],
-            destination: `https://go.gov.my/${segment}`,
-            permanent: true,
-            statusCode: 301,
-          },
-          {
-            source: `/${segment}/:path*`,
-            has: [
-              {
-                type: 'host',
-                value: 'go.gov.my',
-              },
-            ],
-            destination: `https://go.gov.my/${segment}/:path*`,
-            permanent: true,
-            statusCode: 301,
-          }
-        )
-      ),
       {
         source: '/metatags',
         has: [
