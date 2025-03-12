@@ -1,5 +1,4 @@
 
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
@@ -51,7 +50,7 @@ const nextConfig = {
       },
     ],
     domains: [
-      'gogov-web-dev.s3.ap-southeast-1.amazonaws.com',
+      process.env.STORAGE_BASE_URL,
       'app.pautan.org',
       'app.go.gov.my',
       'pautan.org',
