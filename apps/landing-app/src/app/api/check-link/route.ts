@@ -1,26 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sign } from 'jsonwebtoken';
+import { LinkCheckerRequest, LinkCheckerResponse } from '@/types/check-link-type';
 
-type LinkCheckerResponse = {
-  isValid: boolean;
-  isExpired: boolean;
-  agency?: {
-    code: string;
-    names: {
-      ms: string;
-      en: string;
-    };
-    logo: string | null;
-  } | null;
-  validUntil: string | null;
-  redirectUrl: string | null;
-  shortUrl: string | null;
-};
-
-type LinkCheckerRequest = {
-  url: string;
-  token: string;
-};
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {

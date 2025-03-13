@@ -1,13 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { LinkReportRequest, LinkReportResponse } from '@/types/report-link-type';
 
-type LinkReportRequest = {
-  url: string;
-  token: string;
-};
-
-type LinkReportResponse = {
-  status: boolean;
-};
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {

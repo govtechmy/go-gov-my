@@ -18,6 +18,9 @@ import { Header } from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import dynamic from "next/dynamic";
+import { SEGMENTS } from "@/constants/segments";
+import * as BasePath from "@/constants/basepath"
+
 
 const StatsNew = dynamic(() => import("@/components/home/StatsNew"), {
   ssr: false,
@@ -38,26 +41,7 @@ type StatsJson = {
   officersMetadata: MetadataItem[];
 };
 
-const SEGMENTS = [
-  "mygcc",
-  "moh",
-  "miti",
-  "digital",
-  "moe",
-  "moh",
-  "motac",
-  "epf",
-  "mof",
-  "mcmc",
-];
 
-const ACTION_BASE_PATH = "pages.Home.Action";
-const PREVIEW_BASE_PATH = "pages.Home.Preview";
-const HERO_BASE_PATH = "pages.Home.Hero";
-const STATS_BASE_PATH = "pages.Home.Stats";
-const MASTHEAD_BASE_PATH = "components.Masthead";
-const HEADER_BASE_PATH = "components.Header";
-const FOOTER_BASE_PATH = "components.Footer";
 async function getStats() {
   try {
     const url = process.env.LANDING_STATS_JSON_URL;
@@ -279,20 +263,20 @@ function Main(props: { children: ReactNode }) {
 }
 
 const header = {
-  signInKey: keypath(HEADER_BASE_PATH, "buttons.signIn"),
+  signInKey: keypath(BasePath.HEADER_BASE_PATH, "buttons.signIn"),
 };
 
 const preview = {
-  titleKey: keypath(PREVIEW_BASE_PATH, "title"),
-  descriptionKey: keypath(PREVIEW_BASE_PATH, "description"),
+  titleKey: keypath(BasePath.PREVIEW_BASE_PATH, "title"),
+  descriptionKey: keypath(BasePath.PREVIEW_BASE_PATH, "description"),
   items: [
     {
-      tagKey: keypath(PREVIEW_BASE_PATH, "content.1.tag"),
-      titleKey: keypath(PREVIEW_BASE_PATH, "content.1.title"),
+      tagKey: keypath(BasePath.PREVIEW_BASE_PATH, "content.1.tag"),
+      titleKey: keypath(BasePath.PREVIEW_BASE_PATH, "content.1.title"),
       img: {
         svg: "/preview/content1/image.svg",
         webp: "/preview/content1/image.webp",
-        altKey: keypath(PREVIEW_BASE_PATH, "content.1.title"),
+        altKey: keypath(BasePath.PREVIEW_BASE_PATH, "content.1.title"),
       },
       animation: {
         src: "/rive/animation.riv",
@@ -301,12 +285,12 @@ const preview = {
       },
     },
     {
-      tagKey: keypath(PREVIEW_BASE_PATH, "content.2.tag"),
-      titleKey: keypath(PREVIEW_BASE_PATH, "content.2.title"),
+      tagKey: keypath(BasePath.PREVIEW_BASE_PATH, "content.2.tag"),
+      titleKey: keypath(BasePath.PREVIEW_BASE_PATH, "content.2.title"),
       img: {
         svg: "/preview/content2/image.svg",
         webp: "/preview/content2/image.webp",
-        altKey: keypath(PREVIEW_BASE_PATH, "content.2.title"),
+        altKey: keypath(BasePath.PREVIEW_BASE_PATH, "content.2.title"),
       },
       animation: {
         src: "/rive/animation.riv",
@@ -315,12 +299,12 @@ const preview = {
       },
     },
     {
-      tagKey: keypath(PREVIEW_BASE_PATH, "content.3.tag"),
-      titleKey: keypath(PREVIEW_BASE_PATH, "content.3.title"),
+      tagKey: keypath(BasePath.PREVIEW_BASE_PATH, "content.3.tag"),
+      titleKey: keypath(BasePath.PREVIEW_BASE_PATH, "content.3.title"),
       img: {
         svg: "/preview/content3/image.svg",
         webp: "/preview/content3/image.webp",
-        altKey: keypath(PREVIEW_BASE_PATH, "content.3.title"),
+        altKey: keypath(BasePath.PREVIEW_BASE_PATH, "content.3.title"),
       },
       animation: {
         src: "/rive/animation.riv",
@@ -329,12 +313,12 @@ const preview = {
       },
     },
     {
-      tagKey: keypath(PREVIEW_BASE_PATH, "content.4.tag"),
-      titleKey: keypath(PREVIEW_BASE_PATH, "content.4.title"),
+      tagKey: keypath(BasePath.PREVIEW_BASE_PATH, "content.4.tag"),
+      titleKey: keypath(BasePath.PREVIEW_BASE_PATH, "content.4.title"),
       img: {
         svg: "/preview/content4/image.svg",
         webp: "/preview/content4/image.webp",
-        altKey: keypath(PREVIEW_BASE_PATH, "content.4.title"),
+        altKey: keypath(BasePath.PREVIEW_BASE_PATH, "content.4.title"),
       },
       animation: {
         src: "/rive/animation.riv",
@@ -346,58 +330,58 @@ const preview = {
 };
 
 const action = {
-  titleKey: keypath(ACTION_BASE_PATH, "title"),
-  descriptionKey: keypath(ACTION_BASE_PATH, "description"),
-  buttonKey: keypath(ACTION_BASE_PATH, "buttons.createLink"),
+  titleKey: keypath(BasePath.ACTION_BASE_PATH, "title"),
+  descriptionKey: keypath(BasePath.ACTION_BASE_PATH, "description"),
+  buttonKey: keypath(BasePath.ACTION_BASE_PATH, "buttons.createLink"),
 };
 
 const footer = {
-  copyrightKey: keypath(FOOTER_BASE_PATH, "copyright"),
-  lastUpdateKey: keypath(FOOTER_BASE_PATH, "last_update"),
-  disclaimerKey: keypath(FOOTER_BASE_PATH, "disclaimer"),
-  privacyPolicyKey: keypath(FOOTER_BASE_PATH, "privacy_policy"),
+  copyrightKey: keypath(BasePath.FOOTER_BASE_PATH, "copyright"),
+  lastUpdateKey: keypath(BasePath.FOOTER_BASE_PATH, "last_update"),
+  disclaimerKey: keypath(BasePath.FOOTER_BASE_PATH, "disclaimer"),
+  privacyPolicyKey: keypath(BasePath.FOOTER_BASE_PATH, "privacy_policy"),
 };
 
 const hero = {
-  titleKey: keypath(HERO_BASE_PATH, "title"),
-  descriptionKey: keypath(HERO_BASE_PATH, "description"),
-  signInKey: keypath(HERO_BASE_PATH, "signIn"),
-  buttonKey: keypath(HERO_BASE_PATH, "buttons.createLink"),
-  checkLinkKey: keypath(HERO_BASE_PATH, "buttons.checkLink"),
+  titleKey: keypath(BasePath.HERO_BASE_PATH, "title"),
+  descriptionKey: keypath(BasePath.HERO_BASE_PATH, "description"),
+  signInKey: keypath(BasePath.HERO_BASE_PATH, "signIn"),
+  buttonKey: keypath(BasePath.HERO_BASE_PATH, "buttons.createLink"),
+  checkLinkKey: keypath(BasePath.HERO_BASE_PATH, "buttons.checkLink"),
 };
 
 const statsTranslations = {
-  titleKey: keypath(STATS_BASE_PATH, "title"),
+  titleKey: keypath(BasePath.STATS_BASE_PATH, "title"),
   segments: {
-    publicOfficers: keypath(STATS_BASE_PATH, "segments.publicOfficers"),
-    linksCreated: keypath(STATS_BASE_PATH, "segments.linksCreated"),
-    clicksServed: keypath(STATS_BASE_PATH, "segments.clicksServed"),
+    publicOfficers: keypath(BasePath.STATS_BASE_PATH, "segments.publicOfficers"),
+    linksCreated: keypath(BasePath.STATS_BASE_PATH, "segments.linksCreated"),
+    clicksServed: keypath(BasePath.STATS_BASE_PATH, "segments.clicksServed"),
   },
   counters: {
-    daily: keypath(STATS_BASE_PATH, "counters.daily"),
-    total: keypath(STATS_BASE_PATH, "counters.total"),
-    dataAsOf: keypath(STATS_BASE_PATH, "counters.dataAsOf"),
+    daily: keypath(BasePath.STATS_BASE_PATH, "counters.daily"),
+    total: keypath(BasePath.STATS_BASE_PATH, "counters.total"),
+    dataAsOf: keypath(BasePath.STATS_BASE_PATH, "counters.dataAsOf"),
   },
   dropdown: {
     items: {
-      daily: { label: keypath(STATS_BASE_PATH, "dropdown.items.daily.label") },
-      weekly: { label: keypath(STATS_BASE_PATH, "dropdown.items.weekly.label") },
-      monthly: { label: keypath(STATS_BASE_PATH, "dropdown.items.monthly.label") },
-      yearly: { label: keypath(STATS_BASE_PATH, "dropdown.items.yearly.label") },
+      daily: { label: keypath(BasePath.STATS_BASE_PATH, "dropdown.items.daily.label") },
+      weekly: { label: keypath(BasePath.STATS_BASE_PATH, "dropdown.items.weekly.label") },
+      monthly: { label: keypath(BasePath.STATS_BASE_PATH, "dropdown.items.monthly.label") },
+      yearly: { label: keypath(BasePath.STATS_BASE_PATH, "dropdown.items.yearly.label") },
     },
   },
 };
 
 const masthead = {
-  officialGovWebsiteKey: keypath(MASTHEAD_BASE_PATH, "official_gov_website"),
-  howToIdentifyKey: keypath(MASTHEAD_BASE_PATH, "how_to_identify"),
-  officialKey: keypath(MASTHEAD_BASE_PATH, "official"),
-  notGovmyKey: keypath(MASTHEAD_BASE_PATH, "not_govmy"),
-  closeSiteKey: keypath(MASTHEAD_BASE_PATH, "close_site"),
-  secureKey: keypath(MASTHEAD_BASE_PATH, "secure"),
-  findLockKey: keypath(MASTHEAD_BASE_PATH, "find_lock"),
-  orKey: keypath(MASTHEAD_BASE_PATH, "or"),
-  precautionKey: keypath(MASTHEAD_BASE_PATH, "precaution"),
+  officialGovWebsiteKey: keypath(BasePath.MASTHEAD_BASE_PATH, "official_gov_website"),
+  howToIdentifyKey: keypath(BasePath.MASTHEAD_BASE_PATH, "how_to_identify"),
+  officialKey: keypath(BasePath.MASTHEAD_BASE_PATH, "official"),
+  notGovmyKey: keypath(BasePath.MASTHEAD_BASE_PATH, "not_govmy"),
+  closeSiteKey: keypath(BasePath.MASTHEAD_BASE_PATH, "close_site"),
+  secureKey: keypath(BasePath.MASTHEAD_BASE_PATH, "secure"),
+  findLockKey: keypath(BasePath.MASTHEAD_BASE_PATH, "find_lock"),
+  orKey: keypath(BasePath.MASTHEAD_BASE_PATH, "or"),
+  precautionKey: keypath(BasePath.MASTHEAD_BASE_PATH, "precaution"),
 };
 
 const checkLinkDialog = {

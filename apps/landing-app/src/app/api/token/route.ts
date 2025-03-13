@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sign } from 'jsonwebtoken';
+import { TokenResponse } from '@/types/token';
 
-export type TokenResponse = {
-  token: string;
-};
 
 function generateSecurityHash(timestamp: number): string {
   const secretKey = process.env.API_SECRET_KEY || '';
