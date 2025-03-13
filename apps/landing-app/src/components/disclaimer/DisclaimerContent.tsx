@@ -13,7 +13,7 @@ type Props = {
 
 export default function DisclaimerContent(props: Props) {
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-col min-h-[70vh]">
       <div className="container flex w-full flex-col gap-3 py-8 lg:gap-4 xl:px-0">
         <div className="flex flex-col gap-8">
           <Heading level={1} className="text-3xl font-semibold text-center">{props.header}</Heading>
