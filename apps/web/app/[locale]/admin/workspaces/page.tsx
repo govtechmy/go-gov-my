@@ -154,7 +154,7 @@ function WorkspaceCard({
         <div className="flex items-start justify-between">
           <div className="flex items-center space-x-3">
             <BlurImage
-              src={logo || `${DICEBEAR_AVATAR_URL}${name}`}
+              src={logo || `${DICEBEAR_AVATAR_URL}`}
               alt={id}
               className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-full"
               width={48}

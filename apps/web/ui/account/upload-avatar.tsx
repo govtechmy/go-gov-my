@@ -5,6 +5,7 @@ import { Button, FileUpload } from '@dub/ui';
 import { useSession } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { DICEBEAR_AVATAR_URL } from '@dub/utils';
 
 export default function UploadAvatar() {
   const { data: session, update } = useSession();
@@ -13,12 +14,7 @@ export default function UploadAvatar() {
   const [image, setImage] = useState<string | null>();
 
   useEffect(() => {
-    setImage(
-      session?.user?.image ||
-        (session?.user?.email
-          ? `https://api.dicebear.com/7.x/micah/svg?seed=${session?.user?.email}`
-          : null)
-    );
+    setImage(session?.user?.image || (session?.user?.email ? DICEBEAR_AVATAR_URL : null));
   }, [session]);
 
   const [uploading, setUploading] = useState(false);

@@ -31,9 +31,6 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        hostname: 'api.dicebear.com',
-      },
-      {
         hostname: 'gogov-web-dev.s3.ap-southeast-1.amazonaws.com',
       },
       {

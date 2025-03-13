@@ -99,7 +99,7 @@ function TransferLinkModal({
                 ? workspaces.map((workspace) => ({
                     id: workspace.id,
                     value: workspace.name,
-                    image: workspace.logo || `${DICEBEAR_AVATAR_URL}${workspace.name}`,
+                    image: workspace.logo || `${DICEBEAR_AVATAR_URL}`,
                     disabled: workspace.id.replace('ws_', '') === props.projectId,
                     label:
                       workspace.id.replace('ws_', '') === props.projectId ? message?.current : '',

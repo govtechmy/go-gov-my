@@ -82,7 +82,7 @@ export default function WorkspaceCard({
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <BlurImage
-                src={logo || `${DICEBEAR_AVATAR_URL}${name}`}
+                src={logo || `${DICEBEAR_AVATAR_URL}`}
                 alt={id}
                 className="h-8 w-8 flex-shrink-0 overflow-hidden rounded-full"
                 width={32}

@@ -26,7 +26,7 @@ export default function WorkspaceSwitcher() {
     if (slug && workspaces && selectedWorkspace) {
       return {
         ...selectedWorkspace,
-        image: selectedWorkspace.logo || `${DICEBEAR_AVATAR_URL}${selectedWorkspace.name}`,
+        image: selectedWorkspace.logo || `${DICEBEAR_AVATAR_URL}`,
       };
 
       // return personal account selector if there's no workspace or error (user doesn't have access to workspace)
@@ -34,9 +34,7 @@ export default function WorkspaceSwitcher() {
       return {
         name: session?.user?.name || session?.user?.email,
         slug: '/',
-        image:
-          session?.user?.image ||
-          `https://api.dicebear.com/7.x/micah/svg?seed=${session?.user?.email}`,
+        image: session?.user?.image || DICEBEAR_AVATAR_URL,
         plan: 'free',
       };
     }
@@ -140,7 +138,7 @@ function WorkspaceList({
             onClick={() => setOpenPopover(false)}
           >
             <BlurImage
-              src={logo || `${DICEBEAR_AVATAR_URL}${name}`}
+              src={logo || `${DICEBEAR_AVATAR_URL}`}
               width={20}
               height={20}
               alt={id}
