@@ -1,6 +1,6 @@
-import CheckCircle from "@/icons/check-circle";
-import ChevronDown from "@/icons/chevron-down";
-import ChevronUp from "@/icons/chevron-up";
+import CheckCircle from "@dub/ui";
+import ChevronDown from "@dub/ui";
+import ChevronUp from "@dub/ui";
 import { cn } from "@/lib/utils";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { ComponentPropsWithoutRef, ComponentRef, forwardRef } from "react";

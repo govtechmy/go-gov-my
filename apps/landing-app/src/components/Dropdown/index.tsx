@@ -13,7 +13,7 @@ import {
 } from "./radix";
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
-import ChevronDownB from "@/icons/chevron-down-b";
+import ChevronDownB from "@dub/ui";
 import CurrentStrokeIcon from "../utils/CurrentStrokeIcon";
 
 type Props = {

@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AlertCircle, AlertTriangle, X } from "lucide-react";
-import IconLinkFill from "@/icons/link-fill";
+import IconLinkFill from "@dub/ui";
 import Image from "next/image";
 
 type Props = {

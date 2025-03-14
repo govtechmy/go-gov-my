@@ -3,8 +3,8 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Button } from "./Button";
-import Moon from "@/icons/moon";
-import Sun from "@/icons/sun";
+import Moon from "@dub/ui";
+import Sun from "@dub/ui";
 
 export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);

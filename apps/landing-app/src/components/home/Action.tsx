@@ -2,7 +2,7 @@ import ButtonB from "@/components/ButtonB";
 import Heading from "@/components/Heading";
 import Paragraph from "@/components/Paragraph";
 import Section from "@/components/Section";
-import IconLink from "@/icons/link";
+import IconLink from "@dub/ui";
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
 

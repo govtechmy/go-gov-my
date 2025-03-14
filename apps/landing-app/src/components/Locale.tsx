@@ -9,8 +9,8 @@ import {
   SelectValue,
 } from "@/components/Select";
 import { locales } from "@/i18n-config";
-import ChevronDown from "@/icons/chevron-down";
-import Globe from "@/icons/globe";
+import ChevronDown from "@dub/ui";
+import Globe from "@dub/ui";
 import { usePathname, useRouter } from "@/lib/i18n";
 import { SelectIcon } from "@radix-ui/react-select";
 import { useSearchParams } from "next/navigation";

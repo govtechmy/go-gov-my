@@ -1,11 +1,11 @@
 "use client";
 
 import Collapse from "@/components/Collapse";
-import FlagMY from "@/icons/flag-my";
-import ChevronDown from "@/icons/chevron-down";
-import EncryptedLock from "@/icons/encrypted-lock";
-import GovMY from "@/icons/govmy";
-import SolidLock from "@/icons/solid-lock";
+import FlagMY from "@dub/ui";
+import ChevronDown from "@dub/ui";
+import EncryptedLock from "@dub/ui";
+import GovMY from "@dub/ui";
+import SolidLock from "@dub/ui";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 

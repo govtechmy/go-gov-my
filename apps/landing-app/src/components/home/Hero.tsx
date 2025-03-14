@@ -5,7 +5,7 @@ import ButtonB from "@/components/ButtonB";
 import Heading from "@/components/Heading";
 import Paragraph from "@/components/Paragraph";
 import { URL_APP_MAIN } from "@/constants/urls";
-import IconLink from "@/icons/link";
+// import IconLink from "@/icons/link";
 import { cn } from "@/lib/utils";
 import Rive from "@rive-app/react-canvas";
 import CheckLinkDialog from "@/components/CheckLinkDialog";
