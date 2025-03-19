@@ -65,12 +65,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v3
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-southeast-1
+        audience: sts.amazonaws.com
 
     - name: Update kubeconfig
       run: |
@@ -79,3 +80,6 @@ jobs:
     - name: Verify Kubernetes Connection
       run: kubectl cluster-info
 
+    - name: Get Current Pods
+      run: |
+        kubectl get pods --all-namespaces
