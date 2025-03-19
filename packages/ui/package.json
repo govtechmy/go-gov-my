@@ -30,7 +30,7 @@
     "@gogovmy/tailwind-config": "workspace:*",
     "tailwindcss": "^3.2.4",
     "tsconfig": "workspace:*",
-    "tsup": "^6.1.0",
+    "tsup": "^8.3.5",
     "typescript": "^5.1.6"
   },
   "dependencies": {
