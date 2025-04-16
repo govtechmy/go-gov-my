@@ -240,11 +240,31 @@ pnpm dev
 
 ## Contributing
 
-We encourage to contribute! Here's how you can contribute:
+We welcome and appreciate contributions from the community. Whether you're fixing a bug, improving documentation, or proposing a new feature, your input helps make this project better for everyone. Here's how you can get involved:
 
-- [Open an issue](https://github.com/govtechmy/go-gov-my/issues) if you believe you've encountered a bug.
-- Follow the [local development guide](https://go.gov.my/docs/local-development) to get your local dev environment set up.
-- Make a [pull request](https://github.com/govtechmy/go-gov-my/pull) to add new features/make quality-of-life improvements/fix bugs.
+### Report Issues
+
+If you encounter a bug, unexpected behavior, or a potential improvement, please don't hesitate to [open an issue](https://github.com/govtechmy/go-gov-my/issues). When submitting an issue, include as much relevant information as possible—such as steps to reproduce, screenshots, or logs—to help us understand and address the problem efficiently.
+
+### Set Up Your Local Development Environment
+
+To get started with local development, follow our comprehensive [local development guide](https://go.gov.my/docs/local-development). This guide outlines all necessary dependencies, setup instructions, and development workflows to help you quickly spin up the project on your machine.
+
+### Make a Pull Request
+
+Once you're ready to contribute code—whether it’s a bug fix, a quality-of-life enhancement, or a brand-new feature—submit a [pull request](https://github.com/govtechmy/go-gov-my/pull). Please ensure your changes align with our coding standards and are well-documented. Pull requests should be linked to an open issue (if applicable) and include a clear, descriptive title and summary of changes.
+
+### Guidelines
+
+- Follow the existing code style and naming conventions.
+- Write clear, concise commit messages.
+- Include tests for new or updated functionality where possible.
+- Keep pull requests focused and easy to review—smaller, incremental changes are preferred.
+
+### Thank You
+
+Your contributions help shape the future of this project and support our mission to build more accessible and effective public digital services. Thank you for taking the time to make a difference!
+
 
 ## License
 
