@@ -8,7 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "next": "15.1.4",
+    "next": "15.2.4",
     "fumadocs-ui": "14.7.3",
     "fumadocs-core": "14.7.3",
     "react": "^19.0.0",
