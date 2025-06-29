@@ -42,7 +42,7 @@ function InviteCodeModal({
           text={message?.reset}
           variant="secondary"
           loading={resetting}
-          onClick={async() => {
+          onClick={async () => {
             if (id) {
               try {
                 setResetting(true);

@@ -58,12 +58,11 @@ function EditRoleModal({
         <Button
           text="Confirm"
           loading={editing}
-          onClick={async() => {
+          onClick={async () => {
             if (id) {
               try {
                 setEditing(true);
-                await updateRole(id, userId, role)
-                .then(async(res)=>{
+                await updateRole(id, userId, role).then(async (res) => {
                   if (res.status === 200) {
                     await mutate(`/api/workspaces/${id}/users`);
                     setShowEditRoleModal(false);
@@ -74,7 +73,7 @@ function EditRoleModal({
                     const { error } = await res.json();
                     toast.error(error.message);
                   }
-                })
+                });
               } catch (err: unknown) {
                 console.error(err);
               } finally {
