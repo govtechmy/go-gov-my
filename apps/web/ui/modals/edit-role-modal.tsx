@@ -5,6 +5,7 @@ import { Avatar, BlurImage, Button, Logo, Modal } from '@dub/ui';
 import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { mutate } from 'swr';
+import { updateRole } from 'services/update-role';
 
 function EditRoleModal({
   showEditRoleModal,
@@ -57,28 +58,29 @@ function EditRoleModal({
         <Button
           text="Confirm"
           loading={editing}
-          onClick={() => {
-            setEditing(true);
-            fetch(`/api/workspaces/${id}/users`, {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                userId,
-                role,
-              }),
-            }).then(async (res) => {
-              if (res.status === 200) {
-                await mutate(`/api/workspaces/${id}/users`);
-                setShowEditRoleModal(false);
-                toast.success(
-                  `${message?.success_toast_1} ${name || email}${message?.success_toast_2} ${role}.`
-                );
-              } else {
-                const { error } = await res.json();
-                toast.error(error.message);
+          onClick={async() => {
+            if (id) {
+              try {
+                setEditing(true);
+                await updateRole(id, userId, role)
+                .then(async(res)=>{
+                  if (res.status === 200) {
+                    await mutate(`/api/workspaces/${id}/users`);
+                    setShowEditRoleModal(false);
+                    toast.success(
+                      `${message?.success_toast_1} ${name || email}${message?.success_toast_2} ${role}.`
+                    );
+                  } else {
+                    const { error } = await res.json();
+                    toast.error(error.message);
+                  }
+                })
+              } catch (err: unknown) {
+                console.error(err);
+              } finally {
+                setEditing(false);
               }
-              setEditing(false);
-            });
+            }
           }}
         />
       </div>

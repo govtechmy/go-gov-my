@@ -3,6 +3,7 @@ import useWorkspace from '@/lib/swr/use-workspace';
 import { Button, CopyButton, Logo, Modal } from '@dub/ui';
 import { APP_DOMAIN } from '@dub/utils';
 import { Dispatch, SetStateAction, useCallback, useMemo, useState } from 'react';
+import { resetInvite } from 'services/reset-invite';
 
 function InviteCodeModal({
   showInviteCodeModal,
@@ -41,14 +42,18 @@ function InviteCodeModal({
           text={message?.reset}
           variant="secondary"
           loading={resetting}
-          onClick={() => {
-            setResetting(true);
-            fetch(`/api/workspaces/${id}/invites/reset`, {
-              method: 'POST',
-            }).then(async () => {
-              await mutate();
-              setResetting(false);
-            });
+          onClick={async() => {
+            if (id) {
+              try {
+                setResetting(true);
+                await resetInvite(id);
+                await mutate();
+              } catch (err: unknown) {
+                console.error(err);
+              } finally {
+                setResetting(false);
+              }
+            }
           }}
         />
       </div>
