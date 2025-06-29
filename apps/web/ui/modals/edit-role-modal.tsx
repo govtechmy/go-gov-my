@@ -62,18 +62,17 @@ function EditRoleModal({
             if (id) {
               try {
                 setEditing(true);
-                await updateRole(id, userId, role).then(async (res) => {
-                  if (res.status === 200) {
-                    await mutate(`/api/workspaces/${id}/users`);
-                    setShowEditRoleModal(false);
-                    toast.success(
-                      `${message?.success_toast_1} ${name || email}${message?.success_toast_2} ${role}.`
-                    );
-                  } else {
-                    const { error } = await res.json();
-                    toast.error(error.message);
-                  }
-                });
+                const res = await updateRole(id, userId, role);
+                if (res.status === 200) {
+                  await mutate(`/api/workspaces/${id}/users`);
+                  setShowEditRoleModal(false);
+                  toast.success(
+                    `${message?.success_toast_1} ${name || email}${message?.success_toast_2} ${role}.`
+                  );
+                } else {
+                  const { error } = await res.json();
+                  toast.error(error.message);
+                }
               } catch (err: unknown) {
                 console.error(err);
               } finally {
