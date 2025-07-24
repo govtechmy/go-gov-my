@@ -265,7 +265,6 @@ Once you're ready to contribute code—whether it’s a bug fix, a quality-of-li
 
 Your contributions help shape the future of this project and support our mission to build more accessible and effective public digital services. Thank you for taking the time to make a difference!
 
-
 ## License
 
 GoGovMY is open-source under the GNU Affero General Public License Version 3 (AGPLv3) or any later version. You can [find it here](https://github.com/govtechmy/go-gov-my/blob/main/LICENSE.md).
