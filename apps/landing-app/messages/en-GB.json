@@ -56,7 +56,7 @@
 				}
 			},
 			"Action": {
-				"title": "Official link shorterner for the Malaysian Government",
+				"title": "Official link shortener for the Malaysian Government",
 				"description": "Let's create your own <em>go.gov.my/mygcc</em> short links.",
 				"buttons": {
 					"createLink": "Create Link"
