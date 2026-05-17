@@ -59,7 +59,7 @@ With GoGovMY, citizens are safe in the knowledge that the links are official and
 - [TypeScript](https://www.typescriptlang.org/) – language
 - [Tailwind](https://tailwindcss.com/) – CSS
 - [Self-Host Redis](https://hub.docker.com/_/redis) – redis
-- [PostgresSQL](https://hub.docker.com/_/postgres) – database
+- [PostgreSQL](https://hub.docker.com/_/postgres) – database
 - [NextAuth.js](https://next-auth.js.org/) – auth
 - [Turborepo](https://turbo.build/repo) – monorepo
 - [Amazon Simple Email Services](https://aws.amazon.com/ses/) – emails
@@ -70,7 +70,7 @@ With GoGovMY, citizens are safe in the knowledge that the links are official and
 - [ElasticSearch](https://go.dev/) – Indexing & Analytics
 - [ZooKeeper](https://go.dev/) – Dependency Management
 - [KafDrop](https://go.dev/) – Kafka UI Management
-- [Debezium-UI](https://go.dev/) – Debzium UI Management
+- [Debezium-UI](https://go.dev/) – Debezium UI Management
 - [Uptime-Kuma](https://go.dev/) – Status Page
 
 ## Pre-Requisites
@@ -95,7 +95,7 @@ Please create a `.env` (using as .env.example as example) file in the root direc
 NEXT_PUBLIC_APP_NAME=GoGovMy
 NEXT_PUBLIC_APP_DOMAIN=gogovmy
 NEXT_PUBLIC_APP_SHORT_DOMAIN=app.go.gov.my
-NEXT_PUBLIC_APP_APP_DOMAIN=locahost:8888
+NEXT_PUBLIC_APP_APP_DOMAIN=localhost:8888
 NODE_ENV=development
 
 # This is for Unit Test in the apps/web/tests folder
@@ -127,7 +127,7 @@ AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 AWS_REGION=ap-southeast-2
 SES_EMAIL_SOURCE=
-## Replae this value with environment base url
+## Replace this value with environment base url
 BASE_URL=http://localhost:8888
 
 #Logstash Config
@@ -203,7 +203,7 @@ go-gov-my
 ```
 ----- Applications -----
 # Application Dashboard: Port 8888
-# Administrator Dashbaord: Port 8888 with sub-domain {{admin.localhot:8888}}
+# Administrator Dashboard: Port 8888 with sub-domain {{admin.localhost:8888}}
 # Redirect Server: Port 3000
 # Redirect Server API (Internal): Port 3002
 # Documentation App: Port 3334
